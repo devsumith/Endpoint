@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Endpoint.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "-p 8001"
+    }
+  }
+}
