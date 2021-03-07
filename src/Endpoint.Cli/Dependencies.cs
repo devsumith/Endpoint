@@ -8,6 +8,7 @@ namespace Endpoint.Cli
         public static void Configure(IServiceCollection services)
         {
             services.AddMediatR(typeof(Program));
+            services.AddTransient<ICommandService, CommandService>();
         }
     }
 }
