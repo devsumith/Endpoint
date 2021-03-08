@@ -36,13 +36,25 @@ namespace Endpoint.Cli
             }
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
+                _commandService.Start($"rimraf {request.Name}", request.Directory);
+
                 _commandService.Start($"mkdir {request.Name}", request.Directory);
 
-                request.Directory = @$"{request.Directory}\{request.Name}";
+                var slnDirectory = $@"{request.Directory}\{request.Name}";
 
-                _commandService.Start("dotnet new webapi",request.Directory);
+                _commandService.Start($"dotnet new sln -n {request.Name}", slnDirectory);
 
-                _commandService.Start($"start {request.Name}.csproj", request.Directory);
+                _commandService.Start($"mkdir src", slnDirectory);
+
+                _commandService.Start($@"mkdir src\{request.Name}", slnDirectory);
+
+                var apiDirectory = @$"{slnDirectory}\src\{request.Name}";
+
+                _commandService.Start("dotnet new webapi", apiDirectory);
+
+                _commandService.Start($@"dotnet sln add {apiDirectory}\{request.Name}.csproj", slnDirectory);
+
+                _commandService.Start($"start {request.Name}.sln", $@"{slnDirectory}");
 
                 return new();
             }

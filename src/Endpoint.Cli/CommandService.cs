@@ -16,6 +16,8 @@ namespace Endpoint.Cli
             {
                 workingDirectory = workingDirectory ?? Environment.CurrentDirectory;
 
+                Console.WriteLine($"{arguments} in {workingDirectory}");
+                
                 var process = new Process
                 {
                     StartInfo = new ProcessStartInfo
