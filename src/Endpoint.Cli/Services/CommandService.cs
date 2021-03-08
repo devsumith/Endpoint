@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Endpoint.Cli
+namespace Endpoint.Cli.Services
 {
     public interface ICommandService
     {
