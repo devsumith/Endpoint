@@ -23,7 +23,7 @@ namespace Endpoint.Cli.Services
         {
             path = path ?? Environment.CurrentDirectory;
 
-            if (path.Split(DirectorySeparatorChar).Last().ToLower() == "projects")
+            if (path.Split(DirectorySeparatorChar).Count() == 1)
                 return null;
 
             var settingFileNames = _configuration["settingFileNames"].Split(',');

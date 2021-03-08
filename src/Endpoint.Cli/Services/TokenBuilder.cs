@@ -24,8 +24,10 @@ namespace Endpoint.Cli.Services
             var entityNamePascalCase = _namingConventionConverter.Convert(NamingConvention.PascalCase, options["Entity"]);
 
             var @namespace = _namespaceProvider.GetFileNamespace(directory);
-            
+
             var settings = _settingsProvider.Get();
+
+
             
             string entityId = !string.IsNullOrEmpty(options["Entity"]) && !string.IsNullOrEmpty(settings.EntityIdDataType) && settings.EntityIdDataType == "Short"
                 ? "id"

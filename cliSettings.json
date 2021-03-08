@@ -1,1 +1,6 @@
-{"Projects":"","DatabaseConnectionPropertyKey":"","DatabaseSettingsKey":"","SolutionName":"Endpoint.sln","RootNamespace":"Endpoint","SourceFolder":"src","TestFolder":"test"}
+{ 
+  "SolutionName": "Endpoint.sln",
+  "RootNamespace": "Endpoint",
+  "SourceFolder": "src",
+  "TestFolder": "test"
+}

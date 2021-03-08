@@ -2,6 +2,7 @@ using CommandLine;
 using Endpoint.Cli.Services;
 using MediatR;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,6 +35,8 @@ namespace Endpoint.Cli.Commands
             private string _apiDirectory;
             private string _slnDirectory;
             private string _apiProjectName;
+            private int _port;
+            private string _name;
 
             public Handler(ICommandService commandService, IMediator mediator)
             {
@@ -42,6 +45,8 @@ namespace Endpoint.Cli.Commands
             }
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
+                _port = request.Port;
+                _name = request.Name;
 
                 _apiProjectName = $"{request.Name}.Api.csproj";
 
@@ -59,26 +64,49 @@ namespace Endpoint.Cli.Commands
 
                 _commandService.Start("dotnet new webapi", _apiDirectory);
 
-                _commandService.Start($@"dotnet sln add {_apiDirectory}\{_apiProjectName}", _slnDirectory);
-
-                _commandService.Start($"start {request.Name}.sln", $@"{_slnDirectory}");
-
                 RemoveDefaultTemplateFiles();
 
-                await _mediator.Send(new LaunchSettings.Request { Directory = $@"{_apiDirectory}\Properties", Port = request.Port, SslPort = request.Port + 1, Name = request.Name }, cancellationToken);
-
                 _commandService.Start($@"dotnet sln add {_apiDirectory}\{_apiProjectName}", _slnDirectory);
 
+                await UpdateLaunchSettingsAsync();
+
+                await UpdateStartUpProgramAndDependecies();
+
+                AddNugetPackages();
+
                 _commandService.Start($"start {request.Name}.sln", $@"{_slnDirectory}");
+
+                _commandService.Start($"dotnet watch run", $@"{_apiDirectory}");
 
                 return new();
 
+            }
+
+            private async Task UpdateLaunchSettingsAsync()
+            {
+                await _mediator.Send(new LaunchSettings.Request { Directory = $@"{_apiDirectory}\Properties", Port = _port, SslPort = _port + 1, Name = _name }, default);
+            }
+
+            private async Task UpdateStartUpProgramAndDependecies()
+            {
+                await _mediator.Send(new Dependencies.Request { Directory = _apiDirectory, Name = _name }, default);
             }
 
             public void RemoveDefaultTemplateFiles()
             {
                 _commandService.Start($"rimraf WeatherForecast.cs", $@"{_apiDirectory}");
                 _commandService.Start($@"rimraf Controllers\WeatherForecastController.cs", $@"{_apiDirectory}");
+            }
+
+            public void AddNugetPackages()
+            {
+                _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory", $@"{_apiDirectory}");
+                _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.SqlServer", $@"{_apiDirectory}");
+                _commandService.Start($"dotnet add package FluentValidation", $@"{_apiDirectory}");
+                _commandService.Start($"dotnet add package MediatR.Extensions.Microsoft.DependencyInjection", $@"{_apiDirectory}");
+                _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.Tools", $@"{_apiDirectory}");
+                _commandService.Start($"dotnet add package Swashbuckle.AspNetCore", $@"{_apiDirectory}");
+                _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Swagger", $@"{_apiDirectory}");
             }
         }
     }

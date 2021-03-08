@@ -17,11 +17,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Commands\CliSettings.txt" />
+    <None Remove="Commands\Dependencies.txt" />
     <None Remove="Commands\LaunchSettings.txt" />
+    <None Remove="Commands\Program.txt" />
+    <None Remove="Commands\Startup.txt" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Commands\CliSettings.txt" />
+    <EmbeddedResource Include="Commands\Dependencies.txt" />
     <EmbeddedResource Include="Commands\LaunchSettings.txt" />
+    <EmbeddedResource Include="Commands\Program.txt" />
+    <EmbeddedResource Include="Commands\Startup.txt" />
   </ItemGroup>
   
   <ItemGroup>

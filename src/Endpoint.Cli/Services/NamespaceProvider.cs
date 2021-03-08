@@ -14,6 +14,9 @@ namespace Endpoint.Cli.Services
         }
         public string GetFileNamespace(string path, List<string> fileNamespaceParts = default)
         {
+            if (_settings == null)
+                return "Fail";
+
             string @namespace = _settings.Namespace;
 
             var root = File.Exists($@"{path}/cliSettings.json");

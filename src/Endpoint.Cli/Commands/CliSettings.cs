@@ -1,29 +1,18 @@
 using CommandLine;
-using MediatR;
 using Endpoint.Cli.Services;
+using MediatR;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
 
 namespace Endpoint.Cli.Commands
 {
-    internal class LaunchSettings
+    internal class CliSettings
     {
-        [Verb("launch-settings")]
+        [Verb("cli-settings")]
         internal class Request : IRequest<Unit> {
-
             [Option('d', Required = false)]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
-
-            [Value(1)]
-            public string Name { get; set; }
-
-            [Value(0)]
-            public int Port { get; set; } = 5000;
-
-            [Value(0)]
-            public int SslPort { get; set; } = 5001;
         }
 
         internal class Handler : IRequestHandler<Request, Unit>
@@ -32,33 +21,37 @@ namespace Endpoint.Cli.Commands
             private readonly ITemplateLocator _templateLocator;
             private readonly ITemplateProcessor _templateProcessor;
             private readonly ITokenBuilder _tokenBuilder;
+            private readonly IMediator _mediator;
+            private readonly ICommandService _commandService;
 
             public Handler(
                 IFileSystem fileSystem,
                 ITemplateLocator templateLocator,
                 ITemplateProcessor templateProcessor,
-                ITokenBuilder tokenBuilder
+                ITokenBuilder tokenBuilder,
+                IMediator mediator,
+                ICommandService commandService
                 )
             {
                 _fileSystem = fileSystem;
                 _tokenBuilder = tokenBuilder;
                 _templateProcessor = templateProcessor;
                 _templateLocator = templateLocator;
+                _mediator = mediator;
+                _commandService = commandService;
             }
 
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                var template = _templateLocator.Get("LaunchSettings");
+                var template = _templateLocator.Get("CliSettings");
 
                 var tokens = _tokenBuilder.Build(new Dictionary<string, string> {
-                    { "Port", $"{request.Port}" },
-                    { "SslPort", $"{request.SslPort}" },
-                    { "Name", $"{request.Name}" }
+
                 }, request.Directory);
 
                 var result = _templateProcessor.Process(template, tokens);
 
-                _fileSystem.WriteAllLines($@"{request.Directory}\launchSettings.json", result);
+                _fileSystem.WriteAllLines($@"{request.Directory}\cliSettings.json", result);
 
                 return new();
             }

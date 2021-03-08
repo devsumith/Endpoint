@@ -1,11 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{15A99D9B-572B-4D44-81BE-F6867FF8E1BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Endpoint.Cli", "src\Endpoint.Cli\Endpoint.Cli.csproj", "{99A77197-991A-46A7-B28D-EBC560F12898}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Endpoint.Cli", "src\Endpoint.Cli\Endpoint.Cli.csproj", "{99A77197-991A-46A7-B28D-EBC560F12898}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{351B6164-0BCB-4F4F-B597-500F2F777706}"
+	ProjectSection(SolutionItems) = preProject
+		cliSettings.json = cliSettings.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +20,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{99A77197-991A-46A7-B28D-EBC560F12898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -33,7 +35,13 @@ Global
 		{99A77197-991A-46A7-B28D-EBC560F12898}.Release|x86.ActiveCfg = Release|Any CPU
 		{99A77197-991A-46A7-B28D-EBC560F12898}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{99A77197-991A-46A7-B28D-EBC560F12898} = {15A99D9B-572B-4D44-81BE-F6867FF8E1BE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AC7102AF-7E9C-4980-9861-48A3B74465E0}
 	EndGlobalSection
 EndGlobal
