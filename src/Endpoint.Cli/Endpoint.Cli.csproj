@@ -50,4 +50,8 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Builders\" />
+  </ItemGroup>
 </Project>

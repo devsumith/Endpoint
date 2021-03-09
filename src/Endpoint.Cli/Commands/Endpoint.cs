@@ -31,6 +31,7 @@ namespace Endpoint.Cli.Commands
         internal class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ICommandService _commandService;
+            private readonly IServiceProvider _serviceProvider;
             private readonly IMediator _mediator;
             private string _apiDirectory;
             private string _slnDirectory;
@@ -38,13 +39,16 @@ namespace Endpoint.Cli.Commands
             private int _port;
             private string _name;
 
-            public Handler(ICommandService commandService, IMediator mediator)
+            public Handler(ICommandService commandService, IMediator mediator, IServiceProvider serviceProvider)
             {
                 _commandService = commandService;
                 _mediator = mediator;
+                _serviceProvider = serviceProvider;
             }
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
+                var tokenBuilder = _serviceProvider.GetService(typeof(ITokenBuilder));
+
                 _port = request.Port;
                 _name = request.Name;
 

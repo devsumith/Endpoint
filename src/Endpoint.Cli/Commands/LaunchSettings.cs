@@ -32,6 +32,7 @@ namespace Endpoint.Cli.Commands
             private readonly ITemplateLocator _templateLocator;
             private readonly ITemplateProcessor _templateProcessor;
             private readonly ITokenBuilder _tokenBuilder;
+            private readonly IServiceProvider _serviceProvider;
 
             public Handler(
                 IFileSystem fileSystem,
@@ -43,11 +44,12 @@ namespace Endpoint.Cli.Commands
                 _fileSystem = fileSystem;
                 _tokenBuilder = tokenBuilder;
                 _templateProcessor = templateProcessor;
-                _templateLocator = templateLocator;
+                _templateLocator = templateLocator;                
             }
 
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
+                
                 var template = _templateLocator.Get("LaunchSettings");
 
                 var tokens = _tokenBuilder.Build(new Dictionary<string, string> {
