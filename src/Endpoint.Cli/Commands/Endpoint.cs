@@ -47,8 +47,6 @@ namespace Endpoint.Cli.Commands
             }
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                var tokenBuilder = _serviceProvider.GetService(typeof(ITokenBuilder));
-
                 _port = request.Port;
                 _name = request.Name;
 

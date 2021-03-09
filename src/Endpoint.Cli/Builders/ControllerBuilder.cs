@@ -1,5 +1,6 @@
 using Endpoint.Cli.Services;
 using System;
+using System.Collections.Generic;
 
 namespace Endpoint.Cli.Builders
 {
@@ -9,13 +10,18 @@ namespace Endpoint.Cli.Builders
         private readonly ITokenBuilder _tokenBuilder;
         private readonly ITemplateProcessor _templateProcessor;
         private readonly ITemplateLocator _templateLocator;
+        private readonly IFileSystem _fileSystem;
 
         private string _directory;
         private string _name;
+        private string[] _template;
+        private string _templateName = nameof(ControllerBuilder);
 
         public ControllerBuilder(IServiceProvider serviceProvider)
         {
             _commandService = serviceProvider.GetService(typeof(ICommandService)) as ICommandService;
+            _templateLocator = serviceProvider.GetService(typeof(ITemplateLocator)) as ITemplateLocator;
+            _tokenBuilder = serviceProvider.GetService(typeof(ITokenBuilder)) as ITokenBuilder;
         }
 
         public ControllerBuilder SetDirectory(string directory)
@@ -30,14 +36,17 @@ namespace Endpoint.Cli.Builders
             return this;
         }
 
-        public ControllerBuilder(ICommandService commandService)
-        {
-            _commandService = commandService;
-        }
-
         public void Build()
         {
+            _template = _templateLocator.Get(_templateName);
 
+            var tokens = _tokenBuilder.Build(new Dictionary<string, string> {
+                    { "Name", $"{_name}" }
+                }, _directory);
+
+            var contents = _templateProcessor.Process(_template, tokens);
+
+            _fileSystem.WriteAllLines("", contents);
         }
     }
 }
