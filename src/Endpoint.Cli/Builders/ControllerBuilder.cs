@@ -4,7 +4,11 @@ using System.Collections.Generic;
 
 namespace Endpoint.Cli.Builders
 {
-    public class ControllerBuilder
+    public interface IControllerBuilder
+    {
+
+    }
+    public class ControllerBuilder: IControllerBuilder
     {
         private readonly ICommandService _commandService;
         private readonly ITokenBuilder _tokenBuilder;
@@ -17,11 +21,18 @@ namespace Endpoint.Cli.Builders
         private string[] _template;
         private string _templateName = nameof(ControllerBuilder);
 
-        public ControllerBuilder(IServiceProvider serviceProvider)
+        public ControllerBuilder(
+            ICommandService commandService,
+            ITokenBuilder tokenBuilder,
+            ITemplateProcessor templateProcessor,
+            ITemplateLocator templateLocator,
+            IFileSystem fileSystem)
         {
-            _commandService = serviceProvider.GetService(typeof(ICommandService)) as ICommandService;
-            _templateLocator = serviceProvider.GetService(typeof(ITemplateLocator)) as ITemplateLocator;
-            _tokenBuilder = serviceProvider.GetService(typeof(ITokenBuilder)) as ITokenBuilder;
+            _commandService = commandService;
+            _tokenBuilder = tokenBuilder;
+            _templateProcessor = templateProcessor;
+            _templateLocator = templateLocator;
+            _fileSystem = fileSystem;
         }
 
         public ControllerBuilder SetDirectory(string directory)
