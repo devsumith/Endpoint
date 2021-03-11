@@ -1,21 +1,13 @@
 using Endpoint.Cli.Services;
 using Endpoint.Cli.ValueObjects;
 using System.Collections.Generic;
-using System.IO;
-using static System.Array;
 
 namespace Endpoint.Cli.Builders
 {
-    public class DbContextBuilder
+    public class DbContextBuilder: BuilderBase<DbContextBuilder>
     {
-        private readonly ICommandService _commandService;
-        private readonly ITemplateProcessor _templateProcessor;
-        private readonly ITemplateLocator _templateLocator;
-        private readonly IFileSystem _fileSystem;
-
-        private Token _directory = (Token)System.Environment.CurrentDirectory;
         private Token _modelsDirectory;
-        private Token _rootNamespace;
+        private Token _dbContext;        
         private List<Token> _models = new List<Token>();
         
         public DbContextBuilder(
@@ -23,25 +15,13 @@ namespace Endpoint.Cli.Builders
 
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem)
-        {
-            _commandService = commandService;
-            _templateProcessor = templateProcessor;
-            _templateLocator = templateLocator;
-            _fileSystem = fileSystem;
+            IFileSystem fileSystem): base(commandService,templateProcessor,templateLocator,fileSystem)
+        { }
 
-        }
-
-        public DbContextBuilder SetDirectory(string directory)
-        {
-            _directory = (Token)directory;
-            return this;
-        }
 
         public DbContextBuilder WithModel(string model)
         {
             _models.Add((Token)model);
-
             return this;
         }
 
@@ -51,9 +31,9 @@ namespace Endpoint.Cli.Builders
             return this;
         }
 
-        public DbContextBuilder SetRootNamespace(string rootNamespace)
+        public DbContextBuilder WithDbContextName(string dbContextName)
         {
-            _rootNamespace = (Token)rootNamespace;
+            _dbContext = (Token)dbContextName;
             return this;
         }
 
@@ -63,20 +43,20 @@ namespace Endpoint.Cli.Builders
 
             var interfaceTemplate = _templateLocator.Get("DbContextInterfaceBuilder");
 
-            var tokens = new SimpleTokensBuilder()
-                .WithToken(nameof(_rootNamespace), _rootNamespace)
-                .WithToken(nameof(_directory), _directory)
-                .WithToken("Namespace", (Token)$"{_rootNamespace.Value}.Api.Data")
-                .WithToken("dbContext",(Token)$"{_rootNamespace.Value}DbContext")
+            var tokens = new TokensBuilder()
+                .With(nameof(_rootNamespace), _rootNamespace)
+                .With(nameof(_directory), _directory)
+                .With(nameof(_namespace), _namespace)
+                .With(nameof(_dbContext), _dbContext)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
 
             var interfaceContents = _templateProcessor.Process(interfaceTemplate, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/{_rootNamespace.PascalCase}DbContext.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}/{_dbContext.PascalCase}.cs", contents);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/I{_rootNamespace.PascalCase}DbContext.cs", interfaceContents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}/I{_dbContext.PascalCase}.cs", interfaceContents);
         }
     }
 }

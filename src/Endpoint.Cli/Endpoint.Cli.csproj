@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Builders\AppSettingsBuilder.txt" />
-    <EmbeddedResource Include="Builders\CommandBuilder.txt" />
+    <EmbeddedResource Include="Builders\Request\CommandBuilder.txt" />
     <EmbeddedResource Include="Builders\ControllerBuilder.txt" />
     <EmbeddedResource Include="Builders\DbContext\DbContextBuilder.txt" />
     <EmbeddedResource Include="Builders\DbContext\DbContextInterfaceBuilder.txt" />
@@ -36,7 +36,7 @@
     <EmbeddedResource Include="Builders\LaunchSettingsBuilder.txt" />
     <EmbeddedResource Include="Builders\ModelBuilder.txt" />
     <EmbeddedResource Include="Builders\ProgramBuilder.txt" />
-    <EmbeddedResource Include="Builders\QueryBuilder.txt" />
+    <EmbeddedResource Include="Builders\Request\QueryBuilder.txt" />
     <EmbeddedResource Include="Builders\ResponseBaseBuilder.txt" />
     <EmbeddedResource Include="Builders\ServiceCollectionExtensionsBuilder.txt" />
     <EmbeddedResource Include="Builders\StartupBuilder.txt" />
@@ -61,5 +61,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Builders\CSharp\" />
   </ItemGroup>
 </Project>

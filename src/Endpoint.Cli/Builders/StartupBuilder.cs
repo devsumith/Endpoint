@@ -1,56 +1,39 @@
 using Endpoint.Cli.Services;
 using Endpoint.Cli.ValueObjects;
-using System.Collections.Generic;
 
 namespace Endpoint.Cli.Builders
 {
-    public class StartupBuilder
+    public class StartupBuilder: BuilderBase<StartupBuilder>
     {
-        private readonly ICommandService _commandService;
-        private readonly ITemplateProcessor _templateProcessor;
-        private readonly ITemplateLocator _templateLocator;
-        private readonly IFileSystem _fileSystem;
-
-        private Token _directory = (Token)System.Environment.CurrentDirectory;
-        private Token _rootNamespace;
-
         public StartupBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem)
-        {
-            _commandService = commandService;
-            _templateProcessor = templateProcessor;
-            _templateLocator = templateLocator;
-            _fileSystem = fileSystem;
-        }
+            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+        { }
 
-        public StartupBuilder SetDirectory(string directory)
+        private Token _dbContext;
+        public StartupBuilder WithDbContextName(string dbContextName)
         {
-            _directory = (Token)directory;
-            return this;
-        }
+            _dbContext = (Token)dbContextName;
 
-        public StartupBuilder SetRootNamespace(string rootNamespace)
-        {
-            _rootNamespace = (Token)rootNamespace;
             return this;
         }
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(ProgramBuilder));
+            var template = _templateLocator.Get(nameof(StartupBuilder));
 
-            var tokens = new SimpleTokensBuilder()
-                .WithToken(nameof(_rootNamespace), _rootNamespace)
-                .WithToken(nameof(_directory), _directory)
-                .WithToken("Namespace", (Token)$"{_rootNamespace.Value}.Api")
+            var tokens = new TokensBuilder()
+                .With(nameof(_rootNamespace), _rootNamespace)
+                .With(nameof(_directory), _directory)
+                .With(nameof(_namespace), _namespace)
+                .With(nameof(_dbContext), _dbContext)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/Program.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}/Startup.cs", contents);
         }
     }
 }

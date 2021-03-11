@@ -32,8 +32,11 @@ namespace Endpoint.Cli
         }
 
         public static void ProcessArgs(IMediator mediator, string[] args)
-        {
-            args = new string[1] { "Default" }.Concat(args).ToArray();
+        {            
+            if(args.Length == 0 || args[0].StartsWith("-"))
+            {
+                args = new string[1] { "Default" }.Concat(args).ToArray();
+            }
 
             var verbs = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())

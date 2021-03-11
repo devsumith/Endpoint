@@ -41,10 +41,10 @@ namespace Endpoint.Cli.Builders
         {
             var template = _templateLocator.Get(nameof(ServiceCollectionExtensionsBuilder ));
 
-            var tokens = new SimpleTokensBuilder()
-                .WithToken(nameof(_rootNamespace), _rootNamespace)
-                .WithToken(nameof(_directory), _directory)
-                .WithToken("Namespace", (Token)$"{_rootNamespace.Value}.Api.Extensions")
+            var tokens = new TokensBuilder()
+                .With(nameof(_rootNamespace), _rootNamespace)
+                .With(nameof(_directory), _directory)
+                .With("Namespace", (Token)$"{_rootNamespace.Value}.Api.Extensions")
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);

@@ -9,11 +9,11 @@
     }
   },
   "profiles": {
-    "{{ name }}.Api": {
+    "{{ projectName }}": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
-      "launchUrl": "",
+      "launchUrl": "{{ launchUrl }}",
       "applicationUrl": "https://localhost:{{ sslPort }};http://localhost:{{ port }}",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

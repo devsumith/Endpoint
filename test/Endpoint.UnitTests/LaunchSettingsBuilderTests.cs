@@ -21,8 +21,8 @@ namespace Endpoint.UnitTests
 
             var sut = CreateLaunchSettingsBuilder();
 
-            sut.SetRootNamespace("")
-                .SetDirectory(@"")
+            sut.SetDirectory(@"C:\Projects\ContactService\src\ContactService.Api\Properties")
+                .WithLaunchUrl("")
                 .Build();
         }
 
@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static LaunchSettingsBuilder CreateLaunchSettingsBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new LaunchSettingsBuilder(c, t, tp, tl, f, n));
+            => Create((c, tp, tl, f) => new LaunchSettingsBuilder(c, tp, tl, f));
     }
 }

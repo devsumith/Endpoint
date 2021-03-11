@@ -1,5 +1,6 @@
 using Endpoint.Cli.Services;
 using Endpoint.Cli.ValueObjects;
+using System;
 
 namespace Endpoint.Cli.Builders
 {
@@ -24,11 +25,11 @@ namespace Endpoint.Cli.Builders
         {
             var template = _templateLocator.Get(nameof(ModelBuilder));
 
-            var tokens = new SimpleTokensBuilder()
-                .WithToken(nameof(_rootNamespace), _rootNamespace)
-                .WithToken(nameof(_directory), _directory)
-                .WithToken(nameof(_namespace), _namespace)
-                .WithToken(nameof(_entityName), _entityName)
+            var tokens = new TokensBuilder()
+                .With(nameof(_rootNamespace), _rootNamespace)
+                .With(nameof(_directory), _directory)
+                .With(nameof(_namespace), _namespace)
+                .With(nameof(_entityName), _entityName)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);

@@ -8,10 +8,10 @@ namespace {{ rootNamespace }}.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class {{ resourceNamePascalCase }}Controller
+    public class {{ resourcePascalCase }}Controller
     {
         private readonly IMediator _mediator;
 
-        public {{ resourceNamePascalCase }}Controller(IMediator mediator) => _mediator = mediator;          
+        public {{ resourcePascalCase }}Controller(IMediator mediator) => _mediator = mediator;          
     }
 }

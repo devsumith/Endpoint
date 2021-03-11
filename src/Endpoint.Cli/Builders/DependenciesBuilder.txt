@@ -51,11 +51,11 @@ namespace {{ namespace }}
 
             services.AddMediatR(typeof(Startup));
 
-            services.AddTransient<I{{ rootNamespace }}DbContext, {{ rootNamespace }}DbContext>();
+            services.AddTransient<I{{ dbContextPascalCase }}, {{ dbContextPascalCase }}>();
 
-            services.AddDbContext<{{ rootNamespace }}DbContext>(options =>
+            services.AddDbContext<{{ dbContextPascalCase }}>(options =>
             {
-                options.UseInMemoryDatabase(configuration[nameof({{ rootNamespace }})])
+                options.UseInMemoryDatabase(nameof({{ rootNamespace }}))
                 .LogTo(Console.WriteLine)
                 .EnableSensitiveDataLogging();
             });

@@ -26,9 +26,9 @@ namespace {{ namespace }}
 
             using (var scope = services.CreateScope())
             {
-                var context = scope.ServiceProvider.GetRequiredService<{{ rootNamespace }}DbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<{{ dbContextPascalCase }}>();
 
-                SeedData.Seed(context);
+                //SeedData.Seed(context);
             }
         }
 

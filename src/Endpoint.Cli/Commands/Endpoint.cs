@@ -4,7 +4,6 @@ using Endpoint.Cli.Services;
 using Endpoint.Cli.ValueObjects;
 using MediatR;
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using static Endpoint.Cli.Builders.BuilderFactory;
@@ -29,7 +28,6 @@ namespace Endpoint.Cli.Commands
 
             [Option('d')]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
-
         }
 
         internal class Handler : IRequestHandler<Request, Unit>
@@ -40,12 +38,16 @@ namespace Endpoint.Cli.Commands
 
             private string _apiProjectFileName;
             private string _apiProjectName;
-
+            private string _apiProjectNamespace;
+            private string _apiProjectFullPath;
+            private string _rootNamespace;
             private string _modelsNamespace;
-
+            private string _dbContextName;
 
             private int _port;
             private string _name;
+            private string _resource;
+            private string _directory;
 
             public Handler(ICommandService commandService, IMediator mediator)
                 => _commandService = commandService;
@@ -54,13 +56,24 @@ namespace Endpoint.Cli.Commands
             {
                 _port = request.Port;
                 _name = request.Name;
-                _apiProjectFileName = $"{request.Name}.Api.csproj";                
-                _slnDirectory = $@"{request.Directory}\{request.Name}";                
-                _apiDirectory = @$"{_slnDirectory}\src\{request.Name}.Api";
-                _apiProjectName = $"{request.Name}.Api";
-                _modelsNamespace = $"{request.Name}.Api.Models";
+                _resource = request.Resource;
+                _directory = request.Directory;
+                _rootNamespace = _name.Replace("-", "_");
 
-                _commandService.Start($"mkdir {request.Name}", request.Directory);
+                _apiProjectFileName = $"{_name}.Api.csproj";
+                _slnDirectory = $@"{_directory}\{_name}";
+                _apiDirectory = @$"{_slnDirectory}\src\{_name}.Api";
+                _apiProjectFullPath = $@"{_apiDirectory}\{_apiProjectFileName}";
+                _apiProjectName = $"{_name}.Api";
+                _apiProjectNamespace = $"{_rootNamespace}.Api";
+                _modelsNamespace = $"{_rootNamespace}.Api.Models";
+
+
+                var parts = _name.Split('.');
+
+                _dbContextName = parts.Length > 1 ? $"{parts[1]}DbContext" : $"{parts[0]}DbContext";
+
+                _commandService.Start($"mkdir {request.Name}", _directory);
 
                 _commandService.Start($"dotnet new sln -n {request.Name}", _slnDirectory);
 
@@ -70,7 +83,7 @@ namespace Endpoint.Cli.Commands
 
                 _commandService.Start("dotnet new webapi", _apiDirectory);
 
-                _commandService.Start($@"dotnet sln add {_apiDirectory}\{_apiProjectFileName}", _slnDirectory);
+                _commandService.Start($"dotnet sln add {_apiProjectFullPath}", _slnDirectory);
 
                 RemoveUneededFiles();
 
@@ -80,8 +93,6 @@ namespace Endpoint.Cli.Commands
 
                 _commandService.Start($"mkdir {Constants.Folders.Data}", _apiDirectory);
 
-                _commandService.Start($"mkdir {Constants.Folders.Controllers}", _apiDirectory);
-
                 _commandService.Start($"mkdir {Constants.Folders.Core}", _apiDirectory);
 
                 _commandService.Start($"mkdir {Constants.Folders.Behaviors}", _apiDirectory);
@@ -90,63 +101,77 @@ namespace Endpoint.Cli.Commands
 
                 _commandService.Start($"mkdir {Constants.Folders.Features}", _apiDirectory);
 
-                Create<ModelBuilder>((a, b, c, d) => new (a, b, c, d))
+                Create<LaunchSettingsBuilder>((a, b, c, d) => new(a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Properties}")
+                    .WithPort(_port)
+                    .WithSslPort(_port + 1)
+                    .WithProjectName(_apiProjectName)
+                    .Build();
+
+                Create<ModelBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Models}")
                     .SetNamespace(_modelsNamespace)
-                    .SetRootNamespace(_name)
-                    .SetEntityName(request.Resource)
+                    .SetRootNamespace(_rootNamespace)
+                    .SetEntityName(_resource)
                     .Build();
 
-                Create<DbContextBuilder>((a, b, c, d) => new (a, b, c, d))
+                Create<DbContextBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Data}")
-                    .SetRootNamespace(_name)
-                    .WithModel(request.Resource)
+                    .SetRootNamespace(_rootNamespace)
+                    .SetNamespace($"{_apiProjectNamespace}.{Constants.Folders.Data}")
+                    .WithModel(_resource)
+                    .WithDbContextName(_dbContextName)
                     .Build();
 
-                Create<ControllerBuilder>("cli",(a,b,c,d,e,f) => new (a,b,c,d,e,f))
-                    .SetResourceName(request.Resource)
-                    .SetDirectory($@"{_apiDirectory}/Controllers")
-                    .SetRootNamespace(_name)
+                Create<ControllerBuilder>((a, b, c, d) => new(a, b, c, d))
+                    .SetResource(_resource)
+                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Controllers}")
+                    .SetRootNamespace(_rootNamespace)
                     .Build();
 
-                Create<ResponseBaseBuilder>((a, b, c, d) => new (a, b, c, d))
+                Create<ResponseBaseBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Core}")
-                    .SetRootNamespace(_name)
+                    .SetRootNamespace(_rootNamespace)
+                    .SetNamespace($"{_rootNamespace}.Api.{Constants.Folders.Core}")
                     .Build();
 
-                Create<ValidationBehaviorBuilder>((a, b, c, d) => new (a, b, c, d))
-                    .SetDirectory($@"{_apiDirectory}/Behaviors")
-                    .SetRootNamespace(_name)
+                Create<ValidationBehaviorBuilder>((a, b, c, d) => new(a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Behaviors}")
+                    .SetRootNamespace(_rootNamespace)
+                    .SetNamespace($"{_rootNamespace}.Api.{Constants.Folders.Behaviors}")
                     .Build();
 
-                Create<ServiceCollectionExtensionsBuilder>((a, b, c, d) => new (a, b, c, d))
+                Create<ServiceCollectionExtensionsBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Extensions}")
-                    .SetRootNamespace(_name)
+                    .SetRootNamespace(_rootNamespace)
                     .Build();
 
-                Create<QueryBuilder>((a, b, c, d) => new (a, b, c, d))
-                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Features}")
-                    .SetRootNamespace(_name)
-                    .WithName($"Get{((Token)request.Resource).PascalCasePlural}")
-                    .WithEntity(request.Resource)
+                Create<ProgramBuilder>((a, b, c, d) => new(a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}")
+                    .SetRootNamespace(_rootNamespace)
+                    .SetNamespace(_apiProjectNamespace)
+                    .WithDbContextName(_dbContextName)
                     .Build();
 
-                Create<ProgramBuilder>((a, b, c, d) => new (a, b, c, d))
-                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Features}")
-                    .SetRootNamespace(_name)
+                Create<StartupBuilder>((a, b, c, d) => new(a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}")
+                    .SetRootNamespace(_rootNamespace)
+                    .SetNamespace(_apiProjectNamespace)
+                    .WithDbContextName(_dbContextName)
                     .Build();
 
-                Create<StartupBuilder>((a, b, c, d) => new (a, b, c, d))
-                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Features}")
-                    .SetRootNamespace(_name)
+                Create<DependenciesBuilder>((a, b, c, d) => new(a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}")
+                    .SetRootNamespace(_rootNamespace)
+                    .SetNamespace(_apiProjectNamespace)
+                    .WithDbContextName(_dbContextName)
                     .Build();
 
-                _commandService.Start($"start {request.Name}.sln", $@"{_slnDirectory}");
+                _commandService.Start($"start {_name}.sln", $@"{_slnDirectory}");
 
                 _commandService.Start($"dotnet watch run", $@"{_apiDirectory}");
 
                 return new();
-
             }
 
             public void RemoveUneededFiles()

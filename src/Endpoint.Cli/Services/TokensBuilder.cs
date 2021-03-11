@@ -4,17 +4,17 @@ using System.Linq;
 
 namespace Endpoint.Cli.Services
 {
-    public class SimpleTokensBuilder 
+    public class TokensBuilder 
     {
         private Dictionary<string, object> _value { get; set; } = new();
 
-        public SimpleTokensBuilder()
+        public TokensBuilder()
         {
             _value = new();
         }
-        public SimpleTokensBuilder WithToken(string propertyName, Token token)
+        public TokensBuilder With(string propertyName, Token token)
         {
-            var tokens = token.ToTokens(propertyName);
+            var tokens = token == null ? new Token("").ToTokens(propertyName) : token.ToTokens(propertyName);
             _value = new Dictionary<string, object>(_value.Concat(tokens));
             return this;
         }

@@ -3,7 +3,7 @@ using Endpoint.Cli.ValueObjects;
 
 namespace Endpoint.Cli.Builders
 {
-    public class QueryBuilder
+    public class CommandBuilder
     {
         private readonly ICommandService _commandService;
         private readonly ITemplateProcessor _templateProcessor;
@@ -14,8 +14,8 @@ namespace Endpoint.Cli.Builders
         private Token _rootNamespace;
         private Token _name;
         private Token _entity;
-        
-        public QueryBuilder(
+
+        public CommandBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
@@ -27,25 +27,25 @@ namespace Endpoint.Cli.Builders
             _fileSystem = fileSystem;
         }
 
-        public QueryBuilder SetDirectory(string directory)
+        public CommandBuilder SetDirectory(string directory)
         {
             _directory = (Token)directory;
             return this;
         }
 
-        public QueryBuilder SetRootNamespace(string rootNamespace)
+        public CommandBuilder SetRootNamespace(string rootNamespace)
         {
             _rootNamespace = (Token)rootNamespace;
             return this;
         }
 
-        public QueryBuilder WithEntity(string entity)
+        public CommandBuilder WithEntity(string entity)
         {
             _entity = (Token)entity;
             return this;
         }
 
-        public QueryBuilder WithName(string name)
+        public CommandBuilder WithName(string name)
         {
             _name = (Token)name;
             return this;
@@ -53,14 +53,14 @@ namespace Endpoint.Cli.Builders
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(QueryBuilder ));
+            var template = _templateLocator.Get(nameof(CommandBuilder));
 
-            var tokens = new SimpleTokensBuilder()
-                .WithToken("entity",_entity)
-                .WithToken("name",_name)
-                .WithToken(nameof(_rootNamespace), _rootNamespace)
-                .WithToken(nameof(_directory), _directory)
-                .WithToken("Namespace", (Token)$"{_rootNamespace.Value}.Api.Features")
+            var tokens = new TokensBuilder()
+                .With("entity", _entity)
+                .With("name", _name)
+                .With(nameof(_rootNamespace), _rootNamespace)
+                .With(nameof(_directory), _directory)
+                .With("Namespace", (Token)$"{_rootNamespace.Value}.Api.Features")
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);

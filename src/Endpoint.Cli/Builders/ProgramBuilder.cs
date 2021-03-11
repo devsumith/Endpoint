@@ -3,48 +3,30 @@ using Endpoint.Cli.ValueObjects;
 
 namespace Endpoint.Cli.Builders
 {
-    public class ProgramBuilder
+    public class ProgramBuilder: BuilderBase<ProgramBuilder>
     {
-        private readonly ICommandService _commandService;
-        private readonly ITemplateProcessor _templateProcessor;
-        private readonly ITemplateLocator _templateLocator;
-        private readonly IFileSystem _fileSystem;
-
-        private Token _directory = (Token)System.Environment.CurrentDirectory;
-        private Token _rootNamespace;
-        
         public ProgramBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem)
-        {
-            _commandService = commandService;
-            _templateProcessor = templateProcessor;
-            _templateLocator = templateLocator;
-            _fileSystem = fileSystem;
-        }
+            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+        { }
 
-        public ProgramBuilder SetDirectory(string directory)
+        private Token _dbContext;
+        public ProgramBuilder WithDbContextName(string dbContextName)
         {
-            _directory = (Token)directory;
+            _dbContext = (Token)dbContextName;
             return this;
         }
-
-        public ProgramBuilder SetRootNamespace(string rootNamespace)
-        {
-            _rootNamespace = (Token)rootNamespace;
-            return this;
-        }
-
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(ProgramBuilder ));
+            var template = _templateLocator.Get(nameof(ProgramBuilder));
 
-            var tokens = new SimpleTokensBuilder()
-                .WithToken(nameof(_rootNamespace), _rootNamespace)
-                .WithToken(nameof(_directory), _directory)
-                .WithToken("Namespace", (Token)$"{_rootNamespace.Value}.Api")
+            var tokens = new TokensBuilder()
+                .With(nameof(_rootNamespace), _rootNamespace)
+                .With(nameof(_directory), _directory)
+                .With(nameof(_namespace), _namespace)
+                .With(nameof(_dbContext), _dbContext)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);

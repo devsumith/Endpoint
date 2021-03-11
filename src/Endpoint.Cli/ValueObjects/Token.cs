@@ -13,9 +13,9 @@ namespace Endpoint.Cli.ValueObjects
         [JsonProperty]
         public string Value { get; private set; }
 
-        protected Token()
+        public Token(string value = "")
         {
-
+            Value = value;
         }
 
         public string PascalCase => namingConventionConverter.Convert(NamingConvention.PascalCase, Value);
@@ -44,21 +44,9 @@ namespace Endpoint.Cli.ValueObjects
             };
         }
 
-
-        private Token(string value)
-        {
-            Value = value;
-        }
-
         public static Result<Token> Create(string value)
         {
             value = (value ?? string.Empty).Trim();
-
-            if (value.Length == 0)
-                return Result.Failure<Token>("Token should not be empty.");
-
-            if (value.Length > MaxLength)
-                return Result.Failure<Token>("Token name is too long.");
 
             return Result.Success(new Token(value));
         }

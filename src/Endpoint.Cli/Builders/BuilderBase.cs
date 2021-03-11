@@ -1,4 +1,5 @@
-﻿using Endpoint.Cli.Services;
+﻿using Endpoint.Cli.Models;
+using Endpoint.Cli.Services;
 using Endpoint.Cli.ValueObjects;
 
 namespace Endpoint.Cli.Builders
@@ -10,11 +11,12 @@ namespace Endpoint.Cli.Builders
         protected readonly ITemplateProcessor _templateProcessor;
         protected readonly ITemplateLocator _templateLocator;
         protected readonly IFileSystem _fileSystem;
-
+        
+        protected Settings _options;
         protected Token _directory = (Token)System.Environment.CurrentDirectory;
         protected Token _rootNamespace;
         protected Token _namespace;
-
+        
         public BuilderBase(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
@@ -25,6 +27,12 @@ namespace Endpoint.Cli.Builders
             _templateProcessor = templateProcessor;
             _templateLocator = templateLocator;
             _fileSystem = fileSystem;
+        }
+
+        public T WithSettings(Settings options)
+        {
+            _options = options;
+            return this as T;
         }
 
         public T SetDirectory(string directory)

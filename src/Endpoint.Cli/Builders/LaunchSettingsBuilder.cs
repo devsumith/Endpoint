@@ -1,59 +1,65 @@
 using Endpoint.Cli.Services;
-using System.Collections.Generic;
+using Endpoint.Cli.ValueObjects;
+using System;
 
 namespace Endpoint.Cli.Builders
 {
-    public class LaunchSettingsBuilder
+    public class LaunchSettingsBuilder: BuilderBase<LaunchSettingsBuilder>
     {
-        private readonly ICommandService _commandService;
-        private readonly ITokenBuilder _tokenBuilder;
-        private readonly ITemplateProcessor _templateProcessor;
-        private readonly ITemplateLocator _templateLocator;
-        private readonly IFileSystem _fileSystem;
-        private readonly INamingConventionConverter _namingConventionConverter;
-
-        private string _directory = System.Environment.CurrentDirectory;
-        private string _rootNamespace;
-        
         public LaunchSettingsBuilder(
             ICommandService commandService,
-            ITokenBuilder tokenBuilder,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem,
-            INamingConventionConverter namingConventionConverter)
-        {
-            _commandService = commandService;
-            _tokenBuilder = tokenBuilder;
-            _templateProcessor = templateProcessor;
-            _templateLocator = templateLocator;
-            _fileSystem = fileSystem;
-            _namingConventionConverter = namingConventionConverter;
-        }
+            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+        { }
 
-        public LaunchSettingsBuilder SetDirectory(string directory)
+        private Token _port = (Token)$"{5000}";
+        private Token _sslPort = (Token)$"{5001}";
+        private Token _projectName = (Token)"Project";
+        private Token _launchUrl = (Token)$"";
+
+        public LaunchSettingsBuilder WithPort(int port)
         {
-            _directory = directory;
+            _port = (Token)$"{port}";
             return this;
         }
 
-        public LaunchSettingsBuilder SetRootNamespace(string rootNamespace)
+        public LaunchSettingsBuilder WithSslPort(int sslPort)
         {
-            _rootNamespace = rootNamespace;
+            _sslPort = (Token)$"{sslPort}";
+            return this;
+        }
+
+        public LaunchSettingsBuilder WithProjectName(string projectName)
+        {
+            _projectName = (Token)projectName;
+            return this;
+        }
+
+        public LaunchSettingsBuilder WithLaunchUrl(string launchUrl)
+        {
+            _launchUrl = (Token)launchUrl;
             return this;
         }
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(LaunchSettingsBuilder ));
+            var template = _templateLocator.Get(nameof(LaunchSettingsBuilder));
 
-            var tokens = _tokenBuilder.Build(new Dictionary<string, string> {
-                    { "RootNamespace", _rootNamespace }
-                }, _directory);
+            var tokens = new TokensBuilder()
+                .With(nameof(_rootNamespace), _rootNamespace)
+                .With(nameof(_directory), _directory)
+                .With(nameof(_namespace), _namespace)
+                .With(nameof(_port), _port)
+                .With(nameof(_sslPort), _sslPort)
+                .With(nameof(_projectName), _projectName)
+                .With(nameof(_launchUrl), _launchUrl)
+                .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory}/{_namingConventionConverter.Convert(NamingConvention.PascalCase,nameof(LaunchSettingsBuilder))}.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}/launchSettings.json", contents);
+
         }
     }
 }

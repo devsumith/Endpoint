@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static ValidatorBuilder CreateValidatorBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new ValidatorBuilder(c, t, tp, tl, f, n));
+            => Create((c, tp, tl, f) => new ValidatorBuilder(c, tp, tl, f));
     }
 }

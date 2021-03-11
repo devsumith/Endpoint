@@ -13,6 +13,7 @@
             public static string Controllers = nameof(Controllers);
             public static string Core = nameof(Core);
             public static string Behaviors = nameof(Behaviors);
+            public static string Properties = nameof(Properties);
         }
     }
 }

@@ -1,37 +1,31 @@
 using Endpoint.Cli.Services;
 using Endpoint.Cli.ValueObjects;
 
-namespace Endpoint.Cli.Builders
+namespace Endpoint.Cli.Builders.CSharp
 {
-    public class DependenciesBuilder: BuilderBase<DependenciesBuilder>
+    public class ClassBuilder: BuilderBase<ClassBuilder>
     {
-        public DependenciesBuilder(
+        public ClassBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
             IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
-        private Token _dbContext;
-        public DependenciesBuilder WithDbContextName(string dbContextName)
-        {
-            _dbContext = (Token)dbContextName;
-            return this;
-        }
+        
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(DependenciesBuilder));
+            var template = _templateLocator.Get(nameof(ClassBuilder));
 
             var tokens = new TokensBuilder()
                 .With(nameof(_rootNamespace), _rootNamespace)
                 .With(nameof(_directory), _directory)
                 .With(nameof(_namespace), _namespace)
-                .With(nameof(_dbContext), _dbContext)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/Dependencies.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}/Class.cs", contents);
         }
     }
 }

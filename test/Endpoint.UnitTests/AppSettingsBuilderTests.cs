@@ -35,6 +35,6 @@ namespace Endpoint.UnitTests
         }
 
         private static AppSettingsBuilder CreateAppSettingsBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new AppSettingsBuilder(c, t, tp, tl, f, n));
+            => Create((c, tp, tl, f) => new AppSettingsBuilder(c, tp, tl, f));
     }
 }

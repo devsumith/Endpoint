@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static SeedDataBuilder CreateSeedDataBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new SeedDataBuilder(c, t, tp, tl, f, n));
+            => Create((c, tp, tl, f) => new SeedDataBuilder(c, tp, tl, f));
     }
 }

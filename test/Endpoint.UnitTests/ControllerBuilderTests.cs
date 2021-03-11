@@ -21,7 +21,7 @@ namespace Endpoint.UnitTests
 
             var sut = CreateControllerBuilder();
 
-            sut.SetResourceName("Client")
+            sut.SetResource("Client")
                 .SetRootNamespace("UnitTest")
                 .SetDirectory(@"C:\Projects\UnitTests")
                 .Build();
@@ -33,6 +33,6 @@ namespace Endpoint.UnitTests
         }
 
         private static ControllerBuilder CreateControllerBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new ControllerBuilder(c, t, tp, tl, f, n));
+            => Create((c, tp, tl, f) => new ControllerBuilder(c, tp, tl, f));
     }
 }

@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static ResetDbBuilder CreateResetDbBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new ResetDbBuilder(c, t, tp, tl, f, n));
+            => Create((c, tp, tl, f) => new ResetDbBuilder(c, tp, tl, f));
     }
 }

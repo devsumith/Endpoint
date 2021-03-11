@@ -1,10 +1,9 @@
 namespace Endpoint.Cli.Models
 {
-    public class CliSettings
+    public class Settings
     {
         public string Projects { get; set; }
         public string Path { get; set; }
-        public string DatabaseSettingsKey { get; set; }
         public string SolutionName { get; set; }
         public string RootNamespace { get; set; }
         public string Namespace { get; set; }
@@ -14,7 +13,5 @@ namespace Endpoint.Cli.Models
         public string EntityIdDataType { get; set; }
         public string SourceFolder { get; set; }
         public string TestFolder { get; set; }
-        public string SolutionPath => @$"C:\projects\{RootNamespace}";
-
     }
 }
