@@ -1,0 +1,17 @@
+﻿{% assign openingBracket = '{' %}using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Threading.Tasks;
+
+namespace {{ rootNamespace }}.Api.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class {{ resourceNamePascalCase }}Controller
+    {
+        private readonly IMediator _mediator;
+
+        public {{ resourceNamePascalCase }}Controller(IMediator mediator) => _mediator = mediator;          
+    }
+}

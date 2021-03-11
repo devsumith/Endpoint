@@ -1,0 +1,9 @@
+using System;
+
+namespace {{ namespace }}
+{
+    public class {{ entityNamePascalCase }}
+    {
+        public Guid {{ entityNamePascalCase }}Id { get; private set; }
+    }
+}

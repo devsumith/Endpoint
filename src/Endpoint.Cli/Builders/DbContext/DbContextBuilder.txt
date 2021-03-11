@@ -1,0 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using {{ rootNamespace }}.Api.Models;
+
+namespace {{ namespace }}
+{
+    public class {{ dbContextPascalCase }}: DbContext, I{{ dbContextPascalCase }}
+    {
+        public {{ dbContextPascalCase }}(DbContextOptions options)
+            :base(options) { }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+        }
+    }
+}

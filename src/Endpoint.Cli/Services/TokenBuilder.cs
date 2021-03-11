@@ -23,12 +23,16 @@ namespace Endpoint.Cli.Services
 
             var entityNamePascalCase = _namingConventionConverter.Convert(NamingConvention.PascalCase, options["Entity"]);
 
-            var @namespace = _namespaceProvider.GetFileNamespace(directory);
-
+            var @namespace = string.IsNullOrEmpty(options["Namespace"])
+                ? _namespaceProvider.GetFileNamespace(directory)
+                : options["Namespace"];
+            
             var settings = _settingsProvider.Get();
 
+            var rootNamespace = string.IsNullOrEmpty(options["RootNamespace"])
+                ? settings.RootNamespace
+                : options["RootNamespace"];
 
-            
             string entityId = !string.IsNullOrEmpty(options["Entity"]) && !string.IsNullOrEmpty(settings.EntityIdDataType) && settings.EntityIdDataType == "Short"
                 ? "id"
                 : $"{options["Entity"]}Id";
@@ -53,14 +57,15 @@ namespace Endpoint.Cli.Services
                     { "entityNameSnakeCase", _namingConventionConverter.Convert(NamingConvention.SnakeCase, options["Entity"]) },
                     { "entityNameTitleCase", _namingConventionConverter.Convert(NamingConvention.TitleCase, options["Entity"]) },
                     { "namespace", @namespace },
-                    { "rootNamespace", settings?.RootNamespace },
+                    { "rootNamespace", rootNamespace },
                     { "rootNamespaceSnakeCase",  _namingConventionConverter.Convert(NamingConvention.SnakeCase, settings?.RootNamespace) },
                     { "entityNameKebobCase", _namingConventionConverter.Convert(NamingConvention.KebobCase, options["Entity"]) },
                     { "entityIdCamelCase", _namingConventionConverter.Convert(NamingConvention.CamelCase, entityId) },
                     { "entityIdPascalCase", _namingConventionConverter.Convert(NamingConvention.PascalCase, entityId) },
                     { "dbContextPascalCase", _namingConventionConverter.Convert(NamingConvention.PascalCase, $"{settings?.RootNamespace?.Replace(".","")}DbContext") },
                     { "dbContextCamelCase", _namingConventionConverter.Convert(NamingConvention.CamelCase, $"{settings?.RootNamespace?.Replace(".","")}DbContext") },
-                    { "entityIdCamelCaseInsideCurly", "{" + $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, options["Entity"])}" + "Id}" }
+                    { "entityIdCamelCaseInsideCurly", "{" + $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, options["Entity"])}" + "Id}" },
+                    { "resourceNamePascalCase", options["ResourceName"] }
                 };
 
             return tokens;

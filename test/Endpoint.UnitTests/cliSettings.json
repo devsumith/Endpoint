@@ -1,0 +1,8 @@
+{  
+  "RootNamespace": "Endpoint",
+  "Namespace": "Endpoint.UnitTests",
+  "Domain": "Endpoint.Domain",
+  "Api": "Endpoint.Api",
+  "Core": "Endpoint.Core",
+  "EntityIdDataType": "Guid"
+}

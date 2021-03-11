@@ -1,9 +1,11 @@
 using Endpoint.Cli.Services;
+using Endpoint.Cli.ValueObjects;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Endpoint.Cli.Builders
 {
-    public class ControllerBuilder
+    public class AppSettingsBuilder
     {
         private readonly ICommandService _commandService;
         private readonly ITokenBuilder _tokenBuilder;
@@ -12,13 +14,10 @@ namespace Endpoint.Cli.Builders
         private readonly IFileSystem _fileSystem;
         private readonly INamingConventionConverter _namingConventionConverter;
 
-        private string _directory = System.Environment.CurrentDirectory;
-        private string _resourceName;
-        private string[] _template;
-        private string _templateName = nameof(ControllerBuilder);
-        private string _rootNamespace;
+        private Token _directory = (Token)System.Environment.CurrentDirectory;
+        private Token _rootNamespace;
         
-        public ControllerBuilder(
+        public AppSettingsBuilder(
             ICommandService commandService,
             ITokenBuilder tokenBuilder,
             ITemplateProcessor templateProcessor,
@@ -34,36 +33,30 @@ namespace Endpoint.Cli.Builders
             _namingConventionConverter = namingConventionConverter;
         }
 
-        public ControllerBuilder SetDirectory(string directory)
+        public AppSettingsBuilder SetDirectory(string directory)
         {
-            _directory = directory;
+            _directory = (Token)directory;
             return this;
         }
 
-        public ControllerBuilder SetResourceName(string resourceName)
+        public AppSettingsBuilder SetRootNamespace(string rootNamespace)
         {
-            _resourceName = resourceName;
-            return this;
-        }
-
-        public ControllerBuilder SetRootNamespace(string rootNamespace)
-        {
-            _rootNamespace = rootNamespace;
+            _rootNamespace = (Token)rootNamespace;
             return this;
         }
 
         public void Build()
         {
-            _template = _templateLocator.Get(_templateName);
+            var template = _templateLocator.Get(nameof(AppSettingsBuilder));
 
-            var tokens = _tokenBuilder.Build(new Dictionary<string, string> {
-                    { "ResourceName", $"{_resourceName}" },
-                    { "RootNamespace", _rootNamespace }
-                }, _directory);
+            var tokens = new SimpleTokensBuilder()
+                .WithToken(nameof(_rootNamespace), _rootNamespace)
+                .WithToken(nameof(_directory), _rootNamespace)
+                .Build();
+                
+            var contents = _templateProcessor.Process(template, tokens);
 
-            var contents = _templateProcessor.Process(_template, tokens);
-
-            _fileSystem.WriteAllLines($@"{_directory}/{_namingConventionConverter.Convert(NamingConvention.PascalCase,_resourceName)}Controller.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory}/{((Token)nameof(AppSettingsBuilder)).PascalCase}.cs", contents);
         }
     }
 }

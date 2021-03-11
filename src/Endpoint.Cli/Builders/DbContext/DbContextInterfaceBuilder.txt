@@ -1,0 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using {{ rootNamespace }}.Api.Models;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace {{ namespace }}
+{
+    public interface I{{ dbContextPascalCase }}
+    {
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    }
+}

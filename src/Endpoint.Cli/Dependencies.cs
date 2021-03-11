@@ -18,9 +18,6 @@ namespace Endpoint.Cli
             services.AddSingleton<ITokenBuilder, TokenBuilder>();
             services.AddSingleton<INamespaceProvider, NamespaceProvider>();
             services.AddSingleton<INamingConventionConverter, NamingConventionConverter>();
-
-            //builders
-            services.AddSingleton<IControllerBuilder, ControllerBuilder>();
         }
     }
 }

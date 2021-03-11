@@ -17,23 +17,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Commands\CliSettings.txt" />
-    <None Remove="Commands\Dependencies.txt" />
-    <None Remove="Commands\LaunchSettings.txt" />
-    <None Remove="Commands\Program.txt" />
-    <None Remove="Commands\Startup.txt" />
+    <None Remove="Builders\DbContext\DbContextBuilder.txt" />
+    <None Remove="Builders\DbContext\DbContextInterfaceBuilder.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Commands\CliSettings.txt" />
-    <EmbeddedResource Include="Commands\Dependencies.txt" />
-    <EmbeddedResource Include="Commands\LaunchSettings.txt" />
-    <EmbeddedResource Include="Commands\Program.txt" />
-    <EmbeddedResource Include="Commands\Startup.txt" />
+    <EmbeddedResource Include="Builders\AppSettingsBuilder.txt" />
+    <EmbeddedResource Include="Builders\ControllerBuilder.txt" />
+    <EmbeddedResource Include="Builders\DbContext\DbContextBuilder.txt" />
+    <EmbeddedResource Include="Builders\DbContext\DbContextInterfaceBuilder.txt" />
+    <EmbeddedResource Include="Builders\DependenciesBuilder.txt" />
+    <EmbeddedResource Include="Builders\LaunchSettingsBuilder.txt" />
+    <EmbeddedResource Include="Builders\ModelBuilder.txt" />
+    <EmbeddedResource Include="Builders\ProgramBuilder.txt" />
+    <EmbeddedResource Include="Builders\StartupBuilder.txt" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.15.0" />
     <PackageReference Include="DotLiquid" Version="2.0.395" />
     <PackageReference Include="Humanizer" Version="2.8.26" />
     <PackageReference Include="MediatR" Version="9.0.0" />
@@ -49,9 +51,5 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Builders\" />
   </ItemGroup>
 </Project>

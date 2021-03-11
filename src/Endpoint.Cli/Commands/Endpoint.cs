@@ -1,10 +1,12 @@
 using CommandLine;
+using Endpoint.Cli.Builders;
 using Endpoint.Cli.Services;
 using MediatR;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using static Endpoint.Cli.Builders.BuilderFactory;
 
 namespace Endpoint.Cli.Commands
 {
@@ -31,7 +33,6 @@ namespace Endpoint.Cli.Commands
         internal class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ICommandService _commandService;
-            private readonly IServiceProvider _serviceProvider;
             private readonly IMediator _mediator;
             private string _apiDirectory;
             private string _slnDirectory;
@@ -39,11 +40,10 @@ namespace Endpoint.Cli.Commands
             private int _port;
             private string _name;
 
-            public Handler(ICommandService commandService, IMediator mediator, IServiceProvider serviceProvider)
+            public Handler(ICommandService commandService, IMediator mediator)
             {
                 _commandService = commandService;
                 _mediator = mediator;
-                _serviceProvider = serviceProvider;
             }
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
@@ -76,6 +76,30 @@ namespace Endpoint.Cli.Commands
 
                 AddNugetPackages();
 
+                _commandService.Start("mkdir Models", _apiDirectory);
+
+                Create((a, b, c, d) => new ModelBuilder(a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/Controllers")
+                    .SetRootNamespace(_name)
+                    .SetEntityName(request.Resource)
+                    .Build();
+
+                _commandService.Start("mkdir Data", _apiDirectory);
+
+                Create((a, b, c, d) => new DbContextBuilder(a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/Data")
+                    .SetRootNamespace(_name)
+                    .WithModel(request.Resource)
+                    .Build();
+
+                _commandService.Start("mkdir Controllers", _apiDirectory);
+
+                Create("cli",(a,b,c,d,e,f) => new ControllerBuilder(a,b,c,d,e,f))
+                    .SetResourceName(request.Resource)
+                    .SetDirectory($@"{_apiDirectory}/Controllers")
+                    .SetRootNamespace(_name)
+                    .Build();
+
                 _commandService.Start($"start {request.Name}.sln", $@"{_slnDirectory}");
 
                 _commandService.Start($"dotnet watch run", $@"{_apiDirectory}");
@@ -86,12 +110,12 @@ namespace Endpoint.Cli.Commands
 
             private async Task UpdateLaunchSettingsAsync()
             {
-                await _mediator.Send(new LaunchSettings.Request { Directory = $@"{_apiDirectory}\Properties", Port = _port, SslPort = _port + 1, Name = _name }, default);
+
             }
 
             private async Task UpdateStartUpProgramAndDependecies()
             {
-                await _mediator.Send(new Dependencies.Request { Directory = _apiDirectory, Name = _name }, default);
+
             }
 
             public void RemoveDefaultTemplateFiles()
