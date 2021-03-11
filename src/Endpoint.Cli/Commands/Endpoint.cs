@@ -29,103 +29,116 @@ namespace Endpoint.Cli.Commands
 
             [Option('d')]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
+
         }
 
         internal class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ICommandService _commandService;
-            private readonly IMediator _mediator;
             private string _apiDirectory;
             private string _slnDirectory;
+
+            private string _apiProjectFileName;
             private string _apiProjectName;
+
+            private string _modelsNamespace;
+
+
             private int _port;
             private string _name;
 
             public Handler(ICommandService commandService, IMediator mediator)
-            {
-                _commandService = commandService;
-                _mediator = mediator;
-            }
+                => _commandService = commandService;
+
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 _port = request.Port;
                 _name = request.Name;
-
-                _apiProjectName = $"{request.Name}.Api.csproj";
+                _apiProjectFileName = $"{request.Name}.Api.csproj";                
+                _slnDirectory = $@"{request.Directory}\{request.Name}";                
+                _apiDirectory = @$"{_slnDirectory}\src\{request.Name}.Api";
+                _apiProjectName = $"{request.Name}.Api";
+                _modelsNamespace = $"{request.Name}.Api.Models";
 
                 _commandService.Start($"mkdir {request.Name}", request.Directory);
-
-                _slnDirectory = $@"{request.Directory}\{request.Name}";
 
                 _commandService.Start($"dotnet new sln -n {request.Name}", _slnDirectory);
 
                 _commandService.Start($"mkdir src", _slnDirectory);
 
-                _commandService.Start($@"mkdir src\{request.Name}.Api", _slnDirectory);
-
-                _apiDirectory = @$"{_slnDirectory}\src\{request.Name}.Api";
+                _commandService.Start($@"mkdir src\{_apiProjectName}", _slnDirectory);
 
                 _commandService.Start("dotnet new webapi", _apiDirectory);
 
-                RemoveDefaultTemplateFiles();
+                _commandService.Start($@"dotnet sln add {_apiDirectory}\{_apiProjectFileName}", _slnDirectory);
 
-                _commandService.Start($@"dotnet sln add {_apiDirectory}\{_apiProjectName}", _slnDirectory);
+                RemoveUneededFiles();
 
-                await UpdateLaunchSettingsAsync();
+                InstallNugetPackages();
 
-                await UpdateStartUpProgramAndDependecies();
+                _commandService.Start($"mkdir {Constants.Folders.Models}", _apiDirectory);
 
-                AddNugetPackages();
+                _commandService.Start($"mkdir {Constants.Folders.Data}", _apiDirectory);
 
-                _commandService.Start("mkdir Models", _apiDirectory);
+                _commandService.Start($"mkdir {Constants.Folders.Controllers}", _apiDirectory);
 
-                Create((a, b, c, d) => new ModelBuilder(a, b, c, d))
-                    .SetDirectory($@"{_apiDirectory}/Controllers")
+                _commandService.Start($"mkdir {Constants.Folders.Core}", _apiDirectory);
+
+                _commandService.Start($"mkdir {Constants.Folders.Behaviors}", _apiDirectory);
+
+                _commandService.Start($"mkdir {Constants.Folders.Extensions}", _apiDirectory);
+
+                _commandService.Start($"mkdir {Constants.Folders.Features}", _apiDirectory);
+
+                Create<ModelBuilder>((a, b, c, d) => new (a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Models}")
+                    .SetNamespace(_modelsNamespace)
                     .SetRootNamespace(_name)
                     .SetEntityName(request.Resource)
                     .Build();
 
-                _commandService.Start("mkdir Data", _apiDirectory);
-
-                Create((a, b, c, d) => new DbContextBuilder(a, b, c, d))
-                    .SetDirectory($@"{_apiDirectory}/Data")
+                Create<DbContextBuilder>((a, b, c, d) => new (a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Data}")
                     .SetRootNamespace(_name)
                     .WithModel(request.Resource)
                     .Build();
 
-                _commandService.Start("mkdir Controllers", _apiDirectory);
-
-                Create("cli",(a,b,c,d,e,f) => new ControllerBuilder(a,b,c,d,e,f))
+                Create<ControllerBuilder>("cli",(a,b,c,d,e,f) => new (a,b,c,d,e,f))
                     .SetResourceName(request.Resource)
                     .SetDirectory($@"{_apiDirectory}/Controllers")
                     .SetRootNamespace(_name)
                     .Build();
 
-                _commandService.Start("mkdir Core", _apiDirectory);
-
-                Create((a, b, c, d) => new ResponseBaseBuilder(a, b, c, d))
-                    .SetDirectory($@"{_apiDirectory}/Core")
+                Create<ResponseBaseBuilder>((a, b, c, d) => new (a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Core}")
                     .SetRootNamespace(_name)
                     .Build();
 
-                _commandService.Start("mkdir Behaviors", _apiDirectory);
-                Create((a, b, c, d) => new ValidationBehaviorBuilder(a, b, c, d))
+                Create<ValidationBehaviorBuilder>((a, b, c, d) => new (a, b, c, d))
                     .SetDirectory($@"{_apiDirectory}/Behaviors")
                     .SetRootNamespace(_name)
                     .Build();
 
-                _commandService.Start("mkdir Extensions", _apiDirectory);
-                Create((a, b, c, d) => new ServiceCollectionExtensionsBuilder(a, b, c, d))
-                    .SetDirectory($@"{_apiDirectory}/Extensions")
+                Create<ServiceCollectionExtensionsBuilder>((a, b, c, d) => new (a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Extensions}")
                     .SetRootNamespace(_name)
                     .Build();
 
-                _commandService.Start("mkdir Features", _apiDirectory);
-                Create((a, b, c, d) => new QueryBuilder(a, b, c, d))
-                    .SetDirectory($@"{_apiDirectory}/Features")
+                Create<QueryBuilder>((a, b, c, d) => new (a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Features}")
                     .SetRootNamespace(_name)
                     .WithName($"Get{((Token)request.Resource).PascalCasePlural}")
                     .WithEntity(request.Resource)
+                    .Build();
+
+                Create<ProgramBuilder>((a, b, c, d) => new (a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Features}")
+                    .SetRootNamespace(_name)
+                    .Build();
+
+                Create<StartupBuilder>((a, b, c, d) => new (a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/{Constants.Folders.Features}")
+                    .SetRootNamespace(_name)
                     .Build();
 
                 _commandService.Start($"start {request.Name}.sln", $@"{_slnDirectory}");
@@ -136,23 +149,13 @@ namespace Endpoint.Cli.Commands
 
             }
 
-            private async Task UpdateLaunchSettingsAsync()
-            {
-
-            }
-
-            private async Task UpdateStartUpProgramAndDependecies()
-            {
-
-            }
-
-            public void RemoveDefaultTemplateFiles()
+            public void RemoveUneededFiles()
             {
                 _commandService.Start($"rimraf WeatherForecast.cs", $@"{_apiDirectory}");
                 _commandService.Start($@"rimraf Controllers\WeatherForecastController.cs", $@"{_apiDirectory}");
             }
 
-            public void AddNugetPackages()
+            public void InstallNugetPackages()
             {
                 _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory", $@"{_apiDirectory}");
                 _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.SqlServer", $@"{_apiDirectory}");

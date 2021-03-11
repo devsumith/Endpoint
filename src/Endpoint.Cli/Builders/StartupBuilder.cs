@@ -1,4 +1,5 @@
 using Endpoint.Cli.Services;
+using Endpoint.Cli.ValueObjects;
 using System.Collections.Generic;
 
 namespace Endpoint.Cli.Builders
@@ -6,54 +7,50 @@ namespace Endpoint.Cli.Builders
     public class StartupBuilder
     {
         private readonly ICommandService _commandService;
-        private readonly ITokenBuilder _tokenBuilder;
         private readonly ITemplateProcessor _templateProcessor;
         private readonly ITemplateLocator _templateLocator;
         private readonly IFileSystem _fileSystem;
-        private readonly INamingConventionConverter _namingConventionConverter;
 
-        private string _directory = System.Environment.CurrentDirectory;
-        private string _rootNamespace;
-        
+        private Token _directory = (Token)System.Environment.CurrentDirectory;
+        private Token _rootNamespace;
+
         public StartupBuilder(
             ICommandService commandService,
-            ITokenBuilder tokenBuilder,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem,
-            INamingConventionConverter namingConventionConverter)
+            IFileSystem fileSystem)
         {
             _commandService = commandService;
-            _tokenBuilder = tokenBuilder;
             _templateProcessor = templateProcessor;
             _templateLocator = templateLocator;
             _fileSystem = fileSystem;
-            _namingConventionConverter = namingConventionConverter;
         }
 
         public StartupBuilder SetDirectory(string directory)
         {
-            _directory = directory;
+            _directory = (Token)directory;
             return this;
         }
 
         public StartupBuilder SetRootNamespace(string rootNamespace)
         {
-            _rootNamespace = rootNamespace;
+            _rootNamespace = (Token)rootNamespace;
             return this;
         }
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(StartupBuilder ));
+            var template = _templateLocator.Get(nameof(ProgramBuilder));
 
-            var tokens = _tokenBuilder.Build(new Dictionary<string, string> {
-                    { "RootNamespace", _rootNamespace }
-                }, _directory);
+            var tokens = new SimpleTokensBuilder()
+                .WithToken(nameof(_rootNamespace), _rootNamespace)
+                .WithToken(nameof(_directory), _directory)
+                .WithToken("Namespace", (Token)$"{_rootNamespace.Value}.Api")
+                .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory}/{_namingConventionConverter.Convert(NamingConvention.PascalCase,nameof(StartupBuilder))}.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}/Program.cs", contents);
         }
     }
 }

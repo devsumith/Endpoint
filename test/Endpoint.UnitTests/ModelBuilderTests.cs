@@ -22,6 +22,7 @@ namespace Endpoint.UnitTests
             var sut = CreateModelBuilder();
 
             sut.SetRootNamespace("ContactService")
+                .SetNamespace("ContactService.Api.Models")
                 .SetDirectory(@"C:\Projects\ContactService\src\ContactService.Api\Models")
                 .SetEntityName("Contact")
                 .Build();

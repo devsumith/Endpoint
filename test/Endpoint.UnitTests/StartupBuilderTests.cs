@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static StartupBuilder CreateStartupBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new StartupBuilder(c, t, tp, tl, f, n));
+            => Create((c,  tp, tl, f) => new StartupBuilder(c, tp, tl, f));
     }
 }
