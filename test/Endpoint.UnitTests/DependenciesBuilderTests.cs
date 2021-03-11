@@ -21,8 +21,8 @@ namespace Endpoint.UnitTests
 
             var sut = CreateDependenciesBuilder();
 
-            sut.SetRootNamespace("")
-                .SetDirectory(@"")
+            sut.SetRootNamespace("ContactService")
+                .SetDirectory(@"C:\Projects\ContactService\src\ContactService.Api")
                 .Build();
         }
 
@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static DependenciesBuilder CreateDependenciesBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new DependenciesBuilder(c, t, tp, tl, f, n));
+            => Create((c,  tp, tl, f) => new DependenciesBuilder(c, tp, tl, f));
     }
 }

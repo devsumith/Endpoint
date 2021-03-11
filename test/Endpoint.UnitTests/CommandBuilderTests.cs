@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static CommandBuilder CreateCommandBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new CommandBuilder(c, t, tp, tl, f, n));
+            => Create((c, tp, tl, f) => new CommandBuilder(c, tp, tl, f));
     }
 }

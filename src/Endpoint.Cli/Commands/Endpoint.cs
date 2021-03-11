@@ -1,6 +1,7 @@
 using CommandLine;
 using Endpoint.Cli.Builders;
 using Endpoint.Cli.Services;
+using Endpoint.Cli.ValueObjects;
 using MediatR;
 using System;
 using System.IO;
@@ -98,6 +99,33 @@ namespace Endpoint.Cli.Commands
                     .SetResourceName(request.Resource)
                     .SetDirectory($@"{_apiDirectory}/Controllers")
                     .SetRootNamespace(_name)
+                    .Build();
+
+                _commandService.Start("mkdir Core", _apiDirectory);
+
+                Create((a, b, c, d) => new ResponseBaseBuilder(a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/Core")
+                    .SetRootNamespace(_name)
+                    .Build();
+
+                _commandService.Start("mkdir Behaviors", _apiDirectory);
+                Create((a, b, c, d) => new ValidationBehaviorBuilder(a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/Behaviors")
+                    .SetRootNamespace(_name)
+                    .Build();
+
+                _commandService.Start("mkdir Extensions", _apiDirectory);
+                Create((a, b, c, d) => new ServiceCollectionExtensionsBuilder(a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/Extensions")
+                    .SetRootNamespace(_name)
+                    .Build();
+
+                _commandService.Start("mkdir Features", _apiDirectory);
+                Create((a, b, c, d) => new QueryBuilder(a, b, c, d))
+                    .SetDirectory($@"{_apiDirectory}/Features")
+                    .SetRootNamespace(_name)
+                    .WithName($"Get{((Token)request.Resource).PascalCasePlural}")
+                    .WithEntity(request.Resource)
                     .Build();
 
                 _commandService.Start($"start {request.Name}.sln", $@"{_slnDirectory}");

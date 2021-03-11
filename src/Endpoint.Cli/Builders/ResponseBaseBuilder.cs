@@ -3,7 +3,7 @@ using Endpoint.Cli.ValueObjects;
 
 namespace Endpoint.Cli.Builders
 {
-    public class ProgramBuilder
+    public class ResponseBaseBuilder
     {
         private readonly ICommandService _commandService;
         private readonly ITemplateProcessor _templateProcessor;
@@ -13,7 +13,7 @@ namespace Endpoint.Cli.Builders
         private Token _directory = (Token)System.Environment.CurrentDirectory;
         private Token _rootNamespace;
         
-        public ProgramBuilder(
+        public ResponseBaseBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
@@ -25,13 +25,13 @@ namespace Endpoint.Cli.Builders
             _fileSystem = fileSystem;
         }
 
-        public ProgramBuilder SetDirectory(string directory)
+        public ResponseBaseBuilder SetDirectory(string directory)
         {
             _directory = (Token)directory;
             return this;
         }
 
-        public ProgramBuilder SetRootNamespace(string rootNamespace)
+        public ResponseBaseBuilder SetRootNamespace(string rootNamespace)
         {
             _rootNamespace = (Token)rootNamespace;
             return this;
@@ -39,17 +39,15 @@ namespace Endpoint.Cli.Builders
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(ProgramBuilder ));
+            var template = _templateLocator.Get(nameof(ResponseBaseBuilder ));
 
             var tokens = new SimpleTokensBuilder()
-                .WithToken(nameof(_rootNamespace), _rootNamespace)
-                .WithToken(nameof(_directory), _directory)
-                .WithToken("Namespace", (Token)$"{_rootNamespace.Value}.Api")
+                .WithToken("namespace", (Token)$"{_rootNamespace.Value}.Cli.Core")
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/Program.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}/ResponseBase.cs", contents);
         }
     }
 }

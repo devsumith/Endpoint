@@ -21,8 +21,8 @@ namespace Endpoint.UnitTests
 
             var sut = CreateValidationBehaviorBuilder();
 
-            sut.SetRootNamespace("")
-                .SetDirectory(@"")
+            sut.SetRootNamespace("ContactService")
+                .SetDirectory(@"C:\Projects\ContactService\src\ContactService.Api\Behaviors")
                 .Build();
         }
 
@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static ValidationBehaviorBuilder CreateValidationBehaviorBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new ValidationBehaviorBuilder(c, t, tp, tl, f, n));
+            => Create((c, tp, tl, f) => new ValidationBehaviorBuilder(c, tp, tl, f));
     }
 }

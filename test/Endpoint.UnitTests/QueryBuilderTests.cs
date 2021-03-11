@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static QueryBuilder CreateQueryBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new QueryBuilder(c, t, tp, tl, f, n));
+            => Create((c, tp, tl, f) => new QueryBuilder(c, tp, tl, f));
     }
 }

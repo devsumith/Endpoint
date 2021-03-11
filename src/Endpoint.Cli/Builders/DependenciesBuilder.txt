@@ -1,6 +1,5 @@
-using {{ namePascalCase }}.Api.Behaviors;
-using {{ namePascalCase }}.Api.Data;
-using {{ namePascalCase }}.Api.Extensions;
+using {{ rootNamespace }}.Api.Data;
+using {{ rootNamespace }}.Api.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
 
-namespace {{ namePascalCase }}.Api
+namespace {{ namespace }}
 {
     public static class Dependencies
     {
@@ -25,7 +24,7 @@ namespace {{ namePascalCase }}.Api
                     Contact = new OpenApiContact
                     {
                         Name = "",
-                        Email = "q"
+                        Email = ""
                     },
                     License = new OpenApiLicense
                     {
@@ -52,11 +51,11 @@ namespace {{ namePascalCase }}.Api
 
             services.AddMediatR(typeof(Startup));
 
-            services.AddTransient<I{{ namePascalCase }}DbContext, {{ namePascalCase }}DbContext>();
+            services.AddTransient<I{{ rootNamespace }}DbContext, {{ rootNamespace }}DbContext>();
 
-            services.AddDbContext<{{ namePascalCase }}DbContext>(options =>
+            services.AddDbContext<{{ rootNamespace }}DbContext>(options =>
             {
-                options.UseInMemoryDatabase("{{ namePascalCase }}")
+                options.UseInMemoryDatabase(configuration[nameof({{ rootNamespace }})])
                 .LogTo(Console.WriteLine)
                 .EnableSensitiveDataLogging();
             });

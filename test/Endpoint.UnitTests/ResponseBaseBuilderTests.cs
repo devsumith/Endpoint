@@ -4,14 +4,14 @@ using static Endpoint.Cli.Builders.BuilderFactory;
 
 namespace Endpoint.UnitTests
 {
-    public class ProgramBuilderTests
+    public class ResponseBaseBuilderTests
     {
         [Fact]
         public async void Constructor()
         {
             Setup();
 
-            var sut = CreateProgramBuilder();
+            var sut = CreateResponseBaseBuilder();
         }
 
         [Fact]
@@ -19,10 +19,10 @@ namespace Endpoint.UnitTests
         {
             Setup();
 
-            var sut = CreateProgramBuilder();
+            var sut = CreateResponseBaseBuilder();
 
-            sut.SetRootNamespace("ContactService")
-                .SetDirectory(@"C:\Projects\ContactService\src\ContactService.Api")
+            sut.SetRootNamespace("")
+                .SetDirectory(@"")
                 .Build();
         }
 
@@ -31,7 +31,7 @@ namespace Endpoint.UnitTests
 
         }
 
-        private static ProgramBuilder CreateProgramBuilder()
-            => Create((c, tp, tl, f) => new ProgramBuilder(c, tp, tl, f));
+        private static ResponseBaseBuilder CreateResponseBaseBuilder()
+            => Create((c, tp, tl, f) => new ResponseBaseBuilder(c, tp, tl, f));
     }
 }

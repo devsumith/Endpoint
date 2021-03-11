@@ -11,7 +11,7 @@ namespace Endpoint.UnitTests
         {
             Setup();
 
-            var sut = CreateServiceCollectionExtensionsBuilder();
+            _ = CreateServiceCollectionExtensionsBuilder();
         }
 
         [Fact]
@@ -21,8 +21,8 @@ namespace Endpoint.UnitTests
 
             var sut = CreateServiceCollectionExtensionsBuilder();
 
-            sut.SetRootNamespace("")
-                .SetDirectory(@"")
+            sut.SetRootNamespace("ContactService")
+                .SetDirectory(@"C:\Projects\ContactService\src\ContactService.Api\Extensions")
                 .Build();
         }
 
@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static ServiceCollectionExtensionsBuilder CreateServiceCollectionExtensionsBuilder()
-            => Create("cli", (c, t, tp, tl, f, n) => new ServiceCollectionExtensionsBuilder(c, t, tp, tl, f, n));
+            => Create((c, tp, tl, f) => new ServiceCollectionExtensionsBuilder(c, tp, tl, f));
     }
 }

@@ -1,45 +1,53 @@
 using Endpoint.Cli.Services;
-using System.Collections.Generic;
+using Endpoint.Cli.ValueObjects;
 
 namespace Endpoint.Cli.Builders
 {
     public class QueryBuilder
     {
         private readonly ICommandService _commandService;
-        private readonly ITokenBuilder _tokenBuilder;
         private readonly ITemplateProcessor _templateProcessor;
         private readonly ITemplateLocator _templateLocator;
         private readonly IFileSystem _fileSystem;
-        private readonly INamingConventionConverter _namingConventionConverter;
 
-        private string _directory = System.Environment.CurrentDirectory;
-        private string _rootNamespace;
+        private Token _directory = (Token)System.Environment.CurrentDirectory;
+        private Token _rootNamespace;
+        private Token _name;
+        private Token _entity;
         
         public QueryBuilder(
             ICommandService commandService,
-            ITokenBuilder tokenBuilder,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem,
-            INamingConventionConverter namingConventionConverter)
+            IFileSystem fileSystem)
         {
             _commandService = commandService;
-            _tokenBuilder = tokenBuilder;
             _templateProcessor = templateProcessor;
             _templateLocator = templateLocator;
             _fileSystem = fileSystem;
-            _namingConventionConverter = namingConventionConverter;
         }
 
         public QueryBuilder SetDirectory(string directory)
         {
-            _directory = directory;
+            _directory = (Token)directory;
             return this;
         }
 
         public QueryBuilder SetRootNamespace(string rootNamespace)
         {
-            _rootNamespace = rootNamespace;
+            _rootNamespace = (Token)rootNamespace;
+            return this;
+        }
+
+        public QueryBuilder WithEntity(string entity)
+        {
+            _entity = (Token)entity;
+            return this;
+        }
+
+        public QueryBuilder WithName(string name)
+        {
+            _name = (Token)name;
             return this;
         }
 
@@ -47,13 +55,17 @@ namespace Endpoint.Cli.Builders
         {
             var template = _templateLocator.Get(nameof(QueryBuilder ));
 
-            var tokens = _tokenBuilder.Build(new Dictionary<string, string> {
-                    { "RootNamespace", _rootNamespace }
-                }, _directory);
+            var tokens = new SimpleTokensBuilder()
+                .WithToken("entity",_entity)
+                .WithToken("name",_name)
+                .WithToken(nameof(_rootNamespace), _rootNamespace)
+                .WithToken(nameof(_directory), _directory)
+                .WithToken("Namespace", (Token)$"{_rootNamespace.Value}.Api.Features")
+                .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory}/{_namingConventionConverter.Convert(NamingConvention.PascalCase,nameof(QueryBuilder))}.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}/{_name.PascalCase}.cs", contents);
         }
     }
 }
