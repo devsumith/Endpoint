@@ -1,5 +1,6 @@
 using CommandLine;
 using Endpoint.Cli.Builders;
+using Endpoint.Cli.Services;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,14 +21,23 @@ namespace Endpoint.Cli.Commands
         }
 
         internal class Handler : IRequestHandler<Request, Unit>
-        {            
+        {
+            private readonly ISettingsProvider _settingsProvder;
+
+            public Handler(ISettingsProvider settingsProvider)
+            {
+                _settingsProvder = settingsProvider;
+            }
+
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d))
+                var settings = _settingsProvder.Get();
+
+/*                Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDirectory(request.Directory)
                     .SetRootNamespace("")
                     .WithEntity("")
-                    .Build();
+                    .Build();*/
 
                 return new();
             }
