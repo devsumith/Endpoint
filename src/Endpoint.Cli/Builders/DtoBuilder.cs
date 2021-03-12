@@ -3,9 +3,9 @@ using Endpoint.Cli.ValueObjects;
 
 namespace Endpoint.Cli.Builders
 {
-    public class ValidatorBuilder: BuilderBase<ValidatorBuilder>
+    public class DtoBuilder: BuilderBase<DtoBuilder>
     {
-        public ValidatorBuilder(
+        public DtoBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
@@ -13,8 +13,8 @@ namespace Endpoint.Cli.Builders
         { }
 
         private Token _entityName;
-
-        public ValidatorBuilder WithEntity(string entity)
+        
+        public DtoBuilder WithEntity(string entity)
         {
             _entityName = (Token)entity;
             return this;
@@ -22,7 +22,7 @@ namespace Endpoint.Cli.Builders
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(ValidatorBuilder));
+            var template = _templateLocator.Get(nameof(DtoBuilder));
 
             var tokens = new TokensBuilder()
                 .With(nameof(_rootNamespace), _rootNamespace)
@@ -33,7 +33,7 @@ namespace Endpoint.Cli.Builders
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/Validator.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}/Dto.cs", contents);
         }
     }
 }

@@ -1,11 +1,11 @@
-using {{ rootNamespace }}.Api.Models;
 using MediatR;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using {{ applicationNamespace }}.Interfaces;
 
-namespace {{ namespace }}
+namespace {{ applicationNamespace }}.Features
 {
     public class {{ namePascalCase }}
     {
@@ -18,9 +18,9 @@ namespace {{ namespace }}
 
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly I{{ rootNamespace }}DbContext _context;
+            private readonly I{{ dbContextPascalCase }} _context;
 
-            public Handler(I{{ rootNamespace }}DbContext context){
+            public Handler(I{{ dbContextPascalCase }} context){
                 _context = context;
             }
 

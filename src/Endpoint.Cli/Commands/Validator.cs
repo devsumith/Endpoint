@@ -8,10 +8,11 @@ using static Endpoint.Cli.Builders.BuilderFactory;
 
 namespace Endpoint.Cli.Commands
 {
-    internal class Query
+    internal class Validator
     {
-        [Verb("query")]
-        internal class Request : IRequest<Unit> {
+        [Verb("validator")]
+        internal class Request : IRequest<Unit>
+        {
 
             [Value(0)]
             public string Name { get; set; }
@@ -34,12 +35,10 @@ namespace Endpoint.Cli.Commands
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-                Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d))
+                Create<ValidatorBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDirectory(request.Directory)
                     .SetRootNamespace(settings.RootNamespace)
                     .WithEntity(request.Entity)
-                    .WithName(request.Name)
-                    .WithDbContext(settings.DbContext)
                     .SetApplicationNamespace(settings.ApplicationNamespace)
                     .SetDomainNamespace(settings.DomainNamespace)
                     .Build();

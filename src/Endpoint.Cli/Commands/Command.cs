@@ -8,10 +8,11 @@ using static Endpoint.Cli.Builders.BuilderFactory;
 
 namespace Endpoint.Cli.Commands
 {
-    internal class Query
+    internal class Command
     {
-        [Verb("query")]
-        internal class Request : IRequest<Unit> {
+        [Verb("command")]
+        internal class Request : IRequest<Unit>
+        {
 
             [Value(0)]
             public string Name { get; set; }
@@ -34,7 +35,7 @@ namespace Endpoint.Cli.Commands
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-                Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d))
+                Create<CommandBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDirectory(request.Directory)
                     .SetRootNamespace(settings.RootNamespace)
                     .WithEntity(request.Entity)

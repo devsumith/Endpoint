@@ -1,7 +1,7 @@
 ﻿using Endpoint.Cli.Models;
-using System;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 
 namespace Endpoint.Cli.Services
 {
@@ -23,12 +23,16 @@ namespace Endpoint.Cli.Services
 
                 if (File.Exists(path))
                 {
-                    Console.WriteLine("Found");
+                    return JsonSerializer.Deserialize<Settings>(File.ReadAllText(path), new () { 
+                        PropertyNameCaseInsensitive = true, 
+                    });
                 }
+
                 i++;
             }
 
-            return null;
+            return Settings.Empty;
+            
         }
     }
 }

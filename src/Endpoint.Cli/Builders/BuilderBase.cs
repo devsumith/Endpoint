@@ -16,7 +16,9 @@ namespace Endpoint.Cli.Builders
         protected Token _directory = (Token)System.Environment.CurrentDirectory;
         protected Token _rootNamespace;
         protected Token _namespace;
-        
+        protected Token _domainNamespace;
+        protected Token _applicationNamespace;
+
         public BuilderBase(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
@@ -50,6 +52,18 @@ namespace Endpoint.Cli.Builders
         public T SetNamespace(string entityName)
         {
             _namespace = (Token)entityName;
+            return this as T;
+        }
+
+        public T SetDomainNamespace(string domainNamespace)
+        {
+            _domainNamespace = (Token)domainNamespace;
+            return this as T;
+        }
+
+        public T SetApplicationNamespace(string applicationNamespace)
+        {
+            _applicationNamespace = (Token)applicationNamespace;
             return this as T;
         }
     }

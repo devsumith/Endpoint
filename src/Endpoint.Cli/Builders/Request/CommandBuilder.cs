@@ -3,7 +3,7 @@ using Endpoint.Cli.ValueObjects;
 
 namespace Endpoint.Cli.Builders
 {
-    public class CommandBuilder
+    public class CommandBuilder: BuilderBase<CommandBuilder>
     {
         private readonly ICommandService _commandService;
         private readonly ITemplateProcessor _templateProcessor;
@@ -13,13 +13,14 @@ namespace Endpoint.Cli.Builders
         private Token _directory = (Token)System.Environment.CurrentDirectory;
         private Token _rootNamespace;
         private Token _name;
-        private Token _entity;
+        private Token _entityName;
+        private Token _dbContext;
 
         public CommandBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem)
+            IFileSystem fileSystem): base(commandService, templateProcessor, templateLocator, fileSystem)
         {
             _commandService = commandService;
             _templateProcessor = templateProcessor;
@@ -39,9 +40,15 @@ namespace Endpoint.Cli.Builders
             return this;
         }
 
+        public CommandBuilder WithDbContext(string dbContext)
+        {
+            _dbContext = (Token)dbContext;
+            return this;
+        }
+
         public CommandBuilder WithEntity(string entity)
         {
-            _entity = (Token)entity;
+            _entityName = (Token)entity;
             return this;
         }
 
@@ -56,10 +63,11 @@ namespace Endpoint.Cli.Builders
             var template = _templateLocator.Get(nameof(CommandBuilder));
 
             var tokens = new TokensBuilder()
-                .With("entity", _entity)
-                .With("name", _name)
+                .With(nameof(_entityName), _entityName)
+                .With(nameof(_name), _name)
                 .With(nameof(_rootNamespace), _rootNamespace)
                 .With(nameof(_directory), _directory)
+                .With(nameof(_dbContext), _dbContext)
                 .With("Namespace", (Token)$"{_rootNamespace.Value}.Api.Features")
                 .Build();
 

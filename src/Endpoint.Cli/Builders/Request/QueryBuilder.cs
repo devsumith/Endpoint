@@ -3,45 +3,22 @@ using Endpoint.Cli.ValueObjects;
 
 namespace Endpoint.Cli.Builders
 {
-    public class QueryBuilder
+    public class QueryBuilder: BuilderBase<QueryBuilder>
     {
-        private readonly ICommandService _commandService;
-        private readonly ITemplateProcessor _templateProcessor;
-        private readonly ITemplateLocator _templateLocator;
-        private readonly IFileSystem _fileSystem;
-
-        private Token _directory = (Token)System.Environment.CurrentDirectory;
-        private Token _rootNamespace;
         private Token _name;
-        private Token _entity;
-        
+        private Token _entityName;
+        private Token _dbContext;
+
         public QueryBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem)
-        {
-            _commandService = commandService;
-            _templateProcessor = templateProcessor;
-            _templateLocator = templateLocator;
-            _fileSystem = fileSystem;
-        }
+            IFileSystem fileSystem): base(commandService, templateProcessor, templateLocator, fileSystem)
+        { }
 
-        public QueryBuilder SetDirectory(string directory)
+        public QueryBuilder WithEntity(string entityName)
         {
-            _directory = (Token)directory;
-            return this;
-        }
-
-        public QueryBuilder SetRootNamespace(string rootNamespace)
-        {
-            _rootNamespace = (Token)rootNamespace;
-            return this;
-        }
-
-        public QueryBuilder WithEntity(string entity)
-        {
-            _entity = (Token)entity;
+            _entityName = (Token)entityName;
             return this;
         }
 
@@ -51,16 +28,24 @@ namespace Endpoint.Cli.Builders
             return this;
         }
 
+        public QueryBuilder WithDbContext(string dbContext)
+        {
+            _dbContext = (Token)dbContext;
+            return this;
+        }
+
         public void Build()
         {
             var template = _templateLocator.Get(nameof(QueryBuilder ));
 
             var tokens = new TokensBuilder()
-                .With("entity",_entity)
-                .With("name",_name)
+                .With(nameof(_entityName), _entityName)
+                .With(nameof(_name),_name)
                 .With(nameof(_rootNamespace), _rootNamespace)
                 .With(nameof(_directory), _directory)
-                .With("Namespace", (Token)$"{_rootNamespace.Value}.Api.Features")
+                .With(nameof(_domainNamespace), _domainNamespace)
+                .With(nameof(_applicationNamespace), _applicationNamespace)
+                .With(nameof(_dbContext), _dbContext)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
