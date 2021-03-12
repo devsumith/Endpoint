@@ -1,6 +1,6 @@
-using Endpoint.Cli.Builders;
+using Endpoint.Application.Builders;
 using Xunit;
-using static Endpoint.Cli.Builders.BuilderFactory;
+using static Endpoint.Application.Builders.BuilderFactory;
 
 namespace Endpoint.UnitTests
 {

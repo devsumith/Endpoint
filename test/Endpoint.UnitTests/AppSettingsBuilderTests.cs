@@ -1,9 +1,9 @@
-using Endpoint.Cli.Builders;
-using Endpoint.Cli.ValueObjects;
+using Endpoint.Application.Builders;
+using Endpoint.Application.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using static Endpoint.Cli.Builders.BuilderFactory;
+using static Endpoint.Application.Builders.BuilderFactory;
 
 namespace Endpoint.UnitTests
 {

@@ -1,9 +1,7 @@
 ﻿using CommandLine;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Endpoint.Cli
@@ -20,11 +18,6 @@ namespace Endpoint.Cli
         public static ServiceProvider BuildContainer()
         {
             var services = new ServiceCollection();
-
-            services.AddSingleton<IConfiguration>(new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string>() {
-                { "settingFileNames","cli" }
-                }).Build());
 
             Dependencies.Configure(services);
 

@@ -1,4 +1,5 @@
-﻿using Endpoint.Cli.Services;
+﻿using Endpoint.Application;
+using Endpoint.Application.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,7 +9,7 @@ namespace Endpoint.Cli
     {
         public static void Configure(IServiceCollection services)
         {
-            services.AddMediatR(typeof(Program));
+            services.AddMediatR(typeof(Constants));
             services.AddSingleton<ICommandService, CommandService>();
             services.AddSingleton<IFileSystem, FileSystem>();
             services.AddSingleton<ITemplateLocator, TemplateLocator>();
