@@ -25,7 +25,6 @@
     <None Remove="Builders\ResponseBaseBuilder.txt" />
     <None Remove="Builders\ServiceCollectionExtensionsBuilder.txt" />
     <None Remove="Builders\ValidationBehaviorBuilder.txt" />
-    <None Remove="Commands\Settings.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,7 +43,6 @@
     <EmbeddedResource Include="Builders\ServiceCollectionExtensionsBuilder.txt" />
     <EmbeddedResource Include="Builders\StartupBuilder.txt" />
     <EmbeddedResource Include="Builders\ValidationBehaviorBuilder.txt" />
-    <EmbeddedResource Include="Commands\Settings.txt" />
   </ItemGroup>
   
   <ItemGroup>

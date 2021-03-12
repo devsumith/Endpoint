@@ -10,6 +10,9 @@ namespace Endpoint.Cli.Models
         public string DomainNamespace { get; set; }
         public string ApplicationNamespace { get; set; }
         public string InfrastructureNamespace { get; set; }
+        public string BuildingBlocksCoreNamespace { get; set; } = "BuildingBlocks.Core";
+        public string BuildingBlocksEventStoreNamespace { get; set; } = "BuildingBlocks.EventStore";
+        public string Store { get; set; }
         public string Namespace { get; set; }
         public string Domain { get; set; }
         public string Core { get; set; }
@@ -18,7 +21,6 @@ namespace Endpoint.Cli.Models
         public string SourceFolder { get; set; }
         public string TestFolder { get; set; }
         public string DbContext { get; set; }
-
         public static Settings Empty => new();
     }
 }

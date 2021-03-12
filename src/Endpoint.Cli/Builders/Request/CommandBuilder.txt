@@ -1,32 +1,44 @@
-using {{ rootNamespace }}.Api.Models;
+using {{ buildingBlocksCoreNamespace }};
+using {{ buildingBlocksEventStoreNamespace }};
 using MediatR;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using {{ applicationNamespace }}.Interfaces;
+using {{ domainNamespace }}.Models;
 
-namespace {{ namespace }}
+namespace {{ applicationNamespace }}.Features
 {
     public class {{ namePascalCase }}
     {
-        public class Request : IRequest<Response> { }
+        public class Request : IRequest<Response> { 
+            public {{ entityNamePascalCase }}Dto {{ entityNamePascalCase }} { get; set; }        
+        }
 
-        public class Response
+        public class Response: ResponseBase
         {
-            public List<{{ entityNamePascalCase }}Dto> {{ entityNamePascalCasePlural }} { get; set; }
+            public {{ entityNamePascalCase }}Dto {{ entityNamePascalCase }} { get; set; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly I{{ rootNamespace }}DbContext _context;
+            private readonly I{{ storePascalCase }} _context;
 
-            public Handler(I{{ rootNamespace }}DbContext context){
+            public Handler(I{{ storePascalCase }} context){
                 _context = context;
             }
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken) {
-			    return new Response() { 
-                    {{ entityNamePascalCasePlural }} = _context.{{ entityNamePascalCasePlural }}.Select(x => x.ToDto()).ToList()
+            
+                var {{ entityNameCamelCase }} = await _context.FindAsync<{{ entityNamePascalCase }}>(request.{{ entityNamePascalCase }}.{{ entityNamePascalCase }}Id);
+
+                _context.Add({{ entityNameCamelCase }});
+
+                await _context.SaveChangesAsync(cancellationToken);
+			    
+                return new () { 
+                    {{ entityNamePascalCase }} = {{ entityNameCamelCase }}.ToDto()
                 };
             }
         }

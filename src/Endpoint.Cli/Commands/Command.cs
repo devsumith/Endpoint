@@ -38,11 +38,14 @@ namespace Endpoint.Cli.Commands
                 Create<CommandBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDirectory(request.Directory)
                     .SetRootNamespace(settings.RootNamespace)
+                    .SetApplicationNamespace(settings.ApplicationNamespace)
+                    .SetDomainNamespace(settings.DomainNamespace)
+                    .WithBuildingBlocksCoreNamespace(settings.BuildingBlocksCoreNamespace)
+                    .WithBuildingBlocksEventStoreNamespace(settings.BuildingBlocksEventStoreNamespace)
                     .WithEntity(request.Entity)
                     .WithName(request.Name)
                     .WithDbContext(settings.DbContext)
-                    .SetApplicationNamespace(settings.ApplicationNamespace)
-                    .SetDomainNamespace(settings.DomainNamespace)
+                    .WithStore(settings.Store)
                     .Build();
 
                 return new();

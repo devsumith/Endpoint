@@ -25,7 +25,7 @@ namespace {{ applicationNamespace }}.Features
             }
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken) {
-			    return new Response() { 
+			    return new () { 
                     {{ entityNamePascalCasePlural }} = _context.{{ entityNamePascalCasePlural }}.Select(x => x.ToDto()).ToList()
                 };
             }

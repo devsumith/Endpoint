@@ -37,11 +37,11 @@ namespace Endpoint.Cli.Commands
                 Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDirectory(request.Directory)
                     .SetRootNamespace(settings.RootNamespace)
+                    .SetApplicationNamespace(settings.ApplicationNamespace)
+                    .SetDomainNamespace(settings.DomainNamespace)
                     .WithEntity(request.Entity)
                     .WithName(request.Name)
                     .WithDbContext(settings.DbContext)
-                    .SetApplicationNamespace(settings.ApplicationNamespace)
-                    .SetDomainNamespace(settings.DomainNamespace)
                     .Build();
 
                 return new();

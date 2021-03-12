@@ -5,38 +5,29 @@ namespace Endpoint.Cli.Builders
 {
     public class CommandBuilder: BuilderBase<CommandBuilder>
     {
-        private readonly ICommandService _commandService;
-        private readonly ITemplateProcessor _templateProcessor;
-        private readonly ITemplateLocator _templateLocator;
-        private readonly IFileSystem _fileSystem;
-
-        private Token _directory = (Token)System.Environment.CurrentDirectory;
-        private Token _rootNamespace;
         private Token _name;
         private Token _entityName;
         private Token _dbContext;
+        private Token _buildingBlocksCoreNamespace;
+        private Token _buildingBlocksEventStoreNamespace;
+        private Token _store;
 
         public CommandBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
             IFileSystem fileSystem): base(commandService, templateProcessor, templateLocator, fileSystem)
-        {
-            _commandService = commandService;
-            _templateProcessor = templateProcessor;
-            _templateLocator = templateLocator;
-            _fileSystem = fileSystem;
-        }
+        { }
 
-        public CommandBuilder SetDirectory(string directory)
+        public CommandBuilder WithBuildingBlocksCoreNamespace(string buildingBlocksCoreNamespace)
         {
-            _directory = (Token)directory;
+            _buildingBlocksCoreNamespace = (Token)buildingBlocksCoreNamespace;
             return this;
         }
 
-        public CommandBuilder SetRootNamespace(string rootNamespace)
+        public CommandBuilder WithBuildingBlocksEventStoreNamespace(string buildingBlocksEventStoreNamespace)
         {
-            _rootNamespace = (Token)rootNamespace;
+            _buildingBlocksEventStoreNamespace = (Token)buildingBlocksEventStoreNamespace;
             return this;
         }
 
@@ -58,6 +49,12 @@ namespace Endpoint.Cli.Builders
             return this;
         }
 
+        public CommandBuilder WithStore(string store)
+        {
+            _store = (Token)store;
+            return this;
+        }
+
         public void Build()
         {
             var template = _templateLocator.Get(nameof(CommandBuilder));
@@ -68,7 +65,12 @@ namespace Endpoint.Cli.Builders
                 .With(nameof(_rootNamespace), _rootNamespace)
                 .With(nameof(_directory), _directory)
                 .With(nameof(_dbContext), _dbContext)
-                .With("Namespace", (Token)$"{_rootNamespace.Value}.Api.Features")
+                .With(nameof(_namespace), _namespace)
+                .With(nameof(_buildingBlocksCoreNamespace), _buildingBlocksCoreNamespace)
+                .With(nameof(_buildingBlocksEventStoreNamespace), _buildingBlocksEventStoreNamespace)
+                .With(nameof(_applicationNamespace), _applicationNamespace)
+                .With(nameof(_domainNamespace), _domainNamespace)
+                .With(nameof(_store), _store)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
