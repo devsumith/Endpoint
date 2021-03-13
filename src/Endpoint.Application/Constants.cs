@@ -14,6 +14,7 @@
             public static string Core = nameof(Core);
             public static string Behaviors = nameof(Behaviors);
             public static string Properties = nameof(Properties);
+            public static string Interfaces = nameof(Interfaces);
         }
     }
 }

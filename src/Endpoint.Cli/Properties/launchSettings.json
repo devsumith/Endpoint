@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "query -d C:\\Projects\\SiteReliability.BookOfRecord\\src\\SiteReliability.BookOfRecord.Application\\Features\\Wikis"
+      "commandLineArgs": "-d C:\\Test"
     }
   }
 }

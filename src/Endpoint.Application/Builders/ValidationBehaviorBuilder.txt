@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using {{ rootNamespace }}.Api.Core;
+using {{ applicationNamespace }}.Core;
 
-namespace {{ namespace }}
+namespace {{ applicationNamespace }}.Behaviors
 {
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>

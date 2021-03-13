@@ -1,6 +1,7 @@
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Endpoint.Application.Builders
 {
@@ -17,7 +18,6 @@ namespace Endpoint.Application.Builders
             ITemplateLocator templateLocator,
             IFileSystem fileSystem): base(commandService,templateProcessor,templateLocator,fileSystem)
         { }
-
 
         public DbContextBuilder WithModel(string model)
         {
@@ -44,19 +44,21 @@ namespace Endpoint.Application.Builders
             var interfaceTemplate = _templateLocator.Get("DbContextInterfaceBuilder");
 
             var tokens = new TokensBuilder()
-                .With(nameof(_rootNamespace), _rootNamespace)
                 .With(nameof(_directory), _directory)
                 .With(nameof(_namespace), _namespace)
                 .With(nameof(_dbContext), _dbContext)
+                .With(nameof(_domainNamespace), _domainNamespace)
+                .With(nameof(_infrastructureNamespace), _infrastructureNamespace)
+                .With(nameof(_applicationNamespace), _applicationNamespace)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
 
             var interfaceContents = _templateProcessor.Process(interfaceTemplate, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/{_dbContext.PascalCase}.cs", contents);
+            _fileSystem.WriteAllLines($@"{_infrastructureDirectory.Value}{Path.DirectorySeparatorChar}Data{Path.DirectorySeparatorChar}{_dbContext.PascalCase}.cs", contents);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/I{_dbContext.PascalCase}.cs", interfaceContents);
+            _fileSystem.WriteAllLines($@"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Interfaces{Path.DirectorySeparatorChar}I{_dbContext.PascalCase}.cs", interfaceContents);
         }
     }
 }

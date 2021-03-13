@@ -25,6 +25,8 @@ namespace Endpoint.Application.Builders
 
             var tokens = new TokensBuilder()
                 .With(nameof(_rootNamespace), _rootNamespace)
+                .With(nameof(_applicationNamespace), _applicationNamespace)
+                .With(nameof(_domainNamespace), _domainNamespace)
                 .With(nameof(_directory), _directory)
                 .With(nameof(_namespace), _namespace)
                 .With(nameof(_entityName), _entityName)
@@ -32,7 +34,7 @@ namespace Endpoint.Application.Builders
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/Extensions.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}/{_entityName.PascalCase}Extensions.cs", contents);
         }
     }
 }

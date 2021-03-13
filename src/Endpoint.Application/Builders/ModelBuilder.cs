@@ -1,6 +1,7 @@
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
 using System;
+using System.IO;
 
 namespace Endpoint.Application.Builders
 {
@@ -26,15 +27,13 @@ namespace Endpoint.Application.Builders
             var template = _templateLocator.Get(nameof(ModelBuilder));
 
             var tokens = new TokensBuilder()
-                .With(nameof(_rootNamespace), _rootNamespace)
-                .With(nameof(_directory), _directory)
-                .With(nameof(_namespace), _namespace)
                 .With(nameof(_entityName), _entityName)
+                .With(nameof(_domainNamespace), _domainNamespace)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/{_entityName.PascalCase}.cs", contents);
+            _fileSystem.WriteAllLines($@"{_domainDirectory.Value}{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}{_entityName.PascalCase}.cs", contents);
         }
     }
 }

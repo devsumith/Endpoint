@@ -1,6 +1,6 @@
 using System;
 
-namespace {{ namespace }}
+namespace {{ domainNamespace }}.Models
 {
     public class {{ entityNamePascalCase }}
     {

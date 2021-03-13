@@ -2,6 +2,7 @@ using CommandLine;
 using Endpoint.Application.Builders;
 using Endpoint.Application.Services;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using static Endpoint.Application.Builders.BuilderFactory;
@@ -13,11 +14,7 @@ namespace Endpoint.Application.Features
         [Verb("validator")]
         internal class Request : IRequest<Unit>
         {
-
             [Value(0)]
-            public string Name { get; set; }
-
-            [Value(1)]
             public string Entity { get; set; }
 
             [Option('d')]
@@ -33,6 +30,7 @@ namespace Endpoint.Application.Features
 
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
+
                 var settings = _settingsProvder.Get(request.Directory);
 
                 Create<ValidatorBuilder>((a, b, c, d) => new(a, b, c, d))

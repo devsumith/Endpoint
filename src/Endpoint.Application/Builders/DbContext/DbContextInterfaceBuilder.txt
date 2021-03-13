@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using {{ rootNamespace }}.Api.Models;
+using {{ domainNamespace }}.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace {{ namespace }}
+namespace {{ applicationNamespace }}.Interfaces
 {
     public interface I{{ dbContextPascalCase }}
     {

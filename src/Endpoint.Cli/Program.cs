@@ -28,7 +28,7 @@ namespace Endpoint.Cli
         {            
             if(args.Length == 0 || args[0].StartsWith("-"))
             {
-                args = new string[1] { "Default" }.Concat(args).ToArray();
+                args = new string[1] { "default" }.Concat(args).ToArray();
             }
 
             var verbs = AppDomain.CurrentDomain.GetAssemblies()

@@ -15,9 +15,6 @@ namespace Endpoint.Application.Features
         {
 
             [Value(0)]
-            public string Name { get; set; }
-
-            [Value(1)]
             public string Entity { get; set; }
 
             [Option('d')]

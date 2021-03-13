@@ -27,6 +27,10 @@ namespace Endpoint.Application.Builders
                 .With(nameof(_directory), _directory)
                 .With(nameof(_namespace), _namespace)
                 .With(nameof(_dbContext), _dbContext)
+                .With(nameof(_applicationNamespace), _applicationNamespace)
+                .With(nameof(_apiNamespace), _apiNamespace)
+                .With(nameof(_domainNamespace), _domainDirectory)
+                .With(nameof(_infrastructureNamespace), _infrastructureNamespace)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);

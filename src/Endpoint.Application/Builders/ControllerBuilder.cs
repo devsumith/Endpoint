@@ -1,5 +1,6 @@
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
+using System.IO;
 
 namespace Endpoint.Application.Builders
 {
@@ -33,7 +34,7 @@ namespace Endpoint.Application.Builders
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/Controller.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}{Path.DirectorySeparatorChar}{_resource.PascalCase}Controller.cs", contents);
         }
     }
 }

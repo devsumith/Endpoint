@@ -14,10 +14,17 @@ namespace Endpoint.Application.Builders
         
         protected Settings _options;
         protected Token _directory = (Token)System.Environment.CurrentDirectory;
+        
         protected Token _rootNamespace;
         protected Token _namespace;
+        protected Token _apiNamespace;
         protected Token _domainNamespace;
         protected Token _applicationNamespace;
+        protected Token _infrastructureNamespace;
+        protected Token _domainDirectory;
+        protected Token _infrastructureDirectory;
+        protected Token _applicationDirectory;
+        protected Token _apiDirectory;
 
         public BuilderBase(
             ICommandService commandService,
@@ -31,9 +38,31 @@ namespace Endpoint.Application.Builders
             _fileSystem = fileSystem;
         }
 
+        public TTo Map<TTo>(TTo builderBase)
+            where TTo: BuilderBase<TTo>
+        {
+            builderBase.SetDomainDirectory(_domainDirectory?.Value);
+            builderBase.SetApplicationDirectory(_applicationDirectory?.Value);
+            builderBase.SetInfrastructureDirectory(_infrastructureDirectory?.Value);
+            builderBase.SetApiDirectory(_apiDirectory?.Value);
+
+            builderBase.SetDomainNamespace(_domainNamespace?.Value);
+            builderBase.SetApplicationNamespace(_applicationNamespace?.Value);
+            builderBase.SetInfrastructureNamespace(_infrastructureNamespace?.Value);
+            builderBase.SetApiNamespace(_apiNamespace?.Value);
+
+            return builderBase;
+        }
+
         public T WithSettings(Settings options)
         {
             _options = options;
+            return this as T;
+        }
+
+        public T SetApiDirectory(string apiDirectory)
+        {
+            _apiDirectory = (Token)apiDirectory;
             return this as T;
         }
 
@@ -43,15 +72,26 @@ namespace Endpoint.Application.Builders
             return this as T;
         }
 
+        public T SetDomainDirectory(string domainDirectory)
+        {
+            _domainDirectory = (Token)domainDirectory;
+            return this as T;
+        }
+
         public T SetRootNamespace(string rootNamespace)
         {
             _rootNamespace = (Token)rootNamespace;
             return this as T;
         }
-
-        public T SetNamespace(string entityName)
+        public T SetApiNamespace(string apiNamespace)
         {
-            _namespace = (Token)entityName;
+            _apiNamespace = (Token)apiNamespace;
+            return this as T;
+        }
+
+        public T SetNamespace(string @namespace)
+        {
+            _namespace = (Token)@namespace;
             return this as T;
         }
 
@@ -64,6 +104,24 @@ namespace Endpoint.Application.Builders
         public T SetApplicationNamespace(string applicationNamespace)
         {
             _applicationNamespace = (Token)applicationNamespace;
+            return this as T;
+        }
+
+        public T SetApplicationDirectory(string applicationDirectory)
+        {
+            _applicationDirectory = (Token)applicationDirectory;
+            return this as T;
+        }
+
+        public T SetInfrastructureNamespace(string infrastructureNamespace)
+        {
+            _infrastructureNamespace = (Token)infrastructureNamespace;
+            return this as T;
+        }
+
+        public T SetInfrastructureDirectory(string infrastructureNamespace)
+        {
+            _infrastructureDirectory = (Token)infrastructureNamespace;
             return this as T;
         }
     }

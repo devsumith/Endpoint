@@ -1,5 +1,4 @@
 using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {
@@ -18,9 +17,7 @@ namespace Endpoint.Application.Builders
             var template = _templateLocator.Get(nameof(ValidationBehaviorBuilder));
 
             var tokens = new TokensBuilder()
-                .With(nameof(_rootNamespace), _rootNamespace)
-                .With(nameof(_directory), _directory)
-                .With(nameof(_namespace), _namespace)
+                .With(nameof(_applicationNamespace), _applicationNamespace)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);

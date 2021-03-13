@@ -1,0 +1,12 @@
+using FluentValidation;
+
+namespace {{ applicationNamespace }}.Features
+{
+    public class {{ entityNamePascalCase }}Validator : AbstractValidator<{{ entityNamePascalCase }}Dto>
+    {
+        public {{ entityNamePascalCase }}Validator()
+        {
+
+        }
+    }
+}

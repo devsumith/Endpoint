@@ -1,0 +1,10 @@
+﻿using {{ domainNamespace }}.Models;
+
+namespace {{ applicationNamespace }}.Features
+{
+    public static class {{ entityNamePascalCase }}Extensions
+    {
+        public static {{ entityNamePascalCase }}Dto ToDto(this {{ entityNamePascalCase }} {{ entityNameCamelCase }})
+            => new() { {{ entityNamePascalCase }}Id = {{ entityNameCamelCase }}.{{ entityNamePascalCase }}Id };
+    }
+}

@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using {{ rootNamespace }}.Api.Models;
+using {{ domainNamespace }}.Models;
+using {{ applicationNamespace }}.Interfaces;
 
-namespace {{ namespace }}
+namespace {{ infrastructureNamespace }}.Data
 {
     public class {{ dbContextPascalCase }}: DbContext, I{{ dbContextPascalCase }}
     {

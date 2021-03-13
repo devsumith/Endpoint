@@ -11,6 +11,7 @@
     <None Remove="Builders\DbContext\DbContextInterfaceBuilder.txt" />
     <None Remove="Builders\DependenciesBuilder.txt" />
     <None Remove="Builders\DtoBuilder.txt" />
+    <None Remove="Builders\ExtensionsBuilder.txt" />
     <None Remove="Builders\LaunchSettingsBuilder.txt" />
     <None Remove="Builders\ModelBuilder.txt" />
     <None Remove="Builders\ProgramBuilder.txt" />
@@ -20,6 +21,7 @@
     <None Remove="Builders\ServiceCollectionExtensionsBuilder.txt" />
     <None Remove="Builders\StartupBuilder.txt" />
     <None Remove="Builders\ValidationBehaviorBuilder.txt" />
+    <None Remove="Builders\ValidatorBuilder.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +30,7 @@
     <EmbeddedResource Include="Builders\DbContext\DbContextBuilder.txt" />
     <EmbeddedResource Include="Builders\DbContext\DbContextInterfaceBuilder.txt" />
     <EmbeddedResource Include="Builders\DependenciesBuilder.txt" />
+    <EmbeddedResource Include="Builders\ExtensionsBuilder.txt" />
     <EmbeddedResource Include="Builders\DtoBuilder.txt" />
     <EmbeddedResource Include="Builders\LaunchSettingsBuilder.txt" />
     <EmbeddedResource Include="Builders\ModelBuilder.txt" />
@@ -38,6 +41,7 @@
     <EmbeddedResource Include="Builders\ServiceCollectionExtensionsBuilder.txt" />
     <EmbeddedResource Include="Builders\StartupBuilder.txt" />
     <EmbeddedResource Include="Builders\ValidationBehaviorBuilder.txt" />
+    <EmbeddedResource Include="Builders\ValidatorBuilder.txt" />
   </ItemGroup>
 
     <ItemGroup>
