@@ -10,7 +10,8 @@ namespace Endpoint.Application.Features
     internal class Settings
     {
         [Verb("settings")]
-        internal class Request : IRequest<Unit> {
+        internal class Request : IRequest<Unit>
+        {
             [Option('d', Required = false)]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
         }
@@ -42,7 +43,8 @@ namespace Endpoint.Application.Features
             {
                 var template = _templateLocator.Get("Settings");
 
-                var tokens = _tokenBuilder.Build(new Dictionary<string, string> {
+                var tokens = _tokenBuilder.Build(new Dictionary<string, string>
+                {
 
                 }, request.Directory);
 

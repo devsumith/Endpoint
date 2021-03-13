@@ -5,16 +5,16 @@ using Endpoint.Application.ValueObjects;
 namespace Endpoint.Application.Builders
 {
     public class BuilderBase<T>
-        where T: class
+        where T : class
     {
         protected readonly ICommandService _commandService;
         protected readonly ITemplateProcessor _templateProcessor;
         protected readonly ITemplateLocator _templateLocator;
         protected readonly IFileSystem _fileSystem;
-        
+
         protected Settings _options;
         protected Token _directory = (Token)System.Environment.CurrentDirectory;
-        
+
         protected Token _rootNamespace;
         protected Token _namespace;
         protected Token _apiNamespace;
@@ -39,7 +39,7 @@ namespace Endpoint.Application.Builders
         }
 
         public TTo Map<TTo>(TTo builderBase)
-            where TTo: BuilderBase<TTo>
+            where TTo : BuilderBase<TTo>
         {
             builderBase.SetDomainDirectory(_domainDirectory?.Value);
             builderBase.SetApplicationDirectory(_applicationDirectory?.Value);

@@ -11,7 +11,8 @@ namespace Endpoint.Application.Features
     internal class Feature
     {
         [Verb("feature")]
-        internal class Request : IRequest<Unit> {
+        internal class Request : IRequest<Unit>
+        {
             [Value(0)]
             public string Entity { get; set; }
             [Option('d')]
@@ -30,12 +31,12 @@ namespace Endpoint.Application.Features
             }
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                if(request.Directory.EndsWith("Features"))
+                if (request.Directory.EndsWith("Features"))
                 {
                     _commandService.Start($"mkdir {((Token)request.Entity).PascalCasePlural}", request.Directory);
 
                     request.Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{((Token)request.Entity).PascalCasePlural}";
-                } 
+                }
 
                 _commandService.Start($"endpoint command Create{request.Entity} {request.Entity}", request.Directory);
                 _commandService.Start($"endpoint command Update{request.Entity} {request.Entity}", request.Directory);

@@ -5,18 +5,18 @@ using System.IO;
 
 namespace Endpoint.Application.Builders
 {
-    public class DbContextBuilder: BuilderBase<DbContextBuilder>
+    public class DbContextBuilder : BuilderBase<DbContextBuilder>
     {
         private Token _modelsDirectory;
-        private Token _dbContext;        
+        private Token _dbContext;
         private List<Token> _models = new List<Token>();
-        
+
         public DbContextBuilder(
             ICommandService commandService,
 
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem): base(commandService,templateProcessor,templateLocator,fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         public DbContextBuilder WithModel(string model)

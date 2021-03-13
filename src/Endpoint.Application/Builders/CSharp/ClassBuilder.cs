@@ -3,16 +3,16 @@ using Endpoint.Application.ValueObjects;
 
 namespace Endpoint.Application.Builders.CSharp
 {
-    public class ClassBuilder: BuilderBase<ClassBuilder>
+    public class ClassBuilder : BuilderBase<ClassBuilder>
     {
         public ClassBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
-        
+
         public void Build()
         {
             var template = _templateLocator.Get(nameof(ClassBuilder));

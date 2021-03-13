@@ -11,7 +11,8 @@ namespace Endpoint.Application.Features
     internal class Query
     {
         [Verb("query")]
-        internal class Request : IRequest<Unit> {
+        internal class Request : IRequest<Unit>
+        {
 
             [Value(0)]
             public string Name { get; set; }

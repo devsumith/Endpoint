@@ -1,7 +1,9 @@
 ﻿using Endpoint.Application.Models;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
+using static System.Environment;
+using static System.IO.Path;
+using static System.Text.Json.JsonSerializer;
 
 namespace Endpoint.Application.Services
 {
@@ -13,26 +15,29 @@ namespace Endpoint.Application.Services
     {
         public Settings Get(string directory = null)
         {
-            directory ??= System.Environment.CurrentDirectory;
+            directory ??= CurrentDirectory;
 
-            var parts = directory.Split(Path.DirectorySeparatorChar);
+            var parts = directory.Split(DirectorySeparatorChar);
 
-            for(var i = 1; i <= parts.Length; i++)
+            for (var i = 1; i <= parts.Length; i++)
             {
-                var path = $"{string.Join(Path.DirectorySeparatorChar, parts.Take(i))}{Path.DirectorySeparatorChar}clisettings.json";
+                var path = $"{string.Join(DirectorySeparatorChar, parts.Take(i))}{DirectorySeparatorChar}clisettings.json";
 
                 if (File.Exists(path))
                 {
-                    return JsonSerializer.Deserialize<Settings>(File.ReadAllText(path), new () { 
-                        PropertyNameCaseInsensitive = true, 
+                    var settings = Deserialize<Settings>(File.ReadAllText(path), new()
+                    {
+                        PropertyNameCaseInsensitive = true,
                     });
+                    settings.Path = new FileInfo(path).Directory.FullName;
+                    return settings;
                 }
 
                 i++;
             }
 
             return Settings.Empty;
-            
+
         }
     }
 }

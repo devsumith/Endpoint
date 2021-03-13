@@ -4,17 +4,17 @@ using System.IO;
 
 namespace Endpoint.Application.Builders
 {
-    public class ControllerBuilder: BuilderBase<ControllerBuilder>
+    public class ControllerBuilder : BuilderBase<ControllerBuilder>
     {
         public ControllerBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         private Token _resource;
-        
+
         public ControllerBuilder SetResource(string resource)
         {
             _resource = (Token)resource;

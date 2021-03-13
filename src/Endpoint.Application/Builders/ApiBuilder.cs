@@ -7,19 +7,19 @@ using static Endpoint.Application.Builders.BuilderFactory;
 
 namespace Endpoint.Application.Builders
 {
-    public class ApiBuilder: BuilderBase<ApiBuilder>
+    public class ApiBuilder : BuilderBase<ApiBuilder>
     {
         public ApiBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         protected string _apiDirectory => $"{_directory.Value}{Path.DirectorySeparatorChar}{_name}";
 
         protected string _apiProjectFullPath => $"{_apiDirectory}{Path.DirectorySeparatorChar}{_apiProjectName}.csproj";
-        
+
         protected int _port;
         protected int _sslPort;
         protected string _apiProjectName;
@@ -144,9 +144,9 @@ namespace Endpoint.Application.Builders
                 .SetInfrastructureNamespace(_infrastructureNamespace.Value)
                 .WithDbContext(_dbContextName)
                 .Build();
-            
 
-            return new (_commandService, _apiDirectory, _apiProjectFullPath, $"{_rootNamespace.Value}.Api");
+
+            return new(_commandService, _apiDirectory, _apiProjectFullPath, $"{_rootNamespace.Value}.Api");
         }
 
         private void CreateSubDirectories()

@@ -3,10 +3,6 @@ using System.Diagnostics;
 
 namespace Endpoint.Application.Services
 {
-    public interface ICommandService
-    {
-        void Start(string command, string workingDirectory = null, bool waitForExit = true);
-    }
     public class CommandService : ICommandService
 
     {
@@ -14,10 +10,10 @@ namespace Endpoint.Application.Services
         {
             try
             {
-                workingDirectory = workingDirectory ?? Environment.CurrentDirectory;
+                workingDirectory ??= Environment.CurrentDirectory;
 
                 Console.WriteLine($"{arguments} in {workingDirectory}");
-                
+
                 var process = new Process
                 {
                     StartInfo = new ProcessStartInfo
@@ -35,7 +31,8 @@ namespace Endpoint.Application.Services
                 {
                     process.WaitForExit();
                 }
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 throw e;
 

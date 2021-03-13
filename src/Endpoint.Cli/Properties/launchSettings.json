@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "-d C:\\Test"
+      "commandLineArgs": "event GithubRepo GithubRepoCreated -d C:\\Projects\\SiteReliability.BookOfRecord\\src\\SiteReliability.BookOfRecord.Domain\\Models"
     }
   }
 }

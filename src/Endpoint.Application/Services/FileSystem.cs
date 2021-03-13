@@ -5,7 +5,7 @@ namespace Endpoint.Application.Services
 {
     public class FileSystem : IFileSystem
     {
-        public bool Exists(string path) 
+        public bool Exists(string path)
             => File.Exists(path);
 
         public bool Exists(string[] paths)

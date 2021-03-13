@@ -1,3 +1,5 @@
+using static System.IO.Path;
+
 namespace Endpoint.Application.Models
 {
     public class Settings
@@ -6,10 +8,14 @@ namespace Endpoint.Application.Models
         public string Path { get; set; }
         public string SolutionName { get; set; }
         public string RootNamespace { get; set; }
-        public string ApiNamespace { get; set; }
         public string DomainNamespace { get; set; }
         public string ApplicationNamespace { get; set; }
         public string InfrastructureNamespace { get; set; }
+        public string ApiNamespace { get; set; }
+        public string DomainDirectory => $"{Path}{DirectorySeparatorChar}{SourceFolder}{DirectorySeparatorChar}{DomainNamespace}";
+        public string ApplicationDirectory => $"{Path}{DirectorySeparatorChar}{SourceFolder}{DirectorySeparatorChar}{ApplicationNamespace}";
+        public string InfrastructureDirectory => $"{Path}{DirectorySeparatorChar}{SourceFolder}{DirectorySeparatorChar}{InfrastructureNamespace}";
+        public string ApiDirectory => $"{Path}{DirectorySeparatorChar}{SourceFolder}{DirectorySeparatorChar}{ApiNamespace}";
         public string BuildingBlocksCoreNamespace { get; set; } = "BuildingBlocks.Core";
         public string BuildingBlocksEventStoreNamespace { get; set; } = "BuildingBlocks.EventStore";
         public string Store { get; set; }
@@ -21,6 +27,7 @@ namespace Endpoint.Application.Models
         public string SourceFolder { get; set; }
         public string TestFolder { get; set; }
         public string DbContext { get; set; }
+        public bool EventSourcing { get; set; }
         public static Settings Empty => new();
     }
 }

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Builders\AggregateBuilder.txt" />
     <None Remove="Builders\AppSettingsBuilder.txt" />
     <None Remove="Builders\ControllerBuilder.txt" />
     <None Remove="Builders\DbContext\DbContextBuilder.txt" />
@@ -13,6 +14,7 @@
     <None Remove="Builders\DtoBuilder.txt" />
     <None Remove="Builders\ExtensionsBuilder.txt" />
     <None Remove="Builders\LaunchSettingsBuilder.txt" />
+    <None Remove="Builders\Method.txt" />
     <None Remove="Builders\ModelBuilder.txt" />
     <None Remove="Builders\ProgramBuilder.txt" />
     <None Remove="Builders\Request\CommandBuilder.txt" />
@@ -23,6 +25,11 @@
     <None Remove="Builders\StartupBuilder.txt" />
     <None Remove="Builders\ValidationBehaviorBuilder.txt" />
     <None Remove="Builders\ValidatorBuilder.txt" />
+    <None Remove="Builders\When.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Builders\AggregateBuilder.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +41,7 @@
     <EmbeddedResource Include="Builders\ExtensionsBuilder.txt" />
     <EmbeddedResource Include="Builders\DtoBuilder.txt" />
     <EmbeddedResource Include="Builders\LaunchSettingsBuilder.txt" />
+    <EmbeddedResource Include="Builders\Method.txt" />
     <EmbeddedResource Include="Builders\ModelBuilder.txt" />
     <EmbeddedResource Include="Builders\ProgramBuilder.txt" />
     <EmbeddedResource Include="Builders\Request\CommandBuilder.txt" />
@@ -44,6 +52,7 @@
     <EmbeddedResource Include="Builders\StartupBuilder.txt" />
     <EmbeddedResource Include="Builders\ValidationBehaviorBuilder.txt" />
     <EmbeddedResource Include="Builders\ValidatorBuilder.txt" />
+    <EmbeddedResource Include="Builders\When.txt" />
   </ItemGroup>
 
     <ItemGroup>
@@ -63,6 +72,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
       <PackageReference Include="CommandLineParser" Version="2.8.0" />
+      <PackageReference Include="SharpSimpleNLG" Version="1.2.1" />
   </ItemGroup>
 
     <ItemGroup>

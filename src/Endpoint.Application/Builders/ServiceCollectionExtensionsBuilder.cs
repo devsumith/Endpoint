@@ -3,18 +3,18 @@ using System.IO;
 
 namespace Endpoint.Application.Builders
 {
-    public class ServiceCollectionExtensionsBuilder: BuilderBase<ServiceCollectionExtensionsBuilder>
+    public class ServiceCollectionExtensionsBuilder : BuilderBase<ServiceCollectionExtensionsBuilder>
     {
         public ServiceCollectionExtensionsBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem): base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(ServiceCollectionExtensionsBuilder ));
+            var template = _templateLocator.Get(nameof(ServiceCollectionExtensionsBuilder));
 
             var tokens = new TokensBuilder()
                 .With(nameof(_applicationNamespace), _applicationNamespace)

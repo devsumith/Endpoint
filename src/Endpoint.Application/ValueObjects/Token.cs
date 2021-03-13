@@ -27,7 +27,7 @@ namespace Endpoint.Application.ValueObjects
         public string TitleCase => namingConventionConverter.Convert(NamingConvention.TitleCase, Value);
 
         public Dictionary<string, object> ToTokens(string propertyName)
-        {            
+        {
             propertyName = propertyName.Substring(propertyName.IndexOf('_') + 1);
 
             var propertyNameCamelCase = ((Token)propertyName).CamelCase;

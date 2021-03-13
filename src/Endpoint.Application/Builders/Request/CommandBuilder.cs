@@ -3,7 +3,7 @@ using Endpoint.Application.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {
-    public class CommandBuilder: BuilderBase<CommandBuilder>
+    public class CommandBuilder : BuilderBase<CommandBuilder>
     {
         private Token _name;
         private Token _entityName;
@@ -16,7 +16,7 @@ namespace Endpoint.Application.Builders
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem): base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         public CommandBuilder WithBuildingBlocksCoreNamespace(string buildingBlocksCoreNamespace)

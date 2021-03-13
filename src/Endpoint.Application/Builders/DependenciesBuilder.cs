@@ -3,13 +3,13 @@ using Endpoint.Application.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {
-    public class DependenciesBuilder: BuilderBase<DependenciesBuilder>
+    public class DependenciesBuilder : BuilderBase<DependenciesBuilder>
     {
         public DependenciesBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         private Token _dbContext;

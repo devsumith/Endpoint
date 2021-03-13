@@ -5,13 +5,13 @@ using static Endpoint.Application.Builders.BuilderFactory;
 
 namespace Endpoint.Application.Builders
 {
-    public class ResourceBuilder: BuilderBase<ResourceBuilder>
+    public class ResourceBuilder : BuilderBase<ResourceBuilder>
     {
         public ResourceBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         private string _entityName;

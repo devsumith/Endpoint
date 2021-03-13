@@ -12,7 +12,8 @@ namespace Endpoint.Application.Features
     internal class Default
     {
         [Verb("default")]
-        internal class Request : IRequest<Unit> {
+        internal class Request : IRequest<Unit>
+        {
             [Option('p')]
             public int Port { get; set; } = 5000;
 
@@ -55,7 +56,7 @@ namespace Endpoint.Application.Features
                 _modelsNamespace = $"{_rootNamespace}.Api.Models";
                 _dbContextName = _name.Split('.').Length > 1 ? $"{_name.Split('.')[1]}DbContext" : $"{_name.Split('.')[0]}DbContext";
 
-                
+
                 var slnRef = Create<SolutionBuilder>((a, b, c, d) => new(a, b, c, d))
                     .WithDirectory(_directory)
                     .WithName(_name)
@@ -84,7 +85,7 @@ namespace Endpoint.Application.Features
                     .WithStore(_dbContextName)
                     .Build();
 
-                Create<ResourceBuilder>((a, b, c, d) => new (a, b, c, d))
+                Create<ResourceBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDomainDirectory(apiDirectory)
                     .SetInfrastructureDirectory(apiDirectory)
                     .SetApplicationDirectory(apiDirectory)
@@ -102,7 +103,7 @@ namespace Endpoint.Application.Features
                 slnRef.OpenInVisualStudio();
 
                 projRef.Run();
-                
+
                 return new();
             }
         }

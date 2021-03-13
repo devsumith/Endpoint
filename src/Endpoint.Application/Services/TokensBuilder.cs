@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Endpoint.Application.Services
 {
-    public class TokensBuilder 
+    public class TokensBuilder
     {
         private Dictionary<string, object> _value { get; set; } = new();
 
@@ -19,7 +19,7 @@ namespace Endpoint.Application.Services
             return this;
         }
 
-        public Dictionary<string,object> Build()
+        public Dictionary<string, object> Build()
             => this._value;
     }
 }

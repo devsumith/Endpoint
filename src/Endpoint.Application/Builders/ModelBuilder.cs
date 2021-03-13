@@ -5,15 +5,15 @@ using System.IO;
 
 namespace Endpoint.Application.Builders
 {
-    public class ModelBuilder: BuilderBase<ModelBuilder>
+    public class ModelBuilder : BuilderBase<ModelBuilder>
     {
         private Token _entityName;
-
+        private bool _eventSourcing;
         public ModelBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService,templateProcessor,templateLocator,fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         public ModelBuilder SetEntityName(string entityName)
@@ -22,9 +22,17 @@ namespace Endpoint.Application.Builders
             return this;
         }
 
+        public ModelBuilder SetEventSourcing(bool eventSourcing)
+        {
+            _eventSourcing = eventSourcing;
+            return this;
+        }
+
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(ModelBuilder));
+            var template = _eventSourcing
+                ? _templateLocator.Get(nameof(ModelBuilder))
+                : _templateLocator.Get(nameof(ModelBuilder));
 
             var tokens = new TokensBuilder()
                 .With(nameof(_entityName), _entityName)

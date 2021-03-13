@@ -4,13 +4,13 @@ using System.IO;
 
 namespace Endpoint.Application.Builders
 {
-    public class SeedDataBuilder: BuilderBase<SeedDataBuilder>
+    public class SeedDataBuilder : BuilderBase<SeedDataBuilder>
     {
         public SeedDataBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         private Token _dbContext;

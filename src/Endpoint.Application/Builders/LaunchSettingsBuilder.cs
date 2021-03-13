@@ -4,13 +4,13 @@ using System;
 
 namespace Endpoint.Application.Builders
 {
-    public class LaunchSettingsBuilder: BuilderBase<LaunchSettingsBuilder>
+    public class LaunchSettingsBuilder : BuilderBase<LaunchSettingsBuilder>
     {
         public LaunchSettingsBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         private Token _port = (Token)$"{5000}";

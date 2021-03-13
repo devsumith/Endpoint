@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Endpoint.Application.Builders
 {
-    public class SolutionBuilder: BuilderBase<SolutionBuilder>
+    public class SolutionBuilder : BuilderBase<SolutionBuilder>
     {
         private string _slnDirectory => $"{_directory.Value}{Path.DirectorySeparatorChar}{_name}";
         private string _name;
@@ -13,7 +13,7 @@ namespace Endpoint.Application.Builders
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         public SolutionBuilder WithDirectory(string directory)

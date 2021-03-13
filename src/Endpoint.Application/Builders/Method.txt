@@ -1,0 +1,5 @@
+        public {{ entityNamePascalCase }} {{ method }}(string value)
+        {
+            Apply(new {{ namePascalCase }}(value));
+            return this;
+        }

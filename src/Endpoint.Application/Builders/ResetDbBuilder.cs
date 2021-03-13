@@ -3,16 +3,16 @@ using Endpoint.Application.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {
-    public class ResetDbBuilder: BuilderBase<ResetDbBuilder>
+    public class ResetDbBuilder : BuilderBase<ResetDbBuilder>
     {
         public ResetDbBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
-        
+
         public void Build()
         {
             var template = _templateLocator.Get(nameof(ResetDbBuilder));

@@ -3,17 +3,17 @@ using Endpoint.Application.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {
-    public class DtoBuilder: BuilderBase<DtoBuilder>
+    public class DtoBuilder : BuilderBase<DtoBuilder>
     {
         public DtoBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         private Token _entityName;
-        
+
         public DtoBuilder WithEntity(string entity)
         {
             _entityName = (Token)entity;

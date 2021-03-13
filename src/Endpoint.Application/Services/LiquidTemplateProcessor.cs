@@ -18,7 +18,7 @@ namespace Endpoint.Application.Services
                 {
                     var dictionary = ImmutableDictionary.CreateBuilder<string, object>();
 
-                    foreach(var entry in tokens)
+                    foreach (var entry in tokens)
                     {
                         if (!ignoreTokens.Contains(entry.Key))
                         {
@@ -28,7 +28,8 @@ namespace Endpoint.Application.Services
 
                     hash = Hash.FromDictionary(dictionary);
 
-                } else
+                }
+                else
                 {
                     hash = Hash.FromDictionary(tokens);
                 }
@@ -37,7 +38,7 @@ namespace Endpoint.Application.Services
 
                 return liquidTemplate.Render(hash).Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(nameof(LiquidTemplateProcessor));
 
@@ -47,8 +48,8 @@ namespace Endpoint.Application.Services
 
         public string Process(string template, IDictionary<string, object> tokens)
         {
-            try 
-            { 
+            try
+            {
                 var hash = Hash.FromDictionary(tokens);
 
                 var liquidTemplate = Template.Parse(template);

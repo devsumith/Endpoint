@@ -3,13 +3,13 @@ using Endpoint.Application.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {
-    public class ExtensionsBuilder: BuilderBase<ExtensionsBuilder>
+    public class ExtensionsBuilder : BuilderBase<ExtensionsBuilder>
     {
         public ExtensionsBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         private Token _entityName;

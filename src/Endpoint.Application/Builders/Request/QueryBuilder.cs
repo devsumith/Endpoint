@@ -3,7 +3,7 @@ using Endpoint.Application.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {
-    public class QueryBuilder: BuilderBase<QueryBuilder>
+    public class QueryBuilder : BuilderBase<QueryBuilder>
     {
         private Token _name;
         private Token _entityName;
@@ -13,7 +13,7 @@ namespace Endpoint.Application.Builders
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem): base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         public QueryBuilder WithEntity(string entityName)
@@ -36,11 +36,11 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(QueryBuilder ));
+            var template = _templateLocator.Get(nameof(QueryBuilder));
 
             var tokens = new TokensBuilder()
                 .With(nameof(_entityName), _entityName)
-                .With(nameof(_name),_name)
+                .With(nameof(_name), _name)
                 .With(nameof(_rootNamespace), _rootNamespace)
                 .With(nameof(_directory), _directory)
                 .With(nameof(_domainNamespace), _domainNamespace)

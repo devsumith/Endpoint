@@ -17,7 +17,7 @@ namespace Endpoint.Application.Services
     }
 
     public class TemplateLocator : ITemplateLocator
-    {        
+    {
         public TemplateLocator()
         {
 
