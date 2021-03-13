@@ -8,23 +8,16 @@ namespace Endpoint.Application.Builders
         private int _indent;
         private int _tab = 4;
         private string _accessModifier = "public";
+        private List<string> _attributes;
         private List<ParemeterInfo> _parameters = new List<ParemeterInfo>();
-
         public List<string> _body = new List<string>();
 
-        public void Indent()
-        {
-            _indent++;
-        }
-
-        public void Unindent()
-        {
-            _indent--;
-        }
 
         public MethodBuilder()
         {
             _contents = new List<string>();
+            _attributes = new List<string>();
+            _body = new List<string>();
         }
 
         public string[] Build()

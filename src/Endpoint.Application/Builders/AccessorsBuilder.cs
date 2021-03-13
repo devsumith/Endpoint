@@ -5,7 +5,6 @@ namespace Endpoint.Application.Builders
     public class AccessorsBuilder
     {
         private StringBuilder _string;
-        private string _accessor;
         private string _setAccessModifier;
         private bool _getterOnly;
 
