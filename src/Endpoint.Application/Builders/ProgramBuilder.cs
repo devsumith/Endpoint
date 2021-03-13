@@ -23,7 +23,7 @@ namespace Endpoint.Application.Builders
             var template = _templateLocator.Get(nameof(ProgramBuilder));
 
             var tokens = new TokensBuilder()
-                .With(nameof(_rootNamespace), _rootNamespace)
+                .With(nameof(_infrastructureNamespace), _infrastructureNamespace)
                 .With(nameof(_directory), _directory)
                 .With(nameof(_namespace), _namespace)
                 .With(nameof(_dbContext), _dbContext)

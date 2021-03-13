@@ -18,6 +18,7 @@
     <None Remove="Builders\Request\CommandBuilder.txt" />
     <None Remove="Builders\Request\QueryBuilder.txt" />
     <None Remove="Builders\ResponseBaseBuilder.txt" />
+    <None Remove="Builders\SeedDataBuilder.txt" />
     <None Remove="Builders\ServiceCollectionExtensionsBuilder.txt" />
     <None Remove="Builders\StartupBuilder.txt" />
     <None Remove="Builders\ValidationBehaviorBuilder.txt" />
@@ -38,6 +39,7 @@
     <EmbeddedResource Include="Builders\Request\CommandBuilder.txt" />
     <EmbeddedResource Include="Builders\Request\QueryBuilder.txt" />
     <EmbeddedResource Include="Builders\ResponseBaseBuilder.txt" />
+    <EmbeddedResource Include="Builders\SeedDataBuilder.txt" />
     <EmbeddedResource Include="Builders\ServiceCollectionExtensionsBuilder.txt" />
     <EmbeddedResource Include="Builders\StartupBuilder.txt" />
     <EmbeddedResource Include="Builders\ValidationBehaviorBuilder.txt" />

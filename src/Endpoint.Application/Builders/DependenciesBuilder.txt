@@ -49,7 +49,7 @@ namespace {{ apiNamespace }}
 
             services.AddHttpContextAccessor();
 
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(typeof(I{{ dbContextPascalCase }}));
 
             services.AddTransient<I{{ dbContextPascalCase }}, {{ dbContextPascalCase }}>();
 

@@ -116,6 +116,7 @@ namespace Endpoint.Application.Builders
             Create<ProgramBuilder>((a, b, c, d) => new(a, b, c, d))
                 .SetDirectory($@"{_apiDirectory}")
                 .SetRootNamespace(_rootNamespace.Value)
+                .SetInfrastructureNamespace(_infrastructureNamespace.Value)
                 .SetNamespace(_apiProjectNamespace)
                 .WithDbContextName(_dbContextName)
                 .Build();
@@ -137,6 +138,13 @@ namespace Endpoint.Application.Builders
                 .SetApiNamespace(_apiProjectNamespace)
                 .WithDbContextName(_dbContextName)
                 .Build();
+
+            Create<SeedDataBuilder>((a, b, c, d) => new(a, b, c, d))
+                .SetInfrastructureDirectory($@"{_infrastructureDirectory.Value}")
+                .SetInfrastructureNamespace(_infrastructureNamespace.Value)
+                .WithDbContext(_dbContextName)
+                .Build();
+            
 
             return new (_commandService, _apiDirectory, _apiProjectFullPath, $"{_rootNamespace.Value}.Api");
         }
