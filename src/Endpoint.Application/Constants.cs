@@ -3,7 +3,7 @@
     public static class Constants
     {
         public static string RootNamespace = nameof(Endpoint);
-
+        public static string Tab = "    ";
         public static class Folders
         {
             public static string Extensions = nameof(Extensions);

@@ -1,4 +1,0 @@
-        public void When({{ namePascalCase }} {{ nameCamelCase }})
-        {
-            Value = {{ nameCamelCase }}.Value;
-        }

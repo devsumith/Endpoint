@@ -28,15 +28,13 @@ namespace Endpoint.Application.Features
 
             private readonly IFileSystem _fileSystem;
             private readonly ICommandService _commandService;
-            private readonly ITemplateLocator _templateLocator;
             private readonly ITemplateProcessor _templateProcessor;
             private readonly ITenseConverter _tenseConverter;
             private readonly ISettingsProvider _settingsProvider;
-            public Handler(ISettingsProvider settingsProvider, IFileSystem fileSystem, ICommandService commandService, ITemplateProcessor templateProcessor, ITemplateLocator templateLocator, ITenseConverter tenseConverter)
+            public Handler(ISettingsProvider settingsProvider, IFileSystem fileSystem, ICommandService commandService, ITemplateProcessor templateProcessor, ITenseConverter tenseConverter)
             {
                 _fileSystem = fileSystem;
                 _commandService = commandService;
-                _templateLocator = templateLocator;
                 _templateProcessor = templateProcessor;
                 _tenseConverter = tenseConverter;
                 _settingsProvider = settingsProvider;
@@ -57,8 +55,18 @@ namespace Endpoint.Application.Features
 
                 _commandService.Start($"endpoint event {request.Aggregate} {eventName}", domainEventsDirectory);
 
-                var whenTemplate = _templateLocator.Get("When");
-                var methodTemplate = _templateLocator.Get("Method");
+                var whenTemplate = new string[4] { 
+                    "        public void When({{ namePascalCase }} {{ nameCamelCase }})",
+                    "        {",
+                    "            Value = {{ nameCamelCase }}.Value",
+                    "        }" };
+
+                var methodTemplate = new string[5] {
+                "        public {{ entityNamePascalCase }} {{ method }}(string value)",
+                "        {",
+                "            Apply(new {{ namePascalCase }}(value));",
+                "            return this;",
+                "        }" };
 
                 var tokens = new TokensBuilder()
                     .With("name", (Token)eventName)
