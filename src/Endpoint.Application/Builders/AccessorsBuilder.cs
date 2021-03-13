@@ -6,17 +6,42 @@ namespace Endpoint.Application.Builders
     {
         private StringBuilder _string;
         private string _accessor;
+        private string _setAccessModifier;
+        private bool _getterOnly;
 
         public AccessorsBuilder()
         {
             _string = new StringBuilder();
-            _accessor = "{ get; set; }";
+            _setAccessModifier = "";
         }
+
+        public AccessorsBuilder WithGetterOnly(bool getterOnly)
+        {
+            _getterOnly = getterOnly;
+            return this;
+        }
+
+        public AccessorsBuilder WithSetAccessModifuer(string accessModifier)
+        {
+            _setAccessModifier = accessModifier;
+            return this;
+        }
+
         public string Build()
         {
-            return _string
-                .Append(_accessor)
-                .ToString();
+            if(_getterOnly)
+                return _string.Append("{ ")
+                .Append($"get;")
+                .Append(" }").ToString();
+            
+            if(string.IsNullOrEmpty(_setAccessModifier))
+                return _string.Append("{ ")
+                .Append($"get; set;")
+                .Append(" }").ToString();
+            
+            return _string.Append("{ ")
+                .Append($"get; {_setAccessModifier} set;")
+                .Append(" }").ToString();
         }
     }
 }
