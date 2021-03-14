@@ -9,7 +9,6 @@ namespace Endpoint.Application.Builders
     {
         private List<string> _contents;
         private int _indent;
-        private int _tab = 4;
         private string _accessModifier;
         private List<string> _attributes;
         public List<string> _body;
@@ -44,6 +43,12 @@ namespace Endpoint.Application.Builders
             return this;
         }
 
+        public MethodBuilder WithIndent(int indent)
+        {
+            _indent = indent;
+            return this;
+        }
+
         public string[] Build()
         {
             var requestType = _endpointType switch
@@ -56,17 +61,16 @@ namespace Endpoint.Application.Builders
                 _ => throw new System.NotImplementedException()
             };
 
-            _contents = AttributeBuilder.EndpointAttributes(_endpointType, _resource, _authorize, indent: 2).ToList();
+            _contents = AttributeBuilder.EndpointAttributes(_endpointType, _resource, _authorize).ToList();
 
             _contents.Add(new MethodSignatureBuilder()
                 .WithEndpointType(_endpointType)
                 .WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Route).Build())
                 .WithAsync(true)
                 .WithReturnType(TypeBuilder.WithActionResult($"{requestType}.Response"))
-                .WithIndent(2)
                 .Build());
 
-            _contents = _contents.Concat(new MethodBodyBuilder(_endpointType, 2, _resource).Build()).ToList();
+            _contents = _contents.Concat(new MethodBodyBuilder(_endpointType, 0, _resource).Build()).ToList();
 
             return _contents.ToArray();
         }

@@ -111,7 +111,7 @@ namespace Endpoint.Application.Builders
             {
                 attributes.Add(new AttributeBuilder().WithName("Authorize").WithIndent(indent).Build());
             }
-            attributes.Add(WithHttp(HttpVerbs.Get, "{" + ((Token)resource).CamelCase + "Id}", $"{requestType}Route", 2));
+            attributes.Add(WithHttp(HttpVerbs.Get, "{" + ((Token)resource).CamelCase + "Id}", $"{requestType}Route", 0));
             attributes.Add(WithProducesResponseType(HttpStatusCode.InternalServerError, indent: indent));
             attributes.Add(WithProducesResponseType(HttpStatusCode.BadRequest, "ProblemDetails", indent: indent));
             attributes.Add(WithProducesResponseType(HttpStatusCode.OK, $"{requestType}.Response", indent: indent));

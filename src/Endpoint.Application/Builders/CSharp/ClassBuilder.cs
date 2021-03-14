@@ -123,7 +123,29 @@ namespace Endpoint.Application.Builders
                 _content.Add(line.Indent(_indent));
             }
 
-            _content.Add("}");
+            _content.Add("");
+
+            if(_methods.Count > 0)
+            {
+                foreach(var method in _methods)
+                {
+                    foreach(var line in method)
+                    {
+                        _content.Add(line.Indent(_indent));
+                    }
+
+                    _content.Add("".Indent(_indent));
+                }
+            }
+
+            Unindent();
+
+            _content.Add("}".Indent(_indent));
+
+            Unindent();
+
+            _content.Add("}".Indent(_indent));
+
             var path = $"{_directory}{Path.DirectorySeparatorChar}{_name}.cs";
 
             _context.Add(path, _content.ToArray());

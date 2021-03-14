@@ -23,6 +23,7 @@ namespace Endpoint.Application.Builders
             _tab = 4;
             _returnType = "void";
             _parameters = new();
+            _indent = 0;
         }
 
         public MethodSignatureBuilder WithIndent(int indent)
@@ -67,8 +68,6 @@ namespace Endpoint.Application.Builders
         public string Build()
         {
             EnsureValid();
-
-            for (var i = 0; i < _indent * _tab; i++) { _ = this._string.Append(' '); }
 
             if (!string.IsNullOrEmpty(_accessModifier)) {
                 _string.Append(_accessModifier);

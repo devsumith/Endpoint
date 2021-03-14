@@ -1,4 +1,5 @@
 ﻿using Endpoint.Application.Enums;
+using Endpoint.Application.Extensions;
 using Endpoint.Application.ValueObjects;
 using System;
 using System.Text;
@@ -56,16 +57,16 @@ namespace Endpoint.Application.Builders
         public string[] BuildGetByIdEndpointBody(string resource)
             => new string[10]
             {
-                "        {",
-                "            var response = await _mediator.Send(request);",
+                "{",
+                "var response = await _mediator.Send(request);".Indent(_indent+ 1),
                 "",
-                $"            if (response.{((Token)resource).PascalCase} == null)",
-                "            {",
-                $"                return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id);",
-                "            }",
+                $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent+ 1),
+                "{".Indent(_indent+ 1),
+                $"return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id);".Indent(_indent + 2),
+                "}".Indent(_indent +1),
                 "",
-                "            return response;",
-                "        }"
+                "return response;".Indent(_indent + 1),
+                "}"
             };
     }
 }

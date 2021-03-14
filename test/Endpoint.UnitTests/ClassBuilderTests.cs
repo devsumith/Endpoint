@@ -1,5 +1,6 @@
 using Endpoint.Application.Builders;
 using Endpoint.Application.Builders.CSharp;
+using Endpoint.Application.Enums;
 using Endpoint.Application.Services;
 using Moq;
 using System.Collections.Generic;
@@ -47,14 +48,15 @@ namespace Endpoint.UnitTests
                 "        public async Task<ActionResult<GetCustomerById.Response>> GetById([FromRoute]GetCustomerById.Request request)",
                 "        {",
                 "            var response = await _mediator.Send(request);",
-                "",
+                "        ",
                 "            if (response.Customer == null)",
                 "            {",
                 "                return new NotFoundObjectResult(request.CustomerId);",
                 "            }",
-                "",
+                "        ",
                 "            return response;",
                 "        }",
+                "        ",
                 "    }",
                 "}"
             }.ToArray();
@@ -66,6 +68,11 @@ namespace Endpoint.UnitTests
                 .WithAttribute(new AttributeBuilder().WithName("ApiController").Build())
                 .WithAttribute(new AttributeBuilder().WithName("Route").WithParam("\"api/[controller]\"").Build())
                 .WithDependency("IMediator", "mediator")
+                .WithMethod(new MethodBuilder()
+                .WithEndpointType(EndpointType.GetById)
+                .WithResource("Customer")
+                .WithAuthorize(false)
+                .Build())
                 .Build();
 
             var actual = context.ElementAt(0).Value;
@@ -75,6 +82,5 @@ namespace Endpoint.UnitTests
                 Assert.Equal(actual[i], expected[i]);
             }
         }
-
     }
 }
