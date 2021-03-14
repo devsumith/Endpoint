@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 
 namespace Endpoint.Application.Builders
 {
@@ -26,6 +27,22 @@ namespace Endpoint.Application.Builders
         }
     }
 
+    public class MethodSignatureBuilder
+    {
+        private StringBuilder _string;
+        private bool _async;
+
+        public MethodSignatureBuilder()
+        {
+            _string = new();
+            _async = true;
+        }
+
+        public string Build()
+        {
+            return _string.ToString();
+        }
+    }
     public class ParemeterInfo
     {
 

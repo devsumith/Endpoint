@@ -13,7 +13,17 @@ namespace Endpoint.UnitTests
             var sut = CreateMethodBuilder();
         }
 
+        public void BasicSignature()
+        {
+            var expected = "        public async Task<ActionResult<GetCustomerById.Response>> GetById([FromRoute]GetCustomerById.Request request)";
 
+            var actual = new MethodSignatureBuilder()
+                
+                .Build();
+
+            Assert.Equal(expected, actual);
+
+        }
         [Fact]
         public void ApiEndpoint()
         {
