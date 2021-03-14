@@ -1,7 +1,7 @@
 using Endpoint.Application.Builders;
-using System.Threading.Tasks;
+using Endpoint.Application.Enums;
+using System.Net;
 using Xunit;
-
 
 namespace Endpoint.UnitTests
 {
@@ -11,9 +11,8 @@ namespace Endpoint.UnitTests
         [Fact]
         public async void Constructor()
         {
-            Setup();
 
-            var sut = CreateAttributeBuilder();
+            var sut = new AttributeBuilder();
         }
 
         [Fact]
@@ -21,11 +20,7 @@ namespace Endpoint.UnitTests
         {
             var expected = "[Fact]";
 
-            Setup();
-
-            var sut = CreateAttributeBuilder();
-
-            var actual = sut
+            var actual = new AttributeBuilder()
                 .WithName("Fact")
                 .Build();
 
@@ -37,19 +32,29 @@ namespace Endpoint.UnitTests
         {
             var expected = "        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]";
 
-            var actual = AttributeBuilder.WithProducesResponseType(System.Net.HttpStatusCode.InternalServerError, indent: 2);
+            var actual = AttributeBuilder.WithProducesResponseType(HttpStatusCode.InternalServerError, indent: 2);
 
             Assert.Equal(expected, actual);
         }
 
-        private void Setup()
+        [Fact]
+        public void HttpGet()
         {
+            var expected = "        [HttpGet(\"{customerId}\", Name = \"GetCustomerByIdRoute\")]";
 
+            var actual = AttributeBuilder.WithHttp(HttpVerbs.Get, "{customerId}", "GetCustomerByIdRoute", indent: 2);
+
+            Assert.Equal(expected, actual);
         }
 
-        private AttributeBuilder CreateAttributeBuilder()
+        [Fact]
+        public void HttpGetSimple()
         {
-            return new ();
+            var expected = "        [HttpGet(Name = \"GetCustomersRoute\")]";
+
+            var actual = AttributeBuilder.WithHttp(HttpVerbs.Get, routeName: "GetCustomersRoute", indent: 2);
+
+            Assert.Equal(expected, actual);
         }
     }
 }

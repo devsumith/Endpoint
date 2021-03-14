@@ -1,5 +1,8 @@
+using Endpoint.Application.Enums;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 
 namespace Endpoint.Application.Builders
@@ -35,6 +38,36 @@ namespace Endpoint.Application.Builders
         {
             _params.Add(param);
             return this;
+        }
+
+        public AttributeBuilder WithProperty(string name, string value)
+        {
+            _properties.Add(name, value);
+
+            return this;
+        }
+
+        public static string WithHttp(HttpVerbs verb, string route = null, string routeName = null, int indent = 0)
+        {
+            var builder = new AttributeBuilder()
+                .WithIndent(indent)
+                .WithName(verb switch
+                {
+                    HttpVerbs.Get => "HttpGet",
+                    _ => throw new System.NotImplementedException()
+                });
+
+            if(!string.IsNullOrEmpty(route))
+            {
+                builder.WithParam($"\"{route}\"");
+            }
+
+            if(!string.IsNullOrEmpty(routeName))
+            {
+                builder.WithProperty("Name", routeName);
+            }
+
+            return builder.Build();
         }
 
         public static string WithProducesResponseType(HttpStatusCode statusCode, string type = null, int indent = 0)
@@ -83,9 +116,27 @@ namespace Endpoint.Application.Builders
 
                 _string.Append(string.Join(", ", _params));
 
+                if (this._properties.Count > 0)
+                {
+                    _string.Append(", ");
+
+                    _string.Append(string.Join(", ", _properties.Select(x => $"{x.Key} = \"{x.Value}\"")));
+                }
+
                 _string.Append(')');
+            } 
+            else
+            {
+                if (_properties.Count > 0)
+                {
+                    _string.Append('(');
+
+                    _string.Append(string.Join(", ", _properties.Select(x => $"{x.Key} = \"{x.Value}\"")));
+
+                    _string.Append(')');
+                }
             }
-            
+
             _string.Append(']');
             
             return _string.ToString();
