@@ -1,3 +1,4 @@
+using Endpoint.Application.Enums;
 using System.Collections.Generic;
 using System.Text;
 
@@ -26,23 +27,47 @@ namespace Endpoint.Application.Builders
             return _contents.ToArray();
         }
     }
-
-    public class MethodSignatureBuilder
+    
+    public class ParameterBuilder
     {
         private StringBuilder _string;
-        private bool _async;
-
-        public MethodSignatureBuilder()
+        private string _from;
+        private string _type;
+        private string _value;
+        public ParameterBuilder(string type, string value)
         {
-            _string = new();
-            _async = true;
+            _string = new StringBuilder();
+            _type = type;
+            _value = value;
+        }
+
+        public ParameterBuilder WithFrom(From from)
+        {
+            _from = from switch {
+                From.Route => new AttributeBuilder().WithName("FromRoute").Build(),
+                _ => throw new System.NotImplementedException()
+            };
+
+            return this;
         }
 
         public string Build()
         {
+            if(!string.IsNullOrEmpty(_from))
+            {
+                _string.Append(_from);                
+            }
+
+            _string.Append(_type);
+
+            _string.Append(' ');
+
+            _string.Append(_value);
+
             return _string.ToString();
         }
     }
+
     public class ParemeterInfo
     {
 

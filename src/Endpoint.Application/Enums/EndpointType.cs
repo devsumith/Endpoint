@@ -1,6 +1,6 @@
 ﻿namespace Endpoint.Application.Enums
 {
-    public enum RequestType
+    public enum EndpointType
     {
         Get,
         GetById,

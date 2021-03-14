@@ -15,6 +15,9 @@ namespace Endpoint.Application.Builders
             _string = new StringBuilder();
         }
 
+        public static string WithActionResult(string type)
+            => new TypeBuilder().WithGenericType("Task", new TypeBuilder().WithGenericType("ActionResult", type).Build()).Build();
+
         public TypeBuilder WithGenericType(string generic, string type)
         {
             _generic = generic;
