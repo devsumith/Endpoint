@@ -1,4 +1,6 @@
 using Endpoint.Application.Enums;
+using Endpoint.Application.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,7 +13,6 @@ namespace Endpoint.Application.Builders
         private int _tab = 4;
         private string _accessModifier = "public";
         private List<string> _attributes;
-        private List<ParemeterInfo> _parameters = new List<ParemeterInfo>();
         public List<string> _body = new List<string>();
 
 
@@ -27,49 +28,66 @@ namespace Endpoint.Application.Builders
             return _contents.ToArray();
         }
     }
-    
-    public class ParameterBuilder
+
+    public class MethodBodyBuilder
     {
         private StringBuilder _string;
-        private string _from;
-        private string _type;
-        private string _value;
-        public ParameterBuilder(string type, string value)
+        private int _indent;
+        private int _tab = 4;
+        private EndpointType? _endpointType;
+        private string _resource;
+
+        public MethodBodyBuilder(EndpointType? endpointType = null, int indent = 0, string resource = null)
         {
             _string = new StringBuilder();
-            _type = type;
-            _value = value;
+            _indent = indent;
+            _endpointType = endpointType;
+            _resource = resource;
         }
 
-        public ParameterBuilder WithFrom(From from)
-        {
-            _from = from switch {
-                From.Route => new AttributeBuilder().WithName("FromRoute").Build(),
-                _ => throw new System.NotImplementedException()
-            };
-
-            return this;
-        }
-
-        public string Build()
-        {
-            if(!string.IsNullOrEmpty(_from))
+        public string[] Build()
+        {            
+            if(_endpointType != null)
             {
-                _string.Append(_from);                
+                return _endpointType switch
+                {
+                    EndpointType.Get => BuildGetEndpointBody(_resource),
+                    EndpointType.GetById => BuildGetByIdEndpointBody(_resource),
+                    EndpointType.Create => BuildEndpointBody(),
+                    EndpointType.Delete => BuildEndpointBody(),
+                    EndpointType.Update => BuildEndpointBody(),
+                    _ => throw new NotImplementedException()
+                };
             }
 
-            _string.Append(_type);
-
-            _string.Append(' ');
-
-            _string.Append(_value);
-
-            return _string.ToString();
+            throw new System.NotImplementedException();
         }
-    }
 
-    public class ParemeterInfo
-    {
+        public string[] BuildEndpointBody()
+            => new string[1]
+            {
+                "=> await _mediator.Send(request);".PadLeft((_indent + 1) * _tab)
+            };
 
+        public string[] BuildGetEndpointBody(string resource)
+            => new string[1]
+            {
+                $"=> await _mediator.Send(new Get{((Token)resource).PascalCasePlural}.Request());".PadLeft((_indent + 1) * _tab)
+            };
+
+        public string[] BuildGetByIdEndpointBody(string resource)
+            => new string[10]
+            {
+                "        {",
+                "            var response = await _mediator.Send(request);",
+                "",
+                $"            if (response.{((Token)resource).PascalCase} == null)",
+                "            {",
+                $"                return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id)",
+                "            }",
+                "",
+                "            return response",
+                "        }"
+            };
     }
 }
