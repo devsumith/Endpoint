@@ -17,6 +17,7 @@ namespace Endpoint.Cli
             services.AddSingleton<INamingConventionConverter, NamingConventionConverter>();
             services.AddSingleton<ISettingsProvider, SettingsProvider>();
             services.AddSingleton<ITenseConverter, TenseConverter>();
+            services.AddSingleton<IContext, Context>();
         }
     }
 }

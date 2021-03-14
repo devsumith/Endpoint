@@ -3,29 +3,18 @@ using Endpoint.Application.ValueObjects;
 
 namespace Endpoint.Application.Builders.CSharp
 {
-    public class ClassBuilder : BuilderBase<ClassBuilder>
+    public class ClassBuilder
     {
-        public ClassBuilder(
-            ICommandService commandService,
-            ITemplateProcessor templateProcessor,
-            ITemplateLocator templateLocator,
-            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
-        { }
+        private readonly IContext _context;
+        public ClassBuilder(IContext context)
+        {
+            _context = context;
+        }
 
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(ClassBuilder));
 
-            var tokens = new TokensBuilder()
-                .With(nameof(_rootNamespace), _rootNamespace)
-                .With(nameof(_directory), _directory)
-                .With(nameof(_namespace), _namespace)
-                .Build();
-
-            var contents = _templateProcessor.Process(template, tokens);
-
-            _fileSystem.WriteAllLines($@"{_directory.Value}/Class.cs", contents);
         }
     }
 }

@@ -95,6 +95,8 @@ namespace Endpoint.Application.Builders
                 .SetResource(_resource)
                 .SetDirectory($@"{_apiDirectory}{Path.DirectorySeparatorChar}{Constants.Folders.Controllers}")
                 .SetRootNamespace((_rootNamespace.Value))
+                .SetApiNamespace(_apiNamespace.Value)
+                .SetApiDirectory(_apiDirectory)
                 .Build();
 
             Create<ResponseBaseBuilder>((a, b, c, d) => new(a, b, c, d))

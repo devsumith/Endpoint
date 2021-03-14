@@ -26,7 +26,7 @@ namespace Endpoint.Application.Builders
             var template = _templateLocator.Get(nameof(ControllerBuilder));
 
             var tokens = new TokensBuilder()
-                .With(nameof(_rootNamespace), _rootNamespace)
+                .With(nameof(_apiNamespace), _apiNamespace)
                 .With(nameof(_directory), _directory)
                 .With(nameof(_namespace), _namespace)
                 .With(nameof(_resource), _resource)
@@ -34,7 +34,7 @@ namespace Endpoint.Application.Builders
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}{Path.DirectorySeparatorChar}{_resource.PascalCase}Controller.cs", contents);
+            _fileSystem.WriteAllLines($@"{_apiDirectory.Value}{Path.DirectorySeparatorChar}Controllers{Path.DirectorySeparatorChar}{_resource.PascalCase}Controller.cs", contents);
         }
     }
 }
