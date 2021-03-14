@@ -1,4 +1,5 @@
 using Endpoint.Application.Enums;
+using Endpoint.Application.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -85,22 +86,44 @@ namespace Endpoint.Application.Builders
             {
                 HttpStatusCode.InternalServerError => "(int)HttpStatusCode.InternalServerError",
                 HttpStatusCode.BadRequest => "(int)HttpStatusCode.BadRequest",
-                HttpStatusCode.OK => "(int)HttpStatusCode.OK)",
+                HttpStatusCode.OK => "(int)HttpStatusCode.OK",
                 HttpStatusCode.NotFound => "(int)HttpStatusCode.NotFound",
                 _ => throw new System.NotImplementedException()
             }).Build();
         }
 
-        public static List<string> WithProducesResponseTypes(string type = null)
+        public static string[] EndpointAttributes(EndpointType endpointType, string resource, bool authorize = false, int indent = 0)
         {
-            return new List<string>()
+            var attributes = new List<string>();
+
+            var requestType = endpointType switch
             {
-                WithProducesResponseType(HttpStatusCode.InternalServerError),
-                WithProducesResponseType(HttpStatusCode.BadRequest,"ProblemDetails"),
-                WithProducesResponseType(HttpStatusCode.OK,type),
-                WithProducesResponseType(HttpStatusCode.NotFound,"string")
+                EndpointType.Create => $"Create{((Token)resource).PascalCase}",
+                EndpointType.Delete => $"Delete{((Token)resource).PascalCase}",
+                EndpointType.Get => $"Get{((Token)resource).PascalCasePlural}",
+                EndpointType.GetById => $"Get{((Token)resource).PascalCase}ById",
+                EndpointType.Update => $"Update{((Token)resource).PascalCase}",
+                _ => throw new System.NotImplementedException()
             };
+
+
+            if (authorize)
+            {
+                attributes.Add(new AttributeBuilder().WithName("Authorize").WithIndent(indent).Build());
+            }
+            attributes.Add(WithHttp(HttpVerbs.Get, "{" + ((Token)resource).CamelCase + "Id}", $"{requestType}Route", 2));
+            attributes.Add(WithProducesResponseType(HttpStatusCode.InternalServerError, indent: indent));
+            attributes.Add(WithProducesResponseType(HttpStatusCode.BadRequest, "ProblemDetails", indent: indent));
+            attributes.Add(WithProducesResponseType(HttpStatusCode.OK, $"{requestType}.Response", indent: indent));
+
+            if(endpointType == EndpointType.GetById)
+            {
+                attributes.Add(WithProducesResponseType(HttpStatusCode.NotFound, "string", indent: indent));
+            }
+
+            return attributes.ToArray();           
         }
+
 
         public string Build()
         {

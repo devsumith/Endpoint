@@ -98,9 +98,11 @@ namespace Endpoint.UnitTests
             };
             Setup();
 
-            var sut = CreateMethodBuilder();
-
-            var actual = sut.Build();
+            var actual = new MethodBuilder()
+                .WithEndpointType(EndpointType.GetById)
+                .WithResource("Customer")
+                .WithAuthorize(true)
+                .Build();
 
             Assert.Equal(expected, actual);
 

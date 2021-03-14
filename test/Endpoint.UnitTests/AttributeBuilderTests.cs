@@ -38,6 +38,16 @@ namespace Endpoint.UnitTests
         }
 
         [Fact]
+        public void ProducesResponseTypeOK()
+        {
+            var expected = "        [ProducesResponseType(typeof(GetCustomerById.Response), (int)HttpStatusCode.OK)]";
+
+            var actual = AttributeBuilder.WithProducesResponseType(HttpStatusCode.OK, type: "GetCustomerById.Response", indent: 2);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void HttpGet()
         {
             var expected = "        [HttpGet(\"{customerId}\", Name = \"GetCustomerByIdRoute\")]";

@@ -1,5 +1,7 @@
 using Endpoint.Application.Enums;
+using Endpoint.Application.ValueObjects;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Endpoint.Application.Builders
 {
@@ -13,6 +15,7 @@ namespace Endpoint.Application.Builders
         public List<string> _body;
         private bool _authorize;
         private EndpointType _endpointType;
+        private string _resource;
 
         public MethodBuilder()
         {
@@ -35,8 +38,36 @@ namespace Endpoint.Application.Builders
             return this;
         }
 
+        public MethodBuilder WithResource(string resource)
+        {
+            _resource = resource;
+            return this;
+        }
+
         public string[] Build()
         {
+            var requestType = _endpointType switch
+            {
+                EndpointType.Create => $"Create{((Token)_resource).PascalCase}",
+                EndpointType.Delete => $"Delete{((Token)_resource).PascalCase}",
+                EndpointType.Get => $"Get{((Token)_resource).PascalCasePlural}",
+                EndpointType.GetById => $"Get{((Token)_resource).PascalCase}ById",
+                EndpointType.Update => $"Update{((Token)_resource).PascalCase}",
+                _ => throw new System.NotImplementedException()
+            };
+
+            _contents = AttributeBuilder.EndpointAttributes(_endpointType, _resource, _authorize, indent: 2).ToList();
+
+            _contents.Add(new MethodSignatureBuilder()
+                .WithEndpointType(_endpointType)
+                .WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Route).Build())
+                .WithAsync(true)
+                .WithReturnType(TypeBuilder.WithActionResult($"{requestType}.Response"))
+                .WithIndent(2)
+                .Build());
+
+            _contents = _contents.Concat(new MethodBodyBuilder(_endpointType, 2, _resource).Build()).ToList();
+
             return _contents.ToArray();
         }
     }

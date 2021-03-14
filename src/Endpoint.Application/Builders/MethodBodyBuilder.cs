@@ -61,10 +61,10 @@ namespace Endpoint.Application.Builders
                 "",
                 $"            if (response.{((Token)resource).PascalCase} == null)",
                 "            {",
-                $"                return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id)",
+                $"                return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id);",
                 "            }",
                 "",
-                "            return response",
+                "            return response;",
                 "        }"
             };
     }
