@@ -68,11 +68,7 @@ namespace Endpoint.UnitTests
                 .WithAttribute(new AttributeBuilder().WithName("ApiController").Build())
                 .WithAttribute(new AttributeBuilder().WithName("Route").WithParam("\"api/[controller]\"").Build())
                 .WithDependency("IMediator", "mediator")
-                .WithMethod(new MethodBuilder()
-                .WithEndpointType(EndpointType.GetById)
-                .WithResource("Customer")
-                .WithAuthorize(false)
-                .Build())
+                .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.GetById).WithResource("Customer").WithAuthorize(false).Build())
                 .Build();
 
             var actual = context.ElementAt(0).Value;
@@ -81,6 +77,90 @@ namespace Endpoint.UnitTests
             {
                 Assert.Equal(actual[i], expected[i]);
             }
+        }
+
+        [Fact]
+        public void Model()
+        {
+            var context = new Context();
+
+            var expected = new List<string> {
+                "using System;",
+                "",
+                "namespace CustomerService.Api.Models",
+                "{",
+                "    public class Customer",
+                "    {",
+                "        public Guid CustomerId { get; set; }",
+                "    }",
+                "}"
+            }.ToArray();
+
+            new ClassBuilder("Customer", context, Mock.Of<IFileSystem>())
+                .WithDirectory("")
+                .WithUsing("System")
+                .WithNamespace("CustomerService.Api.Models")
+                .WithProperty(new PropertyBuilder().WithName("CustomerId").WithType("Guid").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .Build();
+
+            var actual = context.First().Value;
+
+            for(var i = 0; i <expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
+        }
+
+        [Fact]
+        public void DbContext()
+        {
+            var context = new Context();
+
+            var expected = new List<string> {
+                "using CustomerService.Api.Models",
+                "using Microsoft.EntityFrameworkCore;",
+                "",
+                "namespace CustomerService.Api.Data",
+                "{",
+                "    public class CustomerServiceDbContext: DbContext, ICustomerServiceDbContext",
+                "    {",
+                "        public DbSet<Customer> Customers { get; private set; }",
+                "        public CustomerServiceDbContext(DbContextOptions options)",
+                "            :base(options) { }",
+                "    }",
+                "}"
+            }.ToArray();
+
+            new ClassBuilder("CustomerServiceDbContext", context, Mock.Of<IFileSystem>())
+                .WithDirectory("")
+                .WithUsing("CustomerService.Api.Models")
+                .WithUsing("Microsoft.EntityFrameworkCore")
+                .WithNamespace("CustomerService.Api.Data")
+                .WithProperty(new PropertyBuilder().WithName("Customers").WithType(new TypeBuilder().WithGenericType("DbSet","Customer").Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build())
+                .Build();
+
+            var actual = context.First().Value;
+
+            for (var i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
+        }
+
+        [Fact]
+        public void Interface()
+        {
+            var context = new Context();
+
+            var expected = new List<string> { }.ToArray();
+
+            var sut = new ClassBuilder("CustomerController", context, null);
+
+            sut.Build();
+
+            var actual = context.First().Value;
+
+            Assert.Equal(expected, actual);
         }
     }
 }

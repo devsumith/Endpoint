@@ -22,7 +22,7 @@ namespace Endpoint.Application.Builders
         private List<string> _attributes;
         private List<string[]> _methods;
         private int _indent = 0;
-
+        private List<string> _properties;
         private void Indent() { _indent++; }
         private void Unindent() { _indent--; }
 
@@ -37,9 +37,22 @@ namespace Endpoint.Application.Builders
             _dependencies = new List<KeyValuePair<string, string>>();
             _attributes = new List<string>();
             _methods = new List<string[]>();
+            _properties = new List<string>();
             
         }
 
+        public ClassBuilder WithDirectory(string directory)
+        {
+            _directory = directory;
+            return this;
+        }
+
+        public ClassBuilder WithProperty(string property)
+        {
+            _properties.Add(property);
+
+            return this;
+        }
         public ClassBuilder WithUsing(string @using)
         {
             _usings.Add(@using);
@@ -102,7 +115,17 @@ namespace Endpoint.Application.Builders
             _content.Add($"public class {_name}".Indent(_indent));
             _content.Add("{".Indent(_indent));
 
+
+
             Indent();
+
+            if (_properties.Count > 0)
+            {
+                foreach (var property in _properties)
+                {
+                    _content.Add(property.Indent(_indent));
+                }
+            }
 
             var ctorBuilder = new ConstructorBuilder(_name).WithIndent(_indent).WithAccessModifier(Public);
 
@@ -114,16 +137,16 @@ namespace Endpoint.Application.Builders
 
                     ctorBuilder.WithDependency(dependency.Key, dependency.Value);
                 }
+
+                _content.Add("");
+
+                foreach (var line in ctorBuilder.Build())
+                {
+                    _content.Add(line.Indent(_indent));
+                }
+
+                _content.Add("");
             }
-
-            _content.Add("");
-
-            foreach(var line in ctorBuilder.Build())
-            {
-                _content.Add(line.Indent(_indent));
-            }
-
-            _content.Add("");
 
             if(_methods.Count > 0)
             {
