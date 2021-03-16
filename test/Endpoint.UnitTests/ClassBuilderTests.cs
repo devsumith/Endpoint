@@ -118,7 +118,7 @@ namespace Endpoint.UnitTests
             var context = new Context();
 
             var expected = new List<string> {
-                "using CustomerService.Api.Models",
+                "using CustomerService.Api.Models;",
                 "using Microsoft.EntityFrameworkCore;",
                 "",
                 "namespace CustomerService.Api.Data",

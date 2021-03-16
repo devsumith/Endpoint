@@ -24,7 +24,7 @@ namespace Endpoint.Application.Builders
         private int _indent = 0;
         private List<string> _properties;
         private string _baseClass;
-        private List<KeyValuePair<string, string>> _baseClassDependencies;
+        private List<KeyValuePair<string, string>> _baseDependencies;
         private List<string> _interfaces;
 
         private void Indent() { _indent++; }
@@ -42,7 +42,7 @@ namespace Endpoint.Application.Builders
             _attributes = new List<string>();
             _methods = new List<string[]>();
             _properties = new List<string>();
-            _baseClassDependencies = new List<KeyValuePair<string, string>>();
+            _baseDependencies = new List<KeyValuePair<string, string>>();
             _interfaces = new List<string>();
 
         }
@@ -79,7 +79,7 @@ namespace Endpoint.Application.Builders
 
         public ClassBuilder WithBaseDependency(string type, string name)
         {
-            _baseClassDependencies.Add(new(type, name));
+            _baseDependencies.Add(new(type, name));
             return this;
         }
 
@@ -152,18 +152,24 @@ namespace Endpoint.Application.Builders
                 }
             }
 
-            var ctorBuilder = new ConstructorBuilder(_name).WithIndent(_indent).WithAccessModifier(Public);
+            var ctorBuilder = new ConstructorBuilder(_name)
+                .WithIndent(_indent)
+                .WithParameters(new (_dependencies))
+                .WithBaseParameters(new (_baseDependencies))
+                .WithAccessModifier(Public);
 
-            if (_dependencies.Count > 0)
+            if (_dependencies.Count > 0 || _baseDependencies.Count > 0)
             {
-                foreach(var dependency in _dependencies)
-                {
-                    _content.Add(new FieldBuilder(dependency.Key,dependency.Value).WithReadonly().WithIndent(_indent).WithAccessModifier(Private).Build());
+                if (_dependencies.Count > 0) {
+                        foreach (var dependency in _dependencies)
+                        {
+                            _content.Add(new FieldBuilder(dependency.Key, dependency.Value).WithReadonly().WithIndent(_indent).WithAccessModifier(Private).Build());
 
-                    ctorBuilder.WithDependency(dependency.Key, dependency.Value);
-                }
+                            //ctorBuilder.WithDependency(dependency.Key, dependency.Value);
+                        }
 
-                _content.Add("");
+                        _content.Add("");
+                    }
 
                 foreach (var line in ctorBuilder.Build())
                 {
