@@ -51,6 +51,11 @@ namespace Endpoint.Application.Builders
             return this;
         }
 
+        public MethodSignatureBuilder WithName(string name)
+        {
+            _methodName = name;
+            return this;
+        }
 
         public MethodSignatureBuilder WithEndpointType(EndpointType endpointType)
         {

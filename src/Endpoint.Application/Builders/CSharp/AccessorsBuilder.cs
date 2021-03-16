@@ -14,7 +14,7 @@ namespace Endpoint.Application.Builders
             _setAccessModifier = "";
         }
 
-        public AccessorsBuilder WithGetterOnly(bool getterOnly)
+        public AccessorsBuilder WithGetterOnly(bool getterOnly = true)
         {
             _getterOnly = getterOnly;
             return this;

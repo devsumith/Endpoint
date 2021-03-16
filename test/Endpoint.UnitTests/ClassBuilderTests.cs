@@ -156,9 +156,29 @@ namespace Endpoint.UnitTests
         {
             var context = new Context();
 
-            var expected = new List<string> { }.ToArray();
+            var expected = new List<string> {
+                "using CustomerService.Api.Models;",
+                "using Microsoft.EntityFrameworkCore;",
+                "",
+                "namespace CustomerService.Application.Interfaces",
+                "{",
+                "    public interface ICustomerServiceDbContext",
+                "    {",
+                "        DbSet<Customer> Customers { get; }",
+                "        Task<int> SaveChangesAsync(CancellationToken cancellationToken);",
+                "    }",
+                "}"
+            }.ToArray();
 
-            var sut = new ClassBuilder("CustomerController", context, null);
+            var sut = new ClassBuilder("CustomerServiceDbContext", context, Mock.Of<IFileSystem>(), "interface")
+                .WithUsing("CustomerService.Api.Models")
+                .WithUsing("Microsoft.EntityFrameworkCore")
+                .WithNamespace("CustomerService.Application.Interfaces")
+                .WithProperty(new PropertyBuilder().WithName("Customers").WithAccessModifier(AccessModifier.Inherited).WithType(new TypeBuilder().WithGenericType("DbSet","Customer").Build()).WithAccessors(new AccessorsBuilder().WithGetterOnly().Build()).Build())
+                .WithMethodSignature(new MethodSignatureBuilder()
+                .WithName("SaveChangesAsync")
+                .WithReturnType(new TypeBuilder().WithGenericType("Task","int").Build())
+                .WithParameter("CancellationToken").Build());
 
             sut.Build();
 

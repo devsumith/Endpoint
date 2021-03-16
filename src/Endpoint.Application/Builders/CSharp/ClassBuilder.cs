@@ -26,11 +26,12 @@ namespace Endpoint.Application.Builders
         private string _baseClass;
         private List<KeyValuePair<string, string>> _baseDependencies;
         private List<string> _interfaces;
-
+        private string _type;
+        
         private void Indent() { _indent++; }
         private void Unindent() { _indent--; }
 
-        public ClassBuilder(string name, IContext context, IFileSystem fileSystem)
+        public ClassBuilder(string name, IContext context, IFileSystem fileSystem, string type = "class")
         {
             _name = name;
             _context = context;
@@ -44,6 +45,7 @@ namespace Endpoint.Application.Builders
             _properties = new List<string>();
             _baseDependencies = new List<KeyValuePair<string, string>>();
             _interfaces = new List<string>();
+            _type = type;
 
         }
 
@@ -115,6 +117,12 @@ namespace Endpoint.Application.Builders
             return this;
         }
 
+        public ClassBuilder WithMethodSignature(string methodSignature)
+        {
+            _methods.Add(new string[1] { $"{methodSignature};" });
+            return this;
+        }
+
         private string GetInheritance()
         {
             StringBuilder inheritance = new StringBuilder();
@@ -159,7 +167,13 @@ namespace Endpoint.Application.Builders
                 _content.Add(attribute.Indent(_indent));
             }
 
-            _content.Add($"public class {_name}{GetInheritance()}".Indent(_indent));
+            if(_type == "class")
+                _content.Add($"public class {_name}{GetInheritance()}".Indent(_indent));
+
+            if(_type == "interface")
+                _content.Add($"public interface I{_name}{GetInheritance()}".Indent(_indent));
+
+
             _content.Add("{".Indent(_indent));
 
 

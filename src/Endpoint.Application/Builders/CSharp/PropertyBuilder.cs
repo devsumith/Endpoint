@@ -1,3 +1,4 @@
+using Endpoint.Application.Enums;
 using System.Text;
 
 namespace Endpoint.Application.Builders
@@ -6,7 +7,6 @@ namespace Endpoint.Application.Builders
     {
         private StringBuilder _string;
         private int _indent;
-        private int _tab = 4;
         private string _accessModifier;
         private string _type;
         private string _acessors;
@@ -17,6 +17,19 @@ namespace Endpoint.Application.Builders
             _accessModifier = "public";
             _indent = 0;
             _type = "";
+        }
+
+        public PropertyBuilder WithAccessModifier(AccessModifier accessModifier)
+        {
+            _accessModifier = accessModifier switch
+            {
+                AccessModifier.Inherited => "",
+                AccessModifier.Public => "public",
+                AccessModifier.Private => "private",
+                _ => throw new System.NotSupportedException()
+            };
+
+            return this;
         }
 
         public PropertyBuilder WithIndent(int indent)
@@ -45,11 +58,13 @@ namespace Endpoint.Application.Builders
 
         public string Build()
         {
-            for(var i = 0; i < _indent * _tab; i++) { _ = _string.Append(' '); }
-
-            return _string.Append(_accessModifier)
-                .Append(' ')
-                .Append(_type)
+            if(!string.IsNullOrEmpty(_accessModifier))
+            {
+                _string.Append(_accessModifier)
+                .Append(' ');
+            }
+            
+            return _string.Append(_type)
                 .Append(' ')
                 .Append(_name)
                 .Append(' ')
