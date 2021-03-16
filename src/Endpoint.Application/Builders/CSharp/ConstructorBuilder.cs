@@ -116,7 +116,7 @@ namespace Endpoint.Application.Builders.CSharp
 
                 line.Append($":base({string.Join(", ",_baseParameters.Select(x => x.Value))})".Indent(_indent));
                 
-                line.Append("{ }");
+                line.Append(" { }");
                 
                 body.Add(line.ToString());
 

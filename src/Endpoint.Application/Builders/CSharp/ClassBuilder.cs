@@ -115,6 +115,28 @@ namespace Endpoint.Application.Builders
             return this;
         }
 
+        private string GetInheritance()
+        {
+            StringBuilder inheritance = new StringBuilder();
+
+            if(!string.IsNullOrEmpty(_baseClass))
+            {
+                inheritance.Append($": {_baseClass}");
+
+                if (_interfaces.Count > 0)
+                {
+                    inheritance.Append($", {string.Join(", ", _interfaces)}");
+                }
+            }
+
+            if (string.IsNullOrEmpty(_baseClass) && _interfaces.Count > 0)
+            {
+                inheritance.Append($": {string.Join(", ", _interfaces)}");
+            }
+
+            return inheritance.ToString();
+        }
+
         public void Build()
         {
             if (_usings.Count > 0)
@@ -137,7 +159,7 @@ namespace Endpoint.Application.Builders
                 _content.Add(attribute.Indent(_indent));
             }
 
-            _content.Add($"public class {_name}".Indent(_indent));
+            _content.Add($"public class {_name}{GetInheritance()}".Indent(_indent));
             _content.Add("{".Indent(_indent));
 
 
@@ -175,8 +197,6 @@ namespace Endpoint.Application.Builders
                 {
                     _content.Add(line);
                 }
-
-                _content.Add("");
             }
 
             if(_methods.Count > 0)
