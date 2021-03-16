@@ -39,6 +39,7 @@ namespace Endpoint.UnitTests
                 "        private readonly IMediator _mediator;",
                 "",
                 "        public CustomerController(IMediator mediator)",
+                "            => _mediator = mediator;",
                 "",
                 "        [HttpGet(\"{customerId}\", Name = \"GetCustomerByIdRoute\")]",
                 "        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]",
@@ -136,6 +137,9 @@ namespace Endpoint.UnitTests
                 .WithUsing("CustomerService.Api.Models")
                 .WithUsing("Microsoft.EntityFrameworkCore")
                 .WithNamespace("CustomerService.Api.Data")
+                .WithInterface("ICustomerServiceDbContext")
+                .WithBase("DbContext")
+                .WithBaseDependency("DbContextOptions","options")
                 .WithProperty(new PropertyBuilder().WithName("Customers").WithType(new TypeBuilder().WithGenericType("DbSet","Customer").Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build())
                 .Build();
 

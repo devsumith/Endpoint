@@ -23,6 +23,10 @@ namespace Endpoint.Application.Builders
         private List<string[]> _methods;
         private int _indent = 0;
         private List<string> _properties;
+        private string _baseClass;
+        private List<KeyValuePair<string, string>> _baseClassDependencies;
+        private List<string> _interfaces;
+
         private void Indent() { _indent++; }
         private void Unindent() { _indent--; }
 
@@ -34,16 +38,24 @@ namespace Endpoint.Application.Builders
 
             _content = new List<string>();
             _usings = new List<string>();
-            _dependencies = new List<KeyValuePair<string, string>>();
+            _dependencies = new List<KeyValuePair<string, string>>();            
             _attributes = new List<string>();
             _methods = new List<string[]>();
             _properties = new List<string>();
-            
+            _baseClassDependencies = new List<KeyValuePair<string, string>>();
+            _interfaces = new List<string>();
+
         }
 
         public ClassBuilder WithDirectory(string directory)
         {
             _directory = directory;
+            return this;
+        }
+
+        public ClassBuilder WithBase(string baseClass)
+        {
+            _baseClass = baseClass;
             return this;
         }
 
@@ -62,6 +74,19 @@ namespace Endpoint.Application.Builders
         public ClassBuilder WithNamespace(string @namespace)
         {
             _namespace = @namespace;
+            return this;
+        }
+
+        public ClassBuilder WithBaseDependency(string type, string name)
+        {
+            _baseClassDependencies.Add(new(type, name));
+            return this;
+        }
+
+        public ClassBuilder WithInterface(string type)
+        {
+            _interfaces.Add(type);
+
             return this;
         }
 
@@ -142,7 +167,7 @@ namespace Endpoint.Application.Builders
 
                 foreach (var line in ctorBuilder.Build())
                 {
-                    _content.Add(line.Indent(_indent));
+                    _content.Add(line);
                 }
 
                 _content.Add("");

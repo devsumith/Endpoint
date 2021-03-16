@@ -11,6 +11,7 @@ namespace Endpoint.Application.Builders.CSharp
     {
         private List<string> _contents;
         private Dictionary<string, string> _parameters;
+        private Dictionary<string, string> _baseParameters;
         private string _name;
         private int _indent;
         private AccessModifier _accessModifier = AccessModifier.Inherited;
@@ -22,6 +23,7 @@ namespace Endpoint.Application.Builders.CSharp
         {
             _contents = new List<string>();
             _parameters = new Dictionary<string, string>();
+            _baseParameters = new Dictionary<string, string>();
             _indent = 0;
             _name = name;
         }
@@ -77,17 +79,31 @@ namespace Endpoint.Application.Builders.CSharp
             }
             signature.Append(')');
 
-            return signature.ToString();
+            return signature.ToString().Indent(_indent);
         }
 
         public string[] BuildBody()
         {
-            throw new System.NotImplementedException();
+            var body = new List<string>();
+
+            if (_parameters.Count() == 1 && _baseParameters.Count == 0)
+            {
+                Indent();
+                body.Add($"=> _{_parameters.ElementAt(0).Value} = {_parameters.ElementAt(0).Value};".Indent(_indent));
+                return body.ToArray();
+            }
+
+            throw new NotSupportedException();
         }
 
         public string[] Build()
         {            
             _contents.Add(BuildSignature());
+
+            foreach(var line in BuildBody())
+            {
+                _contents.Add(line);
+            }
 
             return _contents.ToArray();
         }

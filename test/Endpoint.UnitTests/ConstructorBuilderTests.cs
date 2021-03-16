@@ -28,7 +28,10 @@ namespace Endpoint.UnitTests
         [Fact]
         public void BasicWithDependency()
         {
-            var expected = new string[] { "    CustomerController(IMediator mediator)" };
+            var expected = new string[] { 
+                "CustomerController(IMediator mediator)", 
+                "    => _mediator = mediator;" 
+            };
 
             var sut = new ConstructorBuilder("CustomerController")
                 .WithDependency("IMediator", "mediator");
