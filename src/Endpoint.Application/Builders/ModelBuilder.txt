@@ -1,9 +1,0 @@
-using System;
-
-namespace {{ domainNamespace }}.Models
-{
-    public class {{ entityNamePascalCase }}
-    {
-        public Guid {{ entityNamePascalCase }}Id { get; private set; }
-    }
-}

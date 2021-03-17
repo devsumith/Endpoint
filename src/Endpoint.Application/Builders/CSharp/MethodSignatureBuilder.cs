@@ -10,17 +10,16 @@ namespace Endpoint.Application.Builders
         private bool _async;
         private int _indent;
         private string _accessModifier;
-        private string _methodName;
-        private int _tab;
+        private string _methodName;        
         private string _returnType;
         private List<string> _parameters;
+        private bool _static; 
 
         public MethodSignatureBuilder()
         {
             _string = new();
             _async = true;
             _accessModifier = "public";
-            _tab = 4;
             _returnType = "void";
             _parameters = new();
             _indent = 0;
@@ -45,6 +44,12 @@ namespace Endpoint.Application.Builders
             return this;
         }
 
+        public MethodSignatureBuilder IsStatic(bool @static)
+        {
+            _static = @static;
+            return this;
+        }
+
         public MethodSignatureBuilder WithAsync(bool async)
         {
             _async = async;
@@ -54,6 +59,17 @@ namespace Endpoint.Application.Builders
         public MethodSignatureBuilder WithName(string name)
         {
             _methodName = name;
+            return this;
+        }
+
+        public MethodSignatureBuilder WithAccessModifier(AccessModifier accessModifier)
+        {
+            _accessModifier = accessModifier switch { 
+                AccessModifier.Public => "public",
+                AccessModifier.Private => "private",
+                AccessModifier.Inherited => "",
+                _ => throw new System.NotImplementedException()
+            };
             return this;
         }
 
@@ -76,6 +92,12 @@ namespace Endpoint.Application.Builders
 
             if (!string.IsNullOrEmpty(_accessModifier)) {
                 _string.Append(_accessModifier);
+                _string.Append(' ');
+            }
+
+            if (_static)
+            {
+                _string.Append("static");
                 _string.Append(' ');
             }
 

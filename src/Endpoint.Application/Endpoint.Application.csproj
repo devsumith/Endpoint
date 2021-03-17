@@ -14,7 +14,6 @@
     <None Remove="Builders\DtoBuilder.txt" />
     <None Remove="Builders\ExtensionsBuilder.txt" />
     <None Remove="Builders\LaunchSettingsBuilder.txt" />
-    <None Remove="Builders\ModelBuilder.txt" />
     <None Remove="Builders\ProgramBuilder.txt" />
     <None Remove="Builders\Request\CommandBuilder.txt" />
     <None Remove="Builders\Request\QueryBuilder.txt" />
@@ -39,7 +38,6 @@
     <EmbeddedResource Include="Builders\ExtensionsBuilder.txt" />
     <EmbeddedResource Include="Builders\DtoBuilder.txt" />
     <EmbeddedResource Include="Builders\LaunchSettingsBuilder.txt" />
-    <EmbeddedResource Include="Builders\ModelBuilder.txt" />
     <EmbeddedResource Include="Builders\ProgramBuilder.txt" />
     <EmbeddedResource Include="Builders\Request\CommandBuilder.txt" />
     <EmbeddedResource Include="Builders\Request\QueryBuilder.txt" />

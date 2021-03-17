@@ -2,6 +2,7 @@
 {
     public enum EndpointType
     {
+        Default = 0,
         Get,
         GetById,
         Create,

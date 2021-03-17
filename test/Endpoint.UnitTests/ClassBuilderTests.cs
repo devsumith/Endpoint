@@ -113,6 +113,59 @@ namespace Endpoint.UnitTests
         }
 
         [Fact]
+        public void Extensions()
+        {
+            var context = new Context();
+
+            var expected = new List<string> {
+                "using System;",
+                "using CustomerService.Domain.Models;",
+                "",
+                "namespace CustomerService.Application.Features",
+                "{",
+                "    public static class CustomerExtensions",
+                "    {",
+                "        public static CustomerDto ToDto(this Customer customer)",
+                "        {",
+                "            return new CustomerDto",
+                "            {",
+                "                CustomerId = customer.CustomerId",
+                "            };",
+                "        }",
+                "    }",
+                "}"
+            }.ToArray();
+
+            new ClassBuilder("CustomerExtensions", context, Mock.Of<IFileSystem>())
+                .WithDirectory("")
+                .WithUsing("System")
+                .WithUsing("CustomerService.Domain.Models")
+                .WithNamespace("CustomerService.Application.Features")
+                .WithMethod(new MethodBuilder()
+                .IsStatic()
+                .WithName("ToDto")
+                .WithReturnType("CustomerDto")
+                .WithPropertyName("CustomerId")
+                .WithParameter(new ParameterBuilder("Customer", "customer", true).Build())
+                .WithBody(new()
+                {
+                    "    return new ()",
+                    "    {",
+                    "        CustomerId = customer.CustomerId",
+                    "    };"
+                })
+                .Build())
+                .Build();
+
+            var actual = context.First().Value;
+
+            for (var i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
+        }
+
+        [Fact]
         public void DbContext()
         {
             var context = new Context();
@@ -176,9 +229,11 @@ namespace Endpoint.UnitTests
                 .WithNamespace("CustomerService.Application.Interfaces")
                 .WithProperty(new PropertyBuilder().WithName("Customers").WithAccessModifier(AccessModifier.Inherited).WithType(new TypeBuilder().WithGenericType("DbSet","Customer").Build()).WithAccessors(new AccessorsBuilder().WithGetterOnly().Build()).Build())
                 .WithMethodSignature(new MethodSignatureBuilder()
+                .WithAsync(false)
+                .WithAccessModifier(AccessModifier.Inherited)
                 .WithName("SaveChangesAsync")
                 .WithReturnType(new TypeBuilder().WithGenericType("Task","int").Build())
-                .WithParameter("CancellationToken").Build());
+                .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build()).Build());
 
             sut.Build();
 

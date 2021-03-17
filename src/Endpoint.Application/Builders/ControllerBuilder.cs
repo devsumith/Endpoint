@@ -23,18 +23,18 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(ControllerBuilder));
-
-            var tokens = new TokensBuilder()
-                .With(nameof(_apiNamespace), _apiNamespace)
-                .With(nameof(_directory), _directory)
-                .With(nameof(_namespace), _namespace)
-                .With(nameof(_resource), _resource)
+            var context = new Context();
+            new ClassBuilder($"{_resource.PascalCase}Controller", context, _fileSystem)
+                .WithDirectory($"{_apiDirectory.Value}{Path.DirectorySeparatorChar}Controllers")
+                .WithUsing("System.Net")
+                .WithUsing("System.Threading.Tasks")
+                .WithUsing("Microsoft.AspNetCore.Mvc")
+                .WithUsing("MediatR")
+                .WithNamespace($"{_apiNamespace.Value}.Controllers")
+                .WithAttribute(new AttributeBuilder().WithName("ApiController").Build())
+                .WithAttribute(new AttributeBuilder().WithName("Route").WithParam("\"api/[controller]\"").Build())
+                .WithDependency("IMediator", "mediator")
                 .Build();
-
-            var contents = _templateProcessor.Process(template, tokens);
-
-            _fileSystem.WriteAllLines($@"{_apiDirectory.Value}{Path.DirectorySeparatorChar}Controllers{Path.DirectorySeparatorChar}{_resource.PascalCase}Controller.cs", contents);
         }
     }
 }

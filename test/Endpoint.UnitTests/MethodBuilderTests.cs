@@ -1,5 +1,6 @@
 using Endpoint.Application.Builders;
 using Endpoint.Application.Enums;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Endpoint.UnitTests
@@ -107,6 +108,36 @@ namespace Endpoint.UnitTests
 
             Assert.Equal(expected, actual);
 
+        }
+
+        [Fact]
+        public void ToDtoExtensionMethod()
+        {
+            string[] expected = new List<string> {
+                "public static CustomerDto ToDto(this Customer customer)",
+                "{",
+                "    return new ()",
+                "    {",
+                "        CustomerId = customer.CustomerId",
+                "    };",
+                "}"
+            }.ToArray();
+
+            var actual = new MethodBuilder()                
+                .IsStatic()
+                .WithName("ToDto")
+                .WithReturnType("CustomerDto")
+                .WithPropertyName("CustomerId")
+                .WithParameter(new ParameterBuilder("Customer","customer", true).Build())
+                .WithBody(new() {
+                    "    return new ()",
+                    "    {",
+                    "        CustomerId = customer.CustomerId",
+                    "    };"
+                })
+                .Build();
+
+            Assert.Equal(expected, actual);
         }
 
         private void Setup()

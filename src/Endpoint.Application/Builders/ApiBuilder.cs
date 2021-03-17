@@ -91,14 +91,6 @@ namespace Endpoint.Application.Builders
                 .WithProjectName(_apiProjectName)
                 .Build();
 
-            Create<ControllerBuilder>((a, b, c, d) => new(a, b, c, d))
-                .SetResource(_resource)
-                .SetDirectory($@"{_apiDirectory}{Path.DirectorySeparatorChar}{Constants.Folders.Controllers}")
-                .SetRootNamespace((_rootNamespace.Value))
-                .SetApiNamespace(_apiNamespace.Value)
-                .SetApiDirectory(_apiDirectory)
-                .Build();
-
             Create<ResponseBaseBuilder>((a, b, c, d) => new(a, b, c, d))
                 .SetDirectory($@"{_domainDirectory.Value}{Path.DirectorySeparatorChar}{Constants.Folders.Core}")
                 .SetRootNamespace(_domainNamespace.Value)

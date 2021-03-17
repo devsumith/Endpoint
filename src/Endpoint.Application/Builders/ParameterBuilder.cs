@@ -9,11 +9,13 @@ namespace Endpoint.Application.Builders
         private string _from;
         private string _type;
         private string _value;
-        public ParameterBuilder(string type, string value)
+        private bool _extension;
+        public ParameterBuilder(string type, string value, bool extension = false)
         {
             _string = new StringBuilder();
             _type = type;
             _value = value;
+            _extension = extension;
         }
 
         public ParameterBuilder WithFrom(From from)
@@ -31,6 +33,10 @@ namespace Endpoint.Application.Builders
             if(!string.IsNullOrEmpty(_from))
             {
                 _string.Append(_from);                
+            }
+            if (_extension)
+            {
+                _string.Append("this ");
             }
 
             _string.Append(_type);

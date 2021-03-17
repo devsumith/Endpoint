@@ -31,16 +31,33 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            Map(Create<ModelBuilder>((a, b, c, d) => new(a, b, c, d)))
+            new ModelBuilder(
+                new Context(), 
+                _fileSystem, 
+                _domainDirectory.Value, 
+                _domainNamespace.Value, 
+                _entityName
+                ).Build();
+
+            new DbContextBuilder(
+                _dbContextName,
+                new Context(),
+                _fileSystem,
+                _infrastructureDirectory.Value,
+                _infrastructureNamespace.Value,
+                _domainDirectory.Value,
+                _domainNamespace.Value,
+                _applicationDirectory.Value,
+                _applicationNamespace.Value,
+                new string[1] { _entityName }).Build();
+            Map(Create<FeatureBuilder>((a, b, c, d) => new(a, b, c, d)))
                 .SetEntityName(_entityName)
                 .Build();
 
-            Map(Create<DbContextBuilder>((a, b, c, d) => new(a, b, c, d)))
-                .SetDirectory($@"{_domainDirectory}{Path.DirectorySeparatorChar}{Constants.Folders.Data}")
-                .SetNamespace($"{_domainNamespace}.{Constants.Folders.Data}")
-                .SetModelsDirectory($"{_domainDirectory}{Path.DirectorySeparatorChar}Models")
-                .WithModel(_entityName)
-                .WithDbContextName(_dbContextName)
+            Map(Create<ControllerBuilder>((a, b, c, d) => new(a, b, c, d)))
+                .SetResource(_entityName)
+                .SetApiDirectory(_apiDirectory.Value)
+                .SetApiNamespace(_apiNamespace.Value)
                 .Build();
         }
     }

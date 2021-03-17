@@ -26,6 +26,11 @@ namespace Endpoint.Application.Builders
         protected Token _applicationDirectory;
         protected Token _apiDirectory;
 
+        public BuilderBase()
+        {
+
+        }
+
         public BuilderBase(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,

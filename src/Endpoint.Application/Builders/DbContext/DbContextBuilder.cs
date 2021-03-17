@@ -1,7 +1,9 @@
+using Endpoint.Application.Enums;
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Endpoint.Application.Builders
 {
@@ -10,14 +12,38 @@ namespace Endpoint.Application.Builders
         private Token _modelsDirectory;
         private Token _dbContext;
         private List<Token> _models = new List<Token>();
+        private IContext _context;
 
         public DbContextBuilder(
             ICommandService commandService,
-
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
             IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
+
+        public DbContextBuilder(
+            string dbContext, 
+            IContext context, 
+            IFileSystem fileSystem,
+            string infrastructureDirectory,
+            string infrastructureNamespace,
+            string domainDirectory,
+            string domainNamespace,
+            string applicationDirectory,
+            string applicationNamespace,
+            string[] models
+            ): base(default,default,default,fileSystem)
+        {
+            _dbContext = (Token)dbContext;
+            _context = context;
+            _infrastructureDirectory = (Token)infrastructureDirectory;
+            _infrastructureNamespace = (Token)infrastructureNamespace;
+            _domainDirectory = (Token)domainDirectory;
+            _domainNamespace = (Token)domainNamespace;
+            _applicationDirectory = (Token)applicationDirectory;
+            _applicationNamespace = (Token)applicationNamespace;
+            _models = models.Select(x => (Token)x).ToList();
+        }
 
         public DbContextBuilder WithModel(string model)
         {
@@ -38,27 +64,44 @@ namespace Endpoint.Application.Builders
         }
 
         public void Build()
-        {
-            var template = _templateLocator.Get(nameof(DbContextBuilder));
+        {            
+            var dbContextBuilder = new ClassBuilder(_dbContext.PascalCase, _context, _fileSystem)
+                .WithDirectory($"{_infrastructureDirectory.Value}{Path.DirectorySeparatorChar}Data")
+                .WithUsing($"{_domainNamespace.Value}.Models")
+                .WithUsing($"{_applicationNamespace.Value}.Interfaces")
+                .WithUsing("Microsoft.EntityFrameworkCore")
+                .WithNamespace($"{_infrastructureNamespace.Value}.Data")
+                .WithInterface($"I{_dbContext.PascalCase}")
+                .WithBase("DbContext")
+                .WithBaseDependency("DbContextOptions", "options");
 
-            var interfaceTemplate = _templateLocator.Get("DbContextInterfaceBuilder");
+            var dbContextInterfaceBuilder = new ClassBuilder(_dbContext.PascalCase, _context, _fileSystem, "interface")
+                .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Interfaces")
+                .WithUsing($"{_domainNamespace.Value}.Models")
+                .WithUsing("Microsoft.EntityFrameworkCore")
+                .WithUsing("System.Threading.Tasks")
+                .WithUsing("System.Threading")
+                .WithNamespace($"{_applicationNamespace.Value}.Interfaces")
+                .WithMethodSignature(new MethodSignatureBuilder()
+                .WithAsync(false)
+                .WithAccessModifier(AccessModifier.Inherited)
+                .WithName("SaveChangesAsync")
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", "int").Build())
+                .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build()).Build());
 
-            var tokens = new TokensBuilder()
-                .With(nameof(_directory), _directory)
-                .With(nameof(_namespace), _namespace)
-                .With(nameof(_dbContext), _dbContext)
-                .With(nameof(_domainNamespace), _domainNamespace)
-                .With(nameof(_infrastructureNamespace), _infrastructureNamespace)
-                .With(nameof(_applicationNamespace), _applicationNamespace)
-                .Build();
+            foreach (var model in _models)
+            {
+                dbContextBuilder.WithProperty(new PropertyBuilder().WithName(model.PascalCasePlural).WithType(new TypeBuilder().WithGenericType("DbSet", model.PascalCase).Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build());
 
-            var contents = _templateProcessor.Process(template, tokens);
+                dbContextInterfaceBuilder.WithProperty(new PropertyBuilder().WithName(model.PascalCasePlural).WithAccessModifier(AccessModifier.Inherited).WithType(new TypeBuilder().WithGenericType("DbSet", model.PascalCase).Build()).WithAccessors(new AccessorsBuilder().WithGetterOnly().Build()).Build());
+            }
 
-            var interfaceContents = _templateProcessor.Process(interfaceTemplate, tokens);
+            dbContextInterfaceBuilder.Build();
 
-            _fileSystem.WriteAllLines($@"{_infrastructureDirectory.Value}{Path.DirectorySeparatorChar}Data{Path.DirectorySeparatorChar}{_dbContext.PascalCase}.cs", contents);
+            dbContextBuilder.Build();
 
-            _fileSystem.WriteAllLines($@"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Interfaces{Path.DirectorySeparatorChar}I{_dbContext.PascalCase}.cs", interfaceContents);
+            
+
         }
     }
 }

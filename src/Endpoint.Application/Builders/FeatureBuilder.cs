@@ -5,19 +5,21 @@ using System.IO;
 
 namespace Endpoint.Application.Builders
 {
-    public class ModelBuilder : BuilderBase<ModelBuilder>
+    public class FeatureBuilder : BuilderBase<FeatureBuilder>
     {
         private Token _entityName;
         private bool _eventSourcing;
         private readonly IContext _context;
-        public ModelBuilder(
+        public FeatureBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
             IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
-        { }
+        {
+            _context = new Context();
+        }
 
-        public ModelBuilder(
+        public FeatureBuilder(
             IContext context,
             IFileSystem fileSystem,
             string domainDirectory,
@@ -32,13 +34,13 @@ namespace Endpoint.Application.Builders
             _entityName = (Token)entityName;
         }
 
-        public ModelBuilder SetEntityName(string entityName)
+        public FeatureBuilder SetEntityName(string entityName)
         {
             _entityName = (Token)entityName;
             return this;
         }
 
-        public ModelBuilder SetEventSourcing(bool eventSourcing)
+        public FeatureBuilder SetEventSourcing(bool eventSourcing)
         {
             _eventSourcing = eventSourcing;
             return this;
@@ -46,10 +48,18 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            new ClassBuilder(_entityName.PascalCase, _context, _fileSystem)
-                .WithDirectory($"{_domainDirectory.Value}{Path.DirectorySeparatorChar}Models")
+            
+            var featureFolder = $"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{_entityName.PascalCasePlural}";
+
+            if(!Directory.Exists(featureFolder))
+            {
+                _commandService.Start($"mkdir {featureFolder}");
+
+            }
+            new ClassBuilder($"{_entityName.PascalCase}Dto", _context, _fileSystem)
+                .WithDirectory(featureFolder)
                 .WithUsing("System")
-                .WithNamespace($"{_domainNamespace.Value}.Models")
+                .WithNamespace($"{_applicationNamespace.Value}.Features")
                 .WithProperty(new PropertyBuilder().WithName($"{_entityName.PascalCase}Id").WithType("Guid").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Build();
         }
