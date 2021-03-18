@@ -241,5 +241,32 @@ namespace Endpoint.UnitTests
 
             Assert.Equal(expected, actual);
         }
+
+
+        [Fact]
+        public void InnerRequest()
+        {
+            var context = new Context();
+
+            var expected = new List<string> {
+                "namespace CustomerService.Application.Features",
+                "{",
+                "    public class Request : IRequest<Response> { }",
+                "}"
+            }.ToArray();
+
+            new ClassBuilder("Request", context, Mock.Of<IFileSystem>())
+                .WithDirectory("")
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest","Response").Build())
+                .WithNamespace("CustomerService.Application.Features")
+                .Build();
+
+            var actual = context.First().Value;
+
+            for (var i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
+        }
     }
 }

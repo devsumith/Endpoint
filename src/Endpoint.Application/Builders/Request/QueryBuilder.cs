@@ -1,5 +1,6 @@
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
+using System;
 
 namespace Endpoint.Application.Builders
 {
@@ -36,21 +37,27 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(QueryBuilder));
+            try
+            {
+                var template = _templateLocator.Get(nameof(QueryBuilder));
 
-            var tokens = new TokensBuilder()
-                .With(nameof(_entityName), _entityName)
-                .With(nameof(_name), _name)
-                .With(nameof(_rootNamespace), _rootNamespace)
-                .With(nameof(_directory), _directory)
-                .With(nameof(_domainNamespace), _domainNamespace)
-                .With(nameof(_applicationNamespace), _applicationNamespace)
-                .With(nameof(_dbContext), _dbContext)
-                .Build();
+                var tokens = new TokensBuilder()
+                    .With(nameof(_entityName), _entityName)
+                    .With(nameof(_name), _name)
+                    .With(nameof(_applicationNamespace), _applicationNamespace)
+                    .With(nameof(_directory), _directory)
+                    .With(nameof(_domainNamespace), _domainNamespace)
+                    .With(nameof(_dbContext), _dbContext)
+                    .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+                var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/{_name.PascalCase}.cs", contents);
+                _fileSystem.WriteAllLines($@"{_applicationDirectory.Value}/Features/{_entityName.PascalCasePlural}/{_name.PascalCase}.cs", contents);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
     }
 }

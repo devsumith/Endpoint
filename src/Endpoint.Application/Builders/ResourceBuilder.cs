@@ -1,3 +1,4 @@
+using Endpoint.Application.Enums;
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
 using System.IO;
@@ -50,14 +51,24 @@ namespace Endpoint.Application.Builders
                 _applicationDirectory.Value,
                 _applicationNamespace.Value,
                 new string[1] { _entityName }).Build();
+
             Map(Create<FeatureBuilder>((a, b, c, d) => new(a, b, c, d)))
                 .SetEntityName(_entityName)
+                .WithDbContext(_dbContextName)
                 .Build();
 
-            Map(Create<ControllerBuilder>((a, b, c, d) => new(a, b, c, d)))
-                .SetResource(_entityName)
-                .SetApiDirectory(_apiDirectory.Value)
-                .SetApiNamespace(_apiNamespace.Value)
+            new ClassBuilder($"{((Token)_entityName).PascalCase}Controller", new Context(), _fileSystem)
+                .WithDirectory($"{_apiDirectory.Value}{Path.DirectorySeparatorChar}Controllers")
+                .WithUsing("System.Net")
+                .WithUsing("System.Threading.Tasks")
+                .WithUsing($"{_applicationNamespace.Value}.Features")
+                .WithUsing("MediatR")
+                .WithUsing("Microsoft.AspNetCore.Mvc")
+                .WithNamespace($"{_apiNamespace.Value}.Controllers")
+                .WithAttribute(new AttributeBuilder().WithName("ApiController").Build())
+                .WithAttribute(new AttributeBuilder().WithName("Route").WithParam("\"api/[controller]\"").Build())
+                .WithDependency("IMediator", "mediator")
+                .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.GetById).WithResource(_entityName).WithAuthorize(false).Build())
                 .Build();
         }
     }

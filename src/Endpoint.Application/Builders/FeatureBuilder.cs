@@ -10,6 +10,7 @@ namespace Endpoint.Application.Builders
         private Token _entityName;
         private bool _eventSourcing;
         private readonly IContext _context;
+        private string _dbContext;
         public FeatureBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
@@ -46,6 +47,12 @@ namespace Endpoint.Application.Builders
             return this;
         }
 
+        public FeatureBuilder WithDbContext(string dbContext)
+        {
+            _dbContext = dbContext;
+            return this;
+        }
+
         public void Build()
         {
             
@@ -61,6 +68,46 @@ namespace Endpoint.Application.Builders
                 .WithUsing("System")
                 .WithNamespace($"{_applicationNamespace.Value}.Features")
                 .WithProperty(new PropertyBuilder().WithName($"{_entityName.PascalCase}Id").WithType("Guid").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .Build();
+
+            new ClassBuilder($"{((Token)_entityName).PascalCase}Extensions", _context, _fileSystem)
+                .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
+                .WithUsing("System")
+                .IsStatic()
+                .WithUsing($"{_domainNamespace.Value}.Models")
+                .WithNamespace($"{_applicationNamespace.Value}.Features")
+                .WithMethod(new MethodBuilder()
+                .IsStatic()
+                .WithName("ToDto")
+                .WithReturnType($"{((Token)_entityName).PascalCase}Dto")
+                .WithPropertyName($"{((Token)_entityName).PascalCase}Id")
+                .WithParameter(new ParameterBuilder(((Token)_entityName).PascalCase, ((Token)_entityName).CamelCase, true).Build())
+                .WithBody(new()
+                {
+                    "    return new ()",
+                    "    {",
+                    $"        {((Token)_entityName).PascalCase}Id = {((Token)_entityName).CamelCase}.{((Token)_entityName).PascalCase}Id",
+                    "    };"
+                })
+                .Build())
+                .Build();
+
+            Map(BuilderFactory.Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d)))
+                .SetDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
+                .SetApplicationNamespace($"{_applicationNamespace.Value}")
+                .SetDomainNamespace(_domainNamespace.Value)
+                .WithEntity(_entityName)
+                .WithName($"Get{_entityName.PascalCasePlural}")
+                .WithDbContext(_dbContext)
+                .Build();
+
+            Map(BuilderFactory.Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d)))
+                .SetDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
+                .SetApplicationNamespace($"{_applicationNamespace.Value}")
+                .SetDomainNamespace(_domainNamespace.Value)
+                .WithEntity(_entityName)
+                .WithName($"Get{_entityName.PascalCase}ById")
+                .WithDbContext(_dbContext)
                 .Build();
         }
     }

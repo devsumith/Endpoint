@@ -5,6 +5,7 @@ using System.Text;
 using Endpoint.Application.Extensions;
 using static Endpoint.Application.Enums.AccessModifier;
 using Endpoint.Application.Builders.CSharp;
+using System;
 
 namespace Endpoint.Application.Builders
 {
@@ -27,6 +28,7 @@ namespace Endpoint.Application.Builders
         private List<KeyValuePair<string, string>> _baseDependencies;
         private List<string> _interfaces;
         private string _type;
+        private bool _static;
         
         private void Indent() { _indent++; }
         private void Unindent() { _indent--; }
@@ -46,7 +48,13 @@ namespace Endpoint.Application.Builders
             _baseDependencies = new List<KeyValuePair<string, string>>();
             _interfaces = new List<string>();
             _type = type;
+            _static = false;
 
+        }
+        public ClassBuilder IsStatic(bool @static = true)
+        {
+            _static = @static;
+            return this;
         }
 
         public ClassBuilder WithDirectory(string directory)
@@ -147,56 +155,64 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            if (_usings.Count > 0)
+            try
             {
-                foreach (var @using in _usings)
+
+
+                if (_usings.Count > 0)
                 {
-                    _content.Add($"using {@using};");
+                    foreach (var @using in _usings)
+                    {
+                        _content.Add($"using {@using};");
+                    }
+
+                    _content.Add("");
                 }
 
-                _content.Add("");
-            }
+                _content.Add($"namespace {_namespace}");
+                _content.Add("{");
 
-            _content.Add($"namespace {_namespace}");
-            _content.Add("{");
+                Indent();
 
-            Indent();
-
-            foreach (var attribute in _attributes)
-            {
-                _content.Add(attribute.Indent(_indent));
-            }
-
-            if(_type == "class")
-                _content.Add($"public class {_name}{GetInheritance()}".Indent(_indent));
-
-            if(_type == "interface")
-                _content.Add($"public interface I{_name}{GetInheritance()}".Indent(_indent));
-
-
-            _content.Add("{".Indent(_indent));
-
-
-
-            Indent();
-
-            if (_properties.Count > 0)
-            {
-                foreach (var property in _properties)
+                foreach (var attribute in _attributes)
                 {
-                    _content.Add(property.Indent(_indent));
+                    _content.Add(attribute.Indent(_indent));
                 }
-            }
 
-            var ctorBuilder = new ConstructorBuilder(_name)
-                .WithIndent(_indent)
-                .WithParameters(new (_dependencies))
-                .WithBaseParameters(new (_baseDependencies))
-                .WithAccessModifier(Public);
+                if (_type == "class" && _static)
+                    _content.Add($"public static class {_name}{GetInheritance()}".Indent(_indent));
 
-            if (_dependencies.Count > 0 || _baseDependencies.Count > 0)
-            {
-                if (_dependencies.Count > 0) {
+                if (_type == "class" && !_static)
+                    _content.Add($"public class {_name}{GetInheritance()}".Indent(_indent));
+
+                if (_type == "interface")
+                    _content.Add($"public interface I{_name}{GetInheritance()}".Indent(_indent));
+
+
+                _content.Add("{".Indent(_indent));
+
+
+
+                Indent();
+
+                if (_properties.Count > 0)
+                {
+                    foreach (var property in _properties)
+                    {
+                        _content.Add(property.Indent(_indent));
+                    }
+                }
+
+                var ctorBuilder = new ConstructorBuilder(_name)
+                    .WithIndent(_indent)
+                    .WithParameters(new(_dependencies))
+                    .WithBaseParameters(new(_baseDependencies))
+                    .WithAccessModifier(Public);
+
+                if (_dependencies.Count > 0 || _baseDependencies.Count > 0)
+                {
+                    if (_dependencies.Count > 0)
+                    {
                         foreach (var dependency in _dependencies)
                         {
                             _content.Add(new FieldBuilder(dependency.Key, dependency.Value).WithReadonly().WithIndent(_indent).WithAccessModifier(Private).Build());
@@ -207,38 +223,43 @@ namespace Endpoint.Application.Builders
                         _content.Add("");
                     }
 
-                foreach (var line in ctorBuilder.Build())
-                {
-                    _content.Add(line);
-                }
-            }
-
-            if(_methods.Count > 0)
-            {
-                foreach(var method in _methods)
-                {
-                    foreach(var line in method)
+                    foreach (var line in ctorBuilder.Build())
                     {
-                        _content.Add(line.Indent(_indent));
+                        _content.Add(line);
                     }
-
-                    _content.Add("".Indent(_indent));
                 }
+
+                if (_methods.Count > 0)
+                {
+                    foreach (var method in _methods)
+                    {
+                        foreach (var line in method)
+                        {
+                            _content.Add(line.Indent(_indent));
+                        }
+
+                        _content.Add("".Indent(_indent));
+                    }
+                }
+
+                Unindent();
+
+                _content.Add("}".Indent(_indent));
+
+                Unindent();
+
+                _content.Add("}".Indent(_indent));
+
+                var path = $"{_directory}{Path.DirectorySeparatorChar}{_name}.cs";
+
+                _context.Add(path, _content.ToArray());
+
+                _fileSystem.WriteAllLines(path, _content.ToArray());
             }
-
-            Unindent();
-
-            _content.Add("}".Indent(_indent));
-
-            Unindent();
-
-            _content.Add("}".Indent(_indent));
-
-            var path = $"{_directory}{Path.DirectorySeparatorChar}{_name}.cs";
-
-            _context.Add(path, _content.ToArray());
-
-            _fileSystem.WriteAllLines(path, _content.ToArray());
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
     }
 }
