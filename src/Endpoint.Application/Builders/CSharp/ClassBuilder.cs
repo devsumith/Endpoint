@@ -155,43 +155,43 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            try
+
+            if (_usings.Count > 0)
             {
-
-
-                if (_usings.Count > 0)
+                foreach (var @using in _usings)
                 {
-                    foreach (var @using in _usings)
-                    {
-                        _content.Add($"using {@using};");
-                    }
-
-                    _content.Add("");
+                    _content.Add($"using {@using};");
                 }
 
-                _content.Add($"namespace {_namespace}");
-                _content.Add("{");
+                _content.Add("");
+            }
 
-                Indent();
+            _content.Add($"namespace {_namespace}");
+            _content.Add("{");
 
-                foreach (var attribute in _attributes)
-                {
-                    _content.Add(attribute.Indent(_indent));
-                }
+            Indent();
 
-                if (_type == "class" && _static)
-                    _content.Add($"public static class {_name}{GetInheritance()}".Indent(_indent));
+            foreach (var attribute in _attributes)
+            {
+                _content.Add(attribute.Indent(_indent));
+            }
 
-                if (_type == "class" && !_static)
-                    _content.Add($"public class {_name}{GetInheritance()}".Indent(_indent));
+            if (_type == "class" && _static)
+                _content.Add($"public static class {_name}{GetInheritance()}".Indent(_indent));
 
-                if (_type == "interface")
-                    _content.Add($"public interface I{_name}{GetInheritance()}".Indent(_indent));
+            if (_type == "class" && !_static)
+                _content.Add($"public class {_name}{GetInheritance()}".Indent(_indent));
 
+            if (_type == "interface")
+                _content.Add($"public interface I{_name}{GetInheritance()}".Indent(_indent));
 
+            if (_methods.Count == 0 && _dependencies.Count == 0 && _properties.Count == 0)
+            {
+                _content[_content.Count - 1] = _content[_content.Count - 1] + " { }";
+            }
+            else
+            {
                 _content.Add("{".Indent(_indent));
-
-
 
                 Indent();
 
@@ -216,8 +216,6 @@ namespace Endpoint.Application.Builders
                         foreach (var dependency in _dependencies)
                         {
                             _content.Add(new FieldBuilder(dependency.Key, dependency.Value).WithReadonly().WithIndent(_indent).WithAccessModifier(Private).Build());
-
-                            //ctorBuilder.WithDependency(dependency.Key, dependency.Value);
                         }
 
                         _content.Add("");
@@ -246,20 +244,17 @@ namespace Endpoint.Application.Builders
 
                 _content.Add("}".Indent(_indent));
 
-                Unindent();
-
-                _content.Add("}".Indent(_indent));
-
-                var path = $"{_directory}{Path.DirectorySeparatorChar}{_name}.cs";
-
-                _context.Add(path, _content.ToArray());
-
-                _fileSystem.WriteAllLines(path, _content.ToArray());
             }
-            catch(Exception e)
-            {
-                throw e;
-            }
+
+            Unindent();
+
+            _content.Add("}".Indent(_indent));
+
+            var path = $"{_directory}{Path.DirectorySeparatorChar}{_name}.cs";
+
+            _context.Add(path, _content.ToArray());
+
+            _fileSystem.WriteAllLines(path, _content.ToArray());
         }
     }
 }

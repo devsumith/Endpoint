@@ -251,7 +251,7 @@ namespace Endpoint.UnitTests
             var expected = new List<string> {
                 "namespace CustomerService.Application.Features",
                 "{",
-                "    public class Request : IRequest<Response> { }",
+                "    public class Request: IRequest<Response> { }",
                 "}"
             }.ToArray();
 
@@ -259,6 +259,36 @@ namespace Endpoint.UnitTests
                 .WithDirectory("")
                 .WithInterface(new TypeBuilder().WithGenericType("IRequest","Response").Build())
                 .WithNamespace("CustomerService.Application.Features")
+                .Build();
+
+            var actual = context.First().Value;
+
+            for (var i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
+        }
+
+        [Fact]
+        public void Response()
+        {
+            var context = new Context();
+
+            var expected = new List<string> {
+                "namespace CustomerService.Application.Features",
+                "{",
+                "    public class Response: ResponseBase",
+                "    {",
+                "        public CustomerDto Customer { get; set; }",
+                "    }",
+                "}"
+            }.ToArray();
+
+            new ClassBuilder("Response", context, Mock.Of<IFileSystem>())
+                .WithDirectory("")
+                .WithBase("ResponseBase")
+                .WithNamespace("CustomerService.Application.Features")
+                .WithProperty(new PropertyBuilder().WithType("CustomerDto").WithName("Customer").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Build();
 
             var actual = context.First().Value;

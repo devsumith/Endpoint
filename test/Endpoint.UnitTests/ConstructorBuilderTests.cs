@@ -54,12 +54,5 @@ namespace Endpoint.UnitTests
 
             Assert.Equal(expected, actual);
         }
-
-        private void Setup(string databaseName)
-        {
-
-        }
-
-
     }
 }
