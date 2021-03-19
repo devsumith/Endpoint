@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text;
 
 namespace Endpoint.Application.Builders
@@ -24,6 +23,14 @@ namespace Endpoint.Application.Builders
             _type = type;
             return this;
         }
+
+        public TypeBuilder WithGenericType(string generic, string type1, string type2)
+        {
+            _generic = generic;
+            _type = $"{type1}, {type2}";
+            return this;
+        }
+
         public string Build()
         {
             return _isGeneric 

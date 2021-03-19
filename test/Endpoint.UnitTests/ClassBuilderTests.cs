@@ -1,5 +1,4 @@
 using Endpoint.Application.Builders;
-using Endpoint.Application.Builders.CSharp;
 using Endpoint.Application.Enums;
 using Endpoint.Application.Services;
 using Moq;
@@ -280,6 +279,66 @@ namespace Endpoint.UnitTests
                 "    public class Response: ResponseBase",
                 "    {",
                 "        public CustomerDto Customer { get; set; }",
+                "    }",
+                "}"
+            }.ToArray();
+
+            new ClassBuilder("Response", context, Mock.Of<IFileSystem>())
+                .WithDirectory("")
+                .WithBase("ResponseBase")
+                .WithNamespace("CustomerService.Application.Features")
+                .WithProperty(new PropertyBuilder().WithType("CustomerDto").WithName("Customer").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .Build();
+
+            var actual = context.First().Value;
+
+            for (var i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
+        }
+
+        [Fact]
+        public void Validator()
+        {
+            var context = new Context();
+
+            var expected = new List<string> {
+                "namespace CustomerService.Application.Features",
+                "{",
+                "    public class CustomerValidator: AbstractValidator<CustomerDto> { }",
+                "}"
+            }.ToArray();
+
+            new ClassBuilder("CustomerValidator", context, Mock.Of<IFileSystem>())
+                .WithDirectory("")
+                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator","CustomerDto").Build())
+                .WithNamespace("CustomerService.Application.Features")
+                .Build();
+
+            var actual = context.First().Value;
+
+            for (var i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
+        }
+
+        [Fact]
+        public void SubClasses()
+        {
+            var context = new Context();
+
+            var expected = new List<string> {
+                "namespace CustomerService.Application.Features",
+                "{",
+                "    public class Query",
+                "    {",
+                "        public class Request: IRequest<Response> { }",
+                "    ",
+                "        public class Response { }",
+                "    ",
+                "        public class Handler: IHandler<Request, Response> { }",
                 "    }",
                 "}"
             }.ToArray();
