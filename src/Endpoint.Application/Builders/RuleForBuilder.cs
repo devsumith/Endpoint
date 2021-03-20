@@ -1,5 +1,6 @@
 using Endpoint.Application.Services;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Endpoint.Application.Builders
 {
@@ -8,11 +9,11 @@ namespace Endpoint.Application.Builders
 
         private readonly Context _context;
         
-        public string[] Build()
+        public string Build()
         {
-            var content = new List<string>();
+            var content = new StringBuilder();
 
-            return content.ToArray();
+            return content.ToString();
         }
     }
 }
