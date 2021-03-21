@@ -16,7 +16,7 @@ namespace Endpoint.UnitTests
         {
             var expected = "RuleFor(request => request.Customer).NotNull();";
 
-            var sut = new RuleForBuilder();
+            var sut = new RuleForBuilder().WithEntity("Customer").WithNotNull();
 
             var actual = sut
                 .Build();
@@ -29,7 +29,7 @@ namespace Endpoint.UnitTests
         {
             var expected = "RuleFor(request => request.Customer).SetValidator(new CustomerValidator());";
 
-            var sut = new RuleForBuilder();
+            var sut = new RuleForBuilder().WithEntity("Customer").WithValidator();
 
             var actual = sut
                 .Build();
