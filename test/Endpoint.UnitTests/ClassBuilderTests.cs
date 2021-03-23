@@ -325,6 +325,28 @@ namespace Endpoint.UnitTests
         }
 
         [Fact]
+        public void SubClass()
+        {
+            var context = new Context();
+
+            var expected = new List<string> {
+                "public class Validator: AbstractValidator<Request> { }"
+            }.ToArray();
+
+            new ClassBuilder("Validator", context, Mock.Of<IFileSystem>())
+                .WithDirectory("")
+                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator","Request").Build())
+                .Build();
+
+            var actual = context.First().Value;
+
+            for (var i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
+        }
+
+        [Fact]
         public void SubClasses()
         {
             var context = new Context();
@@ -332,8 +354,10 @@ namespace Endpoint.UnitTests
             var expected = new List<string> {
                 "namespace CustomerService.Application.Features",
                 "{",
-                "    public class Query",
+                "    public class CreateCustomer",
                 "    {",
+                "        public class Validator: AbstractValidator<Request> { }",
+                "    ",
                 "        public class Request: IRequest<Response> { }",
                 "    ",
                 "        public class Response { }",

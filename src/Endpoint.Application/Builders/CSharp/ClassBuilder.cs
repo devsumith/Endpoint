@@ -28,6 +28,7 @@ namespace Endpoint.Application.Builders
         private List<KeyValuePair<string, string>> _baseDependencies;
         private List<string> _interfaces;
         private string _type;
+        private List<string[]> _classes;
         private bool _static;
         
         private void Indent() { _indent++; }
@@ -49,6 +50,7 @@ namespace Endpoint.Application.Builders
             _interfaces = new List<string>();
             _type = type;
             _static = false;
+            _classes = new();
 
         }
         public ClassBuilder IsStatic(bool @static = true)
@@ -166,10 +168,11 @@ namespace Endpoint.Application.Builders
                 _content.Add("");
             }
 
-            _content.Add($"namespace {_namespace}");
-            _content.Add("{");
-
-            Indent();
+            if (!string.IsNullOrEmpty(_namespace)) { 
+                _content.Add($"namespace {_namespace}");
+                _content.Add("{");
+                Indent();
+            }
 
             foreach (var attribute in _attributes)
             {
@@ -246,9 +249,14 @@ namespace Endpoint.Application.Builders
 
             }
 
-            Unindent();
 
-            _content.Add("}".Indent(_indent));
+
+            if (!string.IsNullOrEmpty(_namespace))
+            {
+                Unindent();
+
+                _content.Add("}".Indent(_indent));
+            }
 
             var path = $"{_directory}{Path.DirectorySeparatorChar}{_name}.cs";
 
