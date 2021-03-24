@@ -367,11 +367,25 @@ namespace Endpoint.UnitTests
                 "}"
             }.ToArray();
 
-            new ClassBuilder("Response", context, Mock.Of<IFileSystem>())
-                .WithDirectory("")
+            var validator = new ClassBuilder("Validator", context, Mock.Of<IFileSystem>())
+                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", "Request").Build())
+                .Class;
+
+            var request = new ClassBuilder("Request", context, Mock.Of<IFileSystem>())
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest", "Response").Build())
+                .Class;
+
+            var response = new ClassBuilder("Response", context, Mock.Of<IFileSystem>())
                 .WithBase("ResponseBase")
-                .WithNamespace("CustomerService.Application.Features")
                 .WithProperty(new PropertyBuilder().WithType("CustomerDto").WithName("Customer").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .Class;
+
+            new ClassBuilder("CreateCustomer", context, Mock.Of<IFileSystem>())
+                .WithDirectory("")
+                .WithNamespace("CustomerService.Application.Features")
+                .WithClass(validator)
+                .WithClass(request)
+                .WithClass(response)
                 .Build();
 
             var actual = context.First().Value;
