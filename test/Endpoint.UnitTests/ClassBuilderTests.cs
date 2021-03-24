@@ -380,12 +380,19 @@ namespace Endpoint.UnitTests
                 .WithProperty(new PropertyBuilder().WithType("CustomerDto").WithName("Customer").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
+            var handler = new ClassBuilder("Handler", context, Mock.Of<IFileSystem>())
+                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", "Request", "Response").Build())
+                .WithDependency("ICustomerServiceDbContext","context")
+                .WithMethod(new MethodBuilder().WithName("Handle").WithReturnType(new TypeBuilder().WithGenericType("Task","Response").Build()).WithParameter(new ParameterBuilder("Request", "request").Build()).WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build()).Build())
+                .Class;
+
             new ClassBuilder("CreateCustomer", context, Mock.Of<IFileSystem>())
                 .WithDirectory("")
                 .WithNamespace("CustomerService.Application.Features")
                 .WithClass(validator)
                 .WithClass(request)
                 .WithClass(response)
+                .WithClass(handler)
                 .Build();
 
             var actual = context.First().Value;
