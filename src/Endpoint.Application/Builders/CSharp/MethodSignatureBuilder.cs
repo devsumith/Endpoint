@@ -13,7 +13,8 @@ namespace Endpoint.Application.Builders
         private string _methodName;        
         private string _returnType;
         private List<string> _parameters;
-        private bool _static; 
+        private bool _static;
+        private bool _override;
 
         public MethodSignatureBuilder()
         {
@@ -23,6 +24,7 @@ namespace Endpoint.Application.Builders
             _returnType = "void";
             _parameters = new();
             _indent = 0;
+            _override = false;
         }
 
         public MethodSignatureBuilder WithIndent(int indent)
@@ -35,6 +37,12 @@ namespace Endpoint.Application.Builders
         {
             _parameters.Add(parameter);
 
+            return this;
+        }
+
+        public MethodSignatureBuilder WithOverride(bool @override = true)
+        {
+            _override = @override;
             return this;
         }
 
@@ -67,6 +75,7 @@ namespace Endpoint.Application.Builders
             _accessModifier = accessModifier switch { 
                 AccessModifier.Public => "public",
                 AccessModifier.Private => "private",
+                AccessModifier.Protected => "protected",
                 AccessModifier.Inherited => "",
                 _ => throw new System.NotImplementedException()
             };
@@ -92,6 +101,12 @@ namespace Endpoint.Application.Builders
 
             if (!string.IsNullOrEmpty(_accessModifier)) {
                 _string.Append(_accessModifier);
+                _string.Append(' ');
+            }
+
+            if (_override == true)
+            {
+                _string.Append("override");
                 _string.Append(' ');
             }
 

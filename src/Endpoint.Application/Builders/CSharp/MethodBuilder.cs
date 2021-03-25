@@ -10,7 +10,7 @@ namespace Endpoint.Application.Builders
     {
         private List<string> _contents;
         private int _indent;
-        private string _accessModifier;
+        private AccessModifier _accessModifier;
         private List<string> _attributes;
         public List<string> _body;
         private bool _authorize;
@@ -21,9 +21,10 @@ namespace Endpoint.Application.Builders
         private string _returnType;
         private List<string> _parameters;
         private bool _async;
+        private bool _override;
         public MethodBuilder()
         {
-            _accessModifier = "public";
+            _accessModifier = AccessModifier.Public;
             _contents = new List<string>();
             _attributes = new List<string>();
             _body = new List<string>();
@@ -33,6 +34,19 @@ namespace Endpoint.Application.Builders
             _returnType = "";
             _parameters = new();
             _async = false;
+            _override = false;
+        }
+
+        public MethodBuilder WithOverride(bool @override = true)
+        {
+            _override = @override;
+            return this;
+        }
+
+        public MethodBuilder WithAccessModifier(AccessModifier accessModifier)
+        {
+            _accessModifier = accessModifier;
+            return this;
         }
 
         public MethodBuilder WithBody(List<string> body)
@@ -132,6 +146,8 @@ namespace Endpoint.Application.Builders
 
             var methodSignatureBuilder = new MethodSignatureBuilder()
                 .WithName(_name)
+                .WithAccessModifier(_accessModifier)
+                .WithOverride(_override)
                 .IsStatic(_static)
                 .WithAsync(_async);
                 

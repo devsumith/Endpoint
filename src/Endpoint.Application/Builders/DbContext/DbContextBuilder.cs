@@ -1,6 +1,7 @@
 using Endpoint.Application.Enums;
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -64,50 +65,55 @@ namespace Endpoint.Application.Builders
         }
 
         public void Build()
-        {            
-            var dbContextBuilder = new ClassBuilder(_dbContext.PascalCase, _context, _fileSystem)
-                .WithDirectory($"{_infrastructureDirectory.Value}{Path.DirectorySeparatorChar}Data")
-                .WithUsing($"{_domainNamespace.Value}.Models")
-                .WithUsing($"{_applicationNamespace.Value}.Interfaces")
-                .WithUsing("Microsoft.EntityFrameworkCore")
-                .WithNamespace($"{_infrastructureNamespace.Value}.Data")
-                .WithInterface($"I{_dbContext.PascalCase}")
-                .WithBase("DbContext")
-                .WithMethod(new MethodBuilder().WithName("OnModelCreating").WithParameter("ModelBuilder modelBuilder")
-                .WithBody(new List<string>
-                {
+        {
+            try
+            {
+                var dbContextBuilder = new ClassBuilder(_dbContext.PascalCase, _context, _fileSystem)
+                    .WithDirectory($"{_infrastructureDirectory.Value}{Path.DirectorySeparatorChar}Data")
+                    .WithUsing($"{_domainNamespace.Value}.Models")
+                    .WithUsing($"{_applicationNamespace.Value}.Interfaces")
+                    .WithUsing("Microsoft.EntityFrameworkCore")
+                    .WithNamespace($"{_infrastructureNamespace.Value}.Data")
+                    .WithInterface($"I{_dbContext.PascalCase}")
+                    .WithBase("DbContext")
+                    .WithMethod(new MethodBuilder().WithName("OnModelCreating").WithReturnType("void").WithAccessModifier(AccessModifier.Protected).WithOverride().WithParameter("ModelBuilder modelBuilder")
+                    .WithBody(new List<string>
+                    {
                     "base.OnModelCreating(modelBuilder);",
                     "",
                     $"modelBuilder.ApplyConfigurationsFromAssembly(typeof({_dbContext.PascalCase}).Assembly);"
-                })
-                .Build())
-                .WithBaseDependency("DbContextOptions", "options");
+                    })
+                    .Build())
+                    .WithBaseDependency("DbContextOptions", "options");
 
-            var dbContextInterfaceBuilder = new ClassBuilder(_dbContext.PascalCase, _context, _fileSystem, "interface")
-                .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Interfaces")
-                .WithUsing($"{_domainNamespace.Value}.Models")
-                .WithUsing("Microsoft.EntityFrameworkCore")
-                .WithUsing("System.Threading.Tasks")
-                .WithUsing("System.Threading")
-                .WithNamespace($"{_applicationNamespace.Value}.Interfaces")
-                .WithMethodSignature(new MethodSignatureBuilder()
-                .WithAsync(false)
-                .WithAccessModifier(AccessModifier.Inherited)
-                .WithName("SaveChangesAsync")
-                .WithReturnType(new TypeBuilder().WithGenericType("Task", "int").Build())
-                .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build()).Build());
+                var dbContextInterfaceBuilder = new ClassBuilder(_dbContext.PascalCase, _context, _fileSystem, "interface")
+                    .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Interfaces")
+                    .WithUsing($"{_domainNamespace.Value}.Models")
+                    .WithUsing("Microsoft.EntityFrameworkCore")
+                    .WithUsing("System.Threading.Tasks")
+                    .WithUsing("System.Threading")
+                    .WithNamespace($"{_applicationNamespace.Value}.Interfaces")
+                    .WithMethodSignature(new MethodSignatureBuilder()
+                    .WithAsync(false)
+                    .WithAccessModifier(AccessModifier.Inherited)
+                    .WithName("SaveChangesAsync")
+                    .WithReturnType(new TypeBuilder().WithGenericType("Task", "int").Build())
+                    .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build()).Build());
 
-            foreach (var model in _models)
+                foreach (var model in _models)
+                {
+                    dbContextBuilder.WithProperty(new PropertyBuilder().WithName(model.PascalCasePlural).WithType(new TypeBuilder().WithGenericType("DbSet", model.PascalCase).Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build());
+
+                    dbContextInterfaceBuilder.WithProperty(new PropertyBuilder().WithName(model.PascalCasePlural).WithAccessModifier(AccessModifier.Inherited).WithType(new TypeBuilder().WithGenericType("DbSet", model.PascalCase).Build()).WithAccessors(new AccessorsBuilder().WithGetterOnly().Build()).Build());
+                }
+
+                dbContextInterfaceBuilder.Build();
+
+                dbContextBuilder.Build();
+            }catch(Exception e)
             {
-                dbContextBuilder.WithProperty(new PropertyBuilder().WithName(model.PascalCasePlural).WithType(new TypeBuilder().WithGenericType("DbSet", model.PascalCase).Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build());
-
-                dbContextInterfaceBuilder.WithProperty(new PropertyBuilder().WithName(model.PascalCasePlural).WithAccessModifier(AccessModifier.Inherited).WithType(new TypeBuilder().WithGenericType("DbSet", model.PascalCase).Build()).WithAccessors(new AccessorsBuilder().WithGetterOnly().Build()).Build());
+                throw e;
             }
-
-            dbContextInterfaceBuilder.Build();
-
-            dbContextBuilder.Build();
-
             
 
         }
