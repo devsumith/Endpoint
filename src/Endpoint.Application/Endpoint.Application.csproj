@@ -71,7 +71,6 @@
 
     <ItemGroup>
       <Folder Include="Builders\Request\Commands\" />
-      <Folder Include="Builders\Request\Queries\" />
     </ItemGroup>
   
 </Project>

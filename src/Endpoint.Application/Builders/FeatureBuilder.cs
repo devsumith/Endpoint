@@ -108,23 +108,15 @@ namespace Endpoint.Application.Builders
                 .WithEntity(_entityName.Value)
                 .Build();
 
-            Map(BuilderFactory.Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d)))
-                .SetDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
-                .SetApplicationNamespace($"{_applicationNamespace.Value}")
-                .SetDomainNamespace(_domainNamespace.Value)
-                .WithEntity(_entityName)
-                .WithName($"Get{_entityName.PascalCasePlural}")
+            new GetByIdBuilder(new Context(), _fileSystem)
+                .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
                 .WithDbContext(_dbContext)
+                .WithNamespace($"{_applicationNamespace.Value}.Features")
+                .WithApplicationNamespace($"{_applicationNamespace.Value}")
+                .WithDomainNamespace($"{_domainNamespace.Value}")
+                .WithEntity(_entityName.Value)
                 .Build();
 
-            Map(BuilderFactory.Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d)))
-                .SetDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
-                .SetApplicationNamespace($"{_applicationNamespace.Value}")
-                .SetDomainNamespace(_domainNamespace.Value)
-                .WithEntity(_entityName)
-                .WithName($"Get{_entityName.PascalCase}ById")
-                .WithDbContext(_dbContext)
-                .Build();
         }
     }
 }
