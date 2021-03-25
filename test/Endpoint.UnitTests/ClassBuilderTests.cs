@@ -1,5 +1,6 @@
 using Endpoint.Application.Builders;
 using Endpoint.Application.Enums;
+using Endpoint.Application.Extensions;
 using Endpoint.Application.Services;
 using Moq;
 using System.Collections.Generic;
@@ -383,7 +384,22 @@ namespace Endpoint.UnitTests
             var handler = new ClassBuilder("Handler", context, Mock.Of<IFileSystem>())
                 .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", "Request", "Response").Build())
                 .WithDependency("ICustomerServiceDbContext","context")
-                .WithMethod(new MethodBuilder().WithName("Handle").WithReturnType(new TypeBuilder().WithGenericType("Task","Response").Build()).WithParameter(new ParameterBuilder("Request", "request").Build()).WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build()).Build())
+                .WithMethod(new MethodBuilder().WithName("Handle")
+                .WithReturnType(new TypeBuilder().WithGenericType("Task","Response").Build())
+                .WithParameter(new ParameterBuilder("Request", "request").Build())
+                .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
+                .WithBody(new List<string>() {
+                "var customer = new Customer();",
+                "",
+                "_context.Customers.Add(customer);",
+                "",
+                "await _context.SaveChangesAsync(cancellationToken);",
+                "",
+                "return new Response()",
+                "{",
+                "Customer = customer.ToDto()".Indent(1),
+                "}"
+                }).Build())
                 .Class;
 
             new ClassBuilder("CreateCustomer", context, Mock.Of<IFileSystem>())

@@ -31,6 +31,7 @@ namespace Endpoint.Application.Builders
         private string _type;
         private List<string[]> _classes;
         private bool _static;
+        private List<string> _ruleFors;
         
         private void Indent() { _indent++; }
         private void Unindent() { _indent--; }
@@ -52,7 +53,15 @@ namespace Endpoint.Application.Builders
             _type = type;
             _static = false;
             _classes = new();
+            _ruleFors = new();
 
+        }
+
+        public ClassBuilder WithRuleFor(string ruleFor)
+        {
+            _ruleFors.Add(ruleFor);
+
+            return this;
         }
 
         public ClassBuilder WithClass(string[] @class)
@@ -199,7 +208,7 @@ namespace Endpoint.Application.Builders
                 if (_type == "interface")
                     _content.Add($"public interface I{_name}{GetInheritance()}".Indent(_indent));
 
-                if (_methods.Count == 0 && _dependencies.Count == 0 && _properties.Count == 0 && _classes.Count == 0)
+                if (_methods.Count == 0 && _dependencies.Count == 0 && _properties.Count == 0 && _classes.Count == 0 && _ruleFors.Count == 0)
                 {
                     _content[_content.Count - 1] = _content[_content.Count - 1] + " { }";
                 }
@@ -221,9 +230,10 @@ namespace Endpoint.Application.Builders
                         .WithIndent(_indent)
                         .WithParameters(new(_dependencies))
                         .WithBaseParameters(new(_baseDependencies))
+                        .WithRuleFors(this._ruleFors)
                         .WithAccessModifier(Public);
 
-                    if (_dependencies.Count > 0 || _baseDependencies.Count > 0)
+                    if (_dependencies.Count > 0 || _baseDependencies.Count > 0 || _ruleFors.Count() > 0)
                     {
                         if (_dependencies.Count > 0)
                         {

@@ -15,6 +15,7 @@ namespace Endpoint.Application.Builders.CSharp
         private string _name;
         private int _indent;
         private AccessModifier _accessModifier = AccessModifier.Inherited;
+        private List<string> _ruleFors;
 
         private void Indent() { _indent++; }
         private void Unindent() { _indent--; }
@@ -26,6 +27,13 @@ namespace Endpoint.Application.Builders.CSharp
             _baseParameters = new Dictionary<string, string>();
             _indent = 0;
             _name = name;
+            _ruleFors = new();
+        }
+
+        public ConstructorBuilder WithRuleFors(List<string> ruleFors)
+        {
+            this._ruleFors = ruleFors;
+            return this;
         }
 
         public ConstructorBuilder WithAccessModifier(AccessModifier accessModifier)
@@ -101,14 +109,14 @@ namespace Endpoint.Application.Builders.CSharp
         {
             var body = new List<string>();
 
-            if (_parameters.Count() == 1 && _baseParameters.Count == 0)
+            if (_parameters.Count() == 1 && _baseParameters.Count == 0 && _ruleFors.Count == 0)
             {
                 Indent();
                 body.Add($"=> _{_parameters.ElementAt(0).Value} = {_parameters.ElementAt(0).Value};".Indent(_indent));
                 return body.ToArray();
             }
 
-            if (_parameters.Count() == 0 && _baseParameters.Count > 0)
+            if (_parameters.Count() == 0 && _baseParameters.Count > 0 && _ruleFors.Count == 0)
             {
                 var line = new StringBuilder();
 
@@ -119,6 +127,25 @@ namespace Endpoint.Application.Builders.CSharp
                 line.Append(" { }");
                 
                 body.Add(line.ToString());
+
+                return body.ToArray();
+            }
+
+            if(_parameters.Count ==0 && _baseParameters.Count == 0 && _ruleFors.Count > 0)
+            {
+
+                body.Add("{".Indent(_indent));
+
+                Indent();
+
+                foreach(var r in _ruleFors)
+                {
+                    body.Add(r.Indent(_indent));
+                }
+
+                Unindent();
+
+                body.Add("}".Indent(_indent));
 
                 return body.ToArray();
             }

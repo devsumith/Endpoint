@@ -1,4 +1,5 @@
 using Endpoint.Application.Enums;
+using Endpoint.Application.Extensions;
 using Endpoint.Application.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace Endpoint.Application.Builders
         private string _name;
         private string _returnType;
         private List<string> _parameters;
+        private bool _async;
         public MethodBuilder()
         {
             _accessModifier = "public";
@@ -30,6 +32,21 @@ namespace Endpoint.Application.Builders
             _name = "";
             _returnType = "";
             _parameters = new();
+            _async = false;
+        }
+
+        public MethodBuilder WithBody(List<string> body)
+        {
+            _body = body;
+
+            return this;
+        }
+
+        public MethodBuilder WithAsync(bool @async)
+        {
+            _async = async;
+
+            return this;
         }
 
         public MethodBuilder WithParameter(string paremeter)
@@ -64,12 +81,6 @@ namespace Endpoint.Application.Builders
         public MethodBuilder IsStatic(bool isStatic = true)
         {
             this._static = isStatic;
-            return this;
-        }
-
-        public MethodBuilder WithBody(List<string> body)
-        {
-            this._body = body;
             return this;
         }
 
@@ -122,7 +133,7 @@ namespace Endpoint.Application.Builders
             var methodSignatureBuilder = new MethodSignatureBuilder()
                 .WithName(_name)
                 .IsStatic(_static)
-                .WithAsync(false);
+                .WithAsync(_async);
                 
             foreach(var parameter in _parameters)
             {
@@ -139,7 +150,7 @@ namespace Endpoint.Application.Builders
                 _contents.Add("{");
                 foreach(var line in _body)
                 {
-                    _contents.Add(line);
+                    _contents.Add(line.Indent(_indent + 1));
                 }
                 _contents.Add("}");
             }

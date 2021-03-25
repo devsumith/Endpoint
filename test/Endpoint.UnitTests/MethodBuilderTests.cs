@@ -46,7 +46,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void BasicAsyncSignatureWithParams()
         {
-            var expected = "        public async Task Create([FromBody]CreateCustomer.Request request)";
+            var expected = "public async Task Create([FromBody]CreateCustomer.Request request)";
 
             var actual = new MethodSignatureBuilder()
                 .WithEndpointType(EndpointType.Create)

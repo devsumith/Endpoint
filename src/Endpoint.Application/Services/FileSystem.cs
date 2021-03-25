@@ -18,7 +18,14 @@ namespace Endpoint.Application.Services
             => File.ReadAllText(path);
 
         public void WriteAllLines(string path, string[] contents)
-            => File.WriteAllLines(path, contents);
+        {
+            if(File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
+            File.WriteAllLines(path, contents);
+        }
 
         public string ParentFolder(string path)
         {

@@ -92,6 +92,15 @@ namespace Endpoint.Application.Builders
                 .Build())
                 .Build();
 
+            new CreateBuilder(new Context(), _fileSystem)
+                .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
+                .WithDbContext(_dbContext)
+                .WithNamespace($"{_applicationNamespace.Value}.Features")
+                .WithApplicationNamespace($"{_applicationNamespace.Value}")
+                .WithDomainNamespace($"{_domainNamespace.Value}")
+                .WithEntity(_entityName.Value)
+                .Build();
+
             Map(BuilderFactory.Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d)))
                 .SetDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
                 .SetApplicationNamespace($"{_applicationNamespace.Value}")
