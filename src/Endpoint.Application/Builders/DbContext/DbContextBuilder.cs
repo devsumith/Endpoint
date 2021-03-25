@@ -73,6 +73,14 @@ namespace Endpoint.Application.Builders
                 .WithNamespace($"{_infrastructureNamespace.Value}.Data")
                 .WithInterface($"I{_dbContext.PascalCase}")
                 .WithBase("DbContext")
+                .WithMethod(new MethodBuilder().WithName("OnModelCreating").WithParameter("ModelBuilder modelBuilder")
+                .WithBody(new List<string>
+                {
+                    "base.OnModelCreating(modelBuilder);",
+                    "",
+                    $"modelBuilder.ApplyConfigurationsFromAssembly(typeof({_dbContext.PascalCase}).Assembly);"
+                })
+                .Build())
                 .WithBaseDependency("DbContextOptions", "options");
 
             var dbContextInterfaceBuilder = new ClassBuilder(_dbContext.PascalCase, _context, _fileSystem, "interface")
