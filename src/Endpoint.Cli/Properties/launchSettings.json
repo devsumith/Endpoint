@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "-d C:\\Test"
+      "commandLineArgs": "-d C:\\\\Test"
     }
   }
 }

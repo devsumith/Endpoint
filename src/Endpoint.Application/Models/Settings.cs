@@ -12,10 +12,10 @@ namespace Endpoint.Application.Models
         public string ApplicationNamespace { get; set; }
         public string InfrastructureNamespace { get; set; }
         public string ApiNamespace { get; set; }
-        public string DomainDirectory => $"{Path}{DirectorySeparatorChar}{SourceFolder}{DirectorySeparatorChar}{DomainNamespace}";
-        public string ApplicationDirectory => $"{Path}{DirectorySeparatorChar}{SourceFolder}{DirectorySeparatorChar}{ApplicationNamespace}";
-        public string InfrastructureDirectory => $"{Path}{DirectorySeparatorChar}{SourceFolder}{DirectorySeparatorChar}{InfrastructureNamespace}";
-        public string ApiDirectory => $"{Path}{DirectorySeparatorChar}{SourceFolder}{DirectorySeparatorChar}{ApiNamespace}";
+        public string DomainDirectory { get; set; }
+        public string ApplicationDirectory { get; set; }
+        public string InfrastructureDirectory { get; set; }
+        public string ApiDirectory { get; set; }
         public string BuildingBlocksCoreNamespace { get; set; } = "BuildingBlocks.Core";
         public string BuildingBlocksEventStoreNamespace { get; set; } = "BuildingBlocks.EventStore";
         public string Store { get; set; }

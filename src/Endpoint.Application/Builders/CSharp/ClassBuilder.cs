@@ -299,11 +299,17 @@ namespace Endpoint.Application.Builders
         }
         public void Build()
         {
-            var path = $"{_directory}{Path.DirectorySeparatorChar}{_name}.cs";
+            try
+            {
+                var path = $"{_directory}{Path.DirectorySeparatorChar}{_name}.cs";
 
-            _context.Add(path, Class);
+                _context.Add(path, Class);
 
-            _fileSystem.WriteAllLines(path, Class);
+                _fileSystem.WriteAllLines(path, Class);
+            } catch(Exception e)
+            {
+                throw e;
+            }
         }
     }
 }

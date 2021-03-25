@@ -9,6 +9,7 @@ namespace Endpoint.Application.Models
         private readonly ICommandService _commandService;
         private readonly string _name;
         public string SrcDirectory => $"{_slnDirectory}{Path.DirectorySeparatorChar}src";
+        public string Directory => $"{_slnDirectory}";
         public SolutionReference(ICommandService commandService, string slnDirectory, string name)
         {
             _commandService = commandService;

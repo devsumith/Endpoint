@@ -1,4 +1,5 @@
 using Endpoint.Application.Enums;
+using Endpoint.Application.Models;
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
 using System.IO;
@@ -27,6 +28,21 @@ namespace Endpoint.Application.Builders
         public ResourceBuilder WithDbContext(string dbContext)
         {
             _dbContextName = dbContext;
+            return this;
+        }
+
+        public ResourceBuilder WithSettings(Settings settings)
+        {
+            _dbContextName = settings.DbContext;
+            _domainDirectory = (Token)settings.DomainDirectory;
+            _applicationDirectory = (Token)settings.ApplicationDirectory;
+            _infrastructureDirectory = (Token)settings.InfrastructureDirectory;
+            _apiDirectory = (Token)settings.ApiDirectory;
+            _domainNamespace = (Token)settings.DomainNamespace;
+            _applicationNamespace = (Token)settings.ApplicationNamespace;
+            _infrastructureNamespace = (Token)settings.InfrastructureNamespace;
+            _apiNamespace = (Token)settings.ApiNamespace;
+
             return this;
         }
 

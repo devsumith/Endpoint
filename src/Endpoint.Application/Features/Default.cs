@@ -1,5 +1,6 @@
 using CommandLine;
 using Endpoint.Application.Builders;
+using Endpoint.Application.Services;
 using MediatR;
 using System;
 using System.IO;
@@ -101,6 +102,20 @@ namespace Endpoint.Application.Features
                 slnRef.Add(projRef.FullPath);
 
                 slnRef.OpenInVisualStudio();
+
+                new SettingsBuilder(
+                    _apiProjectNamespace,
+                    _apiProjectNamespace,
+                    _apiProjectNamespace,
+                    _apiProjectNamespace,
+                    apiDirectory,
+                    apiDirectory,
+                    apiDirectory,
+                    apiDirectory,
+                    slnRef.Directory,
+                    _dbContextName,
+                    new FileSystem()
+                    ).Build();
 
                 projRef.Run();
 
