@@ -3,6 +3,7 @@ using Endpoint.Application.Models;
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
 using System.IO;
+using System.Linq;
 using static Endpoint.Application.Builders.BuilderFactory;
 
 namespace Endpoint.Application.Builders
@@ -18,10 +19,18 @@ namespace Endpoint.Application.Builders
 
         private string _entityName;
         private string _dbContextName;
+        private string[] _resources = new string[0];
 
         public ResourceBuilder WithResource(string resource)
         {
             _entityName = resource;
+            _resources = _resources.Concat(new string[1] { resource }).ToArray();
+            return this;
+        }
+
+        public ResourceBuilder WithResources(string[] resources)
+        {
+            _resources = resources;
             return this;
         }
 
@@ -42,7 +51,7 @@ namespace Endpoint.Application.Builders
             _applicationNamespace = (Token)settings.ApplicationNamespace;
             _infrastructureNamespace = (Token)settings.InfrastructureNamespace;
             _apiNamespace = (Token)settings.ApiNamespace;
-
+            _resources = settings.Resources;
             return this;
         }
 
@@ -66,7 +75,7 @@ namespace Endpoint.Application.Builders
                 _domainNamespace.Value,
                 _applicationDirectory.Value,
                 _applicationNamespace.Value,
-                new string[1] { _entityName }).Build();
+                _resources).Build();
 
             Map(Create<FeatureBuilder>((a, b, c, d) => new(a, b, c, d)))
                 .SetEntityName(_entityName)

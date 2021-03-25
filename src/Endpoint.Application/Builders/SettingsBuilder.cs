@@ -19,6 +19,7 @@ namespace Endpoint.Application.Builders
         private readonly IFileSystem _fileSystem;
         private readonly string _directory;
         private readonly string _dbContext;
+        private readonly string[] _resources;
         public SettingsBuilder(
             string domainNamespace,
             string applicationNamespace,
@@ -30,6 +31,7 @@ namespace Endpoint.Application.Builders
             string apiDirectory,
             string directory,
             string dbContext,
+            string[] resources,
             IFileSystem fileSystem
             )
         {
@@ -42,6 +44,7 @@ namespace Endpoint.Application.Builders
             _infrastructureDirectory = infrastructureDirectory;
             _apiDirectory = apiDirectory;
             _directory = directory;
+            _resources = resources;
             _fileSystem = fileSystem;
             _dbContext = dbContext;
 
@@ -61,7 +64,8 @@ namespace Endpoint.Application.Builders
                 ApiDirectory = _apiDirectory,
                 Path = _directory,
                 DbContext = _dbContext,
-                SourceFolder = "src"
+                SourceFolder = "src",
+                Resources = _resources
             }, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

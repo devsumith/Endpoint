@@ -2,8 +2,12 @@ using CommandLine;
 using Endpoint.Application.Builders;
 using Endpoint.Application.Services;
 using MediatR;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Text.Json.JsonSerializer;
 
 namespace Endpoint.Application.Features
 {
@@ -43,6 +47,15 @@ namespace Endpoint.Application.Features
                     .WithResource(request.Resource)
                     .Build();
 
+                settings.Resources = settings.Resources.Concat(new string[1] { request.Resource }).ToArray();
+
+                _fileSystem.WriteAllLines($"{settings.Path}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
+                    Serialize(settings, new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            WriteIndented = true
+                        })
+                });
                 return new();
             }
         }

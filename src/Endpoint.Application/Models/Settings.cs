@@ -28,6 +28,7 @@ namespace Endpoint.Application.Models
         public string TestFolder { get; set; }
         public string DbContext { get; set; }
         public bool EventSourcing { get; set; }
+        public string[] Resources { get; set; }
         public static Settings Empty => new();
     }
 }

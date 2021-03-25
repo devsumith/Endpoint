@@ -114,6 +114,7 @@ namespace Endpoint.Application.Features
                     apiDirectory,
                     slnRef.Directory,
                     _dbContextName,
+                    new string[1] { _resource },
                     new FileSystem()
                     ).Build();
 
