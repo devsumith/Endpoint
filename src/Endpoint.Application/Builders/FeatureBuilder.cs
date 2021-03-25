@@ -92,6 +92,13 @@ namespace Endpoint.Application.Builders
                 .Build())
                 .Build();
 
+            new ClassBuilder($"{_entityName.PascalCase}Validator", new Context(), _fileSystem)
+                .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
+                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", $"{_entityName.PascalCase}Dto").Build())
+                .WithNamespace($"{_applicationNamespace.Value}.Features")
+                .WithUsing("FluentValidation")
+                .Build();
+
             new CreateBuilder(new Context(), _fileSystem)
                 .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
                 .WithDbContext(_dbContext)

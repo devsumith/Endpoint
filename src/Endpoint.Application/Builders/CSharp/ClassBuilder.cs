@@ -175,8 +175,11 @@ namespace Endpoint.Application.Builders
 
         public string[] Class
         {
+            
             get
             {
+                _content = new();
+
                 if (_usings.Count > 0)
                 {
                     foreach (var @using in _usings)
