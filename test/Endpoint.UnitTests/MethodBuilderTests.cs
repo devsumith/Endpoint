@@ -1,5 +1,6 @@
 using Endpoint.Application.Builders;
 using Endpoint.Application.Enums;
+using Endpoint.Application.ValueObjects;
 using System.Collections.Generic;
 using Xunit;
 
@@ -111,6 +112,30 @@ namespace Endpoint.UnitTests
         }
 
         [Fact]
+        public void GetApiEndpoint()
+        {
+            var expected = new string[]
+            {
+                "[HttpGet(Name = \"GetCustomersRoute\")]",
+                "[ProducesResponseType((int)HttpStatusCode.InternalServerError)]",
+                "[ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]",
+                "[ProducesResponseType(typeof(GetCustomers.Response), (int)HttpStatusCode.OK)]",
+                "public async Task<ActionResult<GetCustomers.Response>> Get()",
+                "    => await _mediator.Send(new GetCustomers.Request());",
+            };
+            Setup();
+
+            var actual = new MethodBuilder()
+                .WithEndpointType(EndpointType.Get)
+                .WithResource("Customer")
+                .WithAuthorize(false)
+                .Build();
+
+            Assert.Equal(expected, actual);
+
+        }
+
+        [Fact]
         public void ToDtoExtensionMethod()
         {
             string[] expected = new List<string> {
@@ -140,6 +165,26 @@ namespace Endpoint.UnitTests
             Assert.Equal(expected, actual);
         }
 
+        [Fact]
+        public void Configure()
+        {
+            var expected = new List<string>
+            {
+                "public void Configure(EntityTypeBuilder<Foo> builder)",
+                "{",
+                "    ",
+                "}"
+            }.ToArray();
+
+            var actual = new MethodBuilder()
+                    .WithName("Configure")
+                    .WithReturnType("void")
+                    .WithBody(new() { "" })
+                    .WithParameter(new ParameterBuilder(new TypeBuilder().WithGenericType("EntityTypeBuilder", ((Token)"Foo").PascalCase)
+                    .Build(), "builder").Build()).Build();
+
+            Assert.Equal(expected, actual);
+        }
         private void Setup()
         {
 

@@ -132,14 +132,19 @@ namespace Endpoint.Application.Builders
 
                 _contents = AttributeBuilder.EndpointAttributes(_endpointType, _resource, _authorize).ToList();
 
-                _contents.Add(new MethodSignatureBuilder()
+                var methodBuilder = new MethodSignatureBuilder()
                     .WithEndpointType(_endpointType)
-                    .WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Route).Build())
                     .WithAsync(true)
-                    .WithReturnType(TypeBuilder.WithActionResult($"{requestType}.Response"))
-                    .Build());
+                    .WithReturnType(TypeBuilder.WithActionResult($"{requestType}.Response"));
 
-                _contents = _contents.Concat(new MethodBodyBuilder(_endpointType, 0, _resource).Build()).ToList();
+                if (_endpointType != EndpointType.Get)
+                {
+                    methodBuilder.WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Route).Build());
+                }
+
+                _contents.Add(methodBuilder.Build());
+
+                _contents = _contents.Concat(new MethodBodyBuilder(_endpointType, _indent, _resource).Build()).ToList();
 
                 return _contents.ToArray();
             }

@@ -94,6 +94,7 @@ namespace Endpoint.Application.Builders
                 .WithAttribute(new AttributeBuilder().WithName("Route").WithParam("\"api/[controller]\"").Build())
                 .WithDependency("IMediator", "mediator")
                 .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.GetById).WithResource(_entityName).WithAuthorize(false).Build())
+                .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Get).WithResource(_entityName).WithAuthorize(false).Build())
                 .Build();
         }
     }

@@ -7,6 +7,7 @@
         GetById,
         Create,
         Update,
-        Delete
+        Delete,
+        Page
     }
 }

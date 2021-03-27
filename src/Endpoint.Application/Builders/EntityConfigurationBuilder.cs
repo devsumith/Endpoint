@@ -29,7 +29,7 @@ namespace Endpoint.Application.Builders
                 var configureMethod = new MethodBuilder()
                     .WithName("Configure")
                     .WithReturnType("void")
-                    .WithBody(new ())
+                    .WithBody(new () {  "" })
                     .WithParameter(new ParameterBuilder(new TypeBuilder().WithGenericType("EntityTypeBuilder", ((Token)_entity).PascalCase)                    
                     .Build(), "builder").Build()).Build();
 

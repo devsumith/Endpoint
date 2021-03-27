@@ -106,20 +106,25 @@ namespace Endpoint.Application.Builders
                 _ => throw new System.NotImplementedException()
             };
 
-
             if (authorize)
             {
                 attributes.Add(new AttributeBuilder().WithName("Authorize").WithIndent(indent).Build());
             }
-            attributes.Add(WithHttp(HttpVerbs.Get, "{" + ((Token)resource).CamelCase + "Id}", $"{requestType}Route", 0));
+            
+            if(endpointType == EndpointType.GetById)
+            {
+                attributes.Add(WithHttp(HttpVerbs.Get, "{" + ((Token)resource).CamelCase + "Id}", $"{requestType}Route", indent));
+                attributes.Add(WithProducesResponseType(HttpStatusCode.NotFound, "string", indent: indent));
+            }
+
+            if (endpointType == EndpointType.Get)
+            {
+                attributes.Add(WithHttp(HttpVerbs.Get, routeName: $"{requestType}Route", indent: indent));
+            }
+
             attributes.Add(WithProducesResponseType(HttpStatusCode.InternalServerError, indent: indent));
             attributes.Add(WithProducesResponseType(HttpStatusCode.BadRequest, "ProblemDetails", indent: indent));
             attributes.Add(WithProducesResponseType(HttpStatusCode.OK, $"{requestType}.Response", indent: indent));
-
-            if(endpointType == EndpointType.GetById)
-            {
-                attributes.Add(WithProducesResponseType(HttpStatusCode.NotFound, "string", indent: indent));
-            }
 
             return attributes.ToArray();           
         }

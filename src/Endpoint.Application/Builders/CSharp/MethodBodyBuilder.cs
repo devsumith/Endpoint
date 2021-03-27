@@ -51,7 +51,7 @@ namespace Endpoint.Application.Builders
         public string[] BuildGetEndpointBody(string resource)
             => new string[1]
             {
-                $"=> await _mediator.Send(new Get{((Token)resource).PascalCasePlural}.Request());".PadLeft((_indent + 1) * _tab)
+                $"=> await _mediator.Send(new Get{((Token)resource).PascalCasePlural}.Request());".Indent(_indent + 1)
             };
 
         public string[] BuildGetByIdEndpointBody(string resource)

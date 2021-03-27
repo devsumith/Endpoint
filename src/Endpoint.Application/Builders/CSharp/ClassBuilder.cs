@@ -252,6 +252,8 @@ namespace Endpoint.Application.Builders
                         {
                             _content.Add(line);
                         }
+
+                        _content.Add("");
                     }
 
                     if (_methods.Count > 0)
