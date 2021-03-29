@@ -136,6 +136,30 @@ namespace Endpoint.UnitTests
         }
 
         [Fact]
+        public void CreateApiEndpoint()
+        {
+            var expected = new string[]
+            {
+                "[HttpPost(Name = \"CreateCustomerRoute\")]",
+                "[ProducesResponseType((int)HttpStatusCode.InternalServerError)]",
+                "[ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]",
+                "[ProducesResponseType(typeof(CreateCustomer.Response), (int)HttpStatusCode.OK)]",
+                "public async Task<ActionResult<CreateCustomer.Response>> Create()",
+                "    => await _mediator.Send(new CreateCustomer.Request());",
+            };
+            Setup();
+
+            var actual = new MethodBuilder()
+                .WithEndpointType(EndpointType.Create)
+                .WithResource("Customer")
+                .WithAuthorize(false)
+                .Build();
+
+            Assert.Equal(expected, actual);
+
+        }
+
+        [Fact]
         public void ToDtoExtensionMethod()
         {
             string[] expected = new List<string> {

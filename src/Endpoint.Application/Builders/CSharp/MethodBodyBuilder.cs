@@ -45,7 +45,7 @@ namespace Endpoint.Application.Builders
         public string[] BuildEndpointBody()
             => new string[1]
             {
-                "=> await _mediator.Send(request);".PadLeft((_indent + 1) * _tab)
+                "=> await _mediator.Send(request);".Indent(_indent + 1)
             };
 
         public string[] BuildGetEndpointBody(string resource)

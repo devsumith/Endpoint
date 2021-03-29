@@ -55,6 +55,7 @@ namespace Endpoint.Application.Builders
                 .WithName(verb switch
                 {
                     HttpVerbs.Get => "HttpGet",
+                    HttpVerbs.Post => "HttpPost",
                     _ => throw new System.NotImplementedException()
                 });
 
@@ -120,6 +121,11 @@ namespace Endpoint.Application.Builders
             if (endpointType == EndpointType.Get)
             {
                 attributes.Add(WithHttp(HttpVerbs.Get, routeName: $"{requestType}Route", indent: indent));
+            }
+
+            if (endpointType == EndpointType.Create)
+            {
+                attributes.Add(WithHttp(HttpVerbs.Post, routeName: $"{requestType}Route", indent: indent));
             }
 
             attributes.Add(WithProducesResponseType(HttpStatusCode.InternalServerError, indent: indent));
