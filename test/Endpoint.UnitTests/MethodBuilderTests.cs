@@ -144,8 +144,8 @@ namespace Endpoint.UnitTests
                 "[ProducesResponseType((int)HttpStatusCode.InternalServerError)]",
                 "[ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]",
                 "[ProducesResponseType(typeof(CreateCustomer.Response), (int)HttpStatusCode.OK)]",
-                "public async Task<ActionResult<CreateCustomer.Response>> Create()",
-                "    => await _mediator.Send(new CreateCustomer.Request());",
+                "public async Task<ActionResult<CreateCustomer.Response>> Create([FromBody]CreateCustomer.Request request)",
+                "    => await _mediator.Send(request);",
             };
             Setup();
 
@@ -154,6 +154,40 @@ namespace Endpoint.UnitTests
                 .WithResource("Customer")
                 .WithAuthorize(false)
                 .Build();
+
+            for(var i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
+
+            Assert.Equal(expected, actual);
+
+        }
+
+        [Fact]
+        public void PageApiEndpoint()
+        {
+            var expected = new string[]
+            {
+                "[HttpGet(\"page/{pageSize}/{index}\", Name = \"GetCustomersPageRoute\")]",
+                "[ProducesResponseType((int)HttpStatusCode.InternalServerError)]",
+                "[ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]",
+                "[ProducesResponseType(typeof(GetCustomersPage.Response), (int)HttpStatusCode.OK)]",
+                "public async Task<ActionResult<GetCustomersPage.Response>> Page([FromRoute]GetCustomersPage.Request request)",
+                "    => await _mediator.Send(request);",
+            };
+            Setup();
+
+            var actual = new MethodBuilder()
+                .WithEndpointType(EndpointType.Page)
+                .WithResource("Customer")
+                .WithAuthorize(false)
+                .Build();
+
+            for (var i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
 
             Assert.Equal(expected, actual);
 

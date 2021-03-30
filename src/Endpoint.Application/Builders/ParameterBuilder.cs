@@ -22,6 +22,7 @@ namespace Endpoint.Application.Builders
         {
             _from = from switch {
                 From.Route => new AttributeBuilder().WithName("FromRoute").Build(),
+                From.Body => new AttributeBuilder().WithName("FromBody").Build(),
                 _ => throw new System.NotImplementedException()
             };
 

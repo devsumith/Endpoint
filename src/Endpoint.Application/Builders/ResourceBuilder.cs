@@ -95,6 +95,7 @@ namespace Endpoint.Application.Builders
                 .WithDependency("IMediator", "mediator")
                 .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.GetById).WithResource(_entityName).WithAuthorize(false).Build())
                 .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Get).WithResource(_entityName).WithAuthorize(false).Build())
+                .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Create).WithResource(_entityName).WithAuthorize(false).Build())
                 .Build();
         }
     }

@@ -89,6 +89,7 @@ namespace Endpoint.Application.Builders
                 EndpointType.GetById => "GetById",
                 EndpointType.Get => "Get",
                 EndpointType.Create => "Create",
+                EndpointType.Page => "Page",
                 _ => throw new System.NotImplementedException()
             };
 

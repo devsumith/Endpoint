@@ -104,6 +104,7 @@ namespace Endpoint.Application.Builders
                 EndpointType.Get => $"Get{((Token)resource).PascalCasePlural}",
                 EndpointType.GetById => $"Get{((Token)resource).PascalCase}ById",
                 EndpointType.Update => $"Update{((Token)resource).PascalCase}",
+                EndpointType.Page => $"Get{((Token)resource).PascalCasePlural}Page",
                 _ => throw new System.NotImplementedException()
             };
 
@@ -126,6 +127,11 @@ namespace Endpoint.Application.Builders
             if (endpointType == EndpointType.Create)
             {
                 attributes.Add(WithHttp(HttpVerbs.Post, routeName: $"{requestType}Route", indent: indent));
+            }
+
+            if (endpointType == EndpointType.Page)
+            {
+                attributes.Add(WithHttp(HttpVerbs.Get, "page/{pageSize}/{index}", $"{requestType}Route", indent));
             }
 
             attributes.Add(WithProducesResponseType(HttpStatusCode.InternalServerError, indent: indent));

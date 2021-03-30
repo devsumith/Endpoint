@@ -35,6 +35,7 @@ namespace Endpoint.Application.Builders
                     EndpointType.Create => BuildEndpointBody(),
                     EndpointType.Delete => BuildEndpointBody(),
                     EndpointType.Update => BuildEndpointBody(),
+                    EndpointType.Page => BuildEndpointBody(),
                     _ => throw new NotImplementedException()
                 };
             }

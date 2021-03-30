@@ -127,6 +127,7 @@ namespace Endpoint.Application.Builders
                     EndpointType.Get => $"Get{((Token)_resource).PascalCasePlural}",
                     EndpointType.GetById => $"Get{((Token)_resource).PascalCase}ById",
                     EndpointType.Update => $"Update{((Token)_resource).PascalCase}",
+                    EndpointType.Page => $"Get{((Token)_resource).PascalCasePlural}Page",
                     _ => throw new System.NotImplementedException()
                 };
 
@@ -137,9 +138,14 @@ namespace Endpoint.Application.Builders
                     .WithAsync(true)
                     .WithReturnType(TypeBuilder.WithActionResult($"{requestType}.Response"));
 
-                if (_endpointType != EndpointType.Get)
+                if (_endpointType == EndpointType.GetById || _endpointType == EndpointType.Page)
                 {
                     methodBuilder.WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Route).Build());
+                }
+
+                if (_endpointType == EndpointType.Create)
+                {
+                    methodBuilder.WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Body).Build());
                 }
 
                 _contents.Add(methodBuilder.Build());
