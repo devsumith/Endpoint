@@ -107,6 +107,11 @@ namespace Endpoint.Application.Builders
                 .SetApplicationNamespace(_applicationNamespace.Value)
                 .Build();
 
+            Create<QueryableExtensionsBuilder>((a, b, c, d) => new(a, b, c, d))
+                .SetDirectory($@"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}{Constants.Folders.Extensions}")
+                .SetApplicationNamespace(_applicationNamespace.Value)
+                .Build();
+
             Create<ProgramBuilder>((a, b, c, d) => new(a, b, c, d))
                 .SetDirectory($@"{_apiDirectory}")
                 .SetRootNamespace(_rootNamespace.Value)

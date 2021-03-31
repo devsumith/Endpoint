@@ -12,6 +12,7 @@
     <None Remove="Builders\ExtensionsBuilder.txt" />
     <None Remove="Builders\LaunchSettingsBuilder.txt" />
     <None Remove="Builders\ProgramBuilder.txt" />
+    <None Remove="Builders\QueryableExtensionsBuilder.txt" />
     <None Remove="Builders\Request\CommandBuilder.txt" />
     <None Remove="Builders\Request\QueryBuilder.txt" />
     <None Remove="Builders\ResponseBaseBuilder.txt" />
@@ -33,6 +34,7 @@
     <EmbeddedResource Include="Builders\DtoBuilder.txt" />
     <EmbeddedResource Include="Builders\LaunchSettingsBuilder.txt" />
     <EmbeddedResource Include="Builders\ProgramBuilder.txt" />
+    <EmbeddedResource Include="Builders\QueryableExtensionsBuilder.txt" />
     <EmbeddedResource Include="Builders\Request\CommandBuilder.txt" />
     <EmbeddedResource Include="Builders\Request\QueryBuilder.txt" />
     <EmbeddedResource Include="Builders\ResponseBaseBuilder.txt" />

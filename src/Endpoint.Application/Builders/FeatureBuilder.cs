@@ -126,6 +126,15 @@ namespace Endpoint.Application.Builders
                 .WithEntity(_entityName.Value)
                 .Build();
 
+            new GetPageBuilder(new Context(), _fileSystem)
+                .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
+                .WithDbContext(_dbContext)
+                .WithNamespace($"{_applicationNamespace.Value}.Features")
+                .WithApplicationNamespace($"{_applicationNamespace.Value}")
+                .WithDomainNamespace($"{_domainNamespace.Value}")
+                .WithEntity(_entityName.Value)
+                .Build();
+
         }
     }
 }
