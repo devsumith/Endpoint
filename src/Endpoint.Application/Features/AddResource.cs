@@ -47,7 +47,10 @@ namespace Endpoint.Application.Features
                     .WithResource(request.Resource)
                     .Build();
 
-                settings.Resources = settings.Resources.Concat(new string[1] { request.Resource }).ToArray();
+                if (!settings.Resources.Contains(request.Resource))
+                {
+                    settings.Resources = settings.Resources.Concat(new string[1] { request.Resource }).ToArray();
+                }
 
                 _fileSystem.WriteAllLines($"{settings.Path}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
                     Serialize(settings, new JsonSerializerOptions

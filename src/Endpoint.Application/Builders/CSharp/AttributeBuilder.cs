@@ -56,6 +56,8 @@ namespace Endpoint.Application.Builders
                 {
                     HttpVerbs.Get => "HttpGet",
                     HttpVerbs.Post => "HttpPost",
+                    HttpVerbs.Put => "HttpPut",
+                    HttpVerbs.Delete => "HttpDelete",
                     _ => throw new System.NotImplementedException()
                 });
 
@@ -100,7 +102,7 @@ namespace Endpoint.Application.Builders
             var requestType = endpointType switch
             {
                 EndpointType.Create => $"Create{((Token)resource).PascalCase}",
-                EndpointType.Delete => $"Delete{((Token)resource).PascalCase}",
+                EndpointType.Delete => $"Remove{((Token)resource).PascalCase}",
                 EndpointType.Get => $"Get{((Token)resource).PascalCasePlural}",
                 EndpointType.GetById => $"Get{((Token)resource).PascalCase}ById",
                 EndpointType.Update => $"Update{((Token)resource).PascalCase}",
@@ -119,6 +121,11 @@ namespace Endpoint.Application.Builders
                 attributes.Add(WithProducesResponseType(HttpStatusCode.NotFound, "string", indent: indent));
             }
 
+            if (endpointType == EndpointType.Delete)
+            {
+                attributes.Add(WithHttp(HttpVerbs.Delete, "{" + ((Token)resource).CamelCase + "Id}", $"{requestType}Route", indent));
+            }
+
             if (endpointType == EndpointType.Get)
             {
                 attributes.Add(WithHttp(HttpVerbs.Get, routeName: $"{requestType}Route", indent: indent));
@@ -127,6 +134,11 @@ namespace Endpoint.Application.Builders
             if (endpointType == EndpointType.Create)
             {
                 attributes.Add(WithHttp(HttpVerbs.Post, routeName: $"{requestType}Route", indent: indent));
+            }
+
+            if (endpointType == EndpointType.Update)
+            {
+                attributes.Add(WithHttp(HttpVerbs.Put, routeName: $"{requestType}Route", indent: indent));
             }
 
             if (endpointType == EndpointType.Page)

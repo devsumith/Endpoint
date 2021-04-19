@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "-d C:\\\\Test"
+      "commandLineArgs": "query GetLatestVideos Video -d C:\\Projects\\MoveSnapTv\\src\\MoveSnapTv.Api\\Features\\Videos"
     }
   }
 }

@@ -123,7 +123,7 @@ namespace Endpoint.Application.Builders
                 var requestType = _endpointType switch
                 {
                     EndpointType.Create => $"Create{((Token)_resource).PascalCase}",
-                    EndpointType.Delete => $"Delete{((Token)_resource).PascalCase}",
+                    EndpointType.Delete => $"Remove{((Token)_resource).PascalCase}",
                     EndpointType.Get => $"Get{((Token)_resource).PascalCasePlural}",
                     EndpointType.GetById => $"Get{((Token)_resource).PascalCase}ById",
                     EndpointType.Update => $"Update{((Token)_resource).PascalCase}",
@@ -138,9 +138,14 @@ namespace Endpoint.Application.Builders
                     .WithAsync(true)
                     .WithReturnType(TypeBuilder.WithActionResult($"{requestType}.Response"));
 
-                if (_endpointType == EndpointType.GetById || _endpointType == EndpointType.Page)
+                if (_endpointType == EndpointType.GetById || _endpointType == EndpointType.Page || _endpointType == EndpointType.Delete)
                 {
                     methodBuilder.WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Route).Build());
+                }
+
+                if (_endpointType == EndpointType.Update)
+                {
+                    methodBuilder.WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Body).Build());
                 }
 
                 if (_endpointType == EndpointType.Create)

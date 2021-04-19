@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Application.Builders
 {
-    public class GetByIdBuilder
+    public class RemoveBuilder
     {
         private readonly List<string> _content;
         private readonly IContext _context;
@@ -17,52 +17,52 @@ namespace Endpoint.Application.Builders
         private string _domainNamespace;
         private string _applicationNamespace;
 
-        public GetByIdBuilder(IContext context, IFileSystem fileSystem)
+        public RemoveBuilder(IContext context, IFileSystem fileSystem)
         {
             _content = new();
             _context = context;
             _fileSystem = fileSystem;
         }
 
-        public GetByIdBuilder WithDomainNamespace(string domainNamespace)
+        public RemoveBuilder WithDomainNamespace(string domainNamespace)
         {
             _domainNamespace = domainNamespace;
             return this;
         }
 
-        public GetByIdBuilder WithApplicationNamespace(string applicationNamespace)
+        public RemoveBuilder WithApplicationNamespace(string applicationNamespace)
         {
             _applicationNamespace = applicationNamespace;
             return this;
         }
 
-        public GetByIdBuilder WithDirectory(string directory)
+        public RemoveBuilder WithDirectory(string directory)
         {
             _directory = directory;
             return this;
         }
 
-        public GetByIdBuilder WithEntity(string entity)
+        public RemoveBuilder WithEntity(string entity)
         {
             _entity = entity;
             return this;
         }
 
-        public GetByIdBuilder WithDbContext(string dbContext)
+        public RemoveBuilder WithDbContext(string dbContext)
         {
             _dbContext = dbContext;
             return this;
         }
 
-        public GetByIdBuilder WithNamespace(string @namespace)
+
+        public RemoveBuilder WithNamespace(string @namespace)
         {
             _namespace = @namespace;
             return this;
         }
 
         public void Build()
-        {
-            
+        {           
             var request = new ClassBuilder("Request", _context, _fileSystem)
                 .WithInterface(new TypeBuilder().WithGenericType("IRequest", "Response").Build())
                 .WithProperty(new PropertyBuilder().WithType("Guid").WithName($"{((Token)_entity).PascalCase}Id").WithAccessors(new AccessorsBuilder().Build()).Build())
@@ -81,22 +81,31 @@ namespace Endpoint.Application.Builders
                 .WithParameter(new ParameterBuilder("Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
-                "return new () {",
-                $"{((Token)_entity).PascalCase} = (await _context.{((Token)_entity).PascalCasePlural}.SingleOrDefaultAsync(x => x.{((Token)_entity).PascalCase}Id == request.{((Token)_entity).PascalCase}Id)).ToDto()".Indent(1),
+                $"var {((Token)_entity).CamelCase} = await _context.{((Token)_entity).PascalCasePlural}.SingleAsync(x => x.{((Token)_entity).PascalCase}Id == request.{((Token)_entity).PascalCase}Id);",
+                "",
+                $"_context.{((Token)_entity).PascalCasePlural}.Remove({((Token)_entity).CamelCase});",
+                "",
+                "await _context.SaveChangesAsync(cancellationToken);",
+                "",
+                "return new Response()",
+                "{",
+                $"{((Token)_entity).PascalCase} = {((Token)_entity).CamelCase}.ToDto()".Indent(1),
                 "};"
                 }).Build())
                 .Class;
 
-            new ClassBuilder($"Get{((Token)_entity).PascalCase}ById", _context, _fileSystem)
+            new ClassBuilder($"Remove{((Token)_entity).PascalCase}", _context, _fileSystem)
                 .WithDirectory(_directory)
                 .WithNamespace(_namespace)
+                .WithUsing("FluentValidation")
                 .WithUsing("MediatR")
-                .WithUsing("System")
                 .WithUsing("System.Threading")
                 .WithUsing("System.Threading.Tasks")
+                .WithUsing("Microsoft.EntityFrameworkCore")
+                .WithUsing("System")
+                .WithUsing($"{_domainNamespace}.Models")
                 .WithUsing($"{_domainNamespace}.Core")
                 .WithUsing($"{_applicationNamespace}.Interfaces")
-                .WithUsing("Microsoft.EntityFrameworkCore")
                 .WithClass(request)
                 .WithClass(response)
                 .WithClass(handler)

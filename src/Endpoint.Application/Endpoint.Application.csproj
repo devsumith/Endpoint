@@ -64,9 +64,5 @@
       <PackageReference Include="CommandLineParser" Version="2.8.0" />
       <PackageReference Include="SharpSimpleNLG" Version="1.2.1" />
   </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Builders\Request\Commands\" />
-    </ItemGroup>
   
 </Project>

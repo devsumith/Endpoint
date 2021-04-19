@@ -301,17 +301,15 @@ namespace Endpoint.Application.Builders
         }
         public void Build()
         {
-            try
-            {
-                var path = $"{_directory}{Path.DirectorySeparatorChar}{_name}.cs";
 
-                _context.Add(path, Class);
+            var prefix = _type == "class" ? "" : "I";
 
-                _fileSystem.WriteAllLines(path, Class);
-            } catch(Exception e)
-            {
-                throw e;
-            }
+            var path = $"{_directory}{Path.DirectorySeparatorChar}{prefix}{_name}.cs";
+
+            _context.Add(path, Class);
+
+            _fileSystem.WriteAllLines(path, Class);
+
         }
     }
 }

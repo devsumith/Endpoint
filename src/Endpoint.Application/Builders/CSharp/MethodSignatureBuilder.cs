@@ -90,6 +90,8 @@ namespace Endpoint.Application.Builders
                 EndpointType.Get => "Get",
                 EndpointType.Create => "Create",
                 EndpointType.Page => "Page",
+                EndpointType.Update => "Update",
+                EndpointType.Delete => "Remove",
                 _ => throw new System.NotImplementedException()
             };
 

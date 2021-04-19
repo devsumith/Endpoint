@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Application.Builders
 {
-    public class GetByIdBuilder
+    public class UpdateBuilder
     {
         private readonly List<string> _content;
         private readonly IContext _context;
@@ -17,44 +17,45 @@ namespace Endpoint.Application.Builders
         private string _domainNamespace;
         private string _applicationNamespace;
 
-        public GetByIdBuilder(IContext context, IFileSystem fileSystem)
+        public UpdateBuilder(IContext context, IFileSystem fileSystem)
         {
             _content = new();
             _context = context;
             _fileSystem = fileSystem;
         }
 
-        public GetByIdBuilder WithDomainNamespace(string domainNamespace)
+        public UpdateBuilder WithDomainNamespace(string domainNamespace)
         {
             _domainNamespace = domainNamespace;
             return this;
         }
 
-        public GetByIdBuilder WithApplicationNamespace(string applicationNamespace)
+        public UpdateBuilder WithApplicationNamespace(string applicationNamespace)
         {
             _applicationNamespace = applicationNamespace;
             return this;
         }
 
-        public GetByIdBuilder WithDirectory(string directory)
+        public UpdateBuilder WithDirectory(string directory)
         {
             _directory = directory;
             return this;
         }
 
-        public GetByIdBuilder WithEntity(string entity)
+        public UpdateBuilder WithEntity(string entity)
         {
             _entity = entity;
             return this;
         }
 
-        public GetByIdBuilder WithDbContext(string dbContext)
+        public UpdateBuilder WithDbContext(string dbContext)
         {
             _dbContext = dbContext;
             return this;
         }
 
-        public GetByIdBuilder WithNamespace(string @namespace)
+
+        public UpdateBuilder WithNamespace(string @namespace)
         {
             _namespace = @namespace;
             return this;
@@ -63,9 +64,15 @@ namespace Endpoint.Application.Builders
         public void Build()
         {
             
+            var validator = new ClassBuilder("Validator", _context, _fileSystem)
+                .WithRuleFor(new RuleForBuilder().WithNotNull().WithEntity(_entity).Build())
+                .WithRuleFor(new RuleForBuilder().WithValidator().WithEntity(_entity).Build())
+                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", "Request").Build())
+                .Class;
+
             var request = new ClassBuilder("Request", _context, _fileSystem)
                 .WithInterface(new TypeBuilder().WithGenericType("IRequest", "Response").Build())
-                .WithProperty(new PropertyBuilder().WithType("Guid").WithName($"{((Token)_entity).PascalCase}Id").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithType($"{((Token)_entity).PascalCase}Dto").WithName($"{((Token)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
             var response = new ClassBuilder("Response", _context, _fileSystem)
@@ -81,22 +88,28 @@ namespace Endpoint.Application.Builders
                 .WithParameter(new ParameterBuilder("Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
-                "return new () {",
-                $"{((Token)_entity).PascalCase} = (await _context.{((Token)_entity).PascalCasePlural}.SingleOrDefaultAsync(x => x.{((Token)_entity).PascalCase}Id == request.{((Token)_entity).PascalCase}Id)).ToDto()".Indent(1),
+                $"var {((Token)_entity).CamelCase} = await _context.{((Token)_entity).PascalCasePlural}.SingleAsync(x => x.{((Token)_entity).PascalCase}Id == request.{((Token)_entity).PascalCase}.{((Token)_entity).PascalCase}Id);",
+                "",
+                "await _context.SaveChangesAsync(cancellationToken);",
+                "",
+                "return new Response()",
+                "{",
+                $"{((Token)_entity).PascalCase} = {((Token)_entity).CamelCase}.ToDto()".Indent(1),
                 "};"
                 }).Build())
                 .Class;
 
-            new ClassBuilder($"Get{((Token)_entity).PascalCase}ById", _context, _fileSystem)
+            new ClassBuilder($"Update{((Token)_entity).PascalCase}", _context, _fileSystem)
                 .WithDirectory(_directory)
                 .WithNamespace(_namespace)
+                .WithUsing("FluentValidation")
                 .WithUsing("MediatR")
-                .WithUsing("System")
                 .WithUsing("System.Threading")
                 .WithUsing("System.Threading.Tasks")
                 .WithUsing($"{_domainNamespace}.Core")
                 .WithUsing($"{_applicationNamespace}.Interfaces")
                 .WithUsing("Microsoft.EntityFrameworkCore")
+                .WithClass(validator)
                 .WithClass(request)
                 .WithClass(response)
                 .WithClass(handler)

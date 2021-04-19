@@ -1,23 +1,20 @@
 using CommandLine;
 using Endpoint.Application.Builders;
 using Endpoint.Application.Services;
+using Endpoint.Application.ValueObjects;
 using MediatR;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using static Endpoint.Application.Builders.BuilderFactory;
 
 namespace Endpoint.Application.Features
 {
-    internal class Query
+    internal class Page
     {
-        [Verb("query")]
+        [Verb("page")]
         internal class Request : IRequest<Unit>
         {
-
             [Value(0)]
-            public string Name { get; set; }
-
-            [Value(1)]
             public string Entity { get; set; }
 
             [Option('d')]
@@ -27,23 +24,25 @@ namespace Endpoint.Application.Features
         internal class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ISettingsProvider _settingsProvder;
+            private readonly IFileSystem _fileSystem;
 
-            public Handler(ISettingsProvider settingsProvider)
-                => _settingsProvder = settingsProvider;
+            public Handler(ISettingsProvider settingsProvider, IFileSystem fileSystem)
+            {
+                _settingsProvder = settingsProvider;
+                _fileSystem = fileSystem;
+            }
 
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-                Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d))
-                    .SetDirectory(request.Directory)
-                    .SetApplicationDirectory(settings.ApplicationDirectory)
-                    .SetRootNamespace(settings.RootNamespace)
-                    .SetApplicationNamespace(settings.ApplicationNamespace)
-                    .SetDomainNamespace(settings.DomainNamespace)
-                    .WithEntity(request.Entity)
-                    .WithName(request.Name)
+                new GetPageBuilder(new Context(), _fileSystem)
+                    .WithDirectory($"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)request.Entity).PascalCasePlural}")
                     .WithDbContext(settings.DbContext)
+                    .WithNamespace($"{settings.ApplicationNamespace}.Features")
+                    .WithApplicationNamespace($"{settings.ApplicationNamespace}")
+                    .WithDomainNamespace($"{settings.DomainNamespace}")
+                    .WithEntity(request.Entity)
                     .Build();
 
                 return new();

@@ -2,6 +2,7 @@ using Endpoint.Application.Enums;
 using Endpoint.Application.Models;
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
+using System;
 using System.IO;
 using System.Linq;
 using static Endpoint.Application.Builders.BuilderFactory;
@@ -82,6 +83,7 @@ namespace Endpoint.Application.Builders
                 .WithDbContext(_dbContextName)
                 .Build();
 
+
             new ClassBuilder($"{((Token)_entityName).PascalCase}Controller", new Context(), _fileSystem)
                 .WithDirectory($"{_apiDirectory.Value}{Path.DirectorySeparatorChar}Controllers")
                 .WithUsing("System.Net")
@@ -96,9 +98,11 @@ namespace Endpoint.Application.Builders
                 .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.GetById).WithResource(_entityName).WithAuthorize(false).Build())
                 .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Get).WithResource(_entityName).WithAuthorize(false).Build())
                 .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Create).WithResource(_entityName).WithAuthorize(false).Build())
-                .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Page).WithResource(_entityName).WithAuthorize(false)
-                .Build())
+                .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Page).WithResource(_entityName).WithAuthorize(false).Build())
+                .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Update).WithResource(_entityName).WithAuthorize(false).Build())
+                .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Delete).WithResource(_entityName).WithAuthorize(false).Build())
                 .Build();
+
         }
     }
 }

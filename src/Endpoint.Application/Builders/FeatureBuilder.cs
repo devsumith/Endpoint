@@ -1,3 +1,4 @@
+using Endpoint.Application.Extensions;
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
 using System;
@@ -84,10 +85,10 @@ namespace Endpoint.Application.Builders
                 .WithParameter(new ParameterBuilder(((Token)_entityName).PascalCase, ((Token)_entityName).CamelCase, true).Build())
                 .WithBody(new()
                 {
-                    "    return new ()",
-                    "    {",
-                    $"        {((Token)_entityName).PascalCase}Id = {((Token)_entityName).CamelCase}.{((Token)_entityName).PascalCase}Id",
-                    "    };"
+                    "return new ()",
+                    "{",
+                    $"{((Token)_entityName).PascalCase}Id = {((Token)_entityName).CamelCase}.{((Token)_entityName).PascalCase}Id".Indent(1),
+                    "};"
                 })
                 .Build())
                 .Build();
@@ -100,6 +101,24 @@ namespace Endpoint.Application.Builders
                 .Build();
 
             new CreateBuilder(new Context(), _fileSystem)
+                .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
+                .WithDbContext(_dbContext)
+                .WithNamespace($"{_applicationNamespace.Value}.Features")
+                .WithApplicationNamespace($"{_applicationNamespace.Value}")
+                .WithDomainNamespace($"{_domainNamespace.Value}")
+                .WithEntity(_entityName.Value)
+                .Build();
+
+            new UpdateBuilder(new Context(), _fileSystem)
+                .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
+                .WithDbContext(_dbContext)
+                .WithNamespace($"{_applicationNamespace.Value}.Features")
+                .WithApplicationNamespace($"{_applicationNamespace.Value}")
+                .WithDomainNamespace($"{_domainNamespace.Value}")
+                .WithEntity(_entityName.Value)
+                .Build();
+
+            new RemoveBuilder(new Context(), _fileSystem)
                 .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
                 .WithDbContext(_dbContext)
                 .WithNamespace($"{_applicationNamespace.Value}.Features")
