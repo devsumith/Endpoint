@@ -7,6 +7,7 @@
   <ItemGroup>
     <None Remove="Builders\AggregateBuilder.txt" />
     <None Remove="Builders\AppSettingsBuilder.txt" />
+    <None Remove="Builders\ControllerTestBuilder.txt" />
     <None Remove="Builders\DependenciesBuilder.txt" />
     <None Remove="Builders\DtoBuilder.txt" />
     <None Remove="Builders\ExtensionsBuilder.txt" />
@@ -29,6 +30,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Builders\AppSettingsBuilder.txt" />
+    <EmbeddedResource Include="Builders\ControllerTestBuilder.txt" />
     <EmbeddedResource Include="Builders\DependenciesBuilder.txt" />
     <EmbeddedResource Include="Builders\ExtensionsBuilder.txt" />
     <EmbeddedResource Include="Builders\DtoBuilder.txt" />

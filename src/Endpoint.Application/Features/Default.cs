@@ -33,6 +33,8 @@ namespace Endpoint.Application.Features
 
         internal class Handler : IRequestHandler<Request, Unit>
         {
+            private ICommandService _commandService;
+
             private string _apiProjectName;
             private string _apiProjectNamespace;
             private string _rootNamespace;
@@ -44,8 +46,13 @@ namespace Endpoint.Application.Features
             private string _resource;
             private string _directory;
 
+            public Handler(ICommandService commandService)
+            {
+                _commandService = commandService;
+            }
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
+
                 _port = request.Port;
                 _name = request.Name;
                 _resource = request.Resource;
@@ -62,6 +69,10 @@ namespace Endpoint.Application.Features
                     .WithDirectory(_directory)
                     .WithName(_name)
                     .Build();
+
+                _commandService.Start("git init", slnRef.Directory);
+                
+                _commandService.Start("dotnet new gitignore", slnRef.Directory);
 
                 var apiDirectory = $"{slnRef.SrcDirectory}{Path.DirectorySeparatorChar}{_apiProjectName}";
 
