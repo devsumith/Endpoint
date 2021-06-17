@@ -40,6 +40,16 @@ namespace Endpoint.Application.Builders
                 .WithUsing("Xunit")
                 .WithNamespace($"{_rootNamespace}.UnitTests")
                 .WithDirectory(_directory)
+                .WithMethod(new MethodBuilder().WithName("Constuctor")
+                .WithReturnType("void")
+                .WithAttribute("[Fact]")
+                .WithBody(new() { $"var actual = Create{((Token)_name).PascalCase}();" })
+                .Build())
+                .WithMethod(new MethodBuilder()
+                .WithName($"Create{((Token)_name).PascalCase}")
+                .WithReturnType(((Token)_name).PascalCase)
+                .WithBody(new() { "return new();" })
+                .Build())
                 .Build();
         }
     }

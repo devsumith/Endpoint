@@ -25,9 +25,9 @@ namespace Endpoint.Application.Builders
         public MethodBuilder()
         {
             _accessModifier = AccessModifier.Public;
-            _contents = new List<string>();
-            _attributes = new List<string>();
-            _body = new List<string>();
+            _contents = new ();
+            _attributes = new ();
+            _body = new ();
             _authorize = false;
             _static = false;
             _name = "";
@@ -116,6 +116,12 @@ namespace Endpoint.Application.Builders
             return this;
         }
 
+        public MethodBuilder WithAttribute(string attribute)
+        {
+            _attributes.Add(attribute);
+
+            return this;
+        }
         public string[] Build()
         {
             if (_endpointType != default)
@@ -158,6 +164,11 @@ namespace Endpoint.Application.Builders
                 _contents = _contents.Concat(new MethodBodyBuilder(_endpointType, _indent, _resource).Build()).ToList();
 
                 return _contents.ToArray();
+            }
+
+            foreach(var attribute in _attributes)
+            {
+                _contents.Add(attribute);
             }
 
             var methodSignatureBuilder = new MethodSignatureBuilder()

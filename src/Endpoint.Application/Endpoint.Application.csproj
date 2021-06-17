@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <None Remove="Builders\AggregateBuilder.txt" />
+    <None Remove="Builders\ApiTest.txt" />
     <None Remove="Builders\AppSettingsBuilder.txt" />
     <None Remove="Builders\ControllerTestBuilder.txt" />
     <None Remove="Builders\DependenciesBuilder.txt" />
@@ -26,6 +27,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Builders\AggregateBuilder.txt" />
+    <EmbeddedResource Include="Builders\ApiTest.txt" />
   </ItemGroup>
 
   <ItemGroup>

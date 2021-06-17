@@ -16,6 +16,7 @@ namespace Endpoint.Application.Models
         public string ApplicationDirectory { get; set; }
         public string InfrastructureDirectory { get; set; }
         public string ApiDirectory { get; set; }
+        public string[] AppDirectories { get; set; }
         public string BuildingBlocksCoreNamespace { get; set; } = "BuildingBlocks.Core";
         public string BuildingBlocksEventStoreNamespace { get; set; } = "BuildingBlocks.EventStore";
         public string Store { get; set; }
