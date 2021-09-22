@@ -10,7 +10,9 @@
     <None Remove="Builders\AppSettingsBuilder.txt" />
     <None Remove="Builders\ControllerTestBuilder.txt" />
     <None Remove="Builders\DependenciesBuilder.txt" />
+    <None Remove="Builders\DomainEventBuilder.txt" />
     <None Remove="Builders\DtoBuilder.txt" />
+    <None Remove="Builders\EventHandlerBuilder.txt" />
     <None Remove="Builders\ExtensionsBuilder.txt" />
     <None Remove="Builders\LaunchSettingsBuilder.txt" />
     <None Remove="Builders\ProgramBuilder.txt" />
@@ -23,6 +25,14 @@
     <None Remove="Builders\StartupBuilder.txt" />
     <None Remove="Builders\ValidationBehaviorBuilder.txt" />
     <None Remove="Builders\ValidatorBuilder.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Builders\DomainEventBuilder.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Builders\EventHandlerBuilder.txt" />
   </ItemGroup>
 
   <ItemGroup>

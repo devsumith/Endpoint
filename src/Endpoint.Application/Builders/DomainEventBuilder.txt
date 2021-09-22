@@ -1,0 +1,10 @@
+﻿namespace Coop.Core.DomainEvents
+{
+    public class CreatedNotice : DomainEventBase
+    {
+        public CreatedNotice()
+        {
+
+        }
+    }
+}

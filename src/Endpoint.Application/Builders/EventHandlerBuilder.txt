@@ -1,0 +1,21 @@
+﻿using Coop.Api.Core;
+using Coop.Api.Interfaces;
+using Coop.Api.Models;
+using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Coop.Api.Features
+{
+    public class ProfileEventHandler
+    {
+        private readonly ICoopDbContext _context;
+        private readonly IMessageHandlerContext _messageHandlerContext;
+
+        public ProfileEventHandler(ICoopDbContext context, IMessageHandlerContext messageHandlerContext)
+        {
+            _context = context;
+            _messageHandlerContext = messageHandlerContext;
+        }
+    }
+}
