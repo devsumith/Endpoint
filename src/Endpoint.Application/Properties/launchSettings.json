@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Endpoint.Cli": {
+    "Endpoint.Application": {
       "commandName": "Project",
       "commandLineArgs": "model Foo -d C:\\Projects\\ComplexAngularForms\\src\\ComplexAngularForms.Api"
     }

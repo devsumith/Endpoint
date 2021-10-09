@@ -19,6 +19,16 @@ namespace Endpoint.Application.Builders
 
         public ModelBuilder(
             IContext context,
+            ICommandService commandService,
+            ITemplateProcessor templateProcessor,
+            ITemplateLocator templateLocator,
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
+        {
+            _context = context;
+        }
+
+        public ModelBuilder(
+            IContext context,
             IFileSystem fileSystem,
             string domainDirectory,
             string domainNamespace,
