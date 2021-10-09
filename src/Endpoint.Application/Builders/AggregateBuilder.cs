@@ -1,5 +1,4 @@
 using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {

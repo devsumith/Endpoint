@@ -166,6 +166,40 @@ namespace Endpoint.UnitTests
         }
 
         [Fact]
+        public void ClassWithLogicInConstructor()
+        {
+            var context = new Context();
+
+            var expected = new List<string> {
+                "namespace CustomerService.Api.Models",
+                "{",
+                "    public class Customer",
+                "    {",
+                "        public Customer() {",
+                "            Console.Writeline(\" Logic!\");",
+                "        }",
+                "    }",
+                "}"
+            }.ToArray();
+
+            new ClassBuilder("Customer", context, Mock.Of<IFileSystem>())
+                .WithDirectory("")
+                .WithNamespace("CustomerService.Api.Models")
+                .WithConstructor(new List<string>
+                {
+                    "Console.Writeline(\" Logic!\");"
+                })
+                .Build();
+
+            var actual = context.First().Value;
+
+            for (var i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
+        }
+
+        [Fact]
         public void DbContext()
         {
             var context = new Context();
@@ -192,6 +226,9 @@ namespace Endpoint.UnitTests
                 .WithNamespace("CustomerService.Api.Data")
                 .WithInterface("ICustomerServiceDbContext")
                 .WithBase("DbContext")
+                .WithConstructor(new List<string> { 
+                    "Console.Writeline();"
+                })
                 .WithBaseDependency("DbContextOptions","options")
                 .WithProperty(new PropertyBuilder().WithName("Customers").WithType(new TypeBuilder().WithGenericType("DbSet","Customer").Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build())
                 .Build();

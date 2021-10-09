@@ -17,7 +17,7 @@ namespace Endpoint.Application.Builders
         private List<string> _content;
         private string _name;
         private string _namespace;
-        private string[] _constructor;
+        private List<string> _constructor = new List<string>();
         private string _directory;
         private List<string> _usings;
         private List<KeyValuePair<string,string>> _dependencies;
@@ -132,7 +132,7 @@ namespace Endpoint.Application.Builders
             return this;
         }
 
-        public ClassBuilder WithConstructor(string[] constructor)
+        public ClassBuilder WithConstructor(List<string> constructor)
         {
             _constructor = constructor;
             return this;
@@ -211,7 +211,7 @@ namespace Endpoint.Application.Builders
                 if (_type == "interface")
                     _content.Add($"public interface I{_name}{GetInheritance()}".Indent(_indent));
 
-                if (_methods.Count == 0 && _dependencies.Count == 0 && _properties.Count == 0 && _classes.Count == 0 && _ruleFors.Count == 0)
+                if (_methods.Count == 0 && _dependencies.Count == 0 && _properties.Count == 0 && _classes.Count == 0 && _ruleFors.Count == 0 && _constructor.Count == 0)
                 {
                     _content[_content.Count - 1] = _content[_content.Count - 1] + " { }";
                 }
@@ -234,9 +234,10 @@ namespace Endpoint.Application.Builders
                         .WithParameters(new(_dependencies))
                         .WithBaseParameters(new(_baseDependencies))
                         .WithRuleFors(this._ruleFors)
+                        .WithBody(_constructor.ToList())
                         .WithAccessModifier(Public);
 
-                    if (_dependencies.Count > 0 || _baseDependencies.Count > 0 || _ruleFors.Count() > 0)
+                    if (_dependencies.Count > 0 || _baseDependencies.Count > 0 || _ruleFors.Count() > 0 || _constructor.Count() > 0)
                     {
                         if (_dependencies.Count > 0)
                         {
