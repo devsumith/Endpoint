@@ -85,7 +85,7 @@ namespace Endpoint.Application.Builders
                         "SavingChanges += DbContext_SavingChanges;"
                     })
 
-                    .WithMethod(new MethodBuilder().WithName("DbContext_SavingChanges").WithReturnType("void").WithAccessModifier(AccessModifier.Private).WithOverride()
+                    .WithMethod(new MethodBuilder().WithName("DbContext_SavingChanges").WithReturnType("void").WithAccessModifier(AccessModifier.Private)
                     .WithParameter("object sender")
                     .WithParameter("SavingChangesEventArgs e")
                     .WithBody(new List<string>
