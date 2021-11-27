@@ -50,7 +50,7 @@ namespace Endpoint.Application.Features
             {
                 _commandService = commandService;
             }
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
 
                 _port = request.Port;
@@ -71,7 +71,7 @@ namespace Endpoint.Application.Features
                     .Build();
 
                 _commandService.Start("git init", slnRef.Directory);
-                
+
                 _commandService.Start("dotnet new gitignore", slnRef.Directory);
 
                 var apiDirectory = $"{slnRef.SrcDirectory}{Path.DirectorySeparatorChar}{_apiProjectName}";
@@ -83,6 +83,7 @@ namespace Endpoint.Application.Features
                     .WithDbContext(_dbContextName)
                     .SetRootNamespace(_rootNamespace)
                     .WithResource(_resource)
+                    .WithResource("StoredEvent")
                     .WithModelsNamespace(_modelsNamespace)
                     .SetDomainNamespace(_apiProjectNamespace)
                     .SetApplicationNamespace(_apiProjectNamespace)
@@ -110,6 +111,19 @@ namespace Endpoint.Application.Features
                     .WithDbContext(_dbContextName)
                     .Build();
 
+                Create<ResourceBuilder>((a, b, c, d) => new(a, b, c, d))
+                    .SetDomainDirectory(apiDirectory)
+                    .SetInfrastructureDirectory(apiDirectory)
+                    .SetApplicationDirectory(apiDirectory)
+                    .SetApiDirectory(apiDirectory)
+                    .SetDomainNamespace(_apiProjectNamespace)
+                    .SetInfrastructureNamespace(_apiProjectNamespace)
+                    .SetApplicationNamespace(_apiProjectNamespace)
+                    .SetApiNamespace(_apiProjectNamespace)
+                    .WithResource("StoredEvent")
+                    .WithDbContext(_dbContextName)
+                    .Build();
+
                 slnRef.Add(projRef.FullPath);
 
                 slnRef.OpenInVisualStudio();
@@ -131,7 +145,7 @@ namespace Endpoint.Application.Features
 
                 projRef.Run();
 
-                return new();
+                return Task.FromResult(new Unit());
             }
         }
     }

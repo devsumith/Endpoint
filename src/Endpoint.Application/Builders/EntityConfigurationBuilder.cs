@@ -29,8 +29,8 @@ namespace Endpoint.Application.Builders
                 var configureMethod = new MethodBuilder()
                     .WithName("Configure")
                     .WithReturnType("void")
-                    .WithBody(new () {  "" })
-                    .WithParameter(new ParameterBuilder(new TypeBuilder().WithGenericType("EntityTypeBuilder", ((Token)_entity).PascalCase)                    
+                    .WithBody(new() { "" })
+                    .WithParameter(new ParameterBuilder(new TypeBuilder().WithGenericType("EntityTypeBuilder", ((Token)_entity).PascalCase)
                     .Build(), "builder").Build()).Build();
 
                 return new ClassBuilder($"{((Token)_entity).PascalCase}Configuration", _context, _fileSystem)

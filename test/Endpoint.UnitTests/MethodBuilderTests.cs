@@ -9,7 +9,7 @@ namespace Endpoint.UnitTests
     public class MethodBuilderTests
     {
         [Fact]
-        public async void Constructor()
+        public void Constructor()
         {
             Setup();
 
@@ -155,7 +155,7 @@ namespace Endpoint.UnitTests
                 .WithAuthorize(false)
                 .Build();
 
-            for(var i = 0; i < expected.Length; i++)
+            for (var i = 0; i < expected.Length; i++)
             {
                 Assert.Equal(expected[i], actual[i]);
             }
@@ -206,13 +206,14 @@ namespace Endpoint.UnitTests
                 "}"
             }.ToArray();
 
-            var actual = new MethodBuilder()                
+            var actual = new MethodBuilder()
                 .IsStatic()
                 .WithName("ToDto")
                 .WithReturnType("CustomerDto")
                 .WithPropertyName("CustomerId")
-                .WithParameter(new ParameterBuilder("Customer","customer", true).Build())
-                .WithBody(new() {
+                .WithParameter(new ParameterBuilder("Customer", "customer", true).Build())
+                .WithBody(new()
+                {
                     "    return new ()",
                     "    {",
                     "        CustomerId = customer.CustomerId",

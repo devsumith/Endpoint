@@ -7,7 +7,7 @@ namespace Endpoint.UnitTests
     public class DbContextBuilderTests
     {
         [Fact]
-        public async void Constructor()
+        public void Constructor()
         {
             Setup();
 
@@ -15,7 +15,7 @@ namespace Endpoint.UnitTests
         }
 
         [Fact]
-        public async void Build()
+        public void Build()
         {
             Setup();
 

@@ -46,7 +46,7 @@ namespace Endpoint.Application.Features
                 _settingsProvider = settingsProvider;
             }
 
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvider.Get(request.Directory);
 
@@ -57,7 +57,7 @@ namespace Endpoint.Application.Features
                     .SetDomainNamespace(settings.DomainNamespace)
                     .Build();
 
-                return new ();
+                return Task.FromResult(new Unit());
             }
         }
     }

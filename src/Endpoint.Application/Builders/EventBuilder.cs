@@ -6,13 +6,13 @@ using static Endpoint.Application.Constants;
 
 namespace Endpoint.Application.Builders
 {
-    public class EventBuilder: BuilderBase<EventBuilder>
+    public class EventBuilder : BuilderBase<EventBuilder>
     {
         public EventBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         private Token _aggregate;

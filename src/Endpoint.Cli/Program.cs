@@ -25,8 +25,8 @@ namespace Endpoint.Cli
         }
 
         public static void ProcessArgs(IMediator mediator, string[] args)
-        {            
-            if(args.Length == 0 || args[0].StartsWith("-"))
+        {
+            if (args.Length == 0 || args[0].StartsWith("-"))
             {
                 args = new string[1] { "default" }.Concat(args).ToArray();
             }

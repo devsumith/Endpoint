@@ -63,7 +63,7 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            
+
             var validator = new ClassBuilder("Validator", _context, _fileSystem)
                 .WithRuleFor(new RuleForBuilder().WithNotNull().WithEntity(_entity).Build())
                 .WithRuleFor(new RuleForBuilder().WithValidator().WithEntity(_entity).Build())

@@ -20,7 +20,8 @@ namespace Endpoint.Application.Builders
 
         public ParameterBuilder WithFrom(From from)
         {
-            _from = from switch {
+            _from = from switch
+            {
                 From.Route => new AttributeBuilder().WithName("FromRoute").Build(),
                 From.Body => new AttributeBuilder().WithName("FromBody").Build(),
                 _ => throw new System.NotImplementedException()
@@ -31,9 +32,9 @@ namespace Endpoint.Application.Builders
 
         public string Build()
         {
-            if(!string.IsNullOrEmpty(_from))
+            if (!string.IsNullOrEmpty(_from))
             {
-                _string.Append(_from);                
+                _string.Append(_from);
             }
             if (_extension)
             {

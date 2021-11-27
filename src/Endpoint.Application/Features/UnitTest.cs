@@ -10,7 +10,8 @@ namespace Endpoint.Application.Features
     internal class UnitTest
     {
         [Verb("unit-test")]
-        internal class Request : IRequest<Unit> {
+        internal class Request : IRequest<Unit>
+        {
             [Value(0)]
             public string Name { get; set; }
 
@@ -30,17 +31,17 @@ namespace Endpoint.Application.Features
                 _fileSystem = fileSystem;
                 _settingsProvider = settingsProvider;
             }
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvider.Get();
 
-                new UnitTestBuilder(_context,_fileSystem)
+                new UnitTestBuilder(_context, _fileSystem)
                     .WithName(request.Name)
                     .WithRootNamespace(settings.RootNamespace)
                     .WithDirectory(request.Directory)
                     .Build();
 
-                return new();
+                return Task.FromResult(new Unit());
             }
         }
     }

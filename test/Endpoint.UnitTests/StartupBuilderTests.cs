@@ -7,7 +7,7 @@ namespace Endpoint.UnitTests
     public class StartupBuilderTests
     {
         [Fact]
-        public async void Constructor()
+        public void Constructor()
         {
             Setup();
 
@@ -15,7 +15,7 @@ namespace Endpoint.UnitTests
         }
 
         [Fact]
-        public async void Build()
+        public void Build()
         {
             Setup();
 
@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static StartupBuilder CreateStartupBuilder()
-            => Create((c,  tp, tl, f) => new StartupBuilder(c, tp, tl, f));
+            => Create((c, tp, tl, f) => new StartupBuilder(c, tp, tl, f));
     }
 }

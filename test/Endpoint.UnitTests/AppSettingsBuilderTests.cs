@@ -10,7 +10,7 @@ namespace Endpoint.UnitTests
     public class AppSettingsBuilderTests
     {
         [Fact]
-        public async void Constructor()
+        public void Constructor()
         {
             Setup();
 
@@ -18,7 +18,7 @@ namespace Endpoint.UnitTests
         }
 
         [Fact]
-        public async void Build()
+        public void Build()
         {
             Setup();
 

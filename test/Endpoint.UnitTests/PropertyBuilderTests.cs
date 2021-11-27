@@ -8,7 +8,7 @@ namespace Endpoint.UnitTests
     public class PropertyBuilderTests
     {
         [Fact]
-        public async void Constructor()
+        public void Constructor()
         {
             Setup();
 

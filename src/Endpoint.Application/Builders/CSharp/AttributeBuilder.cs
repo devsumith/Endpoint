@@ -61,12 +61,12 @@ namespace Endpoint.Application.Builders
                     _ => throw new System.NotImplementedException()
                 });
 
-            if(!string.IsNullOrEmpty(route))
+            if (!string.IsNullOrEmpty(route))
             {
                 builder.WithParam($"\"{route}\"");
             }
 
-            if(!string.IsNullOrEmpty(routeName))
+            if (!string.IsNullOrEmpty(routeName))
             {
                 builder.WithProperty("Name", routeName);
             }
@@ -80,7 +80,7 @@ namespace Endpoint.Application.Builders
                 .WithName("ProducesResponseType")
                 .WithIndent(indent);
 
-            if(!string.IsNullOrEmpty(type))
+            if (!string.IsNullOrEmpty(type))
             {
                 builder.WithParam($"typeof({type})");
             }
@@ -114,8 +114,8 @@ namespace Endpoint.Application.Builders
             {
                 attributes.Add(new AttributeBuilder().WithName("Authorize").WithIndent(indent).Build());
             }
-            
-            if(endpointType == EndpointType.GetById)
+
+            if (endpointType == EndpointType.GetById)
             {
                 attributes.Add(WithHttp(HttpVerbs.Get, "{" + ((Token)resource).CamelCase + "Id}", $"{requestType}Route", indent));
                 attributes.Add(WithProducesResponseType(HttpStatusCode.NotFound, "string", indent: indent));
@@ -150,7 +150,7 @@ namespace Endpoint.Application.Builders
             attributes.Add(WithProducesResponseType(HttpStatusCode.BadRequest, "ProblemDetails", indent: indent));
             attributes.Add(WithProducesResponseType(HttpStatusCode.OK, $"{requestType}.Response", indent: indent));
 
-            return attributes.ToArray();           
+            return attributes.ToArray();
         }
 
 
@@ -176,7 +176,7 @@ namespace Endpoint.Application.Builders
                 }
 
                 _string.Append(')');
-            } 
+            }
             else
             {
                 if (_properties.Count > 0)
@@ -190,7 +190,7 @@ namespace Endpoint.Application.Builders
             }
 
             _string.Append(']');
-            
+
             return _string.ToString();
         }
     }

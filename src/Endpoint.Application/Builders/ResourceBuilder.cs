@@ -41,7 +41,7 @@ namespace Endpoint.Application.Builders
             return this;
         }
 
-        public ResourceBuilder WithSettings(Settings settings)
+        public new ResourceBuilder WithSettings(Settings settings)
         {
             _dbContextName = settings.DbContext;
             _domainDirectory = (Token)settings.DomainDirectory;
@@ -59,10 +59,10 @@ namespace Endpoint.Application.Builders
         public void Build()
         {
             new ModelBuilder(
-                new Context(), 
-                _fileSystem, 
-                _domainDirectory.Value, 
-                _domainNamespace.Value, 
+                new Context(),
+                _fileSystem,
+                _domainDirectory.Value,
+                _domainNamespace.Value,
                 _entityName
                 ).Build();
 

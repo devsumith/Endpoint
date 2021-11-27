@@ -58,12 +58,12 @@ namespace Endpoint.Application.Builders
 
         public string Build()
         {
-            if(!string.IsNullOrEmpty(_accessModifier))
+            if (!string.IsNullOrEmpty(_accessModifier))
             {
                 _string.Append(_accessModifier)
                 .Append(' ');
             }
-            
+
             return _string.Append(_type)
                 .Append(' ')
                 .Append(_name)

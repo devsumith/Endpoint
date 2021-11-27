@@ -62,7 +62,7 @@ namespace Endpoint.Application.Builders
         }
 
         public void Build()
-        {           
+        {
             var request = new ClassBuilder("Request", _context, _fileSystem)
                 .WithInterface(new TypeBuilder().WithGenericType("IRequest", "Response").Build())
                 .WithProperty(new PropertyBuilder().WithType("Guid").WithName($"{((Token)_entity).PascalCase}Id").WithAccessors(new AccessorsBuilder().Build()).Build())

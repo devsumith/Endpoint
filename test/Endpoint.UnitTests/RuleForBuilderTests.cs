@@ -6,8 +6,8 @@ namespace Endpoint.UnitTests
     public class RuleForBuilderTests
     {
         [Fact]
-        public async void Constructor()
-        {            
+        public void Constructor()
+        {
             var sut = new RuleForBuilder();
         }
 

@@ -7,7 +7,7 @@ namespace Endpoint.UnitTests
     public class DependenciesBuilderTests
     {
         [Fact]
-        public async void Constructor()
+        public void Constructor()
         {
             Setup();
 
@@ -15,7 +15,7 @@ namespace Endpoint.UnitTests
         }
 
         [Fact]
-        public async void Build()
+        public void Build()
         {
             Setup();
 
@@ -32,6 +32,6 @@ namespace Endpoint.UnitTests
         }
 
         private static DependenciesBuilder CreateDependenciesBuilder()
-            => Create((c,  tp, tl, f) => new DependenciesBuilder(c, tp, tl, f));
+            => Create((c, tp, tl, f) => new DependenciesBuilder(c, tp, tl, f));
     }
 }

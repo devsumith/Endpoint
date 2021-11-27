@@ -74,7 +74,7 @@ namespace Endpoint.UnitTests
 
             var actual = context.ElementAt(0).Value;
 
-            for(var i = 0; i < expected.Length; i++)
+            for (var i = 0; i < expected.Length; i++)
             {
                 Assert.Equal(actual[i], expected[i]);
             }
@@ -106,7 +106,7 @@ namespace Endpoint.UnitTests
 
             var actual = context.First().Value;
 
-            for(var i = 0; i <expected.Length; i++)
+            for (var i = 0; i < expected.Length; i++)
             {
                 Assert.Equal(expected[i], actual[i]);
             }
@@ -226,11 +226,11 @@ namespace Endpoint.UnitTests
                 .WithNamespace("CustomerService.Api.Data")
                 .WithInterface("ICustomerServiceDbContext")
                 .WithBase("DbContext")
-                .WithConstructor(new List<string> { 
+                .WithConstructor(new List<string> {
                     "Console.Writeline();"
                 })
-                .WithBaseDependency("DbContextOptions","options")
-                .WithProperty(new PropertyBuilder().WithName("Customers").WithType(new TypeBuilder().WithGenericType("DbSet","Customer").Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build())
+                .WithBaseDependency("DbContextOptions", "options")
+                .WithProperty(new PropertyBuilder().WithName("Customers").WithType(new TypeBuilder().WithGenericType("DbSet", "Customer").Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build())
                 .Build();
 
             var actual = context.First().Value;
@@ -264,12 +264,12 @@ namespace Endpoint.UnitTests
                 .WithUsing("CustomerService.Api.Models")
                 .WithUsing("Microsoft.EntityFrameworkCore")
                 .WithNamespace("CustomerService.Application.Interfaces")
-                .WithProperty(new PropertyBuilder().WithName("Customers").WithAccessModifier(AccessModifier.Inherited).WithType(new TypeBuilder().WithGenericType("DbSet","Customer").Build()).WithAccessors(new AccessorsBuilder().WithGetterOnly().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithName("Customers").WithAccessModifier(AccessModifier.Inherited).WithType(new TypeBuilder().WithGenericType("DbSet", "Customer").Build()).WithAccessors(new AccessorsBuilder().WithGetterOnly().Build()).Build())
                 .WithMethodSignature(new MethodSignatureBuilder()
                 .WithAsync(false)
                 .WithAccessModifier(AccessModifier.Inherited)
                 .WithName("SaveChangesAsync")
-                .WithReturnType(new TypeBuilder().WithGenericType("Task","int").Build())
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", "int").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build()).Build());
 
             sut.Build();
@@ -294,7 +294,7 @@ namespace Endpoint.UnitTests
 
             new ClassBuilder("Request", context, Mock.Of<IFileSystem>())
                 .WithDirectory("")
-                .WithInterface(new TypeBuilder().WithGenericType("IRequest","Response").Build())
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest", "Response").Build())
                 .WithNamespace("CustomerService.Application.Features")
                 .Build();
 
@@ -350,7 +350,7 @@ namespace Endpoint.UnitTests
 
             new ClassBuilder("CustomerValidator", context, Mock.Of<IFileSystem>())
                 .WithDirectory("")
-                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator","CustomerDto").Build())
+                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", "CustomerDto").Build())
                 .WithNamespace("CustomerService.Application.Features")
                 .Build();
 
@@ -373,7 +373,7 @@ namespace Endpoint.UnitTests
 
             new ClassBuilder("Validator", context, Mock.Of<IFileSystem>())
                 .WithDirectory("")
-                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator","Request").Build())
+                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", "Request").Build())
                 .Build();
 
             var actual = context.First().Value;
@@ -420,9 +420,9 @@ namespace Endpoint.UnitTests
 
             var handler = new ClassBuilder("Handler", context, Mock.Of<IFileSystem>())
                 .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", "Request", "Response").Build())
-                .WithDependency("ICustomerServiceDbContext","context")
+                .WithDependency("ICustomerServiceDbContext", "context")
                 .WithMethod(new MethodBuilder().WithName("Handle")
-                .WithReturnType(new TypeBuilder().WithGenericType("Task","Response").Build())
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", "Response").Build())
                 .WithParameter(new ParameterBuilder("Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {

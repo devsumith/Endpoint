@@ -19,7 +19,7 @@ namespace Endpoint.Application.Services
 
         public void WriteAllLines(string path, string[] contents)
         {
-            if(File.Exists(path))
+            if (File.Exists(path))
             {
                 File.Delete(path);
             }

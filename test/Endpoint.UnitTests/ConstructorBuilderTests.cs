@@ -8,7 +8,7 @@ namespace Endpoint.UnitTests
     {
 
         [Fact]
-        public async void Constructor()
+        public void Constructor()
         {
             var sut = new ConstructorBuilder("Customer");
         }
@@ -28,9 +28,9 @@ namespace Endpoint.UnitTests
         [Fact]
         public void BasicWithDependency()
         {
-            var expected = new string[] { 
-                "CustomerController(IMediator mediator)", 
-                "    => _mediator = mediator;" 
+            var expected = new string[] {
+                "CustomerController(IMediator mediator)",
+                "    => _mediator = mediator;"
             };
 
             var sut = new ConstructorBuilder("CustomerController")

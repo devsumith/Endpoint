@@ -16,7 +16,7 @@ namespace Endpoint.Application.Builders
             IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
-        protected string _apiDirectory => $"{_directory.Value}{Path.DirectorySeparatorChar}{_name}";
+        protected new string _apiDirectory => $"{_directory.Value}{Path.DirectorySeparatorChar}{_name}";
 
         protected string _apiProjectFullPath => $"{_apiDirectory}{Path.DirectorySeparatorChar}{_apiProjectName}.csproj";
 

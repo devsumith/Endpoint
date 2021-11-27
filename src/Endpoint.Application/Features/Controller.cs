@@ -33,7 +33,7 @@ namespace Endpoint.Application.Features
                 _fileSystem = fileSystem;
             }
 
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
@@ -56,7 +56,7 @@ namespace Endpoint.Application.Features
                     .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Delete).WithResource(request.Entity).WithAuthorize(false).Build())
                     .Build();
 
-                return new();
+                return Task.FromResult(new Unit());
             }
         }
     }

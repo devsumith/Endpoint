@@ -54,7 +54,7 @@ namespace Endpoint.Application.Builders
 
                 _fileSystem.WriteAllLines($@"{_applicationDirectory.Value}/Features/{_entityName.PascalCasePlural}/{_name.PascalCase}.cs", contents);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw e;
             }

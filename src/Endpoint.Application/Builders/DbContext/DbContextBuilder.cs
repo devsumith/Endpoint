@@ -24,8 +24,8 @@ namespace Endpoint.Application.Builders
         { }
 
         public DbContextBuilder(
-            string dbContext, 
-            IContext context, 
+            string dbContext,
+            IContext context,
             IFileSystem fileSystem,
             string infrastructureDirectory,
             string infrastructureNamespace,
@@ -34,7 +34,7 @@ namespace Endpoint.Application.Builders
             string applicationDirectory,
             string applicationNamespace,
             string[] models
-            ): base(default,default,default,fileSystem)
+            ) : base(default, default, default, fileSystem)
         {
             _dbContext = (Token)dbContext;
             _context = context;
@@ -160,11 +160,12 @@ namespace Endpoint.Application.Builders
                 dbContextInterfaceBuilder.Build();
 
                 dbContextBuilder.Build();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 throw e;
             }
-            
+
 
         }
     }

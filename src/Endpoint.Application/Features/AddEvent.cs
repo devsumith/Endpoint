@@ -40,7 +40,7 @@ namespace Endpoint.Application.Features
                 _settingsProvider = settingsProvider;
             }
 
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvider.Get(request.Directory);
 
@@ -55,7 +55,7 @@ namespace Endpoint.Application.Features
 
                 _commandService.Start($"endpoint event {request.Aggregate} {eventName}", domainEventsDirectory);
 
-                var whenTemplate = new string[4] { 
+                var whenTemplate = new string[4] {
                     "        public void When({{ namePascalCase }} {{ nameCamelCase }})",
                     "        {",
                     "            Value = {{ nameCamelCase }}.Value",
@@ -113,7 +113,7 @@ namespace Endpoint.Application.Features
 
                 _fileSystem.WriteAllLines($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}{((Token)request.Aggregate).PascalCase}.cs", newLines.ToArray());
 
-                return new();
+                return Task.FromResult(new Unit());
             }
         }
     }

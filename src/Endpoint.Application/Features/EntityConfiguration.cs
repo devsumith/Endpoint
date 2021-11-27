@@ -10,11 +10,12 @@ namespace Endpoint.Application.Features
     internal class EntityConfiguration
     {
         [Verb("entity-config")]
-        internal class Request : IRequest<Unit> {
+        internal class Request : IRequest<Unit>
+        {
             [Value(0)]
             public string Entity { get; set; }
 
-            [Option('d',Required = false)]
+            [Option('d', Required = false)]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
         }
 
@@ -28,14 +29,14 @@ namespace Endpoint.Application.Features
                 _settingsProvider = settingsProvider;
                 _fileSystem = fileSystem;
             }
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvider.Get();
 
                 new EntityConfigurationBuilder(request.Entity, settings.InfrastructureNamespace, settings.DomainNamespace, request.Directory, _fileSystem)
                     .Build();
 
-                return new();
+                return Task.FromResult(new Unit());
             }
         }
     }

@@ -7,7 +7,7 @@ namespace Endpoint.UnitTests
     public class ModelBuilderTests
     {
         [Fact]
-        public async void Constructor()
+        public void Constructor()
         {
             Setup();
 
@@ -15,7 +15,7 @@ namespace Endpoint.UnitTests
         }
 
         [Fact]
-        public async void Build()
+        public void Build()
         {
             Setup();
 
@@ -34,6 +34,6 @@ namespace Endpoint.UnitTests
         }
 
         private static ModelBuilder CreateModelBuilder()
-            => Create((c,  tp, tl, f) => new ModelBuilder(c, tp, tl, f));
+            => Create((c, tp, tl, f) => new ModelBuilder(c, tp, tl, f));
     }
 }

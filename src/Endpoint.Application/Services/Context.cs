@@ -2,12 +2,12 @@
 
 namespace Endpoint.Application.Services
 {
-    public interface IContext: IDictionary<string,string[]>
+    public interface IContext : IDictionary<string, string[]>
     {
 
     }
 
-    public class Context: Dictionary<string,string[]>, IContext
+    public class Context : Dictionary<string, string[]>, IContext
     {
     }
 }

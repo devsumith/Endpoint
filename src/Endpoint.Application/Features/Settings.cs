@@ -39,7 +39,7 @@ namespace Endpoint.Application.Features
                 _commandService = commandService;
             }
 
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var template = _templateLocator.Get("Settings");
 
@@ -52,7 +52,7 @@ namespace Endpoint.Application.Features
 
                 _fileSystem.WriteAllLines($@"{request.Directory}\clisettings.json", result);
 
-                return new();
+                return Task.FromResult(new Unit());
             }
         }
     }

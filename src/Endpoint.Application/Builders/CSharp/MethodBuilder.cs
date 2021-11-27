@@ -25,9 +25,9 @@ namespace Endpoint.Application.Builders
         public MethodBuilder()
         {
             _accessModifier = AccessModifier.Public;
-            _contents = new ();
-            _attributes = new ();
-            _body = new ();
+            _contents = new();
+            _attributes = new();
+            _body = new();
             _authorize = false;
             _static = false;
             _name = "";
@@ -166,7 +166,7 @@ namespace Endpoint.Application.Builders
                 return _contents.ToArray();
             }
 
-            foreach(var attribute in _attributes)
+            foreach (var attribute in _attributes)
             {
                 _contents.Add(attribute);
             }
@@ -177,8 +177,8 @@ namespace Endpoint.Application.Builders
                 .WithOverride(_override)
                 .IsStatic(_static)
                 .WithAsync(_async);
-                
-            foreach(var parameter in _parameters)
+
+            foreach (var parameter in _parameters)
             {
                 methodSignatureBuilder.WithParameter(parameter);
             }
@@ -188,16 +188,16 @@ namespace Endpoint.Application.Builders
             _contents.Add(methodSignatureBuilder.Build());
 
 
-            if(_body.Count > 0)
+            if (_body.Count > 0)
             {
                 _contents.Add("{");
-                foreach(var line in _body)
+                foreach (var line in _body)
                 {
                     _contents.Add(line.Indent(_indent + 1));
                 }
                 _contents.Add("}");
             }
-            
+
             return _contents.ToArray();
         }
     }

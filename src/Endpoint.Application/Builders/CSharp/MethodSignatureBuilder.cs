@@ -10,7 +10,7 @@ namespace Endpoint.Application.Builders
         private bool _async;
         private int _indent;
         private string _accessModifier;
-        private string _methodName;        
+        private string _methodName;
         private string _returnType;
         private List<string> _parameters;
         private bool _static;
@@ -72,7 +72,8 @@ namespace Endpoint.Application.Builders
 
         public MethodSignatureBuilder WithAccessModifier(AccessModifier accessModifier)
         {
-            _accessModifier = accessModifier switch { 
+            _accessModifier = accessModifier switch
+            {
                 AccessModifier.Public => "public",
                 AccessModifier.Private => "private",
                 AccessModifier.Protected => "protected",
@@ -102,7 +103,8 @@ namespace Endpoint.Application.Builders
         {
             EnsureValid();
 
-            if (!string.IsNullOrEmpty(_accessModifier)) {
+            if (!string.IsNullOrEmpty(_accessModifier))
+            {
                 _string.Append(_accessModifier);
                 _string.Append(' ');
             }
@@ -126,7 +128,7 @@ namespace Endpoint.Application.Builders
             }
 
             _string.Append(_returnType);
-            
+
             _string.Append(' ');
 
             _string.Append(_methodName);

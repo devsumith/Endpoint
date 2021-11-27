@@ -4,16 +4,16 @@ using System.IO;
 
 namespace Endpoint.Application.Builders
 {
-    public class QueryableExtensionsBuilder: BuilderBase<QueryableExtensionsBuilder>
+    public class QueryableExtensionsBuilder : BuilderBase<QueryableExtensionsBuilder>
     {
         public QueryableExtensionsBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService, templateProcessor, templateLocator, fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
-        
+
         public void Build()
         {
             var template = _templateLocator.Get(nameof(QueryableExtensionsBuilder));

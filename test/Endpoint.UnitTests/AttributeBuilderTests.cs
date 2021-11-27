@@ -9,7 +9,7 @@ namespace Endpoint.UnitTests
     {
 
         [Fact]
-        public async void Constructor()
+        public void Constructor()
         {
 
             var sut = new AttributeBuilder();

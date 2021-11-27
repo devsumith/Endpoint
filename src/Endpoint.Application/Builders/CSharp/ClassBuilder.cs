@@ -20,7 +20,7 @@ namespace Endpoint.Application.Builders
         private List<string> _constructor = new List<string>();
         private string _directory;
         private List<string> _usings;
-        private List<KeyValuePair<string,string>> _dependencies;
+        private List<KeyValuePair<string, string>> _dependencies;
         private List<string> _attributes;
         private List<string[]> _methods;
         private int _indent = 0;
@@ -32,7 +32,7 @@ namespace Endpoint.Application.Builders
         private List<string[]> _classes;
         private bool _static;
         private List<string> _ruleFors;
-        
+
         private void Indent() { _indent++; }
         private void Unindent() { _indent--; }
 
@@ -44,7 +44,7 @@ namespace Endpoint.Application.Builders
 
             _content = new List<string>();
             _usings = new List<string>();
-            _dependencies = new List<KeyValuePair<string, string>>();            
+            _dependencies = new List<KeyValuePair<string, string>>();
             _attributes = new List<string>();
             _methods = new List<string[]>();
             _properties = new List<string>();
@@ -122,7 +122,7 @@ namespace Endpoint.Application.Builders
 
         public ClassBuilder WithDependency(string type, string name)
         {
-            _dependencies.Add(new (type,name));
+            _dependencies.Add(new(type, name));
             return this;
         }
 
@@ -155,7 +155,7 @@ namespace Endpoint.Application.Builders
         {
             StringBuilder inheritance = new StringBuilder();
 
-            if(!string.IsNullOrEmpty(_baseClass))
+            if (!string.IsNullOrEmpty(_baseClass))
             {
                 inheritance.Append($": {_baseClass}");
 
@@ -175,7 +175,7 @@ namespace Endpoint.Application.Builders
 
         public string[] Class
         {
-            
+
             get
             {
                 _content = new();
@@ -270,14 +270,14 @@ namespace Endpoint.Application.Builders
                         }
                     }
 
-                    for(var i = 0; i < _classes.Count; i++)
+                    for (var i = 0; i < _classes.Count; i++)
                     {
                         foreach (var line in _classes.ElementAt(i))
                         {
                             _content.Add(line.Indent(_indent));
                         }
 
-                        if(i != _classes.Count -1)
+                        if (i != _classes.Count - 1)
                             _content.Add("");
                     }
 
@@ -296,7 +296,7 @@ namespace Endpoint.Application.Builders
 
                 var path = $"{_directory}{Path.DirectorySeparatorChar}{_name}.cs";
 
-                
+
                 return _content.ToArray();
             }
         }

@@ -22,11 +22,11 @@ namespace Endpoint.Application.Builders
             _resource = resource;
         }
 
-        
+
         public string[] Build()
-        {           
-            
-            if(_endpointType != null)
+        {
+
+            if (_endpointType != null)
             {
                 return _endpointType switch
                 {

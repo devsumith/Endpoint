@@ -14,7 +14,8 @@ namespace Endpoint.Application.Features
     internal class AddResource
     {
         [Verb("add-resource")]
-        internal class Request : IRequest<Unit> {
+        internal class Request : IRequest<Unit>
+        {
             [Value(0)]
             public string Resource { get; set; }
             [Option('d')]
@@ -38,7 +39,7 @@ namespace Endpoint.Application.Features
                 _templateProcessor = templateProcessor;
                 _templateLocator = templateLocator;
             }
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvider.Get(request.Directory);
 
@@ -59,7 +60,7 @@ namespace Endpoint.Application.Features
                             WriteIndented = true
                         })
                 });
-                return new();
+                return Task.FromResult(new Unit());
             }
         }
     }

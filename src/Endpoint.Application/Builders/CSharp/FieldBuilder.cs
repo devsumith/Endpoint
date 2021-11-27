@@ -43,7 +43,7 @@ namespace Endpoint.Application.Builders
 
         public string Build()
         {
-            if(_accessModifier != AccessModifier.Inherited)
+            if (_accessModifier != AccessModifier.Inherited)
             {
                 _string.Append(_accessModifier switch
                 {
@@ -55,7 +55,7 @@ namespace Endpoint.Application.Builders
                 _string.Append(' ');
             }
 
-            if(_readonly)
+            if (_readonly)
             {
                 _string.Append("readonly");
                 _string.Append(' ');

@@ -56,10 +56,10 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            
+
             var featureFolder = $"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{_entityName.PascalCasePlural}";
 
-            if(!Directory.Exists(featureFolder))
+            if (!Directory.Exists(featureFolder))
             {
                 _commandService.Start($"mkdir {featureFolder}");
 

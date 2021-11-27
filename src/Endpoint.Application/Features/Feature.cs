@@ -29,7 +29,7 @@ namespace Endpoint.Application.Features
                 _commandService = commandService;
                 _settingsProvider = settingsProvider;
             }
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 if (request.Directory.EndsWith("Features"))
                 {
@@ -47,7 +47,7 @@ namespace Endpoint.Application.Features
                 _commandService.Start($"endpoint validator {request.Entity}", request.Directory);
                 _commandService.Start($"endpoint extensions {request.Entity}", request.Directory);
 
-                return new();
+                return Task.FromResult(new Unit());
             }
         }
     }

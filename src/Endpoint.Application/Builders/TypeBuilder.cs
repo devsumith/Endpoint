@@ -33,10 +33,10 @@ namespace Endpoint.Application.Builders
 
         public string Build()
         {
-            return _isGeneric 
+            return _isGeneric
                 ? _string.Append(_generic).Append('<').Append(_type).Append('>').ToString()
                 : _string.Append(_type).ToString();
-            
+
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Endpoint.Application.Builders
             _notNull = false;
             _validator = false;
         }
-        
+
         public RuleForBuilder WithValidator(bool validator = true)
         {
             _validator = validator;
@@ -51,7 +51,7 @@ namespace Endpoint.Application.Builders
 
             content.Append($"RuleFor(request => request.{((Token)_entity).PascalCase})");
 
-            if(_notNull)
+            if (_notNull)
             {
                 content.Append(".NotNull()");
             }

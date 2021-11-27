@@ -28,16 +28,16 @@ namespace Endpoint.Application.Builders
 
         public string Build()
         {
-            if(_getterOnly)
+            if (_getterOnly)
                 return _string.Append("{ ")
                 .Append($"get;")
                 .Append(" }").ToString();
-            
-            if(string.IsNullOrEmpty(_setAccessModifier))
+
+            if (string.IsNullOrEmpty(_setAccessModifier))
                 return _string.Append("{ ")
                 .Append($"get; set;")
                 .Append(" }").ToString();
-            
+
             return _string.Append("{ ")
                 .Append($"get; {_setAccessModifier} set;")
                 .Append(" }").ToString();

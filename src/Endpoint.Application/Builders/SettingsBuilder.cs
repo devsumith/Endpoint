@@ -69,7 +69,7 @@ namespace Endpoint.Application.Builders
             }, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true               
+                WriteIndented = true
             });
 
             _fileSystem.WriteAllLines($"{_directory}{Path.DirectorySeparatorChar}clisettings.json", new List<string> { json }.ToArray());

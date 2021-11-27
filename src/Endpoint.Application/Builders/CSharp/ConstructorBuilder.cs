@@ -68,7 +68,7 @@ namespace Endpoint.Application.Builders.CSharp
             return this;
         }
 
-        public ConstructorBuilder WithParameters(Dictionary<string,string> parameters)
+        public ConstructorBuilder WithParameters(Dictionary<string, string> parameters)
         {
             this._parameters = parameters;
             return this;
@@ -84,9 +84,10 @@ namespace Endpoint.Application.Builders.CSharp
         {
             var signature = new StringBuilder();
 
-            if(_accessModifier != AccessModifier.Inherited)
+            if (_accessModifier != AccessModifier.Inherited)
             {
-                signature.Append(_accessModifier switch { 
+                signature.Append(_accessModifier switch
+                {
                     AccessModifier.Public => "public",
                     _ => throw new NotImplementedException()
                 });
@@ -98,11 +99,11 @@ namespace Endpoint.Application.Builders.CSharp
 
             var allParameters = _parameters.Concat(_baseParameters);
 
-            for(var i = 0; i < allParameters.Count(); i++)
+            for (var i = 0; i < allParameters.Count(); i++)
             {
                 signature.Append($"{allParameters.ElementAt(i).Key} {allParameters.ElementAt(i).Value}");
 
-                if(i < allParameters.Count() -1)
+                if (i < allParameters.Count() - 1)
                 {
                     signature.Append(", ");
                 }
@@ -130,10 +131,10 @@ namespace Endpoint.Application.Builders.CSharp
 
                 Indent();
 
-                line.Append($":base({string.Join(", ",_baseParameters.Select(x => x.Value))})".Indent(_indent));
-                
+                line.Append($":base({string.Join(", ", _baseParameters.Select(x => x.Value))})".Indent(_indent));
+
                 line.Append(" { }");
-                
+
                 body.Add(line.ToString());
 
                 return body.ToArray();
@@ -170,7 +171,7 @@ namespace Endpoint.Application.Builders.CSharp
 
                 Indent();
 
-                foreach(var r in _ruleFors)
+                foreach (var r in _ruleFors)
                 {
                     body.Add(r.Indent(_indent));
                 }
@@ -178,7 +179,7 @@ namespace Endpoint.Application.Builders.CSharp
                 Unindent();
 
                 body.Add("}".Indent(_indent));
-                
+
                 return body.ToArray();
             }
 
@@ -205,10 +206,10 @@ namespace Endpoint.Application.Builders.CSharp
         }
 
         public string[] Build()
-        {            
+        {
             _contents.Add(BuildSignature());
 
-            foreach(var line in BuildBody())
+            foreach (var line in BuildBody())
             {
                 _contents.Add(line);
             }

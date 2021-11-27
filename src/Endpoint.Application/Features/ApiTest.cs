@@ -10,7 +10,8 @@ namespace Endpoint.Application.Features
     internal class ApiTest
     {
         [Verb("api-test")]
-        internal class Request : IRequest<Unit> {
+        internal class Request : IRequest<Unit>
+        {
             [Value(0)]
             public string EntityName { get; set; }
 
@@ -29,7 +30,7 @@ namespace Endpoint.Application.Features
                 _templateProcessor = templateProcessor;
                 _fileSystem = fileSystem;
             }
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var template = _templateLocator.Get(nameof(ApiTest));
 
@@ -40,7 +41,7 @@ namespace Endpoint.Application.Features
                 var contents = _templateProcessor.Process(template, tokens);
 
                 _fileSystem.WriteAllLines($@"{request.Directory}/{((Token)request.EntityName).PascalCase}ControllerTests.cs", contents);
-                return new();
+                return Task.FromResult(new Unit());
             }
         }
     }
