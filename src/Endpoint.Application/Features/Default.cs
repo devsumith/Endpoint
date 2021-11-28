@@ -83,7 +83,6 @@ namespace Endpoint.Application.Features
                     .WithDbContext(_dbContextName)
                     .SetRootNamespace(_rootNamespace)
                     .WithResource(_resource)
-                    .WithResource("StoredEvent")
                     .WithModelsNamespace(_modelsNamespace)
                     .SetDomainNamespace(_apiProjectNamespace)
                     .SetApplicationNamespace(_apiProjectNamespace)
