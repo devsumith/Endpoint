@@ -110,19 +110,6 @@ namespace Endpoint.Application.Features
                     .WithDbContext(_dbContextName)
                     .Build();
 
-                Create<ResourceBuilder>((a, b, c, d) => new(a, b, c, d))
-                    .SetDomainDirectory(apiDirectory)
-                    .SetInfrastructureDirectory(apiDirectory)
-                    .SetApplicationDirectory(apiDirectory)
-                    .SetApiDirectory(apiDirectory)
-                    .SetDomainNamespace(_apiProjectNamespace)
-                    .SetInfrastructureNamespace(_apiProjectNamespace)
-                    .SetApplicationNamespace(_apiProjectNamespace)
-                    .SetApiNamespace(_apiProjectNamespace)
-                    .WithResource("StoredEvent")
-                    .WithDbContext(_dbContextName)
-                    .Build();
-
                 slnRef.Add(projRef.FullPath);
 
                 slnRef.OpenInVisualStudio();
@@ -141,6 +128,8 @@ namespace Endpoint.Application.Features
                     new string[1] { _resource },
                     new FileSystem()
                     ).Build();
+
+                _commandService.Start("endpoint add-resource StoredEvent", apiDirectory);
 
                 projRef.Run();
 

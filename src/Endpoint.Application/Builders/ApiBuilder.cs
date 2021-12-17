@@ -1,7 +1,5 @@
 using Endpoint.Application.Models;
 using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
-using System;
 using System.IO;
 using static Endpoint.Application.Builders.BuilderFactory;
 
@@ -76,7 +74,7 @@ namespace Endpoint.Application.Builders
         {
             _commandService.Start($@"mkdir {_name}", _directory);
 
-            _commandService.Start("dotnet new webapi", _apiDirectory);
+            _commandService.Start("dotnet new webapi --framework net5.0", _apiDirectory);
 
             RemoveUneededFiles();
 
@@ -174,13 +172,14 @@ namespace Endpoint.Application.Builders
 
         public void InstallNugetPackages()
         {
-            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.SqlServer", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package FluentValidation", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package MediatR.Extensions.Microsoft.DependencyInjection", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.Tools", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Swagger", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 5.0.10", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 5.0.10", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package FluentValidation --version 10.3.3", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package MediatR.Extensions.Microsoft.DependencyInjection  --version 9.0.0", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.Tools --version 5.0.10", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore --version 6.2.2", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Swagger --version 6.2.2", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package Newtonsoft.Json", $@"{_apiDirectory}");
         }
     }
 }
