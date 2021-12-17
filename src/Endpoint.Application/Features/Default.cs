@@ -129,8 +129,6 @@ namespace Endpoint.Application.Features
                     new FileSystem()
                     ).Build();
 
-                _commandService.Start("endpoint add-resource StoredEvent", apiDirectory);
-
                 projRef.Run();
 
                 return Task.FromResult(new Unit());

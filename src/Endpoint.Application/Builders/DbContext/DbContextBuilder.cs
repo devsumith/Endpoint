@@ -1,5 +1,4 @@
 using Endpoint.Application.Enums;
-using Endpoint.Application.Extensions;
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
 using System;
@@ -80,60 +79,6 @@ namespace Endpoint.Application.Builders
                     .WithNamespace($"{_infrastructureNamespace.Value}.Data")
                     .WithInterface($"I{_dbContext.PascalCase}")
                     .WithBase("DbContext")
-                    .WithConstructor(new List<string>()
-                    {
-                        "SavingChanges += DbContext_SavingChanges;"
-                    })
-
-                    .WithMethod(new MethodBuilder().WithName("DbContext_SavingChanges").WithReturnType("void").WithAccessModifier(AccessModifier.Private)
-                    .WithParameter("object sender")
-                    .WithParameter("SavingChangesEventArgs e")
-                    .WithBody(new List<string>
-                    {
-                        "var entries = ChangeTracker.Entries<AggregateRoot>()",
-                        ".Where(".Indent(1),
-                        $"e => e.State == EntityState.Added ||".Indent(2),
-                        $"e.State == EntityState.Modified)".Indent(2),
-                        $".Select(e => e.Entity)".Indent(1),
-                        $".ToList();".Indent(1),
-                        $"",
-                        $"foreach (var aggregate in entries)",
-                        "{",
-                        "foreach (var storedEvent in aggregate.StoredEvents)".Indent(1),
-                        "{".Indent(1),
-                        "StoredEvents.Add(storedEvent);".Indent(2),
-                        "}".Indent(1),
-                        "}",
-                    })
-                    .Build())
-
-                    .WithMethod(new MethodBuilder().WithName("OnModelCreating").WithReturnType("void").WithAccessModifier(AccessModifier.Protected).WithOverride().WithParameter("ModelBuilder modelBuilder")
-                    .WithBody(new List<string>
-                    {
-                    "base.OnModelCreating(modelBuilder);",
-                    "",
-                    $"modelBuilder.ApplyConfigurationsFromAssembly(typeof({_dbContext.PascalCase}).Assembly);"
-                    })
-                    .Build())
-
-                    .WithMethod(new MethodBuilder().WithName("Dispose").WithReturnType("void").WithAccessModifier(AccessModifier.Public).WithOverride()
-                    .WithBody(new List<string>
-                    {
-                    "SavingChanges -= DbContext_SavingChanges;",
-                    "",
-                    $"base.Dispose();"
-                    })
-                    .Build())
-
-                    .WithMethod(new MethodBuilder().WithName("DisposeAsync").WithReturnType("ValueTask").WithAccessModifier(AccessModifier.Public).WithOverride()
-                    .WithBody(new List<string>
-                    {
-                    "SavingChanges -= DbContext_SavingChanges;",
-                    "",
-                    $"return base.DisposeAsync();"
-                    })
-                    .Build())
-
                     .WithBaseDependency("DbContextOptions", "options");
 
                 var dbContextInterfaceBuilder = new ClassBuilder(_dbContext.PascalCase, _context, _fileSystem, "interface")
