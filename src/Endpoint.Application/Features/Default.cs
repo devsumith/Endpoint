@@ -72,7 +72,7 @@ namespace Endpoint.Application.Features
 
                 _commandService.Start("git init", slnRef.Directory);
 
-                _commandService.Start("dotnet new gitignore", slnRef.Directory);
+                //TODO: render a Git Ignore
 
                 var apiDirectory = $"{slnRef.SrcDirectory}{Path.DirectorySeparatorChar}{_apiProjectName}";
 
