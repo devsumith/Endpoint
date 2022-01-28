@@ -125,6 +125,25 @@ namespace Endpoint.Application.Builders.CSharp
                 return body.ToArray();
             }
 
+            if (_parameters.Count() > 1 && _baseParameters.Count == 0 && _ruleFors.Count == 0 && _body.Count == 0)
+            {
+
+                body.Add("{".Indent(_indent));
+
+                Indent();
+
+                foreach (var parameter in _parameters)
+                {
+                    body.Add($"_{parameter.Value} = {parameter.Value};".Indent(_indent));
+                }
+
+                Unindent();
+
+                body.Add("}".Indent(_indent)); 
+                
+                return body.ToArray();
+            }
+
             if (_parameters.Count() == 0 && _baseParameters.Count > 0 && _ruleFors.Count == 0 && _body.Count == 0)
             {
                 var line = new StringBuilder();

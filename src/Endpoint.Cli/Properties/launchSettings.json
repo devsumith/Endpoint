@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "model Foo -d C:\\Projects\\ComplexAngularForms\\src\\ComplexAngularForms.Api"
+      "commandLineArgs": "add-resource Sprint -d C:\\projects\\BacklogCore\\src\\Backlog.Api"
     }
   }
 }

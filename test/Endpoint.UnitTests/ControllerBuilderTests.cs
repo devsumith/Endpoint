@@ -47,6 +47,7 @@ namespace Endpoint.UnitTests
                 .WithAttribute(new AttributeBuilder().WithName("ApiController").Build())
                 .WithAttribute(new AttributeBuilder().WithName("Route").WithParam("\"api/[controller]\"").Build())
                 .WithDependency("IMediator", "mediator")
+                .WithDependency($"ILogger<{((Token)_entityName).PascalCase}Controller>", "logger")
                 .WithMethod(getById)
                 .WithMethod(get)
                 .WithMethod(create)

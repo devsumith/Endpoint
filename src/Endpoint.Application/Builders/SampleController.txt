@@ -1,0 +1,101 @@
+﻿using System.Net;
+using System.Threading.Tasks;
+using Sample.Api.Features;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
+namespace Sample.Api.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class FooController
+    {
+        private readonly IMediator _mediator;
+        private readonly ILogger<FooController> _logger;
+
+        public FooController(IMediator mediator, ILogger<FooController> logger)
+        {
+            _mediator = mediator;
+            _logger = logger;
+        }
+
+        [HttpGet("{fooId}", Name = "GetFooByIdRoute")]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(GetFooById.Response), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<GetFooById.Response>> GetById([FromRoute]GetFooById.Request request)
+        {
+            var response = await _mediator.Send(request);
+        
+            if (response.Foo == null)
+            {
+                return new NotFoundObjectResult(request.FooId);
+            }
+        
+            return response;
+        }
+        
+        [HttpGet(Name = "GetFoosRoute")]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(GetFoos.Response), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<GetFoos.Response>> Get()
+            => await _mediator.Send(new GetFoos.Request());
+
+        [HttpPost(Name = "CreateFooRoute")]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(CreateFoo.Response), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<CreateFoo.Response>> Create([FromBody]CreateFoo.Request request)
+        {
+            _logger.LogInformation(
+                "----- Sending command: {CommandName}: ({@Command})",
+                nameof(CreateFoo),
+                request);
+
+            return await _mediator.Send(request);
+        }
+
+        [HttpGet("page/{pageSize}/{index}", Name = "GetFoosPageRoute")]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(GetFoosPage.Response), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<GetFoosPage.Response>> Page([FromRoute] GetFoosPage.Request request)
+            => await _mediator.Send(request);
+
+        [HttpPut(Name = "UpdateFooRoute")]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(UpdateFoo.Response), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<UpdateFoo.Response>> Update([FromBody]UpdateFoo.Request request)
+        {
+            _logger.LogInformation(
+                "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+                nameof(RemoveFoo),
+                nameof(request.Foo.FooId),
+                request.Foo.FooId,
+                request);
+
+            return await _mediator.Send(request);
+        }
+        
+        [HttpDelete("{fooId}", Name = "RemoveFooRoute")]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(RemoveFoo.Response), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<RemoveFoo.Response>> Remove([FromRoute]RemoveFoo.Request request)
+        {
+            _logger.LogInformation(
+                "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+                nameof(RemoveFoo),
+                nameof(request.FooId),
+                request.FooId,
+                request);
+
+            return await _mediator.Send(request);
+        }
+        
+    }
+}

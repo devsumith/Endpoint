@@ -118,6 +118,13 @@ namespace Endpoint.Application.Builders
                 .WithDbContextName(_dbContextName)
                 .Build();
 
+            Create<AppSettingsBuilder>((a, b, c, d) => new(a, b, c, d))
+                .SetDirectory($@"{_apiDirectory}")
+                .SetRootNamespace(_rootNamespace.Value)
+                .SetInfrastructureNamespace(_infrastructureNamespace.Value)
+                .SetNamespace(_apiProjectNamespace)
+                .Build();
+
             Create<StartupBuilder>((a, b, c, d) => new(a, b, c, d))
                 .SetDirectory($@"{_apiDirectory}")
                 .SetRootNamespace(_apiNamespace.Value)
@@ -162,6 +169,8 @@ namespace Endpoint.Application.Builders
 
             _commandService.Start($"mkdir {Constants.Folders.Interfaces}", _applicationDirectory.Value);
 
+            _commandService.Start($"mkdir {Constants.Folders.Logs}", _apiDirectory);
+
         }
 
         public void RemoveUneededFiles()
@@ -180,6 +189,9 @@ namespace Endpoint.Application.Builders
             _commandService.Start($"dotnet add package Swashbuckle.AspNetCore --version 6.2.2", $@"{_apiDirectory}");
             _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Swagger --version 6.2.2", $@"{_apiDirectory}");
             _commandService.Start($"dotnet add package Newtonsoft.Json", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package Serilog.AspNetCore --version 4.1.0", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package Serilog.Sinks.Seq --version 5.1.1", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package SerilogTimings --version 2.3.0", $@"{_apiDirectory}");
         }
     }
 }

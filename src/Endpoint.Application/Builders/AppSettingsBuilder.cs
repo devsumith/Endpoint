@@ -25,7 +25,7 @@ namespace Endpoint.Application.Builders
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/AppSettings.cs", contents);
+            _fileSystem.WriteAllLines($@"{_directory.Value}/appsettings.json", contents);
         }
     }
 }

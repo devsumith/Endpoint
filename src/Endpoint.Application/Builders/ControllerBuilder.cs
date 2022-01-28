@@ -30,10 +30,12 @@ namespace Endpoint.Application.Builders
                 .WithUsing("System.Threading.Tasks")
                 .WithUsing("Microsoft.AspNetCore.Mvc")
                 .WithUsing("MediatR")
+                .WithUsing("Microsoft.Extensions.Logging")
                 .WithNamespace($"{_apiNamespace.Value}.Controllers")
                 .WithAttribute(new AttributeBuilder().WithName("ApiController").Build())
                 .WithAttribute(new AttributeBuilder().WithName("Route").WithParam("\"api/[controller]\"").Build())
                 .WithDependency("IMediator", "mediator")
+                .WithDependency($"ILogger<{_resource.PascalCase}Controller>", "logger")
                 .Build();
         }
     }
