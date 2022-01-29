@@ -121,7 +121,7 @@ namespace Endpoint.Application.Builders.CSharp
             if (_parameters.Count() == 1 && _baseParameters.Count == 0 && _ruleFors.Count == 0 && _body.Count == 0)
             {
                 Indent();
-                body.Add($"=> _{_parameters.ElementAt(0).Value} = {_parameters.ElementAt(0).Value};".Indent(_indent));
+                body.Add($"=> _{_parameters.ElementAt(0).Value} = {_parameters.ElementAt(0).Value} ?? throw new ArgumentNullException(nameof({_parameters.ElementAt(0).Value}));".Indent(_indent));
                 return body.ToArray();
             }
 
@@ -134,7 +134,7 @@ namespace Endpoint.Application.Builders.CSharp
 
                 foreach (var parameter in _parameters)
                 {
-                    body.Add($"_{parameter.Value} = {parameter.Value};".Indent(_indent));
+                    body.Add($"_{parameter.Value} = {parameter.Value} ?? throw new ArgumentNullException(nameof({parameter.Value}));".Indent(_indent));
                 }
 
                 Unindent();

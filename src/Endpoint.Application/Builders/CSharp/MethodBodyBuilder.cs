@@ -22,7 +22,6 @@ namespace Endpoint.Application.Builders
             _resource = resource;
         }
 
-
         public string[] Build()
         {
 
@@ -59,12 +58,57 @@ namespace Endpoint.Application.Builders
             => new string[10]
             {
                 "{",
-                "var response = await _mediator.Send(request);".Indent(_indent+ 1),
+                "var response = await _mediator.Send(request);".Indent(_indent + 1),
                 "",
-                $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent+ 1),
-                "{".Indent(_indent+ 1),
+                $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
+                "{".Indent(_indent + 1),
                 $"return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id);".Indent(_indent + 2),
-                "}".Indent(_indent +1),
+                "}".Indent(_indent + 1),
+                "",
+                "return response;".Indent(_indent + 1),
+                "}"
+            };
+
+        public string[] BuildCreateEndpointBody(string resource)
+            => new string[10]
+            {
+                "{",
+                "var response = await _mediator.Send(request);".Indent(_indent + 1),
+                "",
+                $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
+                "{".Indent(_indent + 1),
+                $"return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id);".Indent(_indent + 2),
+                "}".Indent(_indent + 1),
+                "",
+                "return response;".Indent(_indent + 1),
+                "}"
+            };
+
+        public string[] BuildDeleteEndpointBody(string resource)
+            => new string[10]
+            {
+                "{",
+                "var response = await _mediator.Send(request);".Indent(_indent + 1),
+                "",
+                $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
+                "{".Indent(_indent + 1),
+                $"return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id);".Indent(_indent + 2),
+                "}".Indent(_indent + 1),
+                "",
+                "return response;".Indent(_indent + 1),
+                "}"
+            };
+
+        public string[] BuildUpdateEndpointBody(string resource)
+            => new string[10]
+            {
+                "{",
+                "var response = await _mediator.Send(request);".Indent(_indent + 1),
+                "",
+                $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
+                "{".Indent(_indent + 1),
+                $"return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id);".Indent(_indent + 2),
+                "}".Indent(_indent + 1),
                 "",
                 "return response;".Indent(_indent + 1),
                 "}"

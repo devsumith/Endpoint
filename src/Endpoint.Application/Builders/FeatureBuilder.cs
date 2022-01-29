@@ -73,9 +73,13 @@ namespace Endpoint.Application.Builders
 
             new ClassBuilder($"{((Token)_entityName).PascalCase}Extensions", _context, _fileSystem)
                 .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
-                .WithUsing("System")
                 .IsStatic()
                 .WithUsing($"{_domainNamespace.Value}.Models")
+                .WithUsing("System.Collections.Generic")
+                .WithUsing("Microsoft.EntityFrameworkCore")
+                .WithUsing("System.Linq")
+                .WithUsing("System.Threading.Tasks")
+                .WithUsing("System.Threading")
                 .WithNamespace($"{_applicationNamespace.Value}.Features")
                 .WithMethod(new MethodBuilder()
                 .IsStatic()
@@ -89,6 +93,19 @@ namespace Endpoint.Application.Builders
                     "{",
                     $"{((Token)_entityName).PascalCase}Id = {((Token)_entityName).CamelCase}.{((Token)_entityName).PascalCase}Id".Indent(1),
                     "};"
+                })
+                .Build())
+                .WithMethod(new MethodBuilder()
+                .IsStatic()
+                .WithAsync(true)
+                .WithName("ToDtosAsync")
+                .WithReturnType($"Task<List<{((Token)_entityName).PascalCase}Dto>>")
+                .WithPropertyName($"{((Token)_entityName).PascalCase}Id")
+                .WithParameter(new ParameterBuilder($"IQueryable<{((Token)_entityName).PascalCase}>", ((Token)_entityName).CamelCasePlural, true).Build())
+                .WithParameter(new ParameterBuilder("CancellationToken","cancellationToken").Build())
+                .WithBody(new()
+                {
+                    "return await heroes.Select(x => x.ToDto()).ToListAsync(cancellationToken);"
                 })
                 .Build())
                 .Build();

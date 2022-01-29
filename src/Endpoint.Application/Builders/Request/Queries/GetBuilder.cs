@@ -75,13 +75,14 @@ namespace Endpoint.Application.Builders
             var handler = new ClassBuilder("Handler", _context, _fileSystem)
                 .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", "Request", "Response").Build())
                 .WithDependency($"I{((Token)_dbContext).PascalCase}", "context")
+                .WithDependency($"ILogger<Handler>", "logger")
                 .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
                 .WithReturnType(new TypeBuilder().WithGenericType("Task", "Response").Build())
                 .WithParameter(new ParameterBuilder("Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
                 "return new () {",
-                $"{((Token)_entity).PascalCasePlural} = await _context.{((Token)_entity).PascalCasePlural}.Select(x => x.ToDto()).ToListAsync()".Indent(1),
+                $"{((Token)_entity).PascalCasePlural} = await _context.{((Token)_entity).PascalCasePlural}.ToDtosAsync(cancellationToken)".Indent(1),
                 "};"
                 }).Build())
                 .Class;
@@ -98,6 +99,7 @@ namespace Endpoint.Application.Builders
                 .WithUsing($"{_domainNamespace}.Core")
                 .WithUsing($"{_applicationNamespace}.Interfaces")
                 .WithUsing("Microsoft.EntityFrameworkCore")
+                .WithUsing("Microsoft.Extensions.Logging")
                 .WithClass(request)
                 .WithClass(response)
                 .WithClass(handler)

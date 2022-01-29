@@ -90,6 +90,7 @@ namespace Endpoint.Application.Builders
                 .WithUsing("System.Threading.Tasks")
                 .WithUsing($"{_applicationNamespace.Value}.Features")
                 .WithUsing("MediatR")
+                .WithUsing("System")
                 .WithUsing("Microsoft.AspNetCore.Mvc")
                 .WithUsing("Microsoft.Extensions.Logging")
                 .WithNamespace($"{_apiNamespace.Value}.Controllers")
