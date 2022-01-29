@@ -26,19 +26,15 @@ namespace Endpoint.Application.Builders
 
         public string[] Build()
         {
-            var logStatementBuilder = new LogStatementBuilder(_resource,_endpointType);
+            var logStatementBuilder = new LogStatementBuilder(_resource,_endpointType, _indent + 1);
 
             var logStatement = logStatementBuilder.Build();
+
             var body = new List<string>()
             {
                 "{"
             };
 
-            if(logStatement.Length > 0)
-            {
-                body.AddRange(logStatement.Select(x => x.Indent(_indent + 1)));
-                body.Add("");
-            }
 
             switch(_endpointType)
             {
@@ -50,7 +46,17 @@ namespace Endpoint.Application.Builders
                     body.AddRange(BuildGetEndpointBody(_resource));
                     break;
 
+                case EndpointType.Page:
+                    body.AddRange(BuildPageEndpointBody(_resource));
+                    break;
+
+                case EndpointType.Delete:
+                    body.AddRange(BuildDeleteEndpointBody(_resource));
+                    break;
+
                 default:
+                    body.AddRange(logStatement);
+                    body.Add("");
                     body.AddRange(BuildEndpointBody());
                     break;
             }
@@ -64,19 +70,29 @@ namespace Endpoint.Application.Builders
         public string[] BuildEndpointBody()
             => new string[1]
             {
-                "return await _mediator.Send(request);".Indent(_indent + 1)
+                "return await _mediator.Send(request, cancellationToken);".Indent(_indent + 1)
+            };
+
+        public string[] BuildPageEndpointBody(string resource)
+            => new string[3]
+            {
+                ($"var request = new Get{((Token)resource).PascalCasePlural}Page.Request" + " { Index = index, PageSize = pageSize };").Indent(_indent + 1),
+                "",
+                "return await _mediator.Send(request, cancellationToken);".Indent(_indent + 1)
             };
 
         public string[] BuildGetEndpointBody(string resource)
             => new string[1]
             {
-                $"return await _mediator.Send(new Get{((Token)resource).PascalCasePlural}.Request());".Indent(_indent + 1)
+                $"return await _mediator.Send(new Get{((Token)resource).PascalCasePlural}.Request(), cancellationToken);".Indent(_indent + 1)
             };
 
         public string[] BuildGetByIdEndpointBody(string resource)
-            => new string[8]
+            => new string[10]
             {
-                "var response = await _mediator.Send(request);".Indent(_indent + 1),
+                ("var request = new Get" + ((Token)resource).PascalCase + "ById.Request() { " + ((Token)resource).PascalCase + "Id = " + ((Token)resource).CamelCase + "Id };").Indent(_indent + 1),
+                "",
+                "var response = await _mediator.Send(request, cancellationToken);".Indent(_indent + 1),
                 "",
                 $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
                 "{".Indent(_indent + 1),
@@ -89,7 +105,7 @@ namespace Endpoint.Application.Builders
         public string[] BuildCreateEndpointBody(string resource)
             => new string[8]
             {
-                "var response = await _mediator.Send(request);".Indent(_indent + 1),
+                "var response = await _mediator.Send(request, cancellationToken);".Indent(_indent + 1),
                 "",
                 $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
                 "{".Indent(_indent + 1),
@@ -100,22 +116,27 @@ namespace Endpoint.Application.Builders
             };
 
         public string[] BuildDeleteEndpointBody(string resource)
-            => new string[8]
+        {
+            var result = new List<string>
             {
-                "var response = await _mediator.Send(request);".Indent(_indent + 1),
-                "",
-                $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
-                "{".Indent(_indent + 1),
-                $"return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id);".Indent(_indent + 2),
-                "}".Indent(_indent + 1),
-                "",
-                "return response;".Indent(_indent + 1),
+                ("var request = new Remove" + ((Token)resource).PascalCase + ".Request() { " + ((Token)resource).PascalCase + "Id = " + ((Token)resource).CamelCase + "Id };").Indent(_indent + 1)
             };
+
+            result.Add("");
+
+            result.AddRange(new LogStatementBuilder(resource, EndpointType.Delete, _indent + 1).Build());
+
+            result.Add("");
+
+            result.Add("return await _mediator.Send(request, cancellationToken);".Indent(_indent + 1));
+
+            return result.ToArray();
+        }
 
         public string[] BuildUpdateEndpointBody(string resource)
             => new string[8]
             {
-                "var response = await _mediator.Send(request);".Indent(_indent + 1),
+                "var response = await _mediator.Send(request, cancellationToken);".Indent(_indent + 1),
                 "",
                 $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
                 "{".Indent(_indent + 1),

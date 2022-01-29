@@ -117,7 +117,7 @@ namespace Endpoint.Application.Builders
 
             if (endpointType == EndpointType.GetById)
             {
-                attributes.Add(WithHttp(HttpVerbs.Get, "{" + ((Token)resource).CamelCase + "Id}", $"{requestType}Route", indent));
+                attributes.Add(WithHttp(HttpVerbs.Get, "{" + ((Token)resource).CamelCase + "Id:guid}", $"{requestType}Route", indent));
                 attributes.Add(WithProducesResponseType(HttpStatusCode.NotFound, "string", indent: indent));
             }
 

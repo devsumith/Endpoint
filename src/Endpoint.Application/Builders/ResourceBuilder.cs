@@ -85,8 +85,9 @@ namespace Endpoint.Application.Builders
 
 
             new ClassBuilder($"{((Token)_entityName).PascalCase}Controller", new Context(), _fileSystem)
-                .WithDirectory($"{_apiDirectory.Value}{Path.DirectorySeparatorChar}Controllers")
+                .WithDirectory($"{_apiDirectory.Value}{Path.DirectorySeparatorChar}Controllers")                
                 .WithUsing("System.Net")
+                .WithUsing("System.Threading")
                 .WithUsing("System.Threading.Tasks")
                 .WithUsing($"{_applicationNamespace.Value}.Features")
                 .WithUsing("MediatR")

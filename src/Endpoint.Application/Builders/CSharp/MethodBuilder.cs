@@ -144,9 +144,16 @@ namespace Endpoint.Application.Builders
                     .WithAsync(true)
                     .WithReturnType(TypeBuilder.WithActionResult($"{requestType}.Response"));
 
-                if (_endpointType == EndpointType.GetById || _endpointType == EndpointType.Page || _endpointType == EndpointType.Delete)
+                if (_endpointType == EndpointType.GetById || _endpointType == EndpointType.Delete)
                 {
-                    methodBuilder.WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Route).Build());
+                    methodBuilder.WithParameter(new ParameterBuilder("Guid", $"{((Token)_resource).CamelCase}Id").WithFrom(From.Route).Build());
+                }
+
+                if (_endpointType == EndpointType.Page)
+                {
+                    methodBuilder.WithParameter(new ParameterBuilder("int", "pageSize").WithFrom(From.Route).Build());
+
+                    methodBuilder.WithParameter(new ParameterBuilder("int", "index").WithFrom(From.Route).Build());
                 }
 
                 if (_endpointType == EndpointType.Update)
@@ -158,6 +165,8 @@ namespace Endpoint.Application.Builders
                 {
                     methodBuilder.WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Body).Build());
                 }
+
+                methodBuilder.WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build());
 
                 _contents.Add(methodBuilder.Build());
 
