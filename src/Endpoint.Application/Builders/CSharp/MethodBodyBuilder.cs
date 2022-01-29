@@ -2,6 +2,8 @@
 using Endpoint.Application.Extensions;
 using Endpoint.Application.ValueObjects;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Endpoint.Application.Builders
@@ -24,40 +26,56 @@ namespace Endpoint.Application.Builders
 
         public string[] Build()
         {
+            var logStatementBuilder = new LogStatementBuilder(_resource,_endpointType);
 
-            if (_endpointType != null)
+            var logStatement = logStatementBuilder.Build();
+            var body = new List<string>()
             {
-                return _endpointType switch
-                {
-                    EndpointType.Get => BuildGetEndpointBody(_resource),
-                    EndpointType.GetById => BuildGetByIdEndpointBody(_resource),
-                    EndpointType.Create => BuildEndpointBody(),
-                    EndpointType.Delete => BuildEndpointBody(),
-                    EndpointType.Update => BuildEndpointBody(),
-                    EndpointType.Page => BuildEndpointBody(),
-                    _ => throw new NotImplementedException()
-                };
+                "{"
+            };
+
+            if(logStatement.Length > 0)
+            {
+                body.AddRange(logStatement.Select(x => x.Indent(_indent + 1)));
+                body.Add("");
             }
 
-            throw new System.NotImplementedException();
+            switch(_endpointType)
+            {
+                case EndpointType.GetById:
+                    body.AddRange(BuildGetByIdEndpointBody(_resource));
+                    break;
+
+                case EndpointType.Get:
+                    body.AddRange(BuildGetEndpointBody(_resource));
+                    break;
+
+                default:
+                    body.AddRange(BuildEndpointBody());
+                    break;
+            }
+            
+            body.Add("}");
+
+            return body.ToArray();
+
         }
 
         public string[] BuildEndpointBody()
             => new string[1]
             {
-                "=> await _mediator.Send(request);".Indent(_indent + 1)
+                "return await _mediator.Send(request);".Indent(_indent + 1)
             };
 
         public string[] BuildGetEndpointBody(string resource)
             => new string[1]
             {
-                $"=> await _mediator.Send(new Get{((Token)resource).PascalCasePlural}.Request());".Indent(_indent + 1)
+                $"return await _mediator.Send(new Get{((Token)resource).PascalCasePlural}.Request());".Indent(_indent + 1)
             };
 
         public string[] BuildGetByIdEndpointBody(string resource)
-            => new string[10]
+            => new string[8]
             {
-                "{",
                 "var response = await _mediator.Send(request);".Indent(_indent + 1),
                 "",
                 $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
@@ -66,13 +84,11 @@ namespace Endpoint.Application.Builders
                 "}".Indent(_indent + 1),
                 "",
                 "return response;".Indent(_indent + 1),
-                "}"
             };
 
         public string[] BuildCreateEndpointBody(string resource)
-            => new string[10]
+            => new string[8]
             {
-                "{",
                 "var response = await _mediator.Send(request);".Indent(_indent + 1),
                 "",
                 $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
@@ -81,13 +97,11 @@ namespace Endpoint.Application.Builders
                 "}".Indent(_indent + 1),
                 "",
                 "return response;".Indent(_indent + 1),
-                "}"
             };
 
         public string[] BuildDeleteEndpointBody(string resource)
-            => new string[10]
+            => new string[8]
             {
-                "{",
                 "var response = await _mediator.Send(request);".Indent(_indent + 1),
                 "",
                 $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
@@ -96,13 +110,11 @@ namespace Endpoint.Application.Builders
                 "}".Indent(_indent + 1),
                 "",
                 "return response;".Indent(_indent + 1),
-                "}"
             };
 
         public string[] BuildUpdateEndpointBody(string resource)
-            => new string[10]
+            => new string[8]
             {
-                "{",
                 "var response = await _mediator.Send(request);".Indent(_indent + 1),
                 "",
                 $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
@@ -111,7 +123,6 @@ namespace Endpoint.Application.Builders
                 "}".Indent(_indent + 1),
                 "",
                 "return response;".Indent(_indent + 1),
-                "}"
             };
     }
 }

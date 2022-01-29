@@ -106,6 +106,7 @@ namespace Endpoint.Application.Builders
                 .WithNamespace(_namespace)
                 .WithUsing("FluentValidation")
                 .WithUsing("MediatR")
+                .WithUsing("System")
                 .WithUsing("System.Threading")
                 .WithUsing("System.Threading.Tasks")
                 .WithUsing($"{_domainNamespace}.Models")

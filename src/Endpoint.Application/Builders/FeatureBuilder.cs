@@ -105,7 +105,7 @@ namespace Endpoint.Application.Builders
                 .WithParameter(new ParameterBuilder("CancellationToken","cancellationToken").Build())
                 .WithBody(new()
                 {
-                    "return await heroes.Select(x => x.ToDto()).ToListAsync(cancellationToken);"
+                    $"return await {((Token)_entityName).CamelCasePlural}.Select(x => x.ToDto()).ToListAsync(cancellationToken);"
                 })
                 .Build())
                 .Build();
