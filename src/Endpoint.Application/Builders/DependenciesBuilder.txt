@@ -36,7 +36,7 @@ namespace {{ apiNamespace }}
 
                 options.CustomSchemaIds(x => x.FullName);
                 options.EnableAnnotations();
-            });
+            }).AddSwaggerGenNewtonsoftSupport();
 
             services.AddCors(options => options.AddPolicy("CorsPolicy",
                 builder => builder
@@ -61,7 +61,8 @@ namespace {{ apiNamespace }}
                 .EnableSensitiveDataLogging();
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson()
         }
     }
 }

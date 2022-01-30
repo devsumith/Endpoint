@@ -40,8 +40,9 @@ namespace {{ namespace }}
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "{{ rootNamespace }}");
-                c.RoutePrefix = string.Empty;
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "{{ rootNamespace }}");
+                options.RoutePrefix = string.Empty;
+                options.DisplayOperationId();
             });
         }
     }
