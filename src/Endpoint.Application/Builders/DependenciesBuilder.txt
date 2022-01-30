@@ -19,7 +19,7 @@ namespace {{ apiNamespace }}
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "",
+                    Title = "{{ rootNamespace }}",
                     Description = "",
                     TermsOfService = new Uri("https://example.com/terms"),
                     Contact = new OpenApiContact
@@ -35,6 +35,7 @@ namespace {{ apiNamespace }}
                 });
 
                 options.CustomSchemaIds(x => x.FullName);
+                options.EnableAnnotations();
             });
 
             services.AddCors(options => options.AddPolicy("CorsPolicy",

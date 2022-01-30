@@ -192,6 +192,7 @@ namespace Endpoint.Application.Builders
             _commandService.Start($"dotnet add package Serilog.AspNetCore --version 4.1.0", $@"{_apiDirectory}");
             _commandService.Start($"dotnet add package Serilog.Sinks.Seq --version 5.1.1", $@"{_apiDirectory}");
             _commandService.Start($"dotnet add package SerilogTimings --version 2.3.0", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Annotations --version 6.2.2", $@"{_apiDirectory}");            
         }
     }
 }
