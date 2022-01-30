@@ -142,7 +142,7 @@ namespace Endpoint.Application.Builders
                 var methodBuilder = new MethodSignatureBuilder()
                     .WithEndpointType(_endpointType)
                     .WithAsync(true)
-                    .WithReturnType(TypeBuilder.WithActionResult($"{requestType}.Response"));
+                    .WithReturnType(TypeBuilder.WithActionResult($"{requestType}Response"));
 
                 if (_endpointType == EndpointType.GetById || _endpointType == EndpointType.Delete)
                 {
@@ -158,12 +158,12 @@ namespace Endpoint.Application.Builders
 
                 if (_endpointType == EndpointType.Update)
                 {
-                    methodBuilder.WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Body).Build());
+                    methodBuilder.WithParameter(new ParameterBuilder($"{requestType}Request", "request").WithFrom(From.Body).Build());
                 }
 
                 if (_endpointType == EndpointType.Create)
                 {
-                    methodBuilder.WithParameter(new ParameterBuilder($"{requestType}.Request", "request").WithFrom(From.Body).Build());
+                    methodBuilder.WithParameter(new ParameterBuilder($"{requestType}Request", "request").WithFrom(From.Body).Build());
                 }
 
                 methodBuilder.WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build());

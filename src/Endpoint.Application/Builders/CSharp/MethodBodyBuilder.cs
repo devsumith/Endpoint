@@ -76,7 +76,7 @@ namespace Endpoint.Application.Builders
         public string[] BuildPageEndpointBody(string resource)
             => new string[3]
             {
-                ($"var request = new Get{((Token)resource).PascalCasePlural}Page.Request" + " { Index = index, PageSize = pageSize };").Indent(_indent + 1),
+                ($"var request = new Get{((Token)resource).PascalCasePlural}PageRequest" + " { Index = index, PageSize = pageSize };").Indent(_indent + 1),
                 "",
                 "return await _mediator.Send(request, cancellationToken);".Indent(_indent + 1)
             };
@@ -84,13 +84,13 @@ namespace Endpoint.Application.Builders
         public string[] BuildGetEndpointBody(string resource)
             => new string[1]
             {
-                $"return await _mediator.Send(new Get{((Token)resource).PascalCasePlural}.Request(), cancellationToken);".Indent(_indent + 1)
+                $"return await _mediator.Send(new Get{((Token)resource).PascalCasePlural}Request(), cancellationToken);".Indent(_indent + 1)
             };
 
         public string[] BuildGetByIdEndpointBody(string resource)
             => new string[10]
             {
-                ("var request = new Get" + ((Token)resource).PascalCase + "ById.Request() { " + ((Token)resource).PascalCase + "Id = " + ((Token)resource).CamelCase + "Id };").Indent(_indent + 1),
+                ("var request = new Get" + ((Token)resource).PascalCase + "ByIdRequest() { " + ((Token)resource).PascalCase + "Id = " + ((Token)resource).CamelCase + "Id };").Indent(_indent + 1),
                 "",
                 "var response = await _mediator.Send(request, cancellationToken);".Indent(_indent + 1),
                 "",
@@ -119,7 +119,7 @@ namespace Endpoint.Application.Builders
         {
             var result = new List<string>
             {
-                ("var request = new Remove" + ((Token)resource).PascalCase + ".Request() { " + ((Token)resource).PascalCase + "Id = " + ((Token)resource).CamelCase + "Id };").Indent(_indent + 1)
+                ("var request = new Remove" + ((Token)resource).PascalCase + "Request() { " + ((Token)resource).PascalCase + "Id = " + ((Token)resource).CamelCase + "Id };").Indent(_indent + 1)
             };
 
             result.Add("");

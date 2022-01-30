@@ -63,22 +63,23 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            var request = new ClassBuilder("Request", _context, _fileSystem)
-                .WithInterface(new TypeBuilder().WithGenericType("IRequest", "Response").Build())
+            var request = new ClassBuilder($"Remove{((Token)_entity).PascalCase}Request", _context, _fileSystem)
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Remove{((Token)_entity).PascalCase}Response").Build())
                 .WithProperty(new PropertyBuilder().WithType("Guid").WithName($"{((Token)_entity).PascalCase}Id").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var response = new ClassBuilder("Response", _context, _fileSystem)
+            var response = new ClassBuilder($"Remove{((Token)_entity).PascalCase}Response", _context, _fileSystem)
                 .WithBase("ResponseBase")
                 .WithProperty(new PropertyBuilder().WithType($"{((Token)_entity).PascalCase}Dto").WithName($"{((Token)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var handler = new ClassBuilder("Handler", _context, _fileSystem)
-                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", "Request", "Response").Build())
+            var handler = new ClassBuilder($"Remove{((Token)_entity).PascalCase}Handler", _context, _fileSystem)
+                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Remove{((Token)_entity).PascalCase}Request", $"Remove{((Token)_entity).PascalCase}Response").Build())
                 .WithDependency($"I{((Token)_dbContext).PascalCase}", "context")
+                .WithDependency($"ILogger<Remove{((Token)_entity).PascalCase}Handler>", "logger")
                 .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
-                .WithReturnType(new TypeBuilder().WithGenericType("Task", "Response").Build())
-                .WithParameter(new ParameterBuilder("Request", "request").Build())
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Remove{((Token)_entity).PascalCase}Response").Build())
+                .WithParameter(new ParameterBuilder($"Remove{((Token)_entity).PascalCase}Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
                 $"var {((Token)_entity).CamelCase} = await _context.{((Token)_entity).PascalCasePlural}.SingleAsync(x => x.{((Token)_entity).PascalCase}Id == request.{((Token)_entity).PascalCase}Id);",
@@ -87,17 +88,18 @@ namespace Endpoint.Application.Builders
                 "",
                 "await _context.SaveChangesAsync(cancellationToken);",
                 "",
-                "return new Response()",
+                "return new ()",
                 "{",
                 $"{((Token)_entity).PascalCase} = {((Token)_entity).CamelCase}.ToDto()".Indent(1),
                 "};"
                 }).Build())
                 .Class;
 
-            new ClassBuilder($"Remove{((Token)_entity).PascalCase}", _context, _fileSystem)
+            new NamespaceBuilder($"Remove{((Token)_entity).PascalCase}", _context, _fileSystem)
                 .WithDirectory(_directory)
                 .WithNamespace(_namespace)
                 .WithUsing("FluentValidation")
+                .WithUsing("Microsoft.Extensions.Logging")
                 .WithUsing("MediatR")
                 .WithUsing("System.Threading")
                 .WithUsing("System.Threading.Tasks")

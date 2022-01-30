@@ -1,7 +1,11 @@
-﻿namespace Endpoint.Application
+﻿using System.Xml.Linq;
+
+namespace Endpoint.Application
 {
     public static class Constants
     {
+        public static readonly XNamespace MSBUILD = "";
+
         public static string RootNamespace = nameof(Endpoint);
         public static string Tab = "    ";
         public static class Folders

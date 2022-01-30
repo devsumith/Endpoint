@@ -64,44 +64,46 @@ namespace Endpoint.Application.Builders
         public void Build()
         {
 
-            var validator = new ClassBuilder("Validator", _context, _fileSystem)
+            var validator = new ClassBuilder($"Update{((Token)_entity).PascalCase}Validator", _context, _fileSystem)
                 .WithRuleFor(new RuleForBuilder().WithNotNull().WithEntity(_entity).Build())
                 .WithRuleFor(new RuleForBuilder().WithValidator().WithEntity(_entity).Build())
-                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", "Request").Build())
+                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", $"Update{((Token)_entity).PascalCase}Request").Build())
                 .Class;
 
-            var request = new ClassBuilder("Request", _context, _fileSystem)
-                .WithInterface(new TypeBuilder().WithGenericType("IRequest", "Response").Build())
+            var request = new ClassBuilder($"Update{((Token)_entity).PascalCase}Request", _context, _fileSystem)
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Update{((Token)_entity).PascalCase}Response").Build())
                 .WithProperty(new PropertyBuilder().WithType($"{((Token)_entity).PascalCase}Dto").WithName($"{((Token)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var response = new ClassBuilder("Response", _context, _fileSystem)
+            var response = new ClassBuilder($"Update{((Token)_entity).PascalCase}Response", _context, _fileSystem)
                 .WithBase("ResponseBase")
                 .WithProperty(new PropertyBuilder().WithType($"{((Token)_entity).PascalCase}Dto").WithName($"{((Token)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var handler = new ClassBuilder("Handler", _context, _fileSystem)
-                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", "Request", "Response").Build())
+            var handler = new ClassBuilder($"Update{((Token)_entity).PascalCase}Handler", _context, _fileSystem)
+                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Update{((Token)_entity).PascalCase}Request", $"Update{((Token)_entity).PascalCase}Response").Build())
                 .WithDependency($"I{((Token)_dbContext).PascalCase}", "context")
+                .WithDependency($"ILogger<Update{((Token)_entity).PascalCase}Handler>", "logger")
                 .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
-                .WithReturnType(new TypeBuilder().WithGenericType("Task", "Response").Build())
-                .WithParameter(new ParameterBuilder("Request", "request").Build())
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Update{((Token)_entity).PascalCase}Response").Build())
+                .WithParameter(new ParameterBuilder($"Update{((Token)_entity).PascalCase}Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
                 $"var {((Token)_entity).CamelCase} = await _context.{((Token)_entity).PascalCasePlural}.SingleAsync(x => x.{((Token)_entity).PascalCase}Id == request.{((Token)_entity).PascalCase}.{((Token)_entity).PascalCase}Id);",
                 "",
                 "await _context.SaveChangesAsync(cancellationToken);",
                 "",
-                "return new Response()",
+                "return new ()",
                 "{",
                 $"{((Token)_entity).PascalCase} = {((Token)_entity).CamelCase}.ToDto()".Indent(1),
                 "};"
                 }).Build())
                 .Class;
 
-            new ClassBuilder($"Update{((Token)_entity).PascalCase}", _context, _fileSystem)
+            new NamespaceBuilder($"Update{((Token)_entity).PascalCase}", _context, _fileSystem)
                 .WithDirectory(_directory)
                 .WithNamespace(_namespace)
+                .WithUsing("Microsoft.Extensions.Logging")
                 .WithUsing("FluentValidation")
                 .WithUsing("MediatR")
                 .WithUsing("System")

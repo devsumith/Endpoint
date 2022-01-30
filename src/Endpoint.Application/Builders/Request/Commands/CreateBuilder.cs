@@ -64,28 +64,28 @@ namespace Endpoint.Application.Builders
         public void Build()
         {
 
-            var validator = new ClassBuilder("Validator", _context, _fileSystem)
+            var validator = new ClassBuilder($"Create{((Token)_entity).PascalCase}Validator", _context, _fileSystem)
                 .WithRuleFor(new RuleForBuilder().WithNotNull().WithEntity(_entity).Build())
                 .WithRuleFor(new RuleForBuilder().WithValidator().WithEntity(_entity).Build())
-                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", "Request").Build())
+                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", $"Create{((Token)_entity).PascalCase}Request").Build())
                 .Class;
 
-            var request = new ClassBuilder("Request", _context, _fileSystem)
-                .WithInterface(new TypeBuilder().WithGenericType("IRequest", "Response").Build())
+            var request = new ClassBuilder($"Create{((Token)_entity).PascalCase}Request", _context, _fileSystem)
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Create{((Token)_entity).PascalCase}Response").Build())
                 .WithProperty(new PropertyBuilder().WithType($"{((Token)_entity).PascalCase}Dto").WithName($"{((Token)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var response = new ClassBuilder("Response", _context, _fileSystem)
+            var response = new ClassBuilder($"Create{((Token)_entity).PascalCase}Response", _context, _fileSystem)
                 .WithBase("ResponseBase")
                 .WithProperty(new PropertyBuilder().WithType($"{((Token)_entity).PascalCase}Dto").WithName($"{((Token)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var handler = new ClassBuilder("Handler", _context, _fileSystem)
-                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", "Request", "Response").Build())
+            var handler = new ClassBuilder($"Create{((Token)_entity).PascalCase}Handler", _context, _fileSystem)
+                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Create{((Token)_entity).PascalCase}Request", $"Create{((Token)_entity).PascalCase}Response").Build())
                 .WithDependency($"I{((Token)_dbContext).PascalCase}", "context")
                 .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
-                .WithReturnType(new TypeBuilder().WithGenericType("Task", "Response").Build())
-                .WithParameter(new ParameterBuilder("Request", "request").Build())
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Create{((Token)_entity).PascalCase}Response").Build())
+                .WithParameter(new ParameterBuilder($"Create{((Token)_entity).PascalCase}Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
                 $"var {((Token)_entity).CamelCase} = new {((Token)_entity).PascalCase}();",
@@ -94,17 +94,18 @@ namespace Endpoint.Application.Builders
                 "",
                 "await _context.SaveChangesAsync(cancellationToken);",
                 "",
-                "return new Response()",
+                "return new ()",
                 "{",
                 $"{((Token)_entity).PascalCase} = {((Token)_entity).CamelCase}.ToDto()".Indent(1),
                 "};"
                 }).Build())
                 .Class;
 
-            new ClassBuilder($"Create{((Token)_entity).PascalCase}", _context, _fileSystem)
+            new NamespaceBuilder($"Create{((Token)_entity).PascalCase}", _context, _fileSystem)
                 .WithDirectory(_directory)
                 .WithNamespace(_namespace)
                 .WithUsing("FluentValidation")
+                .WithUsing("Microsoft.Extensions.Logging")
                 .WithUsing("MediatR")
                 .WithUsing("System")
                 .WithUsing("System.Threading")

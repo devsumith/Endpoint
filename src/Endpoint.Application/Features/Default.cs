@@ -129,6 +129,7 @@ namespace Endpoint.Application.Features
                     new FileSystem()
                     ).Build();
 
+
                 projRef.Run();
 
                 return Task.FromResult(new Unit());

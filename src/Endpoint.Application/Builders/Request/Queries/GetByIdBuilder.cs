@@ -63,22 +63,23 @@ namespace Endpoint.Application.Builders
         public void Build()
         {
 
-            var request = new ClassBuilder("Request", _context, _fileSystem)
-                .WithInterface(new TypeBuilder().WithGenericType("IRequest", "Response").Build())
+            var request = new ClassBuilder($"Get{((Token)_entity).PascalCase}ByIdRequest", _context, _fileSystem)
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Get{((Token)_entity).PascalCase}ByIdResponse").Build())
                 .WithProperty(new PropertyBuilder().WithType("Guid").WithName($"{((Token)_entity).PascalCase}Id").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var response = new ClassBuilder("Response", _context, _fileSystem)
+            var response = new ClassBuilder($"Get{((Token)_entity).PascalCase}ByIdResponse", _context, _fileSystem)
                 .WithBase("ResponseBase")
                 .WithProperty(new PropertyBuilder().WithType($"{((Token)_entity).PascalCase}Dto").WithName($"{((Token)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var handler = new ClassBuilder("Handler", _context, _fileSystem)
-                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", "Request", "Response").Build())
+            var handler = new ClassBuilder($"Get{((Token)_entity).PascalCase}ByIdHandler", _context, _fileSystem)
+                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Get{((Token)_entity).PascalCase}ByIdRequest", $"Get{((Token)_entity).PascalCase}ByIdResponse").Build())
                 .WithDependency($"I{((Token)_dbContext).PascalCase}", "context")
+                .WithDependency($"ILogger<Get{((Token)_entity).PascalCase}ByIdHandler>", "logger")
                 .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
-                .WithReturnType(new TypeBuilder().WithGenericType("Task", "Response").Build())
-                .WithParameter(new ParameterBuilder("Request", "request").Build())
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Get{((Token)_entity).PascalCase}ByIdResponse").Build())
+                .WithParameter(new ParameterBuilder($"Get{((Token)_entity).PascalCase}ByIdRequest", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
                 "return new () {",
@@ -87,9 +88,10 @@ namespace Endpoint.Application.Builders
                 }).Build())
                 .Class;
 
-            new ClassBuilder($"Get{((Token)_entity).PascalCase}ById", _context, _fileSystem)
+            new NamespaceBuilder($"Get{((Token)_entity).PascalCase}ById", _context, _fileSystem)
                 .WithDirectory(_directory)
                 .WithNamespace(_namespace)
+                .WithUsing("Microsoft.Extensions.Logging")
                 .WithUsing("MediatR")
                 .WithUsing("System")
                 .WithUsing("System.Threading")

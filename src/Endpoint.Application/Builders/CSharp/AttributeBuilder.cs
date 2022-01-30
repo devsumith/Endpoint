@@ -154,7 +154,7 @@ namespace Endpoint.Application.Builders
 
             attributes.Add(WithProducesResponseType(HttpStatusCode.InternalServerError, indent: indent));
             attributes.Add(WithProducesResponseType(HttpStatusCode.BadRequest, "ProblemDetails", indent: indent));
-            attributes.Add(WithProducesResponseType(HttpStatusCode.OK, $"{requestType}.Response", indent: indent));
+            attributes.Add(WithProducesResponseType(HttpStatusCode.OK, $"{requestType}Response", indent: indent));
 
             return attributes.ToArray();
         }

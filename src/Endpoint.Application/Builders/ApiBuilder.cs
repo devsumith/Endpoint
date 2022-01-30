@@ -82,6 +82,8 @@ namespace Endpoint.Application.Builders
 
             CreateSubDirectories();
 
+            new CsProjService().AddGenerateDocumentationFile($"{_apiDirectory}{Path.DirectorySeparatorChar}{_name}.csproj");
+
             Create<LaunchSettingsBuilder>((a, b, c, d) => new(a, b, c, d))
                 .SetDirectory($@"{_apiDirectory}{Path.DirectorySeparatorChar}{Constants.Folders.Properties}")
                 .WithPort(_port)
