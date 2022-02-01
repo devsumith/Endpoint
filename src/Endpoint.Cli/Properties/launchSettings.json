@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "add-generate-documentation-file -d C:\\projects\\Avengers\\src\\Avengers.Api"
+      "commandLineArgs": "command Authenticate -d C:\\projects\\Venture\\src\\Venture.Api\\Features\\Users"
     }
   }
 }

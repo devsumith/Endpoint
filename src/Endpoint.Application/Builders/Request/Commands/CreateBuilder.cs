@@ -83,6 +83,7 @@ namespace Endpoint.Application.Builders
             var handler = new ClassBuilder($"Create{((Token)_entity).PascalCase}Handler", _context, _fileSystem)
                 .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Create{((Token)_entity).PascalCase}Request", $"Create{((Token)_entity).PascalCase}Response").Build())
                 .WithDependency($"I{((Token)_dbContext).PascalCase}", "context")
+                .WithDependency($"ILogger<Create{((Token)_entity).PascalCase}Handler>", "logger")
                 .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
                 .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Create{((Token)_entity).PascalCase}Response").Build())
                 .WithParameter(new ParameterBuilder($"Create{((Token)_entity).PascalCase}Request", "request").Build())

@@ -40,6 +40,7 @@ namespace Endpoint.Application.Features
                     .SetRootNamespace(settings.RootNamespace)
                     .SetApplicationNamespace(settings.ApplicationNamespace)
                     .SetDomainNamespace(settings.DomainNamespace)
+                    .SetNamespace($"{settings.DomainNamespace}.Features")
                     .WithBuildingBlocksCoreNamespace(settings.BuildingBlocksCoreNamespace)
                     .WithBuildingBlocksEventStoreNamespace(settings.BuildingBlocksEventStoreNamespace)
                     .WithEntity(request.Entity)

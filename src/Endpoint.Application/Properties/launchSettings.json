@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Application": {
       "commandName": "Project",
-      "commandLineArgs": "model Foo -d C:\\Projects\\ComplexAngularForms\\src\\ComplexAngularForms.Api"
+      "commandLineArgs": "post-api-build -d C:\\projects\\Avengers"
     }
   }
 }

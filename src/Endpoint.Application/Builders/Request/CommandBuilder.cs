@@ -1,5 +1,7 @@
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
+using System;
+using System.Collections.Generic;
 
 namespace Endpoint.Application.Builders
 {
@@ -11,6 +13,7 @@ namespace Endpoint.Application.Builders
         private Token _buildingBlocksCoreNamespace;
         private Token _buildingBlocksEventStoreNamespace;
         private Token _store;
+        private Context _context = new Context();
 
         public CommandBuilder(
             ICommandService commandService,
@@ -57,25 +60,52 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            var template = _templateLocator.Get(nameof(CommandBuilder));
 
-            var tokens = new TokensBuilder()
-                .With(nameof(_entityName), _entityName)
-                .With(nameof(_name), _name)
-                .With(nameof(_rootNamespace), _rootNamespace)
-                .With(nameof(_directory), _directory)
-                .With(nameof(_dbContext), _dbContext)
-                .With(nameof(_namespace), _namespace)
-                .With(nameof(_buildingBlocksCoreNamespace), _buildingBlocksCoreNamespace)
-                .With(nameof(_buildingBlocksEventStoreNamespace), _buildingBlocksEventStoreNamespace)
-                .With(nameof(_applicationNamespace), _applicationNamespace)
-                .With(nameof(_domainNamespace), _domainNamespace)
-                .With(nameof(_store), _store)
+            var validator = new ClassBuilder($"{_name.PascalCase}Validator", _context, _fileSystem)
+                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", $"{_name.PascalCase}Request").Build())
+                .Class;
+
+            var request = new ClassBuilder($"{_name.PascalCase}Request", _context, _fileSystem)
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"{_name.PascalCase}Response").Build())
+                .Class;
+
+            var response = new ClassBuilder($"{_name.PascalCase}Response", _context, _fileSystem)
+                .WithBase("ResponseBase")
+                .Class;
+
+            var handler = new ClassBuilder($"{_name.PascalCase}Handler", _context, _fileSystem)
+                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"{_name.PascalCase}Request", $"{_name.PascalCase}Response").Build())
+                .WithDependency($"I{((Token)_dbContext).PascalCase}", "context")
+                .WithDependency($"ILogger<{_name.PascalCase}Handler>", "logger")
+                .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"{_name.PascalCase}Response").Build())
+                .WithParameter(new ParameterBuilder($"{_name.PascalCase}Request", "request").Build())
+                .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
+                .WithBody(new List<string>() {
+            "return new ()",
+            "{",
+            "};"
+                }).Build())
+                .Class;
+
+            new NamespaceBuilder($"{_name.PascalCase}", _context, _fileSystem)
+                .WithDirectory(_directory)
+                .WithNamespace(_namespace)
+                .WithUsing("FluentValidation")
+                .WithUsing("Microsoft.Extensions.Logging")
+                .WithUsing("MediatR")
+                .WithUsing("System")
+                .WithUsing("System.Threading")
+                .WithUsing("System.Threading.Tasks")
+                .WithUsing($"{_domainNamespace.PascalCase}.Models")
+                .WithUsing($"{_domainNamespace.PascalCase}.Core")
+                .WithUsing($"{_applicationNamespace.PascalCase}.Interfaces")
+                .WithClass(validator)
+                .WithClass(request)
+                .WithClass(response)
+                .WithClass(handler)
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
-
-            _fileSystem.WriteAllLines($@"{_directory.Value}/{_name.PascalCase}.cs", contents);
         }
     }
 }
