@@ -76,13 +76,23 @@ namespace Endpoint.Application.Builders
 
             _commandService.Start("dotnet new webapi --framework net5.0", _apiDirectory);
 
+            _commandService.Start("dotnet new tool-manifest", _apiDirectory);
+
+            _commandService.Start("dotnet tool install --version 6.0.7 Swashbuckle.AspNetCore.Cli", _apiDirectory);
+
             RemoveUneededFiles();
 
             InstallNugetPackages();
 
             CreateSubDirectories();
 
-            new CsProjService().AddGenerateDocumentationFile($"{_apiDirectory}{Path.DirectorySeparatorChar}{_name}.csproj");
+            var csProjFilePath = $"{_apiDirectory}{Path.DirectorySeparatorChar}{_name}.csproj";
+
+            var service = new CsProjService();
+
+            service.AddGenerateDocumentationFile(csProjFilePath);
+
+            service.AddEndpointPostBuildTargetElement(csProjFilePath);
 
             Create<LaunchSettingsBuilder>((a, b, c, d) => new(a, b, c, d))
                 .SetDirectory($@"{_apiDirectory}{Path.DirectorySeparatorChar}{Constants.Folders.Properties}")
