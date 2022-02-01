@@ -1,12 +1,16 @@
 using CommandLine;
 using Endpoint.Application.Builders;
 using Endpoint.Application.Services;
+using Endpoint.Application.ValueObjects;
 using MediatR;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using static Endpoint.Application.Builders.BuilderFactory;
+using static System.Text.Json.JsonSerializer;
 
 namespace Endpoint.Application.Features
 {
@@ -25,7 +29,7 @@ namespace Endpoint.Application.Features
             public string Resource { get; set; } = "Foo";
 
             [Option('m')]
-            public string Method { get; set; } = "Get";
+            public bool Monolith { get; set; } = false;
 
             [Option('d')]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -34,101 +38,47 @@ namespace Endpoint.Application.Features
         internal class Handler : IRequestHandler<Request, Unit>
         {
             private ICommandService _commandService;
+            private IFileSystem _fileSystem;
+            private ISolutionBuilder _solutionBuilder;
 
-            private string _apiProjectName;
-            private string _apiProjectNamespace;
-            private string _rootNamespace;
-            private string _modelsNamespace;
-            private string _dbContextName;
-
-            private int _port;
-            private string _name;
-            private string _resource;
-            private string _directory;
-
-            public Handler(ICommandService commandService)
+            public Handler(
+                ICommandService commandService, 
+                IFileSystem fileSystem,
+                ISolutionBuilder solutionBuilder)
             {
                 _commandService = commandService;
+                _fileSystem = fileSystem;
+                _solutionBuilder = solutionBuilder;
             }
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
+                var solutionDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{((Token)request.Name).PascalCase}";
+                
+                var rootSettingsFilePath = $"{solutionDirectory}{Path.DirectorySeparatorChar}{Constants.SettingsFileName}";
 
-                _port = request.Port;
-                _name = request.Name;
-                _resource = request.Resource;
-                _directory = request.Directory;
-                _rootNamespace = _name.Replace("-", "_");
+                var settings = new Models.Settings(request.Name, request.Resource, solutionDirectory, isMicroserviceArchitecture: !request.Monolith);
 
-                _apiProjectName = $"{_name}.Api";
-                _apiProjectNamespace = $"{_rootNamespace}.Api";
-                _modelsNamespace = $"{_rootNamespace}.Api.Models";
-                _dbContextName = _name.Split('.').Length > 1 ? $"{_name.Split('.')[1]}DbContext" : $"{_name.Split('.')[0]}DbContext";
+                var json = Serialize(settings, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                });
 
+                _fileSystem.WriteAllLines(rootSettingsFilePath, new List<string> { json }.ToArray());
 
-                var slnRef = Create<SolutionBuilder>((a, b, c, d) => new(a, b, c, d))
-                    .WithDirectory(_directory)
-                    .WithName(_name)
+                _solutionBuilder.Build(settings);
+
+                _commandService.Start("git init", settings.RootDirectory);
+
+                var projRef = Create<ApiBuilder>((a, b, c, d) => new(a, b, c, d, settings))
                     .Build();
 
-                _commandService.Start("git init", slnRef.Directory);
-
-                //TODO: render a Git Ignore
-
-                var apiDirectory = $"{slnRef.SrcDirectory}{Path.DirectorySeparatorChar}{_apiProjectName}";
-
-                var projRef = Create<ApiBuilder>((a, b, c, d) => new(a, b, c, d))
-                    .SetDirectory(slnRef.SrcDirectory)
-                    .WithPort(_port)
-                    .WithSslPort(_port + 1)
-                    .WithDbContext(_dbContextName)
-                    .SetRootNamespace(_rootNamespace)
-                    .WithResource(_resource)
-                    .WithModelsNamespace(_modelsNamespace)
-                    .SetDomainNamespace(_apiProjectNamespace)
-                    .SetApplicationNamespace(_apiProjectNamespace)
-                    .SetInfrastructureNamespace(_apiProjectNamespace)
-                    .SetApiNamespace(_apiProjectNamespace)
-                    .SetDomainDirectory(apiDirectory)
-                    .SetApplicationDirectory(apiDirectory)
-                    .SetInfrastructureDirectory(apiDirectory)
-                    .SetApiDirectory(apiDirectory)
-                    .WithApiProjectNamespace(_apiProjectNamespace)
-                    .WithName(_apiProjectName)
-                    .WithStore(_dbContextName)
-                    .Build();
-
-                Create<ResourceBuilder>((a, b, c, d) => new(a, b, c, d))
-                    .SetDomainDirectory(apiDirectory)
-                    .SetInfrastructureDirectory(apiDirectory)
-                    .SetApplicationDirectory(apiDirectory)
-                    .SetApiDirectory(apiDirectory)
-                    .SetDomainNamespace(_apiProjectNamespace)
-                    .SetInfrastructureNamespace(_apiProjectNamespace)
-                    .SetApplicationNamespace(_apiProjectNamespace)
-                    .SetApiNamespace(_apiProjectNamespace)
-                    .WithResource(_resource)
-                    .WithDbContext(_dbContextName)
+                Create<ResourceBuilder>((a, b, c, d) => new(a, b, c, d, settings))
                     .Build();
 
                 slnRef.Add(projRef.FullPath);
 
                 slnRef.OpenInVisualStudio();
-
-                new SettingsBuilder(
-                    _apiProjectNamespace,
-                    _apiProjectNamespace,
-                    _apiProjectNamespace,
-                    _apiProjectNamespace,
-                    apiDirectory,
-                    apiDirectory,
-                    apiDirectory,
-                    apiDirectory,
-                    slnRef.Directory,
-                    _dbContextName,
-                    new string[1] { _resource },
-                    new FileSystem()
-                    ).Build();
-
 
                 projRef.Run();
 

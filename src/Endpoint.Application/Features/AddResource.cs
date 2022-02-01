@@ -50,10 +50,10 @@ namespace Endpoint.Application.Features
 
                 if (!settings.Resources.Contains(request.Resource))
                 {
-                    settings.Resources = settings.Resources.Concat(new string[1] { request.Resource }).ToArray();
+                    settings.Resources = settings.Resources.Concat(new string[1] { request.Resource }).ToList();
                 }
 
-                _fileSystem.WriteAllLines($"{settings.Path}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
+                _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
                     Serialize(settings, new JsonSerializerOptions
                         {
                             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

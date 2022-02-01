@@ -1,4 +1,5 @@
-﻿using Endpoint.Application.Models;
+﻿using Endpoint.Application.Exceptions;
+using Endpoint.Application.Models;
 using System.IO;
 using System.Linq;
 using static System.Environment;
@@ -21,7 +22,7 @@ namespace Endpoint.Application.Services
 
             for (var i = 1; i <= parts.Length; i++)
             {
-                var path = $"{string.Join(DirectorySeparatorChar, parts.Take(i))}{DirectorySeparatorChar}clisettings.json";
+                var path = $"{string.Join(DirectorySeparatorChar, parts.Take(i))}{DirectorySeparatorChar}{Constants.SettingsFileName}";
 
                 if (File.Exists(path))
                 {
@@ -29,14 +30,14 @@ namespace Endpoint.Application.Services
                     {
                         PropertyNameCaseInsensitive = true,
                     });
-                    settings.Path = new FileInfo(path).Directory.FullName;
+                    settings.RootDirectory = new FileInfo(path).Directory.FullName;
                     return settings;
                 }
 
                 i++;
             }
 
-            return Settings.Empty;
+            throw new SettingsNotFoundException();
 
         }
     }

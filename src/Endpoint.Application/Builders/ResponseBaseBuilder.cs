@@ -3,29 +3,41 @@ using Endpoint.Application.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {
-    public class ResponseBaseBuilder : BuilderBase<ResponseBaseBuilder>
+    public interface IResponseBaseBuilder
     {
+        public void Build(Models.Settings settings);
+    }
+    public class ResponseBaseBuilder: IResponseBaseBuilder
+    {
+        protected readonly ICommandService _commandService;
+        protected readonly ITemplateProcessor _templateProcessor;
+        protected readonly ITemplateLocator _templateLocator;
+        protected readonly IFileSystem _fileSystem;
+
         public ResponseBaseBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
-        { }
-
-
-        public void Build()
+            IFileSystem fileSystem)
+        {
+            _commandService = commandService;
+            _templateProcessor = templateProcessor;
+            _templateLocator = templateLocator;
+            _fileSystem = fileSystem;
+        }
+        public void Build(Models.Settings settings)
         {
             var template = _templateLocator.Get(nameof(ResponseBaseBuilder));
 
             var tokens = new TokensBuilder()
-                .With(nameof(_rootNamespace), _rootNamespace)
-                .With(nameof(_directory), _directory)
-                .With(nameof(_namespace), _namespace)
+                .With("RootNamespace", (Token)settings.RootNamespace)
+                .With("Directory", (Token)settings.DomainDirectory)
+                .With("Namespace", (Token)settings.DomainNamespace)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_directory.Value}/ResponseBase.cs", contents);
+            _fileSystem.WriteAllLines($@"{(Token)settings.DomainDirectory}/ResponseBase.cs", contents);
         }
     }
 }

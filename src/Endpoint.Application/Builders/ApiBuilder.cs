@@ -5,88 +5,44 @@ using static Endpoint.Application.Builders.BuilderFactory;
 
 namespace Endpoint.Application.Builders
 {
-    public class ApiBuilder : BuilderBase<ApiBuilder>
+    public class ApiBuilder
     {
+        private readonly ICommandService _commandService;
+        private readonly ITemplateProcessor _templateProcessor;
+        private readonly ITemplateLocator _templateLocator;
+        private readonly IFileSystem _fileSystem;
+        private readonly ILaunchSettingsBuilder _launchSettingsBuilder;
+        private readonly IResponseBaseBuilder _responseBaseBuilder;
+
         public ApiBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
-        { }
-
-        protected new string _apiDirectory => $"{_directory.Value}{Path.DirectorySeparatorChar}{_name}";
-
-        protected string _apiProjectFullPath => $"{_apiDirectory}{Path.DirectorySeparatorChar}{_apiProjectName}.csproj";
-
-        protected int _port;
-        protected int _sslPort;
-        protected string _apiProjectName;
-        protected string _modelsNamespace;
-        protected string _resource;
-        protected string _apiProjectNamespace;
-        protected string _dbContextName;
-        protected string _store;
-        protected string _name;
-
-        public ApiBuilder WithPort(int port)
+            IFileSystem fileSystem)
         {
-            _port = port;
-            return this;
-        }
-        public ApiBuilder WithSslPort(int sslPort)
-        {
-            _sslPort = sslPort;
-            return this;
-        }
-        public ApiBuilder WithName(string name)
-        {
-            _apiProjectName = name;
-            _name = name;
-            return this;
-        }
-        public ApiBuilder WithModelsNamespace(string modelsNamespace)
-        {
-            _modelsNamespace = modelsNamespace;
-            return this;
-        }
-        public ApiBuilder WithResource(string resource)
-        {
-            _resource = resource;
-            return this;
-        }
-        public ApiBuilder WithApiProjectNamespace(string apiProjectNamespace)
-        {
-            _apiProjectNamespace = apiProjectNamespace;
-            return this;
-        }
-        public ApiBuilder WithDbContext(string dbContext)
-        {
-            _dbContextName = dbContext;
-            return this;
-        }
-        public ApiBuilder WithStore(string store)
-        {
-            _store = store;
-            return this;
+            _commandService = commandService;
+            _templateProcessor = templateProcessor;
+            _templateLocator = templateLocator;
+            _fileSystem = fileSystem;
         }
 
-        public ProjectReference Build()
+        public ProjectReference Build(Models.Settings settings)
         {
-            _commandService.Start($@"mkdir {_name}", _directory);
+            _commandService.Start($@"mkdir {settings.ApiDirectory}");
 
-            _commandService.Start("dotnet new webapi --framework net5.0", _apiDirectory);
+            _commandService.Start("dotnet new webapi --framework net5.0", settings.ApiDirectory);
 
-            _commandService.Start("dotnet new tool-manifest", _apiDirectory);
+            _commandService.Start("dotnet new tool-manifest", settings.ApiDirectory);
 
-            _commandService.Start("dotnet tool install --version 6.0.7 Swashbuckle.AspNetCore.Cli", _apiDirectory);
+            _commandService.Start("dotnet tool install --version 6.0.7 Swashbuckle.AspNetCore.Cli", settings.ApiDirectory);
 
-            RemoveUneededFiles();
+            RemoveUneededFiles(settings);
 
-            InstallNugetPackages();
+            InstallNugetPackages(settings);
 
-            CreateSubDirectories();
+            CreateSubDirectories(settings);
 
-            var csProjFilePath = $"{_apiDirectory}{Path.DirectorySeparatorChar}{_name}.csproj";
+            var csProjFilePath = $"{settings.ApiDirectory}{Path.DirectorySeparatorChar}{settings.ApiNamespace}.csproj";
 
             var service = new CsProjService();
 
@@ -94,18 +50,9 @@ namespace Endpoint.Application.Builders
 
             service.AddEndpointPostBuildTargetElement(csProjFilePath);
 
-            Create<LaunchSettingsBuilder>((a, b, c, d) => new(a, b, c, d))
-                .SetDirectory($@"{_apiDirectory}{Path.DirectorySeparatorChar}{Constants.Folders.Properties}")
-                .WithPort(_port)
-                .WithSslPort(_port + 1)
-                .WithProjectName(_apiProjectName)
-                .Build();
+            _launchSettingsBuilder.Build(settings);
 
-            Create<ResponseBaseBuilder>((a, b, c, d) => new(a, b, c, d))
-                .SetDirectory($@"{_domainDirectory.Value}{Path.DirectorySeparatorChar}{Constants.Folders.Core}")
-                .SetRootNamespace(_domainNamespace.Value)
-                .SetNamespace($"{(_domainNamespace.Value)}.{Constants.Folders.Core}")
-                .Build();
+            _responseBaseBuilder.Build(settings);
 
             Create<ValidationBehaviorBuilder>((a, b, c, d) => new(a, b, c, d))
                 .SetDirectory($@"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}{Constants.Folders.Behaviors}")
@@ -165,48 +112,48 @@ namespace Endpoint.Application.Builders
             return new(_commandService, _apiDirectory, _apiProjectFullPath, $"{_rootNamespace.Value}.Api");
         }
 
-        private void CreateSubDirectories()
+        private void CreateSubDirectories(Models.Settings settings)
         {
-            _commandService.Start($"mkdir {Constants.Folders.Models}", _domainDirectory.Value);
+            _commandService.Start($"mkdir {Constants.Folders.Models}", settings.ApplicationDirectory);
 
-            _commandService.Start($"mkdir {Constants.Folders.Data}", _infrastructureDirectory.Value);
+            _commandService.Start($"mkdir {Constants.Folders.Data}", settings.InfrastructureDirectory);
 
-            _commandService.Start($"mkdir {Constants.Folders.Core}", _domainDirectory.Value);
+            _commandService.Start($"mkdir {Constants.Folders.Core}", settings.DomainDirectory);
 
-            _commandService.Start($"mkdir {Constants.Folders.Behaviors}", _applicationDirectory.Value);
+            _commandService.Start($"mkdir {Constants.Folders.Behaviors}", settings.ApplicationDirectory);
 
-            _commandService.Start($"mkdir {Constants.Folders.Extensions}", _applicationDirectory.Value);
+            _commandService.Start($"mkdir {Constants.Folders.Extensions}", settings.ApplicationDirectory);
 
-            _commandService.Start($"mkdir {Constants.Folders.Features}", _applicationDirectory.Value);
+            _commandService.Start($"mkdir {Constants.Folders.Features}", settings.ApplicationDirectory);
 
-            _commandService.Start($"mkdir {Constants.Folders.Interfaces}", _applicationDirectory.Value);
+            _commandService.Start($"mkdir {Constants.Folders.Interfaces}", settings.ApplicationDirectory);
 
-            _commandService.Start($"mkdir {Constants.Folders.Logs}", _apiDirectory);
+            _commandService.Start($"mkdir {Constants.Folders.Logs}", settings.ApiDirectory);
 
         }
 
-        public void RemoveUneededFiles()
+        public void RemoveUneededFiles(Models.Settings settings)
         {
-            _commandService.Start($"rimraf WeatherForecast.cs", $@"{_apiDirectory}");
-            _commandService.Start($@"rimraf Controllers\WeatherForecastController.cs", $@"{_apiDirectory}");
+            _commandService.Start($"rimraf WeatherForecast.cs", $@"{settings.ApiDirectory}");
+            _commandService.Start($@"rimraf Controllers\WeatherForecastController.cs", $@"{settings.ApiDirectory}");
         }
 
-        public void InstallNugetPackages()
+        public void InstallNugetPackages(Models.Settings settings)
         {
-            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 5.0.10", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 5.0.10", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package FluentValidation --version 10.3.3", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package MediatR.Extensions.Microsoft.DependencyInjection  --version 9.0.0", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.Tools --version 5.0.10", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore --version 6.2.2", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Swagger --version 6.2.2", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Newtonsoft.Json", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Serilog.AspNetCore --version 4.1.0", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Serilog.Sinks.Seq --version 5.1.1", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package SerilogTimings --version 2.3.0", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Annotations --version 6.2.2", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Newtonsoft --version 6.2.2", $@"{_apiDirectory}");
-            _commandService.Start($"dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 5.0.9", $@"{_apiDirectory}");
+            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 5.0.10", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 5.0.10", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package FluentValidation --version 10.3.3", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package MediatR.Extensions.Microsoft.DependencyInjection  --version 9.0.0", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.Tools --version 5.0.10", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore --version 6.2.2", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Swagger --version 6.2.2", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Newtonsoft.Json", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Serilog.AspNetCore --version 4.1.0", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Serilog.Sinks.Seq --version 5.1.1", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package SerilogTimings --version 2.3.0", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Annotations --version 6.2.2", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Newtonsoft --version 6.2.2", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 5.0.9", $@"{settings.ApiDirectory}");
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Endpoint.Application.Features
 
                 new GetPageBuilder(new Context(), _fileSystem)
                     .WithDirectory($"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)request.Entity).PascalCasePlural}")
-                    .WithDbContext(settings.DbContext)
+                    .WithDbContext(settings.DbContextName)
                     .WithNamespace($"{settings.ApplicationNamespace}.Features")
                     .WithApplicationNamespace($"{settings.ApplicationNamespace}")
                     .WithDomainNamespace($"{settings.DomainNamespace}")

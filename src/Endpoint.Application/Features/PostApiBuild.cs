@@ -34,13 +34,13 @@ namespace Endpoint.Application.Features
 
                 var solutionName = settings.ApiNamespace.Replace(".Api", "");
 
-                var appDirectory = $"{settings.Path}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}{solutionName}.App";
+                var appDirectory = $"{settings.RootDirectory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}{solutionName}.App";
 
                 var apiSwaggerFilePath = $"{settings.ApiDirectory}{Path.DirectorySeparatorChar}swagger.json";
 
                 var appSwaggerFilePath = $"{appDirectory}{Path.DirectorySeparatorChar}swagger.json";
 
-                if (Directory.Exists($"{settings.Path}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}{solutionName}.App"))
+                if (Directory.Exists($"{settings.RootDirectory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}{solutionName}.App"))
                 {
                     if(File.Exists(appSwaggerFilePath))
                     {
@@ -53,7 +53,6 @@ namespace Endpoint.Application.Features
 
                         _commandService.Start("node node_modules/ng-swagger-gen/ng-swagger-gen --config ng-swagger-gen.json", appDirectory);
                     }
-                    
                 }
 
                 return new();

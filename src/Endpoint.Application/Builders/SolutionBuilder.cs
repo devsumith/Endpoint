@@ -1,41 +1,41 @@
 using Endpoint.Application.Models;
 using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
-using System.IO;
 
 namespace Endpoint.Application.Builders
 {
-    public class SolutionBuilder : BuilderBase<SolutionBuilder>
+    public interface ISolutionBuilder
     {
-        private string _slnDirectory => $"{_directory.Value}{Path.DirectorySeparatorChar}{_name}";
-        private string _name;
+        SolutionReference Build(Models.Settings settings);
+    }
+
+    public class SolutionBuilder : ISolutionBuilder
+    {
+        protected readonly ICommandService _commandService;
+        protected readonly ITemplateProcessor _templateProcessor;
+        protected readonly ITemplateLocator _templateLocator;
+        protected readonly IFileSystem _fileSystem;
+
         public SolutionBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
-        { }
-
-        public SolutionBuilder WithDirectory(string directory)
+            IFileSystem fileSystem)
         {
-            _directory = (Token)directory;
-            return this;
+            _commandService = commandService;
+            _templateProcessor = templateProcessor;
+            _templateLocator = templateLocator;
+            _fileSystem = fileSystem;
         }
 
-        public SolutionBuilder WithName(string name)
+        public SolutionReference Build(Settings settings)
         {
-            _name = name;
-            return this;
-        }
-        public SolutionReference Build()
-        {
-            _commandService.Start($"mkdir {_name}", _directory.Value);
+            _commandService.Start($"mkdir {settings.SolutionName}", settings.RootDirectory);
 
-            _commandService.Start($"dotnet new sln -n {_name}", _slnDirectory);
+            _commandService.Start($"dotnet new sln -n {settings.SolutionName}", settings.RootDirectory);
 
-            _commandService.Start($"mkdir src", _slnDirectory);
+            _commandService.Start($"mkdir {settings.SourceFolder}", settings.RootDirectory);
 
-            return new(_commandService, _slnDirectory, _name);
+            return new(_commandService, settings.RootDirectory, settings.SolutionName);
         }
     }
 }

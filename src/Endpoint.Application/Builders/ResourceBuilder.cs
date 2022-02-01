@@ -1,49 +1,43 @@
 using Endpoint.Application.Enums;
-using Endpoint.Application.Models;
 using Endpoint.Application.Services;
 using Endpoint.Application.ValueObjects;
-using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using static Endpoint.Application.Builders.BuilderFactory;
 
 namespace Endpoint.Application.Builders
 {
-    public class ResourceBuilder : BuilderBase<ResourceBuilder>
+    public class ResourceBuilder
     {
+        private readonly Models.Settings _settings;
+        protected readonly ICommandService _commandService;
+        protected readonly ITemplateProcessor _templateProcessor;
+        protected readonly ITemplateLocator _templateLocator;
+        protected readonly IFileSystem _fileSystem;
+        protected Token _directory;
+        protected Token _rootNamespace;
+        protected Token _namespace;
+        protected Token _apiNamespace;
+        protected Token _domainNamespace;
+        protected Token _applicationNamespace;
+        protected Token _infrastructureNamespace;
+        protected Token _domainDirectory;
+        protected Token _infrastructureDirectory;
+        protected Token _applicationDirectory;
+        protected Token _apiDirectory;
+        private string _entityName;
+        private string _dbContextName;
+        private List<string> _resources = new List<string>();
+
         public ResourceBuilder(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
-        { }
-
-        private string _entityName;
-        private string _dbContextName;
-        private string[] _resources = new string[0];
-
-        public ResourceBuilder WithResource(string resource)
-        {
-            _entityName = resource;
-            _resources = _resources.Concat(new string[1] { resource }).ToArray();
-            return this;
-        }
-
-        public ResourceBuilder WithResources(string[] resources)
-        {
-            _resources = resources;
-            return this;
-        }
-
-        public ResourceBuilder WithDbContext(string dbContext)
-        {
-            _dbContextName = dbContext;
-            return this;
-        }
-
-        public new ResourceBuilder WithSettings(Settings settings)
-        {
-            _dbContextName = settings.DbContext;
+            IFileSystem fileSystem,
+            Models.Settings settings)
+        { 
+            _settings = settings;
+            _dbContextName = settings.DbContextName;
             _domainDirectory = (Token)settings.DomainDirectory;
             _applicationDirectory = (Token)settings.ApplicationDirectory;
             _infrastructureDirectory = (Token)settings.InfrastructureDirectory;
@@ -53,8 +47,10 @@ namespace Endpoint.Application.Builders
             _infrastructureNamespace = (Token)settings.InfrastructureNamespace;
             _apiNamespace = (Token)settings.ApiNamespace;
             _resources = settings.Resources;
-            return this;
         }
+
+
+
 
         public void Build()
         {
@@ -76,7 +72,7 @@ namespace Endpoint.Application.Builders
                 _domainNamespace.Value,
                 _applicationDirectory.Value,
                 _applicationNamespace.Value,
-                _resources).Build();
+                _resources.ToArray()).Build();
 
             Map(Create<FeatureBuilder>((a, b, c, d) => new(a, b, c, d)))
                 .SetEntityName(_entityName)

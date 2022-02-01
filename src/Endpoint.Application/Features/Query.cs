@@ -43,7 +43,7 @@ namespace Endpoint.Application.Features
                     .SetDomainNamespace(settings.DomainNamespace)
                     .WithEntity(request.Entity)
                     .WithName(request.Name)
-                    .WithDbContext(settings.DbContext)
+                    .WithDbContext(settings.DbContextName)
                     .Build();
 
                 return Task.FromResult(new Unit());

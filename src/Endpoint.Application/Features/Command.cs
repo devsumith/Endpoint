@@ -45,8 +45,7 @@ namespace Endpoint.Application.Features
                     .WithBuildingBlocksEventStoreNamespace(settings.BuildingBlocksEventStoreNamespace)
                     .WithEntity(request.Entity)
                     .WithName(request.Name)
-                    .WithDbContext(settings.DbContext)
-                    .WithStore(settings.Store)
+                    .WithDbContext(settings.DbContextName)
                     .Build();
 
                 return Task.FromResult(new Unit());
