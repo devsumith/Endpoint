@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "command Authenticate -d C:\\projects\\Venture\\src\\Venture.Api\\Features\\Users"
+      "commandLineArgs": "-d C:\\sandbox"
     }
   }
 }

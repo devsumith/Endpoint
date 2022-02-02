@@ -9,6 +9,13 @@ namespace Endpoint.Application
         public static string RootNamespace = nameof(Endpoint);
         public static string Tab = "    ";
         public static string SettingsFileName = "clisettings.json";
+
+        public static class DotNetTemplateTypes
+        {
+            public static readonly string WebApi = "webapi";
+            public static readonly string XUnit = "xunit";
+            public static readonly string ClassLibrary = "classlib";
+        }
         public static class Folders
         {
             public static string Extensions = nameof(Extensions);

@@ -307,7 +307,7 @@ namespace Endpoint.Application.Builders
 
             var path = $"{_directory}{Path.DirectorySeparatorChar}{prefix}{_name}.cs";
 
-            _context.Add(path, Class);
+            //_context.Add(path, Class);
 
             _fileSystem.WriteAllLines(path, Class);
 

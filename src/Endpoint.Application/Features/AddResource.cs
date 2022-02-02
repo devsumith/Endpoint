@@ -1,4 +1,4 @@
-using CommandLine;
+/*using CommandLine;
 using Endpoint.Application.Builders;
 using Endpoint.Application.Services;
 using MediatR;
@@ -65,3 +65,4 @@ namespace Endpoint.Application.Features
         }
     }
 }
+*/

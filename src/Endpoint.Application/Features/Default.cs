@@ -1,16 +1,12 @@
 using CommandLine;
 using Endpoint.Application.Builders;
 using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
+using Endpoint.Application.Services.FileServices;
 using MediatR;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using static Endpoint.Application.Builders.BuilderFactory;
-using static System.Text.Json.JsonSerializer;
 
 namespace Endpoint.Application.Features
 {
@@ -23,13 +19,13 @@ namespace Endpoint.Application.Features
             public int Port { get; set; } = 5000;
 
             [Option('n')]
-            public string Name { get; set; } = $"DefaultEndpoint-{Guid.NewGuid()}";
+            public string Name { get; set; } = "DefaultEndpoint";
 
             [Option('r')]
             public string Resource { get; set; } = "Foo";
 
             [Option('m')]
-            public bool Monolith { get; set; } = false;
+            public bool Monolith { get; set; } = true;
 
             [Option('d')]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -38,51 +34,47 @@ namespace Endpoint.Application.Features
         internal class Handler : IRequestHandler<Request, Unit>
         {
             private ICommandService _commandService;
-            private IFileSystem _fileSystem;
-            private ISolutionBuilder _solutionBuilder;
+            private readonly ISolutionFileService _solutionFileService;
+            private readonly IDomainFileService _domainFileService;
+            private readonly IApplicationFileService _applicationFileService;
 
             public Handler(
                 ICommandService commandService, 
-                IFileSystem fileSystem,
-                ISolutionBuilder solutionBuilder)
+                ISolutionFileService solutionFileService,
+                IDomainFileService domainFileService,
+                IApplicationFileService applicationFileService)
             {
                 _commandService = commandService;
-                _fileSystem = fileSystem;
-                _solutionBuilder = solutionBuilder;
+                _solutionFileService = solutionFileService;
+                _domainFileService = domainFileService;
+                _applicationFileService = applicationFileService;
             }
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                var solutionDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{((Token)request.Name).PascalCase}";
-                
-                var rootSettingsFilePath = $"{solutionDirectory}{Path.DirectorySeparatorChar}{Constants.SettingsFileName}";
+                int retries = 0;
 
-                var settings = new Models.Settings(request.Name, request.Resource, solutionDirectory, isMicroserviceArchitecture: !request.Monolith);
+                string name = request.Name;
 
-                var json = Serialize(settings, new JsonSerializerOptions
+                while (true)
                 {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    WriteIndented = true
-                });
+                    if(!Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}"))
+                    {
+                        var settings = _solutionFileService.Build(request.Name, request.Resource, request.Directory, isMicroserviceArchitecture: !request.Monolith);
 
-                _fileSystem.WriteAllLines(rootSettingsFilePath, new List<string> { json }.ToArray());
+                        _domainFileService.Build(settings);
 
-                _solutionBuilder.Build(settings);
+                        _applicationFileService.Build(settings);
 
-                _commandService.Start("git init", settings.RootDirectory);
+                        _commandService.Start($"start {settings.SolutionFileName}", settings.RootDirectory);
 
-                var projRef = Create<ApiBuilder>((a, b, c, d) => new(a, b, c, d, settings))
-                    .Build();
+                        return Task.FromResult(new Unit());
+                    }
 
-                Create<ResourceBuilder>((a, b, c, d) => new(a, b, c, d, settings))
-                    .Build();
+                    retries++;
 
-                slnRef.Add(projRef.FullPath);
+                    request.Name = $"{name}_{retries}";
 
-                slnRef.OpenInVisualStudio();
-
-                projRef.Run();
-
-                return Task.FromResult(new Unit());
+                }
             }
         }
     }

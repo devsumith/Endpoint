@@ -1,6 +1,6 @@
 ﻿using Endpoint.Application;
-using Endpoint.Application.Builders;
 using Endpoint.Application.Services;
+using Endpoint.Application.Services.FileServices;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,9 +22,9 @@ namespace Endpoint.Cli
             services.AddSingleton<ICsProjService, CsProjService>();
 
 
-            services.AddSingleton<ISolutionBuilder, SolutionBuilder>();
-
-            services.AddSingleton<IApiFileBuilder, ApiFileBuilder>();
+            services.AddSingleton<ISolutionFileService, SolutionFileService>();
+            services.AddSingleton<IDomainFileService, DomainFileService>();
+            services.AddSingleton<IApplicationFileService, ApplicationFileService>();
         }
     }
 }

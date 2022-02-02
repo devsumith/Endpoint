@@ -12,6 +12,7 @@ namespace Endpoint.Application.Models
         public string RootDirectory { get; set; }
         public string SolutionName { get; set; }
         public string SolutionFileName { get; set; }
+        public string ApiFullPath { get; set; }
         public string RootNamespace { get; set; }
         public string DomainNamespace { get; set; }
         public string ApplicationNamespace { get; set; }
@@ -21,6 +22,8 @@ namespace Endpoint.Application.Models
         public string ApplicationDirectory { get; set; }
         public string InfrastructureDirectory { get; set; }
         public string ApiDirectory { get; set; }
+        public string UnitTestsDirectory { get; set; }
+        public string TestingDirectory { get; set; }
         public List<string> AppDirectories { get; set; } = new List<string>();
         public string BuildingBlocksCoreNamespace { get; set; } = "BuildingBlocks.Core";
         public string BuildingBlocksEventStoreNamespace { get; set; } = "BuildingBlocks.EventStore";
@@ -48,17 +51,21 @@ namespace Endpoint.Application.Models
             RootDirectory = $"{directory}{Path.DirectorySeparatorChar}{SolutionName}";
             RootNamespace = SolutionName;
             ApiNamespace = $"{RootNamespace}.Api";
+            ApiFullPath = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{ApiNamespace}{Path.DirectorySeparatorChar}{ApiNamespace}.csproj";
             InfrastructureNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.Infrastructure";
             DomainNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.SharedKernal";
             ApplicationNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.Core";
 
-            if(IsMicroserviceArchitecture)
+            var sourceFolder = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}";
+            var testsFolder = $"{RootDirectory}{Path.DirectorySeparatorChar}{TestFolder}{Path.DirectorySeparatorChar}";
+
+            if (IsMicroserviceArchitecture)
             {
-                ApiDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Api";
-                InfrastructureDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Api";
-                DomainDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Api";
-                ApplicationDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Api";
-            } 
+                ApiDirectory = $"{sourceFolder}{SolutionName}.Api";
+                InfrastructureDirectory = $"{sourceFolder}{SolutionName}.Api";
+                DomainDirectory = $"{sourceFolder}{SolutionName}.Api";
+                ApplicationDirectory = $"{sourceFolder}{SolutionName}.Api";
+            }
             else
             {
                 ApiDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Api";
@@ -66,6 +73,9 @@ namespace Endpoint.Application.Models
                 DomainDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.SharedKernal";
                 ApplicationDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Core";
             }
+
+            UnitTestsDirectory = $"{testsFolder}{RootNamespace}.UnitTests";
+            TestingDirectory = $"{testsFolder}{RootNamespace}.Testing";
 
         }
 
