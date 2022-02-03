@@ -102,7 +102,7 @@ namespace Endpoint.Application.Builders
                 .WithReturnType($"Task<List<{((Token)_entityName).PascalCase}Dto>>")
                 .WithPropertyName($"{((Token)_entityName).PascalCase}Id")
                 .WithParameter(new ParameterBuilder($"IQueryable<{((Token)_entityName).PascalCase}>", ((Token)_entityName).CamelCasePlural, true).Build())
-                .WithParameter(new ParameterBuilder("CancellationToken","cancellationToken").Build())
+                .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new()
                 {
                     $"return await {((Token)_entityName).CamelCasePlural}.Select(x => x.ToDto()).ToListAsync(cancellationToken);"

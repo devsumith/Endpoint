@@ -32,7 +32,7 @@ namespace Endpoint.Application.Services.FileServices
 
             var settings = new Models.Settings(name, resource, directory, isMicroserviceArchitecture);
 
-            var json =  Serialize(settings, new JsonSerializerOptions
+            var json = Serialize(settings, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
@@ -48,7 +48,7 @@ namespace Endpoint.Application.Services.FileServices
 
             _commandService.Start("git init", settings.RootDirectory);
 
-            if(isMicroserviceArchitecture)
+            if (isMicroserviceArchitecture)
             {
                 _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
 
@@ -59,7 +59,7 @@ namespace Endpoint.Application.Services.FileServices
                 _addReference(settings.TestingDirectory, settings.ApiDirectory);
 
                 _addReference(settings.UnitTestsDirectory, settings.TestingDirectory);
-            } 
+            }
             else
             {
                 _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
@@ -98,7 +98,7 @@ namespace Endpoint.Application.Services.FileServices
 
             var parts = directory.Split(Path.DirectorySeparatorChar);
 
-            var name = parts[parts.Length -1];
+            var name = parts[parts.Length - 1];
 
             _commandService.Start($"dotnet sln add {directory}{Path.DirectorySeparatorChar}{name}.csproj", settings.RootDirectory);
         }

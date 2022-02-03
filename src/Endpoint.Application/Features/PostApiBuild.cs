@@ -11,7 +11,8 @@ namespace Endpoint.Application.Features
     internal class PostApiBuild
     {
         [Verb("post-api-build")]
-        internal class Request : IRequest<Unit> {
+        internal class Request : IRequest<Unit>
+        {
 
             [Option('d', Required = false)]
             public string Directory { get; set; } = Environment.CurrentDirectory;
@@ -42,12 +43,12 @@ namespace Endpoint.Application.Features
 
                 if (Directory.Exists($"{settings.RootDirectory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}{solutionName}.App"))
                 {
-                    if(File.Exists(appSwaggerFilePath))
+                    if (File.Exists(appSwaggerFilePath))
                     {
                         File.Delete(appSwaggerFilePath);
                     }
 
-                    if(File.Exists(apiSwaggerFilePath))
+                    if (File.Exists(apiSwaggerFilePath))
                     {
                         File.Copy(apiSwaggerFilePath, appSwaggerFilePath);
 

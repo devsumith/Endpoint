@@ -26,7 +26,7 @@ namespace Endpoint.Application.Builders
 
         public string[] Build()
         {
-            var logStatementBuilder = new LogStatementBuilder(_resource,_endpointType, _indent + 1);
+            var logStatementBuilder = new LogStatementBuilder(_resource, _endpointType, _indent + 1);
 
             var logStatement = logStatementBuilder.Build();
 
@@ -36,7 +36,7 @@ namespace Endpoint.Application.Builders
             };
 
 
-            switch(_endpointType)
+            switch (_endpointType)
             {
                 case EndpointType.GetById:
                     body.AddRange(BuildGetByIdEndpointBody(_resource));
@@ -60,7 +60,7 @@ namespace Endpoint.Application.Builders
                     body.AddRange(BuildEndpointBody());
                     break;
             }
-            
+
             body.Add("}");
 
             return body.ToArray();

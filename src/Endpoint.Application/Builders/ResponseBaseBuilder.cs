@@ -7,7 +7,7 @@ namespace Endpoint.Application.Builders
     {
         public void Build(Models.Settings settings);
     }
-    public class ResponseBaseBuilder: IResponseBaseBuilder
+    public class ResponseBaseBuilder : IResponseBaseBuilder
     {
         protected readonly ICommandService _commandService;
         protected readonly ITemplateProcessor _templateProcessor;

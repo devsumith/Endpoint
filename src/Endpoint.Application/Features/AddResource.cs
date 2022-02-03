@@ -1,6 +1,7 @@
-/*using CommandLine;
+using CommandLine;
 using Endpoint.Application.Builders;
 using Endpoint.Application.Services;
+using Endpoint.Application.Services.FileServices;
 using MediatR;
 using System.IO;
 using System.Linq;
@@ -30,23 +31,32 @@ namespace Endpoint.Application.Features
             private readonly ICommandService _commandService;
             private readonly ITemplateProcessor _templateProcessor;
             private readonly ITemplateLocator _templateLocator;
+            private readonly IApplicationFileService _applicationFileService;
+            private readonly IInfrastructureFileService _infrastructureFileService;
+            private readonly IApiFileService _apiFileService;
 
-            public Handler(ISettingsProvider settingsProvider, IFileSystem fileSystem, ICommandService commandService, ITemplateLocator templateLocator, ITemplateProcessor templateProcessor)
+            public Handler(
+                ISettingsProvider settingsProvider,
+                IFileSystem fileSystem,
+                ICommandService commandService,
+                ITemplateLocator templateLocator,
+                ITemplateProcessor templateProcessor,
+                IApplicationFileService applicationFileService,
+                IInfrastructureFileService infrastructureFileService,
+                IApiFileService apiFileService)
             {
                 _settingsProvider = settingsProvider;
                 _fileSystem = fileSystem;
                 _commandService = commandService;
                 _templateProcessor = templateProcessor;
                 _templateLocator = templateLocator;
+                _applicationFileService = applicationFileService;
+                _infrastructureFileService = infrastructureFileService;
+                _apiFileService = apiFileService;
             }
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvider.Get(request.Directory);
-
-                new ResourceBuilder(_commandService, _templateProcessor, _templateLocator, _fileSystem)
-                    .WithSettings(settings)
-                    .WithResource(request.Resource)
-                    .Build();
 
                 if (!settings.Resources.Contains(request.Resource))
                 {
@@ -60,9 +70,15 @@ namespace Endpoint.Application.Features
                             WriteIndented = true
                         })
                 });
+
+                _applicationFileService.BuildAdditionalResource(request.Resource, settings);
+
+                _infrastructureFileService.BuildAdditionalResource(request.Resource, settings);
+
+                _apiFileService.BuildAdditionalResource(request.Resource, settings);
+
                 return Task.FromResult(new Unit());
             }
         }
     }
 }
-*/

@@ -9,7 +9,7 @@ namespace Endpoint.Application.Services
         void AddEndpointPostBuildTargetElement(string csprojFilePath);
     }
 
-    public class CsProjService: ICsProjService
+    public class CsProjService : ICsProjService
     {
         public void AddGenerateDocumentationFile(string csprojFilePath)
         {
@@ -36,23 +36,23 @@ namespace Endpoint.Application.Services
         private XElement _getEndpointPostBuildTargetElement()
         {
             var dotnetToolRestoreCommand = new XElement("Exec");
-            
+
             dotnetToolRestoreCommand.SetAttributeValue("Command", "dotnet tool restore");
 
             var toFileCommand = new XElement("Exec");
-            
+
             toFileCommand.SetAttributeValue("Command", "dotnet tool run swagger tofile --serializeasv2  --output \"$(ProjectDir)swagger.json\" \"$(TargetDir)$(TargetFileName)\" v1");
 
             var endpointCommand = new XElement("Exec");
-            
+
             endpointCommand.SetAttributeValue("Command", "endpoint post-api-build");
-            
-            var element = new XElement("Target",dotnetToolRestoreCommand, toFileCommand, endpointCommand);
-            
+
+            var element = new XElement("Target", dotnetToolRestoreCommand, toFileCommand, endpointCommand);
+
             element.SetAttributeValue("Name", "EndpointPostBuildTarget");
-            
+
             element.SetAttributeValue("AfterTargets", "Build");
-            
+
             return element;
         }
     }

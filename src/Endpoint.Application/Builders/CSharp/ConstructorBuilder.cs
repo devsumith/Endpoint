@@ -139,8 +139,8 @@ namespace Endpoint.Application.Builders.CSharp
 
                 Unindent();
 
-                body.Add("}".Indent(_indent)); 
-                
+                body.Add("}".Indent(_indent));
+
                 return body.ToArray();
             }
 

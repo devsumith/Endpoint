@@ -11,12 +11,12 @@ namespace Endpoint.Application.Services.FileServices
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
-            IFileSystem fileSystem):base(commandService,templateProcessor,templateLocator,fileSystem)
+            IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
         public void Build(Settings settings)
         {
-            _createFolder($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Extensions",settings.DomainDirectory);
+            _createFolder($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Extensions", settings.DomainDirectory);
 
             _removeDefaultFiles(settings.DomainDirectory);
 

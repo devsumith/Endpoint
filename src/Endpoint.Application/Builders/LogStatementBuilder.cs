@@ -51,7 +51,7 @@ namespace Endpoint.Application.Builders
 
         public string[] Build()
         {
-            switch(_endpointType)
+            switch (_endpointType)
             {
                 case EndpointType.Create:
                     return BuildForCreateCommand();

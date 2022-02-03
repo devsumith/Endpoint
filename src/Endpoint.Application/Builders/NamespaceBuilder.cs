@@ -63,9 +63,9 @@ namespace Endpoint.Application.Builders
         {
             var content = new List<string>();
 
-            if(_usings.Count > 0)
+            if (_usings.Count > 0)
             {
-                foreach(var u in _usings.OrderBy(x => x))
+                foreach (var u in _usings.OrderBy(x => x))
                 {
                     content.Add($"using {u};");
                 }
@@ -77,11 +77,11 @@ namespace Endpoint.Application.Builders
             content.Add("{");
             content.Add("");
 
-            if(_classes.Count > 0)
+            if (_classes.Count > 0)
             {
-                foreach(var @class in _classes)
+                foreach (var @class in _classes)
                 {
-                    foreach(var line in @class)
+                    foreach (var line in @class)
                     {
                         content.Add(line.Indent(1));
                     }

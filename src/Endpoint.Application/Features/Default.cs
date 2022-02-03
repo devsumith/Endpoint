@@ -25,7 +25,7 @@ namespace Endpoint.Application.Features
             public string Resource { get; set; } = "Foo";
 
             [Option('m')]
-            public bool Monolith { get; set; } = true;
+            public bool Monolith { get; set; } = false;
 
             [Option('d')]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -37,18 +37,24 @@ namespace Endpoint.Application.Features
             private readonly ISolutionFileService _solutionFileService;
             private readonly IDomainFileService _domainFileService;
             private readonly IApplicationFileService _applicationFileService;
-
+            private readonly IInfrastructureFileService _infrastructureFileService;
+            private readonly IApiFileService _apiFileService;
             public Handler(
-                ICommandService commandService, 
+                ICommandService commandService,
                 ISolutionFileService solutionFileService,
                 IDomainFileService domainFileService,
-                IApplicationFileService applicationFileService)
+                IApplicationFileService applicationFileService,
+                IInfrastructureFileService infrastructureFileService,
+                IApiFileService apiFileService)
             {
                 _commandService = commandService;
                 _solutionFileService = solutionFileService;
                 _domainFileService = domainFileService;
                 _applicationFileService = applicationFileService;
+                _infrastructureFileService = infrastructureFileService;
+                _apiFileService = apiFileService;
             }
+
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 int retries = 0;
@@ -57,13 +63,17 @@ namespace Endpoint.Application.Features
 
                 while (true)
                 {
-                    if(!Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}"))
+                    if (!Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}"))
                     {
                         var settings = _solutionFileService.Build(request.Name, request.Resource, request.Directory, isMicroserviceArchitecture: !request.Monolith);
 
                         _domainFileService.Build(settings);
 
                         _applicationFileService.Build(settings);
+
+                        _infrastructureFileService.Build(settings);
+
+                        _apiFileService.Build(settings);
 
                         _commandService.Start($"start {settings.SolutionFileName}", settings.RootDirectory);
 

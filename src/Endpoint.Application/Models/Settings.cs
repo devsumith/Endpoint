@@ -43,7 +43,7 @@ namespace Endpoint.Application.Models
 
             SolutionName = name;
             SolutionFileName = $"{name}.sln";
-            
+
             var parts = name.Split('.');
             DbContextName = $"{parts[parts.Length - 1]}DbContext";
 
@@ -79,7 +79,7 @@ namespace Endpoint.Application.Models
 
         }
 
-        private Settings()
+        public Settings()
         {
 
         }

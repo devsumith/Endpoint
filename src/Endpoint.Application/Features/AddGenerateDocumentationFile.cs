@@ -11,7 +11,8 @@ namespace Endpoint.Application.Features
     internal class AddGenerateDocumentationFile
     {
         [Verb("add-generate-documentation-file")]
-        internal class Request : IRequest<Unit> {
+        internal class Request : IRequest<Unit>
+        {
             [Option('d', Required = false)]
             public string Directory { get; set; } = Environment.CurrentDirectory;
         }
@@ -20,7 +21,7 @@ namespace Endpoint.Application.Features
         {
             private readonly ICsProjService _csProjService;
             private readonly ISettingsProvider _settingsProvider;
-            
+
             public Handler(ICsProjService csProjService, ISettingsProvider settingsProvider)
             {
                 _csProjService = csProjService;

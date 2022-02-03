@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Application": {
       "commandName": "Project",
-      "commandLineArgs": "post-api-build -d C:\\projects\\Avengers"
+      "commandLineArgs": "add-resource User -d C:\\sandbox\\Avengers"
     }
   }
 }

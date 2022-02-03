@@ -12,7 +12,7 @@ namespace Endpoint.UnitTests
         {
             var context = new Context();
 
-            var sut = new NamespaceBuilder("Avengers.Api.Features","Test", context, default);
+            var sut = new NamespaceBuilder("Avengers.Api.Features", "Test", context, default);
 
             sut.Build();
 

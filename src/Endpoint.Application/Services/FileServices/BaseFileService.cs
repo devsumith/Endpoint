@@ -33,7 +33,8 @@ namespace Endpoint.Application.Services.FileServices
 
         private void _removeDefaultFile(string path)
         {
-            if(File.Exists(path)) {
+            if (File.Exists(path))
+            {
                 File.Delete(path);
             }
         }
