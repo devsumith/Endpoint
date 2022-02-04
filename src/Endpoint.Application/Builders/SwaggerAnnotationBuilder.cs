@@ -1,5 +1,6 @@
-﻿using Endpoint.Application.Extensions;
+﻿
 using System.Collections.Generic;
+using Endpoint.SharedKernal;
 
 namespace Endpoint.Application.Builders
 {

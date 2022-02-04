@@ -1,12 +1,11 @@
-using Endpoint.Application.Services;
+using Endpoint.Application.Builders.CSharp;
+using Endpoint.SharedKernal.Services;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using Endpoint.Application.Extensions;
-using static Endpoint.Application.Enums.AccessModifier;
-using Endpoint.Application.Builders.CSharp;
-using System;
 using System.Linq;
+using System.Text;
+using static Endpoint.Application.Enums.AccessModifier;
+using Endpoint.SharedKernal;
 
 namespace Endpoint.Application.Builders
 {

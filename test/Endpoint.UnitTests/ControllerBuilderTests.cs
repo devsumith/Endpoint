@@ -1,7 +1,7 @@
 using Endpoint.Application.Builders;
 using Endpoint.Application.Enums;
-using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
@@ -37,7 +37,7 @@ namespace Endpoint.UnitTests
             var remove = new MethodBuilder().WithEndpointType(EndpointType.Delete).WithResource(_entityName).WithAuthorize(false).Build();
             var page = new MethodBuilder().WithEndpointType(EndpointType.Page).WithResource(_entityName).WithAuthorize(false).Build();
 
-            var actual = new ClassBuilder($"{((Token)_entityName).PascalCase}Controller", new Context(), Mock.Of<IFileSystem>())
+            var actual = new ClassBuilder($"{((Token)_entityName).PascalCase}Controller", new Endpoint.SharedKernal.Services.Context(), Mock.Of<IFileSystem>())
                 .WithUsing("System.Net")
                 .WithUsing("System.Threading.Tasks")
                 .WithUsing($"{_namespace}.Features")

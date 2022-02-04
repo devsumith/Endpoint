@@ -1,6 +1,7 @@
-using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 using System;
+using Endpoint.SharedKernal;
 
 namespace Endpoint.Application.Builders
 {

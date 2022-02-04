@@ -1,7 +1,7 @@
 using CommandLine;
 using Endpoint.Application.Builders;
-using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 using MediatR;
 using System.IO;
 using System.Threading;
@@ -36,7 +36,7 @@ namespace Endpoint.Application.Features
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-                new GetPageBuilder(new Context(), _fileSystem)
+                new GetPageBuilder(new Endpoint.SharedKernal.Services.Context(), _fileSystem)
                     .WithDirectory($"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)request.Entity).PascalCasePlural}")
                     .WithDbContext(settings.DbContextName)
                     .WithNamespace($"{settings.ApplicationNamespace}.Features")

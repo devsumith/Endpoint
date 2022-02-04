@@ -1,6 +1,6 @@
 ﻿using Endpoint.Application.Enums;
-using Endpoint.Application.Extensions;
-using Endpoint.Application.ValueObjects;
+using Endpoint.SharedKernal;
+using Endpoint.SharedKernal.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {

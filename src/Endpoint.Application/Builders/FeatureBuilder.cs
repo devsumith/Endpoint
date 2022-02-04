@@ -1,8 +1,9 @@
-using Endpoint.Application.Extensions;
-using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
+
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 using System;
 using System.IO;
+using Endpoint.SharedKernal;
 
 namespace Endpoint.Application.Builders
 {
@@ -18,7 +19,7 @@ namespace Endpoint.Application.Builders
             ITemplateLocator templateLocator,
             IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         {
-            _context = new Context();
+            _context = new Endpoint.SharedKernal.Services.Context();
         }
 
         public FeatureBuilder(
@@ -110,14 +111,14 @@ namespace Endpoint.Application.Builders
                 .Build())
                 .Build();
 
-            new ClassBuilder($"{_entityName.PascalCase}Validator", new Context(), _fileSystem)
+            new ClassBuilder($"{_entityName.PascalCase}Validator", new Endpoint.SharedKernal.Services.Context(), _fileSystem)
                 .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
                 .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", $"{_entityName.PascalCase}Dto").Build())
                 .WithNamespace($"{_applicationNamespace.Value}.Features")
                 .WithUsing("FluentValidation")
                 .Build();
 
-            new CreateBuilder(new Context(), _fileSystem)
+            new CreateBuilder(new Endpoint.SharedKernal.Services.Context(), _fileSystem)
                 .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
                 .WithDbContext(_dbContext)
                 .WithNamespace($"{_applicationNamespace.Value}.Features")
@@ -126,7 +127,7 @@ namespace Endpoint.Application.Builders
                 .WithEntity(_entityName.Value)
                 .Build();
 
-            new UpdateBuilder(new Context(), _fileSystem)
+            new UpdateBuilder(new Endpoint.SharedKernal.Services.Context(), _fileSystem)
                 .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
                 .WithDbContext(_dbContext)
                 .WithNamespace($"{_applicationNamespace.Value}.Features")
@@ -135,7 +136,7 @@ namespace Endpoint.Application.Builders
                 .WithEntity(_entityName.Value)
                 .Build();
 
-            new RemoveBuilder(new Context(), _fileSystem)
+            new RemoveBuilder(new Endpoint.SharedKernal.Services.Context(), _fileSystem)
                 .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
                 .WithDbContext(_dbContext)
                 .WithNamespace($"{_applicationNamespace.Value}.Features")
@@ -144,7 +145,7 @@ namespace Endpoint.Application.Builders
                 .WithEntity(_entityName.Value)
                 .Build();
 
-            new GetByIdBuilder(new Context(), _fileSystem)
+            new GetByIdBuilder(new Endpoint.SharedKernal.Services.Context(), _fileSystem)
                 .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
                 .WithDbContext(_dbContext)
                 .WithNamespace($"{_applicationNamespace.Value}.Features")
@@ -153,7 +154,7 @@ namespace Endpoint.Application.Builders
                 .WithEntity(_entityName.Value)
                 .Build();
 
-            new GetBuilder(new Context(), _fileSystem)
+            new GetBuilder(new Endpoint.SharedKernal.Services.Context(), _fileSystem)
                 .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
                 .WithDbContext(_dbContext)
                 .WithNamespace($"{_applicationNamespace.Value}.Features")
@@ -162,7 +163,7 @@ namespace Endpoint.Application.Builders
                 .WithEntity(_entityName.Value)
                 .Build();
 
-            new GetPageBuilder(new Context(), _fileSystem)
+            new GetPageBuilder(new Endpoint.SharedKernal.Services.Context(), _fileSystem)
                 .WithDirectory($"{_applicationDirectory.Value}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)_entityName).PascalCasePlural}")
                 .WithDbContext(_dbContext)
                 .WithNamespace($"{_applicationNamespace.Value}.Features")

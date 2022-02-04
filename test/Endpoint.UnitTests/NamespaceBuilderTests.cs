@@ -1,5 +1,5 @@
 ﻿using Endpoint.Application.Builders;
-using Endpoint.Application.Services;
+using Endpoint.SharedKernal.Services;
 using System.IO;
 using Xunit;
 
@@ -10,7 +10,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Constructor()
         {
-            var context = new Context();
+            var context = new Endpoint.SharedKernal.Services.Context();
 
             var sut = new NamespaceBuilder("Avengers.Api.Features", "Test", context, default);
 

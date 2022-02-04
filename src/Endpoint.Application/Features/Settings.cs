@@ -1,5 +1,5 @@
 using CommandLine;
-using Endpoint.Application.Services;
+using Endpoint.SharedKernal.Services;
 using MediatR;
 using System.Collections.Generic;
 using System.Threading;

@@ -1,6 +1,6 @@
 using Endpoint.Application.Enums;
-using Endpoint.Application.Extensions;
 using System.Text;
+using Endpoint.SharedKernal;
 
 namespace Endpoint.Application.Builders
 {

@@ -1,11 +1,11 @@
-using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {
     public interface IResponseBaseBuilder
     {
-        public void Build(Models.Settings settings);
+        public void Build(Endpoint.SharedKernal.Models.Settings settings);
     }
     public class ResponseBaseBuilder : IResponseBaseBuilder
     {
@@ -25,7 +25,7 @@ namespace Endpoint.Application.Builders
             _templateLocator = templateLocator;
             _fileSystem = fileSystem;
         }
-        public void Build(Models.Settings settings)
+        public void Build(Endpoint.SharedKernal.Models.Settings settings)
         {
             var template = _templateLocator.Get(nameof(ResponseBaseBuilder));
 

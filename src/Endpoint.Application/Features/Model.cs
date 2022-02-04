@@ -1,6 +1,6 @@
 using CommandLine;
 using Endpoint.Application.Builders;
-using Endpoint.Application.Services;
+using Endpoint.SharedKernal.Services;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,7 +47,7 @@ namespace Endpoint.Application.Features
                 var settings = _settingsProvider.Get(request.Directory);
 
                 new ModelBuilder(
-                    new Context(),
+                    new Endpoint.SharedKernal.Services.Context(),
                     _commandService,
                     _templateProcessor,
                     _templateLocator,

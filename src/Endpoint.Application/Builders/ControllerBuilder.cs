@@ -1,5 +1,5 @@
-using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 using System.IO;
 
 namespace Endpoint.Application.Builders
@@ -23,7 +23,7 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-            var context = new Context();
+            var context = new Endpoint.SharedKernal.Services.Context();
             new ClassBuilder($"{_resource.PascalCase}Controller", context, _fileSystem)
                 .WithDirectory($"{_apiDirectory.Value}{Path.DirectorySeparatorChar}Controllers")
                 .WithUsing("System.Net")

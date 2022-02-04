@@ -1,7 +1,7 @@
 using CommandLine;
 using Endpoint.Application.Builders;
+using Endpoint.SharedKernal.Services;
 using Endpoint.Application.Services;
-using Endpoint.Application.Services.FileServices;
 using MediatR;
 using System.IO;
 using System.Linq;

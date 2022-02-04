@@ -1,6 +1,6 @@
 using Endpoint.Application.Builders;
 using Endpoint.Application.Enums;
-using Endpoint.Application.ValueObjects;
+using Endpoint.SharedKernal.ValueObjects;
 using Xunit;
 
 namespace Endpoint.UnitTests

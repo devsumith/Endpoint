@@ -1,12 +1,13 @@
-﻿using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
+﻿using Endpoint.SharedKernal.Models;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {
     public interface IApiFileBuilder
     {
-        public void BuildProgram(Models.Settings settings);
-        public void BuildLaunchSettings(Models.Settings settings);
+        public void BuildProgram(Settings settings);
+        public void BuildLaunchSettings(Settings settings);
     }
 
     public class ApiFileBuilder : IApiFileBuilder
@@ -29,7 +30,7 @@ namespace Endpoint.Application.Builders
             _fileSystem = fileSystem;
         }
 
-        public void BuildLaunchSettings(Models.Settings settings)
+        public void BuildLaunchSettings(Settings settings)
         {
             var template = _templateLocator.Get(nameof(LaunchSettingsBuilder));
 
@@ -49,7 +50,7 @@ namespace Endpoint.Application.Builders
 
         }
 
-        public void BuildProgram(Models.Settings settings)
+        public void BuildProgram(Settings settings)
         {
             var template = _templateLocator.Get(nameof(ProgramBuilder));
 

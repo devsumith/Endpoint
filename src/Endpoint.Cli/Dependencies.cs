@@ -1,6 +1,6 @@
 ﻿using Endpoint.Application;
 using Endpoint.Application.Services;
-using Endpoint.Application.Services.FileServices;
+using Endpoint.SharedKernal.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 

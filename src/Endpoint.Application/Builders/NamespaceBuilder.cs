@@ -1,8 +1,9 @@
-﻿using Endpoint.Application.Extensions;
-using Endpoint.Application.Services;
+﻿
+using Endpoint.SharedKernal.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Endpoint.SharedKernal;
 
 namespace Endpoint.Application.Builders
 {

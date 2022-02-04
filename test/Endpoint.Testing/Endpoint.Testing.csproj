@@ -5,4 +5,8 @@
     <RootNamespace>Endpoint.Testing</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Endpoint.SharedKernal\Endpoint.SharedKernal.csproj" />
+  </ItemGroup>
+
 </Project>

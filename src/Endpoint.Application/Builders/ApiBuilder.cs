@@ -1,5 +1,5 @@
 /*using Endpoint.Application.Models;
-using Endpoint.Application.Services;
+using Endpoint.SharedKernal.Services;
 using System.IO;
 using static Endpoint.Application.Builders.BuilderFactory;
 
@@ -26,7 +26,7 @@ namespace Endpoint.Application.Builders
             _fileSystem = fileSystem;
         }
 
-        public ProjectReference Build(Models.Settings settings)
+        public ProjectReference Build(Endpoint.SharedKernal.Models.Settings settings)
         {
             _commandService.Start($@"mkdir {settings.ApiDirectory}");
 
@@ -112,7 +112,7 @@ namespace Endpoint.Application.Builders
             return new(_commandService, _apiDirectory, _apiProjectFullPath, $"{_rootNamespace.Value}.Api");
         }
 
-        private void CreateSubDirectories(Models.Settings settings)
+        private void CreateSubDirectories(Endpoint.SharedKernal.Models.Settings settings)
         {
             _commandService.Start($"mkdir {Constants.Folders.Models}", settings.ApplicationDirectory);
 
@@ -132,13 +132,13 @@ namespace Endpoint.Application.Builders
 
         }
 
-        public void RemoveUneededFiles(Models.Settings settings)
+        public void RemoveUneededFiles(Endpoint.SharedKernal.Models.Settings settings)
         {
             _commandService.Start($"rimraf WeatherForecast.cs", $@"{settings.ApiDirectory}");
             _commandService.Start($@"rimraf Controllers\WeatherForecastController.cs", $@"{settings.ApiDirectory}");
         }
 
-        public void InstallNugetPackages(Models.Settings settings)
+        public void InstallNugetPackages(Endpoint.SharedKernal.Models.Settings settings)
         {
             _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 5.0.10", $@"{settings.ApiDirectory}");
             _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 5.0.10", $@"{settings.ApiDirectory}");

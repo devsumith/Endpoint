@@ -1,6 +1,6 @@
 /*using Endpoint.Application.Enums;
-using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
 using static Endpoint.Application.Builders.BuilderFactory;
@@ -9,7 +9,7 @@ namespace Endpoint.Application.Builders
 {
     public class ResourceBuilder
     {
-        private readonly Models.Settings _settings;
+        private readonly Endpoint.SharedKernal.Models.Settings _settings;
         protected readonly ICommandService _commandService;
         protected readonly ITemplateProcessor _templateProcessor;
         protected readonly ITemplateLocator _templateLocator;
@@ -34,7 +34,7 @@ namespace Endpoint.Application.Builders
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
             IFileSystem fileSystem,
-            Models.Settings settings)
+            Endpoint.SharedKernal.Models.Settings settings)
         { 
             _settings = settings;
             _dbContextName = settings.DbContextName;
@@ -55,7 +55,7 @@ namespace Endpoint.Application.Builders
         public void Build()
         {
             new ModelBuilder(
-                new Context(),
+                new Endpoint.SharedKernal.Services.Context(),
                 _fileSystem,
                 _domainDirectory.Value,
                 _domainNamespace.Value,
@@ -64,7 +64,7 @@ namespace Endpoint.Application.Builders
 
             new DbContextBuilder(
                 _dbContextName,
-                new Context(),
+                new Endpoint.SharedKernal.Services.Context(),
                 _fileSystem,
                 _infrastructureDirectory.Value,
                 _infrastructureNamespace.Value,
@@ -80,7 +80,7 @@ namespace Endpoint.Application.Builders
                 .Build();
 
 
-            new ClassBuilder($"{((Token)_entityName).PascalCase}Controller", new Context(), _fileSystem)
+            new ClassBuilder($"{((Token)_entityName).PascalCase}Controller", new Endpoint.SharedKernal.Services.Context(), _fileSystem)
                 .WithDirectory($"{_apiDirectory.Value}{Path.DirectorySeparatorChar}Controllers")                
                 .WithUsing("System.Net")
                 .WithUsing("System.Threading")

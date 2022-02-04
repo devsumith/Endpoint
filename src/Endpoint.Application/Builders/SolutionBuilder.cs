@@ -1,11 +1,12 @@
 using Endpoint.Application.Models;
-using Endpoint.Application.Services;
+using Endpoint.SharedKernal.Models;
+using Endpoint.SharedKernal.Services;
 
 namespace Endpoint.Application.Builders
 {
     public interface ISolutionBuilder
     {
-        SolutionReference Build(Models.Settings settings);
+        SolutionReference Build(Endpoint.SharedKernal.Models.Settings settings);
     }
 
     public class SolutionBuilder : ISolutionBuilder

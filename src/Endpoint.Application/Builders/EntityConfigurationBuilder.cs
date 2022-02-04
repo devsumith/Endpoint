@@ -1,5 +1,5 @@
-using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 using System.IO;
 
 namespace Endpoint.Application.Builders
@@ -16,7 +16,7 @@ namespace Endpoint.Application.Builders
         {
             _directory = directory;
             _entity = entity;
-            _context = context ?? new Context();
+            _context = context ?? new Endpoint.SharedKernal.Services.Context();
             _fileSystem = fileSystem;
             _infrastructureNamespace = infrastructureNamespace;
             _domainNamespace = domainNamespace;

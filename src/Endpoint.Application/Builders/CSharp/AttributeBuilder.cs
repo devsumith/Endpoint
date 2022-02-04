@@ -1,5 +1,5 @@
 using Endpoint.Application.Enums;
-using Endpoint.Application.ValueObjects;
+using Endpoint.SharedKernal.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;

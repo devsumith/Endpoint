@@ -1,4 +1,4 @@
-﻿using Endpoint.Application.Services;
+﻿using Endpoint.SharedKernal.Services;
 
 namespace Endpoint.Application.Builders
 {

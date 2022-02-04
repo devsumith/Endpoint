@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Endpoint.Application.Enums;
-using Endpoint.Application.Extensions;
+using Endpoint.SharedKernal;
 
 namespace Endpoint.Application.Builders.CSharp
 {

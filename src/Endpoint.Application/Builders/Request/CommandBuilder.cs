@@ -1,5 +1,6 @@
-using Endpoint.Application.Services;
-using Endpoint.Application.ValueObjects;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +14,7 @@ namespace Endpoint.Application.Builders
         private Token _buildingBlocksCoreNamespace;
         private Token _buildingBlocksEventStoreNamespace;
         private Token _store;
-        private Context _context = new Context();
+        private Context _context = new Endpoint.SharedKernal.Services.Context();
 
         public CommandBuilder(
             ICommandService commandService,
