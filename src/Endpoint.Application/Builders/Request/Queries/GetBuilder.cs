@@ -82,7 +82,7 @@ namespace Endpoint.Application.Builders
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
                 "return new () {",
-                $"{((Token)_entity).PascalCasePlural} = await _context.{((Token)_entity).PascalCasePlural}.ToDtosAsync(cancellationToken)".Indent(1),
+                $"{((Token)_entity).PascalCasePlural} = await _context.{((Token)_entity).PascalCasePlural}.AsNoTracking().ToDtosAsync(cancellationToken)".Indent(1),
                 "};"
                 }).Build())
                 .Class;

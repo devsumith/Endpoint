@@ -1,9 +1,7 @@
 using CommandLine;
-using Endpoint.Application.Builders;
 using Endpoint.Application.Services;
 using Endpoint.Application.Services.FileServices;
 using MediatR;
-using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,19 +13,28 @@ namespace Endpoint.Application.Features
         [Verb("default")]
         internal class Request : IRequest<Unit>
         {
-            [Option('p')]
+            [Option('p', "port")]
             public int Port { get; set; } = 5000;
 
-            [Option('n')]
+            [Option('n', "name")]
             public string Name { get; set; } = "DefaultEndpoint";
 
-            [Option('r')]
+            [Option('r', "resource")]
             public string Resource { get; set; } = "Foo";
 
-            [Option('m')]
+            [Option('m', "isMonolithArchitecture")]
             public bool Monolith { get; set; } = false;
 
-            [Option('d')]
+            [Option("dbContextName")]
+            public string DbContextName { get; set; }
+
+            [Option('s', "shortIdPropertyName")]
+            public bool ShortIdPropertyName { get; set; }
+
+            [Option('i', "numericIdPropertyDataType")]
+            public bool NumericIdPropertyDataType { get; set; }
+
+            [Option('d', "directory")]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
         }
 
@@ -65,7 +72,7 @@ namespace Endpoint.Application.Features
                 {
                     if (!Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}"))
                     {
-                        var settings = _solutionFileService.Build(request.Name, request.Resource, request.Directory, isMicroserviceArchitecture: !request.Monolith);
+                        var settings = _solutionFileService.Build(request.Name, request.DbContextName, request.ShortIdPropertyName, request.NumericIdPropertyDataType, request.Resource, request.Directory, isMicroserviceArchitecture: !request.Monolith);
 
                         _domainFileService.Build(settings);
 

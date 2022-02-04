@@ -24,13 +24,13 @@ namespace Endpoint.Application.Services.FileServices
             _fileSystem = fileSystem;
         }
 
-        public Models.Settings Build(string name, string resource, string directory, bool isMicroserviceArchitecture)
+        public Models.Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture)
         {
             name = name.Replace("-", "_");
 
             _commandService.Start($"mkdir {name}", directory);
 
-            var settings = new Models.Settings(name, resource, directory, isMicroserviceArchitecture);
+            var settings = new Models.Settings(name, dbContextName, resource, directory, isMicroserviceArchitecture);
 
             var json = Serialize(settings, new JsonSerializerOptions
             {

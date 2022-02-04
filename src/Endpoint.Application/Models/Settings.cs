@@ -35,7 +35,7 @@ namespace Endpoint.Application.Models
 
         public List<string> Resources { get; set; } = new List<string>();
 
-        public Settings(string name, string resource, string directory, bool isMicroserviceArchitecture = true)
+        public Settings(string name, string dbContextName, string resource, string directory, bool isMicroserviceArchitecture = true)
         {
             name = ((Token)name).PascalCase.Replace("-", "_");
             resource = ((Token)resource).PascalCase;
@@ -44,8 +44,9 @@ namespace Endpoint.Application.Models
             SolutionName = name;
             SolutionFileName = $"{name}.sln";
 
+
             var parts = name.Split('.');
-            DbContextName = $"{parts[parts.Length - 1]}DbContext";
+            DbContextName = dbContextName ?? $"{parts[parts.Length - 1]}DbContext";
 
             Resources.Add(resource);
             RootDirectory = $"{directory}{Path.DirectorySeparatorChar}{SolutionName}";

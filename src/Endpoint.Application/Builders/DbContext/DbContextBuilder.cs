@@ -106,11 +106,10 @@ namespace Endpoint.Application.Builders
 
                 dbContextBuilder.Build();
             }
-            catch (Exception e)
+            catch
             {
-                throw e;
+                throw;
             }
-
 
         }
     }

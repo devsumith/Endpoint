@@ -102,6 +102,17 @@ namespace Endpoint.Application.Services.FileServices
                         $"return await {resource.CamelCasePlural}.Select(x => x.ToDto()).ToListAsync(cancellationToken);"
                     })
                     .Build())
+                    .WithMethod(new MethodBuilder()
+                    .IsStatic()     
+                    .WithName("ToDtos")
+                    .WithReturnType($"List<{resource.PascalCase}Dto>")
+                    .WithPropertyName($"{resource.PascalCase}Id")
+                    .WithParameter(new ParameterBuilder($"IEnumerable<{resource.PascalCase}>", resource.CamelCasePlural, true).Build())                    
+                    .WithBody(new()
+                    {
+                        $"return {resource.CamelCasePlural}.Select(x => x.ToDto()).ToList();"
+                    })
+                    .Build())
                     .Build();
 
                 new ClassBuilder($"{resource.PascalCase}Validator", new Context(), _fileSystem)
