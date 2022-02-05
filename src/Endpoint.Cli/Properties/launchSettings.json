@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "-m true -d C:\\sandbox --dbContextName SchoolContext"
+      "commandLineArgs": "-m true -d C:\\sandbox --help"
     }
   }
 }

@@ -10,16 +10,28 @@ namespace Endpoint.Cli
     {
         static void Main(string[] args)
         {
-            var mediator = BuildContainer().GetService<IMediator>();
+            var parser = new Parser(with =>
+            {
+                with.CaseSensitive = false;
+                with.HelpWriter = Console.Out;
+                with.IgnoreUnknownArguments = true;
+                with.AutoHelp = false;
+            });
+
+            var result = parser.ParseArguments<PluginsOption>(args);
+
+            var value = ((Parsed<PluginsOption>)result).Value;
+
+            var mediator = BuildContainer(value.Plugins?.Split(',') ?? new string[0]).GetService<IMediator>();
 
             ProcessArgs(mediator, args);
         }
 
-        public static ServiceProvider BuildContainer()
+        public static ServiceProvider BuildContainer(string[] args)
         {
             var services = new ServiceCollection();
 
-            Dependencies.Configure(services);
+            Dependencies.Configure(services, args);
 
             return services.BuildServiceProvider();
         }
@@ -36,9 +48,23 @@ namespace Endpoint.Cli
                 .Where(type => type.GetCustomAttributes(typeof(VerbAttribute), true).Length > 0)
                 .ToArray();
 
-            Parser.Default.ParseArguments(args, verbs)
+            var parser = new Parser(with =>
+            {
+                with.CaseSensitive = false;
+                with.HelpWriter = Console.Out;
+                with.IgnoreUnknownArguments = true;
+            });
+
+            parser.ParseArguments(args, verbs)
                 .WithParsed(
                   (dynamic request) => mediator.Send(request));
         }
     }
+
+    public class PluginsOption
+    {
+        [Option("plugins", Required = false)]
+        public string Plugins { get; set; }
+    }
+
 }
