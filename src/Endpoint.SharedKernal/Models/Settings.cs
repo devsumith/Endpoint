@@ -80,6 +80,56 @@ namespace Endpoint.SharedKernal.Models
 
         }
 
+        public Settings(string name, string dbContextName, List<string> resources, string directory, bool isMicroserviceArchitecture = true)
+        {
+            name = ((Token)name).PascalCase.Replace("-", "_");
+
+            foreach(var resource in resources)
+            {
+                Resources.Add(((Token)resource).PascalCase);
+            }
+
+            IsMicroserviceArchitecture = isMicroserviceArchitecture;
+
+            SolutionName = name;
+            SolutionFileName = $"{name}.sln";
+
+
+            var parts = name.Split('.');
+            DbContextName = dbContextName ?? $"{parts[parts.Length - 1]}DbContext";
+
+            
+            RootDirectory = $"{directory}{Path.DirectorySeparatorChar}{SolutionName}";
+            RootNamespace = SolutionName;
+            ApiNamespace = $"{RootNamespace}.Api";
+            ApiFullPath = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{ApiNamespace}{Path.DirectorySeparatorChar}{ApiNamespace}.csproj";
+            InfrastructureNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.Infrastructure";
+            DomainNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.SharedKernal";
+            ApplicationNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.Core";
+
+            var sourceFolder = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}";
+            var testsFolder = $"{RootDirectory}{Path.DirectorySeparatorChar}{TestFolder}{Path.DirectorySeparatorChar}";
+
+            if (IsMicroserviceArchitecture)
+            {
+                ApiDirectory = $"{sourceFolder}{SolutionName}.Api";
+                InfrastructureDirectory = $"{sourceFolder}{SolutionName}.Api";
+                DomainDirectory = $"{sourceFolder}{SolutionName}.Api";
+                ApplicationDirectory = $"{sourceFolder}{SolutionName}.Api";
+            }
+            else
+            {
+                ApiDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Api";
+                InfrastructureDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Infrastructure";
+                DomainDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.SharedKernal";
+                ApplicationDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Core";
+            }
+
+            UnitTestsDirectory = $"{testsFolder}{RootNamespace}.UnitTests";
+            TestingDirectory = $"{testsFolder}{RootNamespace}.Testing";
+
+        }
+
         public Settings()
         {
 

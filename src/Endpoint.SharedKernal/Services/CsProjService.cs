@@ -3,15 +3,10 @@ using System.Xml.Linq;
 
 namespace Endpoint.SharedKernal.Services
 {
-    public interface ICsProjService
-    {
-        void AddGenerateDocumentationFile(string csprojFilePath);
-        void AddEndpointPostBuildTargetElement(string csprojFilePath);
-    }
 
-    public class CsProjService : ICsProjService
+    public static class CsProjService
     {
-        public void AddGenerateDocumentationFile(string csprojFilePath)
+        public static void AddGenerateDocumentationFile(string csprojFilePath)
         {
             var doc = XDocument.Load(csprojFilePath);
             var projectNode = doc.FirstNode as XElement;
@@ -25,7 +20,7 @@ namespace Endpoint.SharedKernal.Services
             doc.Save(csprojFilePath);
         }
 
-        public void AddEndpointPostBuildTargetElement(string csprojFilePath)
+        public static void AddEndpointPostBuildTargetElement(string csprojFilePath)
         {
             var doc = XDocument.Load(csprojFilePath);
             var projectNode = doc.FirstNode as XElement;
@@ -33,7 +28,7 @@ namespace Endpoint.SharedKernal.Services
             doc.Save(csprojFilePath);
         }
 
-        private XElement _getEndpointPostBuildTargetElement()
+        private static XElement _getEndpointPostBuildTargetElement()
         {
             var dotnetToolRestoreCommand = new XElement("Exec");
 

@@ -1,6 +1,6 @@
 using Endpoint.Application.Builders;
 using Xunit;
-using static Endpoint.Application.Builders.BuilderFactory;
+
 
 namespace Endpoint.UnitTests
 {
@@ -9,23 +9,13 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Constructor()
         {
-            Setup();
 
-            var sut = CreateModelBuilder();
         }
 
         [Fact]
         public void Build()
         {
-            Setup();
-
-            var sut = CreateModelBuilder();
-
-            sut.SetRootNamespace("ContactService")
-                .SetNamespace("ContactService.Api.Models")
-                .SetDirectory(@"C:\Projects\ContactService\src\ContactService.Api\Models")
-                .SetEntityName("Contact")
-                .Build();
+  
         }
 
         private void Setup()
@@ -33,7 +23,5 @@ namespace Endpoint.UnitTests
 
         }
 
-        private static ModelBuilder CreateModelBuilder()
-            => Create((c, tp, tl, f) => new ModelBuilder(c, tp, tl, f));
     }
 }

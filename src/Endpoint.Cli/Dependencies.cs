@@ -1,4 +1,5 @@
 ﻿using Endpoint.Application;
+using Endpoint.Application.Core.Services;
 using Endpoint.Application.Services;
 using Endpoint.SharedKernal.Services;
 using MediatR;
@@ -10,7 +11,7 @@ namespace Endpoint.Cli
     {
         public static void Configure(IServiceCollection services)
         {
-            services.AddMediatR(typeof(Constants));
+            services.AddMediatR(typeof(Constants),typeof(Marker));
             services.AddSingleton<ICommandService, CommandService>();
             services.AddSingleton<IFileSystem, FileSystem>();
             services.AddSingleton<ITemplateLocator, TemplateLocator>();
@@ -19,9 +20,9 @@ namespace Endpoint.Cli
             services.AddSingleton<ISettingsProvider, SettingsProvider>();
             services.AddSingleton<ITenseConverter, TenseConverter>();
             services.AddSingleton<IContext, Context>();
-            services.AddSingleton<ICsProjService, CsProjService>();
 
 
+            services.AddSingleton<ISolutionTemplateService, SolutionTemplateService>();
             services.AddSingleton<ISolutionFileService, SolutionFileService>();
             services.AddSingleton<IDomainFileService, DomainFileService>();
             services.AddSingleton<IApplicationFileService, ApplicationFileService>();

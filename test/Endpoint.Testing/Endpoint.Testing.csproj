@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Endpoint.Application.Core\Endpoint.Application.Core.csproj" />
     <ProjectReference Include="..\..\src\Endpoint.SharedKernal\Endpoint.SharedKernal.csproj" />
   </ItemGroup>
 

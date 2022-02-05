@@ -1,8 +1,6 @@
 using CommandLine;
-using Endpoint.SharedKernal.Services;
-using Endpoint.Application.Services;
+using Endpoint.Application.Core.Services;
 using MediatR;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -40,58 +38,17 @@ namespace Endpoint.Application.Features
 
         internal class Handler : IRequestHandler<Request, Unit>
         {
-            private ICommandService _commandService;
-            private readonly ISolutionFileService _solutionFileService;
-            private readonly IDomainFileService _domainFileService;
-            private readonly IApplicationFileService _applicationFileService;
-            private readonly IInfrastructureFileService _infrastructureFileService;
-            private readonly IApiFileService _apiFileService;
-            public Handler(
-                ICommandService commandService,
-                ISolutionFileService solutionFileService,
-                IDomainFileService domainFileService,
-                IApplicationFileService applicationFileService,
-                IInfrastructureFileService infrastructureFileService,
-                IApiFileService apiFileService)
-            {
-                _commandService = commandService;
-                _solutionFileService = solutionFileService;
-                _domainFileService = domainFileService;
-                _applicationFileService = applicationFileService;
-                _infrastructureFileService = infrastructureFileService;
-                _apiFileService = apiFileService;
-            }
+            private ISolutionTemplateService _solutionTemplateService;
 
+            public Handler(ISolutionTemplateService solutionTemplateService)
+            {
+                _solutionTemplateService = solutionTemplateService;
+            }
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                int retries = 0;
+                _solutionTemplateService.Build(request.Name, request.DbContextName, request.ShortIdPropertyName, request.Resource, request.Monolith, request.NumericIdPropertyDataType, request.Directory);
 
-                string name = request.Name;
-
-                while (true)
-                {
-                    if (!Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}"))
-                    {
-                        var settings = _solutionFileService.Build(request.Name, request.DbContextName, request.ShortIdPropertyName, request.NumericIdPropertyDataType, request.Resource, request.Directory, isMicroserviceArchitecture: !request.Monolith);
-
-                        _domainFileService.Build(settings);
-
-                        _applicationFileService.Build(settings);
-
-                        _infrastructureFileService.Build(settings);
-
-                        _apiFileService.Build(settings);
-
-                        _commandService.Start($"start {settings.SolutionFileName}", settings.RootDirectory);
-
-                        return Task.FromResult(new Unit());
-                    }
-
-                    retries++;
-
-                    request.Name = $"{name}_{retries}";
-
-                }
+                return Task.FromResult(new Unit());
             }
         }
     }

@@ -1,6 +1,6 @@
 using Endpoint.Application.Builders;
 using Xunit;
-using static Endpoint.Application.Builders.BuilderFactory;
+
 
 namespace Endpoint.UnitTests
 {
@@ -9,21 +9,13 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Constructor()
         {
-            Setup();
 
-            var sut = CreateQueryBuilder();
         }
 
         [Fact]
         public void Build()
         {
-            Setup();
 
-            var sut = CreateQueryBuilder();
-
-            sut.SetRootNamespace("")
-                .SetDirectory(@"")
-                .Build();
         }
 
         private void Setup()
@@ -31,7 +23,5 @@ namespace Endpoint.UnitTests
 
         }
 
-        private static QueryBuilder CreateQueryBuilder()
-            => Create((c, tp, tl, f) => new QueryBuilder(c, tp, tl, f));
     }
 }
