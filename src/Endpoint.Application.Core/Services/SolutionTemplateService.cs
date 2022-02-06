@@ -1,5 +1,8 @@
-﻿using Endpoint.Application.Services;
+﻿using Endpoint.Application.Core.Events;
+using Endpoint.Application.Services;
+using Endpoint.SharedKernal;
 using Endpoint.SharedKernal.Services;
+using MediatR;
 using System.Collections.Generic;
 using System.IO;
 
@@ -18,13 +21,16 @@ namespace Endpoint.Application.Core.Services
         private readonly IApplicationFileService _applicationFileService;
         private readonly IInfrastructureFileService _infrastructureFileService;
         private readonly IApiFileService _apiFileService;
+        private readonly IMediator _mediator;
+
         public SolutionTemplateService(
             ICommandService commandService,
             ISolutionFileService solutionFileService,
             IDomainFileService domainFileService,
             IApplicationFileService applicationFileService,
             IInfrastructureFileService infrastructureFileService,
-            IApiFileService apiFileService)
+            IApiFileService apiFileService,
+            IMediator mediator)
         {
             _commandService = commandService;
             _solutionFileService = solutionFileService;
@@ -32,6 +38,7 @@ namespace Endpoint.Application.Core.Services
             _applicationFileService = applicationFileService;
             _infrastructureFileService = infrastructureFileService;
             _apiFileService = apiFileService;
+            _mediator = mediator;
         }
 
         public void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, bool isMonolith, bool numericIdPropertyDataType, string directory)
@@ -53,6 +60,8 @@ namespace Endpoint.Application.Core.Services
                     _infrastructureFileService.Build(settings);
 
                     _apiFileService.Build(settings);
+
+                    _mediator.Publish(new SolutionTemplateGenerated(settings));
 
                     _commandService.Start($"start {settings.SolutionFileName}", settings.RootDirectory);
 
@@ -87,7 +96,11 @@ namespace Endpoint.Application.Core.Services
 
                     _apiFileService.Build(settings);
 
+                    _mediator.Publish(new SolutionTemplateGenerated(settings));
+
                     _commandService.Start($"start {settings.SolutionFileName}", settings.RootDirectory);
+
+
 
                     return;
 
