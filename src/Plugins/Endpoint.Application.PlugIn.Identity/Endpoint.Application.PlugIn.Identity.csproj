@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Endpoint.Application.Core\Endpoint.Application.Core.csproj">
       <Private>false</Private>
+      <ExcludeAssets>runtime</ExcludeAssets>
     </ProjectReference>
   </ItemGroup>
 

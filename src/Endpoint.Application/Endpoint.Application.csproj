@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Endpoint.Application.Core\Endpoint.Application.Core.csproj" />
-    <ProjectReference Include="..\Plugins\Endpoint.Application.PlugIn.Identity\Endpoint.Application.PlugIn.Identity.csproj" />
   </ItemGroup>
 
 </Project>
