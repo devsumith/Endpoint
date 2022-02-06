@@ -1,60 +1,60 @@
 using CommandLine;
 using Endpoint.Application.Builders;
 using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 using MediatR;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Features
+namespace Endpoint.Application.Commands
 {
-    internal class Model
+    internal class Event
     {
-        [Verb("model")]
+        [Verb("event")]
         internal class Request : IRequest<Unit>
         {
+            [Value(0)]
+            public string Aggregate { get; set; }
+            [Value(1)]
+            public string Name { get; set; }
             [Option('d', Required = false)]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
-
-            [Value(0)]
-            public string Entity { get; set; }
         }
 
         internal class Handler : IRequestHandler<Request, Unit>
         {
-            private readonly ISettingsProvider _settingsProvider;
-            private readonly ICommandService _commandService;
-            private readonly ITemplateLocator _templateLocator;
             private readonly IFileSystem _fileSystem;
+            private readonly ITemplateLocator _templateLocator;
             private readonly ITemplateProcessor _templateProcessor;
+            private readonly ICommandService _commandService;
+            private readonly ISettingsProvider _settingsProvider;
 
             public Handler(
-                ISettingsProvider settingsProvider,
-                ICommandService commandService,
-                ITemplateLocator templateLocator,
                 IFileSystem fileSystem,
-                ITemplateProcessor templateProcessor
+                ITemplateLocator templateLocator,
+                ITemplateProcessor templateProcessor,
+                ICommandService commandService,
+                ISettingsProvider settingsProvider
                 )
             {
-                _settingsProvider = settingsProvider;
-                _commandService = commandService;
-                _templateLocator = templateLocator;
-                _templateProcessor = templateProcessor;
                 _fileSystem = fileSystem;
+                _templateProcessor = templateProcessor;
+                _templateLocator = templateLocator;
+                _commandService = commandService;
+                _settingsProvider = settingsProvider;
             }
 
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvider.Get(request.Directory);
 
- /*               new ModelBuilder(
-                    new Endpoint.SharedKernal.Services.Context(),
-                    _commandService,
-                    _templateProcessor,
-                    _templateLocator,
-                    _fileSystem)
+/*                BuilderFactory.Create<EventBuilder>((a, b, c, d) => new(a, b, c, d))
+                    .WithAggregate(request.Aggregate)
+                    .WithEvent(request.Name)
                     .SetDomainDirectory(settings.DomainDirectory)
                     .SetDomainNamespace(settings.DomainNamespace)
-                    .SetEntityName(request.Entity)
                     .Build();*/
 
                 return Task.FromResult(new Unit());

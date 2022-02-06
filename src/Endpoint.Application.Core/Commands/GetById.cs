@@ -7,11 +7,11 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Features
+namespace Endpoint.Application.Commands
 {
-    internal class Page
+    internal class GetById
     {
-        [Verb("page")]
+        [Verb("get-by-id")]
         internal class Request : IRequest<Unit>
         {
             [Value(0)]
@@ -36,7 +36,7 @@ namespace Endpoint.Application.Features
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-                new GetPageBuilder(new Endpoint.SharedKernal.Services.Context(), _fileSystem)
+                new GetByIdBuilder(new Endpoint.SharedKernal.Services.Context(), _fileSystem)
                     .WithDirectory($"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)request.Entity).PascalCasePlural}")
                     .WithDbContext(settings.DbContextName)
                     .WithNamespace($"{settings.ApplicationNamespace}.Features")

@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace Endpoint.Application.Features
+namespace Endpoint.Application.Commands
 {
     internal class Dto
     {

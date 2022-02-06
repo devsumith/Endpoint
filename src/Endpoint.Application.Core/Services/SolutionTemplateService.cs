@@ -1,6 +1,5 @@
 ﻿using Endpoint.Application.Core.Events;
 using Endpoint.Application.Services;
-using Endpoint.SharedKernal;
 using Endpoint.SharedKernal.Services;
 using MediatR;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ namespace Endpoint.Application.Core.Services
 {
     public interface ISolutionTemplateService
     {
-        void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, bool isMonolith, bool numericIdPropertyDataType, string directory);
+        void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins);
     }
 
     public class SolutionTemplateService: ISolutionTemplateService
@@ -41,42 +40,12 @@ namespace Endpoint.Application.Core.Services
             _mediator = mediator;
         }
 
-        public void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, bool isMonolith, bool numericIdPropertyDataType, string directory)
+        public void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins)
         {
-            int retries = 0;
-
-            string originalName = name;
-
-            while (true)
-            {
-                if (!Directory.Exists($"{directory}{Path.DirectorySeparatorChar}{name}"))
-                {
-                    var settings = _solutionFileService.Build(name, dbContextName, shortIdPropertyName, numericIdPropertyDataType, resource, directory, isMicroserviceArchitecture: !isMonolith);
-
-                    _domainFileService.Build(settings);
-
-                    _applicationFileService.Build(settings);
-
-                    _infrastructureFileService.Build(settings);
-
-                    _apiFileService.Build(settings);
-
-                    _mediator.Publish(new SolutionTemplateGenerated(settings));
-
-                    _commandService.Start($"start {settings.SolutionFileName}", settings.RootDirectory);
-
-                    return;
-
-                }
-
-                retries++;
-
-                name = $"{originalName}_{retries}";
-
-            }
+            Build(name,dbContextName,shortIdPropertyName, new List<string>() { resource },isMonolith,numericIdPropertyDataType,directory,plugins);
         }
 
-        public void Build(string name, string dbContextName, bool shortIdPropertyName, List<string> resources, bool isMonolith, bool numericIdPropertyDataType, string directory)
+        public void Build(string name, string dbContextName, bool shortIdPropertyName, List<string> resources, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins)
         {
             int retries = 0;
 
@@ -86,7 +55,7 @@ namespace Endpoint.Application.Core.Services
             {
                 if (!Directory.Exists($"{directory}{Path.DirectorySeparatorChar}{name}"))
                 {
-                    var settings = _solutionFileService.Build(name, dbContextName, shortIdPropertyName, numericIdPropertyDataType, resources, directory, isMicroserviceArchitecture: !isMonolith);
+                    var settings = _solutionFileService.Build(name, dbContextName, shortIdPropertyName, numericIdPropertyDataType, resources, directory, isMicroserviceArchitecture: !isMonolith, plugins);
 
                     _domainFileService.Build(settings);
 
@@ -96,11 +65,9 @@ namespace Endpoint.Application.Core.Services
 
                     _apiFileService.Build(settings);
 
-                    _mediator.Publish(new SolutionTemplateGenerated(settings));
+                    _mediator.Publish(new SolutionTemplateGenerated(settings.RootDirectory));
 
                     _commandService.Start($"start {settings.SolutionFileName}", settings.RootDirectory);
-
-
 
                     return;
 

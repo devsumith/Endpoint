@@ -1,18 +1,18 @@
 using CommandLine;
+using Endpoint.Application.Builders;
 using Endpoint.SharedKernal.Services;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace Endpoint.Application.Features
+namespace Endpoint.Application.Commands
 {
-    internal class Extensions
+    internal class Validator
     {
-        [Verb("extensions")]
+        [Verb("validator")]
         internal class Request : IRequest<Unit>
         {
-
             [Value(0)]
             public string Entity { get; set; }
 
@@ -29,9 +29,10 @@ namespace Endpoint.Application.Features
 
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
+
                 var settings = _settingsProvder.Get(request.Directory);
 
-/*                Create<ExtensionsBuilder>((a, b, c, d) => new(a, b, c, d))
+/*                Create<ValidatorBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDirectory(request.Directory)
                     .SetRootNamespace(settings.RootNamespace)
                     .WithEntity(request.Entity)

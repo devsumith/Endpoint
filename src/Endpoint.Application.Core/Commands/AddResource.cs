@@ -1,16 +1,11 @@
 using CommandLine;
-using Endpoint.Application.Builders;
-using Endpoint.SharedKernal.Services;
 using Endpoint.Application.Services;
+using Endpoint.SharedKernal.Services;
 using MediatR;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.Text.Json.JsonSerializer;
 
-namespace Endpoint.Application.Features
+namespace Endpoint.Application.Commands
 {
     internal class AddResource
     {
@@ -58,18 +53,7 @@ namespace Endpoint.Application.Features
             {
                 var settings = _settingsProvider.Get(request.Directory);
 
-                if (!settings.Resources.Contains(request.Resource))
-                {
-                    settings.Resources = settings.Resources.Concat(new string[1] { request.Resource }).ToList();
-                }
-
-                _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
-                    Serialize(settings, new JsonSerializerOptions
-                        {
-                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                            WriteIndented = true
-                        })
-                });
+                settings.AddResource(request.Resource, _fileSystem);
 
                 _applicationFileService.BuildAdditionalResource(request.Resource, settings);
 

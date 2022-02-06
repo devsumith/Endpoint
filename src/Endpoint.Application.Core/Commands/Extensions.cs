@@ -1,23 +1,19 @@
 using CommandLine;
-using Endpoint.Application.Builders;
 using Endpoint.SharedKernal.Services;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace Endpoint.Application.Features
+namespace Endpoint.Application.Commands
 {
-    internal class Query
+    internal class Extensions
     {
-        [Verb("query")]
+        [Verb("extensions")]
         internal class Request : IRequest<Unit>
         {
 
             [Value(0)]
-            public string Name { get; set; }
-
-            [Value(1)]
             public string Entity { get; set; }
 
             [Option('d')]
@@ -35,15 +31,12 @@ namespace Endpoint.Application.Features
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-/*                Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d))
+/*                Create<ExtensionsBuilder>((a, b, c, d) => new(a, b, c, d))
                     .SetDirectory(request.Directory)
-                    .SetApplicationDirectory(settings.ApplicationDirectory)
                     .SetRootNamespace(settings.RootNamespace)
+                    .WithEntity(request.Entity)
                     .SetApplicationNamespace(settings.ApplicationNamespace)
                     .SetDomainNamespace(settings.DomainNamespace)
-                    .WithEntity(request.Entity)
-                    .WithName(request.Name)
-                    .WithDbContext(settings.DbContextName)
                     .Build();*/
 
                 return Task.FromResult(new Unit());

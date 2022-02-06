@@ -1,10 +1,12 @@
 using CommandLine;
 using Endpoint.Application.Core.Services;
 using MediatR;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Features
+namespace Endpoint.Application.Commands
 {
     internal class Default
     {
@@ -32,6 +34,9 @@ namespace Endpoint.Application.Features
             [Option('i', "numericIdPropertyDataType")]
             public bool NumericIdPropertyDataType { get; set; }
 
+            [Option("plugins", Required = false)]
+            public string Plugins { get; set; }
+
             [Option('d', "directory")]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
         }
@@ -46,7 +51,7 @@ namespace Endpoint.Application.Features
             }
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                _solutionTemplateService.Build(request.Name, request.DbContextName, request.ShortIdPropertyName, request.Resource, request.Monolith, request.NumericIdPropertyDataType, request.Directory);
+                _solutionTemplateService.Build(request.Name, request.DbContextName, request.ShortIdPropertyName, request.Resource, request.Monolith, request.NumericIdPropertyDataType, request.Directory, request.Plugins?.Split(',').ToList());
 
                 return Task.FromResult(new Unit());
             }

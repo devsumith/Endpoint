@@ -1,6 +1,10 @@
+using Endpoint.SharedKernal.Services;
 using Endpoint.SharedKernal.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.Json;
+using static System.Text.Json.JsonSerializer;
 
 namespace Endpoint.SharedKernal.Models
 {
@@ -32,59 +36,19 @@ namespace Endpoint.SharedKernal.Models
         public string DbContextName { get; set; }
         public int Port { get; set; } = 5000;
         public int SslPort { get; set; } = 5001;
-
+        public List<string> Plugins { get; set; }
         public List<string> Resources { get; set; } = new List<string>();
 
-        public Settings(string name, string dbContextName, string resource, string directory, bool isMicroserviceArchitecture = true)
+        public Settings(string name, string dbContextName, string resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default)
+            :this(name,dbContextName,new List<string>() { resource },directory,isMicroserviceArchitecture,plugins)
+        { }
+
+        public Settings(string name, string dbContextName, List<string> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default)
         {
             name = ((Token)name).PascalCase.Replace("-", "_");
-            resource = ((Token)resource).PascalCase;
-            IsMicroserviceArchitecture = isMicroserviceArchitecture;
+            Plugins = plugins;
 
-            SolutionName = name;
-            SolutionFileName = $"{name}.sln";
-
-
-            var parts = name.Split('.');
-            DbContextName = dbContextName ?? $"{parts[parts.Length - 1]}DbContext";
-
-            Resources.Add(resource);
-            RootDirectory = $"{directory}{Path.DirectorySeparatorChar}{SolutionName}";
-            RootNamespace = SolutionName;
-            ApiNamespace = $"{RootNamespace}.Api";
-            ApiFullPath = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{ApiNamespace}{Path.DirectorySeparatorChar}{ApiNamespace}.csproj";
-            InfrastructureNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.Infrastructure";
-            DomainNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.SharedKernal";
-            ApplicationNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.Core";
-
-            var sourceFolder = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}";
-            var testsFolder = $"{RootDirectory}{Path.DirectorySeparatorChar}{TestFolder}{Path.DirectorySeparatorChar}";
-
-            if (IsMicroserviceArchitecture)
-            {
-                ApiDirectory = $"{sourceFolder}{SolutionName}.Api";
-                InfrastructureDirectory = $"{sourceFolder}{SolutionName}.Api";
-                DomainDirectory = $"{sourceFolder}{SolutionName}.Api";
-                ApplicationDirectory = $"{sourceFolder}{SolutionName}.Api";
-            }
-            else
-            {
-                ApiDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Api";
-                InfrastructureDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Infrastructure";
-                DomainDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.SharedKernal";
-                ApplicationDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Core";
-            }
-
-            UnitTestsDirectory = $"{testsFolder}{RootNamespace}.UnitTests";
-            TestingDirectory = $"{testsFolder}{RootNamespace}.Testing";
-
-        }
-
-        public Settings(string name, string dbContextName, List<string> resources, string directory, bool isMicroserviceArchitecture = true)
-        {
-            name = ((Token)name).PascalCase.Replace("-", "_");
-
-            foreach(var resource in resources)
+            foreach (var resource in resources)
             {
                 Resources.Add(((Token)resource).PascalCase);
             }
@@ -128,6 +92,22 @@ namespace Endpoint.SharedKernal.Models
             UnitTestsDirectory = $"{testsFolder}{RootNamespace}.UnitTests";
             TestingDirectory = $"{testsFolder}{RootNamespace}.Testing";
 
+        }
+
+        public void AddResource(string resource, IFileSystem fileSystem)
+        {
+            if (!Resources.Contains(resource))
+            {
+                Resources = Resources.Concat(new string[1] { resource }).ToList();
+            }
+
+            fileSystem.WriteAllLines($"{RootDirectory}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
+                    Serialize(this, new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            WriteIndented = true
+                        })
+                });
         }
 
         public Settings()

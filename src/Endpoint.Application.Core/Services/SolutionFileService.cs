@@ -25,18 +25,18 @@ namespace Endpoint.Application.Services
             _fileSystem = fileSystem;
         }
 
-        public Endpoint.SharedKernal.Models.Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture)
+        public Endpoint.SharedKernal.Models.Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins)
         {
-            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<string> { resource }, directory, isMicroserviceArchitecture);
+            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<string> { resource }, directory, isMicroserviceArchitecture, plugins);
         }
 
-        public Endpoint.SharedKernal.Models.Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture)
+        public Endpoint.SharedKernal.Models.Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
         {
             name = name.Replace("-", "_");
 
             _commandService.Start($"mkdir {name}", directory);
 
-            var settings = new Endpoint.SharedKernal.Models.Settings(name, dbContextName, resources, directory, isMicroserviceArchitecture);
+            var settings = new Endpoint.SharedKernal.Models.Settings(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins);
 
             var json = Serialize(settings, new JsonSerializerOptions
             {

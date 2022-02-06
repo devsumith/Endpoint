@@ -5,40 +5,35 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Features
+namespace Endpoint.Application.Commands
 {
-    internal class UnitTest
+    internal class EntityConfiguration
     {
-        [Verb("unit-test")]
+        [Verb("entity-config")]
         internal class Request : IRequest<Unit>
         {
             [Value(0)]
-            public string Name { get; set; }
+            public string Entity { get; set; }
 
-            [Option('d')]
+            [Option('d', Required = false)]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
         }
 
         internal class Handler : IRequestHandler<Request, Unit>
         {
-            private readonly IContext _context;
-            private readonly IFileSystem _fileSystem;
             private readonly ISettingsProvider _settingsProvider;
+            private readonly IFileSystem _fileSystem;
 
-            public Handler(IContext context, IFileSystem fileSystem, ISettingsProvider settingsProvider)
+            public Handler(ISettingsProvider settingsProvider, IFileSystem fileSystem)
             {
-                _context = context;
-                _fileSystem = fileSystem;
                 _settingsProvider = settingsProvider;
+                _fileSystem = fileSystem;
             }
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvider.Get();
 
-                new UnitTestBuilder(_context, _fileSystem)
-                    .WithName(request.Name)
-                    .WithRootNamespace(settings.RootNamespace)
-                    .WithDirectory(request.Directory)
+                new EntityConfigurationBuilder(request.Entity, settings.InfrastructureNamespace, settings.DomainNamespace, request.Directory, _fileSystem)
                     .Build();
 
                 return Task.FromResult(new Unit());

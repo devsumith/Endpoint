@@ -5,11 +5,11 @@ namespace Endpoint.Application.Core.Events
 {
     public class SolutionTemplateGenerated: INotification
     {
-        public Settings Settings { get; private set; }
+        public string RootDirectory { get; private set; }
 
-        public SolutionTemplateGenerated(Settings settings)
+        public SolutionTemplateGenerated(string rootDirectory)
         {
-            Settings = settings;
+            RootDirectory = rootDirectory;
         }
     }
 }

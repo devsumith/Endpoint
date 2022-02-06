@@ -1,0 +1,52 @@
+using CommandLine;
+using Endpoint.Application.Builders;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
+using MediatR;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Endpoint.Application.Commands
+{
+    internal class Page
+    {
+        [Verb("page")]
+        internal class Request : IRequest<Unit>
+        {
+            [Value(0)]
+            public string Entity { get; set; }
+
+            [Option('d')]
+            public string Directory { get; set; } = System.Environment.CurrentDirectory;
+        }
+
+        internal class Handler : IRequestHandler<Request, Unit>
+        {
+            private readonly ISettingsProvider _settingsProvder;
+            private readonly IFileSystem _fileSystem;
+
+            public Handler(ISettingsProvider settingsProvider, IFileSystem fileSystem)
+            {
+                _settingsProvder = settingsProvider;
+                _fileSystem = fileSystem;
+            }
+
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            {
+                var settings = _settingsProvder.Get(request.Directory);
+
+                new GetPageBuilder(new Endpoint.SharedKernal.Services.Context(), _fileSystem)
+                    .WithDirectory($"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)request.Entity).PascalCasePlural}")
+                    .WithDbContext(settings.DbContextName)
+                    .WithNamespace($"{settings.ApplicationNamespace}.Features")
+                    .WithApplicationNamespace($"{settings.ApplicationNamespace}")
+                    .WithDomainNamespace($"{settings.DomainNamespace}")
+                    .WithEntity(request.Entity)
+                    .Build();
+
+                return Task.FromResult(new Unit());
+            }
+        }
+    }
+}

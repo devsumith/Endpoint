@@ -3,18 +3,23 @@ using Endpoint.Application.Builders;
 using Endpoint.SharedKernal.Services;
 using Endpoint.SharedKernal.ValueObjects;
 using MediatR;
-using System.IO;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Features
+
+namespace Endpoint.Application.Commands
 {
-    internal class GetById
+    internal class Command
     {
-        [Verb("get-by-id")]
+        [Verb("command")]
         internal class Request : IRequest<Unit>
         {
+
             [Value(0)]
+            public string Name { get; set; }
+
+            [Value(1)]
             public string Entity { get; set; }
 
             [Option('d')]
@@ -28,22 +33,15 @@ namespace Endpoint.Application.Features
 
             public Handler(ISettingsProvider settingsProvider, IFileSystem fileSystem)
             {
-                _settingsProvder = settingsProvider;
-                _fileSystem = fileSystem;
+                _settingsProvder = settingsProvider ?? throw new ArgumentNullException(nameof(settingsProvider));
+                _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             }
 
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-                new GetByIdBuilder(new Endpoint.SharedKernal.Services.Context(), _fileSystem)
-                    .WithDirectory($"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)request.Entity).PascalCasePlural}")
-                    .WithDbContext(settings.DbContextName)
-                    .WithNamespace($"{settings.ApplicationNamespace}.Features")
-                    .WithApplicationNamespace($"{settings.ApplicationNamespace}")
-                    .WithDomainNamespace($"{settings.DomainNamespace}")
-                    .WithEntity(request.Entity)
-                    .Build();
+                CommandBuilder.Build(settings, (Token)request.Name, new Context(), _fileSystem, request.Directory, settings.ApplicationNamespace);
 
                 return Task.FromResult(new Unit());
             }

@@ -1,18 +1,16 @@
 using CommandLine;
 using Endpoint.Application.Builders;
 using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace Endpoint.Application.Features
+namespace Endpoint.Application.Commands
 {
-    internal class Command
+    internal class Query
     {
-        [Verb("command")]
+        [Verb("query")]
         internal class Request : IRequest<Unit>
         {
 
@@ -29,19 +27,24 @@ namespace Endpoint.Application.Features
         internal class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ISettingsProvider _settingsProvder;
-            private readonly IFileSystem _fileSystem;
 
-            public Handler(ISettingsProvider settingsProvider, IFileSystem fileSystem)
-            {
-                _settingsProvder = settingsProvider ?? throw new ArgumentNullException(nameof(settingsProvider));
-                _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            }
+            public Handler(ISettingsProvider settingsProvider)
+                => _settingsProvder = settingsProvider;
 
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-                CommandBuilder.Build(settings, (Token)request.Name, new Context(), _fileSystem, request.Directory, settings.ApplicationNamespace);
+/*                Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d))
+                    .SetDirectory(request.Directory)
+                    .SetApplicationDirectory(settings.ApplicationDirectory)
+                    .SetRootNamespace(settings.RootNamespace)
+                    .SetApplicationNamespace(settings.ApplicationNamespace)
+                    .SetDomainNamespace(settings.DomainNamespace)
+                    .WithEntity(request.Entity)
+                    .WithName(request.Name)
+                    .WithDbContext(settings.DbContextName)
+                    .Build();*/
 
                 return Task.FromResult(new Unit());
             }
