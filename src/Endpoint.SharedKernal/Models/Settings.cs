@@ -110,6 +110,22 @@ namespace Endpoint.SharedKernal.Models
                 });
         }
 
+        public void AddApp(string directory, IFileSystem fileSystem)
+        {
+            if (!AppDirectories.Contains(directory))
+            {
+                AppDirectories = AppDirectories.Concat(new string[1] { directory }).ToList();
+            }
+
+            fileSystem.WriteAllLines($"{RootDirectory}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
+                    Serialize(this, new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            WriteIndented = true
+                        })
+                });
+        }
+
         public Settings()
         {
 

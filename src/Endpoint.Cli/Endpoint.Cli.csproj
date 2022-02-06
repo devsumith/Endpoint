@@ -21,5 +21,6 @@
     <ProjectReference Include="..\Endpoint.Application\Endpoint.Application.csproj" />
     <ProjectReference Include="..\Plugins\Endpoint.Application.Plugin.ContentManagement\Endpoint.Application.Plugin.ContentManagement.csproj" />
     <ProjectReference Include="..\Plugins\Endpoint.Application.Plugin.Identity\Endpoint.Application.Plugin.Identity.csproj" />
+    <ProjectReference Include="..\Plugins\Endpoint.Application.Plugin.Spa\Endpoint.Application.Plugin.Spa.csproj" />
   </ItemGroup>
 </Project>

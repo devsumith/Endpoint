@@ -2,6 +2,7 @@
 using Endpoint.Application.Core.Extenstions;
 using Endpoint.Application.Plugin.ContentManagement;
 using Endpoint.Application.Plugin.Identity;
+using Endpoint.Application.Plugin.Spa;
 using Endpoint.SharedKernal;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +26,9 @@ namespace Endpoint.Cli
 
                 if (plugin == "ContentManagement")
                     services.AddMediatR(typeof(ContentManagementEndpointPlugin));
+
+                if (plugin == "Spa")
+                    services.AddMediatR(typeof(SpaEndpointPlugin));
             }
         }
 

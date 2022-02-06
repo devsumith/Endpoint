@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "-m true -d C:\\sandbox --plugins Identity,ContentManagement"
+      "commandLineArgs": "-m true -r ContactRequest -d C:\\sandbox --plugins Identity,ContentManagement,Spa"
     }
   }
 }
