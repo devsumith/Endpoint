@@ -12,11 +12,20 @@ namespace Endpoint.Application.Plugin.Identity
         private readonly IApplicationFileService _applicationFileService;
         private readonly IFileSystem _fileSystem;
         private readonly ISettingsProvider _settingsProvider;
-        public IdentityEndpointPlugin(IApplicationFileService applicationFileService, IFileSystem fileSystem, ISettingsProvider settingsProvider)
+        private readonly IInfrastructureFileService _infrastructureFileService;
+        private readonly IApiFileService _apiFileService;
+        public IdentityEndpointPlugin(
+            IApplicationFileService applicationFileService, 
+            IFileSystem fileSystem, 
+            ISettingsProvider settingsProvider,
+            IInfrastructureFileService infrastructureFileService,
+            IApiFileService apiFileService)
         {
             _applicationFileService = applicationFileService;
             _fileSystem = fileSystem;
             _settingsProvider = settingsProvider;
+            _infrastructureFileService = infrastructureFileService;
+            _apiFileService = apiFileService;
         }
 
         public Task Handle(SolutionTemplateGenerated notification, CancellationToken cancellationToken)
@@ -60,12 +69,16 @@ namespace Endpoint.Application.Plugin.Identity
              *  2. Seed Default User
              */
 
+            _infrastructureFileService.BuildAdditionalResource(null, settings);
+
             //--------------- Api
             /*
              *  1. Add User Api Controller with Authenticate and GetCurrent User 
              * 
              */
 
+            _apiFileService.BuildAdditionalResource("User", settings);
+            _apiFileService.BuildAdditionalResource("Role", settings);
 
             return Task.CompletedTask;
         }

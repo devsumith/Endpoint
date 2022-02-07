@@ -1,9 +1,9 @@
 ﻿using Endpoint.Application.Core.Events;
-using Endpoint.Application.Services;
 using Endpoint.SharedKernal.Models;
 using Endpoint.SharedKernal.Services;
 using MediatR;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,13 +23,17 @@ namespace Endpoint.Application.Plugin.Spa
 
         public Task Handle(SolutionTemplateGenerated notification, CancellationToken cancellationToken)
         {
+            var parts = notification.RootDirectory.Split(Path.DirectorySeparatorChar);
+
+            var parent = string.Join(Path.DirectorySeparatorChar, parts.Take(parts.Length - 1));
+
             Settings settings = _settingsProvider.Get(notification.RootDirectory);
 
             var appDirectory = $"{settings.RootDirectory}{Path.DirectorySeparatorChar}{settings.SourceFolder}{Path.DirectorySeparatorChar}{settings.SolutionName}.App";
 
-            settings.AddApp(appDirectory, _fileSystem);
+            _commandService.Start($"spa -n {settings.SolutionName}", parent);
 
-            _commandService.Start($"spa -n {settings.SolutionName}", settings.RootDirectory);
+            settings.AddApp(appDirectory, _fileSystem);
 
             return Task.CompletedTask;
         }

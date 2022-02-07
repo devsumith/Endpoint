@@ -1,6 +1,34 @@
-{ 
-  "SolutionName": "Endpoint.sln",
-  "RootNamespace": "Endpoint",
-  "SourceFolder": "src",
-  "TestFolder": "test"
+{
+  "isRoot": true,
+  "isMicroserviceArchitecture": false,
+  "projects": [],
+  "rootDirectory": "C:\\projects\\Endpoint",
+  "solutionName": "Endpoint",
+  "solutionFileName": "Endpoint.sln",
+  "apiFullPath": null,
+  "rootNamespace": "Endpoint",
+  "domainNamespace": "Endpoint.SharedKernal",
+  "applicationNamespace": "Endpoint.Core",
+  "infrastructureNamespace": "Endpoint.Infrastructure",
+  "apiNamespace": "Endpoint.Api",
+  "domainDirectory": "C:\\projects\\Endpoint\\src\\Endpoint.SharedKernal",
+  "applicationDirectory": "C:\\projects\\Endpoint\\src\\Endpoint.Core",
+  "infrastructureDirectory": "C:\\projects\\Endpoint\\src\\Endpoint.Infrastructure",
+  "apiDirectory": "C:\\projects\\Endpoint\\src\\Endpoint.Api",
+  "unitTestsDirectory": "C:\\projects\\Endpoint\\tests\\Endpoint.UnitTests",
+  "testingDirectory": "C:\\projects\\Endpoint\\tests\\Endpoint.Testing",
+  "appDirectories": [
+
+  ],
+  "buildingBlocksCoreNamespace": "BuildingBlocks.Core",
+  "buildingBlocksEventStoreNamespace": "BuildingBlocks.EventStore",
+  "sourceFolder": "src",
+  "testFolder": "test",
+  "dbContextName": "EndpointDbContext",
+  "port": null,
+  "sslPort": null,
+  "plugins": [
+  ],
+  "resources": [
+  ]
 }

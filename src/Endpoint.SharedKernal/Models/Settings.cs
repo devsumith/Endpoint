@@ -34,8 +34,8 @@ namespace Endpoint.SharedKernal.Models
         public string SourceFolder { get; set; } = "src";
         public string TestFolder { get; set; } = "tests";
         public string DbContextName { get; set; }
-        public int Port { get; set; } = 5000;
-        public int SslPort { get; set; } = 5001;
+        public int? Port { get; set; } = 5000;
+        public int? SslPort { get; set; } = 5001;
         public List<string> Plugins { get; set; }
         public List<string> Resources { get; set; } = new List<string>();
 

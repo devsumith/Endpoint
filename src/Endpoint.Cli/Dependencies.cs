@@ -1,4 +1,4 @@
-﻿using Endpoint.Application;
+﻿using Endpoint.Application.Core;
 using Endpoint.Application.Core.Extenstions;
 using Endpoint.Application.Plugin.ContentManagement;
 using Endpoint.Application.Plugin.Identity;
@@ -13,8 +13,7 @@ namespace Endpoint.Cli
     {
         public static void Configure(IServiceCollection services, string[] plugins)
         {
-            services.AddMediatR(typeof(Marker), typeof(Endpoint.SharedKernal.Constants), typeof(Dependencies));
-            services.AddMediatR(typeof(Dependencies).Assembly);
+            services.AddMediatR(typeof(Endpoint.SharedKernal.Constants), typeof(Dependencies), typeof(Marker));
             services.AddSingleton<IDomainEvents, DomainEvents>();
             services.AddSharedServices();
             services.AddCoreServices();      

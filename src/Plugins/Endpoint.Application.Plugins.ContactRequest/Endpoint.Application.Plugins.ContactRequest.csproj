@@ -4,8 +4,4 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Endpoint.Application.Core\Endpoint.Application.Core.csproj" />
-  </ItemGroup>
-
 </Project>

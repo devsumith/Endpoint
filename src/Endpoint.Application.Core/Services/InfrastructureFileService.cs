@@ -26,29 +26,15 @@ namespace Endpoint.Application.Services
 
             _buildSeedData(settings);
 
-            var dbContextBuilder = new ClassBuilder(settings.DbContextName, new Endpoint.SharedKernal.Services.Context(), _fileSystem)
-                .WithDirectory($"{settings.InfrastructureDirectory}{Path.DirectorySeparatorChar}Data")
-                .WithUsing($"{settings.ApplicationNamespace}")
-                .WithUsing($"{settings.ApplicationNamespace}.Interfaces")
-                .WithUsing("Microsoft.EntityFrameworkCore")
-                .WithUsing("System.Threading.Tasks")
-                .WithUsing("System.Linq")
-                .WithNamespace($"{settings.InfrastructureNamespace}.Data")
-                .WithInterface($"I{settings.DbContextName}")
-                .WithBase("DbContext")
-                .WithBaseDependency("DbContextOptions", "options");
-
-            foreach (var resource in settings.Resources.Select(r => (Token)r))
-            {
-                dbContextBuilder.WithProperty(new PropertyBuilder().WithName(resource.PascalCasePlural).WithType(new TypeBuilder().WithGenericType("DbSet", resource.PascalCase).Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build());
-
-            }
-
-            dbContextBuilder.Build();
-
+            _createOrReCreateDbContext(settings);
         }
 
         public void BuildAdditionalResource(string additionalResource, Settings settings)
+        {
+            _createOrReCreateDbContext(settings);
+        }
+
+        protected void _createOrReCreateDbContext(Settings settings)
         {
             var dbContextBuilder = new ClassBuilder(settings.DbContextName, new Endpoint.SharedKernal.Services.Context(), _fileSystem)
                 .WithDirectory($"{settings.InfrastructureDirectory}{Path.DirectorySeparatorChar}Data")
@@ -65,12 +51,10 @@ namespace Endpoint.Application.Services
             foreach (var resource in settings.Resources.Select(r => (Token)r))
             {
                 dbContextBuilder.WithProperty(new PropertyBuilder().WithName(resource.PascalCasePlural).WithType(new TypeBuilder().WithGenericType("DbSet", resource.PascalCase).Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build());
-
             }
 
             dbContextBuilder.Build();
         }
-
         private void _buildSeedData(Endpoint.SharedKernal.Models.Settings settings)
         {
             var template = _templateLocator.Get(nameof(SeedDataBuilder));

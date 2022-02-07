@@ -1,12 +1,11 @@
 using CommandLine;
 using Endpoint.Application.Core.Services;
 using MediatR;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Commands
+namespace Endpoint.Application.Core.Commands
 {
     internal class Default
     {
