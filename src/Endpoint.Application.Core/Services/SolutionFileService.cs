@@ -1,6 +1,9 @@
-﻿using Endpoint.SharedKernal.Services;
+﻿using Endpoint.SharedKernal.Models;
+using Endpoint.SharedKernal.Services;
+using Endpoint.SharedKernal.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using static System.Text.Json.JsonSerializer;
 
@@ -25,13 +28,56 @@ namespace Endpoint.Application.Services
             _fileSystem = fileSystem;
         }
 
-        public Endpoint.SharedKernal.Models.Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins)
+        public Endpoint.SharedKernal.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins)
         {
-            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<string> { resource }, directory, isMicroserviceArchitecture, plugins);
+            AggregateRoot aggregateRoot = new AggregateRoot(resource);
+
+            aggregateRoot.Properties.Add(new ClassProperty("public", "Guid", $"{((Token)resource).PascalCase}Id", ClassPropertyAccessor.GetPrivateSet, key: true));
+
+            if (!string.IsNullOrWhiteSpace(properties))
+            {
+                foreach (var property in properties.Split(','))
+                {
+                    var nameValuePair = property.Split(':');
+
+                    aggregateRoot.Properties.Add(new ClassProperty("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), ClassPropertyAccessor.GetPrivateSet));
+                }
+            }
+
+            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<AggregateRoot>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins);
         }
 
-        public Endpoint.SharedKernal.Models.Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
+        public Endpoint.SharedKernal.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
         {
+            var aggregates = new List<AggregateRoot>();
+
+            foreach (var resource in resources)
+            {
+                AggregateRoot aggregateRoot = new AggregateRoot(resource);
+
+                aggregateRoot.Properties.Add(new ClassProperty("public", "Guid", $"{((Token)resource).PascalCase}Id", ClassPropertyAccessor.GetPrivateSet, key: true));
+
+                if (!string.IsNullOrWhiteSpace(properties))
+                {
+                    foreach (var property in properties.Split(','))
+                    {
+                        var nameValuePair = property.Split(':');
+
+                        aggregateRoot.Properties.Add(new ClassProperty("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), ClassPropertyAccessor.GetPrivateSet));
+                    }
+                }
+
+                aggregates.Add(aggregateRoot);
+            }
+
+
+            return Build(name, dbContextName,useShortIdProperty, useIntIdPropertyType, aggregates, directory, isMicroserviceArchitecture, plugins);
+
+        }
+
+        public Endpoint.SharedKernal.Models.Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
+        {
+
             name = name.Replace("-", "_");
 
             _commandService.Start($"mkdir {name}", directory);
@@ -95,7 +141,6 @@ namespace Endpoint.Application.Services
 
             return settings;
         }
-
         private void _createProjectAndAddToSolution(string templateType, string directory, Endpoint.SharedKernal.Models.Settings settings)
         {
             _commandService.Start($@"mkdir {directory}");

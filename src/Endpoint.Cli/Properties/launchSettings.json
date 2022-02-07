@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "plugin ContactRequest -d C:\\projects\\Endpoint"
+      "commandLineArgs": "-d C:\\sandbox -r Car --properties Name:string,Make:string,Model:string"
     }
   }
 }

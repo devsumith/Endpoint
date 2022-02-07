@@ -48,7 +48,7 @@ namespace Endpoint.Application.Services
                 .WithBase("DbContext")
                 .WithBaseDependency("DbContextOptions", "options");
 
-            foreach (var resource in settings.Resources.Select(r => (Token)r))
+            foreach (var resource in settings.Resources.Select(r => (Token)r.Name))
             {
                 dbContextBuilder.WithProperty(new PropertyBuilder().WithName(resource.PascalCasePlural).WithType(new TypeBuilder().WithGenericType("DbSet", resource.PascalCase).Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build());
             }

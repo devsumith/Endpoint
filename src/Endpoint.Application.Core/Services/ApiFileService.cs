@@ -33,7 +33,7 @@ namespace Endpoint.Application.Services
 
             foreach (var resource in settings.Resources)
             {
-                ControllerBuilder.Default(settings, resource, _fileSystem);
+                ControllerBuilder.Default(settings, resource.Name, _fileSystem);
             }
 
             _buildLaunchSettings(settings);

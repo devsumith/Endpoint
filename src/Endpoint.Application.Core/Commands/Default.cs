@@ -15,6 +15,9 @@ namespace Endpoint.Application.Core.Commands
             [Option('p', "port")]
             public int Port { get; set; } = 5000;
 
+            [Option("properties", Required = false)]
+            public string Properties { get; set; }
+
             [Option('n', "name")]
             public string Name { get; set; } = "DefaultEndpoint";
 
@@ -50,7 +53,7 @@ namespace Endpoint.Application.Core.Commands
             }
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                _solutionTemplateService.Build(request.Name, request.DbContextName, request.ShortIdPropertyName, request.Resource, request.Monolith, request.NumericIdPropertyDataType, request.Directory, request.Plugins?.Split(',').ToList());
+                _solutionTemplateService.Build(request.Name, request.DbContextName, request.ShortIdPropertyName, request.Resource, request.Properties, request.Monolith, request.NumericIdPropertyDataType, request.Directory, request.Plugins?.Split(',').ToList());
 
                 return Task.FromResult(new Unit());
             }

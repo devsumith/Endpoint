@@ -9,7 +9,7 @@ namespace Endpoint.Application.Core.Services
 {
     public interface ISolutionTemplateService
     {
-        void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins);
+        void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, string properties, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins);
     }
 
     public class SolutionTemplateService: ISolutionTemplateService
@@ -40,12 +40,12 @@ namespace Endpoint.Application.Core.Services
             _mediator = mediator;
         }
 
-        public void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins)
+        public void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, string properties, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins)
         {
-            Build(name,dbContextName,shortIdPropertyName, new List<string>() { resource },isMonolith,numericIdPropertyDataType,directory,plugins);
+            Build(name,dbContextName,shortIdPropertyName, new List<string>() { resource }, properties, isMonolith, numericIdPropertyDataType,directory,plugins);
         }
 
-        public void Build(string name, string dbContextName, bool shortIdPropertyName, List<string> resources, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins)
+        public void Build(string name, string dbContextName, bool shortIdPropertyName, List<string> resources, string properties, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins)
         {
             int retries = 0;
 
@@ -55,7 +55,7 @@ namespace Endpoint.Application.Core.Services
             {
                 if (!Directory.Exists($"{directory}{Path.DirectorySeparatorChar}{name}"))
                 {
-                    var settings = _solutionFileService.Build(name, dbContextName, shortIdPropertyName, numericIdPropertyDataType, resources, directory, isMicroserviceArchitecture: !isMonolith, plugins);
+                    var settings = _solutionFileService.Build(name, properties, dbContextName, shortIdPropertyName, numericIdPropertyDataType, resources, directory, isMicroserviceArchitecture: !isMonolith, plugins);
 
                     _domainFileService.Build(settings);
 

@@ -37,20 +37,21 @@ namespace Endpoint.SharedKernal.Models
         public int? Port { get; set; } = 5000;
         public int? SslPort { get; set; } = 5001;
         public List<string> Plugins { get; set; }
-        public List<string> Resources { get; set; } = new List<string>();
+        public List<Entity> Entities { get; set; } = new List<Entity>();
+        public List<AggregateRoot> Resources { get; set; } = new List<AggregateRoot>();
 
-        public Settings(string name, string dbContextName, string resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default)
-            :this(name,dbContextName,new List<string>() { resource },directory,isMicroserviceArchitecture,plugins)
+        public Settings(string name, string dbContextName, AggregateRoot resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default)
+            :this(name,dbContextName,new List<AggregateRoot>() { resource },directory,isMicroserviceArchitecture,plugins)
         { }
 
-        public Settings(string name, string dbContextName, List<string> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default)
+        public Settings(string name, string dbContextName, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default)
         {
             name = ((Token)name).PascalCase.Replace("-", "_");
             Plugins = plugins;
 
             foreach (var resource in resources)
             {
-                Resources.Add(((Token)resource).PascalCase);
+                Resources.Add(resource);
             }
 
             IsMicroserviceArchitecture = isMicroserviceArchitecture;
@@ -96,9 +97,9 @@ namespace Endpoint.SharedKernal.Models
 
         public void AddResource(string resource, IFileSystem fileSystem)
         {
-            if (!Resources.Contains(resource))
+            if (Resources.FirstOrDefault(x => x.Name == resource)  == null)
             {
-                Resources = Resources.Concat(new string[1] { resource }).ToList();
+                Resources = Resources.Concat(new AggregateRoot[1] { new AggregateRoot(resource) }).ToList();
             }
 
             fileSystem.WriteAllLines($"{RootDirectory}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {

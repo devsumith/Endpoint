@@ -24,7 +24,7 @@ namespace Endpoint.Application.Core
             .WithReturnType(new TypeBuilder().WithGenericType("Task", "int").Build())
             .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build()).Build());
 
-            foreach (var resource in settings.Resources.Select(x => (Token)x))
+            foreach (var resource in settings.Resources.Select(x => (Token)x.Name))
             {
                 classBuilder.WithProperty(new PropertyBuilder().WithName(resource.PascalCasePlural).WithAccessModifier(AccessModifier.Inherited).WithType(new TypeBuilder().WithGenericType("DbSet", resource.PascalCase).Build()).WithAccessors(new AccessorsBuilder().WithGetterOnly().Build()).Build());
             }

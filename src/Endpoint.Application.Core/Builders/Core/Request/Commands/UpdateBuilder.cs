@@ -3,7 +3,9 @@ using Endpoint.SharedKernal.Services;
 using Endpoint.SharedKernal.ValueObjects;
 using System.Collections.Generic;
 using Endpoint.SharedKernal;
-
+using Endpoint.SharedKernal.Models;
+using Endpoint.Application.Core.Builders.Core;
+using System.Linq;
 
 namespace Endpoint.Application.Builders
 {
@@ -18,6 +20,7 @@ namespace Endpoint.Application.Builders
         private string _namespace;
         private string _domainNamespace;
         private string _applicationNamespace;
+        private AggregateRoot _aggregateRoot;
 
         public UpdateBuilder(IContext context, IFileSystem fileSystem)
         {
@@ -26,6 +29,11 @@ namespace Endpoint.Application.Builders
             _fileSystem = fileSystem;
         }
 
+        public UpdateBuilder WithAggregateRoot(AggregateRoot aggregateRoot)
+        {
+            _aggregateRoot = aggregateRoot;
+            return this;
+        }
         public UpdateBuilder WithDomainNamespace(string domainNamespace)
         {
             _domainNamespace = domainNamespace;
@@ -90,16 +98,7 @@ namespace Endpoint.Application.Builders
                 .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Update{((Token)_entity).PascalCase}Response").Build())
                 .WithParameter(new ParameterBuilder($"Update{((Token)_entity).PascalCase}Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
-                .WithBody(new List<string>() {
-                $"var {((Token)_entity).CamelCase} = await _context.{((Token)_entity).PascalCasePlural}.SingleAsync(x => x.{((Token)_entity).PascalCase}Id == request.{((Token)_entity).PascalCase}.{((Token)_entity).PascalCase}Id);",
-                "",
-                "await _context.SaveChangesAsync(cancellationToken);",
-                "",
-                "return new ()",
-                "{",
-                $"{((Token)_entity).PascalCase} = {((Token)_entity).CamelCase}.ToDto()".Indent(1),
-                "};"
-                }).Build())
+                .WithBody(UpdateCommandHandlerBodyBuilder.Build(_aggregateRoot).ToList()).Build())
                 .Class;
 
             new NamespaceBuilder($"Update{((Token)_entity).PascalCase}", _context, _fileSystem)

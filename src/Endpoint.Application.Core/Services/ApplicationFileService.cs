@@ -29,7 +29,7 @@ namespace Endpoint.Application.Services
 
             DbContextInterfaceBuilder.Default(settings, _fileSystem);
 
-            foreach (var resource in settings.Resources.Select(x => (Token)x))
+            foreach (var resource in settings.Resources.Select(x => x))
             {
                 _buildApplicationFilesForResource(settings, resource);
             }
@@ -39,31 +39,60 @@ namespace Endpoint.Application.Services
 
         }
 
-        protected void _buildApplicationFilesForResource(Settings settings, Token resource)
+        protected void _buildApplicationFilesForResource(Settings settings, AggregateRoot resource)
         {
-            var aggregateDirectory = $"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}AggregatesModel{Path.DirectorySeparatorChar}{resource.PascalCase}Aggregate";
+            Token resourceName = ((Token)resource.Name);
+            var aggregateDirectory = $"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}AggregatesModel{Path.DirectorySeparatorChar}{resourceName.PascalCase}Aggregate";
             var commandsDirectory = $"{aggregateDirectory}{Path.DirectorySeparatorChar}Commands";
             var queriesDirectory = $"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries";
             var context = new Context();
+            
 
             _createFolder(commandsDirectory, settings.ApplicationDirectory);
             _createFolder(queriesDirectory, settings.ApplicationDirectory);
 
-            new ClassBuilder(resource.PascalCase, new Context(), _fileSystem)
+            var aggregateBuilder = new ClassBuilder(resource.Name, new Context(), _fileSystem)
                 .WithDirectory(aggregateDirectory)
                 .WithUsing("System")
-                .WithNamespace($"{settings.ApplicationNamespace}")
-                .WithProperty(new PropertyBuilder().WithName($"{resource.PascalCase}Id").WithType("Guid").WithAccessors(new AccessorsBuilder().Build()).Build())
-                .Build();
+                .WithNamespace($"{settings.ApplicationNamespace}");
 
-            new ClassBuilder($"{resource.PascalCase}Dto", new Context(), _fileSystem)
+            foreach(var property in resource.Properties)
+            {
+                aggregateBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(property.Type).WithAccessors(new AccessorsBuilder().Build()).Build());
+            }
+            
+            aggregateBuilder.Build();
+
+            var dtoBuilder = new ClassBuilder($"{((Token)resource.Name).PascalCase}Dto", new Context(), _fileSystem)
                 .WithDirectory(aggregateDirectory)
                 .WithUsing("System")
-                .WithNamespace($"{settings.ApplicationNamespace}")
-                .WithProperty(new PropertyBuilder().WithName($"{resource.PascalCase}Id").WithType("Guid").WithAccessors(new AccessorsBuilder().Build()).Build())
-                .Build();
+                .WithNamespace($"{settings.ApplicationNamespace}");
 
-            new ClassBuilder($"{resource.PascalCase}Extensions", new Context(), _fileSystem)
+            foreach (var property in resource.Properties)
+            {
+                var propertyType = property.Name == $"{resource.Name}Id" ? $"{property.Type}?": property.Type;
+
+                dtoBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(propertyType).WithAccessors(new AccessorsBuilder().Build()).Build());
+            }
+
+            dtoBuilder.Build();
+
+
+            var extensionsBody = new List<string>()
+            {
+                "return new ()",
+                "{",                
+            };
+
+            foreach(var property in resource.Properties)
+            {
+                extensionsBody.Add($"{property.Name} = {((Token)resource.Name).CamelCase}.{((Token)property.Name).PascalCase},".Indent(1));
+            }
+
+            extensionsBody.Add("};");
+
+
+            new ClassBuilder($"{((Token)resource.Name).PascalCase}Extensions", new Context(), _fileSystem)
                 .WithDirectory(aggregateDirectory)
                 .IsStatic()
                 .WithUsing("System.Collections.Generic")
@@ -75,46 +104,40 @@ namespace Endpoint.Application.Services
                 .WithMethod(new MethodBuilder()
                 .IsStatic()
                 .WithName("ToDto")
-                .WithReturnType($"{resource.PascalCase}Dto")
-                .WithPropertyName($"{resource.PascalCase}Id")
-                .WithParameter(new ParameterBuilder(resource.PascalCase, resource.CamelCase, true).Build())
-                .WithBody(new()
-                {
-                    "return new ()",
-                    "{",
-                    $"{resource.PascalCase}Id = {resource.CamelCase}.{resource.PascalCase}Id".Indent(1),
-                    "};"
-                })
+                .WithReturnType($"{((Token)resource.Name).PascalCase}Dto")
+                .WithPropertyName($"{((Token)resource.Name).PascalCase}Id")
+                .WithParameter(new ParameterBuilder(((Token)resource.Name).PascalCase, ((Token)resource.Name).CamelCase, true).Build())
+                .WithBody(extensionsBody)
                 .Build())
                 .WithMethod(new MethodBuilder()
                 .IsStatic()
                 .WithAsync(true)
                 .WithName("ToDtosAsync")
-                .WithReturnType($"Task<List<{resource.PascalCase}Dto>>")
-                .WithPropertyName($"{resource.PascalCase}Id")
-                .WithParameter(new ParameterBuilder($"IQueryable<{resource.PascalCase}>", resource.CamelCasePlural, true).Build())
+                .WithReturnType($"Task<List<{((Token)resource.Name).PascalCase}Dto>>")
+                .WithPropertyName($"{((Token)resource.Name).PascalCase}Id")
+                .WithParameter(new ParameterBuilder($"IQueryable<{((Token)resource.Name).PascalCase}>", ((Token)resource.Name).CamelCasePlural, true).Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new()
                 {
-                    $"return await {resource.CamelCasePlural}.Select(x => x.ToDto()).ToListAsync(cancellationToken);"
+                    $"return await {resourceName.CamelCasePlural}.Select(x => x.ToDto()).ToListAsync(cancellationToken);"
                 })
                 .Build())
                 .WithMethod(new MethodBuilder()
                 .IsStatic()
                 .WithName("ToDtos")
-                .WithReturnType($"List<{resource.PascalCase}Dto>")
-                .WithPropertyName($"{resource.PascalCase}Id")
-                .WithParameter(new ParameterBuilder($"IEnumerable<{resource.PascalCase}>", resource.CamelCasePlural, true).Build())
+                .WithReturnType($"List<{resourceName.PascalCase}Dto>")
+                .WithPropertyName($"{resourceName.PascalCase}Id")
+                .WithParameter(new ParameterBuilder($"IEnumerable<{resourceName.PascalCase}>", resourceName.CamelCasePlural, true).Build())
                 .WithBody(new()
                 {
-                    $"return {resource.CamelCasePlural}.Select(x => x.ToDto()).ToList();"
+                    $"return {resourceName.CamelCasePlural}.Select(x => x.ToDto()).ToList();"
                 })
                 .Build())
                 .Build();
 
-            new ClassBuilder($"{resource.PascalCase}Validator", new Context(), _fileSystem)
+            new ClassBuilder($"{resourceName.PascalCase}Validator", new Context(), _fileSystem)
                 .WithDirectory(aggregateDirectory)
-                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", $"{resource.PascalCase}Dto").Build())
+                .WithBase(new TypeBuilder().WithGenericType("AbstractValidator", $"{resourceName.PascalCase}Dto").Build())
                 .WithNamespace($"{settings.ApplicationNamespace}")
                 .WithUsing("FluentValidation")
                 .Build();
@@ -125,7 +148,8 @@ namespace Endpoint.Application.Services
                 .WithNamespace($"{settings.ApplicationNamespace}")
                 .WithApplicationNamespace($"{settings.ApplicationNamespace}")
                 .WithDomainNamespace($"{settings.DomainNamespace}")
-                .WithEntity(resource.Value)
+                .WithEntity(resourceName.Value)
+                .WithAggregateRoot(resource)
                 .Build();
 
             new UpdateBuilder(new Context(), _fileSystem)
@@ -134,7 +158,8 @@ namespace Endpoint.Application.Services
                 .WithNamespace($"{settings.ApplicationNamespace}")
                 .WithApplicationNamespace($"{settings.ApplicationNamespace}")
                 .WithDomainNamespace($"{settings.DomainNamespace}")
-                .WithEntity(resource.Value)
+                .WithEntity(resourceName.Value)
+                .WithAggregateRoot(resource)
                 .Build();
 
             new RemoveBuilder(new Context(), _fileSystem)
@@ -143,7 +168,7 @@ namespace Endpoint.Application.Services
                 .WithNamespace($"{settings.ApplicationNamespace}")
                 .WithApplicationNamespace($"{settings.ApplicationNamespace}")
                 .WithDomainNamespace($"{settings.DomainNamespace}")
-                .WithEntity(resource.Value)
+                .WithEntity(resourceName.Value)
                 .Build();
 
             new GetByIdBuilder(new Context(), _fileSystem)
@@ -152,7 +177,7 @@ namespace Endpoint.Application.Services
                 .WithNamespace($"{settings.ApplicationNamespace}")
                 .WithApplicationNamespace($"{settings.ApplicationNamespace}")
                 .WithDomainNamespace($"{settings.DomainNamespace}")
-                .WithEntity(resource.Value)
+                .WithEntity(resourceName.Value)
                 .Build();
 
             new GetBuilder(new Context(), _fileSystem)
@@ -161,7 +186,7 @@ namespace Endpoint.Application.Services
                 .WithNamespace($"{settings.ApplicationNamespace}")
                 .WithApplicationNamespace($"{settings.ApplicationNamespace}")
                 .WithDomainNamespace($"{settings.DomainNamespace}")
-                .WithEntity(resource.Value)
+                .WithEntity(resourceName.Value)
                 .Build();
 
             new GetPageBuilder(new Context(), _fileSystem)
@@ -170,7 +195,7 @@ namespace Endpoint.Application.Services
                 .WithNamespace($"{settings.ApplicationNamespace}")
                 .WithApplicationNamespace($"{settings.ApplicationNamespace}")
                 .WithDomainNamespace($"{settings.DomainNamespace}")
-                .WithEntity(resource.Value)
+                .WithEntity(resourceName.Value)
                 .Build();
 
             _buildValidationBehavior(settings);
@@ -181,7 +206,7 @@ namespace Endpoint.Application.Services
         {
             DbContextInterfaceBuilder.Default(settings, _fileSystem);
 
-            _buildApplicationFilesForResource(settings, (Token)additionalResource);
+            _buildApplicationFilesForResource(settings, new AggregateRoot(additionalResource));
         }
 
         private void _buildValidationBehavior(Settings settings)

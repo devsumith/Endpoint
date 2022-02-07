@@ -18,6 +18,11 @@ namespace Endpoint.SharedKernal.Models
             Type = classPropertyAccessorType;
         }
 
+        private ClassPropertyAccessor()
+        {
+
+        }
+
         public static ClassPropertyAccessor Get => new ClassPropertyAccessor(ClassPropertyAccessorType.Get);
 
         public static ClassPropertyAccessor PrivateSet => new ClassPropertyAccessor("private", ClassPropertyAccessorType.Set);
