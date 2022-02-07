@@ -48,7 +48,7 @@ namespace Endpoint.Commands
 
                 _commandService.Start($"dotnet new classlib -o {pluginName} --framework net5.0", pluginsDirectory);
 
-                _removeDefaultFiles(cliCsProjectDirectory);
+                _removeDefaultFiles(pluginDirectory);
 
                 _commandService.Start($"dotnet sln add {pluginCsProjectFullPath}", settings.RootDirectory);
 

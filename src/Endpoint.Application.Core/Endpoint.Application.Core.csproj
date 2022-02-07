@@ -86,6 +86,7 @@
 
   <ItemGroup>
     <Folder Include="Builders\Testing\" />
+    <Folder Include="Templates\" />
   </ItemGroup>
   
 </Project>
