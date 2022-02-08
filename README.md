@@ -1,6 +1,6 @@
 # Endpoint
 
-Model driven Source Code Generator to build production grade Clean Architecture API's using ASP.NET Core.
+Model Driven Source Code Generator to build production grade Clean Architecture API's using ASP.NET Core.
 
 ## How to run locally
 
