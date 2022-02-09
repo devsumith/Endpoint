@@ -39,8 +39,6 @@ namespace Endpoint.UnitTests
             {
                 "using System;","using System.Linq;", "", "namespace Avengers.Api.Features", "{","","}"
             };
-
-            //Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -58,7 +56,6 @@ namespace Endpoint.UnitTests
                 "using System;","using System.Linq;", "", "namespace Avengers.Api.Features", "{","","    public class Foo { }", "", "}"
             };
 
-            //Assert.Equal(expected, actual);
         }
 
     }
