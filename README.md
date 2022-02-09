@@ -2,9 +2,8 @@
 
 Model Driven Source Code Generator to build production grade Clean Architecture API's using ASP.NET Core.
 
-## How to run locally
+## How to run
 
-0. Clone the repo
 1. [Download and install the .NET Core SDK](https://dotnet.microsoft.com/download)
 2. Open a terminal such as **PowerShell**, **Command Prompt**, or **bash**
 3. Execute the Powershell script or Run the following commands:
