@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Endpoint.Cli\Endpoint.Cli.csproj" />
+    <ProjectReference Include="..\..\src\Endpoint.Cli\Allagi.Endpoint.Cli.csproj" />
   </ItemGroup>
 
 </Project>

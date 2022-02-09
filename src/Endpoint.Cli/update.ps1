@@ -1,3 +1,3 @@
-﻿dotnet tool uninstall -g Endpoint.Cli
+﻿dotnet tool uninstall -g Allagi.Endpoint.Cli
 dotnet pack
-dotnet tool install --global --add-source ./nupkg Endpoint.Cli
+dotnet tool install --global --add-source ./nupkg Allagi.Endpoint.Cli
