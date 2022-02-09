@@ -26,34 +26,29 @@
     <None Remove="Builders\StartupBuilder.txt" />
     <None Remove="Builders\ValidationBehaviorBuilder.txt" />
     <None Remove="Builders\ValidatorBuilder.txt" />
+    <None Remove="Templates\Infrastructure\SeedData.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Builders\SharedKernal\AggregateRootBuilder.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Builders\SharedKernal\AggregateBuilder.txt" />
-    <EmbeddedResource Include="Builders\IntegrationTests\ApiTest.txt" />
+    <EmbeddedResource Include="Templates\IntegrationTests\ApiTest.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Templates\Api\AppSettings.txt" />
-    <EmbeddedResource Include="Builders\IntegrationTests\ControllerTestBuilder.txt" />
     <EmbeddedResource Include="Templates\Api\Dependencies.txt" />
     <EmbeddedResource Include="Builders\Core\ExtensionsBuilder.txt" />
     <EmbeddedResource Include="Templates\Application\Dto.txt" />
     <EmbeddedResource Include="Templates\Api\LaunchSettings.txt" />
     <EmbeddedResource Include="Templates\Api\Program.txt" />
-    <EmbeddedResource Include="Builders\SharedKernal\QueryableExtensionsBuilder.txt" />
+    <EmbeddedResource Include="Templates\SharedKernal\QueryableExtensions.txt" />
     <EmbeddedResource Include="Builders\Core\Request\CommandBuilder.txt" />
     <EmbeddedResource Include="Builders\Core\Request\QueryBuilder.txt" />
-    <EmbeddedResource Include="Builders\SharedKernal\ResponseBaseBuilder.txt" />
-    <EmbeddedResource Include="Builders\Infrastructure\SeedDataBuilder.txt" />
+    <EmbeddedResource Include="Templates\SharedKernal\ResponseBase.txt" />
     <EmbeddedResource Include="Builders\Core\ServiceCollectionExtensionsBuilder.txt" />
     <EmbeddedResource Include="Templates\Api\Startup.txt" />
     <EmbeddedResource Include="Builders\Core\ValidationBehaviorBuilder.txt" />
     <EmbeddedResource Include="Builders\Core\ValidatorBuilder.txt" />
+    <EmbeddedResource Include="Templates\Infrastructure\SeedData.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -77,10 +72,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Endpoint.SharedKernal\Endpoint.SharedKernal.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Builders\Testing\" />
   </ItemGroup>
   
 </Project>

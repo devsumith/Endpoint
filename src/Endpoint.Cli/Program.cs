@@ -10,21 +10,30 @@ namespace Endpoint.Cli
     {
         static void Main(string[] args)
         {
-            var parser = new Parser(with =>
+            var pluginsOptionValue = _resolvePluginsOptionValue(args);
+
+            var mediator = BuildContainer(pluginsOptionValue).GetService<IMediator>();
+
+            ProcessArgs(mediator, args);
+        }
+
+        private static string[] _resolvePluginsOptionValue(string[] args)
+        {
+            var result = _createParser().ParseArguments<PluginsOption>(args);
+
+            var pluginsOptionValue = ((Parsed<PluginsOption>)result).Value;
+
+            return pluginsOptionValue.Plugins?.Split(',') ?? new string[0];
+        }
+
+        private static Parser _createParser()
+        {
+            return new Parser(with =>
             {
                 with.CaseSensitive = false;
                 with.HelpWriter = Console.Out;
                 with.IgnoreUnknownArguments = true;
-                with.AutoHelp = false;
             });
-
-            var result = parser.ParseArguments<PluginsOption>(args);
-
-            var value = ((Parsed<PluginsOption>)result).Value;
-
-            var mediator = BuildContainer(value.Plugins?.Split(',') ?? new string[0]).GetService<IMediator>();
-
-            ProcessArgs(mediator, args);
         }
 
         public static ServiceProvider BuildContainer(string[] args)
@@ -48,14 +57,7 @@ namespace Endpoint.Cli
                 .Where(type => type.GetCustomAttributes(typeof(VerbAttribute), true).Length > 0)
                 .ToArray();
 
-            var parser = new Parser(with =>
-            {
-                with.CaseSensitive = false;
-                with.HelpWriter = Console.Out;
-                with.IgnoreUnknownArguments = true;
-            });
-
-            parser.ParseArguments(args, verbs)
+            _createParser().ParseArguments(args, verbs)
                 .WithParsed(
                   (dynamic request) => mediator.Send(request));
         }

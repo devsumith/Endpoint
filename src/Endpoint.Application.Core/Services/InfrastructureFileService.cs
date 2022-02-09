@@ -55,9 +55,9 @@ namespace Endpoint.Application.Services
 
             dbContextBuilder.Build();
         }
-        private void _buildSeedData(Endpoint.SharedKernal.Models.Settings settings)
+        private void _buildSeedData(Settings settings)
         {
-            var template = _templateLocator.Get(nameof(SeedDataBuilder));
+            var template = _templateLocator.Get("SeedData");
 
             var tokens = new TokensBuilder()
                 .With(nameof(settings.InfrastructureNamespace), (Token)settings.InfrastructureNamespace)

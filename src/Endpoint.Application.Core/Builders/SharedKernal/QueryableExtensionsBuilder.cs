@@ -7,11 +7,9 @@ namespace Endpoint.Application.Builders
 {
     public class QueryableExtensionsBuilder
     {
-
-
         public static void Build(Settings settings, ITemplateLocator templateLocator, ITemplateProcessor templateProcessor, IFileSystem fileSystem, string directory)
         {
-            var template = templateLocator.Get(nameof(QueryableExtensionsBuilder));
+            var template = templateLocator.Get("QueryableExtensions");
 
             var tokens = new TokensBuilder()
                 .With(nameof(settings.RootNamespace), (Token)settings.RootNamespace)

@@ -28,7 +28,7 @@ namespace Endpoint.Application.Services
 
         private void _buildResponseBase(Settings settings)
         {
-            var template = _templateLocator.Get(nameof(ResponseBaseBuilder));
+            var template = _templateLocator.Get("ResponseBase");
 
             var tokens = new TokensBuilder()
                 .With("RootNamespace", (Token)settings.RootNamespace)
@@ -45,7 +45,7 @@ namespace Endpoint.Application.Services
 
         private void _buildQueryableExtensions(Endpoint.SharedKernal.Models.Settings settings)
         {
-            var template = _templateLocator.Get(nameof(QueryableExtensionsBuilder));
+            var template = _templateLocator.Get("QueryableExtensions");
 
             var tokens = new TokensBuilder()
                 .With("RootNamespace", (Token)settings.RootNamespace)

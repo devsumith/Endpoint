@@ -27,7 +27,7 @@ namespace Endpoint.Application.Builders
         }
         public void Build(Endpoint.SharedKernal.Models.Settings settings)
         {
-            var template = _templateLocator.Get(nameof(ResponseBaseBuilder));
+            var template = _templateLocator.Get("ResponseBase");
 
             var tokens = new TokensBuilder()
                 .With("RootNamespace", (Token)settings.RootNamespace)
