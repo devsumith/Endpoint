@@ -7,16 +7,11 @@ Model Driven Source Code Generator to build production grade Clean Architecture 
 
 Install the [Endpoint NuGet Package](https://www.nuget.org/packages/Allagi.Endpoint.Cli).
 
-### Package Manager Console
-
-```
-Install-Package Allagi.Endpoint.Cli
-```
 
 ### .NET Core CLI
 
 ```
-dotnet add package Allagi.Endpoint.Cli
+dotnet tool install --global Allagi.Endpoint.Cli
 ```
 
 
