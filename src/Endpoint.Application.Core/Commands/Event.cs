@@ -50,12 +50,12 @@ namespace Endpoint.Application.Commands
             {
                 var settings = _settingsProvider.Get(request.Directory);
 
-/*                BuilderFactory.Create<EventBuilder>((a, b, c, d) => new(a, b, c, d))
-                    .WithAggregate(request.Aggregate)
-                    .WithEvent(request.Name)
-                    .SetDomainDirectory(settings.DomainDirectory)
-                    .SetDomainNamespace(settings.DomainNamespace)
-                    .Build();*/
+                /*                BuilderFactory.Create<EventBuilder>((a, b, c, d) => new(a, b, c, d))
+                                    .WithAggregate(request.Aggregate)
+                                    .WithEvent(request.Name)
+                                    .SetDomainDirectory(settings.DomainDirectory)
+                                    .SetDomainNamespace(settings.DomainNamespace)
+                                    .Build();*/
 
                 return Task.FromResult(new Unit());
             }

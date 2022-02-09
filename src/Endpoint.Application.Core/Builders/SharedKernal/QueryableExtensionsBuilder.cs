@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Endpoint.Application.Builders
 {
-    public class QueryableExtensionsBuilder 
+    public class QueryableExtensionsBuilder
     {
 
 

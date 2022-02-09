@@ -30,7 +30,7 @@ namespace Endpoint.Application.Commands
                 _settingsProvider = settingsProvider ?? throw new ArgumentNullException(nameof(settingsProvider));
             }
 
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 Endpoint.SharedKernal.Models.Settings settings = _settingsProvider.Get(request.Directory);
 
@@ -57,7 +57,7 @@ namespace Endpoint.Application.Commands
                     }
                 }
 
-                return new();
+                return Task.FromResult(new Unit());
             }
         }
     }

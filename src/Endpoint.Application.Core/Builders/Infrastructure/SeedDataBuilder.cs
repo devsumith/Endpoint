@@ -9,16 +9,16 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-/*            var template = _templateLocator.Get(nameof(SeedDataBuilder));
+            /*            var template = _templateLocator.Get(nameof(SeedDataBuilder));
 
-            var tokens = new TokensBuilder()
-                .With(nameof(_infrastructureNamespace), _infrastructureNamespace)
-                .With(nameof(_dbContext), _dbContext)
-                .Build();
+                        var tokens = new TokensBuilder()
+                            .With(nameof(_infrastructureNamespace), _infrastructureNamespace)
+                            .With(nameof(_dbContext), _dbContext)
+                            .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+                        var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{_infrastructureDirectory.Value}{Path.DirectorySeparatorChar}Data{Path.DirectorySeparatorChar}SeedData.cs", contents);*/
+                        _fileSystem.WriteAllLines($@"{_infrastructureDirectory.Value}{Path.DirectorySeparatorChar}Data{Path.DirectorySeparatorChar}SeedData.cs", contents);*/
         }
     }
 }

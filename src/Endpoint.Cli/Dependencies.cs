@@ -16,9 +16,9 @@ namespace Endpoint.Cli
             services.AddMediatR(typeof(Endpoint.SharedKernal.Constants), typeof(Dependencies), typeof(Marker));
             services.AddSingleton<IDomainEvents, DomainEvents>();
             services.AddSharedServices();
-            services.AddCoreServices();      
-            
-            foreach(var plugin in plugins)
+            services.AddCoreServices();
+
+            foreach (var plugin in plugins)
             {
                 if (plugin == "Identity")
                     services.AddMediatR(typeof(IdentityEndpointPlugin));

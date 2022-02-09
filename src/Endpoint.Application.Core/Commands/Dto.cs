@@ -31,13 +31,13 @@ namespace Endpoint.Application.Commands
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-/*                Create<DtoBuilder>((a, b, c, d) => new(a, b, c, d))
-                    .SetDirectory(request.Directory)
-                    .SetRootNamespace(settings.RootNamespace)
-                    .WithEntity(request.Entity)
-                    .SetApplicationNamespace(settings.ApplicationNamespace)
-                    .SetDomainNamespace(settings.DomainNamespace)
-                    .Build();*/
+                /*                Create<DtoBuilder>((a, b, c, d) => new(a, b, c, d))
+                                    .SetDirectory(request.Directory)
+                                    .SetRootNamespace(settings.RootNamespace)
+                                    .WithEntity(request.Entity)
+                                    .SetApplicationNamespace(settings.ApplicationNamespace)
+                                    .SetDomainNamespace(settings.DomainNamespace)
+                                    .Build();*/
 
                 return Task.FromResult(new Unit());
             }

@@ -2,6 +2,12 @@
 {
     public static class Constants
     {
+
+        public static class ApiFileTemplates
+        {
+            public static readonly string AppSettings = nameof(AppSettings);
+            public static readonly string Dependencies = nameof(Dependencies);
+        }
         public static class DotNetTemplateTypes
         {
             public static readonly string WebApi = "webapi";

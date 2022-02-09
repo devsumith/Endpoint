@@ -9,7 +9,7 @@ namespace Endpoint.SharedKernal.Models
         public List<ClassPropertyAccessor> Accessors { get; private set; } = new();
         public string Name { get; private set; }
         public bool Required { get; private set; }
-        public bool Key { get;private set; }
+        public bool Key { get; private set; }
 
         public ClassProperty(string accessModifier, string type, string name, List<ClassPropertyAccessor> accessors, bool required = true, bool key = false)
         {

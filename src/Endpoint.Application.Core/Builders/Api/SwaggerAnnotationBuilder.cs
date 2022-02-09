@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Endpoint.SharedKernal;
 
 namespace Endpoint.Application.Builders

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Endpoint.Application.Core.Events
 {
-    public class SolutionTemplateGenerated: INotification
+    public class SolutionTemplateGenerated : INotification
     {
         public string RootDirectory { get; private set; }
 

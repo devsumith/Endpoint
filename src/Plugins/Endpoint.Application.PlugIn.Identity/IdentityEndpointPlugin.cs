@@ -15,8 +15,8 @@ namespace Endpoint.Application.Plugin.Identity
         private readonly IInfrastructureFileService _infrastructureFileService;
         private readonly IApiFileService _apiFileService;
         public IdentityEndpointPlugin(
-            IApplicationFileService applicationFileService, 
-            IFileSystem fileSystem, 
+            IApplicationFileService applicationFileService,
+            IFileSystem fileSystem,
             ISettingsProvider settingsProvider,
             IInfrastructureFileService infrastructureFileService,
             IApiFileService apiFileService)

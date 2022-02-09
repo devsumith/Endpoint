@@ -8,7 +8,7 @@ namespace Endpoint.SharedKernal
         void Publish(dynamic @event);
         void Subscribe(Action<dynamic> onNext);
     }
-    public class DomainEvents: IDomainEvents
+    public class DomainEvents : IDomainEvents
     {
         private Subject<dynamic> _messages = new Subject<dynamic>();
 

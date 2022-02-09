@@ -21,9 +21,9 @@ namespace Endpoint.Application.Plugin.Identity
             var settings = _settingsProvider.Get(notification.RootDirectory);
 
             Build("ContactRequest",
-                settings, 
-                _fileSystem, 
-                ContactRequestAggregateBuilder.Build,  
+                settings,
+                _fileSystem,
+                ContactRequestAggregateBuilder.Build,
                 ContactRequestControllerBuilder.Build);
 
             return Task.CompletedTask;

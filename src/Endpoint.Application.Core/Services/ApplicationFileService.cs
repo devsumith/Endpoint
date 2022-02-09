@@ -46,7 +46,7 @@ namespace Endpoint.Application.Services
             var commandsDirectory = $"{aggregateDirectory}{Path.DirectorySeparatorChar}Commands";
             var queriesDirectory = $"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries";
             var context = new Context();
-            
+
 
             _createFolder(commandsDirectory, settings.ApplicationDirectory);
             _createFolder(queriesDirectory, settings.ApplicationDirectory);
@@ -56,11 +56,11 @@ namespace Endpoint.Application.Services
                 .WithUsing("System")
                 .WithNamespace($"{settings.ApplicationNamespace}");
 
-            foreach(var property in resource.Properties)
+            foreach (var property in resource.Properties)
             {
                 aggregateBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(property.Type).WithAccessors(new AccessorsBuilder().Build()).Build());
             }
-            
+
             aggregateBuilder.Build();
 
             var dtoBuilder = new ClassBuilder($"{((Token)resource.Name).PascalCase}Dto", new Context(), _fileSystem)
@@ -70,7 +70,7 @@ namespace Endpoint.Application.Services
 
             foreach (var property in resource.Properties)
             {
-                var propertyType = property.Name == $"{resource.Name}Id" ? $"{property.Type}?": property.Type;
+                var propertyType = property.Name == $"{resource.Name}Id" ? $"{property.Type}?" : property.Type;
 
                 dtoBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(propertyType).WithAccessors(new AccessorsBuilder().Build()).Build());
             }
@@ -81,10 +81,10 @@ namespace Endpoint.Application.Services
             var extensionsBody = new List<string>()
             {
                 "return new ()",
-                "{",                
+                "{",
             };
 
-            foreach(var property in resource.Properties)
+            foreach (var property in resource.Properties)
             {
                 extensionsBody.Add($"{property.Name} = {((Token)resource.Name).CamelCase}.{((Token)property.Name).PascalCase},".Indent(1));
             }

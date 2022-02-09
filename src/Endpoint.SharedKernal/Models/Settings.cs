@@ -41,7 +41,7 @@ namespace Endpoint.SharedKernal.Models
         public List<AggregateRoot> Resources { get; set; } = new List<AggregateRoot>();
 
         public Settings(string name, string dbContextName, AggregateRoot resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default)
-            :this(name,dbContextName,new List<AggregateRoot>() { resource },directory,isMicroserviceArchitecture,plugins)
+            : this(name, dbContextName, new List<AggregateRoot>() { resource }, directory, isMicroserviceArchitecture, plugins)
         { }
 
         public Settings(string name, string dbContextName, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default)
@@ -63,7 +63,7 @@ namespace Endpoint.SharedKernal.Models
             var parts = name.Split('.');
             DbContextName = dbContextName ?? $"{parts[parts.Length - 1]}DbContext";
 
-            
+
             RootDirectory = $"{directory}{Path.DirectorySeparatorChar}{SolutionName}";
             RootNamespace = SolutionName;
             ApiNamespace = $"{RootNamespace}.Api";
@@ -97,7 +97,7 @@ namespace Endpoint.SharedKernal.Models
 
         public void AddResource(string resource, IFileSystem fileSystem)
         {
-            if (Resources.FirstOrDefault(x => x.Name == resource)  == null)
+            if (Resources.FirstOrDefault(x => x.Name == resource) == null)
             {
                 Resources = Resources.Concat(new AggregateRoot[1] { new AggregateRoot(resource) }).ToList();
             }

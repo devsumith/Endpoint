@@ -9,7 +9,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Constructor()
         {
- 
+
         }
 
         [Fact]

@@ -12,7 +12,7 @@ namespace Endpoint.Application.Core.Services
         void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, string properties, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins);
     }
 
-    public class SolutionTemplateService: ISolutionTemplateService
+    public class SolutionTemplateService : ISolutionTemplateService
     {
         private ICommandService _commandService;
         private readonly ISolutionFileService _solutionFileService;
@@ -42,7 +42,7 @@ namespace Endpoint.Application.Core.Services
 
         public void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, string properties, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins)
         {
-            Build(name,dbContextName,shortIdPropertyName, new List<string>() { resource }, properties, isMonolith, numericIdPropertyDataType,directory,plugins);
+            Build(name, dbContextName, shortIdPropertyName, new List<string>() { resource }, properties, isMonolith, numericIdPropertyDataType, directory, plugins);
         }
 
         public void Build(string name, string dbContextName, bool shortIdPropertyName, List<string> resources, string properties, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins)

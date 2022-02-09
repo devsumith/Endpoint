@@ -4,11 +4,11 @@ using Endpoint.SharedKernal.ValueObjects;
 
 namespace Endpoint.Application.Builders
 {
-    public class ProgramBuilder 
+    public class ProgramBuilder
     {
         public static void Build(Settings settings, ITemplateLocator templateLocator, ITemplateProcessor templateProcessor, IFileSystem fileSystem)
         {
-            var template = templateLocator.Get(nameof(ProgramBuilder));
+            var template = templateLocator.Get("Program");
 
             var tokens = new TokensBuilder()
                 .With(nameof(settings.InfrastructureNamespace), (Token)settings.InfrastructureNamespace)

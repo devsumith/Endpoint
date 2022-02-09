@@ -46,16 +46,16 @@ namespace Endpoint.Application.Commands
             {
                 var settings = _settingsProvider.Get(request.Directory);
 
-/*                new DomainEventBuilder(
-                    new Endpoint.SharedKernal.Services.Context(),
-                    _commandService,
-                    _templateProcessor,
-                    _templateLocator,
-                    _fileSystem)
-                    .SetDomainDirectory(settings.DomainDirectory)
-                    .SetDomainNamespace(settings.DomainNamespace)
-                    .SetEntityName(request.Entity)
-                    .Build();*/
+                /*                new DomainEventBuilder(
+                                    new Endpoint.SharedKernal.Services.Context(),
+                                    _commandService,
+                                    _templateProcessor,
+                                    _templateLocator,
+                                    _fileSystem)
+                                    .SetDomainDirectory(settings.DomainDirectory)
+                                    .SetDomainNamespace(settings.DomainNamespace)
+                                    .SetEntityName(request.Entity)
+                                    .Build();*/
 
                 return Task.FromResult(new Unit());
             }

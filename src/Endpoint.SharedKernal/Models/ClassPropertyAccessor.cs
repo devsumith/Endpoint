@@ -8,9 +8,9 @@ namespace Endpoint.SharedKernal.Models
         public ClassPropertyAccessorType Type { get; private set; }
 
         public ClassPropertyAccessor(string accessModifier, ClassPropertyAccessorType classPropertyAccessorType)
-            :this(classPropertyAccessorType)
-        {            
-            AccessModifier=accessModifier;
+            : this(classPropertyAccessorType)
+        {
+            AccessModifier = accessModifier;
         }
 
         public ClassPropertyAccessor(ClassPropertyAccessorType classPropertyAccessorType)

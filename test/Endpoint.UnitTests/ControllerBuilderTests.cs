@@ -14,7 +14,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Constructor()
         {
-            
+
             var sut = new ControllerBuilder();
         }
     }

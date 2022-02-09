@@ -71,7 +71,7 @@ namespace Endpoint.Application.Services
             }
 
 
-            return Build(name, dbContextName,useShortIdProperty, useIntIdPropertyType, aggregates, directory, isMicroserviceArchitecture, plugins);
+            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, aggregates, directory, isMicroserviceArchitecture, plugins);
 
         }
 

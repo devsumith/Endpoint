@@ -13,7 +13,8 @@ namespace Endpoint.Commands
     internal class Plugin
     {
         [Verb("plugin")]
-        internal class Request : IRequest<Unit> {
+        internal class Request : IRequest<Unit>
+        {
             [Value(0)]
             public string Name { get; set; }
 
@@ -32,7 +33,7 @@ namespace Endpoint.Commands
                 _settingsProvider = settingsProvider;
             }
 
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvider.Get(request.Directory);
 
@@ -54,7 +55,7 @@ namespace Endpoint.Commands
 
                 _commandService.Start($"dotnet add {cliCsProjectDirectory} reference {pluginCsProjectFullPath}");
 
-                return new();
+                return Task.FromResult(new Unit());
             }
 
             protected void _removeDefaultFiles(string directory)

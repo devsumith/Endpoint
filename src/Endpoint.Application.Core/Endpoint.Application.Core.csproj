@@ -30,11 +30,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Builders\SharedKernal\AggregateRootBuilder.txt" />
-    <EmbeddedResource Include="Builders\Core\DomainEventBuilder.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Builders\Core\EventHandlerBuilder.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,20 +38,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Builders\Api\AppSettingsBuilder.txt" />
+    <EmbeddedResource Include="Templates\Api\AppSettings.txt" />
     <EmbeddedResource Include="Builders\IntegrationTests\ControllerTestBuilder.txt" />
-    <EmbeddedResource Include="Builders\Api\DependenciesBuilder.txt" />
+    <EmbeddedResource Include="Templates\Api\Dependencies.txt" />
     <EmbeddedResource Include="Builders\Core\ExtensionsBuilder.txt" />
-    <EmbeddedResource Include="Builders\Core\DtoBuilder.txt" />
-    <EmbeddedResource Include="Builders\Api\LaunchSettingsBuilder.txt" />
-    <EmbeddedResource Include="Builders\Api\ProgramBuilder.txt" />
+    <EmbeddedResource Include="Templates\Application\Dto.txt" />
+    <EmbeddedResource Include="Templates\Api\LaunchSettings.txt" />
+    <EmbeddedResource Include="Templates\Api\Program.txt" />
     <EmbeddedResource Include="Builders\SharedKernal\QueryableExtensionsBuilder.txt" />
     <EmbeddedResource Include="Builders\Core\Request\CommandBuilder.txt" />
     <EmbeddedResource Include="Builders\Core\Request\QueryBuilder.txt" />
     <EmbeddedResource Include="Builders\SharedKernal\ResponseBaseBuilder.txt" />
     <EmbeddedResource Include="Builders\Infrastructure\SeedDataBuilder.txt" />
     <EmbeddedResource Include="Builders\Core\ServiceCollectionExtensionsBuilder.txt" />
-    <EmbeddedResource Include="Builders\Api\StartupBuilder.txt" />
+    <EmbeddedResource Include="Templates\Api\Startup.txt" />
     <EmbeddedResource Include="Builders\Core\ValidationBehaviorBuilder.txt" />
     <EmbeddedResource Include="Builders\Core\ValidatorBuilder.txt" />
   </ItemGroup>
@@ -86,7 +81,6 @@
 
   <ItemGroup>
     <Folder Include="Builders\Testing\" />
-    <Folder Include="Templates\" />
   </ItemGroup>
   
 </Project>

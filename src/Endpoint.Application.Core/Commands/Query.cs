@@ -35,16 +35,16 @@ namespace Endpoint.Application.Commands
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-/*                Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d))
-                    .SetDirectory(request.Directory)
-                    .SetApplicationDirectory(settings.ApplicationDirectory)
-                    .SetRootNamespace(settings.RootNamespace)
-                    .SetApplicationNamespace(settings.ApplicationNamespace)
-                    .SetDomainNamespace(settings.DomainNamespace)
-                    .WithEntity(request.Entity)
-                    .WithName(request.Name)
-                    .WithDbContext(settings.DbContextName)
-                    .Build();*/
+                /*                Create<QueryBuilder>((a, b, c, d) => new(a, b, c, d))
+                                    .SetDirectory(request.Directory)
+                                    .SetApplicationDirectory(settings.ApplicationDirectory)
+                                    .SetRootNamespace(settings.RootNamespace)
+                                    .SetApplicationNamespace(settings.ApplicationNamespace)
+                                    .SetDomainNamespace(settings.DomainNamespace)
+                                    .WithEntity(request.Entity)
+                                    .WithName(request.Name)
+                                    .WithDbContext(settings.DbContextName)
+                                    .Build();*/
 
                 return Task.FromResult(new Unit());
             }

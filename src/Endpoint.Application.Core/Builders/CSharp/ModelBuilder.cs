@@ -11,12 +11,12 @@ namespace Endpoint.Application.Builders
 
         public void Build()
         {
-/*            new ClassBuilder(_entityName.PascalCase, _context, _fileSystem)
-                .WithDirectory($"{_domainDirectory.Value}{Path.DirectorySeparatorChar}Models")
-                .WithUsing("System")
-                .WithNamespace($"{_domainNamespace.Value}.Models")
-                .WithProperty(new PropertyBuilder().WithName($"{_entityName.PascalCase}Id").WithType("Guid").WithAccessors(new AccessorsBuilder().Build()).Build())
-                .Build();*/
+            /*            new ClassBuilder(_entityName.PascalCase, _context, _fileSystem)
+                            .WithDirectory($"{_domainDirectory.Value}{Path.DirectorySeparatorChar}Models")
+                            .WithUsing("System")
+                            .WithNamespace($"{_domainNamespace.Value}.Models")
+                            .WithProperty(new PropertyBuilder().WithName($"{_entityName.PascalCase}Id").WithType("Guid").WithAccessors(new AccessorsBuilder().Build()).Build())
+                            .Build();*/
         }
     }
 }

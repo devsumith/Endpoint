@@ -4,6 +4,7 @@ using Endpoint.SharedKernal.Models;
 using Endpoint.SharedKernal.Services;
 using Endpoint.SharedKernal.ValueObjects;
 using System.IO;
+using static Endpoint.Application.Constants.ApiFileTemplates;
 
 namespace Endpoint.Application.Services
 {
@@ -37,7 +38,7 @@ namespace Endpoint.Application.Services
             }
 
             _buildLaunchSettings(settings);
-            
+
             ProgramBuilder.Build(settings, _templateLocator, _templateProcessor, _fileSystem);
 
             _buildStartup(settings);
@@ -47,9 +48,9 @@ namespace Endpoint.Application.Services
 
         }
 
-        private void _buildAppSettings(Endpoint.SharedKernal.Models.Settings settings)
+        private void _buildAppSettings(Settings settings)
         {
-            var template = _templateLocator.Get(nameof(AppSettingsBuilder));
+            var template = _templateLocator.Get(AppSettings);
 
             var tokens = new TokensBuilder()
                 .With("RootNamespace", (Token)settings.RootNamespace)
@@ -62,9 +63,9 @@ namespace Endpoint.Application.Services
             _fileSystem.WriteAllLines($@"{settings.ApiDirectory}/appsettings.json", contents);
         }
 
-        private void _buildStartup(Endpoint.SharedKernal.Models.Settings settings)
+        private void _buildStartup(Settings settings)
         {
-            var template = _templateLocator.Get(nameof(StartupBuilder));
+            var template = _templateLocator.Get("Startup");
 
             var tokens = new TokensBuilder()
                 .With("RootNamespace", (Token)settings.RootNamespace)
@@ -78,9 +79,9 @@ namespace Endpoint.Application.Services
             _fileSystem.WriteAllLines($@"{settings.ApiDirectory}/Startup.cs", contents);
         }
 
-        private void _buildDependencies(Endpoint.SharedKernal.Models.Settings settings)
+        private void _buildDependencies(Settings settings)
         {
-            var template = _templateLocator.Get(nameof(DependenciesBuilder));
+            var template = _templateLocator.Get(Dependencies);
 
             var tokens = new TokensBuilder()
                 .With("RootNamespace", (Token)settings.RootNamespace)
@@ -98,9 +99,9 @@ namespace Endpoint.Application.Services
             _fileSystem.WriteAllLines($@"{settings.ApiDirectory}/Dependencies.cs", contents);
         }
 
-        private void _buildLaunchSettings(Endpoint.SharedKernal.Models.Settings settings)
+        private void _buildLaunchSettings(Settings settings)
         {
-            var template = _templateLocator.Get(nameof(LaunchSettingsBuilder));
+            var template = _templateLocator.Get("LaunchSettings");
 
             var tokens = new TokensBuilder()
                 .With(nameof(settings.RootNamespace), (Token)settings.RootNamespace)
@@ -117,7 +118,7 @@ namespace Endpoint.Application.Services
             _fileSystem.WriteAllLines($@"{settings.ApiDirectory}/Properties/launchSettings.json", contents);
         }
 
-        private void _createSubDirectories(Endpoint.SharedKernal.Models.Settings settings)
+        private void _createSubDirectories(Settings settings)
         {
             _commandService.Start($"mkdir {Constants.Folders.Behaviors}", settings.ApplicationDirectory);
 
@@ -125,13 +126,13 @@ namespace Endpoint.Application.Services
 
         }
 
-        public void _removeDefaultFiles(Endpoint.SharedKernal.Models.Settings settings)
+        public void _removeDefaultFiles(Settings settings)
         {
             _commandService.Start($"rimraf WeatherForecast.cs", $@"{settings.ApiDirectory}");
             _commandService.Start($@"rimraf Controllers\WeatherForecastController.cs", $@"{settings.ApiDirectory}");
         }
 
-        private void _installNugetPackages(Endpoint.SharedKernal.Models.Settings settings)
+        private void _installNugetPackages(Settings settings)
         {
             _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 5.0.10", $@"{settings.ApiDirectory}");
             _commandService.Start($"dotnet add package MediatR.Extensions.Microsoft.DependencyInjection  --version 9.0.0", $@"{settings.ApiDirectory}");

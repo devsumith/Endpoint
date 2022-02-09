@@ -15,7 +15,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Build()
         {
- 
+
         }
 
         private void Setup()
