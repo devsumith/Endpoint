@@ -11,6 +11,8 @@ namespace Endpoint.Core.Models
     public class Settings
     {
         public bool IsRoot { get; set; } = true;
+        public IdFormat IdFormat { get; set; } = IdFormat.Long;
+        public IdDotNetType IdDotNetType { get; set; } = IdDotNetType.Guid;
         public bool IsMicroserviceArchitecture { get; set; } = true;
         public List<string> Projects { get; set; } = new List<string>();
         public string RootDirectory { get; set; }
@@ -40,14 +42,16 @@ namespace Endpoint.Core.Models
         public List<Entity> Entities { get; set; } = new List<Entity>();
         public List<AggregateRoot> Resources { get; set; } = new List<AggregateRoot>();
 
-        public Settings(string name, string dbContextName, AggregateRoot resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default)
-            : this(name, dbContextName, new List<AggregateRoot>() { resource }, directory, isMicroserviceArchitecture, plugins)
+        public Settings(string name, string dbContextName, AggregateRoot resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid)
+            : this(name, dbContextName, new List<AggregateRoot>() { resource }, directory, isMicroserviceArchitecture, plugins, idFormat, idDotNetType)
         { }
 
-        public Settings(string name, string dbContextName, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default)
+        public Settings(string name, string dbContextName, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid)
         {
             name = ((Token)name).PascalCase.Replace("-", "_");
             Plugins = plugins;
+            IdDotNetType = idDotNetType;
+            IdFormat = idFormat;
 
             foreach (var resource in resources)
             {

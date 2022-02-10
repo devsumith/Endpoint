@@ -7,7 +7,7 @@ namespace Endpoint.Core.Builders
 {
     public class ControllerBuilder
     {
-        public static void Default(Endpoint.Core.Models.Settings settings, string resource, IFileSystem fileSystem)
+        public static void Default(Models.Settings settings, string resource, IFileSystem fileSystem)
         {
             new ClassBuilder($"{((Token)resource).PascalCase}Controller", new Endpoint.Core.Services.Context(), fileSystem)
             .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")
@@ -28,12 +28,12 @@ namespace Endpoint.Core.Builders
             .WithAttribute(new AttributeBuilder().WithName("Consumes").WithParam("MediaTypeNames.Application.Json").Build())
             .WithDependency("IMediator", "mediator")
             .WithDependency($"ILogger<{((Token)resource).PascalCase}Controller>", "logger")
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.GetById).WithResource(resource).WithAuthorize(false).Build())
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Get).WithResource(resource).WithAuthorize(false).Build())
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Create).WithResource(resource).WithAuthorize(false).Build())
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Page).WithResource(resource).WithAuthorize(false).Build())
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Update).WithResource(resource).WithAuthorize(false).Build())
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Delete).WithResource(resource).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.GetById).WithResource(resource).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.Get).WithResource(resource).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.Create).WithResource(resource).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.Page).WithResource(resource).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.Update).WithResource(resource).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.Delete).WithResource(resource).WithAuthorize(false).Build())
             .Build();
         }
     }

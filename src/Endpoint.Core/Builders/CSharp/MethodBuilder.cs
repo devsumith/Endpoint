@@ -3,6 +3,9 @@ using Endpoint.Core;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
+using Endpoint.Core.Models;
+using Endpoint.Core.Builders.Common;
+using Endpoint.Core.Builders.Statements;
 
 namespace Endpoint.Core.Builders
 {
@@ -22,6 +25,7 @@ namespace Endpoint.Core.Builders
         private List<string> _parameters;
         private bool _async;
         private bool _override;
+        private Settings _settings;
         public MethodBuilder()
         {
             _accessModifier = AccessModifier.Public;
@@ -35,6 +39,12 @@ namespace Endpoint.Core.Builders
             _parameters = new();
             _async = false;
             _override = false;
+        }
+
+        public MethodBuilder WithSettings(Settings settings)
+        {
+            _settings = settings;
+            return this;
         }
 
         public MethodBuilder WithOverride(bool @override = true)
@@ -137,7 +147,7 @@ namespace Endpoint.Core.Builders
                     _ => throw new System.NotImplementedException()
                 };
 
-                _contents = AttributeBuilder.EndpointAttributes(_endpointType, _resource, _authorize).ToList();
+                _contents = AttributeBuilder.EndpointAttributes(_settings, _endpointType, _resource, _authorize).ToList();
 
                 var methodBuilder = new MethodSignatureBuilder()
                     .WithEndpointType(_endpointType)
@@ -146,7 +156,7 @@ namespace Endpoint.Core.Builders
 
                 if (_endpointType == EndpointType.GetById || _endpointType == EndpointType.Delete)
                 {
-                    methodBuilder.WithParameter(new ParameterBuilder("Guid", $"{((Token)_resource).CamelCase}Id").WithFrom(From.Route).Build());
+                    methodBuilder.WithParameter(new ParameterBuilder(IdDotNetTypeBuilder.Build(_settings), ((Token)$"{IdPropertyNameBuilder.Build(_settings,_resource)}").CamelCase).WithFrom(From.Route).Build());
                 }
 
                 if (_endpointType == EndpointType.Page)
@@ -170,7 +180,7 @@ namespace Endpoint.Core.Builders
 
                 _contents.Add(methodBuilder.Build());
 
-                _contents = _contents.Concat(new MethodBodyBuilder(_endpointType, _indent, _resource).Build()).ToList();
+                _contents = _contents.Concat(new MethodBodyBuilder(_settings, _endpointType, _indent, _resource).Build()).ToList();
 
                 return _contents.ToArray();
             }

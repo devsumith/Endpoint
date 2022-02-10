@@ -56,7 +56,11 @@ namespace Endpoint.Core.Services
             {
                 AggregateRoot aggregateRoot = new AggregateRoot(resource);
 
-                aggregateRoot.Properties.Add(new ClassProperty("public", "Guid", $"{((Token)resource).PascalCase}Id", ClassPropertyAccessor.GetPrivateSet, key: true));
+                var idPropertyName = useShortIdProperty ? "Id" : $"{((Token)resource).PascalCase}Id";
+
+                var idDotNetType = useIntIdPropertyType ? "int" : "Guid";
+
+                aggregateRoot.Properties.Add(new ClassProperty("public", idDotNetType, idPropertyName, ClassPropertyAccessor.GetPrivateSet, key: true));
 
                 if (!string.IsNullOrWhiteSpace(properties))
                 {
@@ -83,7 +87,7 @@ namespace Endpoint.Core.Services
 
             _commandService.Start($"mkdir {name}", directory);
 
-            var settings = new Endpoint.Core.Models.Settings(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins);
+            var settings = new Settings(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdFormat.Short: IdFormat.Long, useIntIdPropertyType ? IdDotNetType.Int : IdDotNetType.Guid);
 
             var json = Serialize(settings, new JsonSerializerOptions
             {

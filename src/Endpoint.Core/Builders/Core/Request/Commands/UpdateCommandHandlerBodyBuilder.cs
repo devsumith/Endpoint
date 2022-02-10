@@ -1,22 +1,19 @@
-﻿using Endpoint.Core;
+﻿using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Models;
 using Endpoint.Core.ValueObjects;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Builders.Core
 {
     public class UpdateCommandHandlerBodyBuilder
     {
-        public static string[] Build(AggregateRoot aggregateRoot)
+        public static string[] Build(Settings settings, AggregateRoot aggregateRoot)
         {
             var aggregateName = aggregateRoot.Name;
 
             var result = new List<string>() {
-                $"var {((Token)aggregateName).CamelCase} = await _context.{((Token)aggregateName).PascalCasePlural}.SingleAsync(x => x.{((Token)aggregateName).PascalCase}Id == request.{((Token)aggregateName).PascalCase}.{((Token)aggregateName).PascalCase}Id);",
+                $"var {((Token)aggregateName).CamelCase} = await _context.{((Token)aggregateName).PascalCasePlural}.SingleAsync(x => x.{IdPropertyNameBuilder.Build(settings,aggregateName)} == request.{((Token)aggregateName).PascalCase}.{IdPropertyNameBuilder.Build(settings,aggregateName)});",
                 "",
 
                 };

@@ -3,6 +3,9 @@ using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using Endpoint.Core;
+using Endpoint.Core.Models;
+using Endpoint.Core.Builders.Statements;
+using Endpoint.Core.Builders.Common;
 
 namespace Endpoint.Core.Builders
 {
@@ -17,12 +20,14 @@ namespace Endpoint.Core.Builders
         private string _namespace;
         private string _domainNamespace;
         private string _applicationNamespace;
+        private Settings _settings;
 
-        public GetByIdBuilder(IContext context, IFileSystem fileSystem)
+        public GetByIdBuilder(Settings settings, IContext context, IFileSystem fileSystem)
         {
             _content = new();
             _context = context;
             _fileSystem = fileSystem;
+            _settings = settings;
         }
 
         public GetByIdBuilder WithDomainNamespace(string domainNamespace)
@@ -66,7 +71,7 @@ namespace Endpoint.Core.Builders
 
             var request = new ClassBuilder($"Get{((Token)_entity).PascalCase}ByIdRequest", _context, _fileSystem)
                 .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Get{((Token)_entity).PascalCase}ByIdResponse").Build())
-                .WithProperty(new PropertyBuilder().WithType("Guid").WithName($"{((Token)_entity).PascalCase}Id").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithType(IdDotNetTypeBuilder.Build(_settings)).WithName(IdPropertyNameBuilder.Build(_settings, _entity)).WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
             var response = new ClassBuilder($"Get{((Token)_entity).PascalCase}ByIdResponse", _context, _fileSystem)
@@ -84,7 +89,7 @@ namespace Endpoint.Core.Builders
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
                 "return new () {",
-                $"{((Token)_entity).PascalCase} = (await _context.{((Token)_entity).PascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{((Token)_entity).PascalCase}Id == request.{((Token)_entity).PascalCase}Id)).ToDto()".Indent(1),
+                $"{((Token)_entity).PascalCase} = (await _context.{((Token)_entity).PascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{IdPropertyNameBuilder.Build(_settings, _entity)} == request.{IdPropertyNameBuilder.Build(_settings, _entity)})).ToDto()".Indent(1),
                 "};"
                 }).Build())
                 .Class;

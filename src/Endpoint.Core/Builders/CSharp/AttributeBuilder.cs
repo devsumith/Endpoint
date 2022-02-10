@@ -1,4 +1,6 @@
+using Endpoint.Core.Builders.Statements;
 using Endpoint.Core.Enums;
+using Endpoint.Core.Models;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,7 +97,7 @@ namespace Endpoint.Core.Builders
             }).Build();
         }
 
-        public static string[] EndpointAttributes(EndpointType endpointType, string resource, bool authorize = false, int indent = 0)
+        public static string[] EndpointAttributes(Settings settings, EndpointType endpointType, string resource, bool authorize = false, int indent = 0)
         {
             var attributes = new List<string>();
 
@@ -118,14 +120,14 @@ namespace Endpoint.Core.Builders
             if (endpointType == EndpointType.GetById)
             {
                 attributes.AddRange(new SwaggerAnnotationBuilder($"Get {((Token)resource).PascalCase} by id.", $"Get {((Token)resource).PascalCase} by id.", indent).Build());
-                attributes.Add(WithHttp(HttpVerbs.Get, "{" + ((Token)resource).CamelCase + "Id:guid}", $"{((Token)requestType).CamelCase}", indent));
+                attributes.Add(WithHttp(HttpVerbs.Get, HttpAttributeIdTemplateBuilder.Build(settings,resource), $"{((Token)requestType).CamelCase}", indent));
                 attributes.Add(WithProducesResponseType(HttpStatusCode.NotFound, "string", indent: indent));
             }
 
             if (endpointType == EndpointType.Delete)
             {
                 attributes.AddRange(new SwaggerAnnotationBuilder($"Delete {((Token)resource).PascalCase}.", $"Delete {((Token)resource).PascalCase}.", indent).Build());
-                attributes.Add(WithHttp(HttpVerbs.Delete, "{" + ((Token)resource).CamelCase + "Id:guid}", $"{((Token)requestType).CamelCase}", indent));
+                attributes.Add(WithHttp(HttpVerbs.Delete, HttpAttributeIdTemplateBuilder.Build(settings, resource), $"{((Token)requestType).CamelCase}", indent));
             }
 
             if (endpointType == EndpointType.Get)

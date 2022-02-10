@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Endpoint.Core.Models;
+using Endpoint.Core.Builders.Common;
 
 namespace Endpoint.Core.Builders
 {
@@ -15,18 +17,19 @@ namespace Endpoint.Core.Builders
         private int _tab = 4;
         private EndpointType? _endpointType;
         private string _resource;
-
-        public MethodBodyBuilder(EndpointType? endpointType = null, int indent = 0, string resource = null)
+        private Settings _settings;
+        public MethodBodyBuilder(Settings  settings,EndpointType? endpointType = null, int indent = 0, string resource = null)
         {
             _string = new StringBuilder();
             _indent = indent;
             _endpointType = endpointType;
             _resource = resource;
+            _settings = settings;
         }
 
         public string[] Build()
         {
-            var logStatementBuilder = new LogStatementBuilder(_resource, _endpointType, _indent + 1);
+            var logStatementBuilder = new LogStatementBuilder(_settings, _resource, _endpointType, _indent + 1);
 
             var logStatement = logStatementBuilder.Build();
 
@@ -90,13 +93,13 @@ namespace Endpoint.Core.Builders
         public string[] BuildGetByIdEndpointBody(string resource)
             => new string[10]
             {
-                ("var request = new Get" + ((Token)resource).PascalCase + "ByIdRequest() { " + ((Token)resource).PascalCase + "Id = " + ((Token)resource).CamelCase + "Id };").Indent(_indent + 1),
+                ("var request = new Get" + ((Token)resource).PascalCase + "ByIdRequest() { " + IdPropertyNameBuilder.Build(_settings,resource) + " = " + ((Token)IdPropertyNameBuilder.Build(_settings, resource)).CamelCase + " };").Indent(_indent + 1),
                 "",
                 "var response = await _mediator.Send(request, cancellationToken);".Indent(_indent + 1),
                 "",
                 $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
                 "{".Indent(_indent + 1),
-                $"return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id);".Indent(_indent + 2),
+                $"return new NotFoundObjectResult(request.{IdPropertyNameBuilder.Build(_settings,resource)});".Indent(_indent + 2),
                 "}".Indent(_indent + 1),
                 "",
                 "return response;".Indent(_indent + 1),
@@ -109,7 +112,7 @@ namespace Endpoint.Core.Builders
                 "",
                 $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
                 "{".Indent(_indent + 1),
-                $"return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id);".Indent(_indent + 2),
+                $"return new NotFoundObjectResult(request.{IdPropertyNameBuilder.Build(_settings,resource)});".Indent(_indent + 2),
                 "}".Indent(_indent + 1),
                 "",
                 "return response;".Indent(_indent + 1),
@@ -119,12 +122,12 @@ namespace Endpoint.Core.Builders
         {
             var result = new List<string>
             {
-                ("var request = new Remove" + ((Token)resource).PascalCase + "Request() { " + ((Token)resource).PascalCase + "Id = " + ((Token)resource).CamelCase + "Id };").Indent(_indent + 1)
+                ("var request = new Remove" + ((Token)resource).PascalCase + "Request() { " + IdPropertyNameBuilder.Build(_settings, resource) + " = " + ((Token)IdPropertyNameBuilder.Build(_settings, resource)).CamelCase + " };").Indent(_indent + 1)
             };
 
             result.Add("");
 
-            result.AddRange(new LogStatementBuilder(resource, EndpointType.Delete, _indent + 1).Build());
+            result.AddRange(new LogStatementBuilder(_settings, resource, EndpointType.Delete, _indent + 1).Build());
 
             result.Add("");
 
@@ -140,7 +143,7 @@ namespace Endpoint.Core.Builders
                 "",
                 $"if (response.{((Token)resource).PascalCase} == null)".Indent(_indent + 1),
                 "{".Indent(_indent + 1),
-                $"return new NotFoundObjectResult(request.{((Token)resource).PascalCase}Id);".Indent(_indent + 2),
+                $"return new NotFoundObjectResult(request.{IdPropertyNameBuilder.Build(_settings,resource)});".Indent(_indent + 2),
                 "}".Indent(_indent + 1),
                 "",
                 "return response;".Indent(_indent + 1),

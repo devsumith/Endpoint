@@ -1,5 +1,6 @@
-﻿using Endpoint.Core.Enums;
-using Endpoint.Core;
+﻿using Endpoint.Core.Builders.Common;
+using Endpoint.Core.Enums;
+using Endpoint.Core.Models;
 using Endpoint.Core.ValueObjects;
 
 namespace Endpoint.Core.Builders
@@ -10,12 +11,14 @@ namespace Endpoint.Core.Builders
         private int _indent;
         private string _resource;
         private EndpointType _endpointType;
+        private Settings _settings;
 
-        public LogStatementBuilder(string resource, EndpointType? endpointType = EndpointType.Create, int indent = 0)
+        public LogStatementBuilder(Settings settings, string resource, EndpointType? endpointType = EndpointType.Create, int indent = 0)
         {
             _indent = indent;
             _resource = resource ?? throw new System.ArgumentNullException(nameof(resource));
             _endpointType = endpointType ?? throw new System.ArgumentNullException(nameof(endpointType));
+            _settings = settings ?? throw new System.ArgumentNullException(nameof(settings));
         }
 
         public string[] BuildForCreateCommand()
@@ -33,8 +36,8 @@ namespace Endpoint.Core.Builders
                 "_logger.LogInformation(".Indent(_indent),
                 "\"----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})\",".Indent(_indent + 1),
                 $"nameof(Update{((Token)_resource).PascalCase}Request),".Indent(_indent + 1),
-                $"nameof(request.{((Token)_resource).PascalCase}.{((Token)_resource).PascalCase}Id),".Indent(_indent + 1),
-                $"request.{((Token)_resource).PascalCase}.{((Token)_resource).PascalCase}Id,".Indent(_indent + 1),
+                $"nameof(request.{((Token)_resource).PascalCase}.{IdPropertyNameBuilder.Build(_settings,_resource)}),".Indent(_indent + 1),
+                $"request.{((Token)_resource).PascalCase}.{IdPropertyNameBuilder.Build(_settings,_resource)},".Indent(_indent + 1),
                 "request);".Indent(_indent + 1)
             };
 
@@ -44,8 +47,8 @@ namespace Endpoint.Core.Builders
                 "_logger.LogInformation(".Indent(_indent),
                 "\"----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})\",".Indent(_indent + 1),
                 $"nameof(Remove{((Token)_resource).PascalCase}Request),".Indent(_indent + 1),
-                $"nameof(request.{((Token)_resource).PascalCase}Id),".Indent(_indent + 1),
-                $"request.{((Token)_resource).PascalCase}Id,".Indent(_indent + 1),
+                $"nameof(request.{IdPropertyNameBuilder.Build(_settings,_resource)}),".Indent(_indent + 1),
+                $"request.{IdPropertyNameBuilder.Build(_settings,_resource)},".Indent(_indent + 1),
                 "request);".Indent(_indent + 1)
             };
 

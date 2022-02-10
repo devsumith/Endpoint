@@ -1,11 +1,10 @@
-﻿using Endpoint.Core.Builders;
-using Endpoint.Core;
+﻿using Endpoint.Core.Builders.Common;
+using Endpoint.Core.Builders.Statements;
 using Endpoint.Core.Models;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
-
 
 namespace Endpoint.Core.Builders.Core
 {
@@ -21,7 +20,7 @@ namespace Endpoint.Core.Builders.Core
                 .WithDirectory(aggregateDirectory)
                 .WithUsing("System")
                 .WithNamespace($"{settings.ApplicationNamespace}")
-                .WithProperty(new PropertyBuilder().WithName($"{resource.PascalCase}Id").WithType("Guid").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithName(IdPropertyNameBuilder.Build(settings,resource.PascalCase)).WithType(IdDotNetTypeBuilder.Build(settings)).WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Build();
 
             new ClassBuilder($"{resource.PascalCase}Dto", new Context(), fileSystem)

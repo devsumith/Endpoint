@@ -36,7 +36,7 @@ namespace Endpoint.Application.Commands
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-                new GetByIdBuilder(new Endpoint.Core.Services.Context(), _fileSystem)
+                new GetByIdBuilder(settings, new Context(), _fileSystem)
                     .WithDirectory($"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)request.Entity).PascalCasePlural}")
                     .WithDbContext(settings.DbContextName)
                     .WithNamespace($"{settings.ApplicationNamespace}.Features")

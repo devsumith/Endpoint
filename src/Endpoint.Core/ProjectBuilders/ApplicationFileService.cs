@@ -8,6 +8,8 @@ using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Endpoint.Core.Builders.Common;
+using Endpoint.Core.Builders.Statements;
 
 namespace Endpoint.Core.Services
 {
@@ -58,7 +60,14 @@ namespace Endpoint.Core.Services
 
             foreach (var property in resource.Properties)
             {
-                aggregateBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(property.Type).WithAccessors(new AccessorsBuilder().Build()).Build());
+                if(property.Key)
+                {
+                    aggregateBuilder.WithProperty(new PropertyBuilder().WithName(IdPropertyNameBuilder.Build(settings, resourceName)).WithType(IdDotNetTypeBuilder.Build(settings)).WithAccessors(new AccessorsBuilder().Build()).Build());
+                } 
+                else
+                {
+                    aggregateBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(property.Type).WithAccessors(new AccessorsBuilder().Build()).Build());
+                }
             }
 
             aggregateBuilder.Build();
@@ -70,9 +79,14 @@ namespace Endpoint.Core.Services
 
             foreach (var property in resource.Properties)
             {
-                var propertyType = property.Name == $"{resource.Name}Id" ? $"{property.Type}?" : property.Type;
-
-                dtoBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(propertyType).WithAccessors(new AccessorsBuilder().Build()).Build());
+                if (property.Key)
+                {
+                    dtoBuilder.WithProperty(new PropertyBuilder().WithName(IdPropertyNameBuilder.Build(settings, resourceName)).WithType($"{IdDotNetTypeBuilder.Build(settings)}?").WithAccessors(new AccessorsBuilder().Build()).Build());
+                }
+                else
+                {
+                    dtoBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(property.Type).WithAccessors(new AccessorsBuilder().Build()).Build());
+                }
             }
 
             dtoBuilder.Build();
@@ -152,7 +166,7 @@ namespace Endpoint.Core.Services
                 .WithAggregateRoot(resource)
                 .Build();
 
-            new UpdateBuilder(new Context(), _fileSystem)
+            new UpdateBuilder(settings, new Context(), _fileSystem)
                 .WithDirectory(commandsDirectory)
                 .WithDbContext(settings.DbContextName)
                 .WithNamespace($"{settings.ApplicationNamespace}")
@@ -162,7 +176,7 @@ namespace Endpoint.Core.Services
                 .WithAggregateRoot(resource)
                 .Build();
 
-            new RemoveBuilder(new Context(), _fileSystem)
+            new RemoveBuilder(settings, new Context(), _fileSystem)
                 .WithDirectory(commandsDirectory)
                 .WithDbContext(settings.DbContextName)
                 .WithNamespace($"{settings.ApplicationNamespace}")
@@ -171,7 +185,7 @@ namespace Endpoint.Core.Services
                 .WithEntity(resourceName.Value)
                 .Build();
 
-            new GetByIdBuilder(new Context(), _fileSystem)
+            new GetByIdBuilder(settings, new Context(), _fileSystem)
                 .WithDirectory(queriesDirectory)
                 .WithDbContext(settings.DbContextName)
                 .WithNamespace($"{settings.ApplicationNamespace}")

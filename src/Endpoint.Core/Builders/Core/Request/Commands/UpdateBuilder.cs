@@ -21,12 +21,14 @@ namespace Endpoint.Core.Builders
         private string _domainNamespace;
         private string _applicationNamespace;
         private AggregateRoot _aggregateRoot;
+        private Settings _settings;
 
-        public UpdateBuilder(IContext context, IFileSystem fileSystem)
+        public UpdateBuilder(Settings settings, IContext context, IFileSystem fileSystem)
         {
             _content = new();
             _context = context;
             _fileSystem = fileSystem;
+            _settings = settings;
         }
 
         public UpdateBuilder WithAggregateRoot(AggregateRoot aggregateRoot)
@@ -98,7 +100,7 @@ namespace Endpoint.Core.Builders
                 .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Update{((Token)_entity).PascalCase}Response").Build())
                 .WithParameter(new ParameterBuilder($"Update{((Token)_entity).PascalCase}Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
-                .WithBody(UpdateCommandHandlerBodyBuilder.Build(_aggregateRoot).ToList()).Build())
+                .WithBody(UpdateCommandHandlerBodyBuilder.Build(_settings,_aggregateRoot).ToList()).Build())
                 .Class;
 
             new NamespaceBuilder($"Update{((Token)_entity).PascalCase}", _context, _fileSystem)

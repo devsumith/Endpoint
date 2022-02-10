@@ -39,7 +39,7 @@ namespace Endpoint.Cli
 
             string pluginLocation = Path.GetFullPath(Path.Combine(root, relativePath.Replace('\\', Path.DirectorySeparatorChar)));
 
-            PluginLoadContext loadContext = new PluginLoadContext(pluginLocation);
+            PluginLoadContext loadContext = new (pluginLocation);
             return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
         }
 

@@ -3,6 +3,9 @@ using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using Endpoint.Core;
+using Endpoint.Core.Models;
+using Endpoint.Core.Builders.Common;
+using Endpoint.Core.Builders.Statements;
 
 namespace Endpoint.Core.Builders
 {
@@ -11,6 +14,7 @@ namespace Endpoint.Core.Builders
         private readonly List<string> _content;
         private readonly IContext _context;
         private readonly IFileSystem _fileSystem;
+        private readonly Settings _settings;
         private string _entity;
         private string _dbContext;
         private string _directory;
@@ -18,11 +22,12 @@ namespace Endpoint.Core.Builders
         private string _domainNamespace;
         private string _applicationNamespace;
 
-        public RemoveBuilder(IContext context, IFileSystem fileSystem)
+        public RemoveBuilder(Settings settings, IContext context, IFileSystem fileSystem)
         {
             _content = new();
             _context = context;
             _fileSystem = fileSystem;
+            _settings = settings;
         }
 
         public RemoveBuilder WithDomainNamespace(string domainNamespace)
@@ -66,7 +71,7 @@ namespace Endpoint.Core.Builders
         {
             var request = new ClassBuilder($"Remove{((Token)_entity).PascalCase}Request", _context, _fileSystem)
                 .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Remove{((Token)_entity).PascalCase}Response").Build())
-                .WithProperty(new PropertyBuilder().WithType("Guid").WithName($"{((Token)_entity).PascalCase}Id").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithType(IdDotNetTypeBuilder.Build(_settings)).WithName(IdPropertyNameBuilder.Build(_settings,_entity)).WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
             var response = new ClassBuilder($"Remove{((Token)_entity).PascalCase}Response", _context, _fileSystem)
@@ -83,7 +88,7 @@ namespace Endpoint.Core.Builders
                 .WithParameter(new ParameterBuilder($"Remove{((Token)_entity).PascalCase}Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
-                $"var {((Token)_entity).CamelCase} = await _context.{((Token)_entity).PascalCasePlural}.FindAsync(request.{((Token)_entity).PascalCase}Id);",
+                $"var {((Token)_entity).CamelCase} = await _context.{((Token)_entity).PascalCasePlural}.FindAsync(request.{IdPropertyNameBuilder.Build(_settings,_entity)});",
                 "",
                 $"_context.{((Token)_entity).PascalCasePlural}.Remove({((Token)_entity).CamelCase});",
                 "",
