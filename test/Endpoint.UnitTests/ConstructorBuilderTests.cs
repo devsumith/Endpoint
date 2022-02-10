@@ -1,5 +1,5 @@
 
-using Endpoint.Application.Builders.CSharp;
+using Endpoint.Core.Builders.CSharp;
 using Xunit;
 
 namespace Endpoint.UnitTests

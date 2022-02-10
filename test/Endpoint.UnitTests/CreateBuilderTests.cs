@@ -1,4 +1,4 @@
-using Endpoint.Application.Builders;
+using Endpoint.Core.Builders;
 using Endpoint.SharedKernal.Services;
 using Moq;
 using System.Linq;

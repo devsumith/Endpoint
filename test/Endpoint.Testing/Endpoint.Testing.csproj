@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -6,8 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Endpoint.Application.Core\Endpoint.Application.Core.csproj" />
-    <ProjectReference Include="..\..\src\Endpoint.SharedKernal\Endpoint.SharedKernal.csproj" />
+    <ProjectReference Include="..\..\src\Endpoint.Core.Core\Endpoint.Core.Core.csproj" />
   </ItemGroup>
 
 </Project>

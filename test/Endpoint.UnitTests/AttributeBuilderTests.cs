@@ -1,5 +1,5 @@
-using Endpoint.Application.Builders;
-using Endpoint.Application.Enums;
+using Endpoint.Core.Builders;
+using Endpoint.Core.Enums;
 using System.Net;
 using Xunit;
 

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Endpoint.Core": {
+      "commandName": "Project",
+      "commandLineArgs": "add-resource User -d C:\\sandbox\\Avengers"
+    }
+  }
+}

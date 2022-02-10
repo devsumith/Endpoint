@@ -1,4 +1,4 @@
-﻿using Endpoint.Application.Core.Events;
+﻿using Endpoint.SharedKernal.Events;
 using Endpoint.SharedKernal.Models;
 using Endpoint.SharedKernal.Services;
 using MediatR;

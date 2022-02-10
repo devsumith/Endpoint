@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "-d C:\\sandbox -r Car --properties Name:string,Make:string,Model:string"
+      "commandLineArgs": "-d C:\\sandbox -r Car --properties Name:string,Make:string,Model:string --plugins Spa"
     }
   }
 }

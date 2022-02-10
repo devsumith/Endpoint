@@ -1,5 +1,5 @@
-using Endpoint.Application.Builders;
-using Endpoint.Application.Enums;
+using Endpoint.Core.Builders;
+using Endpoint.Core.Enums;
 using Endpoint.SharedKernal;
 using Endpoint.SharedKernal.Services;
 using Moq;
