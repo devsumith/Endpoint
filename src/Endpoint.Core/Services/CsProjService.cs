@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
 
-namespace Endpoint.SharedKernal.Services
+namespace Endpoint.Core.Services
 {
 
     public static class CsProjService

@@ -1,9 +1,9 @@
-﻿using Endpoint.Core.Core.Services;
+﻿using Endpoint.Core.Services;
 using Endpoint.Core.Services;
-using Endpoint.SharedKernal.Services;
+using Endpoint.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Endpoint.SharedKernal
+namespace Endpoint.Core
 {
     public static class ServiceCollectionExtensions
     {

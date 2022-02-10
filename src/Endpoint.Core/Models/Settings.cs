@@ -1,12 +1,12 @@
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core.Services;
+using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using static System.Text.Json.JsonSerializer;
 
-namespace Endpoint.SharedKernal.Models
+namespace Endpoint.Core.Models
 {
     public class Settings
     {
@@ -69,7 +69,7 @@ namespace Endpoint.SharedKernal.Models
             ApiNamespace = $"{RootNamespace}.Api";
             ApiFullPath = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{ApiNamespace}{Path.DirectorySeparatorChar}{ApiNamespace}.csproj";
             InfrastructureNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.Infrastructure";
-            DomainNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.SharedKernal";
+            DomainNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.Core";
             ApplicationNamespace = IsMicroserviceArchitecture ? $"{RootNamespace}.Api" : $"{RootNamespace}.Core";
 
             var sourceFolder = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}";
@@ -86,7 +86,7 @@ namespace Endpoint.SharedKernal.Models
             {
                 ApiDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Api";
                 InfrastructureDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Infrastructure";
-                DomainDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.SharedKernal";
+                DomainDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Core";
                 ApplicationDirectory = $"{RootDirectory}{Path.DirectorySeparatorChar}{SourceFolder}{Path.DirectorySeparatorChar}{SolutionName}.Core";
             }
 

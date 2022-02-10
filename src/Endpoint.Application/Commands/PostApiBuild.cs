@@ -1,6 +1,6 @@
 using CommandLine;
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.Services;
+using Endpoint.Core.Services;
+using Endpoint.Core.Services;
 using MediatR;
 using System;
 using System.IO;
@@ -32,7 +32,7 @@ namespace Endpoint.Application.Commands
 
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                Endpoint.SharedKernal.Models.Settings settings = _settingsProvider.Get(request.Directory);
+                Endpoint.Core.Models.Settings settings = _settingsProvider.Get(request.Directory);
 
                 var solutionName = settings.ApiNamespace.Replace(".Api", "");
 

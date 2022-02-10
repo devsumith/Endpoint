@@ -1,11 +1,11 @@
 ﻿using Endpoint.Core.Services;
-using Endpoint.SharedKernal.Events;
-using Endpoint.SharedKernal.Services;
+using Endpoint.Core.Events;
+using Endpoint.Core.Services;
 using MediatR;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Endpoint.Core.Core.Services
+namespace Endpoint.Core.Services
 {
     public interface ISolutionTemplateService
     {

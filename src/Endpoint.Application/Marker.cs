@@ -1,4 +1,4 @@
-﻿namespace Endpoint.Core.Core
+﻿namespace Endpoint.Application
 {
     public class Marker { }
 }

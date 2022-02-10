@@ -1,6 +1,6 @@
 ﻿using static System.Linq.Enumerable;
 
-namespace Endpoint.SharedKernal
+namespace Endpoint.Core
 {
     public static class StringExtensions
     {

@@ -1,5 +1,5 @@
 using CommandLine;
-using Endpoint.SharedKernal.Services;
+using Endpoint.Core.Services;
 using MediatR;
 using System;
 using System.IO;

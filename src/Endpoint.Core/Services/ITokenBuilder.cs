@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 
-namespace Endpoint.SharedKernal.Services
+namespace Endpoint.Core.Services
 {
     public interface ITokenBuilder
     {

@@ -1,6 +1,6 @@
 ﻿using CommandLine;
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core.Services;
+using Endpoint.Core.ValueObjects;
 using MediatR;
 using System;
 using System.Collections.Generic;

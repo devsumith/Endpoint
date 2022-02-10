@@ -1,7 +1,7 @@
 using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
-using Endpoint.SharedKernal;
-using Endpoint.SharedKernal.Services;
+using Endpoint.Core;
+using Endpoint.Core.Services;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +24,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Controller()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             var expected = new List<string> {
                 "using System.Net;",
@@ -83,7 +83,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Model()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             var expected = new List<string> {
                 "using System;",
@@ -115,7 +115,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Extensions()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             var expected = new List<string> {
                 "using System;",
@@ -168,7 +168,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void ClassWithLogicInConstructor()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             var expected = new List<string> {
                 "namespace CustomerService.Api.Models",
@@ -202,7 +202,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void DbContext()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             var expected = new List<string> {
                 "using CustomerService.Api.Models;",
@@ -244,7 +244,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Interface()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             var expected = new List<string> {
                 "using CustomerService.Api.Models;",
@@ -283,7 +283,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void InnerRequest()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             var expected = new List<string> {
                 "namespace CustomerService.Application.Features",
@@ -309,7 +309,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Response()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             var expected = new List<string> {
                 "namespace CustomerService.Application.Features",
@@ -339,7 +339,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Validator()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             var expected = new List<string> {
                 "namespace CustomerService.Application.Features",
@@ -365,7 +365,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void SubClass()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             var expected = new List<string> {
                 "public class Validator: AbstractValidator<Request> { }"
@@ -387,7 +387,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void SubClasses()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             var expected = new List<string> {
                 "namespace CustomerService.Application.Features",

@@ -1,6 +1,6 @@
 using CommandLine;
 using Endpoint.Core.Builders;
-using Endpoint.SharedKernal.Services;
+using Endpoint.Core.Services;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;

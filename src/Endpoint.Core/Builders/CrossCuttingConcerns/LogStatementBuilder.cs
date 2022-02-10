@@ -1,6 +1,6 @@
 ﻿using Endpoint.Core.Enums;
-using Endpoint.SharedKernal;
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core;
+using Endpoint.Core.ValueObjects;
 
 namespace Endpoint.Core.Builders
 {

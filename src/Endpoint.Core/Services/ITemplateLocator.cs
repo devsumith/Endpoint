@@ -1,4 +1,4 @@
-﻿namespace Endpoint.SharedKernal.Services
+﻿namespace Endpoint.Core.Services
 {
     public interface ITemplateLocator
     {

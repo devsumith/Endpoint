@@ -1,4 +1,4 @@
-﻿namespace Endpoint.Core
+﻿namespace Endpoint.Application
 {
     public static class Constants
     {

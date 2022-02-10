@@ -1,6 +1,6 @@
-using Endpoint.SharedKernal.Models;
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core.Models;
+using Endpoint.Core.Services;
+using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Builders

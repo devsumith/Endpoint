@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Humanizer;
 using System.Text.RegularExpressions;
 
-namespace Endpoint.SharedKernal.Services
+namespace Endpoint.Core.Services
 {
     public class NamingConventionConverter : INamingConventionConverter
     {

@@ -1,9 +1,9 @@
 using CSharpFunctionalExtensions;
-using Endpoint.SharedKernal.Services;
+using Endpoint.Core.Services;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Endpoint.SharedKernal.ValueObjects
+namespace Endpoint.Core.ValueObjects
 {
     public class Token : ValueObject
     {

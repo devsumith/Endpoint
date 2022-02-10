@@ -1,5 +1,5 @@
-﻿using Endpoint.SharedKernal.Models;
-using Endpoint.SharedKernal.Services;
+﻿using Endpoint.Core.Models;
+using Endpoint.Core.Services;
 using System.IO;
 
 namespace Endpoint.Core.Models

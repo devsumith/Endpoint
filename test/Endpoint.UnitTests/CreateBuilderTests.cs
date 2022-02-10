@@ -1,5 +1,5 @@
 using Endpoint.Core.Builders;
-using Endpoint.SharedKernal.Services;
+using Endpoint.Core.Services;
 using Moq;
 using System.Linq;
 using Xunit;
@@ -11,7 +11,7 @@ namespace Endpoint.UnitTests
         [Fact]
         private void ShouldWork()
         {
-            var context = new Endpoint.SharedKernal.Services.Context();
+            var context = new Endpoint.Core.Services.Context();
 
             new CreateBuilder(context, Mock.Of<IFileSystem>())
                 .WithDirectory("")

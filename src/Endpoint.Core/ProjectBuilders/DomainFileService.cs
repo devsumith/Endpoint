@@ -1,7 +1,7 @@
 ﻿using Endpoint.Core.Builders;
-using Endpoint.SharedKernal.Models;
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core.Models;
+using Endpoint.Core.Services;
+using Endpoint.Core.ValueObjects;
 using System.IO;
 
 namespace Endpoint.Core.Services
@@ -43,7 +43,7 @@ namespace Endpoint.Core.Services
             _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore --version 5.0.10", $@"{settings.DomainDirectory}");
         }
 
-        private void _buildQueryableExtensions(Endpoint.SharedKernal.Models.Settings settings)
+        private void _buildQueryableExtensions(Endpoint.Core.Models.Settings settings)
         {
             var template = _templateLocator.Get("QueryableExtensions");
 

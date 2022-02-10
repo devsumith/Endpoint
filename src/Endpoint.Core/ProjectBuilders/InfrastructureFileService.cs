@@ -1,7 +1,7 @@
 ﻿using Endpoint.Core.Builders;
-using Endpoint.SharedKernal.Models;
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core.Models;
+using Endpoint.Core.Services;
+using Endpoint.Core.ValueObjects;
 using System.IO;
 using System.Linq;
 
@@ -36,7 +36,7 @@ namespace Endpoint.Core.Services
 
         protected void _createOrReCreateDbContext(Settings settings)
         {
-            var dbContextBuilder = new ClassBuilder(settings.DbContextName, new Endpoint.SharedKernal.Services.Context(), _fileSystem)
+            var dbContextBuilder = new ClassBuilder(settings.DbContextName, new Endpoint.Core.Services.Context(), _fileSystem)
                 .WithDirectory($"{settings.InfrastructureDirectory}{Path.DirectorySeparatorChar}Data")
                 .WithUsing($"{settings.ApplicationNamespace}")
                 .WithUsing($"{settings.ApplicationNamespace}.Interfaces")

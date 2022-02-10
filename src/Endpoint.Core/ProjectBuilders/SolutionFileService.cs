@@ -1,7 +1,7 @@
-﻿using Endpoint.SharedKernal;
-using Endpoint.SharedKernal.Models;
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
+﻿using Endpoint.Core;
+using Endpoint.Core.Models;
+using Endpoint.Core.Services;
+using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,7 +29,7 @@ namespace Endpoint.Core.Services
             _fileSystem = fileSystem;
         }
 
-        public Endpoint.SharedKernal.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins)
+        public Endpoint.Core.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins)
         {
             AggregateRoot aggregateRoot = new AggregateRoot(resource);
 
@@ -48,7 +48,7 @@ namespace Endpoint.Core.Services
             return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<AggregateRoot>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins);
         }
 
-        public Endpoint.SharedKernal.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
+        public Endpoint.Core.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
         {
             var aggregates = new List<AggregateRoot>();
 
@@ -76,14 +76,14 @@ namespace Endpoint.Core.Services
 
         }
 
-        public Endpoint.SharedKernal.Models.Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
+        public Endpoint.Core.Models.Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
         {
 
             name = name.Replace("-", "_");
 
             _commandService.Start($"mkdir {name}", directory);
 
-            var settings = new Endpoint.SharedKernal.Models.Settings(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins);
+            var settings = new Endpoint.Core.Models.Settings(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins);
 
             var json = Serialize(settings, new JsonSerializerOptions
             {
@@ -91,7 +91,7 @@ namespace Endpoint.Core.Services
                 WriteIndented = true
             });
 
-            _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{SharedKernal.Constants.SettingsFileName}", new List<string> { json }.ToArray());
+            _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{Constants.SettingsFileName}", new List<string> { json }.ToArray());
 
             _commandService.Start($"dotnet new sln -n {settings.SolutionName}", settings.RootDirectory);
 
@@ -142,7 +142,7 @@ namespace Endpoint.Core.Services
 
             return settings;
         }
-        private void _createProjectAndAddToSolution(string templateType, string directory, Endpoint.SharedKernal.Models.Settings settings)
+        private void _createProjectAndAddToSolution(string templateType, string directory, Endpoint.Core.Models.Settings settings)
         {
             _commandService.Start($@"mkdir {directory}");
 

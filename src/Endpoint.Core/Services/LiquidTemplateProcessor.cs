@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace Endpoint.SharedKernal.Services
+namespace Endpoint.Core.Services
 {
     public class LiquidTemplateProcessor : ITemplateProcessor
     {

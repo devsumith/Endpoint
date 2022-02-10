@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Endpoint.SharedKernal.Models
+namespace Endpoint.Core.Models
 {
     public class ClassPropertyAccessor
     {

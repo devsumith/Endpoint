@@ -1,11 +1,11 @@
 ﻿using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
-using Endpoint.SharedKernal;
-using Endpoint.SharedKernal.Models;
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core;
+using Endpoint.Core.Models;
+using Endpoint.Core.Services;
+using Endpoint.Core.ValueObjects;
 using System.IO;
-using static Endpoint.SharedKernal.Constants.ApiFileTemplates;
+using static Endpoint.Core.Constants.ApiFileTemplates;
 
 namespace Endpoint.Core.Services
 {
@@ -149,7 +149,7 @@ namespace Endpoint.Core.Services
 
         public void BuildAdditionalResource(string additionalResource, Settings settings)
         {
-            new ClassBuilder($"{((Token)additionalResource).PascalCase}Controller", new Endpoint.SharedKernal.Services.Context(), _fileSystem)
+            new ClassBuilder($"{((Token)additionalResource).PascalCase}Controller", new Endpoint.Core.Services.Context(), _fileSystem)
                 .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")
                 .WithUsing("System.Net")
                 .WithUsing("System.Threading")

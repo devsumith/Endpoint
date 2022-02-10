@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Endpoint.SharedKernal.Services
+namespace Endpoint.Core.Services
 {
     public interface IContext : IDictionary<string, string[]>
     {

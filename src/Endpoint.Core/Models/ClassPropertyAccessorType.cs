@@ -1,4 +1,4 @@
-﻿namespace Endpoint.SharedKernal.Models
+﻿namespace Endpoint.Core.Models
 {
     public enum ClassPropertyAccessorType
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Endpoint.SharedKernal.Exceptions
+namespace Endpoint.Core.Exceptions
 {
     internal class SettingsNotFoundException : Exception
     {

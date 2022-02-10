@@ -1,6 +1,6 @@
-﻿using Endpoint.SharedKernal.Events;
-using Endpoint.SharedKernal.Models;
-using Endpoint.SharedKernal.Services;
+﻿using Endpoint.Core.Events;
+using Endpoint.Core.Models;
+using Endpoint.Core.Services;
 using MediatR;
 using System.IO;
 using System.Linq;

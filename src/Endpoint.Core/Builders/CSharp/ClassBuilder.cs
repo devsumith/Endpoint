@@ -1,11 +1,11 @@
 using Endpoint.Core.Builders.CSharp;
-using Endpoint.SharedKernal.Services;
+using Endpoint.Core.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using static Endpoint.Core.Enums.AccessModifier;
-using Endpoint.SharedKernal;
+using Endpoint.Core;
 
 namespace Endpoint.Core.Builders
 {

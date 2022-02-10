@@ -1,15 +1,15 @@
 using Endpoint.Core.Enums;
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core.Services;
+using Endpoint.Core.ValueObjects;
 using System.IO;
 
 namespace Endpoint.Core.Builders
 {
     public class ControllerBuilder
     {
-        public static void Default(Endpoint.SharedKernal.Models.Settings settings, string resource, IFileSystem fileSystem)
+        public static void Default(Endpoint.Core.Models.Settings settings, string resource, IFileSystem fileSystem)
         {
-            new ClassBuilder($"{((Token)resource).PascalCase}Controller", new Endpoint.SharedKernal.Services.Context(), fileSystem)
+            new ClassBuilder($"{((Token)resource).PascalCase}Controller", new Endpoint.Core.Services.Context(), fileSystem)
             .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")
             .WithUsing("System.Net")
             .WithUsing("System.Threading")

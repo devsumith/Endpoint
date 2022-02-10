@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Endpoint.SharedKernal.Services
+namespace Endpoint.Core.Services
 {
     public class CommandService : ICommandService
 

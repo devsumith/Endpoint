@@ -1,13 +1,13 @@
-﻿using Endpoint.SharedKernal;
-using Endpoint.SharedKernal.Models;
-using Endpoint.SharedKernal.ValueObjects;
+﻿using Endpoint.Core;
+using Endpoint.Core.Models;
+using Endpoint.Core.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Endpoint.Core.Core.Builders.Core
+namespace Endpoint.Core.Builders.Core
 {
     public class UpdateCommandHandlerBodyBuilder
     {

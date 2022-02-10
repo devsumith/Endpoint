@@ -1,8 +1,8 @@
 using CommandLine;
 using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core.Services;
+using Endpoint.Core.ValueObjects;
 using MediatR;
 using System.IO;
 using System.Threading;
@@ -37,7 +37,7 @@ namespace Endpoint.Application.Commands
             {
                 var settings = _settingsProvder.Get(request.Directory);
 
-                new ClassBuilder($"{((Token)request.Entity).PascalCase}Controller", new Endpoint.SharedKernal.Services.Context(), _fileSystem)
+                new ClassBuilder($"{((Token)request.Entity).PascalCase}Controller", new Endpoint.Core.Services.Context(), _fileSystem)
                     .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")
                     .WithUsing("System.Net")
                     .WithUsing("System.Threading.Tasks")

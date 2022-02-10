@@ -2,7 +2,7 @@
 {
     public enum CsProjectType
     {
-        SharedKernal,
+        Core,
         Application,
         Infrastructure,
         Apo,

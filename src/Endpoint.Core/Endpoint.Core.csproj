@@ -19,8 +19,8 @@
     <None Remove="Templates\Application\Dto.txt" />
     <None Remove="Templates\Infrastructure\SeedData.txt" />
     <None Remove="Templates\IntegrationTests\ApiTest.txt" />
-    <None Remove="Templates\SharedKernal\QueryableExtensions.txt" />
-    <None Remove="Templates\SharedKernal\ResponseBase.txt" />
+    <None Remove="Templates\Core\QueryableExtensions.txt" />
+    <None Remove="Templates\Core\ResponseBase.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,10 +60,6 @@
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="SharpSimpleNLG" Version="1.2.1" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
   </ItemGroup>
 
 </Project>

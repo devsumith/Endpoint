@@ -1,5 +1,5 @@
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core.Services;
+using Endpoint.Core.ValueObjects;
 
 namespace Endpoint.Core.Builders
 {

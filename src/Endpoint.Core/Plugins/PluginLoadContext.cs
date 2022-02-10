@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace Endpoint.SharedKernal.Plugins
+namespace Endpoint.Core.Plugins
 {
     public class PluginLoadContext : AssemblyLoadContext
     {
@@ -34,7 +34,5 @@ namespace Endpoint.SharedKernal.Plugins
 
             return IntPtr.Zero;
         }
-
-
     }
 }

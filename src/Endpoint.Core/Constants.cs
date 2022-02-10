@@ -1,4 +1,4 @@
-﻿namespace Endpoint.SharedKernal
+﻿namespace Endpoint.Core
 {
     public static class Constants
     {

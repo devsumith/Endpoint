@@ -1,4 +1,4 @@
-﻿using Endpoint.SharedKernal.Models;
+﻿using Endpoint.Core.Models;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Services

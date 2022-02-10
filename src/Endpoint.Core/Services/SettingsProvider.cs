@@ -1,12 +1,12 @@
-﻿using Endpoint.SharedKernal.Exceptions;
-using Endpoint.SharedKernal.Models;
+﻿using Endpoint.Core.Exceptions;
+using Endpoint.Core.Models;
 using System.IO;
 using System.Linq;
 using static System.Environment;
 using static System.IO.Path;
 using static System.Text.Json.JsonSerializer;
 
-namespace Endpoint.SharedKernal.Services
+namespace Endpoint.Core.Services
 {
     public interface ISettingsProvider
     {

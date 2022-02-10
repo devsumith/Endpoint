@@ -1,6 +1,6 @@
 ﻿using SimpleNLG;
 
-namespace Endpoint.SharedKernal.Services
+namespace Endpoint.Core.Services
 {
 
     public class TenseConverter : ITenseConverter

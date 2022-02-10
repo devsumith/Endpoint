@@ -1,8 +1,8 @@
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Endpoint.SharedKernal.Services
+namespace Endpoint.Core.Services
 {
     public class TokensBuilder
     {

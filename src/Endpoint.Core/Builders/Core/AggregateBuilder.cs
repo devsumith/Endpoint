@@ -1,13 +1,13 @@
 ﻿using Endpoint.Core.Builders;
-using Endpoint.SharedKernal;
-using Endpoint.SharedKernal.Models;
-using Endpoint.SharedKernal.Services;
-using Endpoint.SharedKernal.ValueObjects;
+using Endpoint.Core;
+using Endpoint.Core.Models;
+using Endpoint.Core.Services;
+using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
 
 
-namespace Endpoint.Core.Core.Builders.Core
+namespace Endpoint.Core.Builders.Core
 {
     public class AggregateBuilder
     {

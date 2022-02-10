@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace Endpoint.SharedKernal.Services
+namespace Endpoint.Core.Services
 {
     public class FileSystem : IFileSystem
     {

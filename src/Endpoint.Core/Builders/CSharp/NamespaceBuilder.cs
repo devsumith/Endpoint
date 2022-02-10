@@ -1,9 +1,9 @@
 ﻿
-using Endpoint.SharedKernal.Services;
+using Endpoint.Core.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Endpoint.SharedKernal;
+using Endpoint.Core;
 
 namespace Endpoint.Core.Builders
 {

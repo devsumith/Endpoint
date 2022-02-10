@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Endpoint.SharedKernal;
+using Endpoint.Core;
 
 namespace Endpoint.Core.Builders
 {

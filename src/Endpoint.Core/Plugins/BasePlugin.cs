@@ -1,9 +1,8 @@
-﻿using Endpoint.Core.Services;
-using Endpoint.SharedKernal.Models;
-using Endpoint.SharedKernal.Services;
+﻿using Endpoint.Core.Models;
+using Endpoint.Core.Services;
 using System;
 
-namespace Endpoint.Core.Core.Abstractions
+namespace Endpoint.Core.Abstractions
 {
     public abstract class BasePlugin
     {
