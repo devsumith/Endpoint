@@ -20,10 +20,12 @@ namespace Endpoint.Application.Commands
         internal class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ISettingsProvider _settingsProvider;
+            private readonly IApiProjectFilesGenerationStrategy _apiProjectFilesGenerationStrategy;
 
-            public Handler(ISettingsProvider settingsProvider)
+            public Handler(ISettingsProvider settingsProvider, IApiProjectFilesGenerationStrategy apiProjectFilesGenerationStrategy)
             {
-                _settingsProvider = settingsProvider;
+                _settingsProvider = settingsProvider ?? throw new ArgumentNullException(nameof(settingsProvider));
+                _apiProjectFilesGenerationStrategy = apiProjectFilesGenerationStrategy ?? throw new System.ArgumentNullException(nameof(apiProjectFilesGenerationStrategy));    
             }
 
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
@@ -32,7 +34,7 @@ namespace Endpoint.Application.Commands
 
                 var apiCsProjPath = $"{settings.ApiDirectory}{Path.DirectorySeparatorChar}{settings.ApiNamespace}.csproj";
 
-                CsProjService.AddGenerateDocumentationFile(apiCsProjPath);
+                _apiProjectFilesGenerationStrategy.AddGenerateDocumentationFile(apiCsProjPath);
 
                 return Task.FromResult(new Unit());
             }

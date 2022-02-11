@@ -6,5 +6,6 @@ namespace Endpoint.Core.Services
     {
         void Build(Settings settings);
         void BuildAdditionalResource(string additionalResource, Settings settings);
+        void AddGenerateDocumentationFile(string csProjPath);
     }
 }

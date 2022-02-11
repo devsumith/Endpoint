@@ -27,9 +27,9 @@ namespace Endpoint.Core.Services
 
             var csProjFilePath = $"{settings.ApiDirectory}{Path.DirectorySeparatorChar}{settings.ApiNamespace}.csproj";
 
-            CsProjService.AddGenerateDocumentationFile(csProjFilePath);
+            AddGenerateDocumentationFile(csProjFilePath);
 
-            CsProjService.AddEndpointPostBuildTargetElement(csProjFilePath);
+            _addEndpointPostBuildTargetElement(csProjFilePath);
 
             foreach (var resource in settings.Resources)
             {

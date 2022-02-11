@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace Endpoint.Core.Services
 {
@@ -15,10 +17,10 @@ namespace Endpoint.Core.Services
             ITemplateLocator templateLocator,
             IFileSystem fileSystem)
         {
-            _commandService = commandService;
-            _templateProcessor = templateProcessor;
-            _templateLocator = templateLocator;
-            _fileSystem = fileSystem;
+            _commandService = commandService ?? throw new System.ArgumentNullException(nameof(commandService));
+            _templateProcessor = templateProcessor ?? throw new System.ArgumentNullException(nameof(templateProcessor));
+            _templateLocator = templateLocator ?? throw new System.ArgumentNullException(nameof(templateLocator));
+            _fileSystem = fileSystem ?? throw new System.ArgumentNullException(nameof(fileSystem));
         }
 
         protected void _removeDefaultFiles(string directory)
@@ -51,6 +53,51 @@ namespace Endpoint.Core.Services
 
                 directory = newDirectory;
             }
+        }
+
+        public void AddGenerateDocumentationFile(string csprojFilePath)
+        {
+            var doc = XDocument.Load(csprojFilePath);
+            var projectNode = doc.FirstNode as XElement;
+
+            var element = projectNode.Nodes()
+                .Where(x => x.NodeType == System.Xml.XmlNodeType.Element)
+                .First(x => (x as XElement).Name == "PropertyGroup") as XElement;
+
+            element.Add(new XElement("GenerateDocumentationFile", true));
+            element.Add(new XElement("NoWarn", "$(NoWarn);1591"));
+            doc.Save(csprojFilePath);
+        }
+
+        protected void _addEndpointPostBuildTargetElement(string csprojFilePath)
+        {
+            var doc = XDocument.Load(csprojFilePath);
+            var projectNode = doc.FirstNode as XElement;
+            projectNode.Add(_createEndpointPostBuildTargetElement());
+            doc.Save(csprojFilePath);
+        }
+
+        private XElement _createEndpointPostBuildTargetElement()
+        {
+            var dotnetToolRestoreCommand = new XElement("Exec");
+
+            dotnetToolRestoreCommand.SetAttributeValue("Command", "dotnet tool restore");
+
+            var toFileCommand = new XElement("Exec");
+
+            toFileCommand.SetAttributeValue("Command", "dotnet tool run swagger tofile --serializeasv2  --output \"$(ProjectDir)swagger.json\" \"$(TargetDir)$(TargetFileName)\" v1");
+
+            var endpointCommand = new XElement("Exec");
+
+            endpointCommand.SetAttributeValue("Command", "endpoint post-api-build");
+
+            var element = new XElement("Target", dotnetToolRestoreCommand, toFileCommand, endpointCommand);
+
+            element.SetAttributeValue("Name", "EndpointPostBuildTarget");
+
+            element.SetAttributeValue("AfterTargets", "Build");
+
+            return element;
         }
     }
 }
