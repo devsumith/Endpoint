@@ -10,38 +10,21 @@ namespace Endpoint.Cli
 {
     public static class Dependencies
     {
-        public static void Configure(IServiceCollection services, string[] plugins)
+        public static void Configure(IServiceCollection services, Assembly[] pluginAssemblies)
         {
             services.AddMediatR(typeof(Endpoint.Core.Constants), typeof(Dependencies), typeof(Marker));
             services.AddSharedServices();
             services.AddCoreServices();
 
-            //https://stackoverflow.com/questions/31859267/load-nuget-dependencies-at-runtime
+            // TODO: Create an interface for plugins to add services to DI including MediatR
 
-            foreach (var plugin in plugins)
+            foreach (var pluginAssembly in pluginAssemblies)
             {
-                var pluginPath = @$"Plugins\Endpoint.Application.Plugin.{plugin}\bin\Debug\net5.0\Endpoint.Application.Plugin.{plugin}.dll";
-
-                Assembly pluginAssembly = LoadPlugin(pluginPath);
-
                 services.AddMediatR(pluginAssembly);
             }
         }
 
-        static Assembly LoadPlugin(string relativePath)
-        {
-            string root = Path.GetFullPath(Path.Combine(
-                Path.GetDirectoryName(
-                    Path.GetDirectoryName(
-                        Path.GetDirectoryName(
-                            Path.GetDirectoryName(
-                                Path.GetDirectoryName(typeof(Program).Assembly.Location)))))));
 
-            string pluginLocation = Path.GetFullPath(Path.Combine(root, relativePath.Replace('\\', Path.DirectorySeparatorChar)));
-
-            PluginLoadContext loadContext = new (pluginLocation);
-            return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
-        }
 
     }
 

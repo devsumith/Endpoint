@@ -1,8 +1,12 @@
 ﻿using CommandLine;
+using Endpoint.Core.Plugins;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace Endpoint.Cli
 {
@@ -10,20 +14,34 @@ namespace Endpoint.Cli
     {
         static void Main(string[] args)
         {
-            var pluginsOptionValue = _resolvePluginsOptionValue(args);
+            var pluginAssemblies = _resolvePluginsOptionValue(args);
 
-            var mediator = BuildContainer(pluginsOptionValue).GetService<IMediator>();
+            var mediator = BuildContainer(pluginAssemblies).GetService<IMediator>();
 
             ProcessArgs(mediator, args);
         }
 
-        private static string[] _resolvePluginsOptionValue(string[] args)
+        private static Assembly[] _resolvePluginsOptionValue(string[] args)
         {
             var result = _createParser().ParseArguments<PluginsOption>(args);
 
             var pluginsOptionValue = ((Parsed<PluginsOption>)result).Value;
 
-            return pluginsOptionValue.Plugins?.Split(',') ?? new string[0];
+            var pluginNames = pluginsOptionValue.Plugins?.Split(',') ?? new string[0];
+
+            var assemblies = new List<Assembly>();
+
+            foreach (var plugin in pluginNames)
+            {
+                //https://stackoverflow.com/questions/31859267/load-nuget-dependencies-at-runtime
+                // Load from nuget?
+
+                var pluginPath = @$"Plugins\Endpoint.Application.Plugin.{plugin}\bin\Debug\net5.0\Endpoint.Application.Plugin.{plugin}.dll";
+
+                assemblies.Add(LoadPlugin(pluginPath));
+            }
+
+            return assemblies.ToArray();
         }
 
         private static Parser _createParser()
@@ -36,11 +54,11 @@ namespace Endpoint.Cli
             });
         }
 
-        public static ServiceProvider BuildContainer(string[] args)
+        public static ServiceProvider BuildContainer(Assembly[] pluginAssemblies)
         {
             var services = new ServiceCollection();
 
-            Dependencies.Configure(services, args);
+            Dependencies.Configure(services, pluginAssemblies);
 
             return services.BuildServiceProvider();
         }
@@ -60,6 +78,21 @@ namespace Endpoint.Cli
             _createParser().ParseArguments(args, verbs)
                 .WithParsed(
                   (dynamic request) => mediator.Send(request));
+        }
+
+        static Assembly LoadPlugin(string relativePath)
+        {
+            string root = Path.GetFullPath(Path.Combine(
+                Path.GetDirectoryName(
+                    Path.GetDirectoryName(
+                        Path.GetDirectoryName(
+                            Path.GetDirectoryName(
+                                Path.GetDirectoryName(typeof(Program).Assembly.Location)))))));
+
+            string pluginLocation = Path.GetFullPath(Path.Combine(root, relativePath.Replace('\\', Path.DirectorySeparatorChar)));
+
+            PluginLoadContext loadContext = new(pluginLocation);
+            return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
         }
     }
 
