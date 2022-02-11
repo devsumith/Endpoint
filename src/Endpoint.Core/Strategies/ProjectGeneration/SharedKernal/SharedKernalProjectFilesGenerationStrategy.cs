@@ -1,14 +1,12 @@
-﻿using Endpoint.Core.Builders;
-using Endpoint.Core.Models;
-using Endpoint.Core.Services;
+﻿using Endpoint.Core.Models;
 using Endpoint.Core.ValueObjects;
 using System.IO;
 
 namespace Endpoint.Core.Services
 {
-    public class DomainFileService : BaseFileService, IDomainFileService
+    public class SharedKernalProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrategy, ISharedKernalProjectFilesGenerationStrategy
     {
-        public DomainFileService(
+        public SharedKernalProjectFilesGenerationStrategy(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,

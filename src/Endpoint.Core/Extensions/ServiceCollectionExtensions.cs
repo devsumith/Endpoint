@@ -22,11 +22,11 @@ namespace Endpoint.Core
         public static void AddCoreServices(this IServiceCollection services)
         {
             services.AddSingleton<ISolutionTemplateService, SolutionTemplateService>();
-            services.AddSingleton<ISolutionFileService, SolutionFileService>();
-            services.AddSingleton<IDomainFileService, DomainFileService>();
-            services.AddSingleton<IApplicationFileService, ApplicationFileService>();
-            services.AddSingleton<IInfrastructureFileService, InfrastructureFileService>();
-            services.AddSingleton<IApiFileService, ApiFileService>();
+            services.AddSingleton<ISolutionFilesGenerationStrategy, SolutionFilesGenerationStrategy>();
+            services.AddSingleton<ISharedKernalProjectFilesGenerationStrategy, SharedKernalProjectFilesGenerationStrategy>();
+            services.AddSingleton<IApplicationProjectFilesGenerationStrategy, ApplicationProjectFilesGenerationStrategy>();
+            services.AddSingleton<IInfrastructureProjectFilesGenerationStrategy, InfrastructureProjectFilesGenerationStrategy>();
+            services.AddSingleton<IApiProjectFilesGenerationStrategy, ApiProjectFilesGenerationStrategy>();
         }
     }
 }

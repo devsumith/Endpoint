@@ -26,9 +26,9 @@ namespace Endpoint.Application.Commands
             private readonly ICommandService _commandService;
             private readonly ITemplateProcessor _templateProcessor;
             private readonly ITemplateLocator _templateLocator;
-            private readonly IApplicationFileService _applicationFileService;
-            private readonly IInfrastructureFileService _infrastructureFileService;
-            private readonly IApiFileService _apiFileService;
+            private readonly IApplicationProjectFilesGenerationStrategy _applicationFileService;
+            private readonly IInfrastructureProjectFilesGenerationStrategy _infrastructureFileService;
+            private readonly IApiProjectFilesGenerationStrategy _apiFileService;
 
             public Handler(
                 ISettingsProvider settingsProvider,
@@ -36,9 +36,9 @@ namespace Endpoint.Application.Commands
                 ICommandService commandService,
                 ITemplateLocator templateLocator,
                 ITemplateProcessor templateProcessor,
-                IApplicationFileService applicationFileService,
-                IInfrastructureFileService infrastructureFileService,
-                IApiFileService apiFileService)
+                IApplicationProjectFilesGenerationStrategy applicationFileService,
+                IInfrastructureProjectFilesGenerationStrategy infrastructureFileService,
+                IApiProjectFilesGenerationStrategy apiFileService)
             {
                 _settingsProvider = settingsProvider;
                 _fileSystem = fileSystem;

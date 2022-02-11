@@ -7,9 +7,9 @@ using static Endpoint.Core.Constants.ApiFileTemplates;
 
 namespace Endpoint.Core.Services
 {
-    public class ApiFileService : BaseFileService, IApiFileService
+    public class ApiProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrategy, IApiProjectFilesGenerationStrategy
     {
-        public ApiFileService(
+        public ApiProjectFilesGenerationStrategy(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,

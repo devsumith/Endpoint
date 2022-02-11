@@ -68,7 +68,7 @@ namespace Endpoint.Core.Builders
                     return BuildForDeleteCommand();
             }
 
-            return new string[0] { };
+            return System.Array.Empty<string>();
         }
     }
 }

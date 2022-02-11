@@ -2,7 +2,7 @@
 
 namespace Endpoint.Core.Services
 {
-    public interface IApplicationFileService
+    public interface IApiProjectFilesGenerationStrategy
     {
         void Build(Settings settings);
         void BuildAdditionalResource(string additionalResource, Settings settings);

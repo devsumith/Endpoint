@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Services
 {
-    public interface ISolutionFileService
+    public interface ISolutionFilesGenerationStrategy
     {
         public Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins);
 

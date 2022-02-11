@@ -1,6 +1,5 @@
 ﻿using Endpoint.Core.Builders;
 using Endpoint.Core.Models;
-using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.IO;
 using System.Linq;
@@ -8,9 +7,9 @@ using System.Linq;
 
 namespace Endpoint.Core.Services
 {
-    public class InfrastructureFileService : BaseFileService, IInfrastructureFileService
+    public class InfrastructureProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrategy, IInfrastructureProjectFilesGenerationStrategy
     {
-        public InfrastructureFileService(
+        public InfrastructureProjectFilesGenerationStrategy(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,

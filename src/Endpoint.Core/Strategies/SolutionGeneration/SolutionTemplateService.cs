@@ -1,6 +1,4 @@
-﻿using Endpoint.Core.Services;
-using Endpoint.Core.Events;
-using Endpoint.Core.Services;
+﻿using Endpoint.Core.Events;
 using MediatR;
 using System.Collections.Generic;
 using System.IO;
@@ -15,20 +13,20 @@ namespace Endpoint.Core.Services
     public class SolutionTemplateService : ISolutionTemplateService
     {
         private ICommandService _commandService;
-        private readonly ISolutionFileService _solutionFileService;
-        private readonly IDomainFileService _domainFileService;
-        private readonly IApplicationFileService _applicationFileService;
-        private readonly IInfrastructureFileService _infrastructureFileService;
-        private readonly IApiFileService _apiFileService;
+        private readonly ISolutionFilesGenerationStrategy _solutionFileService;
+        private readonly ISharedKernalProjectFilesGenerationStrategy _domainFileService;
+        private readonly IApplicationProjectFilesGenerationStrategy _applicationFileService;
+        private readonly IInfrastructureProjectFilesGenerationStrategy _infrastructureFileService;
+        private readonly IApiProjectFilesGenerationStrategy _apiFileService;
         private readonly IMediator _mediator;
 
         public SolutionTemplateService(
             ICommandService commandService,
-            ISolutionFileService solutionFileService,
-            IDomainFileService domainFileService,
-            IApplicationFileService applicationFileService,
-            IInfrastructureFileService infrastructureFileService,
-            IApiFileService apiFileService,
+            ISolutionFilesGenerationStrategy solutionFileService,
+            ISharedKernalProjectFilesGenerationStrategy domainFileService,
+            IApplicationProjectFilesGenerationStrategy applicationFileService,
+            IInfrastructureProjectFilesGenerationStrategy infrastructureFileService,
+            IApiProjectFilesGenerationStrategy apiFileService,
             IMediator mediator)
         {
             _commandService = commandService;

@@ -6,18 +6,18 @@ namespace Endpoint.Core.Abstractions
 {
     public abstract class BasePlugin
     {
-        protected readonly IApplicationFileService _applicationFileService;
+        protected readonly IApplicationProjectFilesGenerationStrategy _applicationFileService;
         protected readonly IFileSystem _fileSystem;
         protected readonly ISettingsProvider _settingsProvider;
-        protected readonly IInfrastructureFileService _infrastructureFileService;
-        protected readonly IApiFileService _apiFileService;
+        protected readonly IInfrastructureProjectFilesGenerationStrategy _infrastructureFileService;
+        protected readonly IApiProjectFilesGenerationStrategy _apiFileService;
 
         public BasePlugin(
-            IApplicationFileService applicationFileService,
+            IApplicationProjectFilesGenerationStrategy applicationFileService,
             IFileSystem fileSystem,
             ISettingsProvider settingsProvider,
-            IInfrastructureFileService infrastructureFileService,
-            IApiFileService apiFileService)
+            IInfrastructureProjectFilesGenerationStrategy infrastructureFileService,
+            IApiProjectFilesGenerationStrategy apiFileService)
         {
             _applicationFileService = applicationFileService;
             _fileSystem = fileSystem;

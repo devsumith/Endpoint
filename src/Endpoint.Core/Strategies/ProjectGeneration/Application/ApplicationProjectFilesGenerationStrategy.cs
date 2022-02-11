@@ -1,21 +1,18 @@
 ﻿using Endpoint.Core.Builders;
+using Endpoint.Core.Builders.Common;
+using Endpoint.Core.Builders.Statements;
 using Endpoint.Core.Core;
-using Endpoint.Core.Enums;
-using Endpoint.Core;
 using Endpoint.Core.Models;
-using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Endpoint.Core.Builders.Common;
-using Endpoint.Core.Builders.Statements;
 
 namespace Endpoint.Core.Services
 {
-    public class ApplicationFileService : BaseFileService, IApplicationFileService
+    public class ApplicationProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrategy, IApplicationProjectFilesGenerationStrategy
     {
-        public ApplicationFileService(ICommandService commandService, ITemplateProcessor templateProcessor, ITemplateLocator templateLocator, IFileSystem fileSystem)
+        public ApplicationProjectFilesGenerationStrategy(ICommandService commandService, ITemplateProcessor templateProcessor, ITemplateLocator templateLocator, IFileSystem fileSystem)
             : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 

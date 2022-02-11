@@ -1,16 +1,15 @@
-﻿using Endpoint.Core.Services;
-using System.IO;
+﻿using System.IO;
 
 namespace Endpoint.Core.Services
 {
-    public abstract class BaseFileService
+    public abstract class BaseProjectFilesGenerationStrategy
     {
         protected readonly ICommandService _commandService;
         protected readonly ITemplateProcessor _templateProcessor;
         protected readonly ITemplateLocator _templateLocator;
         protected readonly IFileSystem _fileSystem;
 
-        public BaseFileService(
+        public BaseProjectFilesGenerationStrategy(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,

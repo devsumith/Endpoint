@@ -1,6 +1,4 @@
-﻿using Endpoint.Core;
-using Endpoint.Core.Models;
-using Endpoint.Core.Services;
+﻿using Endpoint.Core.Models;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
@@ -10,14 +8,14 @@ using static System.Text.Json.JsonSerializer;
 
 namespace Endpoint.Core.Services
 {
-    public class SolutionFileService : ISolutionFileService
+    public class SolutionFilesGenerationStrategy : ISolutionFilesGenerationStrategy
     {
         protected readonly ICommandService _commandService;
         protected readonly ITemplateProcessor _templateProcessor;
         protected readonly ITemplateLocator _templateLocator;
         protected readonly IFileSystem _fileSystem;
 
-        public SolutionFileService(
+        public SolutionFilesGenerationStrategy(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,
@@ -80,7 +78,7 @@ namespace Endpoint.Core.Services
 
         }
 
-        public Endpoint.Core.Models.Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
+        public Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
         {
 
             name = name.Replace("-", "_");
