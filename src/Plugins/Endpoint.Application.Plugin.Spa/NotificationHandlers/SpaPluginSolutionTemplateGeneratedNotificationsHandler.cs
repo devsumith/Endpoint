@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Application.Plugin.Spa
 {
-    public class SpaEndpointPlugin : INotificationHandler<SolutionTemplateGenerated>
+    public class SpaPluginSolutionTemplateGeneratedNotificationsHandler : INotificationHandler<SolutionTemplateGenerated>
     {
         private readonly ICommandService _commandService;
         private readonly IFileSystem _fileSystem;
         private readonly ISettingsProvider _settingsProvider;
-        public SpaEndpointPlugin(ICommandService commandService, IFileSystem fileSystem, ISettingsProvider settingsProvider)
+        public SpaPluginSolutionTemplateGeneratedNotificationsHandler(ICommandService commandService, IFileSystem fileSystem, ISettingsProvider settingsProvider)
         {
             _commandService = commandService;
             _fileSystem = fileSystem;
@@ -37,6 +37,5 @@ namespace Endpoint.Application.Plugin.Spa
 
             return Task.CompletedTask;
         }
-
     }
 }

@@ -1,5 +1,4 @@
-﻿using Endpoint.Core.Services;
-using Endpoint.Core.Services;
+﻿using Endpoint.Core.Managers;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +26,8 @@ namespace Endpoint.Core
             services.AddSingleton<IApplicationProjectFilesGenerationStrategy, ApplicationProjectFilesGenerationStrategy>();
             services.AddSingleton<IInfrastructureProjectFilesGenerationStrategy, InfrastructureProjectFilesGenerationStrategy>();
             services.AddSingleton<IApiProjectFilesGenerationStrategy, ApiProjectFilesGenerationStrategy>();
+            services.AddSingleton<ICsProjFileManager, CsProjFileManager>();
+            services.AddSingleton<ISolutionFileManager, SolutionFileManager>();
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Endpoint.Core.Models
     public class Settings
     {
         public bool IsRoot { get; set; } = true;
+        public string Prefix { get; set; } = "app";
         public IdFormat IdFormat { get; set; } = IdFormat.Long;
         public IdDotNetType IdDotNetType { get; set; } = IdDotNetType.Guid;
         public bool IsMicroserviceArchitecture { get; set; } = true;

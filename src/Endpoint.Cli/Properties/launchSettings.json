@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "works --plugins Spa"
+      "commandLineArgs": "--plugins Spa -d C:\\sandbox"
     }
   }
-}
+} 
