@@ -39,6 +39,9 @@ namespace Endpoint.Core.Commands
             [Option("plugins", Required = false)]
             public string Plugins { get; set; }
 
+            [Option("prefix", Required = false)]
+            public string Prefix { get; set; } = "app";
+
             [Option('d', "directory")]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
         }
@@ -53,7 +56,7 @@ namespace Endpoint.Core.Commands
             }
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                _solutionTemplateService.Build(request.Name, request.DbContextName, request.ShortIdPropertyName, request.Resource, request.Properties, request.Monolith, request.NumericIdPropertyDataType, request.Directory, request.Plugins?.Split(',').ToList());
+                _solutionTemplateService.Build(request.Name, request.DbContextName, request.ShortIdPropertyName, request.Resource, request.Properties, request.Monolith, request.NumericIdPropertyDataType, request.Directory, request.Plugins?.Split(',').ToList(), request.Prefix);
 
                 return Task.FromResult(new Unit());
             }

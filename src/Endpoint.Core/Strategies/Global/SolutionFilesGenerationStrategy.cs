@@ -27,7 +27,7 @@ namespace Endpoint.Core.Services
             _fileSystem = fileSystem;
         }
 
-        public Endpoint.Core.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins)
+        public Endpoint.Core.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
             AggregateRoot aggregateRoot = new AggregateRoot(resource);
 
@@ -43,10 +43,10 @@ namespace Endpoint.Core.Services
                 }
             }
 
-            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<AggregateRoot>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins);
+            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<AggregateRoot>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins, prefix);
         }
 
-        public Endpoint.Core.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
+        public Endpoint.Core.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
             var aggregates = new List<AggregateRoot>();
 
@@ -74,18 +74,18 @@ namespace Endpoint.Core.Services
             }
 
 
-            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, aggregates, directory, isMicroserviceArchitecture, plugins);
+            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, aggregates, directory, isMicroserviceArchitecture, plugins, prefix);
 
         }
 
-        public Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins)
+        public Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
 
             name = name.Replace("-", "_");
 
             _commandService.Start($"mkdir {name}", directory);
 
-            var settings = new Settings(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdFormat.Short: IdFormat.Long, useIntIdPropertyType ? IdDotNetType.Int : IdDotNetType.Guid);
+            var settings = new Settings(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdFormat.Short: IdFormat.Long, useIntIdPropertyType ? IdDotNetType.Int : IdDotNetType.Guid, prefix);
 
             var json = Serialize(settings, new JsonSerializerOptions
             {

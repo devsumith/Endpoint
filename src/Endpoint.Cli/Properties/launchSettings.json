@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "--plugins Spa -d C:\\sandbox"
+      "commandLineArgs": "-n Avengers --plugins Spa --prefix uw -r User --properties Name:string -d C:\\sandbox"
     }
   }
 } 
