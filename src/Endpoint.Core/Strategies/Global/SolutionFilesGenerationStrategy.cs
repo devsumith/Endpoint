@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Models;
+using Endpoint.Core.Strategies.Global;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
@@ -101,7 +102,11 @@ namespace Endpoint.Core.Services
 
             _commandService.Start($"mkdir {settings.TestFolder}", settings.RootDirectory);
 
+            _commandService.Start($"mkdir deploy", settings.RootDirectory);
+
             _commandService.Start("git init", settings.RootDirectory);
+
+            new GitIgnoreFileGenerationStrategy(_fileSystem, _templateLocator).Generate(settings);
 
             if (isMicroserviceArchitecture)
             {

@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models;
+using Endpoint.Core.Strategies.Global;
 using Endpoint.Core.ValueObjects;
 using System.IO;
 using static Endpoint.Core.Constants.ApiFileTemplates;
@@ -26,6 +27,10 @@ namespace Endpoint.Core.Services
             _commandService.Start("dotnet tool install --version 6.0.7 Swashbuckle.AspNetCore.Cli", settings.ApiDirectory);
 
             var csProjFilePath = $"{settings.ApiDirectory}{Path.DirectorySeparatorChar}{settings.ApiNamespace}.csproj";
+
+            new BicepFileGenerationStrategy(_fileSystem, _templateLocator).Generate(settings);
+
+            new DeploySetupFileGenerationStrategy(_fileSystem, _templateLocator, _templateProcessor).Generate(settings);
 
             AddGenerateDocumentationFile(csProjFilePath);
 

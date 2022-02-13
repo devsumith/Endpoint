@@ -19,6 +19,7 @@
     <None Remove="Templates\Application\Dto.txt" />
     <None Remove="Templates\Global\BicepFile.txt" />
     <None Remove="Templates\Global\DeploySetupFile.txt" />
+    <None Remove="Templates\Global\GitIgnoreFile.txt" />
     <None Remove="Templates\Infrastructure\SeedData.txt" />
     <None Remove="Templates\IntegrationTests\ApiTest.txt" />
     <None Remove="Templates\Core\QueryableExtensions.txt" />
@@ -40,6 +41,7 @@
     <EmbeddedResource Include="Templates\Application\Dto.txt" />
     <EmbeddedResource Include="Templates\Global\DeploySetupFile.txt" />
     <EmbeddedResource Include="Templates\Global\BicepFile.txt" />
+    <EmbeddedResource Include="Templates\Global\GitIgnoreFile.txt" />
     <EmbeddedResource Include="Templates\Infrastructure\SeedData.txt" />
     <EmbeddedResource Include="Templates\IntegrationTests\ApiTest.txt" />
     <EmbeddedResource Include="Templates\SharedKernal\QueryableExtensions.txt" />
