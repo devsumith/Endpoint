@@ -2,7 +2,7 @@
 
 namespace Endpoint.Core.Services
 {
-    public interface ISharedKernalProjectFilesGenerationStrategy
+    public interface ISharedKernelProjectFilesGenerationStrategy
     {
         void Build(Settings settings);
     }

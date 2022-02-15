@@ -22,7 +22,7 @@ namespace Endpoint.Core
         {
             services.AddSingleton<ISolutionTemplateService, SolutionTemplateService>();
             services.AddSingleton<ISolutionFilesGenerationStrategy, SolutionFilesGenerationStrategy>();
-            services.AddSingleton<ISharedKernalProjectFilesGenerationStrategy, SharedKernalProjectFilesGenerationStrategy>();
+            services.AddSingleton<ISharedKernelProjectFilesGenerationStrategy, SharedKernelProjectFilesGenerationStrategy>();
             services.AddSingleton<IApplicationProjectFilesGenerationStrategy, ApplicationProjectFilesGenerationStrategy>();
             services.AddSingleton<IInfrastructureProjectFilesGenerationStrategy, InfrastructureProjectFilesGenerationStrategy>();
             services.AddSingleton<IApiProjectFilesGenerationStrategy, ApiProjectFilesGenerationStrategy>();

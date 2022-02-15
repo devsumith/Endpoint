@@ -14,7 +14,7 @@ namespace Endpoint.Core.Services
     {
         private ICommandService _commandService;
         private readonly ISolutionFilesGenerationStrategy _solutionFileService;
-        private readonly ISharedKernalProjectFilesGenerationStrategy _domainFileService;
+        private readonly ISharedKernelProjectFilesGenerationStrategy _domainFileService;
         private readonly IApplicationProjectFilesGenerationStrategy _applicationFileService;
         private readonly IInfrastructureProjectFilesGenerationStrategy _infrastructureFileService;
         private readonly IApiProjectFilesGenerationStrategy _apiFileService;
@@ -23,7 +23,7 @@ namespace Endpoint.Core.Services
         public SolutionTemplateService(
             ICommandService commandService,
             ISolutionFilesGenerationStrategy solutionFileService,
-            ISharedKernalProjectFilesGenerationStrategy domainFileService,
+            ISharedKernelProjectFilesGenerationStrategy domainFileService,
             IApplicationProjectFilesGenerationStrategy applicationFileService,
             IInfrastructureProjectFilesGenerationStrategy infrastructureFileService,
             IApiProjectFilesGenerationStrategy apiFileService,

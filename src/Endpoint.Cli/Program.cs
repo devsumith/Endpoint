@@ -31,15 +31,14 @@ namespace Endpoint.Cli
 
             var assemblies = new List<Assembly>();
 
-            foreach (var plugin in pluginNames)
+/*            foreach (var plugin in pluginNames)
             {
                 //https://stackoverflow.com/questions/31859267/load-nuget-dependencies-at-runtime
-                // Load from nuget?
-
+                
                 var pluginPath = @$"Plugins\Endpoint.Application.Plugin.{plugin}\bin\Debug\net5.0\Endpoint.Application.Plugin.{plugin}.dll";
 
                 assemblies.Add(LoadPlugin(pluginPath));
-            }
+            }*/
 
             return assemblies.ToArray();
         }

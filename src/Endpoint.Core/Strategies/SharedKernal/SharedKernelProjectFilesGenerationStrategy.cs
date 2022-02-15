@@ -4,9 +4,9 @@ using System.IO;
 
 namespace Endpoint.Core.Services
 {
-    public class SharedKernalProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrategy, ISharedKernalProjectFilesGenerationStrategy
+    public class SharedKernelProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrategy, ISharedKernelProjectFilesGenerationStrategy
     {
-        public SharedKernalProjectFilesGenerationStrategy(
+        public SharedKernelProjectFilesGenerationStrategy(
             ICommandService commandService,
             ITemplateProcessor templateProcessor,
             ITemplateLocator templateLocator,

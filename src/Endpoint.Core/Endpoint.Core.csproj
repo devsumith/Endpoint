@@ -44,8 +44,8 @@
     <EmbeddedResource Include="Templates\Global\GitIgnoreFile.txt" />
     <EmbeddedResource Include="Templates\Infrastructure\SeedData.txt" />
     <EmbeddedResource Include="Templates\IntegrationTests\ApiTest.txt" />
-    <EmbeddedResource Include="Templates\SharedKernal\QueryableExtensions.txt" />
-    <EmbeddedResource Include="Templates\SharedKernal\ResponseBase.txt" />
+    <EmbeddedResource Include="Templates\SharedKernel\QueryableExtensions.txt" />
+    <EmbeddedResource Include="Templates\SharedKernel\ResponseBase.txt" />
   </ItemGroup>
 
   <ItemGroup>
