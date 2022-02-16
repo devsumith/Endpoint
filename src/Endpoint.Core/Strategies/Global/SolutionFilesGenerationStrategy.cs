@@ -88,13 +88,20 @@ namespace Endpoint.Core.Services
 
             var settings = new Settings(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdFormat.Short: IdFormat.Long, useIntIdPropertyType ? IdDotNetType.Int : IdDotNetType.Guid, prefix);
 
+            return Create(settings);
+        }
+        
+        public Settings Create(Settings settings)
+        {
             var json = Serialize(settings, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
             });
 
-            _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{Constants.SettingsFileName}", new List<string> { json }.ToArray());
+            _commandService.Start($"mkdir {settings.RootDirectory}");
+
+            _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{CoreConstants.SettingsFileName}", new List<string> { json }.ToArray());
 
             _commandService.Start($"dotnet new sln -n {settings.SolutionName}", settings.RootDirectory);
 
@@ -108,13 +115,13 @@ namespace Endpoint.Core.Services
 
             new GitIgnoreFileGenerationStrategy(_fileSystem, _templateLocator).Generate(settings);
 
-            if (isMicroserviceArchitecture)
+            if (settings.IsMicroserviceArchitecture)
             {
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
+                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
 
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
+                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
 
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
+                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
 
                 _addReference(settings.TestingDirectory, settings.ApiDirectory);
 
@@ -122,17 +129,17 @@ namespace Endpoint.Core.Services
             }
             else
             {
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
+                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
 
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.DomainDirectory, settings);
+                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.ClassLibrary, settings.DomainDirectory, settings);
 
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.ApplicationDirectory, settings);
+                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.ClassLibrary, settings.ApplicationDirectory, settings);
 
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.InfrastructureDirectory, settings);
+                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.ClassLibrary, settings.InfrastructureDirectory, settings);
 
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
+                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
 
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
+                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
 
                 _addReference(settings.ApplicationDirectory, settings.DomainDirectory);
 
@@ -149,6 +156,7 @@ namespace Endpoint.Core.Services
 
             return settings;
         }
+        
         private void _createProjectAndAddToSolution(string templateType, string directory, Endpoint.Core.Models.Settings settings)
         {
             _commandService.Start($@"mkdir {directory}");

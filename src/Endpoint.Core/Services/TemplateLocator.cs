@@ -24,7 +24,7 @@ namespace Endpoint.Core.Services
         }
         public string[] Get(string name)
         {
-            foreach (Assembly _assembly in AppDomain.CurrentDomain.GetAssemblies().Where(x => x.GetName().FullName.Contains(Constants.RootNamespace)).Distinct())
+            foreach (Assembly _assembly in AppDomain.CurrentDomain.GetAssemblies().Where(x => x.GetName().FullName.Contains(CoreConstants.RootNamespace)).Distinct())
             {
                 var resourceName = _assembly.GetManifestResourceNames().GetResourceName(name);
 

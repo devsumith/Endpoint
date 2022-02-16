@@ -30,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Endpoint.Application.Spa\Endpoint.Application.Spa.csproj" />
     <ProjectReference Include="..\Endpoint.Application\Endpoint.Application.csproj" />
-    <ProjectReference Include="..\Plugins\Endpoint.Application.Plugin.Spa\Endpoint.Application.Plugin.Spa.csproj" />
   </ItemGroup>
 
   <ItemGroup>

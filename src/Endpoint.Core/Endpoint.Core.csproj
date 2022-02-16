@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Builders\Core\ExtensionsBuilder.txt" />
-    <None Remove="Builders\Core\Request\CommandBuilder.txt" />
-    <None Remove="Builders\Core\Request\QueryBuilder.txt" />
-    <None Remove="Builders\Core\ServiceCollectionExtensionsBuilder.txt" />
-    <None Remove="Builders\Core\ValidationBehaviorBuilder.txt" />
-    <None Remove="Builders\Core\ValidatorBuilder.txt" />
+    <None Remove="Generators\Core\ExtensionsBuilder.txt" />
+    <None Remove="Generators\Core\Request\CommandBuilder.txt" />
+    <None Remove="Generators\Core\Request\QueryBuilder.txt" />
+    <None Remove="Generators\Core\ServiceCollectionExtensionsBuilder.txt" />
+    <None Remove="Generators\Core\ValidationBehaviorBuilder.txt" />
+    <None Remove="Generators\Core\ValidatorBuilder.txt" />
     <None Remove="Templates\Api\AppSettings.txt" />
     <None Remove="Templates\Api\Dependencies.txt" />
     <None Remove="Templates\Api\LaunchSettings.txt" />
@@ -27,12 +27,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Builders\Core\ExtensionsBuilder.txt" />
-    <EmbeddedResource Include="Builders\Core\Request\CommandBuilder.txt" />
-    <EmbeddedResource Include="Builders\Core\Request\QueryBuilder.txt" />
-    <EmbeddedResource Include="Builders\Core\ServiceCollectionExtensionsBuilder.txt" />
-    <EmbeddedResource Include="Builders\Core\ValidationBehaviorBuilder.txt" />
-    <EmbeddedResource Include="Builders\Core\ValidatorBuilder.txt" />
+    <EmbeddedResource Include="Generators\Core\ExtensionsBuilder.txt" />
+    <EmbeddedResource Include="Generators\Core\Request\CommandBuilder.txt" />
+    <EmbeddedResource Include="Generators\Core\Request\QueryBuilder.txt" />
+    <EmbeddedResource Include="Generators\Core\ServiceCollectionExtensionsBuilder.txt" />
+    <EmbeddedResource Include="Generators\Core\ValidationBehaviorBuilder.txt" />
+    <EmbeddedResource Include="Generators\Core\ValidatorBuilder.txt" />
     <EmbeddedResource Include="Templates\Api\AppSettings.txt" />
     <EmbeddedResource Include="Templates\Api\Dependencies.txt" />
     <EmbeddedResource Include="Templates\Api\LaunchSettings.txt" />

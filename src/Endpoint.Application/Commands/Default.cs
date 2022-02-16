@@ -1,6 +1,11 @@
 using CommandLine;
+using Endpoint.Core.Generators;
+using Endpoint.Core.Models;
 using Endpoint.Core.Services;
+using Endpoint.Core.Strategies.Global;
 using MediatR;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +32,9 @@ namespace Endpoint.Core.Commands
             [Option('m', "isMonolithArchitecture")]
             public bool Monolith { get; set; } = false;
 
+            [Option('a', "minimalapi")]
+            public bool Minimal { get; set; } = true;
+
             [Option("dbContextName")]
             public string DbContextName { get; set; }
 
@@ -48,15 +56,36 @@ namespace Endpoint.Core.Commands
 
         internal class Handler : IRequestHandler<Request, Unit>
         {
-            private ISolutionTemplateService _solutionTemplateService;
+            private readonly IEndpointGenerationStrategyFactory _workspaceGenerationStrategyFactory;
+            private readonly ISettingsProvider _settingsProvider;
 
-            public Handler(ISolutionTemplateService solutionTemplateService)
+            public Handler(IEndpointGenerationStrategyFactory workspaceGenerationStrategyFactory, ISettingsProvider settingsProvider)
             {
-                _solutionTemplateService = solutionTemplateService;
+                _workspaceGenerationStrategyFactory = workspaceGenerationStrategyFactory; ;
+                _settingsProvider = settingsProvider;
             }
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                _solutionTemplateService.Build(request.Name, request.DbContextName, request.ShortIdPropertyName, request.Resource, request.Properties, request.Monolith, request.NumericIdPropertyDataType, request.Directory, request.Plugins?.Split(',').ToList(), request.Prefix);
+                var endpointDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}";
+
+                var settings = _settingsProvider.Get(endpointDirectory);
+
+                if (settings == null)
+                {
+                    settings = new Models.Settings(
+                        request.Name, 
+                        request.DbContextName,
+                        new AggregateRoot(request.Resource, request.NumericIdPropertyDataType, request.ShortIdPropertyName, request.Properties), 
+                        request.Directory, 
+                        !request.Monolith, 
+                        request.Plugins?.Split(',').ToList(), 
+                        request.ShortIdPropertyName ? IdFormat.Short : IdFormat.Long, 
+                        request.NumericIdPropertyDataType ? IdDotNetType.Int : IdDotNetType.Guid, 
+                        request.Prefix,
+                        request.Minimal);
+                }
+
+                EndpointGenerator.Generate(settings, _workspaceGenerationStrategyFactory);
 
                 return Task.FromResult(new Unit());
             }

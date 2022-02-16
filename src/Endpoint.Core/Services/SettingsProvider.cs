@@ -22,7 +22,7 @@ namespace Endpoint.Core.Services
 
             for (var i = 1; i <= parts.Length; i++)
             {
-                var path = $"{string.Join(DirectorySeparatorChar, parts.Take(i))}{DirectorySeparatorChar}{Constants.SettingsFileName}";
+                var path = $"{string.Join(DirectorySeparatorChar, parts.Take(i))}{DirectorySeparatorChar}{CoreConstants.SettingsFileName}";
 
                 if (File.Exists(path))
                 {
@@ -37,7 +37,7 @@ namespace Endpoint.Core.Services
                 i++;
             }
 
-            throw new SettingsNotFoundException();
+            return null;
 
         }
     }

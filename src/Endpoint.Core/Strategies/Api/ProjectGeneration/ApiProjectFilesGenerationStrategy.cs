@@ -4,7 +4,7 @@ using Endpoint.Core.Models;
 using Endpoint.Core.Strategies.Global;
 using Endpoint.Core.ValueObjects;
 using System.IO;
-using static Endpoint.Core.Constants.ApiFileTemplates;
+using static Endpoint.Core.CoreConstants.ApiFileTemplates;
 
 namespace Endpoint.Core.Services
 {
@@ -124,9 +124,9 @@ namespace Endpoint.Core.Services
 
         private void _createSubDirectories(Settings settings)
         {
-            _commandService.Start($"mkdir {Constants.Folders.Behaviors}", settings.ApplicationDirectory);
+            _commandService.Start($"mkdir {CoreConstants.Folders.Behaviors}", settings.ApplicationDirectory);
 
-            _commandService.Start($"mkdir {Constants.Folders.Logs}", settings.ApiDirectory);
+            _commandService.Start($"mkdir {CoreConstants.Folders.Logs}", settings.ApiDirectory);
 
         }
 

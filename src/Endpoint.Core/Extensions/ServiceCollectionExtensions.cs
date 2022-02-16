@@ -1,5 +1,6 @@
 ﻿using Endpoint.Core.Managers;
 using Endpoint.Core.Services;
+using Endpoint.Core.Strategies.Global;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core
@@ -20,7 +21,7 @@ namespace Endpoint.Core
 
         public static void AddCoreServices(this IServiceCollection services)
         {
-            services.AddSingleton<ISolutionTemplateService, SolutionTemplateService>();
+            services.AddSingleton<ISolutionTemplateService, EndpointGenerationStrategy>();
             services.AddSingleton<ISolutionFilesGenerationStrategy, SolutionFilesGenerationStrategy>();
             services.AddSingleton<ISharedKernelProjectFilesGenerationStrategy, SharedKernelProjectFilesGenerationStrategy>();
             services.AddSingleton<IApplicationProjectFilesGenerationStrategy, ApplicationProjectFilesGenerationStrategy>();
@@ -28,6 +29,7 @@ namespace Endpoint.Core
             services.AddSingleton<IApiProjectFilesGenerationStrategy, ApiProjectFilesGenerationStrategy>();
             services.AddSingleton<ICsProjFileManager, CsProjFileManager>();
             services.AddSingleton<ISolutionFileManager, SolutionFileManager>();
+            services.AddSingleton<IEndpointGenerationStrategyFactory, EndpointGenerationStrategyFactory>();
         }
     }
 }

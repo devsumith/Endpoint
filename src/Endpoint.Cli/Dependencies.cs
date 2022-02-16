@@ -1,17 +1,16 @@
 ﻿using Endpoint.Application;
-using Endpoint.Application.Plugin.Spa;
+using Endpoint.Application.Spa;
 using Endpoint.Core;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace Endpoint.Cli
 {
     public static class Dependencies
     {
-        public static void Configure(IServiceCollection services, Assembly[] pluginAssemblies)
+        public static void Configure(IServiceCollection services)
         {
-            services.AddMediatR(typeof(Endpoint.Core.Constants), typeof(Dependencies), typeof(Marker));
+            services.AddMediatR(typeof(Endpoint.Core.CoreConstants), typeof(Dependencies), typeof(Marker));
             services.AddSharedServices();
             services.AddCoreServices();
             services.AddMediatR(typeof(SpaPluginSolutionTemplateGeneratedNotificationsHandler));

@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Events;
+using Endpoint.Core.Strategies.Global;
 using MediatR;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +11,7 @@ namespace Endpoint.Core.Services
         void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, string properties, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins, string prefix);
     }
 
-    public class SolutionTemplateService : ISolutionTemplateService
+    public class EndpointGenerationStrategy : ISolutionTemplateService, IEndpointGenerationStrategy
     {
         private ICommandService _commandService;
         private readonly ISolutionFilesGenerationStrategy _solutionFileService;
@@ -20,7 +21,7 @@ namespace Endpoint.Core.Services
         private readonly IApiProjectFilesGenerationStrategy _apiFileService;
         private readonly IMediator _mediator;
 
-        public SolutionTemplateService(
+        public EndpointGenerationStrategy(
             ICommandService commandService,
             ISolutionFilesGenerationStrategy solutionFileService,
             ISharedKernelProjectFilesGenerationStrategy domainFileService,
@@ -76,6 +77,28 @@ namespace Endpoint.Core.Services
                 name = $"{originalName}_{retries}";
 
             }
+        }
+
+        public bool CanHandle(Models.Settings model)
+        {
+            return !model.Minimal;
+        }
+
+        public void Create(Models.Settings model)
+        {
+            _solutionFileService.Create(model);
+
+            _domainFileService.Build(model);
+
+            _applicationFileService.Build(model);
+
+            _infrastructureFileService.Build(model);
+
+            _apiFileService.Build(model);
+
+            _mediator.Publish(new SolutionTemplateGenerated(model.RootDirectory));
+
+            _commandService.Start($"start {model.SolutionFileName}", model.RootDirectory);
         }
     }
 }

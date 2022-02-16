@@ -11,6 +11,8 @@ namespace Endpoint.Core.Models
     public class Settings
     {
         public bool IsRoot { get; set; } = true;
+
+        public bool Minimal { get; set; } = false;
         public string Prefix { get; set; } = "app";
         public IdFormat IdFormat { get; set; } = IdFormat.Long;
         public IdDotNetType IdDotNetType { get; set; } = IdDotNetType.Guid;
@@ -43,17 +45,18 @@ namespace Endpoint.Core.Models
         public List<Entity> Entities { get; set; } = new List<Entity>();
         public List<AggregateRoot> Resources { get; set; } = new List<AggregateRoot>();
 
-        public Settings(string name, string dbContextName, AggregateRoot resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid, string prefix = "app")
-            : this(name, dbContextName, new List<AggregateRoot>() { resource }, directory, isMicroserviceArchitecture, plugins, idFormat, idDotNetType, prefix)
+        public Settings(string name, string dbContextName, AggregateRoot resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid, string prefix = "app", bool minimal = false)
+            : this(name, dbContextName, new List<AggregateRoot>() { resource }, directory, isMicroserviceArchitecture, plugins, idFormat, idDotNetType, prefix, minimal)
         { }
 
-        public Settings(string name, string dbContextName, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid, string prefix = "app")
+        public Settings(string name, string dbContextName, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid, string prefix = "app", bool minimal = false)
         {
             name = ((Token)name).PascalCase.Replace("-", "_");
             Plugins = plugins;
             IdDotNetType = idDotNetType;
             IdFormat = idFormat;
             Prefix = prefix;
+            Minimal = minimal;
 
             foreach (var resource in resources)
             {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Plugin.Spa
+namespace Endpoint.Application.Spa
 {
     public class SpaPluginSolutionTemplateGeneratedNotificationsHandler : INotificationHandler<SolutionTemplateGenerated>
     {
