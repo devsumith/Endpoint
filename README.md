@@ -14,7 +14,7 @@ Install the [Endpoint NuGet Package](https://www.nuget.org/packages/Allagi.Endpo
 dotnet tool install --global Allagi.Endpoint.Cli
 ```
 
-##EXAMPLES
+## EXAMPLES
 
 ```
 endpoint -n TodoApp -r Todo --properties Title:string,IsComplete:bool -a
