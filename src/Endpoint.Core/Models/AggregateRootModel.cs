@@ -12,6 +12,9 @@ namespace Endpoint.Core.Models
 
         public string Name { get; set; }
 
+        public string IdPropertyName { get; set; }
+        public string IdPropertyType { get; set; }
+
         public AggregateRootModel(string name, List<ClassProperty> classProperties)
         {
             Name = name;
@@ -22,11 +25,11 @@ namespace Endpoint.Core.Models
         {
             Name = name;
 
-            var idDotNetType = useIntIdPropertyType ? "int" : "Guid";
+            IdPropertyType = useIntIdPropertyType ? "int" : "Guid";
 
-            var idPropertyName = useShortIdProperty ? "Id" : $"{((Token)name).PascalCase}Id";
+            IdPropertyName = useShortIdProperty ? "Id" : $"{((Token)name).PascalCase}Id";
 
-            Properties.Add(new ClassProperty("public", idDotNetType, idPropertyName, ClassPropertyAccessor.GetPrivateSet, key: true));
+            Properties.Add(new ClassProperty("public", IdPropertyType, IdPropertyName, ClassPropertyAccessor.GetPrivateSet, key: true));
 
             if (!string.IsNullOrWhiteSpace(properties))
             {

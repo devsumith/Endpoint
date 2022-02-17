@@ -4,12 +4,21 @@ namespace Endpoint.Core.Models
 {
     public class RouteHandlerModel
     {
-        public string Pattern { get; set; }
-        public string Name { get; set; }
-        public string[] Body { get; set; }
-        public RouteHandlerType Type { get; set; }
-        public List<InputParameterModel> InputParameters { get; set; } = new List<InputParameterModel>();
-        public List<ResponseModel> Responses { get; set; } = new List<ResponseModel>();
+        public string Name { get; private set; }
+        public string Pattern { get; private set; }        
+        public string DbContextName { get; private set; }
+        public AggregateRootModel AggregateRoot { get; private set; }
+        public RouteHandlerType Type { get; private set; }
+        public List<ProducesModel> Produces { get; private set; } = new List<ProducesModel>();
+
+        public RouteHandlerModel(string name, string pattern, string dbContextName, AggregateRootModel aggregateRootModel, RouteHandlerType routeHandlerType)
+        {
+            Name = name;
+            Pattern = pattern;
+            DbContextName = dbContextName;
+            AggregateRoot = aggregateRootModel;
+            Type = routeHandlerType;
+        }
 
     }
 }

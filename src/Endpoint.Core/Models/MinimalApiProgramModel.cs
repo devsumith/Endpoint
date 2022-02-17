@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Endpoint.Core.ValueObjects;
+using System.Collections.Generic;
 
 namespace Endpoint.Core.Models
 {
@@ -26,7 +27,47 @@ namespace Endpoint.Core.Models
 
             foreach(var aggregateRoot in aggregateRoots)
             {
-                //RouteHandlers.Add(new RouteHandlerModel())
+                var resourceNameToken = (Token)aggregateRoot.Name;
+
+                RouteHandlers.Add(new RouteHandlerModel(
+                    $"Create{resourceNameToken.PascalCase}",
+                    $"/{resourceNameToken.SnakeCasePlural}",
+                    dbContextName,
+                    aggregateRoot,
+                    RouteHandlerType.Create
+                    ));
+
+                RouteHandlers.Add(new RouteHandlerModel(
+                    $"Create{resourceNameToken.PascalCase}",
+                    $"/{resourceNameToken.SnakeCasePlural}",
+                    dbContextName,
+                    aggregateRoot,
+                    RouteHandlerType.Get
+                    ));
+
+                RouteHandlers.Add(new RouteHandlerModel(
+                    $"Create{resourceNameToken.PascalCase}",
+                    $"/{resourceNameToken.SnakeCasePlural}",
+                    dbContextName,
+                    aggregateRoot,
+                    RouteHandlerType.GetById
+                    ));
+
+                RouteHandlers.Add(new RouteHandlerModel(
+                    $"Create{resourceNameToken.PascalCase}",
+                    $"/{resourceNameToken.SnakeCasePlural}",
+                    dbContextName,
+                    aggregateRoot,
+                    RouteHandlerType.Update
+                    ));
+
+                RouteHandlers.Add(new RouteHandlerModel(
+                    $"Create{resourceNameToken.PascalCase}",
+                    $"/{resourceNameToken.SnakeCasePlural}",
+                    dbContextName,
+                    aggregateRoot,
+                    RouteHandlerType.Delete
+                    ));
             }
         }
     }

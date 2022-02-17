@@ -2,8 +2,8 @@
 {
     public enum RouteHandlerType
     {
-        Put,
-        Post,
+        Update,
+        Create,
         Get,
         GetById,
         Delete

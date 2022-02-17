@@ -29,26 +29,33 @@ namespace Endpoint.Core.Commands
             [Option('r', "resource")]
             public string Resource { get; set; } = "Foo";
 
+
             [Option('m', "isMonolithArchitecture")]
             public bool Monolith { get; set; } = false;
 
-            [Option('a', "minimalapi")]
-            public bool Minimal { get; set; } = true;
+
+            [Option('a', "minimalapi", Required = false)]
+            public bool Minimal { get; set; }
 
             [Option("dbContextName")]
             public string DbContextName { get; set; }
 
+            
             [Option('s', "shortIdPropertyName")]
             public bool ShortIdPropertyName { get; set; }
 
+            
             [Option('i', "numericIdPropertyDataType")]
             public bool NumericIdPropertyDataType { get; set; }
 
+            
             [Option("plugins", Required = false)]
             public string Plugins { get; set; }
 
+            
             [Option("prefix", Required = false)]
             public string Prefix { get; set; } = "app";
+
 
             [Option('d', "directory")]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
