@@ -13,6 +13,11 @@ Install the [Endpoint NuGet Package](https://www.nuget.org/packages/Allagi.Endpo
 ```
 dotnet tool install --global Allagi.Endpoint.Cli
 ```
+## SYNOPSIS
+
+```
+endpoint [-n] [-r] [--properties] [-a or --minimalapi]
+```
 
 ## EXAMPLES
 
