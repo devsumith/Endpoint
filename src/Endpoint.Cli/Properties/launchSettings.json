@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "-n MinimalToDoApp -r ToDo --properties Name:string -m -s -i --plugins Spa -d C:\\sandbox"
+      "commandLineArgs": "-n Anna -r ToDo --properties Name:string -m -s -i -d C:\\sandbox"
     }
   }
 } 

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Models
 {
-    public class AggregateRoot
+    public class AggregateRootModel
     {
         public List<ClassProperty> Properties { get; private set; } = new List<ClassProperty>();
 
@@ -12,13 +12,13 @@ namespace Endpoint.Core.Models
 
         public string Name { get; set; }
 
-        public AggregateRoot(string name, List<ClassProperty> classProperties)
+        public AggregateRootModel(string name, List<ClassProperty> classProperties)
         {
             Name = name;
             Properties = classProperties;
         }
 
-        public AggregateRoot(string name, bool useIntIdPropertyType, bool useShortIdProperty, string properties)
+        public AggregateRootModel(string name, bool useIntIdPropertyType, bool useShortIdProperty, string properties)
         {
             Name = name;
 
@@ -39,12 +39,12 @@ namespace Endpoint.Core.Models
             }
         }
 
-        public AggregateRoot(string name)
+        public AggregateRootModel(string name)
         {
             Name = name;
         }
 
-        public AggregateRoot()
+        public AggregateRootModel()
         {
 
         }

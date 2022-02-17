@@ -14,6 +14,7 @@
     <None Remove="Templates\Api\AppSettings.txt" />
     <None Remove="Templates\Api\Dependencies.txt" />
     <None Remove="Templates\Api\LaunchSettings.txt" />
+    <None Remove="Templates\Api\MinimalAppSettings.txt" />
     <None Remove="Templates\Api\Program.txt" />
     <None Remove="Templates\Api\Startup.txt" />
     <None Remove="Templates\Api\WebApplicationBuilder.txt" />
@@ -38,6 +39,7 @@
     <EmbeddedResource Include="Templates\Api\AppSettings.txt" />
     <EmbeddedResource Include="Templates\Api\Dependencies.txt" />
     <EmbeddedResource Include="Templates\Api\LaunchSettings.txt" />
+    <EmbeddedResource Include="Templates\Api\MinimalAppSettings.txt" />
     <EmbeddedResource Include="Templates\Api\Program.txt" />
     <EmbeddedResource Include="Templates\Api\Startup.txt" />
     <EmbeddedResource Include="Templates\Api\WebApplicationBuilder.txt" />

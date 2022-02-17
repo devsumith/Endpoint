@@ -9,7 +9,7 @@ namespace Endpoint.Core.Builders.Core
 {
     public class CreateCommandHandlerBodyBuilder
     {
-        public static string[] Build(AggregateRoot aggregateRoot)
+        public static string[] Build(AggregateRootModel aggregateRoot)
         {
             var aggregateName = aggregateRoot.Name;
 

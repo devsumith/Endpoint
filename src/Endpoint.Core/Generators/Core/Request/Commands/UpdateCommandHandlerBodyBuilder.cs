@@ -8,7 +8,7 @@ namespace Endpoint.Core.Builders.Core
 {
     public class UpdateCommandHandlerBodyBuilder
     {
-        public static string[] Build(Settings settings, AggregateRoot aggregateRoot)
+        public static string[] Build(Settings settings, AggregateRootModel aggregateRoot)
         {
             var aggregateName = aggregateRoot.Name;
 

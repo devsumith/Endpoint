@@ -14,12 +14,20 @@ namespace Endpoint.Core.Models
 
         public  string DbContextName { get; private set; }
 
-        public List<AggregateRoot> AggregateRoots { get; private set; } = new List<AggregateRoot>();
+        public List<AggregateRootModel> AggregateRoots { get; private set; } = new List<AggregateRootModel>();
 
-        public MinimalApiProgramModel(string apiNamespace, List<AggregateRoot> aggregateRoots)
+        public List<RouteHandlerModel> RouteHandlers { get; private set; } = new List<RouteHandlerModel>();
+
+        public MinimalApiProgramModel(string apiNamespace, string dbContextName, List<AggregateRootModel> aggregateRoots)
         {
             AggregateRoots = aggregateRoots;
             ApiNamespace = apiNamespace;
+            DbContextName = dbContextName;
+
+            foreach(var aggregateRoot in aggregateRoots)
+            {
+                //RouteHandlers.Add(new RouteHandlerModel())
+            }
         }
     }
 }

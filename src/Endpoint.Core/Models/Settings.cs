@@ -43,13 +43,13 @@ namespace Endpoint.Core.Models
         public int? SslPort { get; set; } = 5001;
         public List<string> Plugins { get; set; }
         public List<Entity> Entities { get; set; } = new List<Entity>();
-        public List<AggregateRoot> Resources { get; set; } = new List<AggregateRoot>();
+        public List<AggregateRootModel> Resources { get; set; } = new List<AggregateRootModel>();
 
-        public Settings(string name, string dbContextName, AggregateRoot resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid, string prefix = "app", bool minimal = false)
-            : this(name, dbContextName, new List<AggregateRoot>() { resource }, directory, isMicroserviceArchitecture, plugins, idFormat, idDotNetType, prefix, minimal)
+        public Settings(string name, string dbContextName, AggregateRootModel resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid, string prefix = "app", bool minimal = false)
+            : this(name, dbContextName, new List<AggregateRootModel>() { resource }, directory, isMicroserviceArchitecture, plugins, idFormat, idDotNetType, prefix, minimal)
         { }
 
-        public Settings(string name, string dbContextName, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid, string prefix = "app", bool minimal = false)
+        public Settings(string name, string dbContextName, List<AggregateRootModel> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid, string prefix = "app", bool minimal = false)
         {
             name = ((Token)name).PascalCase.Replace("-", "_");
             Plugins = plugins;
@@ -108,7 +108,7 @@ namespace Endpoint.Core.Models
         {
             if (Resources.FirstOrDefault(x => x.Name == resource) == null)
             {
-                Resources = Resources.Concat(new AggregateRoot[1] { new AggregateRoot(resource) }).ToList();
+                Resources = Resources.Concat(new AggregateRootModel[1] { new AggregateRootModel(resource) }).ToList();
             }
 
             fileSystem.WriteAllLines($"{RootDirectory}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {

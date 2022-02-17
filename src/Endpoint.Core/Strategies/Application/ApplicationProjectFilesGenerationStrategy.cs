@@ -38,7 +38,7 @@ namespace Endpoint.Core.Services
 
         }
 
-        protected void _buildApplicationFilesForResource(Settings settings, AggregateRoot resource)
+        protected void _buildApplicationFilesForResource(Settings settings, AggregateRootModel resource)
         {
             Token resourceName = ((Token)resource.Name);
             var aggregateDirectory = $"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}AggregatesModel{Path.DirectorySeparatorChar}{resourceName.PascalCase}Aggregate";
@@ -217,7 +217,7 @@ namespace Endpoint.Core.Services
         {
             DbContextInterfaceBuilder.Default(settings, _fileSystem);
 
-            _buildApplicationFilesForResource(settings, new AggregateRoot(additionalResource));
+            _buildApplicationFilesForResource(settings, new AggregateRootModel(additionalResource));
         }
 
         private void _buildValidationBehavior(Settings settings)

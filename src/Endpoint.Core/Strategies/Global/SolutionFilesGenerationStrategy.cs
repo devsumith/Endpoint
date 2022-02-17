@@ -30,7 +30,7 @@ namespace Endpoint.Core.Services
 
         public Endpoint.Core.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
-            AggregateRoot aggregateRoot = new AggregateRoot(resource);
+            AggregateRootModel aggregateRoot = new AggregateRootModel(resource);
 
             aggregateRoot.Properties.Add(new ClassProperty("public", "Guid", $"{((Token)resource).PascalCase}Id", ClassPropertyAccessor.GetPrivateSet, key: true));
 
@@ -44,16 +44,16 @@ namespace Endpoint.Core.Services
                 }
             }
 
-            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<AggregateRoot>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins, prefix);
+            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<AggregateRootModel>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins, prefix);
         }
 
         public Endpoint.Core.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
-            var aggregates = new List<AggregateRoot>();
+            var aggregates = new List<AggregateRootModel>();
 
             foreach (var resource in resources)
             {
-                AggregateRoot aggregateRoot = new AggregateRoot(resource);
+                AggregateRootModel aggregateRoot = new AggregateRootModel(resource);
 
                 var idPropertyName = useShortIdProperty ? "Id" : $"{((Token)resource).PascalCase}Id";
 
@@ -79,7 +79,7 @@ namespace Endpoint.Core.Services
 
         }
 
-        public Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRoot> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+        public Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRootModel> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
 
             name = name.Replace("-", "_");

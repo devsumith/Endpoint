@@ -16,7 +16,7 @@ namespace Endpoint.Core.Strategies.Global
         private readonly ITemplateLocator _templateLocator;
         private readonly ITemplateProcessor _templateProcessor;
         private readonly ILaunchSettingsGenerationStrategy _launchSettingsGenerationStrategy;
-
+        private readonly IMinimalAppSettingsGenerationStrategy _minimalAppSettingsGenerationStrategy;
 
         public MinimalApiEndpointGenerationStrategy(ICommandService commandService, IFileSystem fileSystem, ITemplateLocator templateLocator, ITemplateProcessor templateProcessor)
         {
@@ -25,6 +25,7 @@ namespace Endpoint.Core.Strategies.Global
             _templateLocator = templateLocator;
             _templateProcessor = templateProcessor;
             _launchSettingsGenerationStrategy = new LaunchSettingsGenerationStrategy(templateProcessor, fileSystem, templateLocator);
+            _minimalAppSettingsGenerationStrategy = new MinimalAppSettingsGenerationStrategy(templateProcessor, fileSystem, templateLocator);
         }
 
         public bool CanHandle(Settings model) => model.Minimal;
@@ -37,7 +38,14 @@ namespace Endpoint.Core.Strategies.Global
                 WriteIndented = true
             });
 
+            if (Directory.Exists(model.RootDirectory))
+            {
+                Directory.Delete(model.RootDirectory, true);
+            }
+
             _commandService.Start($"mkdir {model.RootDirectory}");
+
+
 
             _fileSystem.WriteAllLines($"{model.RootDirectory}{Path.DirectorySeparatorChar}{CoreConstants.SettingsFileName}", new List<string> { json }.ToArray());
 
@@ -67,8 +75,6 @@ namespace Endpoint.Core.Strategies.Global
 
             _commandService.Start($@"rimraf Controllers\WeatherForecastController.cs", $@"{model.ApiDirectory}");
 
-            _commandService.Start($"start {model.SolutionFileName}", model.RootDirectory);
-
             new BicepFileGenerationStrategy(_fileSystem, _templateLocator).Generate(model);
 
             new DeploySetupFileGenerationStrategy(_fileSystem, _templateLocator, _templateProcessor).Generate(model);
@@ -81,6 +87,10 @@ namespace Endpoint.Core.Strategies.Global
 
             _launchSettingsGenerationStrategy.Create(model);
 
+            _minimalAppSettingsGenerationStrategy.Create(model);
+
+            new MinimalApiProgramGenerationStratey(_fileSystem, _templateProcessor, _templateLocator).Create(new MinimalApiProgramModel(model.ApiNamespace,model.DbContextName, model.Resources), $"{model.ApiDirectory}");
+
             _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 6.0.2", $@"{model.ApiDirectory}");
 
             _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Annotations --version 6.2.3", $@"{model.ApiDirectory}");
@@ -88,6 +98,8 @@ namespace Endpoint.Core.Strategies.Global
             _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Newtonsoft --version 6.2.3", $@"{model.ApiDirectory}");
 
             _commandService.Start($"dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 6.2.3", $@"{model.ApiDirectory}");
+
+            _commandService.Start($"start {model.SolutionFileName}", model.RootDirectory);
 
         }
     }

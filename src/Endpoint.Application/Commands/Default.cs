@@ -75,7 +75,7 @@ namespace Endpoint.Core.Commands
                     settings = new Models.Settings(
                         request.Name, 
                         request.DbContextName,
-                        new AggregateRoot(request.Resource, request.NumericIdPropertyDataType, request.ShortIdPropertyName, request.Properties), 
+                        new AggregateRootModel(request.Resource, request.NumericIdPropertyDataType, request.ShortIdPropertyName, request.Properties), 
                         request.Directory, 
                         !request.Monolith, 
                         request.Plugins?.Split(',').ToList(), 
