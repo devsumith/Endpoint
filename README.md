@@ -15,7 +15,9 @@ dotnet tool install --global Allagi.Endpoint.Cli
 ```
 ## SYNOPSIS
 
-`endpoint [-n] [-r] [--properties] [-a or --minimalapi]`
+```
+endpoint [-n] [-r] [--properties] [-a or --minimalapi]
+```
 
 ## EXAMPLES
 
