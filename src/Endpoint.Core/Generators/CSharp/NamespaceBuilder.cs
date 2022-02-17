@@ -1,9 +1,7 @@
-﻿
-using Endpoint.Core.Services;
+﻿using Endpoint.Core.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Endpoint.Core;
 
 namespace Endpoint.Core.Builders
 {

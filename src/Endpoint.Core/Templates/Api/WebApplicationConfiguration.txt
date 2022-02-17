@@ -1,0 +1,19 @@
+﻿// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger(options => options.SerializeAsV2 = true);
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "{{ apiNamespace }}");
+        options.RoutePrefix = string.Empty;
+        options.DisplayOperationId();
+    });
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<{{ dbContextName }}>();
+        db.Database.EnsureCreated();
+    }
+}
+
+app.UseHttpsRedirection();

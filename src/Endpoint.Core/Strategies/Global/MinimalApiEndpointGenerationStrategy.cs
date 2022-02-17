@@ -1,16 +1,11 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Services;
-using System;
-using Endpoint.Core.Models;
-using Endpoint.Core.Strategies.Global;
-using Endpoint.Core.ValueObjects;
+using Endpoint.Core.Strategies.Api.FileGeneration;
+using Endpoint.Core.Utilities;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using static System.Text.Json.JsonSerializer;
-using Endpoint.Core.Utilities;
-using Endpoint.Core.Strategies.Api.FileGeneration;
 
 namespace Endpoint.Core.Strategies.Global
 {
@@ -32,10 +27,7 @@ namespace Endpoint.Core.Strategies.Global
             _launchSettingsGenerationStrategy = new LaunchSettingsGenerationStrategy(templateProcessor, fileSystem, templateLocator);
         }
 
-        public bool CanHandle(Settings model)
-        {
-            return model.Minimal;
-        }
+        public bool CanHandle(Settings model) => model.Minimal;
 
         public void Create(Settings model)
         {
@@ -88,6 +80,14 @@ namespace Endpoint.Core.Strategies.Global
             CsProjectUtilities.RemoveDefaultWebApiFiles(model.ApiDirectory);
 
             _launchSettingsGenerationStrategy.Create(model);
+
+            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 6.0.2", $@"{model.ApiDirectory}");
+
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Annotations --version 6.2.3", $@"{model.ApiDirectory}");
+
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Newtonsoft --version 6.2.3", $@"{model.ApiDirectory}");
+
+            _commandService.Start($"dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 6.2.3", $@"{model.ApiDirectory}");
 
         }
     }
