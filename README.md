@@ -14,4 +14,15 @@ Install the [Endpoint NuGet Package](https://www.nuget.org/packages/Allagi.Endpo
 dotnet tool install --global Allagi.Endpoint.Cli
 ```
 
+EXAMPLES
+endpoint -n TodoApp -r Todo --properties Title:string,IsComplete:bool -a
 
+Generates a CRUD Minimal api for a Todo entity
+
+endpoint
+
+Generates a Default CRUD Api for a Foo entity using the classic ASP.NET structure
+
+endpoint -m
+
+Generates a Default CRUD Api for a Foo entity using the multiple project Clean Architecture structure
