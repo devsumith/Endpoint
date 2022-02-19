@@ -13,6 +13,7 @@
     <None Remove="Generators\Core\ValidatorBuilder.txt" />
     <None Remove="Templates\Api\AppSettings.txt" />
     <None Remove="Templates\Api\Dependencies.txt" />
+    <None Remove="Templates\Api\IdFile.txt" />
     <None Remove="Templates\Api\LaunchSettings.txt" />
     <None Remove="Templates\Api\MinimalAppSettings.txt" />
     <None Remove="Templates\Api\Program.txt" />
@@ -23,6 +24,7 @@
     <None Remove="Templates\Global\BicepFile.txt" />
     <None Remove="Templates\Global\DeploySetupFile.txt" />
     <None Remove="Templates\Global\GitIgnoreFile.txt" />
+    <None Remove="Templates\Infrastructure\EntityConfiguration.txt" />
     <None Remove="Templates\Infrastructure\SeedData.txt" />
     <None Remove="Templates\IntegrationTests\ApiTest.txt" />
     <None Remove="Templates\Core\QueryableExtensions.txt" />
@@ -38,6 +40,7 @@
     <EmbeddedResource Include="Generators\Core\ValidatorBuilder.txt" />
     <EmbeddedResource Include="Templates\Api\AppSettings.txt" />
     <EmbeddedResource Include="Templates\Api\Dependencies.txt" />
+    <EmbeddedResource Include="Templates\Api\IdFile.txt" />
     <EmbeddedResource Include="Templates\Api\LaunchSettings.txt" />
     <EmbeddedResource Include="Templates\Api\MinimalAppSettings.txt" />
     <EmbeddedResource Include="Templates\Api\Program.txt" />
@@ -48,6 +51,7 @@
     <EmbeddedResource Include="Templates\Global\DeploySetupFile.txt" />
     <EmbeddedResource Include="Templates\Global\BicepFile.txt" />
     <EmbeddedResource Include="Templates\Global\GitIgnoreFile.txt" />
+    <EmbeddedResource Include="Templates\Infrastructure\EntityConfiguration.txt" />
     <EmbeddedResource Include="Templates\Infrastructure\SeedData.txt" />
     <EmbeddedResource Include="Templates\IntegrationTests\ApiTest.txt" />
     <EmbeddedResource Include="Templates\SharedKernel\QueryableExtensions.txt" />

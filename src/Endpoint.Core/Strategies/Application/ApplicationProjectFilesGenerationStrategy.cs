@@ -3,6 +3,7 @@ using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Builders.Statements;
 using Endpoint.Core.Core;
 using Endpoint.Core.Models;
+using Endpoint.Core.Strategies.Application;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
@@ -50,7 +51,15 @@ namespace Endpoint.Core.Services
 
 
             _createFolder(commandsDirectory, settings.ApplicationDirectory);
+
             _createFolder(queriesDirectory, settings.ApplicationDirectory);
+
+
+            if(settings.IdDotNetType == IdDotNetType.Guid)
+            {
+                new IdFileGenerationStrategy(_templateProcessor, _templateLocator, _fileSystem)
+                    .Create(resourceName.Value, settings.ApplicationNamespace, aggregateDirectory);
+            }
 
             var aggregateBuilder = new ClassBuilder(resource.Name, new Context(), _fileSystem)
                 .WithDirectory(aggregateDirectory)
