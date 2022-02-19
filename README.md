@@ -1,7 +1,21 @@
 # Endpoint
 [![NuGet](https://buildstats.info/nuget/Allagi.Endpoint.Cli?includePreReleases=true)](http://www.nuget.org/packages/Allagi.Endpoint.Cli "Download Allagi.Endpoint.Cli from NuGet")
 
+
 Model Driven Source Code Generator to build production grade Clean Architecture API's using ASP.NET Core.
+
+## Features
+
+This tool will create .NET Solution with the following feature(s):
+
+* [Strongly Typed Ids](https://github.com/andrewlock/StronglyTypedId): Source Generator generator strongly-typed IDs
+* [DDD]: Option for Clean Architecture
+* [Minimal Api]: Option for minimal api
+* [Serilog]: Serilog configuration built in
+* [FluentValidation]
+* [MediatR]: CQRS
+* [Entity Framework Core]: Best practices built it
+
 
 ## Installation
 
