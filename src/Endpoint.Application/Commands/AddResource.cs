@@ -2,6 +2,7 @@ using CommandLine;
 using Endpoint.Core.Services;
 using Endpoint.Core.Services;
 using MediatR;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,6 +15,10 @@ namespace Endpoint.Application.Commands
         {
             [Value(0)]
             public string Resource { get; set; }
+
+            [Option('p',"properties", Required = false)]
+            public string Properties { get; set; }
+
             [Option('d')]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
 
@@ -53,9 +58,9 @@ namespace Endpoint.Application.Commands
             {
                 var settings = _settingsProvider.Get(request.Directory);
 
-                settings.AddResource(request.Resource, _fileSystem);
+                settings.AddResource(request.Resource, request.Properties, _fileSystem);
 
-                _applicationFileService.BuildAdditionalResource(request.Resource, settings);
+                _applicationFileService.BuildAdditionalResource(settings.Resources.First(x => x.Name == request.Resource), settings);
 
                 _infrastructureFileService.BuildAdditionalResource(request.Resource, settings);
 

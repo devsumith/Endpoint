@@ -224,11 +224,11 @@ namespace Endpoint.Core.Services
             _buildServiceCollectionExtensions(settings);
         }
 
-        public void BuildAdditionalResource(string additionalResource, Settings settings)
+        public void BuildAdditionalResource(AggregateRootModel aggregateModel, Settings settings)
         {
             DbContextInterfaceBuilder.Default(settings, _fileSystem);
 
-            _buildApplicationFilesForResource(settings, new AggregateRootModel(additionalResource));
+            _buildApplicationFilesForResource(settings, aggregateModel);
         }
 
         private void _buildValidationBehavior(Settings settings)

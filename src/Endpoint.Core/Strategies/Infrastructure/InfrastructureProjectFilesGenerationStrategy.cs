@@ -51,6 +51,8 @@ namespace Endpoint.Core.Services
         public void BuildAdditionalResource(string additionalResource, Settings settings)
         {
             _createOrReCreateDbContext(settings);
+
+            _buildEntityConfiguration(settings, additionalResource);
         }
 
         protected void _createOrReCreateDbContext(Settings settings)

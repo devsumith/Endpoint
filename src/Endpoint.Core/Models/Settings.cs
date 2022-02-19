@@ -104,13 +104,44 @@ namespace Endpoint.Core.Models
 
         }
 
-        public void AddResource(string resource, IFileSystem fileSystem)
+        public void AddResource(string resource, string properties, IFileSystem fileSystem)
         {
-            if (Resources.FirstOrDefault(x => x.Name == resource) == null)
+            var aggregate = new AggregateRootModel(resource);
+
+            aggregate.IdPropertyName = IdFormat == IdFormat.Short ? "Id" : $"{resource}Id";
+
+            aggregate.IdPropertyType = IdDotNetType == IdDotNetType.Int ? "int" : "Guid";
+
+            aggregate.Properties.Add(new ClassProperty("public", aggregate.IdPropertyType, aggregate.IdPropertyName, ClassPropertyAccessor.GetPrivateSet, key: true));
+
+            if(!string.IsNullOrEmpty(properties))
             {
-                Resources = Resources.Concat(new AggregateRootModel[1] { new AggregateRootModel(resource) }).ToList();
+                foreach (var property in properties.Split(','))
+                {
+                    var nameValuePair = property.Split(':');
+
+                    if (nameValuePair.ElementAt(0) != aggregate.IdPropertyName)
+                    {
+                        aggregate.Properties.Add(new ClassProperty("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), ClassPropertyAccessor.GetPrivateSet));
+                    }
+                }
             }
 
+            AddResource(aggregate, fileSystem);
+        }
+
+        public void AddResource(AggregateRootModel aggregate, IFileSystem fileSystem)
+        {
+            if (Resources.FirstOrDefault(x => x.Name == aggregate.Name) == null)
+            {
+                Resources.Add(aggregate);
+            }
+
+            PersistToFileSystem(fileSystem);
+        }
+
+        public void PersistToFileSystem(IFileSystem fileSystem)
+        {
             fileSystem.WriteAllLines($"{RootDirectory}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
                     Serialize(this, new JsonSerializerOptions
                         {
