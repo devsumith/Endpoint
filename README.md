@@ -9,12 +9,12 @@ Model Driven Source Code Generator to build production grade Clean Architecture 
 This tool will create .NET Solution with the following feature(s):
 
 * [Strongly Typed Ids](https://github.com/andrewlock/StronglyTypedId): Source Generator generator strongly-typed IDs
-* [DDD]: Option for Clean Architecture
-* [Minimal Api]: Option for minimal api
-* [Serilog]: Serilog configuration built in
-* [FluentValidation]
-* [MediatR]: CQRS
-* [Entity Framework Core]: Best practices built it
+* [DDD](https://github.com/QuinntyneBrown/Endpoint): Option for Clean Architecture
+* [Minimal Api](https://github.com/QuinntyneBrown/Endpoint): Option for minimal api
+* [Serilog](https://github.com/QuinntyneBrown/Endpoint): Serilog configuration built in
+* [FluentValidation](https://github.com/QuinntyneBrown/Endpoint):
+* [MediatR](https://github.com/QuinntyneBrown/Endpoint): CQRS
+* [Entity Framework Core](https://github.com/QuinntyneBrown/Endpoint): Best practices built it
 
 
 ## Installation
