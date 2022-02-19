@@ -71,13 +71,24 @@ namespace Endpoint.Core.Builders
 
             var request = new ClassBuilder($"Get{((Token)_entity).PascalCase}ByIdRequest", _context, _fileSystem)
                 .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Get{((Token)_entity).PascalCase}ByIdResponse").Build())
-                .WithProperty(new PropertyBuilder().WithType(IdDotNetTypeBuilder.Build(_settings)).WithName(IdPropertyNameBuilder.Build(_settings, _entity)).WithAccessors(new AccessorsBuilder().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithType(IdDotNetTypeBuilder.Build(_settings,_entity)).WithName(IdPropertyNameBuilder.Build(_settings, _entity)).WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
             var response = new ClassBuilder($"Get{((Token)_entity).PascalCase}ByIdResponse", _context, _fileSystem)
                 .WithBase("ResponseBase")
                 .WithProperty(new PropertyBuilder().WithType($"{((Token)_entity).PascalCase}Dto").WithName($"{((Token)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
+
+            var handlerBody = _settings.IdDotNetType == IdDotNetType.Int ? new List<string>() {
+                "return new () {",
+                $"{((Token)_entity).PascalCase} = (await _context.{((Token)_entity).PascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{IdPropertyNameBuilder.Build(_settings, _entity)} == request.{IdPropertyNameBuilder.Build(_settings, _entity)})).ToDto()".Indent(1),
+                "};"
+                }
+            : new List<string>() {
+                "return new () {",
+                $"{((Token)_entity).PascalCase} = (await _context.{((Token)_entity).PascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{IdPropertyNameBuilder.Build(_settings, _entity)} == new {((Token)_entity).PascalCase}Id(request.{IdPropertyNameBuilder.Build(_settings, _entity)}))).ToDto()".Indent(1),
+                "};"
+                };
 
             var handler = new ClassBuilder($"Get{((Token)_entity).PascalCase}ByIdHandler", _context, _fileSystem)
                 .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Get{((Token)_entity).PascalCase}ByIdRequest", $"Get{((Token)_entity).PascalCase}ByIdResponse").Build())
@@ -87,11 +98,7 @@ namespace Endpoint.Core.Builders
                 .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Get{((Token)_entity).PascalCase}ByIdResponse").Build())
                 .WithParameter(new ParameterBuilder($"Get{((Token)_entity).PascalCase}ByIdRequest", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
-                .WithBody(new List<string>() {
-                "return new () {",
-                $"{((Token)_entity).PascalCase} = (await _context.{((Token)_entity).PascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{IdPropertyNameBuilder.Build(_settings, _entity)} == request.{IdPropertyNameBuilder.Build(_settings, _entity)})).ToDto()".Indent(1),
-                "};"
-                }).Build())
+                .WithBody(handlerBody).Build())
                 .Class;
 
             new NamespaceBuilder($"Get{((Token)_entity).PascalCase}ById", _context, _fileSystem)

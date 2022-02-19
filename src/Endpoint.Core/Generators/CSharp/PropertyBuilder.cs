@@ -1,4 +1,5 @@
 using Endpoint.Core.Enums;
+using Endpoint.Core.Models;
 using System.Text;
 
 namespace Endpoint.Core.Builders
@@ -56,7 +57,7 @@ namespace Endpoint.Core.Builders
             return this;
         }
 
-        public string Build()
+        public string Build(Settings settings = null, string resourceName = null)
         {
             if (!string.IsNullOrEmpty(_accessModifier))
             {
@@ -64,12 +65,19 @@ namespace Endpoint.Core.Builders
                 .Append(' ');
             }
 
-            return _string.Append(_type)
+            var content = _string.Append(_type)
                 .Append(' ')
                 .Append(_name)
                 .Append(' ')
                 .Append(_acessors)
                 .ToString();
+
+            if(settings != null && !string.IsNullOrEmpty(resourceName) && settings.IdDotNetType == IdDotNetType.Guid)
+            {
+                return $"{content}  = new {resourceName}Id(Guid.NewGuid());";
+            }
+
+            return content;
         }
     }
 }

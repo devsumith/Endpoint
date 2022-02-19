@@ -1,7 +1,9 @@
 ﻿using Endpoint.Core.Builders;
+using Endpoint.Core.Enums;
 using Endpoint.Core.Models;
 using Endpoint.Core.Strategies.Infrastructure;
 using Endpoint.Core.ValueObjects;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -23,6 +25,7 @@ namespace Endpoint.Core.Services
             _removeDefaultFiles(settings.InfrastructureDirectory);
 
             _createFolder($"Data", settings.InfrastructureDirectory);
+
             _createFolder($"EntityConfigurations", settings.InfrastructureDirectory);
 
             _buildSeedData(settings);
@@ -67,7 +70,15 @@ namespace Endpoint.Core.Services
                 .WithNamespace($"{settings.InfrastructureNamespace}.Data")
                 .WithInterface($"I{settings.DbContextName}")
                 .WithBase("DbContext")
-                .WithBaseDependency("DbContextOptions", "options");
+                .WithBaseDependency("DbContextOptions", "options")
+                    .WithMethod(new MethodBuilder().WithName("OnModelCreating").WithReturnType("void").WithAccessModifier(AccessModifier.Protected).WithOverride().WithParameter("ModelBuilder modelBuilder")
+                    .WithBody(new List<string>
+                    {
+                    "base.OnModelCreating(modelBuilder);",
+                    "",
+                    $"modelBuilder.ApplyConfigurationsFromAssembly(typeof({((Token)settings.DbContextName).PascalCase}).Assembly);"
+                    })
+                    .Build());
 
             foreach (var resource in settings.Resources.Select(r => (Token)r.Name))
             {

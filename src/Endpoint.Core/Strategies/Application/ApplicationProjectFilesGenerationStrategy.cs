@@ -70,8 +70,13 @@ namespace Endpoint.Core.Services
             {
                 if(property.Key)
                 {
-                    aggregateBuilder.WithProperty(new PropertyBuilder().WithName(IdPropertyNameBuilder.Build(settings, resourceName)).WithType(IdDotNetTypeBuilder.Build(settings)).WithAccessors(new AccessorsBuilder().Build()).Build());
-                } 
+                    var syntax = new PropertyBuilder().WithName(IdPropertyNameBuilder.Build(settings, resourceName)).WithType(IdDotNetTypeBuilder.Build(settings, resource.Name, true)).WithAccessors(new AccessorsBuilder().Build()).Build(settings, resourceName);
+
+                    
+                    aggregateBuilder.WithProperty(syntax);
+
+                    
+                }
                 else
                 {
                     aggregateBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(property.Type).WithAccessors(new AccessorsBuilder().Build()).Build());
@@ -89,7 +94,7 @@ namespace Endpoint.Core.Services
             {
                 if (property.Key)
                 {
-                    dtoBuilder.WithProperty(new PropertyBuilder().WithName(IdPropertyNameBuilder.Build(settings, resourceName)).WithType($"{IdDotNetTypeBuilder.Build(settings)}?").WithAccessors(new AccessorsBuilder().Build()).Build());
+                    dtoBuilder.WithProperty(new PropertyBuilder().WithName(IdPropertyNameBuilder.Build(settings, resourceName)).WithType($"{IdDotNetTypeBuilder.Build(settings, resource.Name)}?").WithAccessors(new AccessorsBuilder().Build()).Build());
                 }
                 else
                 {
@@ -108,7 +113,14 @@ namespace Endpoint.Core.Services
 
             foreach (var property in resource.Properties)
             {
-                extensionsBody.Add($"{property.Name} = {((Token)resource.Name).CamelCase}.{((Token)property.Name).PascalCase},".Indent(1));
+                if(property.Key && settings.IdDotNetType == IdDotNetType.Guid)
+                {
+                    extensionsBody.Add($"{property.Name} = {((Token)resource.Name).CamelCase}.{((Token)property.Name).PascalCase}.Value,".Indent(1));
+                } else
+                {
+                    extensionsBody.Add($"{property.Name} = {((Token)resource.Name).CamelCase}.{((Token)property.Name).PascalCase},".Indent(1));
+                }
+                
             }
 
             extensionsBody.Add("};");
