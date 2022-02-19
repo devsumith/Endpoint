@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "-n MyTodo5 -r Todo --properties Title:string,IsComplete:bool -m -s -d C:\\sandbox"
+      "commandLineArgs": "-n MyTodo -r Todo --properties Title:string,IsComplete:bool -m -s -d C:\\sandbox"
     }
   }
 } 

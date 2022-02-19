@@ -1,5 +1,6 @@
 ﻿using Endpoint.Core.Builders;
 using Endpoint.Core.Models;
+using Endpoint.Core.Strategies.Infrastructure;
 using Endpoint.Core.ValueObjects;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,24 @@ namespace Endpoint.Core.Services
             _buildSeedData(settings);
 
             _createOrReCreateDbContext(settings);
+
+            _buildEntityConfigurations(settings);
+        }
+
+        private void _buildEntityConfigurations(Settings model)
+        {
+            foreach(var resource in model.Resources)
+            {
+                _buildEntityConfiguration(model, resource.Name);
+            }
+        }
+
+        private void _buildEntityConfiguration(Settings model, string resourceName)
+        {
+            var idPropertyName = model.IdFormat == IdFormat.Short ? "Id" : $"{resourceName}Id";
+
+            new EntityConfigurationFileGenerationStrategy(_templateProcessor, _templateLocator, _fileSystem)
+                .Create(resourceName, idPropertyName, model.ApplicationNamespace, model.InfrastructureNamespace, $"{model.InfrastructureDirectory}{Path.DirectorySeparatorChar}EntityConfigurations");
         }
 
         public void BuildAdditionalResource(string additionalResource, Settings settings)
