@@ -1,6 +1,6 @@
 ﻿namespace Endpoint.Application
 {
-    public static class Constants
+    public static class ApplicationConstants
     {
 
         public static class ApiFileTemplates
