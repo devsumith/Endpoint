@@ -33,8 +33,10 @@ namespace Endpoint.Core.Services
                 _buildApplicationFilesForResource(settings, resource);
             }
 
-            _commandService.Start($"dotnet add package FluentValidation --version 10.3.3", $@"{settings.ApplicationDirectory}");
-            _commandService.Start($"dotnet add package MediatR  --version 9.0.0", $@"{settings.ApplicationDirectory}");
+            _commandService.Start($"dotnet add package FluentValidation --version 10.3.6", $@"{settings.ApplicationDirectory}");
+            _commandService.Start($"dotnet add package MediatR  --version 10.0.1", $@"{settings.ApplicationDirectory}");
+            _commandService.Start($"dotnet add package StronglyTypedId  --version 1.0.0-beta05", $@"{settings.ApplicationDirectory}");
+            _commandService.Start($"dotnet add package Newtonsoft.Json  --version 13.0.1", $@"{settings.ApplicationDirectory}");
 
         }
 

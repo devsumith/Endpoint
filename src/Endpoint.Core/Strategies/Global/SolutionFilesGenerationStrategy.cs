@@ -161,7 +161,7 @@ namespace Endpoint.Core.Services
         {
             _commandService.Start($@"mkdir {directory}");
 
-            _commandService.Start($"dotnet new {templateType} --framework net5.0", directory);
+            _commandService.Start($"dotnet new {templateType} --framework net6.0", directory);
 
             var parts = directory.Split(Path.DirectorySeparatorChar);
 

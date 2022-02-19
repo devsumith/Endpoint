@@ -14,11 +14,11 @@ namespace Endpoint.Core.Services
     public class EndpointGenerationStrategy : ISolutionTemplateService, IEndpointGenerationStrategy
     {
         private ICommandService _commandService;
-        private readonly ISolutionFilesGenerationStrategy _solutionFileService;
-        private readonly ISharedKernelProjectFilesGenerationStrategy _domainFileService;
-        private readonly IApplicationProjectFilesGenerationStrategy _applicationFileService;
-        private readonly IInfrastructureProjectFilesGenerationStrategy _infrastructureFileService;
-        private readonly IApiProjectFilesGenerationStrategy _apiFileService;
+        private readonly ISolutionFilesGenerationStrategy _solutionFilesGenerationStrategy;
+        private readonly ISharedKernelProjectFilesGenerationStrategy _sharedKernelFilesGenerationStrategy;
+        private readonly IApplicationProjectFilesGenerationStrategy _applicationFilesGenerationStrategy;
+        private readonly IInfrastructureProjectFilesGenerationStrategy _infrastructureFilesGenerationStrategy;
+        private readonly IApiProjectFilesGenerationStrategy _apiProjectFilesGenerationStrategy;
         private readonly IMediator _mediator;
 
         public EndpointGenerationStrategy(
@@ -31,11 +31,11 @@ namespace Endpoint.Core.Services
             IMediator mediator)
         {
             _commandService = commandService;
-            _solutionFileService = solutionFileService;
-            _domainFileService = domainFileService;
-            _applicationFileService = applicationFileService;
-            _infrastructureFileService = infrastructureFileService;
-            _apiFileService = apiFileService;
+            _solutionFilesGenerationStrategy = solutionFileService;
+            _sharedKernelFilesGenerationStrategy = domainFileService;
+            _applicationFilesGenerationStrategy = applicationFileService;
+            _infrastructureFilesGenerationStrategy = infrastructureFileService;
+            _apiProjectFilesGenerationStrategy = apiFileService;
             _mediator = mediator;
         }
 
@@ -54,15 +54,15 @@ namespace Endpoint.Core.Services
             {
                 if (!Directory.Exists($"{directory}{Path.DirectorySeparatorChar}{name}"))
                 {
-                    var settings = _solutionFileService.Build(name, properties, dbContextName, shortIdPropertyName, numericIdPropertyDataType, resources, directory, isMicroserviceArchitecture: !isMonolith, plugins, prefix);
+                    var settings = _solutionFilesGenerationStrategy.Build(name, properties, dbContextName, shortIdPropertyName, numericIdPropertyDataType, resources, directory, isMicroserviceArchitecture: !isMonolith, plugins, prefix);
 
-                    _domainFileService.Build(settings);
+                    _sharedKernelFilesGenerationStrategy.Build(settings);
 
-                    _applicationFileService.Build(settings);
+                    _applicationFilesGenerationStrategy.Build(settings);
 
-                    _infrastructureFileService.Build(settings);
+                    _infrastructureFilesGenerationStrategy.Build(settings);
 
-                    _apiFileService.Build(settings);
+                    _apiProjectFilesGenerationStrategy.Build(settings);
 
                     _mediator.Publish(new SolutionTemplateGenerated(settings.RootDirectory));
 
@@ -86,15 +86,15 @@ namespace Endpoint.Core.Services
 
         public void Create(Models.Settings model)
         {
-            _solutionFileService.Create(model);
+            _solutionFilesGenerationStrategy.Create(model);
 
-            _domainFileService.Build(model);
+            _sharedKernelFilesGenerationStrategy.Build(model);
 
-            _applicationFileService.Build(model);
+            _applicationFilesGenerationStrategy.Build(model);
 
-            _infrastructureFileService.Build(model);
+            _infrastructureFilesGenerationStrategy.Build(model);
 
-            _apiFileService.Build(model);
+            _apiProjectFilesGenerationStrategy.Build(model);
 
             _mediator.Publish(new SolutionTemplateGenerated(model.RootDirectory));
 

@@ -38,7 +38,7 @@ namespace Endpoint.Core.Services
 
             _fileSystem.WriteAllLines($@"{settings.DomainDirectory}/ResponseBase.cs", contents);
 
-            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore --version 5.0.10", $@"{settings.DomainDirectory}");
+            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore --version 6.0.2", $@"{settings.DomainDirectory}");
         }
 
         private void _buildQueryableExtensions(Endpoint.Core.Models.Settings settings)

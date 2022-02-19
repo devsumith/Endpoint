@@ -22,6 +22,7 @@ namespace Endpoint.Core.Services
             _removeDefaultFiles(settings.InfrastructureDirectory);
 
             _createFolder($"Data", settings.InfrastructureDirectory);
+            _createFolder($"EntityConfigurations", settings.InfrastructureDirectory);
 
             _buildSeedData(settings);
 

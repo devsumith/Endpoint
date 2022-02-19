@@ -138,16 +138,16 @@ namespace Endpoint.Core.Services
 
         private void _installNugetPackages(Settings settings)
         {
-            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 5.0.10", $@"{settings.ApiDirectory}");
-            _commandService.Start($"dotnet add package MediatR.Extensions.Microsoft.DependencyInjection  --version 9.0.0", $@"{settings.ApiDirectory}");
-            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore --version 6.2.2", $@"{settings.ApiDirectory}");
-            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Swagger --version 6.2.2", $@"{settings.ApiDirectory}");
-            _commandService.Start($"dotnet add package Serilog.AspNetCore --version 4.1.0", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 6.0.2", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package MediatR.Extensions.Microsoft.DependencyInjection  --version 10.0.1", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore --version 6.2.3", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Swagger --version 6.2.3", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Serilog.AspNetCore --version 5.0.0", $@"{settings.ApiDirectory}");
             _commandService.Start($"dotnet add package Serilog.Sinks.Seq --version 5.1.1", $@"{settings.ApiDirectory}");
             _commandService.Start($"dotnet add package SerilogTimings --version 2.3.0", $@"{settings.ApiDirectory}");
-            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Annotations --version 6.2.2", $@"{settings.ApiDirectory}");
-            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Newtonsoft --version 6.2.2", $@"{settings.ApiDirectory}");
-            _commandService.Start($"dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 5.0.9", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Annotations --version 6.2.3", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Swashbuckle.AspNetCore.Newtonsoft --version 6.2.3", $@"{settings.ApiDirectory}");
+            _commandService.Start($"dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 6.0.2", $@"{settings.ApiDirectory}");
         }
 
         public void BuildAdditionalResource(string additionalResource, Settings settings)

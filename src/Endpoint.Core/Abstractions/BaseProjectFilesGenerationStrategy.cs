@@ -87,11 +87,7 @@ namespace Endpoint.Core.Services
 
             toFileCommand.SetAttributeValue("Command", "dotnet tool run swagger tofile --serializeasv2  --output \"$(ProjectDir)swagger.json\" \"$(TargetDir)$(TargetFileName)\" v1");
 
-            var endpointCommand = new XElement("Exec");
-
-            endpointCommand.SetAttributeValue("Command", "endpoint post-api-build");
-
-            var element = new XElement("Target", dotnetToolRestoreCommand, toFileCommand, endpointCommand);
+            var element = new XElement("Target", dotnetToolRestoreCommand, toFileCommand);
 
             element.SetAttributeValue("Name", "EndpointPostBuildTarget");
 

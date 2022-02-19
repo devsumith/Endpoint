@@ -32,6 +32,9 @@ namespace Endpoint.Core.Strategies.Global
 
         public void Create(Settings model)
         {
+            model.ApiDirectory = model.ApiDirectory.Replace(".Api", "");
+            model.ApiNamespace = model.ApiNamespace.Replace(".Api", "");
+
             var json = Serialize(model, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
