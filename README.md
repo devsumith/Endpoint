@@ -12,7 +12,7 @@ This tool will create .NET Solution with the following feature(s):
 * [DDD](https://github.com/QuinntyneBrown/Endpoint): Option for Clean Architecture inspired template
 * [Minimal Api](https://github.com/QuinntyneBrown/Endpoint): Option for minimal api
 * [Serilog](https://github.com/QuinntyneBrown/Endpoint): Logging with Serilog built in
-* [FluentValidation](https://github.com/QuinntyneBrown/Endpoint):
+* [FluentValidation](https://github.com/QuinntyneBrown/Endpoint): Boilerplate for server side validation built in
 * [MediatR](https://github.com/QuinntyneBrown/Endpoint): CQRS
 * [Entity Framework Core](https://github.com/QuinntyneBrown/Endpoint): Best practices built in
 
