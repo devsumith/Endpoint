@@ -14,7 +14,7 @@ This tool will create .NET Solution with the following feature(s):
 * [Serilog](https://github.com/QuinntyneBrown/Endpoint): Serilog configuration built in
 * [FluentValidation](https://github.com/QuinntyneBrown/Endpoint):
 * [MediatR](https://github.com/QuinntyneBrown/Endpoint): CQRS
-* [Entity Framework Core](https://github.com/QuinntyneBrown/Endpoint): Best practices built it
+* [Entity Framework Core](https://github.com/QuinntyneBrown/Endpoint): Best practices built in
 
 
 ## Installation
