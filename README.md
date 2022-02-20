@@ -2,7 +2,9 @@
 [![NuGet](https://buildstats.info/nuget/Allagi.Endpoint.Cli?includePreReleases=true)](http://www.nuget.org/packages/Allagi.Endpoint.Cli "Download Allagi.Endpoint.Cli from NuGet")
 
 
-Model Driven Source Code Generator to build production grade Clean Architecture API's using ASP.NET Core.
+Model Driven Source Code Generator to build API's using ASP.NET Core via the command line.
+
+The tool gives you the option to build a minimal api or a production grade Clean Architecture inspired API.
 
 ## Features
 
