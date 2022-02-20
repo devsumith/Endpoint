@@ -17,6 +17,7 @@ This tool will create .NET Solution with the following feature(s):
 * [FluentValidation](https://github.com/QuinntyneBrown/Endpoint): Boilerplate for server side validation built in
 * [MediatR](https://github.com/QuinntyneBrown/Endpoint): CQRS
 * [Entity Framework Core](https://github.com/QuinntyneBrown/Endpoint): Best practices built in
+* [Bicep](https://github.com/QuinntyneBrown/Endpoint): Auto generated Bicep templates and deployment scripts
 
 
 ## Installation
