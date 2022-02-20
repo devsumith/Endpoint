@@ -31,11 +31,11 @@ namespace Endpoint.Core.Commands
 
 
             [Option('m', "isMonolithArchitecture")]
-            public bool Monolith { get; set; } = false;
+            public bool Monolith { get; set; } = true;
 
 
             [Option('a', "minimalapi", Required = false)]
-            public bool Minimal { get; set; }
+            public bool Minimal { get; set; } = true;
 
             [Option("dbContextName")]
             public string DbContextName { get; set; }
