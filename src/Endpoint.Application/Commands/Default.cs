@@ -5,7 +5,6 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Global;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -30,33 +29,26 @@ namespace Endpoint.Core.Commands
             [Option('r', "resource")]
             public string Resource { get; set; } = "Foo";
 
-
             [Option('m', "isMonolithArchitecture")]
             public bool Monolith { get; set; } = true;
-
 
             [Option('a', "minimalapi", Required = false)]
             public bool Minimal { get; set; } = true;
 
             [Option("dbContextName")]
             public string DbContextName { get; set; }
-
             
             [Option('s', "shortIdPropertyName")]
             public bool ShortIdPropertyName { get; set; }
-
             
             [Option('i', "numericIdPropertyDataType")]
             public bool NumericIdPropertyDataType { get; set; }
-
             
             [Option("plugins", Required = false)]
             public string Plugins { get; set; }
-
             
             [Option("prefix", Required = false)]
             public string Prefix { get; set; } = "app";
-
 
             [Option('d', "directory")]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -64,43 +56,63 @@ namespace Endpoint.Core.Commands
 
         internal class Handler : IRequestHandler<Request, Unit>
         {
-            private readonly IEndpointGenerationStrategyFactory _workspaceGenerationStrategyFactory;
+            private readonly IEndpointGenerationStrategyFactory _endpointGenerationStrategyFactory;
             private readonly ISettingsProvider _settingsProvider;
             private readonly ILogger _logger;
 
             public Handler(
-                IEndpointGenerationStrategyFactory workspaceGenerationStrategyFactory, 
+                IEndpointGenerationStrategyFactory endpointGenerationStrategyFactory, 
                 ISettingsProvider settingsProvider,
                 ILogger logger)
             {
-                _workspaceGenerationStrategyFactory = workspaceGenerationStrategyFactory; ;
+                _endpointGenerationStrategyFactory = endpointGenerationStrategyFactory; ;
                 _settingsProvider = settingsProvider;
                 _logger = logger;
             }
+
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                var endpointDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}";
+                _logger.LogInformation("Default Handler");
 
-                var settings = _settingsProvider.Get(endpointDirectory);
+                int retries = 0;
 
-                if (settings == null)
+                string name = request.Name;
+
+                string originalName = request.Name;
+
+                while (true)
                 {
-                    settings = new Models.Settings(
-                        request.Name, 
-                        request.DbContextName,
-                        new AggregateRootModel(request.Resource, request.NumericIdPropertyDataType, request.ShortIdPropertyName, request.Properties), 
-                        request.Directory, 
-                        !request.Monolith, 
-                        request.Plugins?.Split(',').ToList(), 
-                        request.ShortIdPropertyName ? IdFormat.Short : IdFormat.Long, 
-                        request.NumericIdPropertyDataType ? IdDotNetType.Int : IdDotNetType.Guid, 
-                        request.Prefix,
-                        request.Minimal);
+                    if (!Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{name}"))
+                    {
+                        var endpointDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{name}";
+
+                        var settings = _settingsProvider.Get(endpointDirectory);
+
+                        if (settings == null)
+                        {
+                            settings = new Settings(
+                                name,
+                                request.DbContextName,
+                                new AggregateRootModel(request.Resource, request.NumericIdPropertyDataType, request.ShortIdPropertyName, request.Properties),
+                                request.Directory,
+                                !request.Monolith,
+                                request.Plugins?.Split(',').ToList(),
+                                request.ShortIdPropertyName ? IdFormat.Short : IdFormat.Long,
+                                request.NumericIdPropertyDataType ? IdDotNetType.Int : IdDotNetType.Guid,
+                                request.Prefix,
+                                request.Minimal);
+                        }
+
+                        EndpointGenerator.Generate(settings, _endpointGenerationStrategyFactory);
+
+                        return Task.FromResult(new Unit());
+
+                    }
+
+                    retries++;
+
+                    name = $"{originalName}{retries}";
                 }
-
-                EndpointGenerator.Generate(settings, _workspaceGenerationStrategyFactory);
-
-                return Task.FromResult(new Unit());
             }
         }
     }
