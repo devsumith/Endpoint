@@ -1,18 +1,30 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 
 namespace Endpoint.Core.Services
 {
     public class CommandService : ICommandService
-
     {
+        private readonly ILogger _logger;
+        public CommandService(
+            ILogger logger
+            
+            )
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
         public void Start(string arguments, string workingDirectory = null, bool waitForExit = true)
         {
+            // Detect if on Mac and do this?
+            // https://stackoverflow.com/questions/28487132/running-bash-commands-from-c-sharp
+
             try
             {
                 workingDirectory ??= Environment.CurrentDirectory;
 
-                Console.WriteLine($"{arguments} in {workingDirectory}");
+                _logger.LogInformation($"{arguments} in {workingDirectory}");
 
                 var process = new Process
                 {
@@ -32,10 +44,9 @@ namespace Endpoint.Core.Services
                     process.WaitForExit();
                 }
             }
-            catch (Exception e)
+            catch
             {
-                throw e;
-
+                throw;
             }
 
         }

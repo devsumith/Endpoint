@@ -11,6 +11,8 @@ namespace Endpoint.Core.Services
         void WriteAllLines(string path, string[] contents);
         string ParentFolder(string path);
         void CreateDirectory(string directory);
+        void Delete(string path);
+        void DeleteDirectory(string directory);
 
     }
 }

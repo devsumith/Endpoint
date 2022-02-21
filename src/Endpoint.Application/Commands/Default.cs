@@ -33,7 +33,7 @@ namespace Endpoint.Core.Commands
             public bool Monolith { get; set; } = true;
 
             [Option('a', "minimalapi", Required = false)]
-            public bool Minimal { get; set; } = true;
+            public bool Minimal { get; set; }
 
             [Option("dbContextName")]
             public string DbContextName { get; set; }

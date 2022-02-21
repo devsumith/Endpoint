@@ -19,10 +19,7 @@ namespace Endpoint.Core.Services
 
         public void WriteAllLines(string path, string[] contents)
         {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
+            Delete(path);
 
             File.WriteAllLines(path, contents);
         }
@@ -40,6 +37,22 @@ namespace Endpoint.Core.Services
         public void CreateDirectory(string directory)
         {
             System.IO.Directory.CreateDirectory(directory);
+        }
+
+        public void Delete(string path)
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+
+        public void DeleteDirectory(string directory)
+        {
+            if(Directory.Exists(directory))
+            {
+                Directory.Delete(directory, true); 
+            }
         }
     }
 }

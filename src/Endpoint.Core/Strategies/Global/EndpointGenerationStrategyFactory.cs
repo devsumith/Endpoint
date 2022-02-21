@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Services;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,8 @@ namespace Endpoint.Core.Strategies.Global
             IFileSystem fileSystem,
             ITemplateLocator templateLocator,
             ITemplateProcessor templateProcessor,
-            IMediator mediator)
+            IMediator mediator,
+            ILogger logger)
         {
             _strategies = new List<IEndpointGenerationStrategy>()
             {
@@ -36,8 +38,9 @@ namespace Endpoint.Core.Strategies.Global
                     sharedKernelProjectFilesGenerationStrategy,
                     applicationProjectFilesGenerationStrategy,
                     infrastructureProjectFilesGenerationStrategy,apiProjectFilesGenerationStrategy,
-                    mediator),
-                new MinimalApiEndpointGenerationStrategy(commandService,fileSystem,templateLocator, templateProcessor)
+                    mediator,
+                    logger),
+                new MinimalApiEndpointGenerationStrategy(commandService,fileSystem,templateLocator, templateProcessor, logger)
             };
         }
         public void CreateFor(Settings model)

@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Events;
 using Endpoint.Core.Strategies.Global;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO;
 
@@ -20,6 +21,7 @@ namespace Endpoint.Core.Services
         private readonly IInfrastructureProjectFilesGenerationStrategy _infrastructureFilesGenerationStrategy;
         private readonly IApiProjectFilesGenerationStrategy _apiProjectFilesGenerationStrategy;
         private readonly IMediator _mediator;
+        private readonly ILogger _logger;
 
         public EndpointGenerationStrategy(
             ICommandService commandService,
@@ -28,7 +30,8 @@ namespace Endpoint.Core.Services
             IApplicationProjectFilesGenerationStrategy applicationFileService,
             IInfrastructureProjectFilesGenerationStrategy infrastructureFileService,
             IApiProjectFilesGenerationStrategy apiFileService,
-            IMediator mediator)
+            IMediator mediator,
+            ILogger logger)
         {
             _commandService = commandService;
             _solutionFilesGenerationStrategy = solutionFileService;
@@ -37,6 +40,7 @@ namespace Endpoint.Core.Services
             _infrastructureFilesGenerationStrategy = infrastructureFileService;
             _apiProjectFilesGenerationStrategy = apiFileService;
             _mediator = mediator;
+            _logger = logger;
         }
 
         public void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, string properties, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins, string prefix)

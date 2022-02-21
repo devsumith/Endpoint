@@ -13,6 +13,16 @@ namespace Endpoint.Core.Services
             throw new NotImplementedException();
         }
 
+        public void Delete(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteDirectory(string directory)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Exists(string path)
         {
             throw new NotImplementedException();
