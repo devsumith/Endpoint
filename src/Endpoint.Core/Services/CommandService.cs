@@ -1,54 +1,59 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Endpoint.Core.Services
 {
     public class CommandService : ICommandService
     {
         private readonly ILogger _logger;
-        public CommandService(
-            ILogger logger
-            
-            )
+        public CommandService(ILogger logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public void Start(string arguments, string workingDirectory = null, bool waitForExit = true)
         {
-            // Detect if on Mac and do this?
-            // https://stackoverflow.com/questions/28487132/running-bash-commands-from-c-sharp
 
-            try
+            workingDirectory ??= Environment.CurrentDirectory;
+
+            _logger.LogInformation($"{arguments} in {workingDirectory}");
+
+            var process = IsUnix() ? UnixBash(arguments, workingDirectory): WindowsCmd(arguments, workingDirectory);
+
+            process.Start();
+
+            if (waitForExit)
             {
-                workingDirectory ??= Environment.CurrentDirectory;
-
-                _logger.LogInformation($"{arguments} in {workingDirectory}");
-
-                var process = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        WindowStyle = ProcessWindowStyle.Normal,
-                        FileName = "cmd.exe",
-                        Arguments = $"/C {arguments}",
-                        WorkingDirectory = workingDirectory
-                    }
-                };
-
-                process.Start();
-
-                if (waitForExit)
-                {
-                    process.WaitForExit();
-                }
+                process.WaitForExit();
             }
-            catch
-            {
-                throw;
-            }
-
         }
+
+        private bool IsUnix() => RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+
+        private Process UnixBash(string arguments, string workingDirectory)
+            => new()
+            {
+                StartInfo = new()
+                {
+                    WindowStyle = ProcessWindowStyle.Normal,
+                    FileName = "bash",
+                    Arguments = $"-c \"{arguments}\"",
+                    WorkingDirectory = workingDirectory
+                }
+            };
+
+        private Process WindowsCmd(string arguments, string workingDirectory)
+            => new()
+            {
+                StartInfo = new()
+                {
+                    WindowStyle = ProcessWindowStyle.Normal,
+                    FileName = "cmd.exe",
+                    Arguments = $"/C {arguments}",
+                    WorkingDirectory = workingDirectory
+                }
+            };
     }
 }

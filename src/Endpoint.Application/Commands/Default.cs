@@ -5,6 +5,7 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Global;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -33,7 +34,7 @@ namespace Endpoint.Core.Commands
             public bool Monolith { get; set; } = true;
 
             [Option('a', "minimalapi", Required = false)]
-            public bool Minimal { get; set; }
+            public bool Minimal { get; set; } = true;
 
             [Option("dbContextName")]
             public string DbContextName { get; set; }
@@ -74,44 +75,52 @@ namespace Endpoint.Core.Commands
             {
                 _logger.LogInformation("Default Handler");
 
-                int retries = 0;
-
-                string name = request.Name;
-
-                string originalName = request.Name;
-
-                while (true)
+                try
                 {
-                    if (!Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{name}"))
+                    int retries = 0;
+
+                    string name = request.Name;
+
+                    string originalName = request.Name;
+
+                    while (true)
                     {
-                        var endpointDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{name}";
-
-                        var settings = _settingsProvider.Get(endpointDirectory);
-
-                        if (settings == null)
+                        if (!Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{name}"))
                         {
-                            settings = new Settings(
-                                name,
-                                request.DbContextName,
-                                new AggregateRootModel(request.Resource, request.NumericIdPropertyDataType, request.ShortIdPropertyName, request.Properties),
-                                request.Directory,
-                                !request.Monolith,
-                                request.Plugins?.Split(',').ToList(),
-                                request.ShortIdPropertyName ? IdFormat.Short : IdFormat.Long,
-                                request.NumericIdPropertyDataType ? IdDotNetType.Int : IdDotNetType.Guid,
-                                request.Prefix,
-                                request.Minimal);
+                            var endpointDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{name}";
+
+                            var settings = _settingsProvider.Get(endpointDirectory);
+
+                            if (settings == null)
+                            {
+                                settings = new Settings(
+                                    name,
+                                    request.DbContextName,
+                                    new AggregateRootModel(request.Resource, request.NumericIdPropertyDataType, request.ShortIdPropertyName, request.Properties),
+                                    request.Directory,
+                                    !request.Monolith,
+                                    request.Plugins?.Split(',').ToList(),
+                                    request.ShortIdPropertyName ? IdFormat.Short : IdFormat.Long,
+                                    request.NumericIdPropertyDataType ? IdDotNetType.Int : IdDotNetType.Guid,
+                                    request.Prefix,
+                                    request.Minimal);
+                            }
+
+                            EndpointGenerator.Generate(settings, _endpointGenerationStrategyFactory);
+
+                            return Task.FromResult(new Unit());
                         }
 
-                        EndpointGenerator.Generate(settings, _endpointGenerationStrategyFactory);
+                        retries++;
 
-                        return Task.FromResult(new Unit());
-
+                        name = $"{originalName}{retries}";
                     }
+                } 
+                catch(Exception e)
+                {
+                    _logger.LogError(e.Message);
 
-                    retries++;
-
-                    name = $"{originalName}{retries}";
+                    return Task.FromResult(new Unit());
                 }
             }
         }

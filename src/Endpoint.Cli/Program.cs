@@ -1,12 +1,9 @@
-﻿using Allagi.Endpoint.Cli.Logging;
-using CommandLine;
+﻿using CommandLine;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using System;
-using System.IO;
 using System.Linq;
 
 namespace Endpoint.Cli
