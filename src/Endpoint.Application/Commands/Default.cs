@@ -4,6 +4,7 @@ using Endpoint.Core.Models;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Global;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -65,11 +66,16 @@ namespace Endpoint.Core.Commands
         {
             private readonly IEndpointGenerationStrategyFactory _workspaceGenerationStrategyFactory;
             private readonly ISettingsProvider _settingsProvider;
+            private readonly ILogger _logger;
 
-            public Handler(IEndpointGenerationStrategyFactory workspaceGenerationStrategyFactory, ISettingsProvider settingsProvider)
+            public Handler(
+                IEndpointGenerationStrategyFactory workspaceGenerationStrategyFactory, 
+                ISettingsProvider settingsProvider,
+                ILogger logger)
             {
                 _workspaceGenerationStrategyFactory = workspaceGenerationStrategyFactory; ;
                 _settingsProvider = settingsProvider;
+                _logger = logger;
             }
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {

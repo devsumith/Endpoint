@@ -11,9 +11,9 @@
     <PackageTags>clean-architecture;code-generator;scaffolding</PackageTags>
     <RepositoryUrl>https://github.com/QuinntyneBrown/Endpoint</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>0.1.8</AssemblyVersion>
-    <FileVersion>0.1.8</FileVersion>
-    <Version>0.1.8</Version>
+    <AssemblyVersion>0.1.10</AssemblyVersion>
+    <FileVersion>0.1.10</FileVersion>
+    <Version>0.1.10</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
 
@@ -31,6 +31,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Endpoint.Application\Endpoint.Application.csproj" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
+    <PackageReference Include="SerilogTimings" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>

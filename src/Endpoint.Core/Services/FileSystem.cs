@@ -36,5 +36,10 @@ namespace Endpoint.Core.Services
 
             return parentFolderPath;
         }
+
+        public void CreateDirectory(string directory)
+        {
+            System.IO.Directory.CreateDirectory(directory);
+        }
     }
 }

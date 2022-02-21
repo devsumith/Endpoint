@@ -1,16 +1,29 @@
-﻿using CommandLine;
+﻿using Allagi.Endpoint.Cli.Logging;
+using CommandLine;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 using System;
+using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace Endpoint.Cli
 {
     class Program
     {
         static void Main(string[] args)
-        {            
+        {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateBootstrapLogger();
+
+            Log.Information("Starting Endpoint");
+
+
             var mediator = BuildContainer().GetService<IMediator>();
 
             ProcessArgs(mediator, args);

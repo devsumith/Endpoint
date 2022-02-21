@@ -8,6 +8,11 @@ namespace Endpoint.Core.Services
     {
         private readonly IDictionary<string, FileSystemEntry> files = new Dictionary<string, FileSystemEntry>();
 
+        public void CreateDirectory(string directory)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Exists(string path)
         {
             throw new NotImplementedException();

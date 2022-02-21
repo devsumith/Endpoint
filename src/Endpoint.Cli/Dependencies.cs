@@ -1,7 +1,10 @@
-﻿using Endpoint.Application;
+﻿using Allagi.Endpoint.Cli.Logging;
+using Endpoint.Application;
 using Endpoint.Core;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace Endpoint.Cli
 {
@@ -12,6 +15,15 @@ namespace Endpoint.Cli
             services.AddMediatR(typeof(CoreConstants), typeof(ApplicationConstants));
             services.AddSharedServices();
             services.AddCoreServices();
+            services.AddSingleton(CreateLoggerFactory().CreateLogger("bicep"));
+        }
+
+        private static ILoggerFactory CreateLoggerFactory()
+        {
+            return LoggerFactory.Create(builder =>
+            {
+                builder.AddProvider(new EndpointLoggerProvider(new EndpointLoggerOptions(true, ConsoleColor.Red, ConsoleColor.DarkYellow, Console.Out)));
+            });
         }
     }
 }
