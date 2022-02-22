@@ -122,18 +122,10 @@ namespace Endpoint.Core.Services
             _fileSystem.WriteAllLines($@"{settings.ApiDirectory}/Properties/launchSettings.json", contents);
         }
 
-        private void _createSubDirectories(Settings settings)
-        {
-            _commandService.Start($"mkdir {CoreConstants.Folders.Behaviors}", settings.ApplicationDirectory);
-
-            _commandService.Start($"mkdir {CoreConstants.Folders.Logs}", settings.ApiDirectory);
-
-        }
-
         public void _removeDefaultFiles(Settings settings)
         {
-            _commandService.Start($"rimraf WeatherForecast.cs", $@"{settings.ApiDirectory}");
-            _commandService.Start($@"rimraf Controllers\WeatherForecastController.cs", $@"{settings.ApiDirectory}");
+            _fileSystem.Delete($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}WeatherForecast.cs");
+            _fileSystem.Delete($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers{Path.DirectorySeparatorChar}WeatherForecast.cs");
         }
 
         private void _installNugetPackages(Settings settings)

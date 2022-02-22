@@ -50,7 +50,7 @@ namespace Endpoint.Application.Commands
 
                 if (!Directory.Exists(domainEventsDirectory))
                 {
-                    _commandService.Start($"mkdir {domainEventsDirectory}", request.Directory);
+                    _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{domainEventsDirectory}");
                 }
 
                 _commandService.Start($"endpoint event {request.Aggregate} {eventName}", domainEventsDirectory);

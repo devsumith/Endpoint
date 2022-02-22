@@ -84,7 +84,7 @@ namespace Endpoint.Core.Services
 
             name = name.Replace("-", "_");
 
-            _commandService.Start($"mkdir {name}", directory);
+            _fileSystem.CreateDirectory($"{directory}{Path.DirectorySeparatorChar}{name}");
 
             var settings = new Settings(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdFormat.Short: IdFormat.Long, useIntIdPropertyType ? IdDotNetType.Int : IdDotNetType.Guid, prefix);
 
@@ -99,17 +99,17 @@ namespace Endpoint.Core.Services
                 WriteIndented = true
             });
 
-            _commandService.Start($"mkdir {settings.RootDirectory}");
+            _fileSystem.CreateDirectory($"{settings.RootDirectory}");
 
             _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{CoreConstants.SettingsFileName}", new List<string> { json }.ToArray());
 
             _commandService.Start($"dotnet new sln -n {settings.SolutionName}", settings.RootDirectory);
 
-            _commandService.Start($"mkdir {settings.SourceFolder}", settings.RootDirectory);
+            _fileSystem.CreateDirectory($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{settings.SourceFolder}");
 
-            _commandService.Start($"mkdir {settings.TestFolder}", settings.RootDirectory);
+            _fileSystem.CreateDirectory($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{settings.TestFolder}");
 
-            _commandService.Start($"mkdir deploy", settings.RootDirectory);
+            _fileSystem.CreateDirectory($"{settings.RootDirectory}{Path.DirectorySeparatorChar}deploy");
 
             _commandService.Start("git init", settings.RootDirectory);
 
@@ -159,7 +159,8 @@ namespace Endpoint.Core.Services
         
         private void _createProjectAndAddToSolution(string templateType, string directory, Endpoint.Core.Models.Settings settings)
         {
-            _commandService.Start($@"mkdir {directory}");
+
+            _fileSystem.CreateDirectory(directory);
 
             _commandService.Start($"dotnet new {templateType} --framework net6.0", directory);
 
