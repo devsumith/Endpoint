@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Api.FileGeneration;
+using Endpoint.Core.Strategies.Tests;
 using Endpoint.Core.Utilities;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -93,7 +94,9 @@ namespace Endpoint.Core.Strategies.Global
 
             _minimalAppSettingsGenerationStrategy.Create(model);
 
-            new MinimalApiProgramGenerationStratey(_fileSystem, _templateProcessor, _templateLocator).Create(new MinimalApiProgramModel(model.ApiNamespace,model.DbContextName, model.Resources), $"{model.ApiDirectory}");
+            var minimalApiProgramModel = new MinimalApiProgramModel(model.ApiNamespace, model.DbContextName, model.Resources);
+
+            new MinimalApiProgramGenerationStratey(_fileSystem, _templateProcessor, _templateLocator).Create(minimalApiProgramModel, $"{model.ApiDirectory}");
 
             _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 6.0.2", $@"{model.ApiDirectory}");
 
@@ -103,8 +106,41 @@ namespace Endpoint.Core.Strategies.Global
 
             _commandService.Start($"dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 6.0.2", $@"{model.ApiDirectory}");
 
+            _createUnitTestProject(model, minimalApiProgramModel);
+
             _commandService.Start($"code .", model.RootDirectory);
 
+        }
+
+        private void _createUnitTestProject(Settings model, MinimalApiProgramModel apiModel)
+        {
+            _fileSystem.CreateDirectory(model.UnitTestsDirectory);
+
+            _commandService.Start($"dotnet new xunit --framework net6.0", model.UnitTestsDirectory);
+
+            var parts = model.UnitTestsDirectory.Split(Path.DirectorySeparatorChar);
+
+            var name = parts[parts.Length - 1];
+
+            _commandService.Start($"dotnet sln add {model.UnitTestsDirectory}{Path.DirectorySeparatorChar}{name}.csproj", model.RootDirectory);
+
+            _addReference(model.UnitTestsDirectory, model.ApiDirectory);
+
+            _fileSystem.Delete($"{model.UnitTestsDirectory}{Path.DirectorySeparatorChar}UnitTest1.cs");
+
+            new MinimalApiTestsFileGenerationStrategy(_fileSystem).Create(apiModel, model.UnitTestsDirectory);
+
+            _commandService.Start($"dotnet add package Microsoft.AspNetCore.Mvc.Testing --version 6.0.2", $@"{model.UnitTestsDirectory}");
+
+        }
+
+        private void _addReference(string targetDirectory, string referencedDirectory)
+        {
+            var parts = referencedDirectory.Split(Path.DirectorySeparatorChar);
+
+            var name = parts[parts.Length - 1];
+
+            _commandService.Start($"dotnet add {targetDirectory} reference {referencedDirectory}{Path.DirectorySeparatorChar}{name}.csproj");
         }
     }
 }

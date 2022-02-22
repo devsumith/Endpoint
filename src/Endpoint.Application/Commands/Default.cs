@@ -30,19 +30,19 @@ namespace Endpoint.Core.Commands
             [Option('r', "resource")]
             public string Resource { get; set; } = "Foo";
 
-            [Option('m', "isMonolithArchitecture")]
+            [Option('m', "is-monolithic-architecture")]
             public bool Monolith { get; set; } = true;
 
-            [Option('a', "minimalapi", Required = false)]
-            public bool Minimal { get; set; } = true;
+            [Option('a', "minimal-api", Required = false)]
+            public bool Minimal { get; set; }
 
-            [Option("dbContextName")]
+            [Option("db-context-name")]
             public string DbContextName { get; set; }
             
-            [Option('s', "shortIdPropertyName")]
+            [Option('s', "short-id-propeperty-name")]
             public bool ShortIdPropertyName { get; set; }
             
-            [Option('i', "numericIdPropertyDataType")]
+            [Option('i', "numeric-id-property-data-type")]
             public bool NumericIdPropertyDataType { get; set; }
             
             [Option("plugins", Required = false)]
@@ -52,7 +52,7 @@ namespace Endpoint.Core.Commands
             public string Prefix { get; set; } = "app";
 
             [Option('d', "directory")]
-            public string Directory { get; set; } = System.Environment.CurrentDirectory;
+            public string Directory { get; set; } = Environment.CurrentDirectory;
         }
 
         internal class Handler : IRequestHandler<Request, Unit>
