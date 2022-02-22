@@ -17,6 +17,7 @@ This tool will create .NET Solution with the following feature(s):
 * [FluentValidation](https://github.com/QuinntyneBrown/Endpoint): Boilerplate for server side validation built in
 * [MediatR](https://github.com/QuinntyneBrown/Endpoint): CQRS
 * [Entity Framework Core](https://github.com/QuinntyneBrown/Endpoint): Best practices built in
+* [Unit Tests](https://github.com/QuinntyneBrown/Endpoint): Generated Unit Tests
 * [Bicep](https://github.com/Azure/bicep): Auto generated Bicep templates and deployment scripts. ref: [docs.microsoft.com](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview?tabs=bicep)
 
 
@@ -39,19 +40,7 @@ endpoint [-n] [-r] [--properties] [-a or --minimalapi]
 ## EXAMPLES
 
 ```
-endpoint -n TodoApp -r Todo --properties Title:string,IsComplete:bool -a
+endpoint -n TodoApp -r Todo --properties Title:string,IsComplete:bool --minimal-api true
 ```
 
-Generates a CRUD Minimal api for a Todo entity
-
-```
-endpoint
-```
-
-Generates a Default CRUD Api for a Foo entity using the classic ASP.NET structure
-
-```
-endpoint -m
-```
-
-Generates a Default CRUD Api for a Foo entity using the multiple project Clean Architecture structure
+Generates a CRUD Minimal api for a Todo entity and Unit Test Project
