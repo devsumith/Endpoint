@@ -1,0 +1,20 @@
+﻿class {{ solutionNamePascalCase }}Application : WebApplicationFactory<{{ entityNamePascalCase }}>
+{
+    protected override IHost CreateHost(IHostBuilder builder)
+    {
+        var root = new InMemoryDatabaseRoot();
+
+        builder.ConfigureServices(services =>
+        {
+            services.AddScoped(sp =>
+            {
+                return new DbContextOptionsBuilder<{{ dbContextNamePascalCase }}>()
+                            .UseInMemoryDatabase("Tests", root)
+                            .UseApplicationServiceProvider(sp)
+                            .Options;
+            });
+        });
+
+        return base.CreateHost(builder);
+    }
+}

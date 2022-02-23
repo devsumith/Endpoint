@@ -29,6 +29,7 @@
     <None Remove="Templates\IntegrationTests\ApiTest.txt" />
     <None Remove="Templates\Core\QueryableExtensions.txt" />
     <None Remove="Templates\Core\ResponseBase.txt" />
+    <None Remove="Templates\IntegrationTests\WebApplicationFactory.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +55,7 @@
     <EmbeddedResource Include="Templates\Infrastructure\EntityConfiguration.txt" />
     <EmbeddedResource Include="Templates\Infrastructure\SeedData.txt" />
     <EmbeddedResource Include="Templates\IntegrationTests\ApiTest.txt" />
+    <EmbeddedResource Include="Templates\IntegrationTests\WebApplicationFactory.txt" />
     <EmbeddedResource Include="Templates\SharedKernel\QueryableExtensions.txt" />
     <EmbeddedResource Include="Templates\SharedKernel\ResponseBase.txt" />
   </ItemGroup>
