@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Endpoint.Core;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using MediatR;
@@ -17,8 +18,10 @@ namespace Endpoint.Application.Commands
         {
             [Value(0)]
             public string Aggregate { get; set; }
+            
             [Value(1)]
             public string Verb { get; set; }
+
             [Option('d', Required = false)]
             public string Directory { get; set; } = Environment.CurrentDirectory;
         }
@@ -44,29 +47,30 @@ namespace Endpoint.Application.Commands
             {
                 var settings = _settingsProvider.Get(request.Directory);
 
-                var domainEventsDirectory = $@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Events";
+                var aggregateEventsDirectory = $@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}AggregatesModel{Path.DirectorySeparatorChar}{request.Aggregate}Aggregate{Path.DirectorySeparatorChar}DomainEvents";
+
 
                 var eventName = $"{request.Aggregate}{_tenseConverter.Convert(request.Verb)}";
 
-                if (!Directory.Exists(domainEventsDirectory))
+                if (!Directory.Exists(aggregateEventsDirectory))
                 {
-                    _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{domainEventsDirectory}");
+                    _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{aggregateEventsDirectory}");
                 }
 
-                _commandService.Start($"endpoint event {request.Aggregate} {eventName}", domainEventsDirectory);
+                _commandService.Start($"endpoint event {request.Aggregate} {eventName}", aggregateEventsDirectory);
 
                 var whenTemplate = new string[4] {
-                    "        public void When({{ namePascalCase }} {{ nameCamelCase }})",
-                    "        {",
-                    "            Value = {{ nameCamelCase }}.Value",
-                    "        }" };
+                    "public void When({{ namePascalCase }} {{ nameCamelCase }})".Indent(2),
+                    "{".Indent(3),
+                    "Value = {{ nameCamelCase }}.Value".Indent(4),
+                    "}".Indent(3) };
 
                 var methodTemplate = new string[5] {
-                "        public {{ entityNamePascalCase }} {{ method }}(string value)",
-                "        {",
-                "            Apply(new {{ namePascalCase }}(value));",
-                "            return this;",
-                "        }" };
+                "public {{ entityNamePascalCase }} {{ method }}(string value)".Indent(2),
+                "{".Indent(2),
+                "Apply(new {{ namePascalCase }}(value));".Indent(3),
+                "return this;".Indent(3),
+                "}".Indent(2) };
 
                 var tokens = new TokensBuilder()
                     .With("name", (Token)eventName)
