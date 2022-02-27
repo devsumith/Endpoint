@@ -147,7 +147,7 @@ namespace Endpoint.Core.Builders
                     _ => throw new System.NotImplementedException()
                 };
 
-                _contents = AttributeBuilder.EndpointAttributes(_settings, _endpointType, _resource, _authorize).ToList();
+                _contents = GenericAttributeGenerationStrategy.EndpointAttributes(_settings, _endpointType, _resource, _authorize).ToList();
 
                 var methodBuilder = new MethodSignatureBuilder()
                     .WithEndpointType(_endpointType)

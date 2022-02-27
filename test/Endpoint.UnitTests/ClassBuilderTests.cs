@@ -66,8 +66,8 @@ namespace Endpoint.UnitTests
                 .WithUsing("System.Net")
                 .WithUsing("System.Threading.Tasks")
                 .WithNamespace("CustomerService.Api.Controllers")
-                .WithAttribute(new AttributeBuilder().WithName("ApiController").Build())
-                .WithAttribute(new AttributeBuilder().WithName("Route").WithParam("\"api/[controller]\"").Build())
+                .WithAttribute(new GenericAttributeGenerationStrategy().WithName("ApiController").Build())
+                .WithAttribute(new GenericAttributeGenerationStrategy().WithName("Route").WithParam("\"api/[controller]\"").Build())
                 .WithDependency("IMediator", "mediator")
                 .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.GetById).WithResource("Customer").WithAuthorize(false).Build())
                 .Build();

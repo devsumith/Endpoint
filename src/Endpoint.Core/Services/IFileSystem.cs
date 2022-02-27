@@ -4,6 +4,7 @@ namespace Endpoint.Core.Services
 {
     public interface IFileSystem
     {
+        string[] ReadAllLines(string path);
         string ReadAllText(string path);
         Stream OpenRead(string path);
         bool Exists(string path);

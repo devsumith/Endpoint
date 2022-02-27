@@ -12,7 +12,7 @@ namespace Endpoint.UnitTests
         public void Constructor()
         {
 
-            var sut = new AttributeBuilder();
+            var sut = new GenericAttributeGenerationStrategy();
         }
 
         [Fact]
@@ -20,7 +20,7 @@ namespace Endpoint.UnitTests
         {
             var expected = "[Fact]";
 
-            var actual = new AttributeBuilder()
+            var actual = new GenericAttributeGenerationStrategy()
                 .WithName("Fact")
                 .Build();
 
@@ -32,7 +32,7 @@ namespace Endpoint.UnitTests
         {
             var expected = "        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]";
 
-            var actual = AttributeBuilder.WithProducesResponseType(HttpStatusCode.InternalServerError, indent: 2);
+            var actual = GenericAttributeGenerationStrategy.WithProducesResponseType(HttpStatusCode.InternalServerError, indent: 2);
 
             Assert.Equal(expected, actual);
         }
@@ -42,7 +42,7 @@ namespace Endpoint.UnitTests
         {
             var expected = "        [ProducesResponseType(typeof(GetCustomerById.Response), (int)HttpStatusCode.OK)]";
 
-            var actual = AttributeBuilder.WithProducesResponseType(HttpStatusCode.OK, type: "GetCustomerById.Response", indent: 2);
+            var actual = GenericAttributeGenerationStrategy.WithProducesResponseType(HttpStatusCode.OK, type: "GetCustomerById.Response", indent: 2);
 
             Assert.Equal(expected, actual);
         }
@@ -52,7 +52,7 @@ namespace Endpoint.UnitTests
         {
             var expected = "        [HttpGet(\"{customerId}\", Name = \"GetCustomerByIdRoute\")]";
 
-            var actual = AttributeBuilder.WithHttp(HttpVerbs.Get, "{customerId}", "GetCustomerByIdRoute", indent: 2);
+            var actual = GenericAttributeGenerationStrategy.WithHttp(HttpVerbs.Get, "{customerId}", "GetCustomerByIdRoute", indent: 2);
 
             Assert.Equal(expected, actual);
         }
@@ -62,7 +62,7 @@ namespace Endpoint.UnitTests
         {
             var expected = "        [HttpGet(Name = \"GetCustomersRoute\")]";
 
-            var actual = AttributeBuilder.WithHttp(HttpVerbs.Get, routeName: "GetCustomersRoute", indent: 2);
+            var actual = GenericAttributeGenerationStrategy.WithHttp(HttpVerbs.Get, routeName: "GetCustomersRoute", indent: 2);
 
             Assert.Equal(expected, actual);
         }

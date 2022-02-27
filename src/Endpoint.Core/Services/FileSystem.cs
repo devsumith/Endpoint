@@ -54,5 +54,10 @@ namespace Endpoint.Core.Services
                 Directory.Delete(directory, true); 
             }
         }
+
+        public string[] ReadAllLines(string path)
+        {
+            return File.ReadAllLines(path);
+        }
     }
 }

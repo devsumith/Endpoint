@@ -22,8 +22,8 @@ namespace Endpoint.Core.Builders
         {
             _from = from switch
             {
-                From.Route => new AttributeBuilder().WithName("FromRoute").Build(),
-                From.Body => new AttributeBuilder().WithName("FromBody").Build(),
+                From.Route => new GenericAttributeGenerationStrategy().WithName("FromRoute").Build(),
+                From.Body => new GenericAttributeGenerationStrategy().WithName("FromBody").Build(),
                 _ => throw new System.NotImplementedException()
             };
 

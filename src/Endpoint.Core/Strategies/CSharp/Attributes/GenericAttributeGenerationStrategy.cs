@@ -5,12 +5,11 @@ using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 
 namespace Endpoint.Core.Builders
 {
-    public class AttributeBuilder
+    public class GenericAttributeGenerationStrategy
     {
         private StringBuilder _string;
         private int _indent;
@@ -18,32 +17,31 @@ namespace Endpoint.Core.Builders
         private string _name;
         private Dictionary<string, string> _properties;
         private List<string> _params;
-        public AttributeBuilder()
+        public GenericAttributeGenerationStrategy()
         {
             _string = new();
-
             _properties = new();
             _params = new();
         }
-        public AttributeBuilder WithName(string name)
+        public GenericAttributeGenerationStrategy WithName(string name)
         {
             _name = name;
             return this;
         }
 
-        public AttributeBuilder WithIndent(int indent)
+        public GenericAttributeGenerationStrategy WithIndent(int indent)
         {
             _indent = indent;
             return this;
         }
 
-        public AttributeBuilder WithParam(string param)
+        public GenericAttributeGenerationStrategy WithParam(string param)
         {
             _params.Add(param);
             return this;
         }
 
-        public AttributeBuilder WithProperty(string name, string value)
+        public GenericAttributeGenerationStrategy WithProperty(string name, string value)
         {
             _properties.Add(name, value);
 
@@ -52,7 +50,7 @@ namespace Endpoint.Core.Builders
 
         public static string WithHttp(HttpVerbs verb, string route = null, string routeName = null, int indent = 0)
         {
-            var builder = new AttributeBuilder()
+            var builder = new GenericAttributeGenerationStrategy()
                 .WithIndent(indent)
                 .WithName(verb switch
                 {
@@ -78,7 +76,7 @@ namespace Endpoint.Core.Builders
 
         public static string WithProducesResponseType(HttpStatusCode statusCode, string type = null, int indent = 0)
         {
-            var builder = new AttributeBuilder()
+            var builder = new GenericAttributeGenerationStrategy()
                 .WithName("ProducesResponseType")
                 .WithIndent(indent);
 
@@ -114,7 +112,7 @@ namespace Endpoint.Core.Builders
 
             if (authorize)
             {
-                attributes.Add(new AttributeBuilder().WithName("Authorize").WithIndent(indent).Build());
+                attributes.Add(new GenericAttributeGenerationStrategy().WithName("Authorize").WithIndent(indent).Build());
             }
 
             if (endpointType == EndpointType.GetById)
@@ -161,7 +159,6 @@ namespace Endpoint.Core.Builders
             return attributes.ToArray();
         }
 
-
         public string Build()
         {
             for (var i = 0; i < _indent * _tab; i++) { _ = this._string.Append(' '); }
@@ -200,6 +197,11 @@ namespace Endpoint.Core.Builders
             _string.Append(']');
 
             return _string.ToString();
+        }
+
+        public string[] Generate(AttributeModel model)
+        {
+            return new string[0] { };
         }
     }
 }

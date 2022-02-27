@@ -43,6 +43,11 @@ namespace Endpoint.Core.Services
             throw new NotImplementedException();
         }
 
+        public string[] ReadAllLines(string path)
+        {
+            throw new NotImplementedException();
+        }
+
         public string ReadAllText(string path)
         {
             throw new NotImplementedException();
