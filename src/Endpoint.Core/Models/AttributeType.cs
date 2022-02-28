@@ -5,8 +5,10 @@
         Authorize,
         ApiController,
         Produces,
+        Consumes,
         ProducesResponseType,
         Http,
-        SwaggerOperation
+        SwaggerOperation,
+        Route
     }
 }

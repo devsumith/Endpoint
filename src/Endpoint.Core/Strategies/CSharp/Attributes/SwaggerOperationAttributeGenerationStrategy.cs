@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Endpoint.Core.Models;
+using System;
 
 namespace Endpoint.Core.Strategies.CSharp.Attributes
 {
-    public class SwaggerOperationAttributeGenerationStrategy
+    public class SwaggerOperationAttributeGenerationStrategy : IAttributeGenerationStrategy
     {
+        public bool CanHandle(AttributeModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] Create(AttributeModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

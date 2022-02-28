@@ -8,15 +8,14 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp
     public class HttpAttributeGenerationStrategyTests
     {
         [Fact]
-        public void ShouldCreateHttpGetAttribute()
+        public void ShouldCreateAttribute()
         {
             var expected = new string[1] { "[HttpGet(Name = \"getCharacters\")]" };
 
-            var properties = new Dictionary<string, string>();
-
-            properties.Add("Name", "getCharacters");
-
-            var model = new AttributeModel(AttributeType.Http, "HttpGet", properties);
+            var model = new AttributeModel(AttributeType.Http, "HttpGet", new ()
+            {
+                { "Name", "getCharacters" }
+            });
 
             var sut = new HttpAttributeGenerationStrategy();
 

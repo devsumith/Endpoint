@@ -11,7 +11,13 @@ namespace Endpoint.Core.Strategies
     {
         private List<IAttributeGenerationStrategy> _strategies = new List<IAttributeGenerationStrategy>()
         {
-            new AuthorizeAttributeGenerationStrategy()
+            new AuthorizeAttributeGenerationStrategy(),
+            new SwaggerOperationAttributeGenerationStrategy(),
+            new HttpAttributeGenerationStrategy(),
+            new ProducesAttributeGenerationStrategy(),
+            new ProducesResponseTypeAttributeGenerationStrategy(),
+            new ConsumesAttributeGenerationStrategy(),
+            new ApiControllerAttributeGenerationStrategy()
         };
 
         public string[] CreateFor(AttributeModel model)
