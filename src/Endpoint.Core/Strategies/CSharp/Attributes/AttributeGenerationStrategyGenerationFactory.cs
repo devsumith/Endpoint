@@ -6,18 +6,19 @@ using System.Linq;
 
 namespace Endpoint.Core.Strategies
 {
-
     public class AttributeGenerationStrategyGenerationFactory : IAttributeGenerationStrategyGenerationFactory
     {
         private List<IAttributeGenerationStrategy> _strategies = new List<IAttributeGenerationStrategy>()
         {
+            new ApiControllerAttributeGenerationStrategy(),
             new AuthorizeAttributeGenerationStrategy(),
-            new SwaggerOperationAttributeGenerationStrategy(),
+            new HttpAttributeGenerationStrategy(),
+            new ConsumesAttributeGenerationStrategy(),
             new HttpAttributeGenerationStrategy(),
             new ProducesAttributeGenerationStrategy(),
             new ProducesResponseTypeAttributeGenerationStrategy(),
-            new ConsumesAttributeGenerationStrategy(),
-            new ApiControllerAttributeGenerationStrategy()
+            new RouteAttributeGenerationStrategy(),
+            new SwaggerOperationAttributeGenerationStrategy(),
         };
 
         public string[] CreateFor(AttributeModel model)

@@ -1,6 +1,5 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Strategies.CSharp.Attributes;
-using System.Collections.Generic;
 using Xunit;
 
 namespace Endpoint.UnitTests.Core.Strategies.CSharp
