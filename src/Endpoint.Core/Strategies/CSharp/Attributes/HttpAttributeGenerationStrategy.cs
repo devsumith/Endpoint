@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Endpoint.Core.Models;
 
 namespace Endpoint.Core.Strategies.CSharp.Attributes
 {
-    internal class HttpAttributeGenerationStrategy
+    public class HttpAttributeGenerationStrategy : IAttributeGenerationStrategy
     {
+        public bool CanHandle(AttributeModel model) => model.Type == AttributeType.Http;
+
+        public string[] Create(AttributeModel model)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
