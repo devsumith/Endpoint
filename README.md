@@ -1,10 +1,11 @@
 # Endpoint
 [![NuGet](https://buildstats.info/nuget/Allagi.Endpoint.Cli?includePreReleases=true)](http://www.nuget.org/packages/Allagi.Endpoint.Cli "Download Allagi.Endpoint.Cli from NuGet")
 
+ASP.NET Core API Code Generator via a simple command line interface.
 
-Model Driven Source Code Generator to build API's using ASP.NET Core via the command line.
+Endpoint builds the solution file, project file, models, dtos, API's and bicep deployment templates without you having to write a single line of code. You can also add more models, dtos, etc...as the project grows.
 
-The tool gives you the option to build a minimal api or a production grade Clean Architecture inspired API.
+First class support for Minimal API. The tool also gives you the option to build production grade Clean Architecture inspired API solutions.
 
 ## Features
 
