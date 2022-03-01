@@ -26,11 +26,6 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp
 
             var actual = sut.Create(model);
 
-            for(var i = 0; i < actual.Length; i++)
-            {
-                Assert.Equal(expected[i], actual[i]);
-            }
-
             Assert.Equal(expected, actual);
         }
     }
