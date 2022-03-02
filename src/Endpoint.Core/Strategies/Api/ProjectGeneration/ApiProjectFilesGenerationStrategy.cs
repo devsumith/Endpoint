@@ -64,7 +64,7 @@ namespace Endpoint.Core.Services
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{settings.ApiDirectory}/appsettings.json", contents);
+            _fileSystem.WriteAllLines($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}appsettings.json", contents);
         }
 
         private void _buildStartup(Settings settings)
@@ -100,7 +100,7 @@ namespace Endpoint.Core.Services
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{settings.ApiDirectory}/Dependencies.cs", contents);
+            _fileSystem.WriteAllLines($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Dependencies.cs", contents);
         }
 
         private void _buildLaunchSettings(Settings settings)
@@ -119,7 +119,7 @@ namespace Endpoint.Core.Services
 
             var contents = _templateProcessor.Process(template, tokens);
 
-            _fileSystem.WriteAllLines($@"{settings.ApiDirectory}/Properties/launchSettings.json", contents);
+            _fileSystem.WriteAllLines($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}launchSettings.json", contents);
         }
 
         public void _removeDefaultFiles(Settings settings)
