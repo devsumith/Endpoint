@@ -8,6 +8,11 @@ Endpoint builds the solution file, project file, models, dtos, API's and bicep d
 
 [![Build Asp.Net Core Minimal Api with CRUD functionality in 60 seconds from scratch](https://img.youtube.com/vi/whNVtybidcI/0.jpg)](https://www.youtube.com/watch?v=whNVtybidcI)
 
+<a href="https://www.youtube.com/embed/whNVtybidcI" target="_blank">
+  <iframe width="100" height="60" src="https://www.youtube.com/embed/whNVtybidcI" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture">
+   </iframe>
+</a>
+
 ## Features
 
 This tool will create .NET Solution with the following feature(s):
