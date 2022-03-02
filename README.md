@@ -5,6 +5,10 @@ ASP.NET Core API Code Generator via a simple command line interface with first c
 
 Endpoint builds the solution file, project file, models, dtos, API's and bicep deployment templates without you having to write a single line of code. You can also add more models, dtos, etc...as the project grows.
 
+## Build an API in 60 seconds Demo
+
+[![Build Asp.Net Core Minimal Api with CRUD functionality in 60 seconds from scratch](https://img.youtube.com/vi/whNVtybidcI/0.jpg)](https://www.youtube.com/watch?v=whNVtybidcI)
+
 ## Features
 
 This tool will create .NET Solution with the following feature(s):
