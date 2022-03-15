@@ -1,6 +1,7 @@
 using CommandLine;
+using Endpoint.Core.Generators;
 using Endpoint.Core.Services;
-using Endpoint.Core.Services;
+using Endpoint.Core.Strategies;
 using MediatR;
 using System.Linq;
 using System.Threading;
@@ -28,43 +29,24 @@ namespace Endpoint.Application.Commands
         {
             private readonly ISettingsProvider _settingsProvider;
             private readonly IFileSystem _fileSystem;
-            private readonly ICommandService _commandService;
-            private readonly ITemplateProcessor _templateProcessor;
-            private readonly ITemplateLocator _templateLocator;
-            private readonly IApplicationProjectFilesGenerationStrategy _applicationFileService;
-            private readonly IInfrastructureProjectFilesGenerationStrategy _infrastructureFileService;
-            private readonly IApiProjectFilesGenerationStrategy _apiFileService;
-
+            private readonly IAdditionalResourceGenerationStrategyFactory _factory;
             public Handler(
                 ISettingsProvider settingsProvider,
-                IFileSystem fileSystem,
-                ICommandService commandService,
-                ITemplateLocator templateLocator,
-                ITemplateProcessor templateProcessor,
-                IApplicationProjectFilesGenerationStrategy applicationFileService,
-                IInfrastructureProjectFilesGenerationStrategy infrastructureFileService,
-                IApiProjectFilesGenerationStrategy apiFileService)
+                IAdditionalResourceGenerationStrategyFactory factory,
+                IFileSystem fileSystem)
             {
                 _settingsProvider = settingsProvider;
+                _factory = factory;
                 _fileSystem = fileSystem;
-                _commandService = commandService;
-                _templateProcessor = templateProcessor;
-                _templateLocator = templateLocator;
-                _applicationFileService = applicationFileService;
-                _infrastructureFileService = infrastructureFileService;
-                _apiFileService = apiFileService;
             }
+
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 var settings = _settingsProvider.Get(request.Directory);
 
                 settings.AddResource(request.Resource, request.Properties, _fileSystem);
 
-                _applicationFileService.BuildAdditionalResource(settings.Resources.First(x => x.Name == request.Resource), settings);
-
-                _infrastructureFileService.BuildAdditionalResource(request.Resource, settings);
-
-                _apiFileService.BuildAdditionalResource(request.Resource, settings);
+                AdditionalResourceGenerator.Generate(settings, request.Resource, request.Properties.Split(',').ToList(), request.Directory, _factory);
 
                 return Task.FromResult(new Unit());
             }

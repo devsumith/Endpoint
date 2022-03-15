@@ -33,6 +33,11 @@ namespace Endpoint.Core.Services
             throw new NotImplementedException();
         }
 
+        public string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
+        {
+            throw new NotImplementedException();
+        }
+
         public Stream OpenRead(string path)
         {
             throw new NotImplementedException();

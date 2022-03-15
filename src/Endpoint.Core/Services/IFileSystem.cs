@@ -14,6 +14,7 @@ namespace Endpoint.Core.Services
         void CreateDirectory(string directory);
         void Delete(string path);
         void DeleteDirectory(string directory);
+        string[] GetFiles(string path, string searchPattern, SearchOption searchOption);
 
     }
 }

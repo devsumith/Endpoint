@@ -123,9 +123,11 @@ namespace Endpoint.Core.Services
         }
 
         public void _removeDefaultFiles(Settings settings)
-        {
-            _fileSystem.Delete($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}WeatherForecast.cs");
-            _fileSystem.Delete($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers{Path.DirectorySeparatorChar}WeatherForecast.cs");
+        {            
+            foreach(var path in _fileSystem.GetFiles(settings.ApiDirectory, "*.cs", SearchOption.AllDirectories))
+            {
+                _fileSystem.Delete(path);
+            }
         }
 
         private void _installNugetPackages(Settings settings)

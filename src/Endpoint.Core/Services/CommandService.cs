@@ -15,7 +15,6 @@ namespace Endpoint.Core.Services
 
         public void Start(string arguments, string workingDirectory = null, bool waitForExit = true)
         {
-
             workingDirectory ??= Environment.CurrentDirectory;
 
             _logger.LogInformation($"{arguments} in {workingDirectory}");
