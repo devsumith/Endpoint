@@ -2,15 +2,15 @@
 
 namespace Endpoint.Core.Models
 {
-    public partial class FileModel
+    public class FileModel
     {
-        public string Template { get; private set; }
-        public string Name { get; set; }
-        public string Namespace { get; set; }
-        public string Directory { get; private set; }
-        public string Extension { get; private set; }
+        public string Template { get; init; }
+        public string Name { get; init; }
+        public string Namespace { get; init; }
+        public string Directory { get; init; }
+        public string Extension { get; init; }
         public string Path => $"{Directory}{System.IO.Path.DirectorySeparatorChar}{Name}.{Extension}";
-        public Dictionary<string, object> Tokens { get; private set; } = new();
+        public Dictionary<string, object> Tokens { get; init; } = new();
 
         public FileModel()
         {

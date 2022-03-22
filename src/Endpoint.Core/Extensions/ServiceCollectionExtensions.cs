@@ -32,6 +32,8 @@ namespace Endpoint.Core
             services.AddSingleton<ISolutionFileManager, SolutionFileManager>();
             services.AddSingleton<IEndpointGenerationStrategyFactory, EndpointGenerationStrategyFactory>();
             services.AddSingleton<IAdditionalResourceGenerationStrategyFactory, AdditionalResourceGenerationStrategyFactory>();
+            services.AddSingleton<IFileProvider, FileProvider>();
+            services.AddSingleton<ISolutionNamespaceProvider, SolutionNamespaceProvider>();
         }
     }
 }

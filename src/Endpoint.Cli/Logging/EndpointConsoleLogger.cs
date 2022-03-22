@@ -5,24 +5,24 @@ namespace Allagi.Endpoint.Cli.Logging
 {
     public class EndpointConsoleLogger : ILogger
     {
-        private readonly EndpointLoggerOptions options;
+        private readonly EndpointLoggerOptions _options;
 
         public EndpointConsoleLogger(EndpointLoggerOptions options)
         {
-            this.options = options;
+            _options = options;
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
             string message = formatter(state, exception);
 
-            if (this.options.EnableColors)
+            if (_options.EnableColors)
             {
-                this.LogMessageWithColors(logLevel, message);
+                LogMessageWithColors(logLevel, message);
             }
             else
             {
-                this.LogMessage(message);
+                LogMessage(message);
             }
         }
 
@@ -30,23 +30,23 @@ namespace Allagi.Endpoint.Cli.Logging
         {
             var color = logLevel switch
             {
-                LogLevel.Critical => this.options.ErrorColor,
-                LogLevel.Error => this.options.ErrorColor,
-                LogLevel.Warning => this.options.WarningColor,
+                LogLevel.Critical => _options.ErrorColor,
+                LogLevel.Error => _options.ErrorColor,
+                LogLevel.Warning => _options.WarningColor,
                 _ => Console.ForegroundColor
             };
 
             ConsoleColor saved = Console.ForegroundColor;
             Console.ForegroundColor = color;
 
-            this.LogMessage(message);
+            LogMessage(message);
 
             Console.ForegroundColor = saved;
         }
 
         private void LogMessage(string message)
         {
-            this.options.Writer.WriteLine(message);
+            _options.Writer.WriteLine(message);
         }
 
         public bool IsEnabled(LogLevel logLevel)

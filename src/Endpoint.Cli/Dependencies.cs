@@ -2,9 +2,11 @@
 using Endpoint.Application;
 using Endpoint.Core;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 
 namespace Endpoint.Cli
 {
@@ -15,7 +17,15 @@ namespace Endpoint.Cli
             services.AddMediatR(typeof(CoreConstants), typeof(ApplicationConstants));
             services.AddSharedServices();
             services.AddCoreServices();
-            services.AddSingleton(CreateLoggerFactory().CreateLogger("bicep"));
+            services.AddSingleton(CreateLoggerFactory().CreateLogger("endpoint"));
+
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
+                .AddUserSecrets<Program>(optional: true)                
+                .AddJsonFile("appsettings.json", false)
+                .Build();
+
+            services.AddSingleton<IConfiguration>(_ => configuration);
         }
 
         private static ILoggerFactory CreateLoggerFactory()
