@@ -87,7 +87,7 @@ namespace Endpoint.Application.Commands
 
                 _commandService.Start($"git config user.email {email}", request.Directory);
 
-                _fileSystem.WriteAllLines($@"{request.Directory}\.gitignore", _templateLocator.Get("GitIgnoreFile"));
+                _fileSystem.WriteAllLines($@"{request.Directory}{Path.DirectorySeparatorChar}.gitignore", _templateLocator.Get("GitIgnoreFile"));
 
                 _commandService.Start($"git remote add origin https://{username}:{personalAccessToken}@github.com/{username}/{request.RepositoryName}.git");
 
@@ -100,14 +100,16 @@ namespace Endpoint.Application.Commands
                 var json = File.ReadAllText(appSettingsPath);
                 var jObject = JsonConvert.DeserializeObject<JObject>(json);
 
-                if (jObject.GetValue(key) == null)
+                jObject[key] = value;
+
+                /*if (jObject.GetValue(key) == null)
                 {
                     jObject.Add(key, value);
                 }
                 else
                 {
                     jObject[key] = value;
-                }
+                }*/
 
                 File.WriteAllText(appSettingsPath, JsonConvert.SerializeObject(jObject, Formatting.Indented));
             }
