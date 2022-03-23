@@ -14,7 +14,7 @@ namespace Endpoint.Core.Strategies.Application
         {
             var content = new List<string>();
 
-            content.Add($"class {((Token)model.Name).PascalCase}");
+            content.Add($"public class {((Token)model.Name).PascalCase}");
 
             content.Add("{");
 

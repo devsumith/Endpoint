@@ -14,18 +14,21 @@ namespace Endpoint.Cli
     {
         public static void Configure(IServiceCollection services)
         {
+
             services.AddMediatR(typeof(CoreConstants), typeof(ApplicationConstants));
             services.AddSharedServices();
             services.AddCoreServices();
             services.AddSingleton(CreateLoggerFactory().CreateLogger("endpoint"));
+            services.AddAutoMapper(typeof(CoreConstants));
 
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
-                .AddUserSecrets<Program>(optional: true)                
+                .AddUserSecrets<Program>(optional: true)
                 .AddJsonFile("appsettings.json", false)
                 .Build();
 
             services.AddSingleton<IConfiguration>(_ => configuration);
+
         }
 
         private static ILoggerFactory CreateLoggerFactory()

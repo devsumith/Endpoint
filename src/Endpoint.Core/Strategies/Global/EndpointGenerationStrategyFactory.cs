@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Models;
+using Endpoint.Core.Options;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -10,7 +11,7 @@ namespace Endpoint.Core.Strategies.Global
 {
     public interface IEndpointGenerationStrategyFactory
     {
-        void CreateFor(Settings model);
+        void CreateFor(CreateEndpointOptions request);
     }
 
     public class EndpointGenerationStrategyFactory : IEndpointGenerationStrategyFactory
@@ -28,7 +29,9 @@ namespace Endpoint.Core.Strategies.Global
             ITemplateLocator templateLocator,
             ITemplateProcessor templateProcessor,
             IMediator mediator,
-            ILogger logger)
+            ISolutionGenerationStrategy solutionGenerationStrategy,
+            ILogger logger
+            )
         {
             _strategies = new List<IEndpointGenerationStrategy>()
             {
@@ -40,24 +43,26 @@ namespace Endpoint.Core.Strategies.Global
                     infrastructureProjectFilesGenerationStrategy,apiProjectFilesGenerationStrategy,
                     mediator,
                     logger),
-                new MinimalApiEndpointGenerationStrategy(commandService,fileSystem,templateLocator, templateProcessor, logger)
+
+                new MinimalApiEndpointGenerationStrategy(solutionGenerationStrategy,commandService,fileSystem)
             };
         }
-        public void CreateFor(Settings model)
+
+        public void CreateFor(CreateEndpointOptions request)
         {
-            if (model == null)
+            if (request == null)
             {
-                throw new ArgumentNullException(nameof(model));
+                throw new ArgumentNullException(nameof(request));
             }
 
-            var strategy = _strategies.Where(x => x.CanHandle(model)).FirstOrDefault();
+            var strategy = _strategies.Where(x => x.CanHandle(request)).FirstOrDefault();
 
             if (strategy == null)
             {
-                throw new InvalidOperationException("Cannot find a strategy for generation for the type " + model.SolutionName);
+                throw new InvalidOperationException("Cannot find a strategy for generation for the type " + request.Name);
             }
 
-            strategy.Create(model);
+            strategy.Create(request);
         }
     }
 }

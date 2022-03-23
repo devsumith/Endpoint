@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "git Pizza C:\\projects\\Pizza"
+      "commandLineArgs": ""
     }
   }
 } 

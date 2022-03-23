@@ -1,28 +1,28 @@
-﻿using Endpoint.Core.Managers;
-using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models;
 using Endpoint.Core.Services;
-using Microsoft.Extensions.Logging;
 using System.IO;
 
 namespace Endpoint.Core.Strategies
 {
-    public class ProjectGenerationStrategy
+    public interface IProjectGenerationStrategy
     {
-        private readonly FileGenerationStrategy _fileGenerationStrategy;
+        void Create(ProjectModel model);
+    }
+
+    public class ProjectGenerationStrategy: IProjectGenerationStrategy
+    {
+        private readonly IFileGenerationStrategyFactory _fileGenerationStrategyFactory;
         private readonly ICommandService _commandService;
         private readonly IFileSystem _fileSystem;
 
         public ProjectGenerationStrategy(
             IFileSystem fileSystem,
-            ITemplateLocator templateLocator,
-            ITemplateProcessor templateProcessor,
-            ILogger logger,
             ICommandService commandService,
-            ISolutionNamespaceProvider solutionNamespaceProvider
+            IFileGenerationStrategyFactory fileGenerationStrategyFactory
             )
         {
             _commandService = commandService;
-            _fileGenerationStrategy = new(fileSystem, templateLocator, templateProcessor, solutionNamespaceProvider, logger);
+            _fileGenerationStrategyFactory = fileGenerationStrategyFactory;
             _fileSystem = fileSystem;
         }
 
@@ -35,12 +35,14 @@ namespace Endpoint.Core.Strategies
 
             foreach(var package in model.Packages)
             {
-                _commandService.Start($"dotnet add package {package.Name} --version {package.Version}",model.Directory);
+                var version = package.IsPreRelease ? "--prerelease" : $"--version {package.Version}";
+
+                _commandService.Start($"dotnet add package {package.Name} {version}",model.Directory);
             }
 
             foreach(var file in model.Files)
             {
-                _fileGenerationStrategy.Create(file);
+                _fileGenerationStrategyFactory.CreateFor(file);
             }
         }
     }

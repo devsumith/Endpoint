@@ -14,7 +14,7 @@ namespace Endpoint.Core.Strategies.Infrastructure
         {
             var content = new List<string>();
 
-            content.Add($"class {((Token)model.Name).PascalCase} : DbContext");
+            content.Add($"public class {((Token)model.Name).PascalCase} : DbContext");
 
             content.Add("{");
 

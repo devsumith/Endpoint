@@ -1,13 +1,12 @@
 using CommandLine;
 using Endpoint.Core.Generators;
-using Endpoint.Core.Models;
-using Endpoint.Core.Services;
+using Endpoint.Core.Options;
 using Endpoint.Core.Strategies.Global;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,65 +15,77 @@ namespace Endpoint.Core.Commands
     internal class Default
     {
         [Verb("default")]
-        internal class Request : IRequest<Unit>
+        internal class Request : CreateEndpointOptions, IRequest<Unit>
         {
-            [Option('p', "port")]
-            public int Port { get; set; } = 5000;
+            [Option("port")]
+            public new int? Port { get; set; }
 
-            [Option("properties", Required = false)]
-            public string Properties { get; set; }
+            [Option("properties")]
+            public new string Properties { get; set; }
 
-            [Option('n', "name")]
-            public string Name { get; set; } = "DefaultEndpoint";
+            [Option("name")]
+            public new string Name { get; set; }
 
-            [Option('r', "resource")]
-            public string Resource { get; set; } = "Foo";
+            [Option("resource")]
+            public new string Resource { get; set; }
 
-            [Option('m', "is-monolithic-architecture")]
-            public bool Monolith { get; set; } = true;
+            [Option("monolith")]
+            public new bool? Monolith { get; set; }
 
-            [Option('a', "minimal-api", Required = false)]
-            public bool Minimal { get; set; }
+            [Option("minimal")]
+            public new bool? Minimal { get; set; }
 
             [Option("db-context-name")]
-            public string DbContextName { get; set; }
+            public new string DbContextName { get; set; }
             
-            [Option('s', "short-id-propeperty-name")]
-            public bool ShortIdPropertyName { get; set; }
+            [Option("short-ids")]
+            public new bool? ShortIdPropertyName { get; set; }
             
-            [Option('i', "numeric-id-property-data-type")]
-            public bool NumericIdPropertyDataType { get; set; }
-            
-            [Option("plugins", Required = false)]
-            public string Plugins { get; set; }
-            
-            [Option("prefix", Required = false)]
-            public string Prefix { get; set; } = "app";
-
-            [Option('d', "directory")]
-            public string Directory { get; set; } = Environment.CurrentDirectory;
+            [Option("numeric-ids")]
+            public new bool? NumericIdPropertyDataType { get; set; }
+                        
+            [Option("directory")]
+            public new string Directory { get; set; } = Environment.CurrentDirectory;
         }
 
         internal class Handler : IRequestHandler<Request, Unit>
         {
             private readonly IEndpointGenerationStrategyFactory _endpointGenerationStrategyFactory;
-            private readonly ISettingsProvider _settingsProvider;
             private readonly ILogger _logger;
+            private readonly IConfiguration _configuration;
 
             public Handler(
                 IEndpointGenerationStrategyFactory endpointGenerationStrategyFactory, 
-                ISettingsProvider settingsProvider,
-                ILogger logger)
+                ILogger logger,
+                IConfiguration configuration)
             {
                 _endpointGenerationStrategyFactory = endpointGenerationStrategyFactory; ;
-                _settingsProvider = settingsProvider;
                 _logger = logger;
+                _configuration = configuration;
             }
 
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 _logger.LogInformation("Default Handler");
 
+                request.Name ??= _configuration["Default:Name"];
+
+                request.Port ??= int.Parse(_configuration["Default:Port"]);
+                
+                request.Properties ??= _configuration["Default:Properties"];
+                
+                request.Resource ??= _configuration["Default:Resource"];
+                
+                request.Monolith ??= bool.Parse(_configuration["Default:Monolith"]);
+                
+                request.Minimal ??= bool.Parse(_configuration["Default:IsMinimalApi"]);
+                
+                request.DbContextName ??= _configuration["Default:DbContextName"];
+                
+                request.ShortIdPropertyName ??= bool.Parse(_configuration["Default:ShortIdPropertyName"]);
+                
+                request.NumericIdPropertyDataType ??= bool.Parse(_configuration["Default:NumericIdPropertyDataType"]);
+                
                 try
                 {
                     int retries = 0;
@@ -87,26 +98,9 @@ namespace Endpoint.Core.Commands
                     {
                         if (!Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{name}"))
                         {
-                            var endpointDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{name}";
+                            request.Name = name;
 
-                            var settings = _settingsProvider.Get(endpointDirectory);
-
-                            if (settings == null)
-                            {
-                                settings = new Settings(
-                                    name,
-                                    request.DbContextName,
-                                    new AggregateRootModel(request.Resource, request.NumericIdPropertyDataType, request.ShortIdPropertyName, request.Properties),
-                                    request.Directory,
-                                    !request.Monolith,
-                                    request.Plugins?.Split(',').ToList(),
-                                    request.ShortIdPropertyName ? IdFormat.Short : IdFormat.Long,
-                                    request.NumericIdPropertyDataType ? IdDotNetType.Int : IdDotNetType.Guid,
-                                    request.Prefix,
-                                    request.Minimal);
-                            }
-
-                            EndpointGenerator.Generate(settings, _endpointGenerationStrategyFactory);
+                            EndpointGenerator.Generate(request, _endpointGenerationStrategyFactory);
 
                             return Task.FromResult(new Unit());
                         }

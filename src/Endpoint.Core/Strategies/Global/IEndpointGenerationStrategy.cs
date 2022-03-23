@@ -1,11 +1,12 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Options;
 
 namespace Endpoint.Core.Strategies.Global
 {
     public interface IEndpointGenerationStrategy
     {
-        bool CanHandle(Settings model);
+        int Order { get; }
+        bool CanHandle(CreateEndpointOptions request);
 
-        void Create(Settings model);
+        void Create(CreateEndpointOptions request);
     }
 }

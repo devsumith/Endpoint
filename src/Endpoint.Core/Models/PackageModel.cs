@@ -2,8 +2,9 @@
 {
     public class PackageModel
     {
-        public string Name { get; set; }
-        public string Version { get; set; }
+        public string Name { get; init; }
+        public string Version { get; init; }
+        public bool IsPreRelease { get; init; }
 
         public PackageModel(string name, string verison)
         {

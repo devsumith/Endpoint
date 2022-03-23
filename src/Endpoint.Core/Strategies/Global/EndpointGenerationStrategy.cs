@@ -1,4 +1,6 @@
 ﻿using Endpoint.Core.Events;
+using Endpoint.Core.Models;
+using Endpoint.Core.Options;
 using Endpoint.Core.Strategies.Global;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -7,11 +9,6 @@ using System.IO;
 
 namespace Endpoint.Core.Services
 {
-    public interface ISolutionTemplateService
-    {
-        void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, string properties, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins, string prefix);
-    }
-
     public class EndpointGenerationStrategy : ISolutionTemplateService, IEndpointGenerationStrategy
     {
         private ICommandService _commandService;
@@ -43,6 +40,7 @@ namespace Endpoint.Core.Services
             _logger = logger;
         }
 
+        public int Order => 0;
         public void Build(string name, string dbContextName, bool shortIdPropertyName, string resource, string properties, bool isMonolith, bool numericIdPropertyDataType, string directory, List<string> plugins, string prefix)
         {
             Build(name, dbContextName, shortIdPropertyName, new List<string>() { resource }, properties, isMonolith, numericIdPropertyDataType, directory, plugins, prefix);
@@ -83,13 +81,22 @@ namespace Endpoint.Core.Services
             }
         }
 
-        public bool CanHandle(Models.Settings model)
-        {
-            return !model.Minimal;
-        }
+        public bool CanHandle(CreateEndpointOptions request) => !request.Minimal.Value;
 
-        public void Create(Models.Settings model)
+        public void Create(CreateEndpointOptions request)
         {
+            var model = new Settings(
+                        request.Name,
+                        request.DbContextName,
+                        new AggregateRootModel(request.Resource, request.NumericIdPropertyDataType.Value, request.ShortIdPropertyName.Value, request.Properties),
+                        request.Directory,
+                        !request.Monolith.Value,
+                        default,
+                        request.ShortIdPropertyName.Value ? IdFormat.Short : IdFormat.Long,
+                        request.NumericIdPropertyDataType.Value ? IdDotNetType.Int : IdDotNetType.Guid,
+                        default,
+                        request.Minimal.Value);
+
             _solutionFilesGenerationStrategy.Create(model);
 
             _sharedKernelFilesGenerationStrategy.Build(model);
@@ -103,6 +110,7 @@ namespace Endpoint.Core.Services
             _mediator.Publish(new SolutionTemplateGenerated(model.RootDirectory));
 
             _commandService.Start($"start {model.SolutionFileName}", model.RootDirectory);
+
         }
     }
 }

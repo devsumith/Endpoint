@@ -1,4 +1,5 @@
-﻿using Endpoint.Core.Managers;
+﻿using Endpoint.Core.Generators;
+using Endpoint.Core.Managers;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
 using Endpoint.Core.Strategies.Global;
@@ -34,6 +35,10 @@ namespace Endpoint.Core
             services.AddSingleton<IAdditionalResourceGenerationStrategyFactory, AdditionalResourceGenerationStrategyFactory>();
             services.AddSingleton<IFileProvider, FileProvider>();
             services.AddSingleton<ISolutionNamespaceProvider, SolutionNamespaceProvider>();
+            services.AddSingleton<ISettingsFileGenerationStrategyFactory, SettingsFileGenerationStrategyFactory>();
+            services.AddSingleton<IFileGenerationStrategyFactory, FileGenerationStrategyFactory>();
+            services.AddSingleton<ISolutionGenerationStrategy, SolutionGenerationStrategy>();
+            services.AddSingleton<IProjectGenerationStrategy, ProjectGenerationStrategy>();
         }
     }
 }

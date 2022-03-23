@@ -2,16 +2,13 @@
 using Endpoint.Core.Models;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using static System.Environment;
 using static System.IO.Path;
 using static System.Text.Json.JsonSerializer;
 
 namespace Endpoint.Core.Services
 {
-    public interface ISettingsProvider
-    {
-        Settings Get(string directory = null);
-    }
     public class SettingsProvider : ISettingsProvider
     {
         public Settings Get(string directory = null)
@@ -26,7 +23,7 @@ namespace Endpoint.Core.Services
 
                 if (File.Exists(path))
                 {
-                    var settings = Deserialize<Settings>(File.ReadAllText(path), new()
+                    var settings = Deserialize<Settings>(File.ReadAllText(path), new JsonSerializerOptions()
                     {
                         PropertyNameCaseInsensitive = true,
                     });

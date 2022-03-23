@@ -1,9 +1,11 @@
 ﻿using Endpoint.Core.Models;
+using Endpoint.Core.Options;
 
 namespace Endpoint.Core.Strategies
 {
     public interface ISettingsFileGenerationStrategy
     {
-        Settings Create();
+        bool? CanHandle(CreateEndpointOptions request);
+        Settings Create(CreateEndpointOptions request);
     }
 }

@@ -1,13 +1,25 @@
 ﻿using Endpoint.Core.Models;
-using System;
+using Endpoint.Core.Options;
 
 namespace Endpoint.Core.Strategies
 {
     public class SettingsFileGenerationStrategy : ISettingsFileGenerationStrategy
     {
-        public Settings Create()
+        public bool? CanHandle(CreateEndpointOptions request)
+            => !request.Minimal;
+        public Settings Create(CreateEndpointOptions request)
         {
-            throw new NotImplementedException();
+            return new();
+        }
+    }
+
+    public class MinimalApiSettingsFileGenerationStrategy : ISettingsFileGenerationStrategy
+    {
+        public bool? CanHandle(CreateEndpointOptions request) => request.Minimal;
+
+        public Settings Create(CreateEndpointOptions request)
+        {
+            return new();
         }
     }
 }

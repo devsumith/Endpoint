@@ -46,32 +46,32 @@ namespace Endpoint.Application.Commands
             {
                 _logger.LogInformation($"Handled: {nameof(Git)}");
 
-                var username = _configuration["GitHubUsername"];
+                var username = _configuration["Git:GitHubUsername"];
 
                 if(string.IsNullOrEmpty(username))
                 {
                     Console.WriteLine("Please enter your github username:");
                     username = Console.ReadLine();
-                    _addOrUpdateAppSettingSettingsEntry("GitHubUsername", username);
+                    _addOrUpdateAppSettingSettingsEntry("Git:GitHubUsername", username);
                 }
 
-                var email = _configuration["GitHubEmail"];
+                var email = _configuration["Git:GitHubEmail"];
 
                 if (string.IsNullOrEmpty(email))
                 {
                     Console.WriteLine("Please enter your github email:");
                     email = Console.ReadLine();
 
-                    _addOrUpdateAppSettingSettingsEntry("GitHubEmail", username);
+                    _addOrUpdateAppSettingSettingsEntry("Git:GitHubEmail", username);
                 }
 
-                var personalAccessToken = _configuration["GitHubPersonalAccessToken"];
+                var personalAccessToken = _configuration["Git:GitHubPersonalAccessToken"];
 
                 if (string.IsNullOrEmpty(personalAccessToken))
                 {
                     Console.WriteLine("Please enter your github personal access token:");
                     personalAccessToken = Console.ReadLine();
-                    _addOrUpdateAppSettingSettingsEntry("GitHubPersonalAccessToken", username);
+                    _addOrUpdateAppSettingSettingsEntry("Git:GitHubPersonalAccessToken", username);
                 }
 
                 var client = new GitHubClient(new ProductHeaderValue(username))
@@ -99,18 +99,7 @@ namespace Endpoint.Application.Commands
                 var appSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
                 var json = File.ReadAllText(appSettingsPath);
                 var jObject = JsonConvert.DeserializeObject<JObject>(json);
-
                 jObject[key] = value;
-
-                /*if (jObject.GetValue(key) == null)
-                {
-                    jObject.Add(key, value);
-                }
-                else
-                {
-                    jObject[key] = value;
-                }*/
-
                 File.WriteAllText(appSettingsPath, JsonConvert.SerializeObject(jObject, Formatting.Indented));
             }
         }

@@ -19,7 +19,17 @@ namespace Endpoint.Core.Services
 
         public void WriteAllLines(string path, string[] contents)
         {
-            Delete(path);
+            var parts = Path.GetDirectoryName(path).Split(Path.DirectorySeparatorChar);
+
+            for (var i = 1; i <= parts.Length; i++)
+            {
+                var subPath = string.Join(Path.DirectorySeparatorChar, parts.Take(i));
+
+                if (!Exists(subPath))
+                {
+                    CreateDirectory(subPath);
+                }
+            }
 
             File.WriteAllLines(path, contents);
         }
