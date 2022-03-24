@@ -14,7 +14,6 @@ namespace Endpoint.Cli
     {
         public static void Configure(IServiceCollection services)
         {
-
             services.AddMediatR(typeof(CoreConstants), typeof(ApplicationConstants));
             services.AddSharedServices();
             services.AddCoreServices();

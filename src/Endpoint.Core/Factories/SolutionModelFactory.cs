@@ -25,7 +25,7 @@ namespace Endpoint.Core.Factories
                 DbContextName = options.DbContextName
             });
 
-            var unitTestProject = ProjectModelFactory.CreateMinimalApiUnitTestsProject();
+            var unitTestProject = ProjectModelFactory.CreateMinimalApiUnitTestsProject(options.Name,model.TestDirectory, options.Resource);
 
             model.Projects.Add(minimalApiProject);
 

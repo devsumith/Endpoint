@@ -5,7 +5,7 @@ using Endpoint.Core.ValueObjects;
 
 namespace Endpoint.Core.Builders
 {
-    internal class LogStatementBuilder
+    public class LogStatementBuilder
     {
 
         private int _indent;

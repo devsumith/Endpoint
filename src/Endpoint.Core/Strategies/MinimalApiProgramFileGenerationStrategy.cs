@@ -5,7 +5,7 @@ using System;
 
 namespace Endpoint.Core.Strategies
 {
-    internal class MinimalApiProgramFileGenerationStrategy : IFileGenerationStrategy
+    public class MinimalApiProgramFileGenerationStrategy : IFileGenerationStrategy
     {
         private readonly IFileSystem _fileSystem;
         private readonly ITemplateLocator _templateLocator;

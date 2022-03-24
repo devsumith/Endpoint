@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands
 {
-    internal class Feature
+    public class Feature
     {
         [Verb("feature")]
-        internal class Request : IRequest<Unit>
+        public class Request : IRequest<Unit>
         {
             [Value(0)]
             public string Entity { get; set; }
@@ -19,7 +19,7 @@ namespace Endpoint.Application.Commands
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
         }
 
-        internal class Handler : IRequestHandler<Request, Unit>
+        public class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ICommandService _commandService;
             private readonly ISettingsProvider _settingsProvider;

@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands
 {
-    internal class AddResource
+    public class AddResource
     {
         [Verb("add-resource")]
-        internal class Request : IRequest<Unit>
+        public class Request : IRequest<Unit>
         {
             [Value(0)]
             public string Resource { get; set; }
@@ -25,7 +25,7 @@ namespace Endpoint.Application.Commands
 
         }
 
-        internal class Handler : IRequestHandler<Request, Unit>
+        public class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ISettingsProvider _settingsProvider;
             private readonly IFileSystem _fileSystem;

@@ -5,6 +5,7 @@ using Endpoint.Core.Strategies.Global;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Nelibur.ObjectMapper;
 using System;
 using System.IO;
 using System.Threading;
@@ -12,43 +13,43 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Core.Commands
 {
-    internal class Default
+    public class Default
     {
         [Verb("default")]
-        internal class Request : CreateEndpointOptions, IRequest<Unit>
+        public class Request : IRequest<Unit>
         {
             [Option("port")]
-            public new int? Port { get; set; }
+            public int? Port { get; set; }
 
             [Option("properties")]
-            public new string Properties { get; set; }
+            public string Properties { get; set; }
 
             [Option("name")]
-            public new string Name { get; set; }
+            public string Name { get; set; }
 
             [Option("resource")]
-            public new string Resource { get; set; }
+            public string Resource { get; set; }
 
             [Option("monolith")]
-            public new bool? Monolith { get; set; }
+            public bool? Monolith { get; set; }
 
             [Option("minimal")]
-            public new bool? Minimal { get; set; }
+            public bool? Minimal { get; set; }
 
             [Option("db-context-name")]
-            public new string DbContextName { get; set; }
+            public string DbContextName { get; set; }
             
             [Option("short-ids")]
-            public new bool? ShortIdPropertyName { get; set; }
+            public bool? ShortIdPropertyName { get; set; }
             
             [Option("numeric-ids")]
-            public new bool? NumericIdPropertyDataType { get; set; }
+            public bool? NumericIdPropertyDataType { get; set; }
                         
             [Option("directory")]
-            public new string Directory { get; set; } = Environment.CurrentDirectory;
+            public string Directory { get; set; } = Environment.CurrentDirectory;
         }
 
-        internal class Handler : IRequestHandler<Request, Unit>
+        public class Handler : IRequestHandler<Request, Unit>
         {
             private readonly IEndpointGenerationStrategyFactory _endpointGenerationStrategyFactory;
             private readonly ILogger _logger;
@@ -78,7 +79,7 @@ namespace Endpoint.Core.Commands
                 
                 request.Monolith ??= bool.Parse(_configuration["Default:Monolith"]);
                 
-                request.Minimal ??= bool.Parse(_configuration["Default:IsMinimalApi"]);
+                request.Minimal ??= bool.Parse(_configuration["Default:Minimal"]);
                 
                 request.DbContextName ??= _configuration["Default:DbContextName"];
                 
@@ -100,7 +101,9 @@ namespace Endpoint.Core.Commands
                         {
                             request.Name = name;
 
-                            EndpointGenerator.Generate(request, _endpointGenerationStrategyFactory);
+                            var options = TinyMapper.Map<CreateEndpointOptions>(request);
+
+                            EndpointGenerator.Generate(options, _endpointGenerationStrategyFactory);
 
                             return Task.FromResult(new Unit());
                         }

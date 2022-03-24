@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands
 {
-    internal class Command
+    public class Command
     {
         [Verb("command")]
-        internal class Request : IRequest<Unit>
+        public class Request : IRequest<Unit>
         {
 
             [Value(0)]
@@ -26,7 +26,7 @@ namespace Endpoint.Application.Commands
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
         }
 
-        internal class Handler : IRequestHandler<Request, Unit>
+        public class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ISettingsProvider _settingsProvder;
             private readonly IFileSystem _fileSystem;

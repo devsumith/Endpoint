@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands
 {
-    internal class Settings
+    public class Settings
     {
         [Verb("settings")]
-        internal class Request : IRequest<Unit>
+        public class Request : IRequest<Unit>
         {
             [Option('d', Required = false)]
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
         }
 
-        internal class Handler : IRequestHandler<Request, Unit>
+        public class Handler : IRequestHandler<Request, Unit>
         {
             private readonly IFileSystem _fileSystem;
             private readonly ITemplateLocator _templateLocator;

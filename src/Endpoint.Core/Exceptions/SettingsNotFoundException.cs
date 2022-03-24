@@ -2,7 +2,7 @@
 
 namespace Endpoint.Core.Exceptions
 {
-    internal class SettingsNotFoundException : Exception
+    public class SettingsNotFoundException : Exception
     {
         public SettingsNotFoundException()
             : base("Settings Not Found.")

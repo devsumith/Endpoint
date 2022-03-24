@@ -27,9 +27,9 @@ namespace Endpoint.Core.Factories
             return projectModel;
         }
 
-        public static ProjectModel CreateMinimalApiUnitTestsProject()
+        public static ProjectModel CreateMinimalApiUnitTestsProject(string name, string directory, string resource)
         {
-            var model = new ProjectModel();
+            var model = new ProjectModel(DotNetProjectType.XUnit, $"{name}.Tests", directory);
 
             return model;
         }

@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands
 {
-    internal class Git
+    public class Git
     {
         [Verb("git")]
-        internal class Request : IRequest<Unit>
+        public class Request : IRequest<Unit>
         {
             [Value(0)]
             public string RepositoryName { get; set; }
@@ -25,7 +25,7 @@ namespace Endpoint.Application.Commands
             public string Directory { get; set; } = Environment.CurrentDirectory;
         }
 
-        internal class Handler : IRequestHandler<Request, Unit>
+        public class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ICommandService _commandService;
             private readonly ILogger _logger;
@@ -100,6 +100,7 @@ namespace Endpoint.Application.Commands
                 var json = File.ReadAllText(appSettingsPath);
                 var jObject = JsonConvert.DeserializeObject<JObject>(json);
                 jObject[key] = value;
+                Console.WriteLine(appSettingsPath);
                 File.WriteAllText(appSettingsPath, JsonConvert.SerializeObject(jObject, Formatting.Indented));
             }
         }

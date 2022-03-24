@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands
 {
-    internal class UnitTest
+    public class UnitTest
     {
         [Verb("unit-test")]
-        internal class Request : IRequest<Unit>
+        public class Request : IRequest<Unit>
         {
             [Value(0)]
             public string Name { get; set; }
@@ -19,7 +19,7 @@ namespace Endpoint.Application.Commands
             public string Directory { get; set; } = System.Environment.CurrentDirectory;
         }
 
-        internal class Handler : IRequestHandler<Request, Unit>
+        public class Handler : IRequestHandler<Request, Unit>
         {
             private readonly IContext _context;
             private readonly IFileSystem _fileSystem;

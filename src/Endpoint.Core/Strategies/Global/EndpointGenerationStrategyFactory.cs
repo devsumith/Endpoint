@@ -48,21 +48,21 @@ namespace Endpoint.Core.Strategies.Global
             };
         }
 
-        public void CreateFor(CreateEndpointOptions request)
+        public void CreateFor(CreateEndpointOptions options)
         {
-            if (request == null)
+            if (options == null)
             {
-                throw new ArgumentNullException(nameof(request));
+                throw new ArgumentNullException(nameof(options));
             }
 
-            var strategy = _strategies.Where(x => x.CanHandle(request)).FirstOrDefault();
+            var strategy = _strategies.Where(x => x.CanHandle(options)).OrderByDescending(x => x.Order).FirstOrDefault();
 
             if (strategy == null)
             {
-                throw new InvalidOperationException("Cannot find a strategy for generation for the type " + request.Name);
+                throw new InvalidOperationException("Cannot find a strategy for generation for the type " + options.Name);
             }
 
-            strategy.Create(request);
+            strategy.Create(options);
         }
     }
 }

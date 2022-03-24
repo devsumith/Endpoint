@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands
 {
-    internal class AddGenerateDocumentationFile
+    public class AddGenerateDocumentationFile
     {
         [Verb("add-generate-documentation-file")]
-        internal class Request : IRequest<Unit>
+        public class Request : IRequest<Unit>
         {
             [Option('d', Required = false)]
             public string Directory { get; set; } = Environment.CurrentDirectory;
         }
 
-        internal class Handler : IRequestHandler<Request, Unit>
+        public class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ISettingsProvider _settingsProvider;
             private readonly IApiProjectFilesGenerationStrategy _apiProjectFilesGenerationStrategy;

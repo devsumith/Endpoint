@@ -1,11 +1,12 @@
 ﻿using Endpoint.Core.Factories;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
+using Nelibur.ObjectMapper;
 using System.IO;
 
 namespace Endpoint.Core.Strategies.Global
 {
-    internal class MinimalApiEndpointGenerationStrategy : IEndpointGenerationStrategy
+    public class MinimalApiEndpointGenerationStrategy : IEndpointGenerationStrategy
     {
         private readonly ISolutionGenerationStrategy _solutionGenerationStrategy;
         private readonly ICommandService _commandService;
@@ -30,19 +31,9 @@ namespace Endpoint.Core.Strategies.Global
 
             _commandService.Start($"endpoint git {options.Name}", workspaceDirectory);
 
-            var solutionModel = SolutionModelFactory.Minimal(new()
-            {
-                Name = options.Name,
-                Port = options.Port,
-                Properties = options.Properties,
-                Resource = options.Resource,
-                Monolith = options.Monolith,
-                Minimal = options.Minimal,
-                DbContextName = options.DbContextName,
-                ShortIdPropertyName = options.ShortIdPropertyName,
-                NumericIdPropertyDataType = options.NumericIdPropertyDataType,
-                Directory = options.Directory
-            });
+            var solutionOptions = TinyMapper.Map<CreateEndpointSolutionOptions>(options);
+
+            var solutionModel = SolutionModelFactory.Minimal(solutionOptions);
 
             _solutionGenerationStrategy.Create(solutionModel);
         }

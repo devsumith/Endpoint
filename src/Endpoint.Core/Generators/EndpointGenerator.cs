@@ -5,9 +5,9 @@ namespace Endpoint.Core.Generators
 {
     public class EndpointGenerator
     {
-        public static void Generate(CreateEndpointOptions request, IEndpointGenerationStrategyFactory factory)
+        public static void Generate(CreateEndpointOptions options, IEndpointGenerationStrategyFactory factory)
         {
-            factory.CreateFor(request);
+             factory.CreateFor(options);
         }
     }
 }

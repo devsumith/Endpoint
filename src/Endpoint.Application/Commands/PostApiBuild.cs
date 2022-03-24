@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands
 {
-    internal class PostApiBuild
+    public class PostApiBuild
     {
         [Verb("post-api-build")]
-        internal class Request : IRequest<Unit>
+        public class Request : IRequest<Unit>
         {
 
             [Option('d', Required = false)]
             public string Directory { get; set; } = Environment.CurrentDirectory;
         }
 
-        internal class Handler : IRequestHandler<Request, Unit>
+        public class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ICommandService _commandService;
             private readonly ISettingsProvider _settingsProvider;

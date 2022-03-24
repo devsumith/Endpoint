@@ -10,7 +10,7 @@ namespace Endpoint.Core.Models
         public string SrcDirectoryName { get; private set; } = "src";
         public string TestDirectoryName { get; private set; } = "test";
         public string SrcDirectory => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{SrcDirectoryName}";
-        public string TestDirectory => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{TestDirectory}";
+        public string TestDirectory => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{TestDirectoryName}";
         public string SolutionPath => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{Name}.sln";
         public string Directory { get; init; }
         public string SolutionDirectory => $"{Directory}{Path.DirectorySeparatorChar}{Name}";

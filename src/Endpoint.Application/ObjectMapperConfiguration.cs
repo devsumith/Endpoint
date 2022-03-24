@@ -1,0 +1,17 @@
+﻿using Endpoint.Core.Commands;
+using Endpoint.Core.Options;
+using Nelibur.ObjectMapper;
+using System.Runtime.CompilerServices;
+
+namespace Endpoint.Application
+{
+    public static class ObjectMapperConfiguration
+    {
+        [ModuleInitializer]
+        public static void  Configure()
+        {
+            TinyMapper.Bind<Default.Request, CreateEndpointOptions>();
+            TinyMapper.Bind<CreateEndpointOptions, CreateEndpointSolutionOptions>();
+        }
+    }
+}

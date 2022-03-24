@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands
 {
-    internal class AddEvent
+    public class AddEvent
     {
         [Verb("add-event")]
-        internal class Request : IRequest<Unit>
+        public class Request : IRequest<Unit>
         {
             [Value(0)]
             public string Aggregate { get; set; }
@@ -26,7 +26,7 @@ namespace Endpoint.Application.Commands
             public string Directory { get; set; } = Environment.CurrentDirectory;
         }
 
-        internal class Handler : IRequestHandler<Request, Unit>
+        public class Handler : IRequestHandler<Request, Unit>
         {
 
             private readonly IFileSystem _fileSystem;

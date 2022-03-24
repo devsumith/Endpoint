@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Endpoint.Application;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -19,7 +20,6 @@ namespace Endpoint.Cli
                 .CreateBootstrapLogger();
 
             Log.Information("Starting Endpoint");
-
 
             var mediator = BuildContainer().GetService<IMediator>();
 
