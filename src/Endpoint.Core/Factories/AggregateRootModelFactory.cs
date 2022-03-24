@@ -14,6 +14,10 @@ namespace Endpoint.Core.Factories
 
             var idDotNetType = useIntIdPropertyType ? "int" : "Guid";
 
+            model.IdPropertyName = idPropertyName;
+
+            model.IdPropertyType = idDotNetType;
+
             model.Properties.Add(new ClassProperty("public", idDotNetType, idPropertyName, ClassPropertyAccessor.GetPrivateSet, key: true));
 
             if (!string.IsNullOrWhiteSpace(properties))

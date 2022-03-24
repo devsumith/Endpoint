@@ -2,6 +2,7 @@ using CommandLine;
 using Endpoint.Core.Generators;
 using Endpoint.Core.Options;
 using Endpoint.Core.Strategies.Global;
+using Endpoint.Core.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -44,7 +45,10 @@ namespace Endpoint.Core.Commands
             
             [Option("numeric-ids")]
             public bool? NumericIdPropertyDataType { get; set; }
-                        
+
+            [Option("vs-code")]
+            public bool? VsCode { get; set; }
+
             [Option("directory")]
             public string Directory { get; set; } = Environment.CurrentDirectory;
         }
@@ -81,12 +85,14 @@ namespace Endpoint.Core.Commands
                 
                 request.Minimal ??= bool.Parse(_configuration["Default:Minimal"]);
                 
-                request.DbContextName ??= _configuration["Default:DbContextName"];
+                request.DbContextName ??= _configuration["Default:DbContextName"] ??= $"{((Token)request.Name).PascalCase}DbContext";
                 
                 request.ShortIdPropertyName ??= bool.Parse(_configuration["Default:ShortIdPropertyName"]);
                 
                 request.NumericIdPropertyDataType ??= bool.Parse(_configuration["Default:NumericIdPropertyDataType"]);
-                
+
+                request.VsCode ??= bool.Parse(_configuration["Default:VsCode"]);
+
                 try
                 {
                     int retries = 0;

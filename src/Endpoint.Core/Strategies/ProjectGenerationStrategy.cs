@@ -1,6 +1,8 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Services;
 using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace Endpoint.Core.Strategies
 {
@@ -44,6 +46,21 @@ namespace Endpoint.Core.Strategies
             {
                 _fileGenerationStrategyFactory.CreateFor(file);
             }
+
+            if(model.GenerateDocumentationFile)
+            {
+                var doc = XDocument.Load(model.Path);
+                var projectNode = doc.FirstNode as XElement;
+
+                var element = projectNode.Nodes()
+                    .Where(x => x.NodeType == System.Xml.XmlNodeType.Element)
+                    .First(x => (x as XElement).Name == "PropertyGroup") as XElement;
+
+                element.Add(new XElement("GenerateDocumentationFile", true));
+                element.Add(new XElement("NoWarn", "$(NoWarn);1591"));
+                doc.Save(model.Path);
+            }
         }
+
     }
 }

@@ -28,7 +28,7 @@ namespace Endpoint.Core.Strategies.Api
                 content.Add($"context.{resourceNameToken.PascalCasePlural}.Add({resourceNameToken.CamelCase});".Indent(2));
                 content.Add("await context.SaveChangesAsync();".Indent(2));
                 content.Add("");
-                content.Add(($"return Results.Created($\"/{resourceNameToken.SnakeCasePlural}/{resourceNameToken.SnakeCasePlural}/" + "{" + $"{resourceNameToken.CamelCase}.{idPropertyName}" + "}\"," + $"{resourceNameToken.CamelCase});").Indent(2));
+                content.Add(($"return Results.Created($\"/{resourceNameToken.SnakeCasePlural}/" + "{" + $"{resourceNameToken.CamelCase}.{idPropertyName}" + "}\"," + $"{resourceNameToken.CamelCase});").Indent(2));
 
                 content.Add("})".Indent(1));
                 content.Add($".WithName(\"Create{resourceNameToken.PascalCase}\")".Indent(1));

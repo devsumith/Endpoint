@@ -14,6 +14,7 @@ namespace Endpoint.Core.Models
         public bool HasSecrets { get; init; }
         public bool IsNugetPackage { get; init; }
         public int Order { get; init; } = 0;
+        public bool GenerateDocumentationFile { get; set; }
 
         public ProjectModel(DotNetProjectType dotNetProjectType, string name, string parentDirectory)
         {

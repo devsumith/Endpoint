@@ -1,12 +1,13 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Options;
+using Endpoint.Core.ValueObjects;
 
 namespace Endpoint.Core.Factories
 {
     public static class SolutionModelFactory
     {
         public static SolutionModel Minimal(CreateEndpointSolutionOptions options)
-        {
+        {            
             var model = new SolutionModel
             {
                 Name = options.Name,

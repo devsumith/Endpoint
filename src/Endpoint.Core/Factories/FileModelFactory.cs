@@ -32,6 +32,7 @@ namespace Endpoint.Core.Factories
                 Tokens = new TokensBuilder()
                 .With(nameof(projectName), (Token)projectName)
                 .With(nameof(port), (Token)$"{port}")
+                .With("SslPort", (Token)$"{port + 1}")
                 .Build()
             };
 
@@ -54,12 +55,25 @@ namespace Endpoint.Core.Factories
                 DbContextName = dbContextName,
                 Name = "Program",
                 Extension = "cs",
-                Directory = projectDirectory
+                Directory = projectDirectory,
             };
 
-            foreach(var resource in resources.Split(','))
-            {                
-                model.Aggregates.Add(AggregateRootModelFactory.Create(resource, properties, useShortIdProperty, useIntIdPropertyType));
+            model.Usings.Add("Microsoft.EntityFrameworkCore");
+
+            model.Usings.Add("Microsoft.OpenApi.Models");
+
+            model.Usings.Add("System.Reflection");
+
+            foreach (var resource in resources.Split(','))
+            {
+                var aggregate = AggregateRootModelFactory.Create(resource, properties, useShortIdProperty, useIntIdPropertyType);
+
+                model.Aggregates.Add(aggregate);
+
+                foreach(var routeHandler in RouteHandlerFactory.Create(dbContextName, aggregate))
+                {
+                    model.RouteHandlers.Add(routeHandler);
+                }
             }
 
             return model;

@@ -5,10 +5,6 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Strategies.Api
 {
-    public interface IWebApplicationGenerationStrategy
-    {
-        string[] Create(MinimalApiProgramModel model);
-    }
 
     public class WebApplicationGenerationStrategy: IWebApplicationGenerationStrategy
     {
@@ -20,11 +16,11 @@ namespace Endpoint.Core.Strategies.Api
             _templateProcessor = templateProcessor;
         }
 
-        public string[] Create(MinimalApiProgramModel model)
+        public string[] Create(string @namespace, string dbContextName, List<RouteHandlerModel> routeHandlers)
         {
             var tokens = new TokensBuilder()
-                .With(nameof(model.ApiNamespace), (Token)model.ApiNamespace)
-                .With(nameof(model.DbContextName), (Token)model.DbContextName)
+                .With("Namespace", (Token)@namespace)
+                .With(nameof(dbContextName), (Token)dbContextName)
                 .Build();
 
             List<string> content = new List<string>();
@@ -37,14 +33,13 @@ namespace Endpoint.Core.Strategies.Api
 
             content.Add("");
 
-            foreach(var routeHandlerModel in model.RouteHandlers)
+            foreach(var routeHandlerModel in routeHandlers)
             {
                 content.AddRange(new RouteHandlerGenerationStrategy().Create(routeHandlerModel));
 
                 content.Add("");
             }
 
-            
             content.Add("app.Run();");
 
             return content.ToArray();

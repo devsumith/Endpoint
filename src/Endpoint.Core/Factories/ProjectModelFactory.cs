@@ -10,6 +10,8 @@ namespace Endpoint.Core.Factories
         {
             var projectModel = new ProjectModel(DotNetProjectType.MinimalWebApi, options.Name, options.Directory);
 
+            projectModel.GenerateDocumentationFile = true;
+
             projectModel.Files.Add(FileModelFactory.LaunchSettingsJson(projectModel.Directory,projectModel.Name, options.Port.Value));
 
             projectModel.Files.Add(FileModelFactory.AppSettings(projectModel.Directory, projectModel.Name, options.DbContextName));

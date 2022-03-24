@@ -36,11 +36,11 @@ namespace Endpoint.Core.Strategies.Api.FileGeneration
 
             content.Add("");
 
-            content.AddRange(_webApplicationBuilderGenerationStrategy.Create(model));
+            content.AddRange(_webApplicationBuilderGenerationStrategy.Create(default,default));
             
             content.Add("");
 
-            content.AddRange(_webApplicationGenerationStrategy.Create(model));
+            content.AddRange(_webApplicationGenerationStrategy.Create(default, default,default));
 
             content.Add("");
 

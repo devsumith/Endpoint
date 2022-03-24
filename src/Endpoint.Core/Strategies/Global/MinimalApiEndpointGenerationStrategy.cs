@@ -27,8 +27,6 @@ namespace Endpoint.Core.Strategies.Global
 
             _fileSystem.CreateDirectory(workspaceDirectory);
 
-            _commandService.Start($"code .", workspaceDirectory);
-
             _commandService.Start($"endpoint git {options.Name}", workspaceDirectory);
 
             var solutionOptions = TinyMapper.Map<CreateEndpointSolutionOptions>(options);
@@ -36,6 +34,9 @@ namespace Endpoint.Core.Strategies.Global
             var solutionModel = SolutionModelFactory.Minimal(solutionOptions);
 
             _solutionGenerationStrategy.Create(solutionModel);
+
+            _commandService.Start(options.VsCode ? "code ." : $"start {options.Name}.sln", workspaceDirectory);
+
         }
     }
 }

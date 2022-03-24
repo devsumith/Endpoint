@@ -1,13 +1,8 @@
-﻿using Endpoint.Core.Models;
-using Endpoint.Core.Services;
+﻿using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 
 namespace Endpoint.Core.Strategies.Api
 {
-    public interface IWebApplicationBuilderGenerationStrategy
-    {
-        string[] Create(MinimalApiProgramModel model);
-    }
 
     public class WebApplicationBuilderGenerationStrategy: IWebApplicationBuilderGenerationStrategy
     {
@@ -20,13 +15,13 @@ namespace Endpoint.Core.Strategies.Api
             _templateLocator = templateLocator;
         }
 
-        public string[] Create(MinimalApiProgramModel model)
+        public string[] Create(string @namespace, string dbContextName)
         {
             var template = _templateLocator.Get("WebApplicationBuilder");
 
             var tokens = new TokensBuilder()
-                .With(nameof(model.ApiNamespace), (Token)model.ApiNamespace)
-                .With(nameof(model.DbContextName), (Token)model.DbContextName)
+                .With("Namespace", (Token)@namespace)
+                .With(nameof(dbContextName), (Token)dbContextName)
                 .Build();
 
             var contents = _templateProcessor.Process(template, tokens);

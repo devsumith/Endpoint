@@ -2,6 +2,7 @@
 using Endpoint.Core.Managers;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
+using Endpoint.Core.Strategies.Api;
 using Endpoint.Core.Strategies.Global;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -39,6 +40,8 @@ namespace Endpoint.Core
             services.AddSingleton<IFileGenerationStrategyFactory, FileGenerationStrategyFactory>();
             services.AddSingleton<ISolutionGenerationStrategy, SolutionGenerationStrategy>();
             services.AddSingleton<IProjectGenerationStrategy, ProjectGenerationStrategy>();
+            services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
+            services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();
         }
     }
 }

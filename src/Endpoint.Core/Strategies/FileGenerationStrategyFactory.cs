@@ -1,5 +1,6 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Services;
+using Endpoint.Core.Strategies.Api;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,15 @@ namespace Endpoint.Core.Strategies
             ITemplateLocator templateLocator,
             ITemplateProcessor templateProcessor,
             ISolutionNamespaceProvider solutionNamespaceProvider,
-            ILogger logger
+            ILogger logger,
+            IWebApplicationBuilderGenerationStrategy webApplicationBuilderGenerationStrategy,
+            IWebApplicationGenerationStrategy webApplicationGenerationStrategy
             )
         {
             _strategies = new List<IFileGenerationStrategy>()
             {
                 new TemplatedFileGenerationStrategy(fileSystem,templateLocator,templateProcessor,solutionNamespaceProvider,logger),
-                new MinimalApiProgramFileGenerationStrategy(fileSystem,templateLocator,templateProcessor,logger)
+                new MinimalApiProgramFileGenerationStrategy( fileSystem,templateLocator,templateProcessor,logger,webApplicationBuilderGenerationStrategy, webApplicationGenerationStrategy)
             };
         }
 
