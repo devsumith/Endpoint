@@ -1,14 +1,13 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Options;
 using Endpoint.Core.Strategies;
-using System.Collections.Generic;
 
 namespace Endpoint.Core.Generators
 {
     public static class AdditionalResourceGenerator
     {
-        public static void Generate(Settings model, string resource, List<string> properties, string directory, IAdditionalResourceGenerationStrategyFactory factory)
+        public static void Generate(AddResourceOptions options, IAdditionalResourceGenerationStrategyFactory factory)
         {
-            factory.CreateFor(model, resource, properties, directory);
+            factory.CreateFor(options);
         }
     }
 }

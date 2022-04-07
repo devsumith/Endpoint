@@ -84,7 +84,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Providers\" />
+    <Folder Include="Parsers\Strategies\" />
   </ItemGroup>
 
 </Project>

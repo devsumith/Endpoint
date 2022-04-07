@@ -1,106 +1,47 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Options;
 using Endpoint.Core.Services;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Endpoint.Core.Strategies
 {
-    public interface IAdditionalResourceGenerationStrategyFactory
-    {
-        void CreateFor(Settings model, string resource, List<string> properties, string directory);
-    }
-
-    public interface IAdditionalResourceGenerationStrategy
-    {
-        bool CanHandle(Settings model);
-        void Create(Settings model, string resource, List<string> properties, string directory);
-    }
-
-    public class AdditionalResourceGenerationStrategyFactory : IAdditionalResourceGenerationStrategyFactory
-    {
-        private readonly List<IAdditionalResourceGenerationStrategy> _strategies;
-
-        public AdditionalResourceGenerationStrategyFactory(
-            ILogger logger,
-            IApplicationProjectFilesGenerationStrategy applicationFileService,
-            IInfrastructureProjectFilesGenerationStrategy infrastructureFileService,
-            IApiProjectFilesGenerationStrategy apiFileService)
-        {
-            _strategies = new List<IAdditionalResourceGenerationStrategy>()
-            {
-                new AdditionalResourceGenerationStrategy(applicationFileService, infrastructureFileService, apiFileService),
-                new AdditionalMinimalApiResourceGenerationStrategy(logger)
-            };
-        }
-
-        public void CreateFor(Settings model, string resource, List<string> properties, string directory)
-        {
-            if (model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
-            var strategy = _strategies.Where(x => x.CanHandle(model)).FirstOrDefault();
-
-            if (strategy == null)
-            {
-                throw new InvalidOperationException("Cannot find a strategy for generation for the type ");
-            }
-
-            strategy.Create(model,resource,properties,directory);
-        }
-    }
 
     public class AdditionalResourceGenerationStrategy : IAdditionalResourceGenerationStrategy
     {
         private readonly IApplicationProjectFilesGenerationStrategy _applicationFileService;
         private readonly IInfrastructureProjectFilesGenerationStrategy _infrastructureFileService;
         private readonly IApiProjectFilesGenerationStrategy _apiFileService;
+        private readonly ISettingsProvider _settingsProvider;
+        private readonly IFileSystem _fileSystem;
 
         public AdditionalResourceGenerationStrategy(
             IApplicationProjectFilesGenerationStrategy applicationFileService,
             IInfrastructureProjectFilesGenerationStrategy infrastructureFileService,
-            IApiProjectFilesGenerationStrategy apiFileService)
+            IApiProjectFilesGenerationStrategy apiFileService,
+            ISettingsProvider settingsProvider,
+            IFileSystem fileSystem)
         {
             _applicationFileService = applicationFileService;
             _infrastructureFileService = infrastructureFileService;
             _apiFileService = apiFileService;
+            _settingsProvider = settingsProvider;
+            _fileSystem = fileSystem;
         }
 
-        public bool CanHandle(Settings model) => !model.Minimal;
+        public int Order => 0;
+        public bool CanHandle(AddResourceOptions options) => true;
 
-        public void Create(Settings model, string resource, List<string> properties, string directory)
+        public void Create(AddResourceOptions options)
         {
-            _applicationFileService.BuildAdditionalResource(model.Resources.First(x => x.Name == resource), model);
+            var settings = _settingsProvider.Get(options.Directory);
 
-            _infrastructureFileService.BuildAdditionalResource(resource, model);
+            settings.AddResource(options.Resource, options.Properties, _fileSystem);
 
-            _apiFileService.BuildAdditionalResource(resource, model);
-        }
-    }
+            _applicationFileService.BuildAdditionalResource(settings.Resources.First(x => x.Name == options.Resource), settings);
 
-    public class AdditionalMinimalApiResourceGenerationStrategy : IAdditionalResourceGenerationStrategy
-    {
-        private readonly ILogger _logger;
+            _infrastructureFileService.BuildAdditionalResource(options.Resource, settings);
 
-        public AdditionalMinimalApiResourceGenerationStrategy(
-            ILogger logger
-            )
-        {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-
-        public bool CanHandle(Settings model) => model.Minimal;
-
-        public void Create(Settings model, string resource, List<string> properties, string directory)
-        {
-            _logger.LogInformation(nameof(AdditionalMinimalApiResourceGenerationStrategy));
-
-            Console.WriteLine("Press any key to continue...");
-
-            Console.ReadKey();
+            _apiFileService.BuildAdditionalResource(options.Resource, settings);
         }
     }
 }

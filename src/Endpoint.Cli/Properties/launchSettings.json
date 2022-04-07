@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": ""
+      "commandLineArgs": "add-resource Pizza --properties Name:string --directory  C:\\sandbox\\MyPizzaApp9"
     }
   }
 } 

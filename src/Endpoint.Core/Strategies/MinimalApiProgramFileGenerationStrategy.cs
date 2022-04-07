@@ -6,6 +6,7 @@ using Endpoint.Core.Strategies.Infrastructure;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Endpoint.Core.Strategies
 {
@@ -72,5 +73,39 @@ namespace Endpoint.Core.Strategies
 
             _fileSystem.WriteAllLines(model.Path, content.ToArray());
         }
+
+        public void Update(dynamic model) => Update(model);
+
+        private void Update(MinimalApiProgramFileModel model)
+        {
+            _logger.LogInformation($"Updating {model.Name} file at {model.Path}");
+
+            var existingContent = File.ReadLines(model.Path);
+            
+            var content = new List<string>();
+
+            /* Look for var app = builder.Build(); and insert the new routeHandlers before that
+             * 
+             * then add the class
+             * 
+             * then update the dbCOntext
+             * 
+             */
+
+
+            foreach (var line in existingContent)
+            {
+                content.Add(line);
+
+                if(line.StartsWith("var app = builder.Build();"))
+                {
+
+                }
+            }
+
+            _fileSystem.WriteAllLines(model.Path, content.ToArray());
+        }
+
+
     }
 }
