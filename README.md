@@ -37,13 +37,16 @@ dotnet tool install --global Allagi.Endpoint.Cli
 ## SYNOPSIS
 
 ```
-endpoint [-n] [-r] [--properties] [-a or --minimalapi]
+endpoint [-n] [-r] [--properties] [-a or --minimal]
 ```
 
 ## EXAMPLES
 
 ```
-endpoint -n TodoApp -r Todo --properties Title:string,IsComplete:bool --minimal-api true
+endpoint --name TodoApp --resource Todo --properties Title:string,IsComplete:bool --minimal true
+
+endpoint --name MyBank --resource Transaction --properties Name:string,Amount:float --monolith true --minimal false --numeric-ids false
+
 ```
 
 Generates a CRUD Minimal api for a Todo entity and Unit Test Project

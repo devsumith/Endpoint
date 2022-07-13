@@ -49,7 +49,6 @@ namespace Endpoint.Application.Commands
 
                 var aggregateEventsDirectory = $@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}AggregatesModel{Path.DirectorySeparatorChar}{request.Aggregate}Aggregate{Path.DirectorySeparatorChar}DomainEvents";
 
-
                 var eventName = $"{request.Aggregate}{_tenseConverter.Convert(request.Verb)}";
 
                 if (!Directory.Exists(aggregateEventsDirectory))
