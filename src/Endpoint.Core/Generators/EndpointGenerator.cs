@@ -1,5 +1,5 @@
 ﻿using Endpoint.Core.Options;
-using Endpoint.Core.Strategies.Global;
+using Endpoint.Core.Strategies.Common;
 
 namespace Endpoint.Core.Generators
 {

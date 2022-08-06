@@ -15,10 +15,20 @@ namespace Endpoint.Core.Models
         public bool IsNugetPackage { get; init; }
         public int Order { get; init; } = 0;
         public bool GenerateDocumentationFile { get; set; }
+        public List<string> Metadata { get; set; } = new List<string>();
 
         public ProjectModel(DotNetProjectType dotNetProjectType, string name, string parentDirectory)
         {
             DotNetProjectType = dotNetProjectType;
+
+            Name = name;
+
+            Directory = $"{parentDirectory}{System.IO.Path.DirectorySeparatorChar}{name}";
+        }
+
+        public ProjectModel(string name, string parentDirectory)
+        {
+            DotNetProjectType = DotNetProjectType.ClassLib;
 
             Name = name;
 

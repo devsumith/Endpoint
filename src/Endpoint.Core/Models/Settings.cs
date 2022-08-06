@@ -44,6 +44,7 @@ namespace Endpoint.Core.Models
         public List<string> Plugins { get; set; }
         public List<Entity> Entities { get; set; } = new List<Entity>();
         public List<AggregateRootModel> Resources { get; set; } = new List<AggregateRootModel>();
+        public string Directory { get; set; }
 
         public Settings(string name, string dbContextName, AggregateRootModel resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid, string prefix = "app", bool minimal = false)
             : this(name, dbContextName, new List<AggregateRootModel>() { resource }, directory, isMicroserviceArchitecture, plugins, idFormat, idDotNetType, prefix, minimal)

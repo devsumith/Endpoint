@@ -4,7 +4,7 @@ using Endpoint.Core.Services;
 using Nelibur.ObjectMapper;
 using System.IO;
 
-namespace Endpoint.Core.Strategies.Global
+namespace Endpoint.Core.Strategies.Common
 {
     public class MinimalApiEndpointGenerationStrategy : IEndpointGenerationStrategy
     {

@@ -1,7 +1,7 @@
 ﻿using Endpoint.Core.Events;
 using Endpoint.Core.Models;
 using Endpoint.Core.Options;
-using Endpoint.Core.Strategies.Global;
+using Endpoint.Core.Strategies.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;

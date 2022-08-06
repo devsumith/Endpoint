@@ -3,7 +3,7 @@ using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.IO;
 
-namespace Endpoint.Core.Strategies.Global
+namespace Endpoint.Core.Strategies.Common
 {
 
     public interface IDeploySetupFileGenerationStrategy

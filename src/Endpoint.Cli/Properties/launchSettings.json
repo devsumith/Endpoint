@@ -2,7 +2,11 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "add-resource Pizza --properties Name:string --directory  C:\\sandbox\\MyPizzaApp9"
+      "commandLineArgs": "-n \"QuinntyneBrown.ConfigServer1\" -d  C:\\reference-architecture",
+      "environmentVariables": {
+        "Endpoint:DefaultCommand": "microservice"
+      }
     }
   }
 } 
+

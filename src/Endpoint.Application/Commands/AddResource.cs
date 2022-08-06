@@ -21,7 +21,7 @@ namespace Endpoint.Application.Commands
             [Option("properties")]
             public string Properties { get; set; }
 
-            [Option("directory")]
+            [Option('d', "directory")]
             public string Directory { get; set; } = Environment.CurrentDirectory;
         }
 

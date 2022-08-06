@@ -1,7 +1,7 @@
 ﻿using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models;
-using Endpoint.Core.Strategies.Global;
+using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.ValueObjects;
 using System.IO;
 using static Endpoint.Core.CoreConstants.ApiFileTemplates;

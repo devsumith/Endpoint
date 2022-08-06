@@ -46,7 +46,7 @@ endpoint [-n] [-r] [--properties] [-a or --minimal]
 endpoint --name TodoApp --resource Todo --properties Title:string,IsComplete:bool --minimal true
 
 
-endpoint --name Contoso.Identity --resource User --properties Name:string,Password:string,Salt:byte[] --monolith true --minimal false --numeric-ids false --db-context-name IdentityDbContext
+endpoint --name Contoso.Identity --resource User --properties Name:string,Password:string,Salt:byte[] --monolith true --minimal false --numeric-ids false --db-context-name IdentityDbContext --short-ids false
 
 ```
 

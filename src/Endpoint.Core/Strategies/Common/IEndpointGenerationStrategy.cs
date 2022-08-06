@@ -1,6 +1,6 @@
 ﻿using Endpoint.Core.Options;
 
-namespace Endpoint.Core.Strategies.Global
+namespace Endpoint.Core.Strategies.Common
 {
     public interface IEndpointGenerationStrategy
     {

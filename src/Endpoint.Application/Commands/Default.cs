@@ -1,7 +1,7 @@
 using CommandLine;
 using Endpoint.Core.Generators;
 using Endpoint.Core.Options;
-using Endpoint.Core.Strategies.Global;
+using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Configuration;

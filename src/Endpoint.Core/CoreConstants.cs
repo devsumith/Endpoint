@@ -29,5 +29,10 @@
             public static string Interfaces = nameof(Interfaces);
             public static string Logs = nameof(Logs);
         }
+
+        public static class EnvironmentVariables
+        {
+            public const string DefaultCommand = $"Endpoint:{nameof(DefaultCommand)}";
+        }
     }
 }

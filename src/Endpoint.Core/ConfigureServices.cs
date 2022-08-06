@@ -1,9 +1,9 @@
-﻿using Endpoint.Core.Generators;
-using Endpoint.Core.Managers;
+﻿using Endpoint.Core.Managers;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
 using Endpoint.Core.Strategies.Api;
-using Endpoint.Core.Strategies.Global;
+using Endpoint.Core.Strategies.Common;
+using Endpoint.Core.Strategies.Common.Git;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core
@@ -42,6 +42,8 @@ namespace Endpoint.Core
             services.AddSingleton<IProjectGenerationStrategy, ProjectGenerationStrategy>();
             services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
             services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();
+
+            services.AddGitStrategyApplicationServices();
         }
     }
 }

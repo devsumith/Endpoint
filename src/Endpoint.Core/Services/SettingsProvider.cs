@@ -30,8 +30,6 @@ namespace Endpoint.Core.Services
                     settings.RootDirectory = new FileInfo(path).Directory.FullName;
                     return settings;
                 }
-
-                i++;
             }
 
             return null;

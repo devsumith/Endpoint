@@ -1,6 +1,8 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Options;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Endpoint.Core.Factories
 {
@@ -34,6 +36,29 @@ namespace Endpoint.Core.Factories
             var model = new ProjectModel(DotNetProjectType.XUnit, $"{name}.Tests", directory);
 
             return model;
+        }
+
+        public static ProjectModel CreateLibrary(string name, string parentDirectory, List<string>? additionalMetadata = null)
+        {
+            var project = new ProjectModel(name, parentDirectory);
+
+            if (additionalMetadata != null)
+                project.Metadata.Concat(additionalMetadata);
+
+            return project;
+        }
+
+        public static ProjectModel CreateWebApi(string name, string parentDirectory, List<string>? additionalMetadata = null)
+        {
+            var project = new ProjectModel(name, parentDirectory)
+            {
+                DotNetProjectType = DotNetProjectType.WebApi
+            };
+
+            if (additionalMetadata != null)
+                project.Metadata.Concat(additionalMetadata);
+
+            return project;
         }
 
         public static ProjectModel CreateTestingProject()

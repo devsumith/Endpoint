@@ -2,7 +2,7 @@
 using Endpoint.Core.Services;
 using System.IO;
 
-namespace Endpoint.Core.Strategies.Global
+namespace Endpoint.Core.Strategies.Common
 {
     public interface IGitIgnoreFileGenerationStrategy
     {

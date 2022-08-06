@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Endpoint.Core.Strategies.Global
+namespace Endpoint.Core.Strategies.Common
 {
     public interface IEndpointGenerationStrategyFactory
     {

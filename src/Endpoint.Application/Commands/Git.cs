@@ -3,8 +3,6 @@ using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Octokit;
 using System;
 using System.IO;
@@ -18,7 +16,7 @@ namespace Endpoint.Application.Commands
         [Verb("git")]
         public class Request : IRequest<Unit>
         {
-            [Value(0)]
+            [Option('n',"name")]
             public string RepositoryName { get; set; }
 
             [Option('d', Required = false)]
@@ -46,37 +44,15 @@ namespace Endpoint.Application.Commands
             {
                 _logger.LogInformation($"Handled: {nameof(Git)}");
 
-                var username = _configuration["Git:GitHubUsername"];
+                var username = Environment.GetEnvironmentVariable("Endpoint:GitUsername");
 
-                if(string.IsNullOrEmpty(username))
-                {
-                    Console.WriteLine("Please enter your github username:");
-                    username = Console.ReadLine();
-                    _addOrUpdateAppSettingSettingsEntry("Git:GitHubUsername", username);
-                }
-
-                var email = _configuration["Git:GitHubEmail"];
-
-                if (string.IsNullOrEmpty(email))
-                {
-                    Console.WriteLine("Please enter your github email:");
-                    email = Console.ReadLine();
-
-                    _addOrUpdateAppSettingSettingsEntry("Git:GitHubEmail", username);
-                }
-
-                var personalAccessToken = _configuration["Git:GitHubPersonalAccessToken"];
-
-                if (string.IsNullOrEmpty(personalAccessToken))
-                {
-                    Console.WriteLine("Please enter your github personal access token:");
-                    personalAccessToken = Console.ReadLine();
-                    _addOrUpdateAppSettingSettingsEntry("Git:GitHubPersonalAccessToken", username);
-                }
+                var email = Environment.GetEnvironmentVariable("Endpoint:GitEmail");
+                
+                var password = Environment.GetEnvironmentVariable("Endpoint:GitPassword");
 
                 var client = new GitHubClient(new ProductHeaderValue(username))
                 {
-                    Credentials = new Credentials(personalAccessToken)
+                    Credentials = new Credentials(password)
                 };
 
                 client.Repository.Create(new NewRepository(request.RepositoryName)).GetAwaiter().GetResult();
@@ -89,20 +65,11 @@ namespace Endpoint.Application.Commands
 
                 _fileSystem.WriteAllLines($@"{request.Directory}{Path.DirectorySeparatorChar}.gitignore", _templateLocator.Get("GitIgnoreFile"));
 
-                _commandService.Start($"git remote add origin https://{username}:{personalAccessToken}@github.com/{username}/{request.RepositoryName}.git");
+                _commandService.Start($"git remote add origin https://{username}:{password}@github.com/{username}/{request.RepositoryName}.git");
 
                 return new();
             }
 
-            private void _addOrUpdateAppSettingSettingsEntry(string key, string value)
-            {
-                var appSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
-                var json = File.ReadAllText(appSettingsPath);
-                var jObject = JsonConvert.DeserializeObject<JObject>(json);
-                jObject[key] = value;
-                Console.WriteLine(appSettingsPath);
-                File.WriteAllText(appSettingsPath, JsonConvert.SerializeObject(jObject, Formatting.Indented));
-            }
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using CommandLine;
 using Endpoint.Application;
+using Endpoint.Core;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
@@ -21,9 +23,13 @@ namespace Endpoint.Cli
 
             Log.Information("Starting Endpoint");
 
-            var mediator = BuildContainer().GetService<IMediator>();
+            var container = BuildContainer();
 
-            ProcessArgs(mediator, args);
+            var mediator = container.GetService<IMediator>();
+
+            var configuration = container.GetRequiredService<IConfiguration>();
+
+            ProcessArgs(mediator, configuration, args);
         }
 
         private static Parser _createParser()
@@ -45,11 +51,11 @@ namespace Endpoint.Cli
             return services.BuildServiceProvider();
         }
 
-        public static void ProcessArgs(IMediator mediator, string[] args)
+        public static void ProcessArgs(IMediator mediator, IConfiguration configuration, string[] args)
         {
             if (args.Length == 0 || args[0].StartsWith("-"))
             {
-                args = new string[1] { "default" }.Concat(args).ToArray();
+                args = new string[1] { configuration[CoreConstants.EnvironmentVariables.DefaultCommand] }.Concat(args).ToArray();
             }
 
             var verbs = AppDomain.CurrentDomain.GetAssemblies()

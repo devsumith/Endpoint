@@ -1,5 +1,5 @@
 ﻿using Endpoint.Core.Models;
-using Endpoint.Core.Strategies.Global;
+using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
