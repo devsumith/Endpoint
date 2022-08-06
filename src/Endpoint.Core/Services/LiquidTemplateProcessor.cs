@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection;
 
 namespace Endpoint.Core.Services
 {
@@ -63,8 +64,51 @@ namespace Endpoint.Core.Services
                 throw e;
             }
         }
+
+        public string Process(string[] template, dynamic model)
+        {
+            var dictionary = ConvertObjectToDictionary(model);
+
+            string[] result = Process(template, dictionary, ignoreTokens: null);
+
+            return string.Join(Environment.NewLine, result);
+        }
+
+        private static Dictionary<string, object> ConvertObjectToDictionary(object o)
+        {
+            var dictionary = new Dictionary<string, object>();
+
+            var properties = o.GetType()
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
+            foreach (var prop in properties)
+            {
+                var propValue = prop.GetValue(o, null);
+
+                var propType = propValue.GetType();
+
+                if ((propType.IsGenericType && (propType.GetGenericTypeDefinition() == typeof(List<>))))
+                {
+                    var list = new List<object>();
+
+                    foreach (var x in (propValue as IEnumerable<object>))
+                    {
+                        list.Add(ConvertObjectToDictionary(x));
+                    }
+
+                    dictionary.Add(prop.Name, list);
+                }
+                else if (propType != typeof(int) && propType != typeof(string))
+                {
+                    dictionary.Add(prop.Name, ConvertObjectToDictionary(propValue));
+                }
+                else
+                {
+                    dictionary.Add(prop.Name, propValue);
+                }
+            }
+
+            return dictionary;
+        }
     }
-
-
-
 }

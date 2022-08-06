@@ -6,5 +6,6 @@ namespace Endpoint.Core.Services
     {
         string[] Process(string[] template, IDictionary<string, object> tokens, string[] ignoreTokens = null);
         string Process(string template, IDictionary<string, object> tokens);
+        string Process(string[] template, dynamic model);
     }
 }

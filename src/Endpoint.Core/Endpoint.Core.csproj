@@ -86,6 +86,7 @@
 
   <ItemGroup>
     <Folder Include="Parsers\Strategies\" />
+    <Folder Include="Strategies\Common\SettingsModel\" />
   </ItemGroup>
 
 </Project>
