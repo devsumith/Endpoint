@@ -1,6 +1,6 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Files;
 
-namespace Endpoint.Core.Strategies
+namespace Endpoint.Core.Strategies.Files.Create
 {
     public interface IFileGenerationStrategy
     {

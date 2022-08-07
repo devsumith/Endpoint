@@ -1,12 +1,12 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Files;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace Endpoint.Core.Strategies
+namespace Endpoint.Core.Strategies.Files.Create
 {
-    public class TemplatedFileGenerationStrategy: IFileGenerationStrategy
+    public class TemplatedFileGenerationStrategy : IFileGenerationStrategy
     {
         private readonly IFileSystem _fileSystem;
         private readonly ITemplateLocator _templateLocator;
@@ -46,7 +46,7 @@ namespace Endpoint.Core.Strategies
 
             foreach (var token in tokens)
             {
-                model.Tokens.Add(token.Key, token.Value); 
+                model.Tokens.Add(token.Key, token.Value);
             }
 
             var result = _templateProcessor.Process(template, model.Tokens); ;

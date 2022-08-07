@@ -70,5 +70,13 @@ namespace Endpoint.Core.Factories
 
             return model;
         }
+
+        public static SolutionModel ResolveCleanArchitectureMicroservice(UpdateCleanArchitectureMicroserviceOptions options)
+        {
+            return new SolutionModel
+            {
+
+            };
+        }
     }
 }

@@ -6,7 +6,6 @@ namespace Endpoint.Core.Models
     {
         public string AggregateRootName { get; private set; }
         public List<ClassProperty> Properties { get; private set; } = new List<ClassProperty>();
-
         public string Name { get; set; }
 
         public Entity(string aggregateRootName, string name, List<ClassProperty> classProperties)
@@ -31,5 +30,8 @@ namespace Endpoint.Core.Models
         {
 
         }
+
+        public List<string> Usings { get; set; }
+        public string Namespace { get; set; }
     }
 }

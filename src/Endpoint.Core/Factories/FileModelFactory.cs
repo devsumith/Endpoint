@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Models;
+using Endpoint.Core.Models.Files;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
@@ -8,6 +9,13 @@ namespace Endpoint.Core.Factories
 {
     public class FileModelFactory
     {
+        public static EntityFileModel Create(Entity model, string directory)
+        {
+            return new EntityFileModel
+            {
+                Entity = model
+            };
+        }
         public static CSharpTemplatedFileModel CreateCSharp(string template, string @namespace, string name, string directory, Dictionary<string, object> tokens = null)
             => new()
             {
@@ -21,7 +29,6 @@ namespace Endpoint.Core.Factories
                 .With("Namespace", (Token)@namespace)
                 .Build()
             };
-
         public static TemplatedFileModel LaunchSettingsJson(string projectDirectory, string projectName, int port)
             => new()
             {
@@ -35,7 +42,6 @@ namespace Endpoint.Core.Factories
                 .With("SslPort", (Token)$"{port + 1}")
                 .Build()
             };
-
         public static TemplatedFileModel AppSettings(string projectDirectory, string projectName, string dbContextName)
             => new()
             {

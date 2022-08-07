@@ -1,6 +1,4 @@
 ﻿using Endpoint.Core.Models;
-using Endpoint.Core.Options;
-using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,23 +8,17 @@ using System.Linq;
 namespace Endpoint.Core
 {
 
-    public class SettingsFileGenerationStrategyFactory: ISettingsFileGenerationStrategyFactory
+    public class SolutionSettingsFileGenerationStrategyFactory: ISolutionSettingsFileGenerationStrategyFactory
     {
-        private readonly List<ISettingsFileGenerationStrategy> _strategies;
+        private readonly IEnumerable<ISolutionSettingsFileGenerationStrategy> _strategies;
         private readonly ILogger _logger;
-        public SettingsFileGenerationStrategyFactory(ILogger logger, IFileSystem fileSystem)
+        public SolutionSettingsFileGenerationStrategyFactory(ILogger logger, IEnumerable<ISolutionSettingsFileGenerationStrategy> strategies)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            
-
-            _strategies = new List<ISettingsFileGenerationStrategy>()
-            {
-                new SettingsFileGenerationStrategy(fileSystem),
-                new MinimalApiSettingsFileGenerationStrategy()
-            };
+            _strategies = strategies ?? throw new ArgumentNullException(nameof(strategies));
         }
 
-        public Settings CreateFor(Settings model)
+        public SolutionSettingsModel CreateFor(SolutionSettingsModel model)
         {
             var strategy = _strategies.Where(x => x.CanHandle(model).Value).FirstOrDefault();
 

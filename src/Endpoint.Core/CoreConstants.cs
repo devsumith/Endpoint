@@ -34,5 +34,12 @@
         {
             public const string DefaultCommand = $"Endpoint:{nameof(DefaultCommand)}";
         }
+
+        public static class SolutionTemplates
+        {
+            public const string CleanArchitectureByJasonTalyor = nameof(CleanArchitectureByJasonTalyor);
+            public const string CleanArchitectureBySteveSmith = nameof(CleanArchitectureBySteveSmith);
+            public const string Minimal = nameof(Minimal);
+        }
     }
 }

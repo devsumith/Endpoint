@@ -1,4 +1,5 @@
 ﻿using DotLiquid;
+using Endpoint.Core.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -104,7 +105,15 @@ namespace Endpoint.Core.Services
                 }
                 else
                 {
-                    dictionary.Add(prop.Name, propValue);
+                    
+                    var tokens = new TokensBuilder()
+                        .With(prop.Name, (Token)propValue.ToString())
+                        .Build();
+
+                    foreach (var token in tokens)
+                    {
+                        dictionary.Add(token.Key, token.Value);
+                    }
                 }
             }
 

@@ -33,4 +33,27 @@ namespace Endpoint.Core.Factories
             return model;
         }
     }
+
+    public static class EntityFactory
+    {
+        public static Entity Create(string name, string properties)
+        {
+            Entity model = new Entity() {  Name = name };
+
+
+            model.Properties.Add(new ClassProperty("public", "Guid", $"{((Token)name).PascalCase}Id", ClassPropertyAccessor.GetPrivateSet, key: true));
+
+            if (!string.IsNullOrWhiteSpace(properties))
+            {
+                foreach (var property in properties.Split(','))
+                {
+                    var nameValuePair = property.Split(':');
+
+                    model.Properties.Add(new ClassProperty("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), ClassPropertyAccessor.GetPrivateSet));
+                }
+            }
+
+            return model;
+        }
+    }
 }

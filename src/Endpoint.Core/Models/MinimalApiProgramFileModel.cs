@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Endpoint.Core.Models.Files;
+using System.Collections.Generic;
 
 namespace Endpoint.Core.Models
 {

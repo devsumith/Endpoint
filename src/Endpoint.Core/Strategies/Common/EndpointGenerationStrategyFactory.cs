@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
+using Endpoint.Core.Strategies.Solutions.Crerate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;

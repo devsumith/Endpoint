@@ -1,6 +1,6 @@
 ﻿using Endpoint.Core.Models;
 
-namespace Endpoint.Core.Strategies
+namespace Endpoint.Core.Strategies.Solutions.Crerate
 {
     public interface ISolutionGenerationStrategy
     {

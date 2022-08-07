@@ -4,6 +4,8 @@ using Endpoint.Core.Strategies;
 using Endpoint.Core.Strategies.Api;
 using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.Strategies.Common.Git;
+using Endpoint.Core.Strategies.Files.Create;
+using Endpoint.Core.Strategies.Solutions.Crerate;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core
@@ -36,7 +38,7 @@ namespace Endpoint.Core
             services.AddSingleton<IAdditionalResourceGenerationStrategyFactory, AdditionalResourceGenerationStrategyFactory>();
             services.AddSingleton<IFileProvider, FileProvider>();
             services.AddSingleton<ISolutionNamespaceProvider, SolutionNamespaceProvider>();
-            services.AddSingleton<ISettingsFileGenerationStrategyFactory, SettingsFileGenerationStrategyFactory>();
+            services.AddSingleton<ISolutionSettingsFileGenerationStrategyFactory, SolutionSettingsFileGenerationStrategyFactory>();
             services.AddSingleton<IFileGenerationStrategyFactory, FileGenerationStrategyFactory>();
             services.AddSingleton<ISolutionGenerationStrategy, SolutionGenerationStrategy>();
             services.AddSingleton<IProjectGenerationStrategy, ProjectGenerationStrategy>();

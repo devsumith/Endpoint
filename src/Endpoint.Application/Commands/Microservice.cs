@@ -4,13 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System;
-using Endpoint.Core.Strategies;
 using Endpoint.Core.Factories;
 using Nelibur.ObjectMapper;
 using Endpoint.Core.Options;
 using Endpoint.Core;
 using Endpoint.Core.Strategies.Common.Git;
 using Endpoint.Core.Models;
+using Endpoint.Core.Strategies.Solutions.Crerate;
 
 namespace Endpoint.Application.Commands
 {
@@ -29,10 +29,10 @@ namespace Endpoint.Application.Commands
         {
             private readonly ILogger _logger;
             private readonly ISolutionGenerationStrategy _solutionGenerationStrategy;
-            private readonly ISettingsFileGenerationStrategyFactory _factory;
+            private readonly ISolutionSettingsFileGenerationStrategyFactory _factory;
             private readonly IGitGenerationStrategyFactory _gitGenerationStrategyFactory;
 
-            public Handler(ILogger logger, ISolutionGenerationStrategy solutionGenerationStrategy, ISettingsFileGenerationStrategyFactory factory, IGitGenerationStrategyFactory gitGenerationStrategyFactory)
+            public Handler(ILogger logger, ISolutionGenerationStrategy solutionGenerationStrategy, ISolutionSettingsFileGenerationStrategyFactory factory, IGitGenerationStrategyFactory gitGenerationStrategyFactory)
             {
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
                 _solutionGenerationStrategy = solutionGenerationStrategy ?? throw new ArgumentNullException(nameof(solutionGenerationStrategy));

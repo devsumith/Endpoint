@@ -2,9 +2,9 @@
 
 namespace Endpoint.Core.Strategies
 {
-    public interface ISettingsFileGenerationStrategy
+    public interface ISolutionSettingsFileGenerationStrategy
     {
-        bool? CanHandle(Settings model);
-        Settings Create(Settings model);
+        bool? CanHandle(SolutionSettingsModel model);
+        SolutionSettingsModel Create(SolutionSettingsModel model);
     }
 }

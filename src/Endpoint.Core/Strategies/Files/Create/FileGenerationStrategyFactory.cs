@@ -1,14 +1,14 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Files;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Api;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Endpoint.Core.Strategies
+namespace Endpoint.Core.Strategies.Files.Create
 {
 
-    public class FileGenerationStrategyFactory: IFileGenerationStrategyFactory
+    public class FileGenerationStrategyFactory : IFileGenerationStrategyFactory
     {
         private readonly List<IFileGenerationStrategy> _strategies;
 

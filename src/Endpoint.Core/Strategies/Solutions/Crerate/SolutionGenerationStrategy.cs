@@ -3,10 +3,10 @@ using Endpoint.Core.Services;
 using System;
 using System.Linq;
 
-namespace Endpoint.Core.Strategies
+namespace Endpoint.Core.Strategies.Solutions.Crerate
 {
 
-    public class SolutionGenerationStrategy: ISolutionGenerationStrategy
+    public class SolutionGenerationStrategy : ISolutionGenerationStrategy
     {
         private readonly IProjectGenerationStrategy _projectGenerationStrategy;
         private readonly ICommandService _commandService;
@@ -43,7 +43,7 @@ namespace Endpoint.Core.Strategies
                 _projectGenerationStrategy.Create(project);
             }
 
-            foreach(var dependOn in model.DependOns)
+            foreach (var dependOn in model.DependOns)
             {
                 _commandService.Start($"dotnet add {dependOn.Client.Directory} reference {dependOn.Supplier.Path}");
             }

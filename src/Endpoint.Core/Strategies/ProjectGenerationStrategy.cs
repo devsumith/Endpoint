@@ -1,5 +1,6 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Services;
+using Endpoint.Core.Strategies.Files.Create;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;

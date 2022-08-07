@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Factories;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
+using Endpoint.Core.Strategies.Solutions.Crerate;
 using Nelibur.ObjectMapper;
 using System.IO;
 

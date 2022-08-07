@@ -1,7 +1,9 @@
 ﻿using Endpoint.Core.Models;
+using Endpoint.Core.Models.Files;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Api;
 using Endpoint.Core.Strategies.Application;
+using Endpoint.Core.Strategies.Files.Create;
 using Endpoint.Core.Strategies.Infrastructure;
 using Microsoft.Extensions.Logging;
 using System;

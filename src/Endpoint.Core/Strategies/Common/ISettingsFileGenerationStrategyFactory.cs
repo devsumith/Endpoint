@@ -2,8 +2,8 @@
 
 namespace Endpoint.Core
 {
-    public interface ISettingsFileGenerationStrategyFactory
+    public interface ISolutionSettingsFileGenerationStrategyFactory
     {
-        Settings CreateFor(Settings model);
+        SolutionSettingsModel CreateFor(SolutionSettingsModel model);
     }
 }
