@@ -20,9 +20,9 @@ namespace Endpoint.Core.Services
 
             var projectDirectoryParts = Path.GetDirectoryName(_fileProvider.Get("*.csproj", directory)).Split(Path.DirectorySeparatorChar);
 
-            var fileDirectoryParts = Path.GetDirectoryName(directory).Split(Path.DirectorySeparatorChar).Skip(projectDirectoryParts.Length);
+            var fileDirectoryParts = directory.Split(Path.DirectorySeparatorChar).Skip(projectDirectoryParts.Length);
 
-            return fileDirectoryParts.Count() > 0 ? $"{projectNamespace}.{string.Join(".", fileDirectoryParts)}" : projectNamespace;
+            return fileDirectoryParts.Any() ? $"{projectNamespace}.{string.Join(".", fileDirectoryParts)}" : projectNamespace;
         }
     }
 }

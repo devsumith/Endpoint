@@ -11,8 +11,11 @@ namespace Endpoint.Core.ViewModels
         public string Name { get; set; }
     }
 
+
     public static class EntityExtensions
     {
+
+
         public static EntityViewModel ToViewModel(this Entity entity)
         {
             var model = new EntityViewModel
@@ -26,7 +29,7 @@ namespace Endpoint.Core.ViewModels
             {
                 if (ClassPropertyAccessor.IsGetPrivateSet(prop.Accessors))
                 {
-                    model.Properties.Add($"{prop.AccessModifier} {prop.Type} {prop.Name} " + "{ get; private set; }" + System.Environment.NewLine);
+                    model.Properties.Add($"{prop.AccessModifier} {prop.Type} {prop.Name} " + "{ get; private set; }" + (!entity.Properties.IsLast(prop) ? System.Environment.NewLine : string.Empty));
                 }
             }
             return model;
