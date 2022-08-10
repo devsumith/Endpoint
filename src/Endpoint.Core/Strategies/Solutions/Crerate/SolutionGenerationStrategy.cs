@@ -35,7 +35,7 @@ namespace Endpoint.Core.Strategies.Solutions.Crerate
 
             foreach (var project in model.Projects.OrderByDescending(x => x.Order))
             {
-                CreateProjectAndAddToSolution(project.DotNetProjectType, model.SolutionDirectory, project.Path, project.Directory);
+                CreateProjectAndAddToSolution(project.DotNetProjectType, model.SolutionDirectory, project.Path, project.Directory, model.SolultionFileName);
             }
 
             foreach (var project in model.Projects)
@@ -49,7 +49,7 @@ namespace Endpoint.Core.Strategies.Solutions.Crerate
             }
         }
 
-        private void CreateProjectAndAddToSolution(DotNetProjectType dotNetProjectType, string directory, string projectPath, string projectDirectory)
+        private void CreateProjectAndAddToSolution(DotNetProjectType dotNetProjectType, string directory, string projectPath, string projectDirectory, string solutionFileName)
         {
             _fileSystem.CreateDirectory(projectDirectory);
 
@@ -65,7 +65,7 @@ namespace Endpoint.Core.Strategies.Solutions.Crerate
 
             _commandService.Start($"dotnet new {templateType} --framework net6.0", projectDirectory);
 
-            _commandService.Start($"dotnet sln add {projectPath}", directory);
+            _commandService.Start($"dotnet sln {solutionFileName} add {projectPath}", directory);
         }
 
     }

@@ -3,14 +3,13 @@ using Endpoint.Core.Models.Files;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Api;
 using Endpoint.Core.Strategies.Application;
-using Endpoint.Core.Strategies.Files.Create;
 using Endpoint.Core.Strategies.Infrastructure;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Endpoint.Core.Strategies
+namespace Endpoint.Core.Strategies.Files.Create
 {
     public class MinimalApiProgramFileGenerationStrategy : IFileGenerationStrategy
     {
@@ -83,7 +82,7 @@ namespace Endpoint.Core.Strategies
             _logger.LogInformation($"Updating {model.Name} file at {model.Path}");
 
             var existingContent = File.ReadLines(model.Path);
-            
+
             var content = new List<string>();
 
             /* Look for var app = builder.Build(); and insert the new routeHandlers before that
@@ -99,7 +98,7 @@ namespace Endpoint.Core.Strategies
             {
                 content.Add(line);
 
-                if(line.StartsWith("var app = builder.Build();"))
+                if (line.StartsWith("var app = builder.Build();"))
                 {
 
                 }

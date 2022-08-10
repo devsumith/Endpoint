@@ -12,5 +12,6 @@
         public bool? ShortIdPropertyName { get; set; }
         public bool? NumericIdPropertyDataType { get; set; }
         public string Directory { get; set; }
+        public string SolutionDirectory { get; set; }
     }
 }

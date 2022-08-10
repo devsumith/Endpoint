@@ -8,6 +8,7 @@ namespace Endpoint.Core.Models
         {
 
         }
+        public string Path => $"{Directory}{System.IO.Path.DirectorySeparatorChar}CliSettings.{Namespace}.json";
         public string Namespace { get; set; }
         public List<Entity> Entities { get; set; } = new List<Entity>();
         public string Directory { get; set; }

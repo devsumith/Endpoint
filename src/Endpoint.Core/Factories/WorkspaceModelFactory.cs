@@ -1,9 +1,11 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Options;
+using System;
 
 namespace Endpoint.Core.Factories
 {
-    public static class WorkspaceModelFactory
+    [Obsolete]
+    public static class _WorkspaceSettingsModelFactory
     {
         public static WorkspaceModel CreateMinimalApiEndpointWorkspace(CreateEndpointOptions request)
         {

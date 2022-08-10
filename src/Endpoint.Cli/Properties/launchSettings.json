@@ -2,9 +2,15 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "-n \"QuinntyneBrown.ConfigServer1\" -d  C:\\reference-architecture",
+      "commandLineArgs": "",
       "environmentVariables": {
-        "Endpoint:DefaultCommand": "microservice"
+        "Endpoint:DefaultCommand": "add-entity",
+        "Endpoint:ShortIdPropertyName": "false",
+        "Endpoint:NumericIdPropertyDataType": "false",
+        "Endpoint:Resource": "Foo",
+        "Endpoint:Propertoes": "Name:string",
+        "Endpoint:Port": "5000",
+        "Endpoint:DbContextName": "FooDbContext"
       }
     }
   }

@@ -17,6 +17,11 @@ namespace Endpoint.Core.Services
         public string ReadAllText(string path)
             => File.ReadAllText(path);
 
+        public void WriteAllText(string path, string contents)
+        {
+            File.WriteAllText(path, contents);
+        }
+
         public void WriteAllLines(string path, string[] contents)
         {
             var parts = Path.GetDirectoryName(path).Split(Path.DirectorySeparatorChar);

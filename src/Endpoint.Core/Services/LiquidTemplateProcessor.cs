@@ -77,47 +77,68 @@ namespace Endpoint.Core.Services
 
         private static Dictionary<string, object> ConvertObjectToDictionary(object o)
         {
-            var dictionary = new Dictionary<string, object>();
-
-            var properties = o.GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public);
-
-            foreach (var prop in properties)
+            try
             {
-                var propValue = prop.GetValue(o, null);
+                var dictionary = new Dictionary<string, object>();
 
-                var propType = propValue.GetType();
+                var properties = o.GetType()
+                    .GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
-                if ((propType.IsGenericType && (propType.GetGenericTypeDefinition() == typeof(List<>))))
+                foreach (var prop in properties)
                 {
-                    var list = new List<object>();
+                    var propValue = prop.GetValue(o, null);
 
-                    foreach (var x in (propValue as IEnumerable<object>))
+                    if (propValue != null)
                     {
-                        list.Add(ConvertObjectToDictionary(x));
-                    }
+                        var propType = propValue.GetType();
 
-                    dictionary.Add(prop.Name, list);
-                }
-                else if (propType != typeof(int) && propType != typeof(string))
-                {
-                    dictionary.Add(prop.Name, ConvertObjectToDictionary(propValue));
-                }
-                else
-                {
-                    
-                    var tokens = new TokensBuilder()
-                        .With(prop.Name, (Token)propValue.ToString())
-                        .Build();
+                        if (propType == typeof(List<string>))
+                        {
+                            var list = new List<string>();
 
-                    foreach (var token in tokens)
-                    {
-                        dictionary.Add(token.Key, token.Value);
+                            foreach (var x in (propValue as IEnumerable<string>))
+                            {
+                                list.Add(x);
+                            }
+
+                            dictionary.Add(prop.Name, list);
+                        }
+                        else if (propType.IsGenericType && (propType.GetGenericTypeDefinition() == typeof(List<>)))
+                        {
+                            var list = new List<object>();
+
+                            foreach (var x in (propValue as IEnumerable<object>))
+                            {
+                                list.Add(ConvertObjectToDictionary(x));
+                            }
+
+                            dictionary.Add(prop.Name, list);
+                        }
+                        else if (propType != typeof(int) && propType != typeof(string))
+                        {
+                            dictionary.Add(prop.Name, ConvertObjectToDictionary(propValue));
+                        }
+                        else
+                        {
+
+                            var tokens = new TokensBuilder()
+                                .With(prop.Name, (Token)propValue.ToString())
+                                .Build();
+
+                            foreach (var token in tokens)
+                            {
+                                dictionary.Add(token.Key, token.Value);
+                            }
+                        }
                     }
                 }
+
+                return dictionary;
             }
-
-            return dictionary;
+            catch(TargetParameterCountException exception)
+            {
+                return new Dictionary<string, object>();
+            }
         }
     }
 }

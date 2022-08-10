@@ -9,6 +9,5 @@ namespace Endpoint.Core.Models
         public string Directory => $"{ParentDirectory}{Path.DirectorySeparatorChar}{Name}";
         public string ParentDirectory { get; init; }
         public List<SolutionModel> Solutions { get; private set; } = new();
-        public List<FrontendModel> Frontends { get; private set; } = new();
     }
 }

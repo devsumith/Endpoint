@@ -1,24 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Endpoint.Core.Models;
+using Endpoint.Core.Services;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Strategies.Solutions.Update
 {
     public class SolutionUpdateStrategy : ISolutionUpdateStrategy
     {
-    }
+        private readonly ICommandService _commandService;
 
-    public interface ISolutionUpdateStrategy
-    {
-    }
+        public SolutionUpdateStrategy(ICommandService commandService)
+        {
+            _commandService = commandService;
+        }
 
-    public class SolutionUpdateStrategyFactory : ISolutionUpdateStrategyFactory
-    {
-    }
-
-    public interface ISolutionUpdateStrategyFactory
-    {
+        public bool CanHandle(SolutionModel previous, SolutionModel next) => true;
+        public int Order { get; set; }
+        public void Update(SolutionModel previous, SolutionModel next)
+        {
+            foreach (var project in next.Projects.Where(np => previous.Projects.SingleOrDefault(p => p.Path == np.Path) == null))
+            {
+                if (previous.Projects.SingleOrDefault(x => x.Name == project.Name) == null)
+                {
+                    _commandService.Start($"dotnet sln {next.SolultionFileName} add {project.Path}", next.SolutionDirectory);
+                }
+            }
+        }
     }
 }

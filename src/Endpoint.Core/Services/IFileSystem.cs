@@ -10,6 +10,7 @@ namespace Endpoint.Core.Services
         bool Exists(string path);
         bool Exists(string[] paths);
         void WriteAllLines(string path, string[] contents);
+        void WriteAllText(string path, string contents);
         string ParentFolder(string path);
         void CreateDirectory(string directory);
         void Delete(string path);

@@ -1,21 +1,18 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Services;
 using System;
-using System.IO;
 using System.Text.Json;
 using static System.Text.Json.JsonSerializer;
 
 namespace Endpoint.Core.Strategies
 {
-    public class SettingsFileGenerationStrategy : ISolutionSettingsFileGenerationStrategy
+    public class SolutionSettingsFileGenerationStrategy : ISolutionSettingsFileGenerationStrategy
     {
         private readonly IFileSystem _fileSystem;
-        private readonly INamingConventionConverter _namingConventionConverter;
 
-        public SettingsFileGenerationStrategy(IFileSystem fileSystem, INamingConventionConverter namingConventionConverter)
+        public SolutionSettingsFileGenerationStrategy(IFileSystem fileSystem)
         {
-            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(namingConventionConverter));
-            _namingConventionConverter = namingConventionConverter ?? throw new System.ArgumentNullException(nameof(namingConventionConverter));
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         }
 
         public bool? CanHandle(SolutionSettingsModel request) => !request.Metadata.Contains(CoreConstants.SolutionTemplates.Minimal);
@@ -27,7 +24,7 @@ namespace Endpoint.Core.Strategies
                 WriteIndented = true
             });
 
-            _fileSystem.WriteAllLines($"{model.Directory}{Path.DirectorySeparatorChar}cliSettings.${_namingConventionConverter.Convert(NamingConvention.CamelCase,model.Namespace)}.json", new string[1] { json });
+            _fileSystem.WriteAllLines(model.Path, new string[1] { json });
 
             return model;
         }

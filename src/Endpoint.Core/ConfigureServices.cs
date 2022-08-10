@@ -4,8 +4,12 @@ using Endpoint.Core.Strategies;
 using Endpoint.Core.Strategies.Api;
 using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.Strategies.Common.Git;
+using Endpoint.Core.Strategies.Files;
 using Endpoint.Core.Strategies.Files.Create;
+using Endpoint.Core.Strategies.Solutions;
 using Endpoint.Core.Strategies.Solutions.Crerate;
+using Endpoint.Core.Strategies.Solutions.Update;
+using Endpoint.Core.Strategies.WorkspaceSettingss.Update;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core
@@ -26,6 +30,7 @@ namespace Endpoint.Core
 
         public static void AddCoreServices(this IServiceCollection services)
         {
+            services.AddSingleton<IFileNamespaceProvider, FileNamespaceProvider>();
             services.AddSingleton<ISolutionTemplateService, EndpointGenerationStrategy>();
             services.AddSingleton<ISolutionFilesGenerationStrategy, SolutionFilesGenerationStrategy>();
             services.AddSingleton<ISharedKernelProjectFilesGenerationStrategy, SharedKernelProjectFilesGenerationStrategy>();
@@ -39,13 +44,14 @@ namespace Endpoint.Core
             services.AddSingleton<IFileProvider, FileProvider>();
             services.AddSingleton<ISolutionNamespaceProvider, SolutionNamespaceProvider>();
             services.AddSingleton<ISolutionSettingsFileGenerationStrategyFactory, SolutionSettingsFileGenerationStrategyFactory>();
-            services.AddSingleton<IFileGenerationStrategyFactory, FileGenerationStrategyFactory>();
+
             services.AddSingleton<ISolutionGenerationStrategy, SolutionGenerationStrategy>();
             services.AddSingleton<IProjectGenerationStrategy, ProjectGenerationStrategy>();
             services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
-            services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();
-
+            services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();           
             services.AddGitStrategyApplicationServices();
+            services.AddSolutionStrategyApplicationServices();
+            services.AddFileGenerationApplicationServices();
         }
     }
 }

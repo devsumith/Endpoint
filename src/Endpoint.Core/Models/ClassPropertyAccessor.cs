@@ -29,5 +29,9 @@ namespace Endpoint.Core.Models
 
         public static List<ClassPropertyAccessor> GetPrivateSet => new List<ClassPropertyAccessor>() { Get, PrivateSet };
 
+        public static bool IsGetPrivateSet(List<ClassPropertyAccessor> accessors)
+        {
+            return true;
+        }
     }
 }

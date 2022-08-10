@@ -40,6 +40,30 @@
             public const string CleanArchitectureByJasonTalyor = nameof(CleanArchitectureByJasonTalyor);
             public const string CleanArchitectureBySteveSmith = nameof(CleanArchitectureBySteveSmith);
             public const string Minimal = nameof(Minimal);
+            public const string Library = nameof(Library);
+        }
+
+        public static class TargetFramework
+        {
+            public const string NetCore6 = nameof(NetCore6);
+            public const string NetCore7 = nameof(NetCore7);
+            public const string Framework48 = nameof(Framework48);
+        }
+
+        public static class SolutionTypes
+        {
+            public const string Workspace = nameof(Workspace);
+        }
+
+        public static class ProjectType
+        {
+            public const string Domain = nameof(Domain);
+            public const string Core = nameof(Core);
+            public const string SharedKernel = nameof(SharedKernel);
+            public const string Infrastructure = nameof(Infrastructure);
+            public const string Application = nameof(Application);
+            public const string Api = nameof(Api);
+            public const string Cli = nameof(Cli);            
         }
     }
 }

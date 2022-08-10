@@ -1,7 +1,5 @@
 ﻿using Endpoint.Core.Models.Files;
-using Endpoint.Core.Services;
-using Endpoint.Core.Strategies.Api;
-using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,23 +8,13 @@ namespace Endpoint.Core.Strategies.Files.Create
 
     public class FileGenerationStrategyFactory : IFileGenerationStrategyFactory
     {
-        private readonly List<IFileGenerationStrategy> _strategies;
+        private readonly IEnumerable<IFileGenerationStrategy> _strategies;
 
         public FileGenerationStrategyFactory(
-            IFileSystem fileSystem,
-            ITemplateLocator templateLocator,
-            ITemplateProcessor templateProcessor,
-            ISolutionNamespaceProvider solutionNamespaceProvider,
-            ILogger logger,
-            IWebApplicationBuilderGenerationStrategy webApplicationBuilderGenerationStrategy,
-            IWebApplicationGenerationStrategy webApplicationGenerationStrategy
+            IEnumerable<IFileGenerationStrategy> strategies
             )
         {
-            _strategies = new List<IFileGenerationStrategy>()
-            {
-                new TemplatedFileGenerationStrategy(fileSystem,templateLocator,templateProcessor,solutionNamespaceProvider,logger),
-                new MinimalApiProgramFileGenerationStrategy( fileSystem,templateLocator,templateProcessor,logger,webApplicationBuilderGenerationStrategy, webApplicationGenerationStrategy)
-            };
+            _strategies = strategies ?? throw new ArgumentNullException(nameof(strategies));
         }
 
         public void CreateFor(FileModel model)

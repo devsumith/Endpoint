@@ -1,10 +1,12 @@
 using CommandLine;
+using Endpoint.Core.Factories;
+using Endpoint.Core.Services;
+using Endpoint.Core.Strategies.Files.Create;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System;
-using Endpoint.Core.Factories;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands
 {
@@ -23,25 +25,23 @@ namespace Endpoint.Application.Commands
         internal class Handler : IRequestHandler<Request, Unit>
         {
             private readonly ILogger _logger;
+            private readonly IFileGenerationStrategyFactory _fileGenerationStrategyFactory;
+            private readonly IFileNamespaceProvider _fileNamespaceProvider;
 
-            public Handler(ILogger logger)
+            public Handler(ILogger logger, IFileGenerationStrategyFactory fileGenerationStrategyFactory, IFileNamespaceProvider fileNamespaceProvider)
             {
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+                _fileGenerationStrategyFactory = fileGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(fileGenerationStrategyFactory));
+                _fileNamespaceProvider = fileNamespaceProvider ?? throw new ArgumentNullException(nameof(fileNamespaceProvider));
             }
 
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
                 _logger.LogInformation($"Handled: {nameof(AddEntity)}");
 
-                var settings = SettingsModelFactory.Resolve(request.Directory);
+                var model = EntityFileModelFactory.Create(request.Name, request.Properties, request.Directory, _fileNamespaceProvider.Get(request.Directory));
 
-                // add file to Domain
-
-                // add files to Application
-
-                // update db context
-
-                // add controller
+                _fileGenerationStrategyFactory.CreateFor(model);
 
                 return new();
             }

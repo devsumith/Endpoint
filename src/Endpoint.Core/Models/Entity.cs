@@ -31,7 +31,7 @@ namespace Endpoint.Core.Models
 
         }
 
-        public List<string> Usings { get; set; }
+        public List<string> Usings { get; set; } = new List<string>();
         public string Namespace { get; set; }
     }
 }

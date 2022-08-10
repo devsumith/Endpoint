@@ -15,6 +15,7 @@ namespace Endpoint.Application
             TinyMapper.Bind<CreateEndpointOptions, CreateEndpointSolutionOptions>();
             TinyMapper.Bind<AddResource.Request, AddResourceOptions>();
             TinyMapper.Bind<Microservice.Request, CreateCleanArchitectureMicroserviceOptions>();
+            TinyMapper.Bind<Microservice.Request, ResolveOrCreateWorkspaceOptions>();
         }
     }
 }

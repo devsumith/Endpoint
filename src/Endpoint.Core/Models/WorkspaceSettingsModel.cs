@@ -2,7 +2,7 @@
 
 namespace Endpoint.Core.Models
 {
-    public class MetaSolutionSettingsModel
+    public class WorkspaceSettingsModel
     {
         public string Directory { get; set; }
         public string Name { get; set; }

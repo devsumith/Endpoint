@@ -45,6 +45,32 @@ namespace Endpoint.Core.Factories
             if (additionalMetadata != null)
                 project.Metadata.Concat(additionalMetadata);
 
+            foreach(var metadataItem in project.Metadata)
+            {
+                switch (metadataItem) {
+                    case CoreConstants.ProjectType.Domain:
+                        project.Packages.Add(new PackageModel("FluentValidation", "10.3.6"));
+                        project.Packages.Add(new PackageModel("MediatR", "10.0.1"));
+                        project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.1"));
+                        project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "6.0.2"));
+                        break;
+
+                    case CoreConstants.ProjectType.Application:
+                        project.Packages.Add(new PackageModel("FluentValidation", "10.3.6"));
+                        project.Packages.Add(new PackageModel("MediatR", "10.0.1"));
+                        project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.1"));
+                        project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "6.0.2"));
+                        break;
+
+                    case CoreConstants.ProjectType.Infrastructure:
+                        project.Packages.Add(new PackageModel("FluentValidation", "10.3.6"));
+                        project.Packages.Add(new PackageModel("MediatR", "10.0.1"));
+                        project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.1"));
+                        project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "6.0.2"));
+                        break;
+
+                }
+            }
             return project;
         }
 

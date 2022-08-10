@@ -1,1 +1,9 @@
-﻿public class
+﻿{% for using in Usings %}using {{ using }};
+{% endfor %}
+namespace {{ Namespace }}
+{
+    public class {{ namePascalCase }}
+    {
+{% for prop in Properties %}        {{ prop }}{% endfor %}
+    }
+}

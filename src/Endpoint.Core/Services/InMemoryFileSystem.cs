@@ -62,6 +62,11 @@ namespace Endpoint.Core.Services
         {
             throw new NotImplementedException();
         }
+
+        public void WriteAllText(string path, string contents)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class FileSystemEntry
