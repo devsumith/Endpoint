@@ -4,13 +4,10 @@ using System.Linq;
 
 namespace Endpoint.Core.Models
 {
-    public class AggregateRootModel
+    public class AggregateRootModel: Entity
     {
-        public List<ClassProperty> Properties { get; private set; } = new List<ClassProperty>();
-
         public List<Entity> Entities { get; private set; } = new List<Entity>();
 
-        public string Name { get; set; }
 
         public string IdPropertyName { get; set; }
         public string IdPropertyType { get; set; }

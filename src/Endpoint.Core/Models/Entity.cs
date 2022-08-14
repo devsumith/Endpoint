@@ -5,7 +5,7 @@ namespace Endpoint.Core.Models
     public class Entity
     {
         public string AggregateRootName { get; private set; }
-        public List<ClassProperty> Properties { get; private set; } = new List<ClassProperty>();
+        public List<ClassProperty> Properties { get; protected set; } = new List<ClassProperty>();
         public string Name { get; set; }
 
         public Entity(string aggregateRootName, string name, List<ClassProperty> classProperties)

@@ -5,12 +5,12 @@ namespace Endpoint.Core.Models
     public  class DbContextModel
     {
         public string Name { get; set; }
-        public List<AggregateRootModel> AggregateRoots { get; private set; } = new List<AggregateRootModel>();
+        public List<Entity> Entities { get; private set; } = new List<Entity>();
 
-        public DbContextModel(string name, List<AggregateRootModel> aggregateRoots)
+        public DbContextModel(string name, List<Entity> entities)
         {
             Name = name;
-            AggregateRoots = aggregateRoots;
+            Entities = entities;
         }
     }
 }

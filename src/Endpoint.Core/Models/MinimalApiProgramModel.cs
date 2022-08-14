@@ -15,25 +15,25 @@ namespace Endpoint.Core.Models
 
         public  string DbContextName { get; private set; }
 
-        public List<AggregateRootModel> AggregateRoots { get; private set; } = new List<AggregateRootModel>();
+        public List<Entity> Entities { get; private set; } = new List<Entity>();
 
         public List<RouteHandlerModel> RouteHandlers { get; private set; } = new List<RouteHandlerModel>();
 
-        public MinimalApiProgramModel(string apiNamespace, string dbContextName, List<AggregateRootModel> aggregateRoots)
+        public MinimalApiProgramModel(string apiNamespace, string dbContextName, List<Entity> entities)
         {
-            AggregateRoots = aggregateRoots;
+            Entities = entities;
             ApiNamespace = apiNamespace;
             DbContextName = dbContextName;
 
-            foreach(var aggregateRoot in aggregateRoots)
+            foreach(var entity in entities)
             {
-                var resourceNameToken = (Token)aggregateRoot.Name;
+                var resourceNameToken = (Token)entity.Name;
 
                 RouteHandlers.Add(new RouteHandlerModel(
                     $"Create{resourceNameToken.PascalCase}",
                     $"/{resourceNameToken.SnakeCasePlural}",
                     dbContextName,
-                    aggregateRoot,
+                    entity,
                     RouteHandlerType.Create
                     ));
 
@@ -41,7 +41,7 @@ namespace Endpoint.Core.Models
                     $"Create{resourceNameToken.PascalCase}",
                     $"/{resourceNameToken.SnakeCasePlural}",
                     dbContextName,
-                    aggregateRoot,
+                    entity,
                     RouteHandlerType.Get
                     ));
 
@@ -49,7 +49,7 @@ namespace Endpoint.Core.Models
                     $"Create{resourceNameToken.PascalCase}",
                     $"/{resourceNameToken.SnakeCasePlural}",
                     dbContextName,
-                    aggregateRoot,
+                    entity,
                     RouteHandlerType.GetById
                     ));
 
@@ -57,7 +57,7 @@ namespace Endpoint.Core.Models
                     $"Create{resourceNameToken.PascalCase}",
                     $"/{resourceNameToken.SnakeCasePlural}",
                     dbContextName,
-                    aggregateRoot,
+                    entity,
                     RouteHandlerType.Update
                     ));
 
@@ -65,7 +65,7 @@ namespace Endpoint.Core.Models
                     $"Create{resourceNameToken.PascalCase}",
                     $"/{resourceNameToken.SnakeCasePlural}",
                     dbContextName,
-                    aggregateRoot,
+                    entity,
                     RouteHandlerType.Delete
                     ));
             }

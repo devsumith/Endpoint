@@ -24,7 +24,7 @@ namespace Endpoint.Core.Strategies.Infrastructure
 
             content.Add("");
 
-            foreach(var aggregateRoot in model.AggregateRoots)
+            foreach(var aggregateRoot in model.Entities)
             {
                 content.Add($"public DbSet<{((Token)aggregateRoot.Name).PascalCase}> {((Token)aggregateRoot.Name).PascalCasePlural} => Set<{((Token)aggregateRoot.Name).PascalCase}>();".Indent(1));
             }

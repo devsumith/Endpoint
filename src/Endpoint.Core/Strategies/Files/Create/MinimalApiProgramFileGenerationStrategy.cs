@@ -3,6 +3,7 @@ using Endpoint.Core.Models.Files;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Api;
 using Endpoint.Core.Strategies.Application;
+using Endpoint.Core.Strategies.CodeBlocks;
 using Endpoint.Core.Strategies.Infrastructure;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,14 +20,15 @@ namespace Endpoint.Core.Strategies.Files.Create
         private readonly ILogger _logger;
         private readonly IWebApplicationBuilderGenerationStrategy _webApplicationBuilderGenerationStrategy;
         private readonly IWebApplicationGenerationStrategy _webApplicationGenerationStrategy;
-
+        private readonly ICodeBlockGenerationStrategyFactory _codeBlockGenerationStrategyFactory;
         public MinimalApiProgramFileGenerationStrategy(
             IFileSystem fileSystem,
             ITemplateLocator templateLocator,
             ITemplateProcessor templateProcessor,
             ILogger logger,
             IWebApplicationBuilderGenerationStrategy webApplicationBuilderGenerationStrategy,
-            IWebApplicationGenerationStrategy webApplicationGenerationStrategy
+            IWebApplicationGenerationStrategy webApplicationGenerationStrategy,
+            ICodeBlockGenerationStrategyFactory codeBlockGenerationStrategyFactory
             )
         {
             _fileSystem = fileSystem ?? throw new ArgumentException(nameof(fileSystem));
@@ -35,6 +37,7 @@ namespace Endpoint.Core.Strategies.Files.Create
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _webApplicationBuilderGenerationStrategy = webApplicationBuilderGenerationStrategy ?? throw new ArgumentNullException(nameof(webApplicationBuilderGenerationStrategy));
             _webApplicationGenerationStrategy = webApplicationGenerationStrategy ?? throw new ArgumentNullException(nameof(webApplicationGenerationStrategy));
+            _codeBlockGenerationStrategyFactory = codeBlockGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(codeBlockGenerationStrategyFactory));
         }
 
         public int Order => 0;
@@ -63,14 +66,14 @@ namespace Endpoint.Core.Strategies.Files.Create
 
             content.Add("");
 
-            foreach (var aggregate in model.Aggregates)
+            foreach (var entity in model.Entities)
             {
-                content.AddRange(new AggregateRootGenerationStrategy().Create(aggregate));
+                content.Add(_codeBlockGenerationStrategyFactory.CreateFor(entity));
 
                 content.Add("");
             }
 
-            content.AddRange(new DbContextGenerationStrategy().Create(new DbContextModel(model.DbContextName, model.Aggregates)));
+            content.AddRange(new DbContextGenerationStrategy().Create(new DbContextModel(model.DbContextName, model.Entities)));
 
             _fileSystem.WriteAllLines(model.Path, content.ToArray());
         }

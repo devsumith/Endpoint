@@ -11,9 +11,9 @@ namespace Endpoint.Core.Strategies.Api
         {
             List<string> content = new List<string>();
 
-            var resourceNameToken = (Token)model.AggregateRoot.Name;
-            var idPropertyName = model.AggregateRoot.IdPropertyName;
-            var idPropertyType = model.AggregateRoot.IdPropertyType;
+            var resourceNameToken = (Token)model.Entity.Name;
+            var idPropertyName = $"{model.Entity.Name}Id";
+            var idPropertyType = "guid";
 
             var dbContextNameToken = (Token)model.DbContextName;
 
@@ -61,7 +61,7 @@ namespace Endpoint.Core.Strategies.Api
                 content.Add($"if ({resourceNameToken.CamelCase} is null) return Results.NotFound();".Indent(2));
                 content.Add("");
 
-                foreach(var property in model.AggregateRoot.Properties.Where(x => x.Key == false))
+                foreach(var property in model.Entity.Properties.Where(x => x.Key == false))
                 {
                     content.Add($"{resourceNameToken.CamelCase}.{((Token)property.Name).PascalCase} = input{resourceNameToken.PascalCase}.{((Token)property.Name).PascalCase};".Indent(2));
                 }

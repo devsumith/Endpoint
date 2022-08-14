@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Application;
+using Endpoint.Core.Strategies.CodeBlocks;
 using Endpoint.Core.Strategies.Infrastructure;
 using System.Collections.Generic;
 using System.IO;
@@ -17,12 +18,18 @@ namespace Endpoint.Core.Strategies.Api.FileGeneration
         private readonly IFileSystem _fileSystem;
         private readonly IWebApplicationBuilderGenerationStrategy _webApplicationBuilderGenerationStrategy;
         private readonly IWebApplicationGenerationStrategy _webApplicationGenerationStrategy;
-
-        public MinimalApiProgramGenerationStratey(IFileSystem fileSystem, ITemplateProcessor templateProcessor, ITemplateLocator templateLocator)
+        private readonly ICodeBlockGenerationStrategyFactory _codeBlockGenerationStrategyFactory;
+        public MinimalApiProgramGenerationStratey(
+            IFileSystem fileSystem, 
+            IWebApplicationGenerationStrategy webApplicationGenerationStrategy, 
+            IWebApplicationBuilderGenerationStrategy webApplicationBuilderGenerationStrategy,
+            ICodeBlockGenerationStrategyFactory codeBlockGenerationStrategyFactory
+            )
         {
             _fileSystem = fileSystem;
-            _webApplicationBuilderGenerationStrategy = new WebApplicationBuilderGenerationStrategy(templateProcessor, templateLocator);
-            _webApplicationGenerationStrategy = new WebApplicationGenerationStrategy(templateProcessor, templateLocator);
+            _webApplicationBuilderGenerationStrategy = webApplicationBuilderGenerationStrategy;
+            _webApplicationGenerationStrategy = webApplicationGenerationStrategy;
+            _codeBlockGenerationStrategyFactory = codeBlockGenerationStrategyFactory;
         }
 
         public void Create(MinimalApiProgramModel model, string directory)
@@ -44,14 +51,14 @@ namespace Endpoint.Core.Strategies.Api.FileGeneration
 
             content.Add("");
 
-            foreach (var aggregateRoot in model.AggregateRoots)
+            foreach (var entity in model.Entities)
             {
-                content.AddRange(new AggregateRootGenerationStrategy().Create(aggregateRoot));
+                content.Add(_codeBlockGenerationStrategyFactory.CreateFor(entity));
 
                 content.Add("");
             }
 
-            content.AddRange(new DbContextGenerationStrategy().Create(new DbContextModel(model.DbContextName, model.AggregateRoots)));
+            content.AddRange(new DbContextGenerationStrategy().Create(new DbContextModel(model.DbContextName, model.Entities)));
 
             _fileSystem.WriteAllLines($"{directory}{Path.DirectorySeparatorChar}Program.cs", content.ToArray());
         }

@@ -15,7 +15,6 @@ namespace Endpoint.Core.ViewModels
     public static class EntityExtensions
     {
 
-
         public static EntityViewModel ToViewModel(this Entity entity)
         {
             var model = new EntityViewModel

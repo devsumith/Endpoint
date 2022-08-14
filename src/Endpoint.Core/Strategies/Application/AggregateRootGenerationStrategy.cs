@@ -4,10 +4,6 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Strategies.Application
 {
-    public interface IAggregateRootGenerationStrategy
-    {
-        string[] Create(AggregateRootModel model);
-    }
     public class AggregateRootGenerationStrategy : IAggregateRootGenerationStrategy
     {
         public string[] Create(AggregateRootModel model)

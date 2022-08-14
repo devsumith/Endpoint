@@ -2,6 +2,7 @@
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
 using Endpoint.Core.Strategies.Api;
+using Endpoint.Core.Strategies.CodeBlocks;
 using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.Strategies.Common.Git;
 using Endpoint.Core.Strategies.Files;
@@ -52,6 +53,7 @@ namespace Endpoint.Core
             services.AddGitStrategyApplicationServices();
             services.AddSolutionStrategyApplicationServices();
             services.AddFileGenerationApplicationServices();
+            services.AddCodeBlockGenerationServices();
         }
     }
 }

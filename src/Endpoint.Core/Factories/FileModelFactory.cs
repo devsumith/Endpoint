@@ -74,7 +74,7 @@ namespace Endpoint.Core.Factories
             {
                 var aggregate = AggregateRootModelFactory.Create(resource, properties, useShortIdProperty, useIntIdPropertyType);
 
-                model.Aggregates.Add(aggregate);
+                model.Entities.Add(aggregate);
 
                 foreach(var routeHandler in RouteHandlerFactory.Create(dbContextName, aggregate))
                 {
