@@ -29,10 +29,16 @@ namespace Endpoint.Core.Strategies.Solutions.Crerate
 
             _commandService.Start($"dotnet new sln -n {model.Name}", model.SolutionDirectory);
 
-            _fileSystem.CreateDirectory(model.SrcDirectory);
+            if (model.Projects.Any(x => x.Directory.Contains(model.SrcDirectory)))
+            {
+                _fileSystem.CreateDirectory(model.SrcDirectory);
+            }
 
-            _fileSystem.CreateDirectory(model.TestDirectory);
-
+            if (model.Projects.Any(x => x.Directory.Contains(model.TestDirectory)))
+            {
+                _fileSystem.CreateDirectory(model.TestDirectory);
+            }
+            
             foreach (var project in model.Projects.OrderByDescending(x => x.Order))
             {
                 CreateProjectAndAddToSolution(project.DotNetProjectType, model.SolutionDirectory, project.Path, project.Directory, model.SolultionFileName);

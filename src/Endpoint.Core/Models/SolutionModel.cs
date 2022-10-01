@@ -8,7 +8,7 @@ namespace Endpoint.Core.Models
         public List<ProjectModel> Projects { get; private set; } = new();
         public string Name { get; init; }
         public string SrcDirectoryName { get; private set; } = "src";
-        public string TestDirectoryName { get; private set; } = "test";
+        public string TestDirectoryName { get; private set; } = "tests";
         public string SrcDirectory => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{SrcDirectoryName}";
         public string TestDirectory => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{TestDirectoryName}";
         public string SolutionPath => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{Name}.sln";

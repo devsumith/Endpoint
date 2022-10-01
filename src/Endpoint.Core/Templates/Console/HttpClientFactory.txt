@@ -1,0 +1,19 @@
+﻿public static class HttpClientFactory
+{
+    public static HttpClient CreateClient(Uri baseAddress) => new HttpClient()
+    {
+        BaseAddress = baseAddress
+    };
+
+    public static HttpClient CreateClientWithBearerToken(Uri baseAddress, string token)
+    {
+        var client = new HttpClient()
+        {
+            BaseAddress = baseAddress
+        };
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        return client;
+    }
+}

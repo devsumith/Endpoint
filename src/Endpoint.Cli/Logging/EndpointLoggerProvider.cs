@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Allagi.Endpoint.Cli.Logging
+namespace Endpoint.Cli.Logging
 {
     public class EndpointLoggerProvider : ILoggerProvider
     {

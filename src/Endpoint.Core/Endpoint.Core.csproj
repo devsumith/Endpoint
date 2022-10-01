@@ -21,6 +21,9 @@
     <None Remove="Templates\Api\WebApplicationBuilder.txt" />
     <None Remove="Templates\Api\WebApplicationConfiguration.txt" />
     <None Remove="Templates\Application\Dto.txt" />
+    <None Remove="Templates\Console\EmptyProgram.txt" />
+    <None Remove="Templates\Console\HttpClientExtensions.txt" />
+    <None Remove="Templates\Console\HttpClientFactory.txt" />
     <None Remove="Templates\Domain\Entity.txt" />
     <None Remove="Templates\Global\BicepFile.txt" />
     <None Remove="Templates\Global\DeploySetupFile.txt" />
@@ -50,6 +53,9 @@
     <EmbeddedResource Include="Templates\Api\WebApplicationBuilder.txt" />
     <EmbeddedResource Include="Templates\Api\WebApplicationConfiguration.txt" />
     <EmbeddedResource Include="Templates\Application\Dto.txt" />
+    <EmbeddedResource Include="Templates\Console\HttpClientExtensions.txt" />
+    <EmbeddedResource Include="Templates\Console\HttpClientFactory.txt" />
+    <EmbeddedResource Include="Templates\Console\EmptyProgram.txt" />
     <EmbeddedResource Include="Templates\Domain\Entity.txt" />
     <EmbeddedResource Include="Templates\Global\DeploySetupFile.txt" />
     <EmbeddedResource Include="Templates\Global\BicepFile.txt" />

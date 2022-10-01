@@ -1,5 +1,5 @@
-﻿using Allagi.Endpoint.Cli.Configuration;
-using Allagi.Endpoint.Cli.Logging;
+﻿using Endpoint.Cli.Configuration;
+using Endpoint.Cli.Logging;
 using Endpoint.Application;
 using Endpoint.Core;
 using Microsoft.Extensions.Configuration;

@@ -31,7 +31,7 @@ namespace Endpoint.Core.Strategies
 
         public void Create(ProjectModel model)
         {
-            foreach(var path in _fileSystem.GetFiles(model.Directory,"*.cs",SearchOption.AllDirectories))
+            foreach(var path in _fileSystem.GetFiles(model.Directory,"*.cs", SearchOption.AllDirectories))
             {
                 _fileSystem.Delete(path);
             }

@@ -8,6 +8,18 @@ namespace Endpoint.Core.Factories
 {
     public static class ProjectModelFactory
     {
+        public static ProjectModel CreateHttpProject(string name, string directory)
+        {
+            var model = new ProjectModel(DotNetProjectType.Console,name,directory);
+
+            model.Files.Add(FileModelFactory.CreateCSharp("EmptyProgram", "", "Program", model.Directory));
+
+            model.Files.Add(FileModelFactory.CreateCSharp("HttpClientExtensions","", "HttpClientExtensions", model.Directory));
+
+            model.Files.Add(FileModelFactory.CreateCSharp("HttpClientFactory", "", "HttpClientFactory", model.Directory));
+
+            return model;
+        }
         public static ProjectModel CreateMinimalApiProject(CreateMinimalApiProjectOptions options)
         {
             var projectModel = new ProjectModel(DotNetProjectType.MinimalWebApi, options.Name, options.Directory);

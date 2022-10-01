@@ -1,13 +1,20 @@
 ﻿using Endpoint.Core.Models;
 using Endpoint.Core.Options;
-using System;
 using System.IO;
-using System.Text.Json;
 
 namespace Endpoint.Core.Factories
 {
     public static class SolutionModelFactory
     {
+        public static SolutionModel CreateHttpSolution(CreateEndpointSolutionOptions options)
+        {
+            var solutionModel = new SolutionModel(options.Name, options.Directory);
+
+            solutionModel.Projects.Add(ProjectModelFactory.CreateHttpProject(options.Name, solutionModel.SrcDirectory));
+
+            return solutionModel;
+        }
+
         public static SolutionModel Minimal(CreateEndpointSolutionOptions options)
         {       
             var model = string.IsNullOrEmpty(options.SolutionDirectory) ? new SolutionModel(options.Name, options.Directory) : new SolutionModel(options.Name, options.Directory, options.SolutionDirectory);

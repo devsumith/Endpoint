@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Allagi.Endpoint.Cli.Logging
+namespace Endpoint.Cli.Logging
 {
     public class EndpointLoggerOptions
     {

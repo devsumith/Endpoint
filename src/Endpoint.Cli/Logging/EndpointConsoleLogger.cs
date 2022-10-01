@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 
-namespace Allagi.Endpoint.Cli.Logging
+namespace Endpoint.Cli.Logging
 {
     public class EndpointConsoleLogger : ILogger
     {

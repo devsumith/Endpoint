@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 
-namespace Allagi.Endpoint.Cli.Configuration
+namespace Endpoint.Cli.Configuration
 {
     public static class ConfigureServices
     {

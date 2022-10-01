@@ -1,5 +1,5 @@
 # Endpoint
-[![NuGet](https://buildstats.info/nuget/Allagi.Endpoint.Cli?includePreReleases=true)](http://www.nuget.org/packages/Allagi.Endpoint.Cli "Download Allagi.Endpoint.Cli from NuGet")
+[![NuGet](https://buildstats.info/nuget/Endpoint.Cli?includePreReleases=true)](http://www.nuget.org/packages/Endpoint.Cli "Download Endpoint.Cli from NuGet")
 
 ASP.NET Core API Code Generator via a simple command line interface with first class support for generating Minimal Api's.
 
@@ -26,13 +26,13 @@ This tool will create .NET Solution with the following feature(s):
 
 ## Installation
 
-Install the [Endpoint NuGet Package](https://www.nuget.org/packages/Allagi.Endpoint.Cli).
+Install the [Endpoint NuGet Package](https://www.nuget.org/packages/Endpoint.Cli).
 
 
 ### .NET Core CLI
 
 ```
-dotnet tool install --global Allagi.Endpoint.Cli
+dotnet tool install --global Endpoint.Cli
 ```
 ## SYNOPSIS
 

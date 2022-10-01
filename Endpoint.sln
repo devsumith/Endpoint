@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{15A99D9B-572B-4D44-81BE-F6867FF8E1BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allagi.Endpoint.Cli", "src\Endpoint.Cli\Allagi.Endpoint.Cli.csproj", "{99A77197-991A-46A7-B28D-EBC560F12898}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Endpoint.Cli", "src\Endpoint.Cli\Endpoint.Cli.csproj", "{99A77197-991A-46A7-B28D-EBC560F12898}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{351B6164-0BCB-4F4F-B597-500F2F777706}"
 	ProjectSection(SolutionItems) = preProject
