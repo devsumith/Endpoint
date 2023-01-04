@@ -4,18 +4,17 @@ using Endpoint.Core.Options;
 using Nelibur.ObjectMapper;
 using System.Runtime.CompilerServices;
 
-namespace Endpoint.Application
+namespace Endpoint.Application;
+
+public static class ObjectMapperConfiguration
 {
-    public static class ObjectMapperConfiguration
+    [ModuleInitializer]
+    public static void  Configure()
     {
-        [ModuleInitializer]
-        public static void  Configure()
-        {
-            TinyMapper.Bind<Default.Request, CreateEndpointOptions>();
-            TinyMapper.Bind<CreateEndpointOptions, CreateEndpointSolutionOptions>();
-            TinyMapper.Bind<AddResource.Request, AddResourceOptions>();
-            TinyMapper.Bind<Microservice.Request, CreateCleanArchitectureMicroserviceOptions>();
-            TinyMapper.Bind<Microservice.Request, ResolveOrCreateWorkspaceOptions>();
-        }
+        TinyMapper.Bind<Default.Request, CreateEndpointOptions>();
+        TinyMapper.Bind<CreateEndpointOptions, CreateEndpointSolutionOptions>();
+        TinyMapper.Bind<AddResource.Request, AddResourceOptions>();
+        TinyMapper.Bind<MicroserviceRequest, CreateCleanArchitectureMicroserviceOptions>();
+        TinyMapper.Bind<MicroserviceRequest, ResolveOrCreateWorkspaceOptions>();
     }
 }

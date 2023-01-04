@@ -69,7 +69,7 @@ namespace Endpoint.Core.Strategies.Solutions.Crerate
                 _ => throw new NotImplementedException(),
             };
 
-            _commandService.Start($"dotnet new {templateType} --framework net6.0", projectDirectory);
+            _commandService.Start($"dotnet new {templateType} --framework net7.0", projectDirectory);
 
             _commandService.Start($"dotnet sln {solutionFileName} add {projectPath}", directory);
         }

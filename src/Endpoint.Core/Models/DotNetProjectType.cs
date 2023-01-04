@@ -1,11 +1,10 @@
-﻿namespace Endpoint.Core.Models
+﻿namespace Endpoint.Core.Models;
+
+public enum DotNetProjectType
 {
-    public enum DotNetProjectType
-    {
-        Console,
-        XUnit,
-        ClassLib,
-        WebApi,
-        MinimalWebApi
-    }
+    Console,
+    XUnit,
+    ClassLib,
+    WebApi,
+    MinimalWebApi
 }

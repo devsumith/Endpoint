@@ -1,11 +1,10 @@
-﻿namespace Endpoint.Core.Enums
+﻿namespace Endpoint.Core.Enums;
+
+public enum AccessModifier
 {
-    public enum AccessModifier
-    {
-        Public,
-        Private,
-        Protected,
-        Internal,
-        Inherited
-    }
+    Public,
+    Private,
+    Protected,
+    Internal,
+    Inherited
 }
