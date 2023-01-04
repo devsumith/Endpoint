@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Options;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.IO;
@@ -8,7 +8,7 @@ namespace Endpoint.Core.Strategies.Common
 
     public interface IDeploySetupFileGenerationStrategy
     {
-        void Generate(Settings settings);
+        void Generate(SettingsModel settings);
     }
 
     public class DeploySetupFileGenerationStrategy : IDeploySetupFileGenerationStrategy
@@ -23,7 +23,7 @@ namespace Endpoint.Core.Strategies.Common
             _templateLocator = templateLocator;
             _templateProcessor = templateProcessor;
         }
-        public void Generate(Settings settings)
+        public void Generate(SettingsModel settings)
         {
             var tokens = new TokensBuilder()
                 .With("Name", (Token)settings.SolutionName)

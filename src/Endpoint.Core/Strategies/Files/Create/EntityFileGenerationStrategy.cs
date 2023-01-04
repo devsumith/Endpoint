@@ -1,8 +1,8 @@
-﻿using Endpoint.Core.Models.Files;
-using Endpoint.Core.Services;
+﻿using Endpoint.Core.Services;
 using System;
 using Endpoint.Core.ViewModels;
-using Endpoint.Core.Models;
+using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Artifacts;
 
 namespace Endpoint.Core.Strategies.Files.Create
 {
@@ -27,7 +27,7 @@ namespace Endpoint.Core.Strategies.Files.Create
         {
             if(model is EntityFileModel entityFileModel)
             {
-                var template = _templateLocator.Get(nameof(Entity));
+                var template = _templateLocator.Get(nameof(EntityModel));
 
                 var viewModel = entityFileModel.Entity.ToViewModel();
 

@@ -9,13 +9,15 @@ using Nelibur.ObjectMapper;
 using Endpoint.Core.Options;
 using Endpoint.Core;
 using Endpoint.Core.Strategies.Common.Git;
-using Endpoint.Core.Models;
 using Endpoint.Core.Strategies.Solutions.Crerate;
 using Endpoint.Core.Strategies.Solutions.Update;
 using Endpoint.Core.Services;
 using System.IO;
 using Endpoint.Core.Strategies.WorkspaceSettingss.Update;
 using static Endpoint.Core.CoreConstants.SolutionTemplates;
+using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Artifacts;
+using Endpoint.Core.Models.Git;
 
 namespace Endpoint.Application.Commands;
 

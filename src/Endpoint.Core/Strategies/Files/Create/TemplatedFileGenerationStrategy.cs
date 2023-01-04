@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Files;
+﻿using Endpoint.Core.Models.Artifacts;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;

@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Artifacts;
 using Endpoint.Core.Options;
 using Octokit;
 using System;
@@ -65,7 +65,7 @@ namespace Endpoint.Core.Factories
                         project.Packages.Add(new PackageModel("FluentValidation", "11.2.2"));
                         project.Packages.Add(new PackageModel("MediatR", "11.0.0"));
                         project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.1"));
-                        project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "7.0.0-rc.1.22426.7"));
+                        project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "7.0.0"));
                         break;
 
                     case CoreConstants.ProjectType.Application:
@@ -80,7 +80,7 @@ namespace Endpoint.Core.Factories
                         break;
 
                     case CoreConstants.ProjectType.Api:
-                        project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore.Design", "7.0.0-rc.1.22426.7"));
+                        project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore.Design", "7.0.0"));
                         break;
 
                 }

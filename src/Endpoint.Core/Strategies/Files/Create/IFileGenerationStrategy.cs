@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Files;
+﻿using Endpoint.Core.Models.Artifacts;
 
 namespace Endpoint.Core.Strategies.Files.Create;
 

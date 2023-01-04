@@ -3,9 +3,9 @@ using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using Endpoint.Core;
-using Endpoint.Core.Models;
 using Endpoint.Core.Builders.Core;
 using System.Linq;
+using Endpoint.Core.Models.Syntax;
 
 namespace Endpoint.Core.Builders
 {

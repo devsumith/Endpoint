@@ -1,4 +1,5 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace Endpoint.Core.Services
             _fileSystem = fileSystem;
         }
 
-        public Endpoint.Core.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+        public SettingsModel Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
             AggregateRootModel aggregateRoot = new AggregateRootModel(resource);
 
@@ -47,7 +48,7 @@ namespace Endpoint.Core.Services
             return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<AggregateRootModel>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins, prefix);
         }
 
-        public Endpoint.Core.Models.Settings Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+        public SettingsModel Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
             var aggregates = new List<AggregateRootModel>();
 
@@ -79,19 +80,19 @@ namespace Endpoint.Core.Services
 
         }
 
-        public Settings Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRootModel> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+        public SettingsModel Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRootModel> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
 
             name = name.Replace("-", "_");
 
             _fileSystem.CreateDirectory($"{directory}{Path.DirectorySeparatorChar}{name}");
 
-            var settings = new Settings(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdFormat.Short: IdFormat.Long, useIntIdPropertyType ? IdDotNetType.Int : IdDotNetType.Guid, prefix);
+            var settings = new SettingsModel(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdFormat.Short: IdFormat.Long, useIntIdPropertyType ? IdDotNetType.Int : IdDotNetType.Guid, prefix);
 
             return Create(settings);
         }
         
-        public Settings Create(Settings settings)
+        public SettingsModel Create(SettingsModel settings)
         {
             var json = Serialize(settings, new JsonSerializerOptions
             {
@@ -157,7 +158,7 @@ namespace Endpoint.Core.Services
             return settings;
         }
         
-        private void _createProjectAndAddToSolution(string templateType, string directory, Endpoint.Core.Models.Settings settings)
+        private void _createProjectAndAddToSolution(string templateType, string directory, SettingsModel settings)
         {
 
             _fileSystem.CreateDirectory(directory);

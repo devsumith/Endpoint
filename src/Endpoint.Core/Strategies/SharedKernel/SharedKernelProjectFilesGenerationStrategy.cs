@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Options;
 using Endpoint.Core.ValueObjects;
 using System.IO;
 
@@ -13,7 +13,7 @@ namespace Endpoint.Core.Services
             IFileSystem fileSystem) : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
-        public void Build(Settings settings)
+        public void Build(SettingsModel settings)
         {
             _createFolder($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Extensions", settings.DomainDirectory);
 
@@ -24,7 +24,7 @@ namespace Endpoint.Core.Services
             _buildResponseBase(settings);
         }
 
-        private void _buildResponseBase(Settings settings)
+        private void _buildResponseBase(SettingsModel settings)
         {
             var template = _templateLocator.Get("ResponseBase");
 
@@ -41,7 +41,7 @@ namespace Endpoint.Core.Services
             _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore --version 6.0.2", $@"{settings.DomainDirectory}");
         }
 
-        private void _buildQueryableExtensions(Endpoint.Core.Models.Settings settings)
+        private void _buildQueryableExtensions(SettingsModel settings)
         {
             var template = _templateLocator.Get("QueryableExtensions");
 

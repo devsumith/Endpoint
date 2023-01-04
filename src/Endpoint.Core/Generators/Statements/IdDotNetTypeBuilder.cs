@@ -1,10 +1,11 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 
 namespace Endpoint.Core.Builders.Statements
 {
     public static class IdDotNetTypeBuilder
     {
-        public static string Build(Settings settings, string resourceName, bool forModel = false)
+        public static string Build(SettingsModel settings, string resourceName, bool forModel = false)
         {
             var type = settings.IdDotNetType == IdDotNetType.Guid ? $"Guid" : "int";
 

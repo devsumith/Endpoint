@@ -1,4 +1,4 @@
-using Endpoint.Core.Models;
+using Endpoint.Core.Models.Options;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace Endpoint.Core.Builders
 {
     public class CommandBuilder
     {
-        public static void Build(Settings settings, Token name, Context context, IFileSystem fileSystem, string directory, string @namespace)
+        public static void Build(SettingsModel settings, Token name, Context context, IFileSystem fileSystem, string directory, string @namespace)
         {
 
             var validator = new ClassBuilder($"{name.PascalCase}Validator", context, fileSystem)

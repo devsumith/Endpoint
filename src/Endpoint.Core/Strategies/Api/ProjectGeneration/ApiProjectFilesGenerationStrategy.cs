@@ -1,6 +1,6 @@
 ﻿using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
-using Endpoint.Core.Models;
+using Endpoint.Core.Models.Options;
 using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.ValueObjects;
 using System.IO;
@@ -18,7 +18,7 @@ namespace Endpoint.Core.Services
             : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
-        public void Build(Settings settings)
+        public void Build(SettingsModel settings)
         {
             _removeDefaultFiles(settings);
 
@@ -52,7 +52,7 @@ namespace Endpoint.Core.Services
 
         }
 
-        private void _buildAppSettings(Settings settings)
+        private void _buildAppSettings(SettingsModel settings)
         {
             var template = _templateLocator.Get(AppSettings);
 
@@ -67,7 +67,7 @@ namespace Endpoint.Core.Services
             _fileSystem.WriteAllLines($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}appsettings.json", contents);
         }
 
-        private void _buildStartup(Settings settings)
+        private void _buildStartup(SettingsModel settings)
         {
             var template = _templateLocator.Get("Startup");
 
@@ -83,7 +83,7 @@ namespace Endpoint.Core.Services
             _fileSystem.WriteAllLines($@"{settings.ApiDirectory}/Startup.cs", contents);
         }
 
-        private void _buildDependencies(Settings settings)
+        private void _buildDependencies(SettingsModel settings)
         {
             var template = _templateLocator.Get(Dependencies);
 
@@ -103,7 +103,7 @@ namespace Endpoint.Core.Services
             _fileSystem.WriteAllLines($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Dependencies.cs", contents);
         }
 
-        private void _buildLaunchSettings(Settings settings)
+        private void _buildLaunchSettings(SettingsModel settings)
         {
             var template = _templateLocator.Get("LaunchSettings");
 
@@ -122,7 +122,7 @@ namespace Endpoint.Core.Services
             _fileSystem.WriteAllLines($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}launchSettings.json", contents);
         }
 
-        public void _removeDefaultFiles(Settings settings)
+        public void _removeDefaultFiles(SettingsModel settings)
         {            
             foreach(var path in _fileSystem.GetFiles(settings.ApiDirectory, "*.cs", SearchOption.AllDirectories))
             {
@@ -130,7 +130,7 @@ namespace Endpoint.Core.Services
             }
         }
 
-        private void _installNugetPackages(Settings settings)
+        private void _installNugetPackages(SettingsModel settings)
         {
             _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 6.0.2", $@"{settings.ApiDirectory}");
             _commandService.Start($"dotnet add package MediatR.Extensions.Microsoft.DependencyInjection  --version 10.0.1", $@"{settings.ApiDirectory}");
@@ -144,7 +144,7 @@ namespace Endpoint.Core.Services
             _commandService.Start($"dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 6.0.2", $@"{settings.ApiDirectory}");
         }
 
-        public void BuildAdditionalResource(string additionalResource, Settings settings)
+        public void BuildAdditionalResource(string additionalResource, SettingsModel settings)
         {
             new ClassBuilder($"{((Token)additionalResource).PascalCase}Controller", new Endpoint.Core.Services.Context(), _fileSystem)
                 .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")

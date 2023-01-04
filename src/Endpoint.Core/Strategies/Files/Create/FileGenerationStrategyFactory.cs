@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Files;
+﻿using Endpoint.Core.Models.Artifacts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

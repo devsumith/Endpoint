@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Options;
 using Endpoint.Core.Services;
 using System.IO;
 
@@ -6,7 +6,7 @@ namespace Endpoint.Core.Strategies.Common
 {
     public interface IGitIgnoreFileGenerationStrategy
     {
-        void Generate(Settings settings);
+        void Generate(SettingsModel settings);
     }
 
     public class GitIgnoreFileGenerationStrategy: IGitIgnoreFileGenerationStrategy
@@ -19,7 +19,7 @@ namespace Endpoint.Core.Strategies.Common
             _fileSystem = fileSystem;
             _templateLocator = templateLocator;
         }
-        public void Generate(Settings settings)
+        public void Generate(SettingsModel settings)
         {
             _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}.gitignore", _templateLocator.Get("GitIgnoreFile"));
 

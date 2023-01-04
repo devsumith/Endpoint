@@ -1,6 +1,6 @@
 ﻿using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Enums;
-using Endpoint.Core.Models;
+using Endpoint.Core.Models.Options;
 using Endpoint.Core.ValueObjects;
 
 namespace Endpoint.Core.Builders
@@ -11,9 +11,9 @@ namespace Endpoint.Core.Builders
         private int _indent;
         private string _resource;
         private EndpointType _endpointType;
-        private Settings _settings;
+        private SettingsModel _settings;
 
-        public LogStatementBuilder(Settings settings, string resource, EndpointType? endpointType = EndpointType.Create, int indent = 0)
+        public LogStatementBuilder(SettingsModel settings, string resource, EndpointType? endpointType = EndpointType.Create, int indent = 0)
         {
             _indent = indent;
             _resource = resource ?? throw new System.ArgumentNullException(nameof(resource));

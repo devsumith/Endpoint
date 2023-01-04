@@ -1,5 +1,7 @@
 ﻿using Endpoint.Core.Events;
 using Endpoint.Core.Models;
+using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Options;
 using Endpoint.Core.Strategies.Common;
 using MediatR;
@@ -85,7 +87,7 @@ namespace Endpoint.Core.Services
 
         public void Create(CreateEndpointOptions request)
         {
-            var model = new Settings(
+            var model = new SettingsModel(
                         request.Name,
                         request.DbContextName,
                         new AggregateRootModel(request.Resource, request.NumericIdPropertyDataType.Value, request.ShortIdPropertyName.Value, request.Properties),

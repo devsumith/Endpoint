@@ -1,9 +1,9 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Options;
 
 namespace Endpoint.Core.Services
 {
     public interface ISharedKernelProjectFilesGenerationStrategy
     {
-        void Build(Settings settings);
+        void Build(SettingsModel settings);
     }
 }

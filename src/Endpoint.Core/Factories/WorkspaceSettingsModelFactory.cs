@@ -1,8 +1,8 @@
-﻿using Endpoint.Core.Models;
-using Endpoint.Core.Options;
+﻿using Endpoint.Core.Options;
 using System.IO;
 using static System.Text.Json.JsonSerializer;
 using static System.IO.File;
+using Endpoint.Core.Models.Options;
 
 namespace Endpoint.Core.Factories
 {

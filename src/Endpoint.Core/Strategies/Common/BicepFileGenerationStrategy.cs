@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Options;
 using Endpoint.Core.Services;
 using System.IO;
 
@@ -7,7 +7,7 @@ namespace Endpoint.Core.Strategies.Common
 
     public interface IBicepFileGenerationStrategy
     {
-        void Generate(Settings settings);
+        void Generate(SettingsModel settings);
     }
 
     public class BicepFileGenerationStrategy: IBicepFileGenerationStrategy
@@ -20,7 +20,7 @@ namespace Endpoint.Core.Strategies.Common
             _fileSystem = fileSystem;
             _templateLocator = templateLocator;
         }
-        public void Generate(Settings settings)
+        public void Generate(SettingsModel settings)
         {
             _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}deploy{Path.DirectorySeparatorChar}main.bicep", _templateLocator.Get("BicepFile"));
 

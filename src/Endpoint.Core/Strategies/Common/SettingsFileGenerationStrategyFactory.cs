@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Options;
 using Endpoint.Core.Strategies;
 using Microsoft.Extensions.Logging;
 using System;

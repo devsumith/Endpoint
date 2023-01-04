@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 

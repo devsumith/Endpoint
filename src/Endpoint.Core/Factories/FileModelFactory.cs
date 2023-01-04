@@ -1,5 +1,5 @@
-﻿using Endpoint.Core.Models;
-using Endpoint.Core.Models.Files;
+﻿using Endpoint.Core.Models.Artifacts;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace Endpoint.Core.Factories
 {
     public class FileModelFactory
     {
-        public static EntityFileModel Create(Entity model, string directory)
+        public static EntityFileModel Create(EntityModel model, string directory)
         {
             return new EntityFileModel
             {

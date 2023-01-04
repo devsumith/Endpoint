@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Sql;
+﻿using Endpoint.Core.Models.Syntax;
 
 namespace Endpoint.Core.ViewModels.Sql
 {

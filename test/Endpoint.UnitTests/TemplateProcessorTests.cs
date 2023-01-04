@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Models;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
 using Endpoint.Core.ViewModels;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Process_ShouldComplextModel()
         {
-            var entity = new Entity("User", new List<ClassProperty>
+            var entity = new EntityModel("User", new List<ClassProperty>
             {
                 new ClassProperty("public","string","Name", ClassPropertyAccessor.GetPrivateSet)
             })

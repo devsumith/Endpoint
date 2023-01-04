@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Application;
 using Endpoint.Core.Strategies.CodeBlocks;

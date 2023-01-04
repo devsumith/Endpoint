@@ -31,7 +31,7 @@ namespace Endpoint.Application.Commands
 
             public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                Endpoint.Core.Models.Settings settings = _settingsProvider.Get(request.Directory);
+                Core.Models.Options.SettingsModel settings = _settingsProvider.Get(request.Directory);
 
                 var solutionName = settings.ApiNamespace.Replace(".Api", "");
 

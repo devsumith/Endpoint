@@ -1,10 +1,9 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Syntax;
 
-namespace Endpoint.Core.Options
+namespace Endpoint.Core.Options;
+
+public class UpdateCleanArchitectureMicroserviceOptions
 {
-    public class UpdateCleanArchitectureMicroserviceOptions
-    {
-        public string Directory { get; set; }
-        public Entity Entity { get; set; }
-    }
+    public string Directory { get; set; }
+    public EntityModel Entity { get; set; }
 }

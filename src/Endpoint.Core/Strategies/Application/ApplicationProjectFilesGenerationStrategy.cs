@@ -2,7 +2,8 @@
 using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Builders.Statements;
 using Endpoint.Core.Core;
-using Endpoint.Core.Models;
+using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Strategies.Application;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Endpoint.Core.Services
             : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
-        public void Build(Settings settings)
+        public void Build(SettingsModel settings)
         {
             _removeDefaultFiles(settings.ApplicationDirectory);
 
@@ -41,7 +42,7 @@ namespace Endpoint.Core.Services
 
         }
 
-        protected void _buildApplicationFilesForResource(Settings settings, AggregateRootModel resource)
+        protected void _buildApplicationFilesForResource(SettingsModel settings, AggregateRootModel resource)
         {
             Token resourceName = ((Token)resource.Name);
             var aggregateDirectory = $"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}AggregatesModel{Path.DirectorySeparatorChar}{resourceName.PascalCase}Aggregate";
@@ -236,14 +237,14 @@ namespace Endpoint.Core.Services
             _buildServiceCollectionExtensions(settings);
         }
 
-        public void BuildAdditionalResource(AggregateRootModel aggregateModel, Settings settings)
+        public void BuildAdditionalResource(AggregateRootModel aggregateModel, SettingsModel settings)
         {
             DbContextInterfaceBuilder.Default(settings, _fileSystem);
 
             _buildApplicationFilesForResource(settings, aggregateModel);
         }
 
-        private void _buildValidationBehavior(Settings settings)
+        private void _buildValidationBehavior(SettingsModel settings)
         {
             var template = _templateLocator.Get(nameof(ValidationBehaviorBuilder));
 
@@ -257,7 +258,7 @@ namespace Endpoint.Core.Services
             _fileSystem.WriteAllLines($@"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Behaviors{Path.DirectorySeparatorChar}ValidationBehavior.cs", contents);
         }
 
-        private void _buildServiceCollectionExtensions(Settings settings)
+        private void _buildServiceCollectionExtensions(SettingsModel settings)
         {
             var template = _templateLocator.Get(nameof(ServiceCollectionExtensionsBuilder));
 

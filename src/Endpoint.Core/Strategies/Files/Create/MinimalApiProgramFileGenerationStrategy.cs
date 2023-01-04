@@ -1,5 +1,5 @@
-﻿using Endpoint.Core.Models;
-using Endpoint.Core.Models.Files;
+﻿using Endpoint.Core.Models.Artifacts;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Api;
 using Endpoint.Core.Strategies.Application;

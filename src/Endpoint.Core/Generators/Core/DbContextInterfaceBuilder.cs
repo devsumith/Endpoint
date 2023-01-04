@@ -1,5 +1,6 @@
 ﻿using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Options;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.IO;
@@ -9,7 +10,7 @@ namespace Endpoint.Core.Core
 {
     public class DbContextInterfaceBuilder
     {
-        public static void Default(Endpoint.Core.Models.Settings settings, IFileSystem fileSystem)
+        public static void Default(SettingsModel settings, IFileSystem fileSystem)
         {
             var classBuilder = new ClassBuilder(settings.DbContextName, new Endpoint.Core.Services.Context(), fileSystem, "interface")
             .WithDirectory($"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Interfaces")

@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
-using Endpoint.Core.Models;
+using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Strategies.Infrastructure;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace Endpoint.Core.Services
             : base(commandService, templateProcessor, templateLocator, fileSystem)
         { }
 
-        public void Build(Settings settings)
+        public void Build(SettingsModel settings)
         {
             _removeDefaultFiles(settings.InfrastructureDirectory);
 
@@ -35,7 +36,7 @@ namespace Endpoint.Core.Services
             _buildEntityConfigurations(settings);
         }
 
-        private void _buildEntityConfigurations(Settings model)
+        private void _buildEntityConfigurations(SettingsModel model)
         {
             foreach(var resource in model.Resources)
             {
@@ -43,7 +44,7 @@ namespace Endpoint.Core.Services
             }
         }
 
-        private void _buildEntityConfiguration(Settings model, string resourceName)
+        private void _buildEntityConfiguration(SettingsModel model, string resourceName)
         {
             var idPropertyName = model.IdFormat == IdFormat.Short ? "Id" : $"{resourceName}Id";
 
@@ -51,14 +52,14 @@ namespace Endpoint.Core.Services
                 .Create(resourceName, idPropertyName, model.ApplicationNamespace, model.InfrastructureNamespace, $"{model.InfrastructureDirectory}{Path.DirectorySeparatorChar}EntityConfigurations");
         }
 
-        public void BuildAdditionalResource(string additionalResource, Settings settings)
+        public void BuildAdditionalResource(string additionalResource, SettingsModel settings)
         {
             _createOrReCreateDbContext(settings);
 
             _buildEntityConfiguration(settings, additionalResource);
         }
 
-        protected void _createOrReCreateDbContext(Settings settings)
+        protected void _createOrReCreateDbContext(SettingsModel settings)
         {
             var dbContextBuilder = new ClassBuilder(settings.DbContextName, new Endpoint.Core.Services.Context(), _fileSystem)
                 .WithDirectory($"{settings.InfrastructureDirectory}{Path.DirectorySeparatorChar}Data")
@@ -87,7 +88,7 @@ namespace Endpoint.Core.Services
 
             dbContextBuilder.Build();
         }
-        private void _buildSeedData(Settings settings)
+        private void _buildSeedData(SettingsModel settings)
         {
             var template = _templateLocator.Get("SeedData");
 

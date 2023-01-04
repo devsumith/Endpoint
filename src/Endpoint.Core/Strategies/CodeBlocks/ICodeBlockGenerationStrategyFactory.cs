@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
 using Endpoint.Core.ViewModels;
 using System;
@@ -29,13 +29,13 @@ namespace Endpoint.Core.Strategies.CodeBlocks
         }
         public int Order { get; set; } = 0;
 
-        public bool CanHandle(dynamic model) => model is Entity;
+        public bool CanHandle(dynamic model) => model is EntityModel;
 
         public string Create(dynamic model) => Create(model);
 
-        public string Create(Entity model)
+        public string Create(EntityModel model)
         {
-            var template = _templateLocator.Get(nameof(Entity));
+            var template = _templateLocator.Get(nameof(EntityModel));
 
             var viewModel = model.ToViewModel();
 
@@ -55,13 +55,13 @@ namespace Endpoint.Core.Strategies.CodeBlocks
         }
         public int Order { get; set; } = 0;
 
-        public bool CanHandle(dynamic model) => model is Entity;
+        public bool CanHandle(dynamic model) => model is EntityModel;
 
         public string Create(dynamic model) => Create(model);
 
-        public string Create(Entity model)
+        public string Create(EntityModel model)
         {
-            var template = _templateLocator.Get(nameof(Entity));
+            var template = _templateLocator.Get(nameof(EntityModel));
 
             var viewModel = model.ToViewModel();
 

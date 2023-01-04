@@ -1,4 +1,5 @@
 using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Options;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.IO;
@@ -7,7 +8,7 @@ namespace Endpoint.Core.Builders
 {
     public class ControllerBuilder
     {
-        public static void Default(Models.Settings settings, string resource, IFileSystem fileSystem)
+        public static void Default(SettingsModel settings, string resource, IFileSystem fileSystem)
         {
             new ClassBuilder($"{((Token)resource).PascalCase}Controller", new Endpoint.Core.Services.Context(), fileSystem)
             .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")

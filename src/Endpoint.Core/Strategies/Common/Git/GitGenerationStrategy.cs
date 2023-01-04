@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Git;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using Octokit;

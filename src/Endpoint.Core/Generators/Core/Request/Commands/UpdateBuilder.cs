@@ -3,9 +3,10 @@ using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using Endpoint.Core;
-using Endpoint.Core.Models;
 using Endpoint.Core.Builders.Core;
 using System.Linq;
+using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Options;
 
 namespace Endpoint.Core.Builders
 {
@@ -21,9 +22,9 @@ namespace Endpoint.Core.Builders
         private string _domainNamespace;
         private string _applicationNamespace;
         private AggregateRootModel _aggregateRoot;
-        private Settings _settings;
+        private SettingsModel _settings;
 
-        public UpdateBuilder(Settings settings, IContext context, IFileSystem fileSystem)
+        public UpdateBuilder(SettingsModel settings, IContext context, IFileSystem fileSystem)
         {
             _content = new();
             _context = context;

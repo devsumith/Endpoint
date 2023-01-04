@@ -3,9 +3,10 @@ using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using Endpoint.Core;
-using Endpoint.Core.Models;
 using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Builders.Statements;
+using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Options;
 
 namespace Endpoint.Core.Builders
 {
@@ -14,7 +15,7 @@ namespace Endpoint.Core.Builders
         private readonly List<string> _content;
         private readonly IContext _context;
         private readonly IFileSystem _fileSystem;
-        private readonly Settings _settings;
+        private readonly SettingsModel _settings;
         private string _entity;
         private string _dbContext;
         private string _directory;
@@ -22,7 +23,7 @@ namespace Endpoint.Core.Builders
         private string _domainNamespace;
         private string _applicationNamespace;
 
-        public RemoveBuilder(Settings settings, IContext context, IFileSystem fileSystem)
+        public RemoveBuilder(SettingsModel settings, IContext context, IFileSystem fileSystem)
         {
             _content = new();
             _context = context;

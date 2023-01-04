@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Artifacts;
 
 namespace Endpoint.Core.Strategies.Solutions.Crerate
 {

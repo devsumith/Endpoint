@@ -9,67 +9,66 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Commands
+namespace Endpoint.Application.Commands;
+
+public class Git
 {
-    public class Git
+    [Verb("git")]
+    public class Request : IRequest<Unit>
     {
-        [Verb("git")]
-        public class Request : IRequest<Unit>
-        {
-            [Option('n',"name")]
-            public string RepositoryName { get; set; }
+        [Option('n',"name")]
+        public string RepositoryName { get; set; }
 
-            [Option('d', Required = false)]
-            public string Directory { get; set; } = Environment.CurrentDirectory;
+        [Option('d', Required = false)]
+        public string Directory { get; set; } = Environment.CurrentDirectory;
+    }
+
+    public class Handler : IRequestHandler<Request, Unit>
+    {
+        private readonly ICommandService _commandService;
+        private readonly ILogger _logger;
+        private readonly IConfiguration _configuration;
+        private readonly ITemplateLocator _templateLocator;
+        private readonly IFileSystem _fileSystem;
+
+        public Handler(ILogger logger, IConfiguration configuration, ICommandService commandService, ITemplateLocator templateLocator, IFileSystem fileSystem)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+            _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         }
 
-        public class Handler : IRequestHandler<Request, Unit>
+        public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
         {
-            private readonly ICommandService _commandService;
-            private readonly ILogger _logger;
-            private readonly IConfiguration _configuration;
-            private readonly ITemplateLocator _templateLocator;
-            private readonly IFileSystem _fileSystem;
+            _logger.LogInformation($"Handled: {nameof(Git)}");
 
-            public Handler(ILogger logger, IConfiguration configuration, ICommandService commandService, ITemplateLocator templateLocator, IFileSystem fileSystem)
+            var username = Environment.GetEnvironmentVariable("Endpoint:GitUsername");
+
+            var email = Environment.GetEnvironmentVariable("Endpoint:GitEmail");
+            
+            var password = Environment.GetEnvironmentVariable("Endpoint:GitPassword");
+
+            var client = new GitHubClient(new ProductHeaderValue(username))
             {
-                _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-                _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-                _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-                _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
-                _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            }
+                Credentials = new Credentials(password)
+            };
 
-            public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
-            {
-                _logger.LogInformation($"Handled: {nameof(Git)}");
+            client.Repository.Create(new NewRepository(request.RepositoryName)).GetAwaiter().GetResult();
 
-                var username = Environment.GetEnvironmentVariable("Endpoint:GitUsername");
+            _commandService.Start($"git init", $@"{request.Directory}");
 
-                var email = Environment.GetEnvironmentVariable("Endpoint:GitEmail");
-                
-                var password = Environment.GetEnvironmentVariable("Endpoint:GitPassword");
+            _commandService.Start($"git config user.name {username}", request.Directory);
 
-                var client = new GitHubClient(new ProductHeaderValue(username))
-                {
-                    Credentials = new Credentials(password)
-                };
+            _commandService.Start($"git config user.email {email}", request.Directory);
 
-                client.Repository.Create(new NewRepository(request.RepositoryName)).GetAwaiter().GetResult();
+            _fileSystem.WriteAllLines($@"{request.Directory}{Path.DirectorySeparatorChar}.gitignore", _templateLocator.Get("GitIgnoreFile"));
 
-                _commandService.Start($"git init", $@"{request.Directory}");
+            _commandService.Start($"git remote add origin https://{username}:{password}@github.com/{username}/{request.RepositoryName}.git");
 
-                _commandService.Start($"git config user.name {username}", request.Directory);
-
-                _commandService.Start($"git config user.email {email}", request.Directory);
-
-                _fileSystem.WriteAllLines($@"{request.Directory}{Path.DirectorySeparatorChar}.gitignore", _templateLocator.Get("GitIgnoreFile"));
-
-                _commandService.Start($"git remote add origin https://{username}:{password}@github.com/{username}/{request.RepositoryName}.git");
-
-                return new();
-            }
-
+            return new();
         }
+
     }
 }

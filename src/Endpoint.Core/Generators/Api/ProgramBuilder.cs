@@ -1,4 +1,4 @@
-using Endpoint.Core.Models;
+using Endpoint.Core.Models.Options;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 
@@ -6,7 +6,7 @@ namespace Endpoint.Core.Builders
 {
     public class ProgramBuilder
     {
-        public static void Build(Settings settings, ITemplateLocator templateLocator, ITemplateProcessor templateProcessor, IFileSystem fileSystem)
+        public static void Build(SettingsModel settings, ITemplateLocator templateLocator, ITemplateProcessor templateProcessor, IFileSystem fileSystem)
         {
             var template = templateLocator.Get("Program");
 

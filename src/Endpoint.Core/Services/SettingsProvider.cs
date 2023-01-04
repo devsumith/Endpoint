@@ -1,5 +1,5 @@
 ﻿using Endpoint.Core.Exceptions;
-using Endpoint.Core.Models;
+using Endpoint.Core.Models.Options;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -11,7 +11,7 @@ namespace Endpoint.Core.Services
 {
     public class SettingsProvider : ISettingsProvider
     {
-        public Settings Get(string directory = null)
+        public SettingsModel Get(string directory = null)
         {
             directory ??= CurrentDirectory;
 
@@ -23,7 +23,7 @@ namespace Endpoint.Core.Services
 
                 if (File.Exists(path))
                 {
-                    var settings = Deserialize<Settings>(File.ReadAllText(path), new JsonSerializerOptions()
+                    var settings = Deserialize<SettingsModel>(File.ReadAllText(path), new JsonSerializerOptions()
                     {
                         PropertyNameCaseInsensitive = true,
                     });

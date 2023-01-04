@@ -1,5 +1,6 @@
 ﻿using Endpoint.Core.Factories;
-using Endpoint.Core.Models;
+using Endpoint.Core.Models.Artifacts;
+using Endpoint.Core.Models.Options;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Common.Git;

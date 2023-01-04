@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Endpoint.Core.Models;
 using Endpoint.Core.Builders.Common;
+using Endpoint.Core.Models.Options;
 
 namespace Endpoint.Core.Builders
 {
@@ -17,8 +17,8 @@ namespace Endpoint.Core.Builders
         private int _tab = 4;
         private EndpointType? _endpointType;
         private string _resource;
-        private Settings _settings;
-        public MethodBodyBuilder(Settings  settings,EndpointType? endpointType = null, int indent = 0, string resource = null)
+        private SettingsModel _settings;
+        public MethodBodyBuilder(SettingsModel  settings,EndpointType? endpointType = null, int indent = 0, string resource = null)
         {
             _string = new StringBuilder();
             _indent = indent;

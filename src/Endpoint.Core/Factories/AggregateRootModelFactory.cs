@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.ValueObjects;
 using System.Linq;
 
@@ -36,9 +36,9 @@ namespace Endpoint.Core.Factories
 
     public static class EntityFactory
     {
-        public static Entity Create(string name, string properties)
+        public static EntityModel Create(string name, string properties)
         {
-            Entity model = new Entity() {  Name = name };
+            EntityModel model = new EntityModel() {  Name = name };
 
 
             model.Properties.Add(new ClassProperty("public", "Guid", $"{((Token)name).PascalCase}Id", ClassPropertyAccessor.GetPrivateSet, key: true));

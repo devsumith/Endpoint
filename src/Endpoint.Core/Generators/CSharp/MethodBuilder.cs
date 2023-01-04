@@ -3,9 +3,9 @@ using Endpoint.Core;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
-using Endpoint.Core.Models;
 using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Builders.Statements;
+using Endpoint.Core.Models.Options;
 
 namespace Endpoint.Core.Builders
 {
@@ -25,7 +25,7 @@ namespace Endpoint.Core.Builders
         private List<string> _parameters;
         private bool _async;
         private bool _override;
-        private Settings _settings;
+        private SettingsModel _settings;
         public MethodBuilder()
         {
             _accessModifier = AccessModifier.Public;
@@ -41,7 +41,7 @@ namespace Endpoint.Core.Builders
             _override = false;
         }
 
-        public MethodBuilder WithSettings(Settings settings)
+        public MethodBuilder WithSettings(SettingsModel settings)
         {
             _settings = settings;
             return this;

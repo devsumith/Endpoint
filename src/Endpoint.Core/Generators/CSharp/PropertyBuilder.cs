@@ -1,5 +1,6 @@
 using Endpoint.Core.Enums;
-using Endpoint.Core.Models;
+using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using System.Text;
 
 namespace Endpoint.Core.Builders
@@ -57,7 +58,7 @@ namespace Endpoint.Core.Builders
             return this;
         }
 
-        public string Build(Settings settings = null, string resourceName = null)
+        public string Build(SettingsModel settings = null, string resourceName = null)
         {
             if (!string.IsNullOrEmpty(_accessModifier))
             {

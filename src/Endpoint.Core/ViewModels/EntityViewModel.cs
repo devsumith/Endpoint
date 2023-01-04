@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Syntax;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.ViewModels
@@ -15,7 +15,7 @@ namespace Endpoint.Core.ViewModels
     public static class EntityExtensions
     {
 
-        public static EntityViewModel ToViewModel(this Entity entity)
+        public static EntityViewModel ToViewModel(this EntityModel entity)
         {
             var model = new EntityViewModel
             {

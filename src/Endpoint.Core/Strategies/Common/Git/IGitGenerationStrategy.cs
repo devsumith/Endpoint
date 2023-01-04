@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Git;
 
 namespace Endpoint.Core.Strategies.Common.Git
 {

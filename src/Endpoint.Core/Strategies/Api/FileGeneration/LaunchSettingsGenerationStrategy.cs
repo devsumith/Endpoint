@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Options;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 
@@ -6,7 +6,7 @@ namespace Endpoint.Core.Strategies.Api.FileGeneration
 {
     public interface ILaunchSettingsGenerationStrategy
     {
-        void Create(Settings settings);
+        void Create(SettingsModel settings);
     }
     public class LaunchSettingsGenerationStrategy: ILaunchSettingsGenerationStrategy
     {
@@ -21,7 +21,7 @@ namespace Endpoint.Core.Strategies.Api.FileGeneration
             _templateLocator = templateLocator;
         }
 
-        public void Create(Settings settings)
+        public void Create(SettingsModel settings)
         {
             var template = _templateLocator.Get("LaunchSettings");
 

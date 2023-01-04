@@ -1,6 +1,7 @@
 using Endpoint.Core.Builders.Statements;
 using Endpoint.Core.Enums;
-using Endpoint.Core.Models;
+using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,7 +96,7 @@ namespace Endpoint.Core.Builders
             }).Build();
         }
 
-        public static string[] EndpointAttributes(Settings settings, EndpointType endpointType, string resource, bool authorize = false, int indent = 0)
+        public static string[] EndpointAttributes(SettingsModel settings, EndpointType endpointType, string resource, bool authorize = false, int indent = 0)
         {
             var attributes = new List<string>();
 

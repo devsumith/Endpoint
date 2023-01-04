@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Models.Options;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Solutions.Crerate;
 using System.IO;

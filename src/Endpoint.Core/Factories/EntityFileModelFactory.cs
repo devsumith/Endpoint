@@ -1,5 +1,5 @@
-﻿using Endpoint.Core.Models;
-using Endpoint.Core.Models.Files;
+﻿using Endpoint.Core.Models.Artifacts;
+using Endpoint.Core.Models.Syntax;
 using System.Linq;
 
 namespace Endpoint.Core.Factories
@@ -10,7 +10,7 @@ namespace Endpoint.Core.Factories
         {
             var entityFileModel = new EntityFileModel
             {
-                Entity = new Entity
+                Entity = new EntityModel
                 {
                     Name = name,
                     Namespace = @namespace,                    
