@@ -1,4 +1,5 @@
-﻿using Endpoint.Core.Options;
+﻿using Endpoint.Core.Models.Artifacts.ApiProjectModels;
+using Endpoint.Core.Options;
 using Endpoint.Core.Services;
 using System.IO;
 using System.Linq;

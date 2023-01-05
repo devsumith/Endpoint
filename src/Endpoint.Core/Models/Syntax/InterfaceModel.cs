@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Endpoint.Core.Models.Syntax.Properties;
 
 namespace Endpoint.Core.Models.Syntax;
 

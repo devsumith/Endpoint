@@ -1,8 +1,0 @@
-﻿using System;
-
-namespace {{ applicationNamespace }}.Features
-{
-    public class {{ entityNamePascalCase }}Dto
-    {
-    }
-}

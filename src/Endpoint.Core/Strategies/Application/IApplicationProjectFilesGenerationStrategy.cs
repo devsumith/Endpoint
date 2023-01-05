@@ -1,5 +1,5 @@
 ﻿using Endpoint.Core.Models.Options;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Entities;
 
 namespace Endpoint.Core.Services
 {

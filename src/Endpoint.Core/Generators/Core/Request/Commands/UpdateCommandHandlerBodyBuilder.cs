@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;

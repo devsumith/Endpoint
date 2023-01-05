@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Models;
+using Endpoint.Core.Models.Artifacts.ApiProjectModels;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Solutions.Crerate;

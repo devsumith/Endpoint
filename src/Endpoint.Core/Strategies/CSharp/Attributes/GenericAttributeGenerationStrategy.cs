@@ -2,6 +2,7 @@ using Endpoint.Core.Builders.Statements;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;

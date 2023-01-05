@@ -1,5 +1,7 @@
 ﻿using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
@@ -33,7 +35,7 @@ namespace Endpoint.Core.Services
         {
             AggregateRootModel aggregateRoot = new AggregateRootModel(resource);
 
-            aggregateRoot.Properties.Add(new ClassProperty("public", "Guid", $"{((Token)resource).PascalCase}Id", ClassPropertyAccessor.GetPrivateSet, key: true));
+            aggregateRoot.Properties.Add(new PropertyModel("public", "Guid", $"{((Token)resource).PascalCase}Id", PropertyAccessorModel.GetPrivateSet, key: true));
 
             if (!string.IsNullOrWhiteSpace(properties))
             {
@@ -41,7 +43,7 @@ namespace Endpoint.Core.Services
                 {
                     var nameValuePair = property.Split(':');
 
-                    aggregateRoot.Properties.Add(new ClassProperty("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), ClassPropertyAccessor.GetPrivateSet));
+                    aggregateRoot.Properties.Add(new PropertyModel("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
                 }
             }
 
@@ -60,7 +62,7 @@ namespace Endpoint.Core.Services
 
                 var idDotNetType = useIntIdPropertyType ? "int" : "Guid";
 
-                aggregateRoot.Properties.Add(new ClassProperty("public", idDotNetType, idPropertyName, ClassPropertyAccessor.GetPrivateSet, key: true));
+                aggregateRoot.Properties.Add(new PropertyModel("public", idDotNetType, idPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 
                 if (!string.IsNullOrWhiteSpace(properties))
                 {
@@ -68,7 +70,7 @@ namespace Endpoint.Core.Services
                     {
                         var nameValuePair = property.Split(':');
 
-                        aggregateRoot.Properties.Add(new ClassProperty("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), ClassPropertyAccessor.GetPrivateSet));
+                        aggregateRoot.Properties.Add(new PropertyModel("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
                     }
                 }
 

@@ -1,12 +1,10 @@
-﻿using Endpoint.Core.Models.Artifacts;
-using Endpoint.Core.Models.Syntax;
+﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Api;
-using Endpoint.Core.Strategies.Application;
-using Endpoint.Core.Strategies.CodeBlocks;
 using Endpoint.Core.Strategies.Infrastructure;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -20,7 +18,7 @@ namespace Endpoint.Core.Strategies.Files.Create
         private readonly ILogger _logger;
         private readonly IWebApplicationBuilderGenerationStrategy _webApplicationBuilderGenerationStrategy;
         private readonly IWebApplicationGenerationStrategy _webApplicationGenerationStrategy;
-        private readonly ICodeBlockGenerationStrategyFactory _codeBlockGenerationStrategyFactory;
+        private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
         public MinimalApiProgramFileGenerationStrategy(
             IFileSystem fileSystem,
             ITemplateLocator templateLocator,
@@ -28,7 +26,7 @@ namespace Endpoint.Core.Strategies.Files.Create
             ILogger logger,
             IWebApplicationBuilderGenerationStrategy webApplicationBuilderGenerationStrategy,
             IWebApplicationGenerationStrategy webApplicationGenerationStrategy,
-            ICodeBlockGenerationStrategyFactory codeBlockGenerationStrategyFactory
+            ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory
             )
         {
             _fileSystem = fileSystem ?? throw new ArgumentException(nameof(fileSystem));
@@ -37,7 +35,7 @@ namespace Endpoint.Core.Strategies.Files.Create
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _webApplicationBuilderGenerationStrategy = webApplicationBuilderGenerationStrategy ?? throw new ArgumentNullException(nameof(webApplicationBuilderGenerationStrategy));
             _webApplicationGenerationStrategy = webApplicationGenerationStrategy ?? throw new ArgumentNullException(nameof(webApplicationGenerationStrategy));
-            _codeBlockGenerationStrategyFactory = codeBlockGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(codeBlockGenerationStrategyFactory));
+            _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategyFactory));
         }
 
         public int Order => 0;
@@ -68,7 +66,7 @@ namespace Endpoint.Core.Strategies.Files.Create
 
             foreach (var entity in model.Entities)
             {
-                content.Add(_codeBlockGenerationStrategyFactory.CreateFor(entity));
+                content.Add(_syntaxGenerationStrategyFactory.CreateFor(entity));
 
                 content.Add("");
             }

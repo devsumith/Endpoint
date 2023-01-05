@@ -1,6 +1,5 @@
-﻿namespace Endpoint.Core.Models.Syntax
+﻿namespace Endpoint.Core.Models.Syntax;
+
+public class SelectQueryModel
 {
-    public class SelectQueryModel
-    {
-    }
 }

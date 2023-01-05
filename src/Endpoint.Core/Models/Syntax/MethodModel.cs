@@ -1,4 +1,6 @@
 ﻿using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Syntax.Attributes;
+using Endpoint.Core.Models.Syntax.Params;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax;

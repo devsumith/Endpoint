@@ -1,7 +1,9 @@
 ﻿using Endpoint.Core.Events;
 using Endpoint.Core.Models;
+using Endpoint.Core.Models.Artifacts.ApiProjectModels;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Options;
 using Endpoint.Core.Strategies.Common;
 using MediatR;

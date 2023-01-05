@@ -4,6 +4,7 @@ using Endpoint.Core.Builders.Statements;
 using Endpoint.Core.Core;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Strategies.Application;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;

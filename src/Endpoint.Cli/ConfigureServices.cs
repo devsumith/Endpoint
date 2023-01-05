@@ -8,11 +8,10 @@ public static class ConfigureServices
 {
     public static void AddCliServices(this IServiceCollection services)
     {
-        services.AddSharedServices();
         services.AddCoreServices();
-        services.AddInfrastructureServices();
         services.AddApplicationServices();
-        
+        services.AddInfrastructureServices();
+
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
             .AddUserSecrets<Program>(optional: true)

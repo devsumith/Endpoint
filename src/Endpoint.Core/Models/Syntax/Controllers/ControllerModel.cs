@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax.Classes;
 
 namespace Endpoint.Core.Models.Syntax.Controllers;
 

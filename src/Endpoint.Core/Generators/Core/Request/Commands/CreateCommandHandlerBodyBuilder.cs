@@ -1,5 +1,5 @@
 ﻿using Endpoint.Core;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.ValueObjects;
 using System;
 using System.Collections.Generic;

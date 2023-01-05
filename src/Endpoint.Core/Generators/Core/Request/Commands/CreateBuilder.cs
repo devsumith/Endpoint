@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Endpoint.Core;
 using Endpoint.Core.Builders.Core;
 using System.Linq;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Entities;
 
 namespace Endpoint.Core.Builders
 {

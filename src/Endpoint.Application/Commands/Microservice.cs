@@ -8,7 +8,6 @@ using Endpoint.Core.Factories;
 using Nelibur.ObjectMapper;
 using Endpoint.Core.Options;
 using Endpoint.Core;
-using Endpoint.Core.Strategies.Common.Git;
 using Endpoint.Core.Strategies.Solutions.Crerate;
 using Endpoint.Core.Strategies.Solutions.Update;
 using Endpoint.Core.Services;

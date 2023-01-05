@@ -1,4 +1,6 @@
 using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
@@ -114,7 +116,7 @@ public class SettingsModel
 
         aggregate.IdPropertyType = IdDotNetType == IdDotNetType.Int ? "int" : "Guid";
 
-        aggregate.Properties.Add(new ClassProperty("public", aggregate.IdPropertyType, aggregate.IdPropertyName, ClassPropertyAccessor.GetPrivateSet, key: true));
+        aggregate.Properties.Add(new PropertyModel("public", aggregate.IdPropertyType, aggregate.IdPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 
         if (!string.IsNullOrEmpty(properties))
         {
@@ -124,7 +126,7 @@ public class SettingsModel
 
                 if (nameValuePair.ElementAt(0) != aggregate.IdPropertyName)
                 {
-                    aggregate.Properties.Add(new ClassProperty("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), ClassPropertyAccessor.GetPrivateSet));
+                    aggregate.Properties.Add(new PropertyModel("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
                 }
             }
         }

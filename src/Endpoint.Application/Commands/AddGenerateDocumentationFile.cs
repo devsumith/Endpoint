@@ -1,4 +1,5 @@
 using CommandLine;
+using Endpoint.Core.Models.Artifacts.ApiProjectModels;
 using Endpoint.Core.Services;
 using MediatR;
 using System;

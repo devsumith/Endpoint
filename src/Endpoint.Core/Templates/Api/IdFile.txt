@@ -1,7 +1,0 @@
-﻿using StronglyTypedIds;
-
-namespace {{ namespace }}
-{
-    [StronglyTypedId(backingType: StronglyTypedIdBackingType.Guid, converters: StronglyTypedIdConverter.EfCoreValueConverter)]
-    public partial struct {{ entityNamePascalCase }}Id { }
-}

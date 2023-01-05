@@ -1,9 +1,9 @@
 ﻿using Endpoint.Core.Factories;
 using Endpoint.Core.Models.Artifacts;
+using Endpoint.Core.Models.Git;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
-using Endpoint.Core.Strategies.Common.Git;
 using Endpoint.Core.Strategies.Solutions.Crerate;
 using Endpoint.Core.Strategies.Solutions.Update;
 using Endpoint.Core.Strategies.WorkspaceSettingss.Update;

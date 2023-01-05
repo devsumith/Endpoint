@@ -1,19 +1,21 @@
 ﻿using Endpoint.Core;
+using Endpoint.Core.Models.Artifacts.ApiProjectModels;
+using Endpoint.Core.Models.Artifacts.ProgramFiles;
+using Endpoint.Core.Models.Git;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
 using Endpoint.Core.Strategies.Api;
-using Endpoint.Core.Strategies.CodeBlocks;
 using Endpoint.Core.Strategies.Common;
-using Endpoint.Core.Strategies.Common.Git;
-using Endpoint.Core.Strategies.Files;
-using Endpoint.Core.Strategies.Solutions;
+using Endpoint.Core.Strategies.Files.Create;
 using Endpoint.Core.Strategies.Solutions.Crerate;
+using Endpoint.Core.Strategies.Solutions.Update;
+using Endpoint.Core.Strategies.WorkspaceSettingss.Update;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
 {
-    public static void AddSharedServices(this IServiceCollection services)
+    public static void AddCoreServices(this IServiceCollection services)
     {
         services.AddSingleton<ICommandService, CommandService>();
         services.AddSingleton<IFileSystem, FileSystem>();
@@ -22,10 +24,7 @@ public static class ConfigureServices
         services.AddSingleton<ISettingsProvider, SettingsProvider>();
         services.AddSingleton<ITenseConverter, TenseConverter>();
         services.AddSingleton<IContext, Context>();
-    }
 
-    public static void AddCoreServices(this IServiceCollection services)
-    {
         services.AddSingleton<IFileNamespaceProvider, FileNamespaceProvider>();
         services.AddSingleton<ISolutionTemplateService, EndpointGenerationStrategy>();
         services.AddSingleton<ISolutionFilesGenerationStrategy, SolutionFilesGenerationStrategy>();
@@ -44,10 +43,24 @@ public static class ConfigureServices
         services.AddSingleton<ISolutionGenerationStrategy, SolutionGenerationStrategy>();
         services.AddSingleton<IProjectGenerationStrategy, ProjectGenerationStrategy>();
         services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
-        services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();           
-        services.AddGitStrategyApplicationServices();
-        services.AddSolutionStrategyApplicationServices();
-        services.AddFileGenerationApplicationServices();
-        services.AddCodeBlockGenerationServices();
+        services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();
+        services.AddSingleton<IGitGenerationStrategy, GitGenerationStrategy>();
+        services.AddSingleton<IGitGenerationStrategyFactory, GitGenerationStrategyFactory>();
+        services.AddSingleton<IMinimalApiProgramFileGenerationStratey, MinimalApiProgramFileGenerationStratey>();
+        services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
+        services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();
+        services.AddSingleton<ISolutionSettingsFileGenerationStrategy, SolutionSettingsFileGenerationStrategy>();
+        services.AddSingleton<ISolutionUpdateStrategy, SolutionUpdateStrategy>();
+        services.AddSingleton<ISolutionUpdateStrategyFactory, SolutionUpdateStrategyFactory>();
+
+        services.AddSingleton<IWorkspaceSettingsGenerationStrategy, WorkspaceGenerationStrategy>();
+        services.AddSingleton<IWorkspaceGenerationStrategyFactory, WorkspaceSettingsGenerationStrategyFactory>();
+        services.AddSingleton<IWorkspaceSettingsUpdateStrategyFactory, WorkspaceSettingsUpdateStrategyFactory>();
+        services.AddSingleton<IWorkspaceSettingsUpdateStrategy, WorkspaceSettingsUpdateStrategy>();
+        services.AddSingleton<IFileGenerationStrategyFactory, FileGenerationStrategyFactory>();
+        services.AddSingleton<IFileGenerationStrategy, MinimalApiProgramFileGenerationStrategy>();
+        services.AddSingleton<IFileGenerationStrategy, TemplatedFileGenerationStrategy>();
+        services.AddSingleton<IFileGenerationStrategy, EntityFileGenerationStrategy>();
+
     }
 }

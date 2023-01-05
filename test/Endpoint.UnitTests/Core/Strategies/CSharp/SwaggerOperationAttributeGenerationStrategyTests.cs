@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Syntax;
+﻿using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Strategies.CSharp.Attributes;
 using System;
 using Xunit;

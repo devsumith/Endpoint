@@ -1,4 +1,5 @@
-﻿using Endpoint.Core.Models.Syntax;
+﻿using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.ValueObjects;
 using System.Linq;
 
@@ -18,7 +19,7 @@ namespace Endpoint.Core.Factories
 
             model.IdPropertyType = idDotNetType;
 
-            model.Properties.Add(new ClassProperty("public", idDotNetType, idPropertyName, ClassPropertyAccessor.GetPrivateSet, key: true));
+            model.Properties.Add(new PropertyModel("public", idDotNetType, idPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 
             if (!string.IsNullOrWhiteSpace(properties))
             {
@@ -26,7 +27,7 @@ namespace Endpoint.Core.Factories
                 {
                     var nameValuePair = property.Split(':');
 
-                    model.Properties.Add(new ClassProperty("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), ClassPropertyAccessor.GetPrivateSet));
+                    model.Properties.Add(new PropertyModel("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
                 }
             }
 
@@ -41,7 +42,7 @@ namespace Endpoint.Core.Factories
             EntityModel model = new EntityModel() {  Name = name };
 
 
-            model.Properties.Add(new ClassProperty("public", "Guid", $"{((Token)name).PascalCase}Id", ClassPropertyAccessor.GetPrivateSet, key: true));
+            model.Properties.Add(new PropertyModel("public", "Guid", $"{((Token)name).PascalCase}Id", PropertyAccessorModel.GetPrivateSet, key: true));
 
             if (!string.IsNullOrWhiteSpace(properties))
             {
@@ -49,7 +50,7 @@ namespace Endpoint.Core.Factories
                 {
                     var nameValuePair = property.Split(':');
 
-                    model.Properties.Add(new ClassProperty("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), ClassPropertyAccessor.GetPrivateSet));
+                    model.Properties.Add(new PropertyModel("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
                 }
             }
 

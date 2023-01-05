@@ -1,4 +1,5 @@
-﻿using Endpoint.Core.Models.Syntax;
+﻿using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
 using Xunit;
@@ -25,9 +26,9 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Process_ShouldComplextModel()
         {
-            var entity = new EntityModel("User", new List<ClassProperty>
+            var entity = new EntityModel("User", new List<PropertyModel>
             {
-                new ClassProperty("public","string","Name", ClassPropertyAccessor.GetPrivateSet)
+                new PropertyModel("public","string","Name", PropertyAccessorModel.GetPrivateSet)
             })
             {
                 Namespace = "Endpoint.Domain.Models"

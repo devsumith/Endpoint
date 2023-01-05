@@ -1,5 +1,5 @@
 using CommandLine;
-using Endpoint.Core.Factories;
+using Endpoint.Core.Models.Artifacts.Entities;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Files.Create;
 using MediatR;
@@ -10,40 +10,40 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands;
 
-internal class AddEntity
+[Verb("entity-add")]
+public class EntityAddRequest : IRequest<Unit>
 {
-    [Verb("add-entity")]
-    internal class Request : IRequest<Unit> {
-        [Option('n',"name")]
-        public string Name { get; set; }
-        [Option('p', "properties")]
-        public string Properties { get; set; }
-        [Option('d', "directory")]
-        public string Directory { get; set; } = Environment.CurrentDirectory;
+    [Option('n', "name")]
+    public string Name { get; set; }
+    
+    [Option('p', "properties")]
+    public string Properties { get; set; }
+
+    [Option('d', "directory")]
+    public string Directory { get; set; } = Environment.CurrentDirectory;
+}
+
+public class EntityAddRequestHandler : IRequestHandler<EntityAddRequest, Unit>
+{
+    private readonly ILogger _logger;
+    private readonly IFileGenerationStrategyFactory _fileGenerationStrategyFactory;
+    private readonly IFileNamespaceProvider _fileNamespaceProvider;
+
+    public EntityAddRequestHandler(ILogger logger, IFileGenerationStrategyFactory fileGenerationStrategyFactory, IFileNamespaceProvider fileNamespaceProvider)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _fileGenerationStrategyFactory = fileGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(fileGenerationStrategyFactory));
+        _fileNamespaceProvider = fileNamespaceProvider ?? throw new ArgumentNullException(nameof(fileNamespaceProvider));
     }
 
-    internal class Handler : IRequestHandler<Request, Unit>
+    public async Task<Unit> Handle(EntityAddRequest request, CancellationToken cancellationToken)
     {
-        private readonly ILogger _logger;
-        private readonly IFileGenerationStrategyFactory _fileGenerationStrategyFactory;
-        private readonly IFileNamespaceProvider _fileNamespaceProvider;
+        _logger.LogInformation($"Handled: {nameof(EntityAddRequestHandler)}");
 
-        public Handler(ILogger logger, IFileGenerationStrategyFactory fileGenerationStrategyFactory, IFileNamespaceProvider fileNamespaceProvider)
-        {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _fileGenerationStrategyFactory = fileGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(fileGenerationStrategyFactory));
-            _fileNamespaceProvider = fileNamespaceProvider ?? throw new ArgumentNullException(nameof(fileNamespaceProvider));
-        }
+        var model = EntityFileModelFactory.Create(request.Name, request.Properties, request.Directory, _fileNamespaceProvider.Get(request.Directory));
 
-        public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation($"Handled: {nameof(AddEntity)}");
+        _fileGenerationStrategyFactory.CreateFor(model);
 
-            var model = EntityFileModelFactory.Create(request.Name, request.Properties, request.Directory, _fileNamespaceProvider.Get(request.Directory));
-
-            _fileGenerationStrategyFactory.CreateFor(model);
-
-            return new();
-        }
+        return new();
     }
 }
