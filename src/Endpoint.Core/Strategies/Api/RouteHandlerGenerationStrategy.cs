@@ -7,7 +7,7 @@ namespace Endpoint.Core.Strategies.Api
 {
     public class RouteHandlerGenerationStrategy : IRouteHandlerGenerationStrategy
     {
-        public string[] Create(RouteHandlerModel model)
+        public string Create(RouteHandlerModel model)
         {
             List<string> content = new List<string>();
 
@@ -29,7 +29,7 @@ namespace Endpoint.Core.Strategies.Api
                 content.Add("})".Indent(1));
                 content.Add($".WithName(\"Create{resourceNameToken.PascalCase}\")".Indent(1));
                 content.Add($".Produces<{resourceNameToken.PascalCase}>(StatusCodes.Status201Created);".Indent(1));
-                return content.ToArray();
+                return string.Join(Environment.NewLine, content);
             }
 
             if(model.Type == RouteHandlerType.Get)
@@ -99,7 +99,7 @@ namespace Endpoint.Core.Strategies.Api
                 content.Add(".Produces(StatusCodes.Status404NotFound);".Indent(1));
             }
 
-            return content.ToArray();
+            return string.Join(Environment.NewLine, content);
         }
     }
 }

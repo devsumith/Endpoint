@@ -1,0 +1,36 @@
+﻿var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<{{ dbContextName }}>(optionsBuilder => optionsBuilder.UseInMemoryDatabase(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "{{ apiNamespace }}",
+        Description = "",
+        TermsOfService = new Uri("https://example.com/terms"),
+        Contact = new OpenApiContact
+        {
+            Name = "",
+            Email = ""
+        },
+        License = new OpenApiLicense
+        {
+            Name = "Use under MIT",
+            Url = new Uri("https://opensource.org/licenses/MIT"),
+        }
+    });
+
+    options.EnableAnnotations();
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+}).AddSwaggerGenNewtonsoftSupport();

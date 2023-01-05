@@ -6,6 +6,8 @@ using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using System;
+using Endpoint.Core.Models.Syntax;
 
 namespace Endpoint.UnitTests
 {

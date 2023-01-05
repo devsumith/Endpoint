@@ -58,11 +58,11 @@ namespace Endpoint.Core.Strategies.Files.Create
 
             content.Add("");
 
-            content.AddRange(_webApplicationBuilderGenerationStrategy.Create(model.Name, model.DbContextName));
+            content.Add(_webApplicationBuilderGenerationStrategy.Create(model.Name, model.DbContextName));
 
             content.Add("");
 
-            content.AddRange(_webApplicationGenerationStrategy.Create(model.Name, model.DbContextName, model.RouteHandlers));
+            content.Add(_webApplicationGenerationStrategy.Create(model.Name, model.DbContextName, model.RouteHandlers));
 
             content.Add("");
 
@@ -73,9 +73,9 @@ namespace Endpoint.Core.Strategies.Files.Create
                 content.Add("");
             }
 
-            content.AddRange(new DbContextGenerationStrategy().Create(new DbContextModel(model.DbContextName, model.Entities)));
+            content.Add(new DbContextGenerationStrategy().Create(new DbContextModel(model.DbContextName, model.Entities)));
 
-            _fileSystem.WriteAllLines(model.Path, content.ToArray());
+            _fileSystem.WriteAllText(model.Path, string.Join(Environment.NewLine, content));
         }
 
         public void Update(dynamic model) => Update(model);
@@ -107,7 +107,7 @@ namespace Endpoint.Core.Strategies.Files.Create
                 }
             }
 
-            _fileSystem.WriteAllLines(model.Path, content.ToArray());
+            _fileSystem.WriteAllText(model.Path, string.Join(Environment.NewLine, content));
         }
 
 

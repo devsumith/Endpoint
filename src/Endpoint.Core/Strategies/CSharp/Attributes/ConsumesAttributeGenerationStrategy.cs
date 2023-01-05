@@ -1,11 +1,10 @@
 ﻿using Endpoint.Core.Models.Syntax;
 
-namespace Endpoint.Core.Strategies.CSharp.Attributes
-{
-    public class ConsumesAttributeGenerationStrategy : IAttributeGenerationStrategy
-    {
-        public bool CanHandle(AttributeModel model) => model.Type == AttributeType.Consumes;
+namespace Endpoint.Core.Strategies.CSharp.Attributes;
 
-        public string[] Create(AttributeModel model) => new string[1] { "[Consumes(MediaTypeNames.Application.Json)]" };
-    }
+public class ConsumesAttributeGenerationStrategy : IAttributeGenerationStrategy
+{
+    public bool CanHandle(AttributeModel model) => model.Type == AttributeType.Consumes;
+
+    public string Create(AttributeModel model) => "[Consumes(MediaTypeNames.Application.Json)]";
 }

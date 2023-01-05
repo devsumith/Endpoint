@@ -16,63 +16,65 @@ namespace Endpoint.Core.Strategies.Api
             _templateProcessor = templateProcessor;
         }
 
-        public string[] Create(string @namespace, string dbContextName, List<RouteHandlerModel> routeHandlers)
+        public string Create(string @namespace, string dbContextName, List<RouteHandlerModel> routeHandlers)
         {
             var tokens = new TokensBuilder()
                 .With("Namespace", (Token)@namespace)
                 .With(nameof(dbContextName), (Token)dbContextName)
                 .Build();
 
-            List<string> content = new List<string>();
-
-            content.Add("var app = builder.Build();");
-
-            content.Add("");
-
-            content.AddRange(_templateProcessor.Process(_templateLocator.Get("WebApplicationConfiguration"), tokens));
-
-            content.Add("");
-
-            foreach(var routeHandlerModel in routeHandlers)
+            List<string> content = new List<string>
             {
-                content.AddRange(new RouteHandlerGenerationStrategy().Create(routeHandlerModel));
+                "var app = builder.Build();",
 
-                content.Add("");
-            }
+                "",
 
-            content.Add("app.Run();");
+                string.Join(Environment.NewLine, _templateProcessor.Process(_templateLocator.Get("WebApplicationConfiguration"), tokens)),
 
-            return content.ToArray();
-
-        }
-
-        public string[] Update(List<string> existingWebApplication, string @namespace, string dbContextName, List<RouteHandlerModel> routeHandlers)
-        {
-            var tokens = new TokensBuilder()
-                .With("Namespace", (Token)@namespace)
-                .With(nameof(dbContextName), (Token)dbContextName)
-                .Build();
-
-            List<string> content = new List<string>();
-
-            content.Add("var app = builder.Build();");
-
-            content.Add("");
-
-            content.AddRange(_templateProcessor.Process(_templateLocator.Get("WebApplicationConfiguration"), tokens));
-
-            content.Add("");
+                ""
+            };
 
             foreach (var routeHandlerModel in routeHandlers)
             {
-                content.AddRange(new RouteHandlerGenerationStrategy().Create(routeHandlerModel));
+                content.Add(new RouteHandlerGenerationStrategy().Create(routeHandlerModel));
 
                 content.Add("");
             }
 
             content.Add("app.Run();");
 
-            return content.ToArray();
+            return string.Join(Environment.NewLine, content);
+
+        }
+
+        public string Update(List<string> existingWebApplication, string @namespace, string dbContextName, List<RouteHandlerModel> routeHandlers)
+        {
+            var tokens = new TokensBuilder()
+                .With("Namespace", (Token)@namespace)
+                .With(nameof(dbContextName), (Token)dbContextName)
+                .Build();
+
+            List<string> content = new List<string>
+            {
+                "var app = builder.Build();",
+
+                "",
+
+                string.Join(Environment.NewLine, _templateProcessor.Process(_templateLocator.Get("WebApplicationConfiguration"), tokens)),
+
+                ""
+            };
+
+            foreach (var routeHandlerModel in routeHandlers)
+            {
+                content.Add(new RouteHandlerGenerationStrategy().Create(routeHandlerModel));
+
+                content.Add("");
+            }
+
+            content.Add("app.Run();");
+
+            return string.Join(Environment.NewLine, content);
 
         }
     }

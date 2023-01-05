@@ -27,7 +27,7 @@ namespace Endpoint.Core.Strategies
                 WriteIndented = true
             });
 
-            _fileSystem.WriteAllLines($"{model.Directory}{Path.DirectorySeparatorChar}Workspace.json", new string[1] { json });
+            _fileSystem.WriteAllText($"{model.Directory}{Path.DirectorySeparatorChar}Workspace.json", json);
         }
     }
 }

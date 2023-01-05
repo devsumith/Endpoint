@@ -97,9 +97,9 @@ namespace Endpoint.Core.Services
                 .With("DbContext", (Token)settings.DbContextName)
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($@"{settings.InfrastructureDirectory}{Path.DirectorySeparatorChar}Data{Path.DirectorySeparatorChar}SeedData.cs", contents);
+            _fileSystem.WriteAllText($@"{settings.InfrastructureDirectory}{Path.DirectorySeparatorChar}Data{Path.DirectorySeparatorChar}SeedData.cs", contents);
         }
     }
 }

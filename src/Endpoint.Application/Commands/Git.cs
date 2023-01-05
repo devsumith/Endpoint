@@ -63,7 +63,7 @@ public class Git
 
             _commandService.Start($"git config user.email {email}", request.Directory);
 
-            _fileSystem.WriteAllLines($@"{request.Directory}{Path.DirectorySeparatorChar}.gitignore", _templateLocator.Get("GitIgnoreFile"));
+            _fileSystem.WriteAllText($@"{request.Directory}{Path.DirectorySeparatorChar}.gitignore", string.Join(Environment.NewLine, _templateLocator.Get("GitIgnoreFile")));
 
             _commandService.Start($"git remote add origin https://{username}:{password}@github.com/{username}/{request.RepositoryName}.git");
 

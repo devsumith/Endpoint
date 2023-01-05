@@ -45,7 +45,7 @@ namespace Endpoint.Core.Builders
         }
         public void Build()
         {
-            _fileSystem.WriteAllLines($"{_directory}{Path.DirectorySeparatorChar}{((Token)_entity).PascalCase}Configuration.cs", Class);
+            _fileSystem.WriteAllText($"{_directory}{Path.DirectorySeparatorChar}{((Token)_entity).PascalCase}Configuration.cs", string.Join(Environment.NewLine, Class));
         }
     }
 }

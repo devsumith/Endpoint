@@ -26,7 +26,7 @@ namespace Endpoint.Core.Strategies.WorkspaceSettingss.Update
                 WriteIndented = true
             });
 
-            _fileSystem.WriteAllLines($"{next.Directory}{Path.DirectorySeparatorChar}Workspace.json", new string[1] { json });
+            _fileSystem.WriteAllText($"{next.Directory}{Path.DirectorySeparatorChar}Workspace.json", json);
         }
     }
 }

@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\Api\AppSettings.txt" />
+    <EmbeddedResource Include="Templates\Api\Dependencies.txt" />
+    <EmbeddedResource Include="Templates\Api\IdFile.txt" />
+    <EmbeddedResource Include="Templates\Api\LaunchSettings.txt" />
+    <EmbeddedResource Include="Templates\Api\MinimalAppSettings.txt" />
+    <EmbeddedResource Include="Templates\Api\Program.txt" />
+    <EmbeddedResource Include="Templates\Api\Startup.txt" />
+    <EmbeddedResource Include="Templates\Api\WebApplicationBuilder.txt" />
+    <EmbeddedResource Include="Templates\Api\WebApplicationConfiguration.txt" />
+    <EmbeddedResource Include="Templates\Application\Dto.txt" />
+    <EmbeddedResource Include="Templates\Console\EmptyProgram.txt" />
+    <EmbeddedResource Include="Templates\Console\HttpClientExtensions.txt" />
+    <EmbeddedResource Include="Templates\Console\HttpClientFactory.txt" />
+    <EmbeddedResource Include="Templates\Domain\Entity.txt" />
+    <EmbeddedResource Include="Templates\Global\BicepFile.txt" />
+    <EmbeddedResource Include="Templates\Global\DeploySetupFile.txt" />
+    <EmbeddedResource Include="Templates\Global\GitIgnoreFile.txt" />
+    <EmbeddedResource Include="Templates\Infrastructure\EntityConfiguration.txt" />
+    <EmbeddedResource Include="Templates\Infrastructure\SeedData.txt" />
+    <EmbeddedResource Include="Templates\IntegrationTests\ApiTest.txt" />
+    <EmbeddedResource Include="Templates\IntegrationTests\WebApplicationFactory.txt" />
+    <EmbeddedResource Include="Templates\SharedKernel\QueryableExtensions.txt" />
+    <EmbeddedResource Include="Templates\SharedKernel\ResponseBase.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Endpoint.Application\Endpoint.Application.csproj" />
+  </ItemGroup>
+
+</Project>

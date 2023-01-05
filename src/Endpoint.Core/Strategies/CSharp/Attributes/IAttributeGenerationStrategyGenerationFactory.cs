@@ -4,6 +4,6 @@ namespace Endpoint.Core.Strategies
 {
     public interface IAttributeGenerationStrategyGenerationFactory
     {
-        string[] CreateFor(AttributeModel model);
+        string CreateFor(AttributeModel model);
     }
 }

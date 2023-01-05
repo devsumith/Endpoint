@@ -36,7 +36,7 @@ namespace Endpoint.Core.Strategies.Application
 
             var content = _templateProcessor.Process(_templateLocator.Get("IdFile"), tokens);
 
-            _fileSystem.WriteAllLines($"{directory}{Path.DirectorySeparatorChar}{((Token)entityName).PascalCase}Id.cs", content);
+            _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}{((Token)entityName).PascalCase}Id.cs", string.Join(Environment.NewLine, content));
         }
     }
 }

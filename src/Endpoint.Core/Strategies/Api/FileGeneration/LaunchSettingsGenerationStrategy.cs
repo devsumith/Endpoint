@@ -35,9 +35,9 @@ namespace Endpoint.Core.Strategies.Api.FileGeneration
                 .With("LaunchUrl", (Token)"")
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($@"{settings.ApiDirectory}/Properties/launchSettings.json", contents);
+            _fileSystem.WriteAllText($@"{settings.ApiDirectory}/Properties/launchSettings.json", contents);
         }
     }
 }

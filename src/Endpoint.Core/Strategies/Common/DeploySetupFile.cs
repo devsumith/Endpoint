@@ -32,9 +32,9 @@ namespace Endpoint.Core.Strategies.Common
 
             var template = _templateLocator.Get("DeploySetupFile");
 
-            var result = _templateProcessor.Process(template, tokens);
+            var result = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}deploy{Path.DirectorySeparatorChar}setup.ps1", result);
+            _fileSystem.WriteAllText($"{settings.RootDirectory}{Path.DirectorySeparatorChar}deploy{Path.DirectorySeparatorChar}setup.ps1", result);
 
         }
     }

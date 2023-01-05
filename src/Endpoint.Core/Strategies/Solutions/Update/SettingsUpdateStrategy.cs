@@ -32,7 +32,7 @@ namespace Endpoint.Core.Strategies.Solutions.Update
                 WriteIndented = true
             });
 
-            _fileSystem.WriteAllLines($"{model.Directory}{Path.DirectorySeparatorChar}cliSettings.json", new string[1] { json });
+            _fileSystem.WriteAllText($"{model.Directory}{Path.DirectorySeparatorChar}cliSettings.json", json);
         }
 
         public int Order => 0;

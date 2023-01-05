@@ -1,0 +1,9 @@
+using System.Collections.Generic;
+
+namespace {{ namespace }}
+{
+    public class ResponseBase
+    {
+        public List<string> ValidationErrors { get; set; }
+    }
+}

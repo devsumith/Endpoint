@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 
 namespace Endpoint.Core.Builders
 {

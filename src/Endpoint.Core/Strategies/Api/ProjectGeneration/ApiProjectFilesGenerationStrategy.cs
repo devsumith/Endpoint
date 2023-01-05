@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.ValueObjects;
 using System.IO;
@@ -62,9 +63,9 @@ namespace Endpoint.Core.Services
                 .With("Namespace", (Token)settings.ApiNamespace)
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}appsettings.json", contents);
+            _fileSystem.WriteAllText($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}appsettings.json", contents);
         }
 
         private void _buildStartup(SettingsModel settings)
@@ -78,9 +79,9 @@ namespace Endpoint.Core.Services
                 .With("DbContext", (Token)settings.DbContextName)
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($@"{settings.ApiDirectory}/Startup.cs", contents);
+            _fileSystem.WriteAllText($@"{settings.ApiDirectory}/Startup.cs", contents);
         }
 
         private void _buildDependencies(SettingsModel settings)
@@ -98,9 +99,9 @@ namespace Endpoint.Core.Services
                 .With(nameof(settings.InfrastructureNamespace), (Token)settings.InfrastructureNamespace)
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Dependencies.cs", contents);
+            _fileSystem.WriteAllText($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Dependencies.cs", contents);
         }
 
         private void _buildLaunchSettings(SettingsModel settings)
@@ -117,9 +118,9 @@ namespace Endpoint.Core.Services
                 .With("LaunchUrl", (Token)"")
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}launchSettings.json", contents);
+            _fileSystem.WriteAllText($@"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}launchSettings.json", contents);
         }
 
         public void _removeDefaultFiles(SettingsModel settings)

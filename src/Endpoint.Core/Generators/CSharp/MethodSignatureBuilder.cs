@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Syntax;
 using System.Collections.Generic;
 using System.Text;
 

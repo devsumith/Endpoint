@@ -102,7 +102,7 @@ namespace Endpoint.Core.Services
 
             _fileSystem.CreateDirectory($"{settings.RootDirectory}");
 
-            _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{CoreConstants.SettingsFileName}", new List<string> { json }.ToArray());
+            _fileSystem.WriteAllText($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{CoreConstants.SettingsFileName}", json);
 
             _commandService.Start($"dotnet new sln -n {settings.SolutionName}", settings.RootDirectory);
 

@@ -2,6 +2,6 @@
 {
     public interface IWebApplicationBuilderGenerationStrategy
     {
-        string[] Create(string @namespace, string dbContextName);
+        string Create(string @namespace, string dbContextName);
     }
 }

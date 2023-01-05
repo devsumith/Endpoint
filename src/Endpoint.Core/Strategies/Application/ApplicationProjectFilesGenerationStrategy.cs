@@ -253,9 +253,9 @@ namespace Endpoint.Core.Services
                 .With(nameof(settings.DomainNamespace), (Token)settings.DomainNamespace)
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($@"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Behaviors{Path.DirectorySeparatorChar}ValidationBehavior.cs", contents);
+            _fileSystem.WriteAllText($@"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Behaviors{Path.DirectorySeparatorChar}ValidationBehavior.cs", contents);
         }
 
         private void _buildServiceCollectionExtensions(SettingsModel settings)
@@ -267,9 +267,9 @@ namespace Endpoint.Core.Services
                 .With(nameof(settings.DomainNamespace), (Token)settings.DomainNamespace)
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($@"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Extensions{Path.DirectorySeparatorChar}ServiceCollectionExtensions.cs", contents);
+            _fileSystem.WriteAllText($@"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Extensions{Path.DirectorySeparatorChar}ServiceCollectionExtensions.cs", contents);
         }
 
 

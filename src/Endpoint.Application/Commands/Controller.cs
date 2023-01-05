@@ -1,6 +1,7 @@
 using CommandLine;
 using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using MediatR;

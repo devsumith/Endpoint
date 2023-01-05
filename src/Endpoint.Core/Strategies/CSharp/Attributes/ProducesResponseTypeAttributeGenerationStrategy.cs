@@ -10,7 +10,7 @@ namespace Endpoint.Core.Strategies.CSharp.Attributes
             throw new NotImplementedException();
         }
 
-        public string[] Create(AttributeModel model)
+        public string Create(AttributeModel model)
         {
             throw new NotImplementedException();
         }

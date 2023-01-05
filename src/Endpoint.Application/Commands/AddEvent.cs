@@ -114,7 +114,7 @@ namespace Endpoint.Application.Commands
 
                 }
 
-                _fileSystem.WriteAllLines($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}{((Token)request.Aggregate).PascalCase}.cs", newLines.ToArray());
+                _fileSystem.WriteAllText($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}{((Token)request.Aggregate).PascalCase}.cs", string.Join(Environment.NewLine, newLines));
 
                 return Task.FromResult(new Unit());
             }

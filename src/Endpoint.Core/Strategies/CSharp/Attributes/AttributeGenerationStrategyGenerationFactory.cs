@@ -21,7 +21,7 @@ namespace Endpoint.Core.Strategies
             new SwaggerOperationAttributeGenerationStrategy(),
         };
 
-        public string[] CreateFor(AttributeModel model)
+        public string CreateFor(AttributeModel model)
         {
             if (model == null)
             {

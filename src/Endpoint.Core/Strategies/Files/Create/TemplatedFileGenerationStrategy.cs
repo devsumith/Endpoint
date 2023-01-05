@@ -51,7 +51,7 @@ namespace Endpoint.Core.Strategies.Files.Create
 
             var result = _templateProcessor.Process(template, model.Tokens); ;
 
-            _fileSystem.WriteAllLines(model.Path, result);
+            _fileSystem.WriteAllText(model.Path, string.Join(Environment.NewLine, result));
         }
     }
 }

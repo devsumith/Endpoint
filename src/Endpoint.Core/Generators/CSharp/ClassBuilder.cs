@@ -308,7 +308,7 @@ namespace Endpoint.Core.Builders
 
             //_context.Add(path, Class);
 
-            _fileSystem.WriteAllLines(path, Class);
+            _fileSystem.WriteAllText(path, string.Join(Environment.NewLine, Class));
 
         }
     }

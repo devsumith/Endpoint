@@ -36,9 +36,9 @@ namespace Endpoint.Core.Builders
                 .With("Namespace", (Token)settings.DomainNamespace)
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($@"{(Token)settings.DomainDirectory}/ResponseBase.cs", contents);
+            _fileSystem.WriteAllText($@"{(Token)settings.DomainDirectory}/ResponseBase.cs", contents);
         }
     }
 }

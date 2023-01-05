@@ -6,6 +6,6 @@ namespace Endpoint.Core.Strategies.CSharp.Attributes
     {
         public bool CanHandle(AttributeModel model) => model.Type == AttributeType.Route;
 
-        public string[] Create(AttributeModel model) => new string[1] { "[Route(\"api/[controller]\")]" };
+        public string Create(AttributeModel model) => "[Route(\"api/[controller]\")]";
     }
 }

@@ -2,28 +2,25 @@
 using Endpoint.Core.Services;
 using System.IO;
 
-namespace Endpoint.Core.Strategies.Common
+namespace Endpoint.Core.Strategies.Common;
+
+public interface IBicepFileGenerationStrategy
 {
+    void Generate(SettingsModel settings);
+}
 
-    public interface IBicepFileGenerationStrategy
+public class BicepFileGenerationStrategy: IBicepFileGenerationStrategy
+{
+    private readonly IFileSystem _fileSystem;
+    private readonly ITemplateLocator _templateLocator;
+    
+    public BicepFileGenerationStrategy(IFileSystem fileSystem, ITemplateLocator templateLocator)
     {
-        void Generate(SettingsModel settings);
+        _fileSystem = fileSystem;
+        _templateLocator = templateLocator;
     }
-
-    public class BicepFileGenerationStrategy: IBicepFileGenerationStrategy
+    public void Generate(SettingsModel settings)
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ITemplateLocator _templateLocator;
-        
-        public BicepFileGenerationStrategy(IFileSystem fileSystem, ITemplateLocator templateLocator)
-        {
-            _fileSystem = fileSystem;
-            _templateLocator = templateLocator;
-        }
-        public void Generate(SettingsModel settings)
-        {
-            _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}deploy{Path.DirectorySeparatorChar}main.bicep", _templateLocator.Get("BicepFile"));
-
-        }
+        _fileSystem.WriteAllText($"{settings.RootDirectory}{Path.DirectorySeparatorChar}deploy{Path.DirectorySeparatorChar}main.bicep", string.Join(Environment.NewLine, _templateLocator.Get("BicepFile")));
     }
 }

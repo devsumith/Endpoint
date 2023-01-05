@@ -1,5 +1,6 @@
 ﻿using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Strategies.CSharp.Attributes;
+using System;
 using Xunit;
 
 namespace Endpoint.UnitTests.Core.Strategies.CSharp
@@ -26,7 +27,7 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp
 
             var actual = sut.Create(model);
 
-            Assert.Equal(expected, actual);
+            Assert.Equal(string.Join(Environment.NewLine, expected), actual);
         }
     }
 }

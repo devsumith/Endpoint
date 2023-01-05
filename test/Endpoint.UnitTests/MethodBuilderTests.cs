@@ -1,5 +1,6 @@
 using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using Xunit;

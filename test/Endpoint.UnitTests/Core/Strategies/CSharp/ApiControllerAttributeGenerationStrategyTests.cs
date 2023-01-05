@@ -1,20 +1,20 @@
 ﻿using Endpoint.Core.Strategies.CSharp.Attributes;
+using System;
 using Xunit;
 
-namespace Endpoint.UnitTests.Core.Strategies.CSharp
+namespace Endpoint.UnitTests.Core.Strategies.CSharp;
+
+public class ApiControllerAttributeGenerationStrategyTests
 {
-    public class ApiControllerAttributeGenerationStrategyTests
+    [Fact]
+    public void ShouldCreateAttribute()
     {
-        [Fact]
-        public void ShouldCreateAttribute()
-        {
-            var expected = new string[1] { "[ApiController]" };
+        var expected = new string[1] { "[ApiController]" };
 
-            var sut = new ApiControllerAttributeGenerationStrategy();
+        var sut = new ApiControllerAttributeGenerationStrategy();
 
-            var actual = sut.Create(default);
+        var actual = sut.Create(default);
 
-            Assert.Equal(expected, actual);
-        }
+        Assert.Equal(string.Join(Environment.NewLine, expected), actual);
     }
 }

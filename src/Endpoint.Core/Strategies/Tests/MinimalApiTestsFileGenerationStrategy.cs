@@ -22,7 +22,7 @@ namespace Endpoint.Core.Strategies.Tests
         {
             var content = new List<string>();
             
-            _fileSystem.WriteAllLines($"{directory}{Path.DirectorySeparatorChar}Tests.cs", content.ToArray());
+            _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}Tests.cs", string.Join(Environment.NewLine, content));
         }
     }
 }

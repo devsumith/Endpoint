@@ -1,8 +1,7 @@
-﻿namespace Endpoint.Core.Models.Syntax
+﻿namespace Endpoint.Core.Models.Syntax;
+
+public enum IdDotNetType
 {
-    public enum IdDotNetType
-    {
-        Guid,
-        Int
-    }
+    Guid,
+    Int
 }

@@ -34,9 +34,9 @@ namespace Endpoint.Core.Services
                 .With("Namespace", (Token)settings.DomainNamespace)
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($@"{settings.DomainDirectory}/ResponseBase.cs", contents);
+            _fileSystem.WriteAllText($@"{settings.DomainDirectory}/ResponseBase.cs", contents);
 
             _commandService.Start($"dotnet add package Microsoft.EntityFrameworkCore --version 6.0.2", $@"{settings.DomainDirectory}");
         }
@@ -52,9 +52,9 @@ namespace Endpoint.Core.Services
                 .With("DomainNamespace", (Token)settings.DomainNamespace)
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllLines($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Extensions{Path.DirectorySeparatorChar}QueryableExtensions.cs", contents);
+            _fileSystem.WriteAllText($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Extensions{Path.DirectorySeparatorChar}QueryableExtensions.cs", contents);
         }
     }
 }

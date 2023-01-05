@@ -6,6 +6,6 @@ namespace Endpoint.Core.Strategies.CSharp.Attributes
     {
         public bool CanHandle(AttributeModel model) => model.Type == AttributeType.Produces;
 
-        public string[] Create(AttributeModel model) => new string[1] { "[Produces(MediaTypeNames.Application.Json)]" };
+        public string Create(AttributeModel model) => "[Produces(MediaTypeNames.Application.Json)]";
     }
 }

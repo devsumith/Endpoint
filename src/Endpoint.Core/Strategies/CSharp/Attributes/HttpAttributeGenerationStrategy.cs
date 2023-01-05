@@ -7,7 +7,7 @@ namespace Endpoint.Core.Strategies.CSharp.Attributes
     {
         public bool CanHandle(AttributeModel model) => model.Type == AttributeType.Http;
 
-        public string[] Create(AttributeModel model)
+        public string Create(AttributeModel model)
         {
             var properties = new StringBuilder();
 
@@ -18,16 +18,16 @@ namespace Endpoint.Core.Strategies.CSharp.Attributes
 
             if(!string.IsNullOrEmpty(model.Template))
             {
-                return new string[1]
+                return string.Join(Environment.NewLine, new string[1]
                 {
                     $"[\"{model.Template}\", {model.Name}({properties})]"
-                };
+                });
             }
 
-            return new string[1]
+            return string.Join(Environment.NewLine, new string[1]
             {
                 $"[{model.Name}({properties})]"
-            };
+            });
         }
     }
 }

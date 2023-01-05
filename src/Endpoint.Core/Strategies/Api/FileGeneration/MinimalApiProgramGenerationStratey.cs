@@ -43,11 +43,11 @@ namespace Endpoint.Core.Strategies.Api.FileGeneration
 
             content.Add("");
 
-            content.AddRange(_webApplicationBuilderGenerationStrategy.Create(default,default));
+            content.Add(_webApplicationBuilderGenerationStrategy.Create(default,default));
             
             content.Add("");
 
-            content.AddRange(_webApplicationGenerationStrategy.Create(default, default,default));
+            content.Add(_webApplicationGenerationStrategy.Create(default, default,default));
 
             content.Add("");
 
@@ -58,9 +58,9 @@ namespace Endpoint.Core.Strategies.Api.FileGeneration
                 content.Add("");
             }
 
-            content.AddRange(new DbContextGenerationStrategy().Create(new DbContextModel(model.DbContextName, model.Entities)));
+            content.Add(new DbContextGenerationStrategy().Create(new DbContextModel(model.DbContextName, model.Entities)));
 
-            _fileSystem.WriteAllLines($"{directory}{Path.DirectorySeparatorChar}Program.cs", content.ToArray());
+            _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}Program.cs", string.Join(Environment.NewLine, content));
         }
     }
 }

@@ -1,6 +1,7 @@
 using CommandLine;
 using Endpoint.Core.Services;
 using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ namespace Endpoint.Application.Commands
 
                 var result = _templateProcessor.Process(template, tokens);
 
-                _fileSystem.WriteAllLines($@"{request.Directory}\clisettings.json", result);
+                _fileSystem.WriteAllText($@"{request.Directory}\clisettings.json", string.Join(Environment.NewLine, result));
 
                 return Task.FromResult(new Unit());
             }

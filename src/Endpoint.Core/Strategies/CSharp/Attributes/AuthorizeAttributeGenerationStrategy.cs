@@ -6,6 +6,6 @@ namespace Endpoint.Core.Strategies.CSharp.Attributes
     {
         public bool CanHandle(AttributeModel model) => model.Type == AttributeType.Authorize;
 
-        public string[] Create(AttributeModel model) => new string[1] { "[Authorize]" };
+        public string Create(AttributeModel model) => "[Authorize]";
     }
 }

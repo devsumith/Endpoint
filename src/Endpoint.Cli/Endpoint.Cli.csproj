@@ -23,7 +23,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-    <ProjectReference Include="..\Endpoint.Application\Endpoint.Application.csproj" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="5.0.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.1-dev-00896" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.1" />
@@ -44,6 +43,10 @@
 
   <ItemGroup>
     <Folder Include="nupkg\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Endpoint.Infrastructure\Endpoint.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

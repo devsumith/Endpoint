@@ -1,9 +1,12 @@
-﻿namespace Endpoint.Core.Models.Syntax
+﻿namespace Endpoint.Core.Models.Syntax;
+
+public enum EndpointType
 {
-    public enum WorkspaceType
-    {
-        Minimal,
-        CleanArchitecture,
-        ClassicMicroservice
-    }
+    Default = 0,
+    Get,
+    GetById,
+    Create,
+    Update,
+    Delete,
+    Page
 }

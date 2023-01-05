@@ -1,9 +1,9 @@
-﻿using Endpoint.Core.Models.Syntax;
+﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax;
 
-namespace Endpoint.Core.Strategies.Application
+namespace Endpoint.Core.Strategies.Application;
+
+public interface IAggregateRootGenerationStrategy: ISyntaxGenerationStrategy
 {
-    public interface IAggregateRootGenerationStrategy
-    {
-        string[] Create(AggregateRootModel model);
-    }
+
 }

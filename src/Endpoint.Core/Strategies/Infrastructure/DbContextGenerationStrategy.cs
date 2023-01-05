@@ -6,11 +6,11 @@ namespace Endpoint.Core.Strategies.Infrastructure
 {
     public interface IDbContextGenerationStrategy
     {
-        string[] Create(DbContextModel model);
+        string Create(DbContextModel model);
     }
     public class DbContextGenerationStrategy: IDbContextGenerationStrategy
     {
-        public string[] Create(DbContextModel model)
+        public string Create(DbContextModel model)
         {
             var content = new List<string>();
 
@@ -31,7 +31,7 @@ namespace Endpoint.Core.Strategies.Infrastructure
 
             content.Add("}");
 
-            return content.ToArray();
+            return string.Join(Environment.NewLine, content);
         }
     }
 }

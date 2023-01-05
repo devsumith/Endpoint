@@ -1,9 +1,8 @@
 ﻿using Endpoint.Core.Models.Syntax;
 
-namespace Endpoint.Core.Strategies.Api
+namespace Endpoint.Core.Strategies.Api;
+
+public interface IRouteHandlerGenerationStrategy
 {
-    public interface IRouteHandlerGenerationStrategy
-    {
-        string[] Create(RouteHandlerModel model);
-    }
+    string Create(RouteHandlerModel model);
 }

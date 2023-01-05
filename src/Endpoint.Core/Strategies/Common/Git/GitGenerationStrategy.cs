@@ -40,7 +40,7 @@ namespace Endpoint.Core.Strategies.Common.Git
 
             _commandService.Start($"git config user.email {model.Email}", model.Directory);
 
-            _fileSystem.WriteAllLines($@"{model.Directory}{Path.DirectorySeparatorChar}.gitignore", _templateLocator.Get("GitIgnoreFile"));
+            _fileSystem.WriteAllText($@"{model.Directory}{Path.DirectorySeparatorChar}.gitignore", string.Join(Environment.NewLine, _templateLocator.Get("GitIgnoreFile")));
 
             _commandService.Start($"git remote add origin https://{model.Username}:{model.PersonalAccessToken}@github.com/{model.Username}/{model.RepositoryName}.git", model.Directory);
 

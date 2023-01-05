@@ -8,7 +8,7 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp
         [Fact]
         public void ShouldCreateAuthorizeAttribute()
         {
-            var expected = new string[1] { "[Authorize]" };
+            var expected = "[Authorize]";
 
             var sut = new AuthorizeAttributeGenerationStrategy();
 

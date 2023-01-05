@@ -15,7 +15,7 @@ namespace Endpoint.Core.Strategies.Api
             _templateLocator = templateLocator;
         }
 
-        public string[] Create(string @namespace, string dbContextName)
+        public string Create(string @namespace, string dbContextName)
         {
             var template = _templateLocator.Get("WebApplicationBuilder");
 
@@ -24,7 +24,7 @@ namespace Endpoint.Core.Strategies.Api
                 .With(nameof(dbContextName), (Token)dbContextName)
                 .Build();
 
-            var contents = _templateProcessor.Process(template, tokens);
+            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
             return contents;
         }

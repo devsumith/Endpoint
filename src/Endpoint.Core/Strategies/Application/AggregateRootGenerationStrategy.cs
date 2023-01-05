@@ -1,27 +1,32 @@
-﻿using Endpoint.Core.Models.Syntax;
+﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 
-namespace Endpoint.Core.Strategies.Application
+namespace Endpoint.Core.Strategies.Application;
+
+public class AggregateRootGenerationStrategy : SyntaxGenerationStrategyBase<AggregateRootModel>, IAggregateRootGenerationStrategy
 {
-    public class AggregateRootGenerationStrategy : IAggregateRootGenerationStrategy
+    public AggregateRootGenerationStrategy(IServiceProvider serviceProvider)
+        :base(serviceProvider)
+    { }
+
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, AggregateRootModel model, dynamic configuration = null)
     {
-        public string[] Create(AggregateRootModel model)
+        var content = new List<string>
         {
-            var content = new List<string>();
+            $"public class {((Token)model.Name).PascalCase}",
 
-            content.Add($"public class {((Token)model.Name).PascalCase}");
+            "{"
+        };
 
-            content.Add("{");
-
-            foreach(var property in model.Properties)
-            {
-                content.Add(($"public {property.Type} {property.Name}" + " { get; set; }").Indent(1));
-            }
-
-            content.Add("}");
-            
-            return content.ToArray();
+        foreach (var property in model.Properties)
+        {
+            content.Add(($"public {property.Type} {property.Name}" + " { get; set; }").Indent(1));
         }
+
+        content.Add("}");
+
+        return string.Join(Environment.NewLine, content);
     }
 }

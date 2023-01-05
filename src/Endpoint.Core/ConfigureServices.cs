@@ -1,5 +1,4 @@
 ﻿using Endpoint.Core;
-using Endpoint.Core.Managers;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
 using Endpoint.Core.Strategies.Api;
@@ -18,7 +17,6 @@ public static class ConfigureServices
     {
         services.AddSingleton<ICommandService, CommandService>();
         services.AddSingleton<IFileSystem, FileSystem>();
-        services.AddSingleton<ITemplateLocator, TemplateLocator>();
         services.AddSingleton<ITemplateProcessor, LiquidTemplateProcessor>();
         services.AddSingleton<INamingConventionConverter, NamingConventionConverter>();
         services.AddSingleton<ISettingsProvider, SettingsProvider>();
@@ -35,8 +33,8 @@ public static class ConfigureServices
         services.AddSingleton<IApplicationProjectFilesGenerationStrategy, ApplicationProjectFilesGenerationStrategy>();
         services.AddSingleton<IInfrastructureProjectFilesGenerationStrategy, InfrastructureProjectFilesGenerationStrategy>();
         services.AddSingleton<IApiProjectFilesGenerationStrategy, ApiProjectFilesGenerationStrategy>();
-        services.AddSingleton<ICsProjFileManager, CsProjFileManager>();
-        services.AddSingleton<ISolutionFileManager, SolutionFileManager>();
+        services.AddSingleton<ICsProjectService, CsProjectService>();
+        services.AddSingleton<ISolutionService, SolutionService>();
         services.AddSingleton<IEndpointGenerationStrategyFactory, EndpointGenerationStrategyFactory>();
         services.AddSingleton<IAdditionalResourceGenerationStrategyFactory, AdditionalResourceGenerationStrategyFactory>();
         services.AddSingleton<IFileProvider, FileProvider>();

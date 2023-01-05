@@ -8,7 +8,7 @@ namespace Endpoint.Core.Strategies.CSharp.Attributes
     {
         public bool CanHandle(AttributeModel model) => model.Type == AttributeType.SwaggerOperation;
 
-        public string[] Create(AttributeModel model)
+        public string Create(AttributeModel model)
         {
             var content = new List<string>()
             {
@@ -31,7 +31,7 @@ namespace Endpoint.Core.Strategies.CSharp.Attributes
                 }
             }
 
-            return content.ToArray();
+            return string.Join(Environment.NewLine, content);
         }
     }
 }

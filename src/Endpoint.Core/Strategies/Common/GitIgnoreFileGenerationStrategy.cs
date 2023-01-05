@@ -21,7 +21,7 @@ namespace Endpoint.Core.Strategies.Common
         }
         public void Generate(SettingsModel settings)
         {
-            _fileSystem.WriteAllLines($"{settings.RootDirectory}{Path.DirectorySeparatorChar}.gitignore", _templateLocator.Get("GitIgnoreFile"));
+            _fileSystem.WriteAllText($"{settings.RootDirectory}{Path.DirectorySeparatorChar}.gitignore", string.Join(Environment.NewLine, _templateLocator.Get("GitIgnoreFile")));
 
         }
     }

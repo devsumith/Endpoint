@@ -2,11 +2,21 @@
 
 namespace Endpoint.Core.Models.Syntax;
 
-public class ClassModel
+public class ClassModel : InterfaceModel
 {
-    public List<ClassProperty> Properties { get; set; } = new List<ClassProperty>();
+    public ClassModel(string name)
+        : base(name)
+    {
+        Fields = new List<FieldModel>();
+        Constructors = new List<ConstructorModel>();
+        Attributes = new List<AttributeModel>();
+        
+    }
 
-    public List<ConstructorModel> Constructors { get; set; } = new List<ConstructorModel>();
+    public IList<FieldModel> Fields { get; set; }
+    public IList<ConstructorModel> Constructors { get; set; }
+    public List<AttributeModel> Attributes { get; set; }
+    public bool ForInterface { get; set; }
+    public bool IsStatic { get; set; }
 
-    public List<ClassMethodModel> Methods { get; set; } = new List<ClassMethodModel>();
 }

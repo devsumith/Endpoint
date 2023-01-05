@@ -1,7 +1,4 @@
-﻿using Endpoint.Application;
-using Endpoint.Cli;
-using Endpoint.Core;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 
@@ -13,6 +10,7 @@ public static class ConfigureServices
     {
         services.AddSharedServices();
         services.AddCoreServices();
+        services.AddInfrastructureServices();
         services.AddApplicationServices();
         
         var configuration = new ConfigurationBuilder()

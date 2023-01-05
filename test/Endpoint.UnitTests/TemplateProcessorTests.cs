@@ -1,7 +1,5 @@
-﻿using Endpoint.Core.Models;
-using Endpoint.Core.Models.Syntax;
+﻿using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ViewModels;
 using System.Collections.Generic;
 using Xunit;
 
@@ -52,7 +50,7 @@ namespace Endpoint.UnitTests
 
             var sut = new LiquidTemplateProcessor();
 
-            var result = sut.Process(template, entity.ToViewModel());
+            var result = sut.Process(template, new { });
 
             System.IO.File.WriteAllText(@"C:\reference-architecture\foo.txt", result);
 

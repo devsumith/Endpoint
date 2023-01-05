@@ -4,7 +4,7 @@
       "commandName": "Project",
       "commandLineArgs": "",
       "environmentVariables": {
-        "Endpoint:DefaultCommand": "add-entity",
+        "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",
         "Endpoint:NumericIdPropertyDataType": "false",
         "Endpoint:Resource": "Foo",

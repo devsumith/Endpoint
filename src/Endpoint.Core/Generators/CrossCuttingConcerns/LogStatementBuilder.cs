@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.ValueObjects;
 
 namespace Endpoint.Core.Builders

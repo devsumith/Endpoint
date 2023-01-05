@@ -6,6 +6,7 @@ using System.Linq;
 using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Builders.Statements;
 using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 
 namespace Endpoint.Core.Builders
 {

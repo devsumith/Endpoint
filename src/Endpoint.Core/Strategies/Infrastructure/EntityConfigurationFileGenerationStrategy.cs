@@ -38,7 +38,7 @@ namespace Endpoint.Core.Strategies.Infrastructure
 
             var content = _templateProcessor.Process(_templateLocator.Get("EntityConfiguration"), tokens);
 
-            _fileSystem.WriteAllLines($"{directory}{Path.DirectorySeparatorChar}{((Token)entityName).PascalCase}EntityConfiguration.cs", content);
+            _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}{((Token)entityName).PascalCase}EntityConfiguration.cs", string.Join(Environment.NewLine, content));
         }
     }
 }
