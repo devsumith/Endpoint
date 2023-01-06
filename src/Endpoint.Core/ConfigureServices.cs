@@ -1,7 +1,10 @@
 ﻿using Endpoint.Core;
+using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.ApiProjectModels;
+using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.ProgramFiles;
 using Endpoint.Core.Models.Git;
+using Endpoint.Core.Models.WebArtifacts;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
 using Endpoint.Core.Strategies.Api;
@@ -24,6 +27,8 @@ public static class ConfigureServices
         services.AddSingleton<ISettingsProvider, SettingsProvider>();
         services.AddSingleton<ITenseConverter, TenseConverter>();
         services.AddSingleton<IContext, Context>();
+        services.AddSingleton<IFileFactory, FileFactory>();
+        services.AddSingleton<INamespaceProvider, NamespaceProvider>();
 
         services.AddSingleton<IFileNamespaceProvider, FileNamespaceProvider>();
         services.AddSingleton<ISolutionTemplateService, EndpointGenerationStrategy>();
@@ -57,10 +62,19 @@ public static class ConfigureServices
         services.AddSingleton<IWorkspaceGenerationStrategyFactory, WorkspaceSettingsGenerationStrategyFactory>();
         services.AddSingleton<IWorkspaceSettingsUpdateStrategyFactory, WorkspaceSettingsUpdateStrategyFactory>();
         services.AddSingleton<IWorkspaceSettingsUpdateStrategy, WorkspaceSettingsUpdateStrategy>();
+        services.AddSingleton<IFileFactory, FileFactory>();
         services.AddSingleton<IFileGenerationStrategyFactory, FileGenerationStrategyFactory>();
         services.AddSingleton<IFileGenerationStrategy, MinimalApiProgramFileGenerationStrategy>();
-        services.AddSingleton<IFileGenerationStrategy, TemplatedFileGenerationStrategy>();
         services.AddSingleton<IFileGenerationStrategy, EntityFileGenerationStrategy>();
+
+
+        services.AddSingleton<IWebArtifactModelsFactory, WebArtifactModelsFactory>();
+        services.AddSingleton<IWebGenerationStrategyFactory, WebGenerationStrategyFactory>();
+        services.AddSingleton<IWebGenerationStrategy, AngularProjectGenerationStrategy>();
+
+
+        services.AddSingleton<IArtifactGenerationStrategyFactory, ArtifactGenerationStrategyFactory>();
+        services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileGenerationStrategy>();
 
     }
 }

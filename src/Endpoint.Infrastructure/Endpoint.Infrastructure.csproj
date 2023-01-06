@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Templates\Verb.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Templates\Api\AppSettings.txt" />
     <EmbeddedResource Include="Templates\Api\Dependencies.txt" />
     <EmbeddedResource Include="Templates\Api\IdFile.txt" />
@@ -30,6 +34,7 @@
     <EmbeddedResource Include="Templates\IntegrationTests\WebApplicationFactory.txt" />
     <EmbeddedResource Include="Templates\SharedKernel\QueryableExtensions.txt" />
     <EmbeddedResource Include="Templates\SharedKernel\ResponseBase.txt" />
+    <EmbeddedResource Include="Templates\Verb.txt" />
   </ItemGroup>
 
   <ItemGroup>
