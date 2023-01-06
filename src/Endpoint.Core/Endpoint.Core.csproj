@@ -37,8 +37,4 @@
     <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="TinyMapper" Version="3.0.3" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\Syntax\Methods\" />
-  </ItemGroup>
 </Project>

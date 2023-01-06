@@ -1,5 +1,14 @@
-﻿namespace Endpoint.Core.Models.Syntax.Controllers;
+﻿using Endpoint.Core.Abstractions;
 
-internal class ControllerSyntaxGenerationStrategy
+namespace Endpoint.Core.Models.Syntax.Controllers;
+
+internal class ControllerSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ControllerModel>
 {
+    public ControllerSyntaxGenerationStrategy(IServiceProvider serviceProvider) 
+        : base(serviceProvider) { }
+
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, ControllerModel model, dynamic configuration = null)
+    {
+        throw new NotImplementedException();
+    }
 }

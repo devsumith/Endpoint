@@ -4,6 +4,11 @@ using Endpoint.Core.Models.Artifacts.ApiProjectModels;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.ProgramFiles;
 using Endpoint.Core.Models.Git;
+using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Models.Syntax.Constructors;
+using Endpoint.Core.Models.Syntax.Fields;
+using Endpoint.Core.Models.Syntax.Methods;
+using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.WebArtifacts;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
@@ -75,6 +80,12 @@ public static class ConfigureServices
 
         services.AddSingleton<IArtifactGenerationStrategyFactory, ArtifactGenerationStrategyFactory>();
         services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileGenerationStrategy>();
+
+        services.AddSingleton<ISyntaxGenerationStrategy, ClassSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, MethodSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, FieldSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, ConstructorSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, PropertySyntaxGenerationStrategy>();
 
     }
 }

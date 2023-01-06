@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Syntax;
+﻿using Endpoint.Core.Models.Syntax.RouteHandlers;
 
 namespace Endpoint.Core.Strategies.Api;
 

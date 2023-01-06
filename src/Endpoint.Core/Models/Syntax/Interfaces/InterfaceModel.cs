@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Properties;
 
-namespace Endpoint.Core.Models.Syntax;
+namespace Endpoint.Core.Models.Syntax.Interfaces;
 
-public class InterfaceModel: TypeDeclarationModel
+public class InterfaceModel : TypeDeclarationModel
 {
     public InterfaceModel(string name)
     {

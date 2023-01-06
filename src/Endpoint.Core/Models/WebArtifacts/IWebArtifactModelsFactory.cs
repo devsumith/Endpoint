@@ -2,5 +2,5 @@
 
 public interface IWebArtifactModelsFactory
 {
-    AngularProjectModel Create(string name, string prefix);
+    AngularProjectModel Create(string name, string prefix, string directory);
 }

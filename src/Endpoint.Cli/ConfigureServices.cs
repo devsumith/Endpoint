@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 
@@ -18,6 +19,8 @@ public static class ConfigureServices
             .AddJsonFile("appsettings.json", false)
             .AddEnvironmentVariables()
             .Build();
+
+        services.AddLogging(o => o.AddConsole());
 
         services.AddSingleton<IConfiguration>(_ => configuration);
     }

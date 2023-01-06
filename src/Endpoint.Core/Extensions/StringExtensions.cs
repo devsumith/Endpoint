@@ -5,7 +5,11 @@ namespace System;
 public static class StringExtensions
 {
     public static string Indent(this string value, int indent)
-        => $"{string.Join("", Range(1, 4 * indent).Select(i => ' '))}{value}";
+    {
+        string[] values = value.Split(Environment.NewLine);
+
+        return string.Join(Environment.NewLine, values.Select(v => $"{string.Join("", Range(1, 4 * indent).Select(i => ' '))}{v}"));
+    }
 
     public static string GetResourceName(this string[] collection, string name)
         => collection.SingleOrDefault(x => x.EndsWith(name)) == null ?

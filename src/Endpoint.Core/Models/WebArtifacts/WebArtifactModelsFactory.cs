@@ -2,7 +2,7 @@
 
 public class WebArtifactModelsFactory: IWebArtifactModelsFactory
 {
-    public AngularProjectModel Create(string name, string prefix)
-        => new AngularProjectModel(name, prefix);
+    public AngularProjectModel Create(string name, string prefix, string directory)
+        => new AngularProjectModel(name, prefix, directory);
 
 }

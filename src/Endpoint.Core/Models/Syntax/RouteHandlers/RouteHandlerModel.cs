@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Endpoint.Core.Models.Syntax.Entities;
 
-namespace Endpoint.Core.Models.Syntax;
+namespace Endpoint.Core.Models.Syntax.RouteHandlers;
 
 public class RouteHandlerModel
 {

@@ -1,8 +1,7 @@
-﻿namespace Endpoint.Core.Models.Syntax
+﻿namespace Endpoint.Core.Models.Syntax;
+
+public enum IdFormat
 {
-    public enum IdFormat
-    {
-        Long,
-        Short
-    }
+    Long,
+    Short
 }

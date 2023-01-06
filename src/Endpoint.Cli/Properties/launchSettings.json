@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "verb -n FooCreate -d C:\\projects\\Endpoint\\src\\Endpoint.Application\\Commands",
+      "commandLineArgs": "ng-new -n Dave -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",

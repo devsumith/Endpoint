@@ -59,7 +59,7 @@ public interface IArtifactGenerationStrategyFactory
 public interface IWebGenerationStrategy
 {
     bool CanHandle(WebModel model, dynamic configuration = null);
-    string Create(WebModel model, dynamic configuration = null);
+    void Create(WebModel model, dynamic configuration = null);
     int Priority { get; }
 }
 
@@ -105,29 +105,29 @@ public class WebGenerationStrategyFactory : IWebGenerationStrategyFactory
 
 
 
-public abstract class WebGenerationStrategyStrategyBase<T>: IWebGenerationStrategy
+public abstract class WebGenerationStrategyBase<T>: IWebGenerationStrategy
     where T : class
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public WebGenerationStrategyStrategyBase(IServiceProvider serviceProvider)
+    public WebGenerationStrategyBase(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
     public virtual bool CanHandle(WebModel model, dynamic configuration = null) => model is T;
 
-    public string Create(WebModel model, dynamic configuration = null)
+    public void Create(WebModel model, dynamic configuration = null)
     {
         using (IServiceScope scope = _serviceProvider.CreateScope())
         {
             var webGenerationStrategyFactory = scope.ServiceProvider
                 .GetRequiredService<IWebGenerationStrategyFactory>();
-            return Create(webGenerationStrategyFactory, model as T, configuration);
+            Create(webGenerationStrategyFactory, model as T, configuration);
         }
     }
 
-    public abstract string Create(IWebGenerationStrategyFactory webGenerationStrategyFactory, T model, dynamic configuration = null);
+    public abstract void Create(IWebGenerationStrategyFactory webGenerationStrategyFactory, T model, dynamic configuration = null);
     public virtual int Priority => 0;
 }
 

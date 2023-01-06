@@ -1,16 +1,26 @@
 ﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Models.WebArtifacts;
 
-public class AngularProjectGenerationStrategy : WebGenerationStrategyStrategyBase<AngularProjectModel>
+public class AngularProjectGenerationStrategy : WebGenerationStrategyBase<AngularProjectModel>
 {
-    public AngularProjectGenerationStrategy(IServiceProvider serviceProvider)
+    private readonly ICommandService _commandService;
+    private readonly ILogger<AngularProjectGenerationStrategy> _logger;
+    public AngularProjectGenerationStrategy(
+        ICommandService commandService,
+        ILogger<AngularProjectGenerationStrategy> logger,
+        IServiceProvider serviceProvider)
         :base(serviceProvider)
-    { }
+    { 
+        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
 
-    public override string Create(IWebGenerationStrategyFactory webGenerationStrategyFactory, AngularProjectModel model, dynamic configuration = null)
+    public override void Create(IWebGenerationStrategyFactory webGenerationStrategyFactory, AngularProjectModel model, dynamic configuration = null)
     {
-        throw new NotImplementedException();
+        _commandService.Start($"ng new {model.Name}", model.Directory);
     }
 }
 

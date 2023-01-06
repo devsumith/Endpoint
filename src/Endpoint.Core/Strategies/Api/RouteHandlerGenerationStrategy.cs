@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Syntax;
+﻿using Endpoint.Core.Models.Syntax.RouteHandlers;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
