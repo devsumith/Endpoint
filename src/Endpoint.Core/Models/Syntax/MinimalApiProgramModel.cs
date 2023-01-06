@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.RouteHandlers;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 

@@ -1,5 +1,6 @@
-﻿using Endpoint.Core.Factories;
-using Endpoint.Core.Models.Artifacts;
+﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Factories;
+using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Git;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Options;
@@ -26,17 +27,17 @@ namespace Endpoint.Core.Strategies.Workspaces
     public class WorkspaceCreateOrUpdateStrategy
     {
         private readonly ILogger _logger;
-        private readonly ISolutionGenerationStrategy _solutionGenerationStrategy;
+        private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
         private readonly ISolutionSettingsFileGenerationStrategyFactory _factory;
         private readonly IGitGenerationStrategyFactory _gitGenerationStrategyFactory;
         private readonly IWorkspaceGenerationStrategyFactory _workspaceSettingsGenerationStrategyFactory;
         private readonly ISolutionUpdateStrategyFactory _solutionUpdateStrategyFactory;
         private readonly IWorkspaceSettingsUpdateStrategyFactory _workspaceSettingsUpdateStrategyFactory;
         private readonly IFileSystem _fileSystem;
-        public WorkspaceCreateOrUpdateStrategy(ILogger logger, ISolutionGenerationStrategy solutionGenerationStrategy, ISolutionSettingsFileGenerationStrategyFactory factory, IGitGenerationStrategyFactory gitGenerationStrategyFactory, IWorkspaceGenerationStrategyFactory workspaceGenerationStrategyFactory, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
+        public WorkspaceCreateOrUpdateStrategy(ILogger logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ISolutionSettingsFileGenerationStrategyFactory factory, IGitGenerationStrategyFactory gitGenerationStrategyFactory, IWorkspaceGenerationStrategyFactory workspaceGenerationStrategyFactory, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _solutionGenerationStrategy = solutionGenerationStrategy ?? throw new ArgumentNullException(nameof(solutionGenerationStrategy));
+            _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
             _factory = factory ?? throw new ArgumentNullException(nameof(factory));
             _gitGenerationStrategyFactory = gitGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(gitGenerationStrategyFactory));
             _workspaceSettingsGenerationStrategyFactory = workspaceGenerationStrategyFactory;
@@ -50,14 +51,14 @@ namespace Endpoint.Core.Strategies.Workspaces
 
             if (!_fileSystem.Exists($"{resolveOrCreateWorkspaceOptions.Directory}{Path.DirectorySeparatorChar}{resolveOrCreateWorkspaceOptions.Name}{Path.DirectorySeparatorChar}Workspace.sln"))
             {
-                var newWorkspaceSolutionModel = SolutionModelFactory.Workspace(resolveOrCreateWorkspaceOptions);
+                var newWorkspaceSolutionModel = new SolutionModelFactory().Workspace(resolveOrCreateWorkspaceOptions);
 
-                _solutionGenerationStrategy.Create(newWorkspaceSolutionModel);
+                _artifactGenerationStrategyFactory.CreateFor(newWorkspaceSolutionModel);
 
-                return new(SolutionModelFactory.Workspace(resolveOrCreateWorkspaceOptions), SolutionModelFactory.Workspace(resolveOrCreateWorkspaceOptions));
+                return new(new SolutionModelFactory().Workspace(resolveOrCreateWorkspaceOptions), new SolutionModelFactory().Workspace(resolveOrCreateWorkspaceOptions));
             }
 
-            return new(SolutionModelFactory.Resolve(resolveOrCreateWorkspaceOptions), SolutionModelFactory.Resolve(resolveOrCreateWorkspaceOptions));
+            return new(new SolutionModelFactory().Resolve(resolveOrCreateWorkspaceOptions), new SolutionModelFactory().Resolve(resolveOrCreateWorkspaceOptions));
         }
 
         public Tuple<WorkspaceSettingsModel, WorkspaceSettingsModel> CreateOrResolvePreviousAndNextWorkspaceSettings(ResolveOrCreateWorkspaceOptions resolveOrCreateWorkspaceOptions)

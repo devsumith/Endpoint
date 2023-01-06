@@ -1,8 +1,8 @@
 ﻿namespace Endpoint.Core.Abstractions;
 
-public interface ISyntaxGenerationStrategy
+public interface IArtifactGenerationStrategy
 {
     bool CanHandle(object model, dynamic configuration = null);
-    string Create(object model, dynamic configuration = null);
+    void Create(object model, dynamic configuration = null);
     int Priority { get; }
 }

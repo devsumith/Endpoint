@@ -1,5 +1,6 @@
 using CommandLine;
-using Endpoint.Core.Factories;
+using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Options;
 using Endpoint.Core.Strategies.Solutions.Crerate;
 using MediatR;
@@ -22,24 +23,24 @@ internal class HttpProjectRequest : IRequest<Unit>
 internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest, Unit>
 {
     private readonly ILogger _logger;
-    private readonly ISolutionGenerationStrategy _solutionGenerationStrategy;
-    public HttpProjectRequestHandler(ILogger logger, ISolutionGenerationStrategy solutionGenerationStrategy)
+    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    public HttpProjectRequestHandler(ILogger logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _solutionGenerationStrategy = solutionGenerationStrategy ?? throw new ArgumentNullException(nameof(solutionGenerationStrategy));
+        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
     }
 
     public async Task<Unit> Handle(HttpProjectRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Handled: {nameof(HttpProjectRequestHandler)}");
 
-        var model = SolutionModelFactory.CreateHttpSolution(new CreateEndpointSolutionOptions
+        var model = new SolutionModelFactory().CreateHttpSolution(new CreateEndpointSolutionOptions
         {
             Name = request.Name,
             Directory = request.Directory,
         });
 
-        _solutionGenerationStrategy.Create(model);
+        _artifactGenerationStrategyFactory.CreateFor(model);
 
         return new();
     }

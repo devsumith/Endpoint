@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "ng-new -n Dave -d C:\\projects",
+      "commandLineArgs": "git-create -n Angular-Examples -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",

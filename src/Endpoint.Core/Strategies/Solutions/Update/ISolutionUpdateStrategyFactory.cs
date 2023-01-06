@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Artifacts;
+﻿using Endpoint.Core.Models.Artifacts.Solutions;
 
 namespace Endpoint.Core.Strategies.Solutions.Update
 {

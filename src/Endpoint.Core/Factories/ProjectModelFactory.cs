@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Models.Artifacts;
+using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Options;
 using Octokit;
 using System;

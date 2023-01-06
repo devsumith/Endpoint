@@ -21,6 +21,7 @@ internal class ConstructorSyntaxGenerationStrategy : SyntaxGenerationStrategyBas
 
         var builder = new StringBuilder();
 
+        builder.AppendLine($"");
 
         return builder.ToString();
     }

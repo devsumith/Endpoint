@@ -1,43 +1,47 @@
-﻿using Endpoint.Core.Factories;
+﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts.Solutions;
+using Endpoint.Core.Models.Git;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
-using Endpoint.Core.Strategies.Solutions.Crerate;
+using Microsoft.Extensions.Options;
 using Nelibur.ObjectMapper;
 using System.IO;
 
-namespace Endpoint.Core.Strategies.Common
+namespace Endpoint.Core.Strategies.Common;
+
+public class MinimalApiEndpointGenerationStrategy : ArtifactGenerationStrategyBase<MinimalApiSolutionModel>
 {
-    public class MinimalApiEndpointGenerationStrategy : IEndpointGenerationStrategy
+    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly ICommandService _commandService;
+    private readonly IFileSystem _fileSystem;
+    private readonly ISolutionModelFactory _solutionModelFactory;
+
+    public MinimalApiEndpointGenerationStrategy(IServiceProvider serviceProvider, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ICommandService commandService, IFileSystem fileSystem, ISolutionModelFactory solutionModelFactory)
+        :base(serviceProvider)
     {
-        private readonly ISolutionGenerationStrategy _solutionGenerationStrategy;
-        private readonly ICommandService _commandService;
-        private readonly IFileSystem _fileSystem;
+        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
+        _commandService = commandService;
+        _fileSystem = fileSystem;
+        _solutionModelFactory = solutionModelFactory;
+    }
 
-        public MinimalApiEndpointGenerationStrategy(ISolutionGenerationStrategy solutionGenerationStrategy, ICommandService commandService, IFileSystem fileSystem)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, MinimalApiSolutionModel model, dynamic configuration = null)
+    {
+        var workspaceDirectory = $"{model.Directory}{Path.DirectorySeparatorChar}{model.Name}";
+
+        _fileSystem.CreateDirectory(workspaceDirectory);
+
+        _artifactGenerationStrategyFactory.CreateFor(new GitModel(model.Name)
         {
-            _solutionGenerationStrategy = solutionGenerationStrategy;
-            _commandService = commandService;
-            _fileSystem = fileSystem;
-        }
-        public int Order => 0;
-        public bool CanHandle(CreateEndpointOptions options) => options.Minimal.Value;
+            Directory = workspaceDirectory,
+        });
 
-        public void Create(CreateEndpointOptions options)
-        {
-            var workspaceDirectory = $"{options.Directory}{Path.DirectorySeparatorChar}{options.Name}";
+/*        var solutionOptions = TinyMapper.Map<CreateEndpointSolutionOptions>(options);
 
-            _fileSystem.CreateDirectory(workspaceDirectory);
+        var solutionModel = _solutionModelFactory.Minimal(solutionOptions);
 
-            _commandService.Start($"endpoint git {options.Name}", workspaceDirectory);
+        _artifactGenerationStrategyFactory.CreateFor(solutionModel);
 
-            var solutionOptions = TinyMapper.Map<CreateEndpointSolutionOptions>(options);
-
-            var solutionModel = SolutionModelFactory.Minimal(solutionOptions);
-
-            _solutionGenerationStrategy.Create(solutionModel);
-
-            _commandService.Start(options.VsCode ? "code ." : $"start {options.Name}.sln", workspaceDirectory);
-
-        }
+        _commandService.Start(options.VsCode ? "code ." : $"start {options.Name}.sln", workspaceDirectory);*/
     }
 }

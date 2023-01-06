@@ -3,10 +3,13 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.ApiProjectModels;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.ProgramFiles;
+using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Git;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Fields;
+using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.WebArtifacts;
@@ -49,12 +52,15 @@ public static class ConfigureServices
         services.AddSingleton<IFileProvider, FileProvider>();
         services.AddSingleton<ISolutionNamespaceProvider, SolutionNamespaceProvider>();
         services.AddSingleton<ISolutionSettingsFileGenerationStrategyFactory, SolutionSettingsFileGenerationStrategyFactory>();
+        services.AddSingleton<ISolutionModelFactory, SolutionModelFactory>();
 
-        services.AddSingleton<ISolutionGenerationStrategy, SolutionGenerationStrategy>();
+
+/*        services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();
+        services.AddSingleton<IArtifactGenerationStrategy, MinimalApiEndpointGenerationStrategy>();
         services.AddSingleton<IProjectGenerationStrategy, ProjectGenerationStrategy>();
         services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
-        services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();
-        services.AddSingleton<IGitGenerationStrategy, GitGenerationStrategy>();
+        services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();*/
+        services.AddSingleton<IArtifactGenerationStrategy, GitGenerationStrategy>();
         services.AddSingleton<IGitGenerationStrategyFactory, GitGenerationStrategyFactory>();
         services.AddSingleton<IMinimalApiProgramFileGenerationStratey, MinimalApiProgramFileGenerationStratey>();
         services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
@@ -72,20 +78,23 @@ public static class ConfigureServices
         services.AddSingleton<IFileGenerationStrategy, MinimalApiProgramFileGenerationStrategy>();
         services.AddSingleton<IFileGenerationStrategy, EntityFileGenerationStrategy>();
 
-
         services.AddSingleton<IWebArtifactModelsFactory, WebArtifactModelsFactory>();
         services.AddSingleton<IWebGenerationStrategyFactory, WebGenerationStrategyFactory>();
         services.AddSingleton<IWebGenerationStrategy, AngularProjectGenerationStrategy>();
 
-
         services.AddSingleton<IArtifactGenerationStrategyFactory, ArtifactGenerationStrategyFactory>();
-        services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileGenerationStrategy>();
+        //services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileGenerationStrategy>();
 
+        services.AddSingleton<ISyntaxGenerationStrategyFactory, SyntaxGenerationStrategyFactory>();
         services.AddSingleton<ISyntaxGenerationStrategy, ClassSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, MethodSyntaxGenerationStrategy>();
-        services.AddSingleton<ISyntaxGenerationStrategy, FieldSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, FieldsSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, ConstructorSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, PropertySyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, AccessModifierSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, InterfaceSyntaxGenerationStrategy>();
+
+        services.AddSingleton<IArtifactUpdateStrategyFactory, ArtifactUpdateStrategyFactory>();
 
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts;
+using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Api;

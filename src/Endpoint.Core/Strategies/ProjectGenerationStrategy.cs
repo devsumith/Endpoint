@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Artifacts;
+﻿using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Files.Create;
 using System.IO;

@@ -1,13 +1,19 @@
-﻿using System;
+﻿namespace Endpoint.Core.Models.Git;
 
-namespace Endpoint.Core.Models.Git
+public class GitModel
 {
-    public class GitModel
+    public GitModel(string repositoryName)
     {
-        public string Username { get; set; } = Environment.GetEnvironmentVariable("Endpoint:GitUsername");
-        public string Email { get; set; } = Environment.GetEnvironmentVariable("Endpoint:GitEmail");
-        public string PersonalAccessToken { get; set; } = Environment.GetEnvironmentVariable("Endpoint:GitPassword");
-        public string RepositoryName { get; set; }
-        public string Directory { get; set; } = Environment.CurrentDirectory;
+        RepositoryName = repositoryName;
+        Username = Environment.GetEnvironmentVariable("Endpoint:GitUsername");
+        Email = Environment.GetEnvironmentVariable("Endpoint:GitEmail");
+        PersonalAccessToken = Environment.GetEnvironmentVariable("Endpoint:GitPassword");
+        Directory = Environment.CurrentDirectory;
     }
+
+    public string Username { get; init; }
+    public string Email { get; init; }
+    public string PersonalAccessToken { get; init; }
+    public string RepositoryName { get; init; }
+    public string Directory { get; init; } 
 }

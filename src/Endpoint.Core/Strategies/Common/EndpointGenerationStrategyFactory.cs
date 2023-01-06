@@ -1,70 +1,63 @@
-﻿using Endpoint.Core.Models;
+﻿using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.ApiProjectModels;
+using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
-using Endpoint.Core.Strategies.Solutions.Crerate;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Endpoint.Core.Strategies.Common
+namespace Endpoint.Core.Strategies.Common;
+
+public class EndpointGenerationStrategyFactory : IEndpointGenerationStrategyFactory
 {
-    public interface IEndpointGenerationStrategyFactory
+    private readonly IList<IEndpointGenerationStrategy> _strategies;
+
+    public EndpointGenerationStrategyFactory(
+        ICommandService commandService,
+        ISolutionFilesGenerationStrategy solutionFilesGenerationStrategy,
+        ISharedKernelProjectFilesGenerationStrategy sharedKernelProjectFilesGenerationStrategy,
+        IApplicationProjectFilesGenerationStrategy applicationProjectFilesGenerationStrategy,
+        IInfrastructureProjectFilesGenerationStrategy infrastructureProjectFilesGenerationStrategy,
+        IApiProjectFilesGenerationStrategy apiProjectFilesGenerationStrategy,
+        IFileSystem fileSystem,
+        ISolutionModelFactory solutionModelFactory,
+        IMediator mediator,
+        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IServiceProvider serviceProvider,
+        ILogger<EndpointGenerationStrategyFactory> logger
+        )
     {
-        void CreateFor(CreateEndpointOptions request);
+        _strategies = new List<IEndpointGenerationStrategy>()
+        {
+            new EndpointGenerationStrategy(
+                commandService,
+                solutionFilesGenerationStrategy,
+                sharedKernelProjectFilesGenerationStrategy,
+                applicationProjectFilesGenerationStrategy,
+                infrastructureProjectFilesGenerationStrategy,apiProjectFilesGenerationStrategy,
+                mediator,
+                logger),
+
+            //new MinimalApiEndpointGenerationStrategy(serviceProvider, artifactGenerationStrategyFactory,commandService,fileSystem, solutionModelFactory)
+        };
     }
 
-    public class EndpointGenerationStrategyFactory : IEndpointGenerationStrategyFactory
+    public void CreateFor(CreateEndpointOptions options)
     {
-        private readonly IList<IEndpointGenerationStrategy> _strategies;
-
-        public EndpointGenerationStrategyFactory(
-            ICommandService commandService,
-            ISolutionFilesGenerationStrategy solutionFilesGenerationStrategy,
-            ISharedKernelProjectFilesGenerationStrategy sharedKernelProjectFilesGenerationStrategy,
-            IApplicationProjectFilesGenerationStrategy applicationProjectFilesGenerationStrategy,
-            IInfrastructureProjectFilesGenerationStrategy infrastructureProjectFilesGenerationStrategy,
-            IApiProjectFilesGenerationStrategy apiProjectFilesGenerationStrategy,
-            IFileSystem fileSystem,
-            ITemplateLocator templateLocator,
-            ITemplateProcessor templateProcessor,
-            IMediator mediator,
-            ISolutionGenerationStrategy solutionGenerationStrategy,
-            ILogger logger
-            )
+        if (options == null)
         {
-            _strategies = new List<IEndpointGenerationStrategy>()
-            {
-                new EndpointGenerationStrategy(
-                    commandService,
-                    solutionFilesGenerationStrategy,
-                    sharedKernelProjectFilesGenerationStrategy,
-                    applicationProjectFilesGenerationStrategy,
-                    infrastructureProjectFilesGenerationStrategy,apiProjectFilesGenerationStrategy,
-                    mediator,
-                    logger),
-
-                new MinimalApiEndpointGenerationStrategy(solutionGenerationStrategy,commandService,fileSystem)
-            };
+            throw new ArgumentNullException(nameof(options));
         }
 
-        public void CreateFor(CreateEndpointOptions options)
+        var strategy = _strategies.Where(x => x.CanHandle(options)).OrderByDescending(x => x.Order).FirstOrDefault();
+
+        if (strategy == null)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            var strategy = _strategies.Where(x => x.CanHandle(options)).OrderByDescending(x => x.Order).FirstOrDefault();
-
-            if (strategy == null)
-            {
-                throw new InvalidOperationException("Cannot find a strategy for generation for the type " + options.Name);
-            }
-
-            strategy.Create(options);
+            throw new InvalidOperationException("Cannot find a strategy for generation for the type " + options.Name);
         }
+
+        strategy.Create(options);
     }
 }

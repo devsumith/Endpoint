@@ -2,16 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <Authors>Quinntyne Brown</Authors>
+    <Company>Allagi Consulting</Company>
+    <PackageTags>clean-architecture;source-generator;application-code;scaffolding</PackageTags>
+    <RepositoryUrl>https://github.com/QuinntyneBrown/Endpoint</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <Version>1.0.0</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageId>QB.Endpoint.Core</PackageId>
   </PropertyGroup>
 
-
   <ItemGroup>
-    <EmbeddedResource Include="Generators\Core\ExtensionsBuilder.txt" />
-    <EmbeddedResource Include="Generators\Core\Request\CommandBuilder.txt" />
-    <EmbeddedResource Include="Generators\Core\Request\QueryBuilder.txt" />
-    <EmbeddedResource Include="Generators\Core\ServiceCollectionExtensionsBuilder.txt" />
-    <EmbeddedResource Include="Generators\Core\ValidationBehaviorBuilder.txt" />
-    <EmbeddedResource Include="Generators\Core\ValidatorBuilder.txt" />
+    <None Include="..\..\README.md" Link="README.md">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +38,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Octokit" Version="3.0.1" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />

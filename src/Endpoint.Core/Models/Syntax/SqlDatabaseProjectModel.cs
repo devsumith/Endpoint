@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Artifacts;
+﻿using Endpoint.Core.Models.Artifacts.Projects;
 
 namespace Endpoint.Core.Models.Syntax
 {

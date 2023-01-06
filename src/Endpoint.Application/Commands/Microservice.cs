@@ -15,8 +15,9 @@ using System.IO;
 using Endpoint.Core.Strategies.WorkspaceSettingss.Update;
 using static Endpoint.Core.CoreConstants.SolutionTemplates;
 using Endpoint.Core.Models.Options;
-using Endpoint.Core.Models.Artifacts;
 using Endpoint.Core.Models.Git;
+using Endpoint.Core.Models.Artifacts.Solutions;
+using Endpoint.Core.Abstractions;
 
 namespace Endpoint.Application.Commands;
 
@@ -52,17 +53,17 @@ public class MicroserviceRequest : IRequest<Unit>
 public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, Unit>
 {
     private readonly ILogger _logger;
-    private readonly ISolutionGenerationStrategy _solutionGenerationStrategy;
+    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly ISolutionSettingsFileGenerationStrategyFactory _factory;
     private readonly IGitGenerationStrategyFactory _gitGenerationStrategyFactory;
     private readonly IWorkspaceGenerationStrategyFactory _workspaceSettingsGenerationStrategyFactory;
     private readonly ISolutionUpdateStrategyFactory _solutionUpdateStrategyFactory;
     private readonly IWorkspaceSettingsUpdateStrategyFactory _workspaceSettingsUpdateStrategyFactory;
     private readonly IFileSystem _fileSystem;
-    public MicroserviceRequestHandler(ILogger logger, ISolutionGenerationStrategy solutionGenerationStrategy, ISolutionSettingsFileGenerationStrategyFactory factory, IGitGenerationStrategyFactory gitGenerationStrategyFactory, IWorkspaceGenerationStrategyFactory workspaceGenerationStrategyFactory, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
+    public MicroserviceRequestHandler(ILogger logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ISolutionSettingsFileGenerationStrategyFactory factory, IGitGenerationStrategyFactory gitGenerationStrategyFactory, IWorkspaceGenerationStrategyFactory workspaceGenerationStrategyFactory, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _solutionGenerationStrategy = solutionGenerationStrategy ?? throw new ArgumentNullException(nameof(solutionGenerationStrategy));
+        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _factory = factory ?? throw new ArgumentNullException(nameof(factory));
         _gitGenerationStrategyFactory = gitGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(gitGenerationStrategyFactory));
         _workspaceSettingsGenerationStrategyFactory = workspaceGenerationStrategyFactory;
@@ -75,7 +76,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
     {
         if (IsExistingWorkspace(request.Directory))
         {
-            return SolutionModelFactory.Minimal(new CreateEndpointSolutionOptions
+            return new SolutionModelFactory().Minimal(new CreateEndpointSolutionOptions
             {
                 Name = createMicroserviceOptions.Name,
                 Directory = createMicroserviceOptions.Directory,
@@ -86,7 +87,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
             });
         }
 
-        return SolutionModelFactory.Minimal(new CreateEndpointSolutionOptions
+        return new SolutionModelFactory().Minimal(new CreateEndpointSolutionOptions
         {
             Name = createMicroserviceOptions.Name,
             Directory = $"{createMicroserviceOptions.Directory}",
@@ -120,12 +121,12 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
 
         SolutionModel solutionModel = request.TemplateType switch
         {
-            CleanArchitectureByJasonTalyor => SolutionModelFactory.CleanArchitectureMicroservice(createMicroserviceOptions),
+            CleanArchitectureByJasonTalyor => new SolutionModelFactory().CleanArchitectureMicroservice(createMicroserviceOptions),
             Minimal => CreateMinimalSolutionModel(createMicroserviceOptions, request),
             _ => throw new NotImplementedException()
         };
 
-        _solutionGenerationStrategy.Create(solutionModel);
+        _artifactGenerationStrategyFactory.CreateFor(solutionModel);
 
         var settings = SolutionSettingsModelFactory.Create(createMicroserviceOptions);
 
@@ -143,10 +144,9 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
         _workspaceSettingsUpdateStrategyFactory.UpdateFor(previousWorkspaceSettings, nextWorkspaceSettings);
 
         if (!IsExistingWorkspace(request.Directory) && request.CreateGitRepository)
-            _gitGenerationStrategyFactory.CreateFor(new GitModel
+            _gitGenerationStrategyFactory.CreateFor(new GitModel(request.WorkspaceName)
             {
                 Directory = solutionModel.SolutionDirectory,
-                RepositoryName = request.WorkspaceName
             });
 
         return new();
@@ -157,14 +157,14 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
 
         if (!_fileSystem.Exists($"{resolveOrCreateWorkspaceOptions.Directory}{Path.DirectorySeparatorChar}{resolveOrCreateWorkspaceOptions.Name}{Path.DirectorySeparatorChar}Workspace.sln"))
         {
-            var newWorkspaceSolutionModel = SolutionModelFactory.Workspace(resolveOrCreateWorkspaceOptions);
+            var newWorkspaceSolutionModel = new SolutionModelFactory().Workspace(resolveOrCreateWorkspaceOptions);
 
-            _solutionGenerationStrategy.Create(newWorkspaceSolutionModel);
+            _artifactGenerationStrategyFactory.CreateFor(newWorkspaceSolutionModel);
 
-            return new(SolutionModelFactory.Workspace(resolveOrCreateWorkspaceOptions), SolutionModelFactory.Workspace(resolveOrCreateWorkspaceOptions));
+            return new(new SolutionModelFactory().Workspace(resolveOrCreateWorkspaceOptions), new SolutionModelFactory().Workspace(resolveOrCreateWorkspaceOptions));
         }
 
-        return new(SolutionModelFactory.Resolve(resolveOrCreateWorkspaceOptions), SolutionModelFactory.Resolve(resolveOrCreateWorkspaceOptions));
+        return new(new SolutionModelFactory().Resolve(resolveOrCreateWorkspaceOptions), new SolutionModelFactory().Resolve(resolveOrCreateWorkspaceOptions));
     }
 
     public Tuple<WorkspaceSettingsModel, WorkspaceSettingsModel> CreateOrResolvePreviousAndNextWorkspaceSettings(ResolveOrCreateWorkspaceOptions resolveOrCreateWorkspaceOptions)

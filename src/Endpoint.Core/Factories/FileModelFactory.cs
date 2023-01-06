@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Artifacts;
+﻿using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;

@@ -1,12 +1,12 @@
 ﻿using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts;
+using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Strategies.Files.Create;
 
-public class TemplatedFileGenerationStrategy : ArtifactGenerationStrategyStrategyBase<TemplatedFileModel>
+public class TemplatedFileGenerationStrategy : ArtifactGenerationStrategyBase<TemplatedFileModel>
 {
     private readonly IFileSystem _fileSystem;
     private readonly ITemplateLocator _templateLocator;

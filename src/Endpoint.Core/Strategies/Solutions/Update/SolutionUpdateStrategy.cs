@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Artifacts;
+﻿using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Services;
 using System.Linq;
 

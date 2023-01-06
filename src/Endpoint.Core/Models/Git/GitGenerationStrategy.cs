@@ -1,28 +1,28 @@
-﻿using Endpoint.Core.Services;
+﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using Octokit;
-using System;
 using System.IO;
 
 namespace Endpoint.Core.Models.Git;
 
-public class GitGenerationStrategy : IGitGenerationStrategy
+public class GitGenerationStrategy : ArtifactGenerationStrategyBase<GitModel>
 {
     private readonly ICommandService _commandService;
-    private readonly ILogger _logger;
+    private readonly ILogger<GitGenerationStrategy> _logger;
     private readonly ITemplateLocator _templateLocator;
     private readonly IFileSystem _fileSystem;
 
-    public GitGenerationStrategy(ILogger logger, ICommandService commandService, ITemplateLocator templateLocator, IFileSystem fileSystem)
+    public GitGenerationStrategy(IServiceProvider serviceProvider, ILogger<GitGenerationStrategy> logger, ICommandService commandService, ITemplateLocator templateLocator, IFileSystem fileSystem)
+        :base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
-    public bool CanHandle(GitModel model) => true;
 
-    public void Create(GitModel model)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, GitModel model, dynamic configuration = null)
     {
         _logger.LogInformation($"{nameof(GitGenerationStrategy)}: Handled");
 
@@ -50,5 +50,4 @@ public class GitGenerationStrategy : IGitGenerationStrategy
         _commandService.Start("git push --set-upstream origin master", model.Directory);
     }
 
-    public int Order { get; set; } = 0;
 }

@@ -1,5 +1,4 @@
 ﻿using Endpoint.Core.Abstractions;
-using Endpoint.Core.Enums;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
@@ -23,14 +22,7 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
 
         var builder = new StringBuilder();
 
-        var accessModifer = model.AccessModifier switch
-        {
-            AccessModifier.Public => "public",
-            AccessModifier.Protected => "protected",
-            _ => "public"
-        };
-
-        builder.Append(accessModifer);
+        builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
 
         if (model.Static)
             builder.Append(" static");
@@ -54,26 +46,14 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
         builder.AppendLine($"");
 
         builder.AppendLine("{");
-        
-        foreach(var field in model.Fields)
-        {
-            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(field, configuration).Indent(1));
-        }
 
-        foreach(var ctor in model.Constructors)
-        {
-            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(ctor, configuration).Indent(1));
-        }
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Fields, configuration).Indent(1));
 
-        foreach(var property in model.Properties)
-        {
-            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(property, configuration).Indent(1));
-        }
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Constructors, configuration).Indent(1));
 
-        foreach(var method in model.Methods)
-        {
-            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(method, configuration).Indent(1));
-        }
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Properties, configuration).Indent(1));
+
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Methods, configuration).Indent(1));
 
         builder.AppendLine("}");
         
