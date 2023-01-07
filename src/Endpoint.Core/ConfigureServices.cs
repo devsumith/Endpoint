@@ -3,6 +3,7 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.ApiProjectModels;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.ProgramFiles;
+using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Git;
 using Endpoint.Core.Models.Syntax;
@@ -57,7 +58,7 @@ public static class ConfigureServices
 
         services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, MinimalApiEndpointGenerationStrategy>();
-        services.AddSingleton<IProjectGenerationStrategy, ProjectGenerationStrategy>();
+        services.AddSingleton<IArtifactGenerationStrategy, ProjectGenerationStrategy>();
         services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
         services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, GitGenerationStrategy>();

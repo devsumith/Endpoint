@@ -55,5 +55,17 @@ static void ProcessArgs(IMediator mediator, IConfiguration configuration, string
 
    _createParser().ParseArguments(args, verbs)
        .WithParsed(
-         (dynamic request) => mediator.Send(request));
+         (dynamic request) =>
+         {
+
+             try
+             {
+                 mediator.Send(request).GetAwaiter().GetResult();
+             }
+             catch (Exception ex)
+             {
+
+                 throw ex;
+             }
+         });
 }

@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "git-create -n Angular-Examples -d C:\\projects",
+      "commandLineArgs": "solution-create -n Bottlenose.ServiceBus -p Bottlenose.ServiceBus -t classlib -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",
