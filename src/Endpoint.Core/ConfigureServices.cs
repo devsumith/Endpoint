@@ -97,5 +97,7 @@ public static class ConfigureServices
 
         services.AddSingleton<IArtifactUpdateStrategyFactory, ArtifactUpdateStrategyFactory>();
 
+        services.AddSingleton<IClipboardService,ClipboardService>();
+
     }
 }
