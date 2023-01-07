@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "solution-create -n Bottlenose.ServiceBus -p Bottlenose.ServiceBus -t classlib -d C:\\projects",
+      "commandLineArgs": "",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",

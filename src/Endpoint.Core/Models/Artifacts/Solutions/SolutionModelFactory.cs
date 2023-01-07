@@ -14,13 +14,23 @@ public class SolutionModelFactory: ISolutionModelFactory
         return model;
     }
 
-    public SolutionModel SingleProjectSolution(string name, string projectName, string dotNetProjectTypeName, string directory)
+    public SolutionModel Create(string name, string projectName, string dotNetProjectTypeName, string folderName, string directory)
     {
         var model = new SolutionModel(name, directory);
 
         var srcFolder = new FolderModel("src", model.SolutionDirectory);
 
         model.Folders.Add(srcFolder);
+
+        FolderModel userDefinedFolder = null;
+
+        if (!string.IsNullOrEmpty(folderName))
+        {
+            userDefinedFolder = new FolderModel(folderName, srcFolder.Directory);
+
+            srcFolder.SubFolders.Add(userDefinedFolder);
+        }
+        
 
         DotNetProjectType dotNetType = dotNetProjectTypeName switch
         {
@@ -32,12 +42,13 @@ public class SolutionModelFactory: ISolutionModelFactory
             _ => DotNetProjectType.Console
         };
 
-        var project = new ProjectModel(dotNetType, projectName, $"{srcFolder.Directory}");
+        var project = new ProjectModel(dotNetType, projectName, userDefinedFolder == null ? $"{srcFolder.Directory}" : userDefinedFolder.Directory);
 
-        srcFolder.Projects.Add(project);
+        (userDefinedFolder == null ? srcFolder : userDefinedFolder).Projects.Add(project);
 
         return model;
     }
+
     public SolutionModel CreateHttpSolution(CreateEndpointSolutionOptions options)
     {
         var solutionModel = new SolutionModel(options.Name, options.Directory);

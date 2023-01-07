@@ -39,6 +39,7 @@ public static class ConfigureServices
         services.AddSingleton<IFileFactory, FileFactory>();
         services.AddSingleton<INamespaceProvider, NamespaceProvider>();
 
+        services.AddSingleton<ITemplateLocator, EmptyTemplateLocator>();
         services.AddSingleton<IFileNamespaceProvider, FileNamespaceProvider>();
         services.AddSingleton<ISolutionTemplateService, EndpointGenerationStrategy>();
         services.AddSingleton<ISolutionFilesGenerationStrategy, SolutionFilesGenerationStrategy>();
@@ -46,7 +47,7 @@ public static class ConfigureServices
         services.AddSingleton<IApplicationProjectFilesGenerationStrategy, ApplicationProjectFilesGenerationStrategy>();
         services.AddSingleton<IInfrastructureProjectFilesGenerationStrategy, InfrastructureProjectFilesGenerationStrategy>();
         services.AddSingleton<IApiProjectFilesGenerationStrategy, ApiProjectFilesGenerationStrategy>();
-        services.AddSingleton<ICsProjectService, CsProjectService>();
+        services.AddSingleton<IProjectService, ProjectService>();
         services.AddSingleton<ISolutionService, SolutionService>();
         services.AddSingleton<IEndpointGenerationStrategyFactory, EndpointGenerationStrategyFactory>();
         services.AddSingleton<IAdditionalResourceGenerationStrategyFactory, AdditionalResourceGenerationStrategyFactory>();

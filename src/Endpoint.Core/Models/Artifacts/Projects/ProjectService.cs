@@ -1,10 +1,41 @@
-﻿using System.Linq;
+﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Services;
+using Octokit.Internal;
+using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 
-namespace Endpoint.Core.Services;
+namespace Endpoint.Core.Models.Artifacts.Projects;
 
-public class CsProjectService : ICsProjectService
+public class ProjectService : IProjectService
 {
+    private readonly ICommandService _commandService;
+    private readonly IFileProvider _fileProvider;
+    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    public ProjectService(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ICommandService commandService, IFileProvider fileProvider)
+    {
+        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
+    }
+
+    public void AddProject(ProjectModel model)
+    {
+        _artifactGenerationStrategyFactory.CreateFor(model);
+
+        AddToSolution(model);
+    }
+
+    public void AddToSolution(ProjectModel model)
+    {
+        var solution = _fileProvider.Get("*.sln", model.Directory);
+
+        var solutionName = Path.GetFileName(solution);
+
+        var solutionDirectory = Path.GetDirectoryName(solution);
+
+        _commandService.Start($"dotnet sln {solutionName} add {model.Path}", solutionDirectory);
+    }
     public void AddGenerateDocumentationFile(string csprojFilePath)
     {
         var doc = XDocument.Load(csprojFilePath);

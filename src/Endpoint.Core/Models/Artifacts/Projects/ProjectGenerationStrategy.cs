@@ -1,6 +1,7 @@
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
+using Octokit.Internal;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -29,15 +30,19 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
-        var templateType = model.DotNetProjectType switch
+        string templateType = model.DotNetProjectType switch
         {
-            _ => "classlib"
+            DotNetProjectType.Web => "web",
+            DotNetProjectType.WebApi => "webapi",
+            DotNetProjectType.ClassLib => "classlib",
+            DotNetProjectType.Worker => "worker",
+            DotNetProjectType.XUnit => "xunit",
+            _ => "console"
         };
 
         _fileSystem.CreateDirectory(model.Directory);
 
         _commandService.Start($"dotnet new {templateType} --framework net7.0", model.Directory);
-
 
         foreach (var path in _fileSystem.GetFiles(model.Directory, "*.cs", SearchOption.AllDirectories))
         {
@@ -50,6 +55,12 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
 
             _commandService.Start($"dotnet add package {package.Name} {version}", model.Directory);
         }
+
+        if(model.References != null)
+            foreach (var path in model.References)
+            {
+                _commandService.Start($"dotnet add {model.Directory} reference {path}", model.Directory);
+            }
 
         foreach (var file in model.Files)
         {

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Endpoint.Core.Models.Artifacts.Projects;
 
-namespace Endpoint.Core.Models.Artifacts.Projects
+public class NetFrameworkProjectModel : ProjectModel
 {
-    public class NetFrameworkProjectModel : ProjectModel
-    {
-    }
 }

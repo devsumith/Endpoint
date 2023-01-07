@@ -5,6 +5,6 @@ namespace Endpoint.Core.Models.Artifacts.Solutions;
 public interface ISolutionModelFactory
 {
     SolutionModel Create(string name);
-    SolutionModel SingleProjectSolution(string name, string projectName, string dotNetProjectTypeName, string directory);
+    SolutionModel Create(string name, string projectName, string dotNetProjectTypeName, string folderName, string directory);
     SolutionModel Minimal(CreateEndpointSolutionOptions options);
 }

@@ -1,5 +1,4 @@
 using CommandLine;
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Services;
 using MediatR;
@@ -20,6 +19,9 @@ public class SolutionCreateRequest : IRequest<Unit> {
     [Option('p')]
     public string ProjectName { get; set; } = "Worker.Console";
 
+    [Option('f')]
+    public string FolderName { get; set; }
+
     [Option('t')]
     public string ProjectType { get; set; } = "worker";
 
@@ -31,29 +33,29 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
 {
     private readonly ILogger<SolutionCreateRequestHandler> _logger;
     private readonly ISolutionModelFactory _solutionModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly ISolutionService _solutionService;
     private readonly ICommandService _commandService;
 
     public SolutionCreateRequestHandler(
         ILogger<SolutionCreateRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        ISolutionService solutionService,
         ISolutionModelFactory solutionModelFactory,
         ICommandService commandService
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
         _solutionModelFactory = solutionModelFactory ?? throw new ArgumentNullException(nameof(solutionModelFactory));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
     public async Task<Unit> Handle(SolutionCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Handled: {nameof(SolutionCreateRequestHandler)}");
+        _logger.LogInformation("Handled: {0}", nameof(SolutionCreateRequestHandler));
 
-        var model = _solutionModelFactory.SingleProjectSolution(request.Name, request.ProjectName, request.ProjectType, request.Directory);
+        var model = _solutionModelFactory.Create(request.Name, request.ProjectName, request.ProjectType, request.FolderName, request.Directory);
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _solutionService.Create(model);
 
         _commandService.Start($"start {model.SolultionFileName}", model.SolutionDirectory);
 
