@@ -7,7 +7,7 @@
     <ToolCommandName>endpoint</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <Authors>Quinntyne Brown</Authors>
-    <Company>Allagi Consulting</Company>
+    <Company>Quinntyne Brown</Company>
     <PackageTags>clean-architecture;code-generator;scaffolding</PackageTags>
     <RepositoryUrl>https://github.com/QuinntyneBrown/Endpoint</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -18,6 +18,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <UserSecretsId>06c49638-0786-4731-9c6b-3921161c01b5</UserSecretsId>
+    <PackageId>Quinntyne.Endpoint.Cli</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

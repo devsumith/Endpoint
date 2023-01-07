@@ -1,0 +1,27 @@
+﻿using Endpoint.Core.Abstractions;
+using Microsoft.Extensions.Logging;
+using System.Text;
+
+namespace {{ namespace }};
+
+public class {{ modelNamePascalCase }}ArtifactGenerationStrategy : ArtifactGenerationStrategyBase<{{ modelNamePascalCase }}Model>
+{
+    private readonly ILogger<{{ modelNamePascalCase }}ArtifactGenerationStrategy> _logger;
+    public {{ modelNamePascalCase }}ArtifactGenerationStrategy(
+        IServiceProvider serviceProvider,
+        ILogger<{{ modelNamePascalCase }}ArtifactGenerationStrategy> logger) 
+        : base(serviceProvider)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    public override string Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, {{ modelNamePascalCase }}Model model, dynamic configuration = null)
+    {
+        _logger.LogInformation("Generating artifact for {0}.", model);
+
+        var builder = new StringBuilder();
+
+
+        return builder.ToString();
+    }
+}

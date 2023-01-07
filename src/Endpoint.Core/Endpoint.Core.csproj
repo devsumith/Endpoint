@@ -13,7 +13,8 @@
     <Version>1.0.0</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageId>QB.Endpoint.Core</PackageId>
+    <PackageId>Quinntyne.Endpoint.Core</PackageId>
+    <Title>Endpoint Core</Title>
   </PropertyGroup>
 
   <ItemGroup>

@@ -55,16 +55,15 @@ public static class ConfigureServices
         services.AddSingleton<ISolutionModelFactory, SolutionModelFactory>();
 
 
-/*        services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();
+        services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, MinimalApiEndpointGenerationStrategy>();
         services.AddSingleton<IProjectGenerationStrategy, ProjectGenerationStrategy>();
         services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
-        services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();*/
+        services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, GitGenerationStrategy>();
         services.AddSingleton<IGitGenerationStrategyFactory, GitGenerationStrategyFactory>();
         services.AddSingleton<IMinimalApiProgramFileGenerationStratey, MinimalApiProgramFileGenerationStratey>();
         services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
-        services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();
         services.AddSingleton<ISolutionSettingsFileGenerationStrategy, SolutionSettingsFileGenerationStrategy>();
         services.AddSingleton<ISolutionUpdateStrategy, SolutionUpdateStrategy>();
         services.AddSingleton<ISolutionUpdateStrategyFactory, SolutionUpdateStrategyFactory>();
@@ -83,7 +82,7 @@ public static class ConfigureServices
         services.AddSingleton<IWebGenerationStrategy, AngularProjectGenerationStrategy>();
 
         services.AddSingleton<IArtifactGenerationStrategyFactory, ArtifactGenerationStrategyFactory>();
-        //services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileGenerationStrategy>();
+        services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileGenerationStrategy>();
 
         services.AddSingleton<ISyntaxGenerationStrategyFactory, SyntaxGenerationStrategyFactory>();
         services.AddSingleton<ISyntaxGenerationStrategy, ClassSyntaxGenerationStrategy>();

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace {{ namespace }};
 
-internal class {{ modelNamePascalCase }}SyntaxGenerationStrategy : SyntaxGenerationStrategyBase<{{ modelNamePascalCase }}Model>
+public class {{ modelNamePascalCase }}SyntaxGenerationStrategy : SyntaxGenerationStrategyBase<{{ modelNamePascalCase }}Model>
 {
     private readonly ILogger<{{ modelNamePascalCase }}SyntaxGenerationStrategy> _logger;
     public {{ modelNamePascalCase }}SyntaxGenerationStrategy(

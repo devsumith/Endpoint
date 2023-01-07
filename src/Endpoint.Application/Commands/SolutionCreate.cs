@@ -1,4 +1,6 @@
 using CommandLine;
+using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts.Solutions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,6 +16,11 @@ public class SolutionCreateRequest : IRequest<Unit> {
     [Option('n',"name")]
     public string Name { get; set; }
 
+    [Option('p')]
+    public string ProjectName { get; set; } = "Worker.Console";
+
+    [Option('t')]
+    public string ProjectType { get; set; } = "worker";
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -22,15 +29,25 @@ public class SolutionCreateRequest : IRequest<Unit> {
 public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateRequest, Unit>
 {
     private readonly ILogger<SolutionCreateRequestHandler> _logger;
-
-    public SolutionCreateRequestHandler(ILogger<SolutionCreateRequestHandler> logger)
+    private readonly ISolutionModelFactory _solutionModelFactory;
+    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    public SolutionCreateRequestHandler(
+        ILogger<SolutionCreateRequestHandler> logger,
+        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        ISolutionModelFactory solutionModelFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _solutionModelFactory = solutionModelFactory ?? throw new ArgumentNullException(nameof(solutionModelFactory));
     }
 
     public async Task<Unit> Handle(SolutionCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Handled: {nameof(SolutionCreateRequestHandler)}");
+
+        var model = _solutionModelFactory.SingleProjectSolution(request.Name, request.ProjectName, request.ProjectType, request.Directory);
+
+        _artifactGenerationStrategyFactory.CreateFor(model);
 
         return new();
     }
