@@ -38,11 +38,11 @@ public class EntityAddRequestHandler : IRequestHandler<EntityAddRequest, Unit>
 
     public async Task<Unit> Handle(EntityAddRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Handled: {nameof(EntityAddRequestHandler)}");
+/*        _logger.LogInformation($"Handled: {nameof(EntityAddRequestHandler)}");
 
-        var model = EntityFileModelFactory.Create(request.Name, request.Properties, request.Directory, _fileNamespaceProvider.Get(request.Directory));
+        var model = new EntityFileModelFactory().Create(request.Name, request.Properties, request.Directory, _fileNamespaceProvider.Get(request.Directory));
 
-        _fileGenerationStrategyFactory.CreateFor(model);
+        _fileGenerationStrategyFactory.CreateFor(model);*/
 
         return new();
     }

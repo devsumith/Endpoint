@@ -13,6 +13,7 @@ public class AggregateRootModel : EntityModel
     public string IdPropertyType { get; set; }
 
     public AggregateRootModel(string name, List<PropertyModel> classProperties)
+        :base(name)
     {
         Name = name;
         Properties = classProperties;
@@ -20,6 +21,7 @@ public class AggregateRootModel : EntityModel
     }
 
     public AggregateRootModel(string name, bool useIntIdPropertyType, bool useShortIdProperty, string properties)
+        :base(name)
     {
         Name = name;
 
@@ -27,7 +29,7 @@ public class AggregateRootModel : EntityModel
 
         IdPropertyName = useShortIdProperty ? "Id" : $"{((Token)name).PascalCase}Id";
 
-        Properties.Add(new PropertyModel("public", IdPropertyType, IdPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
+        Properties.Add(new PropertyModel(this, "public", IdPropertyType, IdPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 
         if (!string.IsNullOrWhiteSpace(properties))
         {
@@ -35,18 +37,14 @@ public class AggregateRootModel : EntityModel
             {
                 var nameValuePair = property.Split(':');
 
-                Properties.Add(new PropertyModel("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
+                Properties.Add(new PropertyModel(this, "public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
             }
         }
     }
 
     public AggregateRootModel(string name)
+        :base(name)
     {
         Name = name;
-    }
-
-    public AggregateRootModel()
-    {
-
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Endpoint.Core;
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Factories;
 using Endpoint.Core.Models.Artifacts.ApiProjectModels;
+using Endpoint.Core.Models.Artifacts.Entities;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.ProgramFiles;
 using Endpoint.Core.Models.Artifacts.Projects;
@@ -9,10 +11,12 @@ using Endpoint.Core.Models.Git;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
+using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Properties;
+using Endpoint.Core.Models.Syntax.RouteHandlers;
 using Endpoint.Core.Models.WebArtifacts;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
@@ -36,8 +40,11 @@ public static class ConfigureServices
         services.AddSingleton<ISettingsProvider, SettingsProvider>();
         services.AddSingleton<ITenseConverter, TenseConverter>();
         services.AddSingleton<IContext, Context>();
-        services.AddSingleton<IFileFactory, FileFactory>();
+        services.AddSingleton<IFileModelFactory, FileModelFactory>();
         services.AddSingleton<INamespaceProvider, NamespaceProvider>();
+
+        services.AddSingleton<IEntityModelFactory, EntityModelFactory>();
+        services.AddSingleton<IAggregateRootModelFactory, AggregateRootModelFactory>();
 
         services.AddSingleton<ITemplateLocator, EmptyTemplateLocator>();
         services.AddSingleton<IFileNamespaceProvider, FileNamespaceProvider>();
@@ -74,7 +81,7 @@ public static class ConfigureServices
         services.AddSingleton<IWorkspaceGenerationStrategyFactory, WorkspaceSettingsGenerationStrategyFactory>();
         services.AddSingleton<IWorkspaceSettingsUpdateStrategyFactory, WorkspaceSettingsUpdateStrategyFactory>();
         services.AddSingleton<IWorkspaceSettingsUpdateStrategy, WorkspaceSettingsUpdateStrategy>();
-        services.AddSingleton<IFileFactory, FileFactory>();
+        services.AddSingleton<IFileModelFactory, FileModelFactory>();
         services.AddSingleton<IFileGenerationStrategyFactory, FileGenerationStrategyFactory>();
         services.AddSingleton<IFileGenerationStrategy, MinimalApiProgramFileGenerationStrategy>();
         services.AddSingleton<IFileGenerationStrategy, EntityFileGenerationStrategy>();
@@ -94,10 +101,18 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategy, PropertySyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, AccessModifierSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, InterfaceSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerCreateSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerUpdateSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerDeleteSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerGetSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerGetByIdSyntaxGenerationStrategy>();
 
         services.AddSingleton<IArtifactUpdateStrategyFactory, ArtifactUpdateStrategyFactory>();
 
         services.AddSingleton<IClipboardService,ClipboardService>();
+        services.AddSingleton<ISyntaxService, SyntaxService>();
+        services.AddSingleton<IEntityFileModelFactory, EntityFileModelFactory>();
+        services.AddSingleton<IProjectModelFactory, ProjectModelFactory>();
 
     }
 }

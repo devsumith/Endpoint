@@ -1,36 +1,50 @@
 ﻿using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Properties;
 using System.Linq;
+using System.Text;
 
 namespace Endpoint.Core.Models.Artifacts.Entities;
 
-public static class EntityFileModelFactory
+public class EntityFileModelFactory: IEntityFileModelFactory
 {
-    public static EntityFileModel Create(string name, string properties, string directory, string @namespace)
+    private readonly ISyntaxService _syntaxService;
+
+    public EntityFileModelFactory(ISyntaxService syntaxService)
     {
-        var entityFileModel = new EntityFileModel
-        {
-            Entity = new EntityModel
-            {
-                Name = name,
-                Namespace = @namespace,
-            },
-            Directory = directory,
-            Name = name,
-            Extension = "cs",
-        };
+        _syntaxService = syntaxService;
+    }
 
+    public EntityFileModel Create(string name, string properties, string directory)
+    {
+        var entity = new EntityModel(name);
 
-        foreach (var prop in $"Id:long,{properties}".Split(',').Distinct())
+        var idProperty = new StringBuilder();
+
+        idProperty.Append(_syntaxService.SyntaxModel.IdPropertyFormat == IdPropertyFormat.Long ? $"{entity.Name}Id" : "Id");
+        
+        idProperty.Append(':');
+        
+        idProperty.Append(_syntaxService.SyntaxModel.IdPropertyType == IdPropertyType.Guid ? "guid" : "int");
+
+        foreach (var prop in $"{idProperty},{properties}".Split(',').Distinct())
         {
             var propType = prop.Split(':')[1];
             var propName = prop.Split(':')[0];
 
-            var classProperty = new PropertyModel("public", propType, propName, PropertyAccessorModel.GetPrivateSet);
+            var classProperty = new PropertyModel(entity, "public", propType, propName, PropertyAccessorModel.GetPrivateSet);
 
-            entityFileModel.Entity.Properties.Add(classProperty);
+            entity.Properties.Add(classProperty);
         }
+
+        var entityFileModel = new EntityFileModel
+        {
+            Entity = entity,
+            Directory = directory,
+            Name = name,
+            Extension = "cs",
+        };
 
         return entityFileModel;
     }

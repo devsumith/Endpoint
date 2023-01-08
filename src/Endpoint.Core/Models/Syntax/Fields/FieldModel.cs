@@ -1,4 +1,6 @@
-﻿namespace Endpoint.Core.Models.Syntax.Fields;
+﻿using Endpoint.Core.Models.Syntax.Types;
+
+namespace Endpoint.Core.Models.Syntax.Fields;
 
 public class FieldModel
 {

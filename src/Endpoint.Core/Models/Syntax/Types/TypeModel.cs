@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Endpoint.Core.Models.Syntax;
+namespace Endpoint.Core.Models.Syntax.Types;
 
 public class TypeModel
 {

@@ -7,6 +7,12 @@ namespace Endpoint.Core.Models.Artifacts.Solutions;
 
 public class SolutionModelFactory: ISolutionModelFactory
 {
+    private readonly IProjectModelFactory _projectModelFactory;
+
+    public SolutionModelFactory(IProjectModelFactory projectModelFactory)
+    {
+        _projectModelFactory = projectModelFactory;
+    }
     public SolutionModel Create(string name)
     {
         var model = new SolutionModel() { Name = name };
@@ -53,7 +59,7 @@ public class SolutionModelFactory: ISolutionModelFactory
     {
         var solutionModel = new SolutionModel(options.Name, options.Directory);
 
-        solutionModel.Projects.Add(ProjectModelFactory.CreateHttpProject(options.Name, solutionModel.SrcDirectory));
+        solutionModel.Projects.Add(_projectModelFactory.CreateHttpProject(options.Name, solutionModel.SrcDirectory));
 
         return solutionModel;
     }
@@ -62,7 +68,7 @@ public class SolutionModelFactory: ISolutionModelFactory
     {
         var model = string.IsNullOrEmpty(options.SolutionDirectory) ? new SolutionModel(options.Name, options.Directory) : new SolutionModel(options.Name, options.Directory, options.SolutionDirectory);
 
-        var minimalApiProject = ProjectModelFactory.CreateMinimalApiProject(new CreateMinimalApiProjectOptions
+        var minimalApiProject = _projectModelFactory.CreateMinimalApiProject(new CreateMinimalApiProjectOptions
         {
             Name = $"{options.Name}.Api",
             ShortIdPropertyName = false,
@@ -74,7 +80,7 @@ public class SolutionModelFactory: ISolutionModelFactory
             DbContextName = options.DbContextName
         });
 
-        var unitTestProject = ProjectModelFactory.CreateMinimalApiUnitTestsProject(options.Name, model.TestDirectory, options.Resource);
+        var unitTestProject = _projectModelFactory.CreateMinimalApiUnitTestsProject(options.Name, model.TestDirectory, options.Resource);
 
         model.Projects.Add(minimalApiProject);
 
@@ -89,19 +95,19 @@ public class SolutionModelFactory: ISolutionModelFactory
     {
         var model = string.IsNullOrEmpty(options.SolutionDirectory) ? new SolutionModel(options.Name, options.Directory) : new SolutionModel(options.Name, options.Directory, options.SolutionDirectory);
 
-        var domain = ProjectModelFactory.CreateLibrary($"{options.Name}.Domain", model.SrcDirectory);
+        var domain = _projectModelFactory.CreateLibrary($"{options.Name}.Domain", model.SrcDirectory);
 
         domain.Metadata.Add(CoreConstants.ProjectType.Domain);
 
-        var infrastructure = ProjectModelFactory.CreateLibrary($"{options.Name}.Infrastructure", model.SrcDirectory);
+        var infrastructure = _projectModelFactory.CreateLibrary($"{options.Name}.Infrastructure", model.SrcDirectory);
 
         infrastructure.Metadata.Add(CoreConstants.ProjectType.Infrastructure);
 
-        var application = ProjectModelFactory.CreateLibrary($"{options.Name}.Application", model.SrcDirectory);
+        var application = _projectModelFactory.CreateLibrary($"{options.Name}.Application", model.SrcDirectory);
 
         application.Metadata.Add(CoreConstants.ProjectType.Application);
 
-        var api = ProjectModelFactory.CreateWebApi($"{options.Name}.Api", model.SrcDirectory);
+        var api = _projectModelFactory.CreateWebApi($"{options.Name}.Api", model.SrcDirectory);
 
         api.Metadata.Add(CoreConstants.ProjectType.Api);
 

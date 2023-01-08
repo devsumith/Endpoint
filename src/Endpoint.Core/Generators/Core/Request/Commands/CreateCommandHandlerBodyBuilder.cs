@@ -21,7 +21,7 @@ namespace Endpoint.Core.Builders.Core
 
                 };
 
-            foreach (var property in aggregateRoot.Properties.Where(x => x.Key == false))
+            foreach (var property in aggregateRoot.Properties.Where(x => x.Id == false))
             {
                 result.Add($"{((Token)aggregateName).CamelCase}.{((Token)property.Name).PascalCase} = request.{((Token)aggregateName).PascalCase}.{((Token)property.Name).PascalCase};");
             }

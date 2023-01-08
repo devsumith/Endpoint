@@ -46,7 +46,7 @@ namespace Endpoint.Core.Services
 
         private void _buildEntityConfiguration(SettingsModel model, string resourceName)
         {
-            var idPropertyName = model.IdFormat == IdFormat.Short ? "Id" : $"{resourceName}Id";
+            var idPropertyName = model.IdFormat == IdPropertyFormat.Short ? "Id" : $"{resourceName}Id";
 
             new EntityConfigurationFileGenerationStrategy(_templateProcessor, _templateLocator, _fileSystem)
                 .Create(resourceName, idPropertyName, model.ApplicationNamespace, model.InfrastructureNamespace, $"{model.InfrastructureDirectory}{Path.DirectorySeparatorChar}EntityConfigurations");

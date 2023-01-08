@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Models.Syntax.Attributes;
+using Endpoint.Core.Models.Syntax.Types;
 
 namespace Endpoint.Core.Models.Syntax.Params;
 

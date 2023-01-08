@@ -7,7 +7,7 @@ namespace Endpoint.Core.Builders.Statements
     {
         public static string Build(SettingsModel settings, string resourceName, bool forModel = false)
         {
-            var type = settings.IdDotNetType == IdDotNetType.Guid ? $"Guid" : "int";
+            var type = settings.IdDotNetType == IdPropertyType.Guid ? $"Guid" : "int";
 
             if(forModel && type == "Guid")
             {

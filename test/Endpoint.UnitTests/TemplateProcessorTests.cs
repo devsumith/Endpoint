@@ -26,16 +26,13 @@ namespace Endpoint.UnitTests
         [Fact]
         public void Process_ShouldComplextModel()
         {
-            var entity = new EntityModel("User", new List<PropertyModel>
+            var entity = new EntityModel("User");
+
+            entity.Properties = new List<PropertyModel>
             {
-                new PropertyModel("public","string","Name", PropertyAccessorModel.GetPrivateSet)
-            })
-            {
-                Namespace = "Endpoint.Domain.Models"
+                new PropertyModel(entity, "public","string","Name", PropertyAccessorModel.GetPrivateSet)
             };
 
-            entity.Usings.Add("System");
-            entity.Usings.Add("System.Collection.Generic");
 
             var template = new string[9] {
                 "{% for using in Usings %}using {{ using }};",

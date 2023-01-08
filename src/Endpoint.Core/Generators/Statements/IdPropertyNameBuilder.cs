@@ -6,6 +6,6 @@ namespace Endpoint.Core.Builders.Common
     public class IdPropertyNameBuilder
     {
         public static string Build(SettingsModel settings, string objectName)
-            => settings.IdFormat == IdFormat.Long ? $"{objectName}Id" : "Id";
+            => settings.IdFormat == IdPropertyFormat.Long ? $"{objectName}Id" : "Id";
     }
 }

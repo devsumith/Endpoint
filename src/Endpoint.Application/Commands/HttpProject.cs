@@ -2,7 +2,6 @@ using CommandLine;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Options;
-using Endpoint.Core.Strategies.Solutions.Crerate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -24,9 +23,11 @@ internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest, U
 {
     private readonly ILogger _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
-    public HttpProjectRequestHandler(ILogger logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+    private readonly ISolutionModelFactory _solutionModelFactory;
+    public HttpProjectRequestHandler(ILogger logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ISolutionModelFactory solutionModelFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _solutionModelFactory = solutionModelFactory ?? throw new ArgumentNullException(nameof(solutionModelFactory));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
     }
 
@@ -34,7 +35,7 @@ internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest, U
     {
         _logger.LogInformation($"Handled: {nameof(HttpProjectRequestHandler)}");
 
-        var model = new SolutionModelFactory().CreateHttpSolution(new CreateEndpointSolutionOptions
+        var model = _solutionModelFactory.CreateHttpSolution(new CreateEndpointSolutionOptions
         {
             Name = request.Name,
             Directory = request.Directory,

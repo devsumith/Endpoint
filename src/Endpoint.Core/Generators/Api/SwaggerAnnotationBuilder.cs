@@ -1,33 +1,31 @@
 ﻿using System.Collections.Generic;
 
-namespace Endpoint.Core.Builders
+namespace Endpoint.Core.Builders;
+
+public class SwaggerAnnotationBuilder
 {
-    public class SwaggerAnnotationBuilder
+    private int _indent = 0;
+    private string _summary;
+    private string _description;
+    public SwaggerAnnotationBuilder(string summary, string description, int indent = 0)
     {
-        private int _indent = 0;
-        private string _summary;
-        private string _description;
-        public SwaggerAnnotationBuilder(string summary, string description, int indent = 0)
+        _summary = summary;
+        _description = description;
+        _indent = indent;
+    }
+
+    public string[] Build()
+    {
+        var results = new List<string>
         {
-            _summary = summary;
-            _description = description;
-            _indent = indent;
-        }
+            "[SwaggerOperation(".Indent(_indent),
+            $"Summary = \"{_summary}\",".Indent(_indent + 1),
 
-        public string[] Build()
-        {
-            var results = new List<string>()
-            {
-                "[SwaggerOperation(".Indent(_indent)
-            };
+            $"Description = @\"{_description}\"".Indent(_indent + 1),
 
-            results.Add($"Summary = \"{_summary}\",".Indent(_indent + 1));
+            ")]".Indent(_indent)
+        };
 
-            results.Add($"Description = @\"{_description}\"".Indent(_indent + 1));
-
-            results.Add(")]".Indent(_indent));
-
-            return results.ToArray();
-        }
+        return results.ToArray();
     }
 }

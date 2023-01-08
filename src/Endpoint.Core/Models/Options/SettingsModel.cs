@@ -17,8 +17,8 @@ public class SettingsModel
     public WorkspaceType EndpointType { get; set; } = WorkspaceType.Minimal;
     public bool Minimal { get; set; } = false;
     public string Prefix { get; set; } = "app";
-    public IdFormat IdFormat { get; set; } = IdFormat.Long;
-    public IdDotNetType IdDotNetType { get; set; } = IdDotNetType.Guid;
+    public IdPropertyFormat IdFormat { get; set; } = IdPropertyFormat.Long;
+    public IdPropertyType IdDotNetType { get; set; } = IdPropertyType.Guid;
     public bool IsMicroserviceArchitecture { get; set; } = true;
     public List<string> Projects { get; set; } = new List<string>();
     public string RootDirectory { get; set; }
@@ -49,11 +49,11 @@ public class SettingsModel
     public List<AggregateRootModel> Resources { get; set; } = new List<AggregateRootModel>();
     public string Directory { get; set; }
     public List<string> Metadata { get; set; } = new List<string>();
-    public SettingsModel(string name, string dbContextName, AggregateRootModel resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid, string prefix = "app", bool minimal = false)
+    public SettingsModel(string name, string dbContextName, AggregateRootModel resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdPropertyFormat idFormat = IdPropertyFormat.Long, IdPropertyType idDotNetType = IdPropertyType.Guid, string prefix = "app", bool minimal = false)
         : this(name, dbContextName, new List<AggregateRootModel>() { resource }, directory, isMicroserviceArchitecture, plugins, idFormat, idDotNetType, prefix, minimal)
     { }
 
-    public SettingsModel(string name, string dbContextName, List<AggregateRootModel> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdFormat idFormat = IdFormat.Long, IdDotNetType idDotNetType = IdDotNetType.Guid, string prefix = "app", bool minimal = false)
+    public SettingsModel(string name, string dbContextName, List<AggregateRootModel> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdPropertyFormat idFormat = IdPropertyFormat.Long, IdPropertyType idDotNetType = IdPropertyType.Guid, string prefix = "app", bool minimal = false)
     {
         name = ((Token)name).PascalCase.Replace("-", "_");
         Plugins = plugins;
@@ -112,11 +112,11 @@ public class SettingsModel
     {
         var aggregate = new AggregateRootModel(resource);
 
-        aggregate.IdPropertyName = IdFormat == IdFormat.Short ? "Id" : $"{resource}Id";
+        aggregate.IdPropertyName = IdFormat == IdPropertyFormat.Short ? "Id" : $"{resource}Id";
 
-        aggregate.IdPropertyType = IdDotNetType == IdDotNetType.Int ? "int" : "Guid";
+        aggregate.IdPropertyType = IdDotNetType == IdPropertyType.Int ? "int" : "Guid";
 
-        aggregate.Properties.Add(new PropertyModel("public", aggregate.IdPropertyType, aggregate.IdPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
+        aggregate.Properties.Add(new PropertyModel(aggregate, "public", aggregate.IdPropertyType, aggregate.IdPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 
         if (!string.IsNullOrEmpty(properties))
         {
@@ -126,7 +126,7 @@ public class SettingsModel
 
                 if (nameValuePair.ElementAt(0) != aggregate.IdPropertyName)
                 {
-                    aggregate.Properties.Add(new PropertyModel("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
+                    aggregate.Properties.Add(new PropertyModel(aggregate, "public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
                 }
             }
         }

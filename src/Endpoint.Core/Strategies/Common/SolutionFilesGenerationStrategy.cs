@@ -35,7 +35,7 @@ namespace Endpoint.Core.Services
         {
             AggregateRootModel aggregateRoot = new AggregateRootModel(resource);
 
-            aggregateRoot.Properties.Add(new PropertyModel("public", "Guid", $"{((Token)resource).PascalCase}Id", PropertyAccessorModel.GetPrivateSet, key: true));
+            aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, "public", "Guid", $"{((Token)resource).PascalCase}Id", PropertyAccessorModel.GetPrivateSet, key: true));
 
             if (!string.IsNullOrWhiteSpace(properties))
             {
@@ -43,7 +43,7 @@ namespace Endpoint.Core.Services
                 {
                     var nameValuePair = property.Split(':');
 
-                    aggregateRoot.Properties.Add(new PropertyModel("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
+                    aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, "public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
                 }
             }
 
@@ -62,7 +62,7 @@ namespace Endpoint.Core.Services
 
                 var idDotNetType = useIntIdPropertyType ? "int" : "Guid";
 
-                aggregateRoot.Properties.Add(new PropertyModel("public", idDotNetType, idPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
+                aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, "public", idDotNetType, idPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 
                 if (!string.IsNullOrWhiteSpace(properties))
                 {
@@ -70,7 +70,7 @@ namespace Endpoint.Core.Services
                     {
                         var nameValuePair = property.Split(':');
 
-                        aggregateRoot.Properties.Add(new PropertyModel("public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
+                        aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, "public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
                     }
                 }
 
@@ -89,7 +89,7 @@ namespace Endpoint.Core.Services
 
             _fileSystem.CreateDirectory($"{directory}{Path.DirectorySeparatorChar}{name}");
 
-            var settings = new SettingsModel(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdFormat.Short: IdFormat.Long, useIntIdPropertyType ? IdDotNetType.Int : IdDotNetType.Guid, prefix);
+            var settings = new SettingsModel(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdPropertyFormat.Short: IdPropertyFormat.Long, useIntIdPropertyType ? IdPropertyType.Int : IdPropertyType.Guid, prefix);
 
             return Create(settings);
         }

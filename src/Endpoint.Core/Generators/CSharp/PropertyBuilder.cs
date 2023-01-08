@@ -73,7 +73,7 @@ namespace Endpoint.Core.Builders
                 .Append(_acessors)
                 .ToString();
 
-            if(settings != null && !string.IsNullOrEmpty(resourceName) && settings.IdDotNetType == IdDotNetType.Guid)
+            if(settings != null && !string.IsNullOrEmpty(resourceName) && settings.IdDotNetType == IdPropertyType.Guid)
             {
                 return $"{content}  = new {resourceName}Id(Guid.NewGuid());";
             }

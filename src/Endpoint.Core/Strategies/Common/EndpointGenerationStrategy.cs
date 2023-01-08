@@ -96,8 +96,8 @@ namespace Endpoint.Core.Services
                         request.Directory,
                         !request.Monolith.Value,
                         default,
-                        request.ShortIdPropertyName.Value ? IdFormat.Short : IdFormat.Long,
-                        request.NumericIdPropertyDataType.Value ? IdDotNetType.Int : IdDotNetType.Guid,
+                        request.ShortIdPropertyName.Value ? IdPropertyFormat.Short : IdPropertyFormat.Long,
+                        request.NumericIdPropertyDataType.Value ? IdPropertyType.Int : IdPropertyType.Guid,
                         default,
                         request.Minimal.Value);
 

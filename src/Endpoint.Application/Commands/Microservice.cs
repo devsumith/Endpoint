@@ -52,7 +52,7 @@ public class MicroserviceRequest : IRequest<Unit>
 
 public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, Unit>
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<MicroserviceRequestHandler> _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly ISolutionSettingsFileGenerationStrategyFactory _factory;
     private readonly IGitGenerationStrategyFactory _gitGenerationStrategyFactory;
@@ -60,8 +60,11 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
     private readonly ISolutionUpdateStrategyFactory _solutionUpdateStrategyFactory;
     private readonly IWorkspaceSettingsUpdateStrategyFactory _workspaceSettingsUpdateStrategyFactory;
     private readonly IFileSystem _fileSystem;
-    public MicroserviceRequestHandler(ILogger logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ISolutionSettingsFileGenerationStrategyFactory factory, IGitGenerationStrategyFactory gitGenerationStrategyFactory, IWorkspaceGenerationStrategyFactory workspaceGenerationStrategyFactory, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
+    private readonly ISolutionModelFactory _solutionModelFactory;
+
+    public MicroserviceRequestHandler(ISolutionModelFactory solutionModelFactory, ILogger<MicroserviceRequestHandler> logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ISolutionSettingsFileGenerationStrategyFactory factory, IGitGenerationStrategyFactory gitGenerationStrategyFactory, IWorkspaceGenerationStrategyFactory workspaceGenerationStrategyFactory, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
     {
+        _solutionModelFactory = solutionModelFactory;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _factory = factory ?? throw new ArgumentNullException(nameof(factory));
@@ -76,7 +79,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
     {
         if (IsExistingWorkspace(request.Directory))
         {
-            return new SolutionModelFactory().Minimal(new CreateEndpointSolutionOptions
+            return _solutionModelFactory.Minimal(new CreateEndpointSolutionOptions
             {
                 Name = createMicroserviceOptions.Name,
                 Directory = createMicroserviceOptions.Directory,
@@ -87,7 +90,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
             });
         }
 
-        return new SolutionModelFactory().Minimal(new CreateEndpointSolutionOptions
+        return _solutionModelFactory.Minimal(new CreateEndpointSolutionOptions
         {
             Name = createMicroserviceOptions.Name,
             Directory = $"{createMicroserviceOptions.Directory}",
@@ -117,11 +120,9 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
 
         (WorkspaceSettingsModel previousWorkspaceSettings, WorkspaceSettingsModel nextWorkspaceSettings) = CreateOrResolvePreviousAndNextWorkspaceSettings(resolveOrCreateWorkspaceOptions);
 
-        (SolutionModel previousWorkspaceSolutionModel, SolutionModel nextWorkspaceSolutionModel) = CreateOrResolvePreviousAndNextWorkspaceSolutions(resolveOrCreateWorkspaceOptions);
-
         SolutionModel solutionModel = request.TemplateType switch
         {
-            CleanArchitectureByJasonTalyor => new SolutionModelFactory().CleanArchitectureMicroservice(createMicroserviceOptions),
+            CleanArchitectureByJasonTalyor => _solutionModelFactory.CleanArchitectureMicroservice(createMicroserviceOptions),
             Minimal => CreateMinimalSolutionModel(createMicroserviceOptions, request),
             _ => throw new NotImplementedException()
         };
@@ -132,14 +133,9 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
 
         _factory.CreateFor(settings);
 
-        foreach (var project in solutionModel.Projects)
-        {
-            nextWorkspaceSolutionModel.Projects.Add(project);
-        }
 
         nextWorkspaceSettings.SolutionSettings.Add(settings);
 
-        _solutionUpdateStrategyFactory.UpdateFor(previousWorkspaceSolutionModel, nextWorkspaceSolutionModel);
 
         _workspaceSettingsUpdateStrategyFactory.UpdateFor(previousWorkspaceSettings, nextWorkspaceSettings);
 
@@ -152,20 +148,6 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
         return new();
     }
 
-    public Tuple<SolutionModel, SolutionModel> CreateOrResolvePreviousAndNextWorkspaceSolutions(ResolveOrCreateWorkspaceOptions resolveOrCreateWorkspaceOptions)
-    {
-
-        if (!_fileSystem.Exists($"{resolveOrCreateWorkspaceOptions.Directory}{Path.DirectorySeparatorChar}{resolveOrCreateWorkspaceOptions.Name}{Path.DirectorySeparatorChar}Workspace.sln"))
-        {
-            var newWorkspaceSolutionModel = new SolutionModelFactory().Workspace(resolveOrCreateWorkspaceOptions);
-
-            _artifactGenerationStrategyFactory.CreateFor(newWorkspaceSolutionModel);
-
-            return new(new SolutionModelFactory().Workspace(resolveOrCreateWorkspaceOptions), new SolutionModelFactory().Workspace(resolveOrCreateWorkspaceOptions));
-        }
-
-        return new(new SolutionModelFactory().Resolve(resolveOrCreateWorkspaceOptions), new SolutionModelFactory().Resolve(resolveOrCreateWorkspaceOptions));
-    }
 
     public Tuple<WorkspaceSettingsModel, WorkspaceSettingsModel> CreateOrResolvePreviousAndNextWorkspaceSettings(ResolveOrCreateWorkspaceOptions resolveOrCreateWorkspaceOptions)
     {

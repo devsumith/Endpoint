@@ -57,7 +57,7 @@ namespace Endpoint.Core.Services
             _createFolder(queriesDirectory, settings.ApplicationDirectory);
 
 
-            if(settings.IdDotNetType == IdDotNetType.Guid)
+            if(settings.IdDotNetType == IdPropertyType.Guid)
             {
                 new IdFileGenerationStrategy(_templateProcessor, _templateLocator, _fileSystem)
                     .Create(resourceName.Value, settings.ApplicationNamespace, aggregateDirectory);
@@ -70,7 +70,7 @@ namespace Endpoint.Core.Services
 
             foreach (var property in resource.Properties)
             {
-                if(property.Key)
+                if(property.Id)
                 {
                     var syntax = new PropertyBuilder().WithName(IdPropertyNameBuilder.Build(settings, resourceName)).WithType(IdDotNetTypeBuilder.Build(settings, resource.Name, true)).WithAccessors(new AccessorsBuilder().Build()).Build(settings, resourceName);
 
@@ -94,7 +94,7 @@ namespace Endpoint.Core.Services
 
             foreach (var property in resource.Properties)
             {
-                if (property.Key)
+                if (property.Id)
                 {
                     dtoBuilder.WithProperty(new PropertyBuilder().WithName(IdPropertyNameBuilder.Build(settings, resourceName)).WithType($"{IdDotNetTypeBuilder.Build(settings, resource.Name)}?").WithAccessors(new AccessorsBuilder().Build()).Build());
                 }
@@ -115,7 +115,7 @@ namespace Endpoint.Core.Services
 
             foreach (var property in resource.Properties)
             {
-                if(property.Key && settings.IdDotNetType == IdDotNetType.Guid)
+                if(property.Id && settings.IdDotNetType == IdPropertyType.Guid)
                 {
                     extensionsBody.Add($"{property.Name} = {((Token)resource.Name).CamelCase}.{((Token)property.Name).PascalCase}.Value,".Indent(1));
                 } else
@@ -261,7 +261,7 @@ namespace Endpoint.Core.Services
 
         private void _buildServiceCollectionExtensions(SettingsModel settings)
         {
-            var template = _templateLocator.Get(nameof(ServiceCollectionExtensionsBuilder));
+            var template = _templateLocator.Get("ConfigureValidationServices");
 
             var tokens = new TokensBuilder()
                 .With(nameof(settings.ApplicationNamespace), (Token)settings.ApplicationNamespace)

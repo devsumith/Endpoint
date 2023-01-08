@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using Endpoint.Core;
 using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Builders.Statements;
-using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 
 namespace Endpoint.Core.Builders
 {
@@ -80,7 +80,7 @@ namespace Endpoint.Core.Builders
                 .WithProperty(new PropertyBuilder().WithType($"{((Token)_entity).PascalCase}Dto").WithName($"{((Token)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var handlerBodyLine1 = _settings.IdDotNetType == IdDotNetType.Int
+            var handlerBodyLine1 = _settings.IdDotNetType == IdPropertyType.Int
                 ? $"var {((Token)_entity).CamelCase} = await _context.{((Token)_entity).PascalCasePlural}.FindAsync(request.{IdPropertyNameBuilder.Build(_settings, _entity)});"
                 : $"var {((Token)_entity).CamelCase} = await _context.{((Token)_entity).PascalCasePlural}.FindAsync(new {((Token)_entity).PascalCase}Id(request.{IdPropertyNameBuilder.Build(_settings, _entity)}));";
 

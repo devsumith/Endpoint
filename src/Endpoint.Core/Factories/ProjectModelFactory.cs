@@ -1,38 +1,44 @@
-﻿using Endpoint.Core.Models.Artifacts;
+﻿using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Options;
-using Octokit;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Endpoint.Core.Factories
 {
-    public static class ProjectModelFactory
+    public class ProjectModelFactory: IProjectModelFactory
     {
-        public static ProjectModel CreateHttpProject(string name, string directory)
+        private readonly IFileModelFactory _fileModelFactory;
+
+        public ProjectModelFactory(IFileModelFactory fileModelFactory)
+        {
+            _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        }
+
+        public ProjectModel CreateHttpProject(string name, string directory)
         {
             var model = new ProjectModel(DotNetProjectType.Console,name,directory);
 
-            model.Files.Add(FileModelFactory.CreateCSharp("EmptyProgram", "", "Program", model.Directory));
+            model.Files.Add(_fileModelFactory.CreateCSharp("EmptyProgram", "", "Program", model.Directory));
 
-            model.Files.Add(FileModelFactory.CreateCSharp("HttpClientExtensions","", "HttpClientExtensions", model.Directory));
+            model.Files.Add(_fileModelFactory.CreateCSharp("HttpClientExtensions","", "HttpClientExtensions", model.Directory));
 
-            model.Files.Add(FileModelFactory.CreateCSharp("HttpClientFactory", "", "HttpClientFactory", model.Directory));
+            model.Files.Add(_fileModelFactory.CreateCSharp("HttpClientFactory", "", "HttpClientFactory", model.Directory));
 
             return model;
         }
-        public static ProjectModel CreateMinimalApiProject(CreateMinimalApiProjectOptions options)
+        
+        public ProjectModel CreateMinimalApiProject(CreateMinimalApiProjectOptions options)
         {
             var projectModel = new ProjectModel(DotNetProjectType.MinimalWebApi, options.Name, options.Directory);
 
             projectModel.GenerateDocumentationFile = true;
 
-            projectModel.Files.Add(FileModelFactory.LaunchSettingsJson(projectModel.Directory,projectModel.Name, options.Port.Value));
+            projectModel.Files.Add(_fileModelFactory.LaunchSettingsJson(projectModel.Directory,projectModel.Name, options.Port.Value));
 
-            projectModel.Files.Add(FileModelFactory.AppSettings(projectModel.Directory, projectModel.Name, options.DbContextName));
+            projectModel.Files.Add(_fileModelFactory.AppSettings(projectModel.Directory, projectModel.Name, options.DbContextName));
 
-            projectModel.Files.Add(FileModelFactory.MinimalApiProgram(projectModel.Directory, options.Resource,options.Properties,options.ShortIdPropertyName.Value,options.NumericIdPropertyDataType.Value,options.DbContextName));
+            projectModel.Files.Add(_fileModelFactory.MinimalApiProgram(projectModel.Directory, options.Resource,options.Properties,options.DbContextName));
 
             projectModel.Packages.Add(new() { Name = "Microsoft.EntityFrameworkCore.InMemory", Version = "6.0.2" });
 
@@ -45,14 +51,14 @@ namespace Endpoint.Core.Factories
             return projectModel;
         }
 
-        public static ProjectModel CreateMinimalApiUnitTestsProject(string name, string directory, string resource)
+        public ProjectModel CreateMinimalApiUnitTestsProject(string name, string directory, string resource)
         {
             var model = new ProjectModel(DotNetProjectType.XUnit, $"{name}.Tests", directory);
 
             return model;
         }
 
-        public static ProjectModel CreateLibrary(string name, string parentDirectory, List<string>? additionalMetadata = null)
+        public ProjectModel CreateLibrary(string name, string parentDirectory, List<string>? additionalMetadata = null)
         {
             var project = new ProjectModel(name, parentDirectory);
 
@@ -89,8 +95,7 @@ namespace Endpoint.Core.Factories
             return project;
         }
 
-
-        public static ProjectModel CreateWebApi(string name, string parentDirectory, List<string>? additionalMetadata = null)
+        public ProjectModel CreateWebApi(string name, string parentDirectory, List<string>? additionalMetadata = null)
         {
             var project = new ProjectModel(name, parentDirectory)
             {
@@ -103,19 +108,36 @@ namespace Endpoint.Core.Factories
             return project;
         }
 
-        public static ProjectModel CreateTestingProject()
+        public ProjectModel CreateTestingProject()
         {
             throw new NotImplementedException();
         }
 
-        public static ProjectModel CreateUnitTestsProject()
+        public ProjectModel CreateUnitTestsProject()
         {
             throw new NotImplementedException();
         }
 
-        public static ProjectModel CreateIntegrationTestsProject()
+        public ProjectModel CreateIntegrationTestsProject()
         {
             throw new NotImplementedException();
         }
+    }
+
+    public interface IProjectModelFactory
+    {
+        ProjectModel CreateHttpProject(string name, string directory);
+
+        ProjectModel CreateMinimalApiProject(CreateMinimalApiProjectOptions options);
+
+        ProjectModel CreateMinimalApiUnitTestsProject(string name, string directory, string resource);
+        ProjectModel CreateLibrary(string name, string parentDirectory, List<string>? additionalMetadata = null);
+
+        ProjectModel CreateWebApi(string name, string parentDirectory, List<string>? additionalMetadata = null);
+
+        ProjectModel CreateTestingProject();
+        ProjectModel CreateUnitTestsProject();
+
+        ProjectModel CreateIntegrationTestsProject();
     }
 }

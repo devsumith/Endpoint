@@ -1,6 +1,6 @@
 ﻿namespace Endpoint.Core.Models.Syntax;
 
-public enum IdDotNetType
+public enum IdPropertyType
 {
     Guid,
     Int

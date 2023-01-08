@@ -14,12 +14,12 @@ namespace Endpoint.Core.Builders.Core
         {
             var aggregateName = aggregateRoot.Name;
 
-            var result = settings.IdDotNetType == IdDotNetType.Int
+            var result = settings.IdDotNetType == IdPropertyType.Int
                 ? new List<string>() { $"var {((Token)aggregateName).CamelCase} = await _context.{((Token)aggregateName).PascalCasePlural}.SingleAsync(x => x.{IdPropertyNameBuilder.Build(settings, aggregateName)} == request.{((Token)aggregateName).PascalCase}.{IdPropertyNameBuilder.Build(settings, aggregateName)});", "" }
                 : new List<string>() { $"var {((Token)aggregateName).CamelCase} = await _context.{((Token)aggregateName).PascalCasePlural}.SingleAsync(x => x.{IdPropertyNameBuilder.Build(settings, aggregateName)} == new {((Token)aggregateName).PascalCase}Id(request.{((Token)aggregateName).PascalCase}.{IdPropertyNameBuilder.Build(settings, aggregateName)}.Value));", "" };
 
 
-            foreach (var property in aggregateRoot.Properties.Where(x => x.Key == false))
+            foreach (var property in aggregateRoot.Properties.Where(x => x.Id == false))
             {
                 result.Add($"{((Token)aggregateName).CamelCase}.{((Token)property.Name).PascalCase} = request.{((Token)aggregateName).PascalCase}.{((Token)property.Name).PascalCase};");
             }
