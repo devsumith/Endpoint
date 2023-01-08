@@ -1,5 +1,8 @@
 ﻿using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Strategies.CSharp.Attributes;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using Xunit;
 
@@ -16,8 +19,15 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp
                 "    Description = \"Get Show By Id.\"",
                 ")]"
             };
+            var services = new ServiceCollection();
 
-            var sut = new SwaggerOperationAttributeGenerationStrategy();
+            services.AddLogging();
+
+            services.AddCoreServices();
+
+            var mockLogger = new Mock<ILogger<AttributeSyntaxGenerationStrategy>>().Object;
+
+            var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(), mockLogger);
 
             var model = new AttributeModel(AttributeType.SwaggerOperation, "SwaggerOperation", new()
             {

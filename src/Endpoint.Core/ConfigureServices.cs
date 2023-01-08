@@ -8,6 +8,7 @@ using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Git;
 using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Entities;
@@ -64,6 +65,7 @@ public static class ConfigureServices
         services.AddSingleton<ISolutionModelFactory, SolutionModelFactory>();
 
 
+        services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, MinimalApiEndpointGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, ProjectGenerationStrategy>();
@@ -90,8 +92,7 @@ public static class ConfigureServices
         services.AddSingleton<IWebGenerationStrategy, AngularProjectGenerationStrategy>();
 
         services.AddSingleton<IArtifactGenerationStrategyFactory, ArtifactGenerationStrategyFactory>();
-        services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileGenerationStrategy>();
-
+        
         services.AddSingleton<ISyntaxGenerationStrategyFactory, SyntaxGenerationStrategyFactory>();
         services.AddSingleton<ISyntaxGenerationStrategy, ClassSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, MethodSyntaxGenerationStrategy>();
@@ -105,6 +106,7 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerDeleteSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerGetSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerGetByIdSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, AttributeSyntaxGenerationStrategy>();
 
 
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerCreateSyntaxGenerationStrategy>();

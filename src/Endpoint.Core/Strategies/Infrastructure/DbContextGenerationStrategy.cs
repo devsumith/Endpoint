@@ -12,19 +12,20 @@ namespace Endpoint.Core.Strategies.Infrastructure
     {
         public string Create(DbContextModel model)
         {
-            var content = new List<string>();
+            var content = new List<string>
+            {
+                $"public class {((Token)model.Name).PascalCase} : DbContext",
 
-            content.Add($"public class {((Token)model.Name).PascalCase} : DbContext");
+                "{",
 
-            content.Add("{");
+                $"public {((Token)model.Name).PascalCase}(DbContextOptions<{((Token)model.Name).PascalCase}> options)".Indent(1),
 
-            content.Add($"public {((Token)model.Name).PascalCase}(DbContextOptions<{((Token)model.Name).PascalCase}> options)".Indent(1));
+                ": base(options) { }".Indent(2),
 
-            content.Add(": base(options) { }".Indent(2));
+                ""
+            };
 
-            content.Add("");
-
-            foreach(var aggregateRoot in model.Entities)
+            foreach (var aggregateRoot in model.Entities)
             {
                 content.Add($"public DbSet<{((Token)aggregateRoot.Name).PascalCase}> {((Token)aggregateRoot.Name).PascalCasePlural} => Set<{((Token)aggregateRoot.Name).PascalCase}>();".Indent(1));
             }

@@ -1,45 +1,41 @@
-﻿using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 
-namespace Endpoint.Core.Strategies.Files.Create;
+namespace Endpoint.Core.Models.Artifacts.Files;
 
-public class TemplatedFileGenerationStrategy : ArtifactGenerationStrategyBase<TemplatedFileModel>
+public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrategyBase<TemplatedFileModel>
 {
-    private readonly IFileSystem _fileSystem;
+    private readonly ILogger<TemplatedFileArtifactGenerationStrategy> _logger;
     private readonly ITemplateLocator _templateLocator;
+    private readonly IFileSystem _fileSystem;
     private readonly ITemplateProcessor _templateProcessor;
     private readonly ISolutionNamespaceProvider _solutionNamespaceProvider;
-    private readonly ILogger<TemplatedFileGenerationStrategy> _logger;
 
-    public TemplatedFileGenerationStrategy(
-        IFileSystem fileSystem,
-        ITemplateLocator templateLocator,
-        ITemplateProcessor templateProcessor,
-        ISolutionNamespaceProvider solutionNamespaceProvider,
+    public TemplatedFileArtifactGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<TemplatedFileGenerationStrategy> logger
-        ): base(serviceProvider)
+        ITemplateProcessor templateProcessor,
+        ITemplateLocator templateLocator,
+        IFileSystem fileSystem,
+        ISolutionNamespaceProvider solutionNamespaceProvider,
+        ILogger<TemplatedFileArtifactGenerationStrategy> logger) 
+        : base(serviceProvider)
     {
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _solutionNamespaceProvider = solutionNamespaceProvider ?? throw new ArgumentNullException(nameof(solutionNamespaceProvider));
     }
 
-    public int Order => 0;
-
     public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, TemplatedFileModel model, dynamic configuration = null)
     {
-        _logger.LogInformation($"Creating {model.Name} file at {model.Path}");
+        _logger.LogInformation("Generating artifact for {0}.", model);
 
         var template = _templateLocator.Get(model.Template);
 
         var tokens = new TokensBuilder()
-            .With("SolutionNamespace", (Token)_solutionNamespaceProvider.Get(model.Directory))
+            .With("SolutionNamespace", _solutionNamespaceProvider.Get(model.Directory))
             .Build();
 
         foreach (var token in tokens)
@@ -50,5 +46,6 @@ public class TemplatedFileGenerationStrategy : ArtifactGenerationStrategyBase<Te
         var result = _templateProcessor.Process(template, model.Tokens); ;
 
         _fileSystem.WriteAllText(model.Path, string.Join(Environment.NewLine, result));
+
     }
 }

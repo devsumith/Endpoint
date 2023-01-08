@@ -1,6 +1,5 @@
-﻿using Endpoint.Core.Models.Syntax.Attributes;
-using Endpoint.Core.Strategies.CSharp.Attributes;
-using System;
+﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,18 +7,26 @@ namespace Endpoint.Core.Strategies
 {
     public class AttributeGenerationStrategyGenerationFactory : IAttributeGenerationStrategyGenerationFactory
     {
-        private List<IAttributeGenerationStrategy> _strategies = new List<IAttributeGenerationStrategy>()
+        private readonly IEnumerable<ISyntaxGenerationStrategy> _strategies;
+
+        public AttributeGenerationStrategyGenerationFactory(IEnumerable<ISyntaxGenerationStrategy> strategies)
         {
-            new ApiControllerAttributeGenerationStrategy(),
-            new AuthorizeAttributeGenerationStrategy(),
-            new HttpAttributeGenerationStrategy(),
-            new ConsumesAttributeGenerationStrategy(),
-            new HttpAttributeGenerationStrategy(),
-            new ProducesAttributeGenerationStrategy(),
-            new ProducesResponseTypeAttributeGenerationStrategy(),
-            new RouteAttributeGenerationStrategy(),
-            new SwaggerOperationAttributeGenerationStrategy(),
-        };
+            _strategies = strategies;
+        }
+
+
+        /*        private List<IAttributeGenerationStrategy> _strategies = new List<ISyntaxGenerationStrategy>()
+                {
+                    new ApiControllerAttributeGenerationStrategy(),
+                    new AuthorizeAttributeGenerationStrategy(),
+                    new HttpAttributeGenerationStrategy(),
+                    new ConsumesAttributeGenerationStrategy(),
+                    new HttpAttributeGenerationStrategy(),
+                    new ProducesAttributeGenerationStrategy(),
+                    new ProducesResponseTypeAttributeGenerationStrategy(),
+                    new RouteAttributeGenerationStrategy(),
+                    new SwaggerOperationAttributeGenerationStrategy(),
+                };*/
 
         public string CreateFor(AttributeModel model)
         {

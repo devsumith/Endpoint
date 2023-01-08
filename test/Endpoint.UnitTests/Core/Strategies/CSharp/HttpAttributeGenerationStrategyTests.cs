@@ -1,5 +1,9 @@
-﻿using Endpoint.Core.Models.Syntax.Attributes;
+﻿using Castle.Core.Logging;
+using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Strategies.CSharp.Attributes;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using Xunit;
 
@@ -17,7 +21,15 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp
                 { "Name", "getCharacters" }
             });
 
-            var sut = new HttpAttributeGenerationStrategy();
+            var services = new ServiceCollection();
+
+            services.AddLogging();
+
+            services.AddCoreServices();
+
+            var mockLogger = new Mock<ILogger<AttributeSyntaxGenerationStrategy>>().Object;
+
+            var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(),mockLogger);
 
             var actual = sut.Create(model);
 

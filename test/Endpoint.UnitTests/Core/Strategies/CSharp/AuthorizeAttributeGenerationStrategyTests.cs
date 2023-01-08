@@ -1,4 +1,8 @@
-﻿using Endpoint.Core.Strategies.CSharp.Attributes;
+﻿using Endpoint.Core.Models.Syntax.Attributes;
+using Endpoint.Core.Strategies.CSharp.Attributes;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
 
 namespace Endpoint.UnitTests.Core.Strategies.CSharp
@@ -10,9 +14,17 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp
         {
             var expected = "[Authorize]";
 
-            var sut = new AuthorizeAttributeGenerationStrategy();
+            var services = new ServiceCollection();
 
-            var actual = sut.Create(default);
+            services.AddLogging();
+
+            services.AddCoreServices();
+
+            var mockLogger = new Mock<ILogger<AttributeSyntaxGenerationStrategy>>().Object;
+
+            var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(), mockLogger);
+
+            var actual = sut.Create(new AttributeModel(AttributeType.Authorize,"Authorize",new System.Collections.Generic.Dictionary<string, string>()));
 
             Assert.Equal(expected, actual);
         }

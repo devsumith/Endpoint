@@ -3,10 +3,10 @@ using Microsoft.Extensions.Logging;
 
 namespace {{ namespace }};
 
-public class {{ modelNamePascalCase }}GenerationStrategy : ArtifactGenerationStrategyBase<{{ modelNamePascalCase }}Model>
+public class {{ modelNamePascalCase }}ArtifactGenerationStrategy : ArtifactGenerationStrategyBase<{{ modelNamePascalCase }}Model>
 {
     private readonly ILogger<{{ modelNamePascalCase }}ArtifactGenerationStrategy> _logger;
-    public {{ modelNamePascalCase }}GenerationStrategy(
+    public {{ modelNamePascalCase }}ArtifactGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<{{ modelNamePascalCase }}ArtifactGenerationStrategy> logger) 
         : base(serviceProvider)

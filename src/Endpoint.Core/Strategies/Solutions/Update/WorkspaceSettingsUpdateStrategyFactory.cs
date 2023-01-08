@@ -1,39 +1,37 @@
 ﻿using Endpoint.Core.Models.Options;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Endpoint.Core.Strategies.WorkspaceSettingss.Update
+namespace Endpoint.Core.Strategies.WorkspaceSettingss.Update;
+
+public class WorkspaceSettingsUpdateStrategyFactory : IWorkspaceSettingsUpdateStrategyFactory
 {
-    public class WorkspaceSettingsUpdateStrategyFactory : IWorkspaceSettingsUpdateStrategyFactory
+    private readonly IEnumerable<IWorkspaceSettingsUpdateStrategy> _workspaceSettingsUpdateStrategies;
+
+    public WorkspaceSettingsUpdateStrategyFactory(IEnumerable<IWorkspaceSettingsUpdateStrategy> WorkspaceSettingsUpdateStrategies)
     {
-        private readonly IEnumerable<IWorkspaceSettingsUpdateStrategy> _workspaceSettingsUpdateStrategies;
+        _workspaceSettingsUpdateStrategies = WorkspaceSettingsUpdateStrategies;
+    }
 
-        public WorkspaceSettingsUpdateStrategyFactory(IEnumerable<IWorkspaceSettingsUpdateStrategy> WorkspaceSettingsUpdateStrategies)
+    public void UpdateFor(WorkspaceSettingsModel previous, WorkspaceSettingsModel next)
+    {
+        if (previous == null)
         {
-            _workspaceSettingsUpdateStrategies = WorkspaceSettingsUpdateStrategies;
+            throw new ArgumentNullException(nameof(previous));
         }
 
-        public void UpdateFor(WorkspaceSettingsModel previous, WorkspaceSettingsModel next)
+        if (next == null)
         {
-            if (previous == null)
-            {
-                throw new ArgumentNullException(nameof(previous));
-            }
-
-            if (next == null)
-            {
-                throw new ArgumentNullException(nameof(next));
-            }
-
-            var strategy = _workspaceSettingsUpdateStrategies.Where(x => x.CanHandle(previous, next)).OrderByDescending(x => x.Order).FirstOrDefault();
-
-            if (strategy == null)
-            {
-                throw new InvalidOperationException("Cannot find a strategy for generation for the type ");
-            }
-
-            strategy.Update(previous, next);
+            throw new ArgumentNullException(nameof(next));
         }
+
+        var strategy = _workspaceSettingsUpdateStrategies.Where(x => x.CanHandle(previous, next)).OrderByDescending(x => x.Order).FirstOrDefault();
+
+        if (strategy == null)
+        {
+            throw new InvalidOperationException("Cannot find a strategy for generation for the type ");
+        }
+
+        strategy.Update(previous, next);
     }
 }
