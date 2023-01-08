@@ -1,11 +1,10 @@
 using CommandLine;
+using Endpoint.Core.Strategies.Solutions.Crerate;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System;
-using Endpoint.Core.Factories;
-using Endpoint.Core.Strategies.Solutions.Crerate;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Endpoint.Application.Commands
 {

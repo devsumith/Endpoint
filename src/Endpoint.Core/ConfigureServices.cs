@@ -1,6 +1,5 @@
 ﻿using Endpoint.Core;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Factories;
 using Endpoint.Core.Models.Artifacts.ApiProjectModels;
 using Endpoint.Core.Models.Artifacts.Entities;
 using Endpoint.Core.Models.Artifacts.Files;
@@ -16,6 +15,7 @@ using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Properties;
+using Endpoint.Core.Models.Syntax.RequestHandlers;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
 using Endpoint.Core.Models.WebArtifacts;
 using Endpoint.Core.Services;
@@ -77,7 +77,6 @@ public static class ConfigureServices
         services.AddSingleton<ISolutionUpdateStrategy, SolutionUpdateStrategy>();
         services.AddSingleton<ISolutionUpdateStrategyFactory, SolutionUpdateStrategyFactory>();
 
-        services.AddSingleton<IWorkspaceSettingsGenerationStrategy, WorkspaceGenerationStrategy>();
         services.AddSingleton<IWorkspaceGenerationStrategyFactory, WorkspaceSettingsGenerationStrategyFactory>();
         services.AddSingleton<IWorkspaceSettingsUpdateStrategyFactory, WorkspaceSettingsUpdateStrategyFactory>();
         services.AddSingleton<IWorkspaceSettingsUpdateStrategy, WorkspaceSettingsUpdateStrategy>();
@@ -106,6 +105,13 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerDeleteSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerGetSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerGetByIdSyntaxGenerationStrategy>();
+
+
+        services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerCreateSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerDeleteSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerGetByIdSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerGetSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerSyntaxUpdateGenerationStrategy>();
 
         services.AddSingleton<IArtifactUpdateStrategyFactory, ArtifactUpdateStrategyFactory>();
 

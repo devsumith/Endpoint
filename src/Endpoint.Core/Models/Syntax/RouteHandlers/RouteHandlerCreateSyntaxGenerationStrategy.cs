@@ -17,7 +17,7 @@ public class RouteHandlerCreateSyntaxGenerationStrategy : SyntaxGenerationStrate
     }
 
     public override bool CanHandle(object model, dynamic configuration = null)
-        => model is RouteHandlerModel routeHandlerModel && routeHandlerModel.Type == RouteHandlerType.Create;
+        => model is RouteHandlerModel routeHandlerModel && routeHandlerModel.Type == RouteType.Create;
 
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, RouteHandlerModel model, dynamic configuration = null)
     {

@@ -14,7 +14,6 @@ namespace Endpoint.Core.Models.Options;
 public class SettingsModel
 {
     public bool IsRoot { get; set; } = true;
-    public WorkspaceType EndpointType { get; set; } = WorkspaceType.Minimal;
     public bool Minimal { get; set; } = false;
     public string Prefix { get; set; } = "app";
     public IdPropertyFormat IdFormat { get; set; } = IdPropertyFormat.Long;

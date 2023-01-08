@@ -19,7 +19,7 @@ public class RouteHandlerUpdateSyntaxGenerationStrategy : SyntaxGenerationStrate
     {
         if (model is RouteHandlerModel routeHandlerModel)
         {
-            return routeHandlerModel.Type == RouteHandlerType.Update;
+            return routeHandlerModel.Type == RouteType.Update;
         }
 
         return false;

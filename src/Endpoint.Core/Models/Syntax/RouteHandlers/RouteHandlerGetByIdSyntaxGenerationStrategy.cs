@@ -17,7 +17,7 @@ public class RouteHandlerGetByIdSyntaxGenerationStrategy : SyntaxGenerationStrat
     }
 
     public override bool CanHandle(object model, dynamic configuration = null)
-        => model is RouteHandlerModel routeHandlerModel && routeHandlerModel.Type == RouteHandlerType.GetById;
+        => model is RouteHandlerModel routeHandlerModel && routeHandlerModel.Type == RouteType.GetById;
 
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, RouteHandlerModel model, dynamic configuration = null)
     {

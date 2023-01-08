@@ -17,7 +17,7 @@ public class RouteHandlerModelFactory : IRouteHandlerModelFactory
             $"/{resourceNameToken.SnakeCasePlural}",
             dbContextName,
             aggregateRoot,
-            RouteHandlerType.Create
+            RouteType.Create
             ),
 
             new RouteHandlerModel(
@@ -25,7 +25,7 @@ public class RouteHandlerModelFactory : IRouteHandlerModelFactory
             $"/{resourceNameToken.SnakeCasePlural}",
             dbContextName,
             aggregateRoot,
-            RouteHandlerType.Get
+            RouteType.Get
             ),
 
             new RouteHandlerModel(
@@ -33,7 +33,7 @@ public class RouteHandlerModelFactory : IRouteHandlerModelFactory
             $"/{resourceNameToken.SnakeCasePlural}",
             dbContextName,
             aggregateRoot,
-            RouteHandlerType.GetById
+            RouteType.GetById
             ),
 
             new RouteHandlerModel(
@@ -41,7 +41,7 @@ public class RouteHandlerModelFactory : IRouteHandlerModelFactory
             $"/{resourceNameToken.SnakeCasePlural}",
             dbContextName,
             aggregateRoot,
-            RouteHandlerType.Update
+            RouteType.Update
             ),
 
             new RouteHandlerModel(
@@ -49,7 +49,7 @@ public class RouteHandlerModelFactory : IRouteHandlerModelFactory
             $"/{resourceNameToken.SnakeCasePlural}",
             dbContextName,
             aggregateRoot,
-            RouteHandlerType.Delete
+            RouteType.Delete
             )
         };
 

@@ -36,7 +36,7 @@ public class MinimalApiProgramModel
                 $"/{resourceNameToken.SnakeCasePlural}",
                 dbContextName,
                 entity,
-                RouteHandlerType.Create
+                RouteType.Create
                 ));
 
             RouteHandlers.Add(new RouteHandlerModel(
@@ -44,7 +44,7 @@ public class MinimalApiProgramModel
                 $"/{resourceNameToken.SnakeCasePlural}",
                 dbContextName,
                 entity,
-                RouteHandlerType.Get
+                RouteType.Get
                 ));
 
             RouteHandlers.Add(new RouteHandlerModel(
@@ -52,7 +52,7 @@ public class MinimalApiProgramModel
                 $"/{resourceNameToken.SnakeCasePlural}",
                 dbContextName,
                 entity,
-                RouteHandlerType.GetById
+                RouteType.GetById
                 ));
 
             RouteHandlers.Add(new RouteHandlerModel(
@@ -60,7 +60,7 @@ public class MinimalApiProgramModel
                 $"/{resourceNameToken.SnakeCasePlural}",
                 dbContextName,
                 entity,
-                RouteHandlerType.Update
+                RouteType.Update
                 ));
 
             RouteHandlers.Add(new RouteHandlerModel(
@@ -68,7 +68,7 @@ public class MinimalApiProgramModel
                 $"/{resourceNameToken.SnakeCasePlural}",
                 dbContextName,
                 entity,
-                RouteHandlerType.Delete
+                RouteType.Delete
                 ));
         }
     }

@@ -1,5 +1,4 @@
-﻿using Endpoint.Core.Factories;
-using Endpoint.Core.Models.Artifacts.Projects;
+﻿using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Options;
 using System.IO;
 

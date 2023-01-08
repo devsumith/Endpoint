@@ -17,7 +17,7 @@ public class RouteHandlerDeleteSyntaxGenerationStrategy : SyntaxGenerationStrate
     }
 
     public override bool CanHandle(object model, dynamic configuration = null)
-        => model is RouteHandlerModel routeHandlerModel && routeHandlerModel.Type == RouteHandlerType.Delete;
+        => model is RouteHandlerModel routeHandlerModel && routeHandlerModel.Type == RouteType.Delete;
 
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, RouteHandlerModel model, dynamic configuration = null)
     {

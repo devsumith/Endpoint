@@ -1,6 +1,4 @@
-﻿using Endpoint.Core.Events;
-using Endpoint.Core.Models;
-using Endpoint.Core.Models.Artifacts.ApiProjectModels;
+﻿using Endpoint.Core.Models.Artifacts.ApiProjectModels;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities;
@@ -70,8 +68,6 @@ namespace Endpoint.Core.Services
 
                     _apiProjectFilesGenerationStrategy.Build(settings);
 
-                    _mediator.Publish(new SolutionTemplateGenerated(settings.RootDirectory));
-
                     _commandService.Start($"start {settings.SolutionFileName}", settings.RootDirectory);
 
                     return;
@@ -111,7 +107,6 @@ namespace Endpoint.Core.Services
 
             _apiProjectFilesGenerationStrategy.Build(model);
 
-            _mediator.Publish(new SolutionTemplateGenerated(model.RootDirectory));
 
             _commandService.Start($"start {model.SolutionFileName}", model.RootDirectory);
 

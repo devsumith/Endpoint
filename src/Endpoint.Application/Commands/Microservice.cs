@@ -1,23 +1,22 @@
 using CommandLine;
-using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using System;
-using Endpoint.Core.Factories;
-using Nelibur.ObjectMapper;
-using Endpoint.Core.Options;
 using Endpoint.Core;
+using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts.Solutions;
+using Endpoint.Core.Models.Git;
+using Endpoint.Core.Models.Options;
+using Endpoint.Core.Options;
+using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Solutions.Crerate;
 using Endpoint.Core.Strategies.Solutions.Update;
-using Endpoint.Core.Services;
-using System.IO;
 using Endpoint.Core.Strategies.WorkspaceSettingss.Update;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using Nelibur.ObjectMapper;
+using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using static Endpoint.Core.CoreConstants.SolutionTemplates;
-using Endpoint.Core.Models.Options;
-using Endpoint.Core.Models.Git;
-using Endpoint.Core.Models.Artifacts.Solutions;
-using Endpoint.Core.Abstractions;
 
 namespace Endpoint.Application.Commands;
 
@@ -129,12 +128,12 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
 
         _artifactGenerationStrategyFactory.CreateFor(solutionModel);
 
-        var settings = SolutionSettingsModelFactory.Create(createMicroserviceOptions);
+        
 
-        _factory.CreateFor(settings);
+        _factory.CreateFor(default);
 
 
-        nextWorkspaceSettings.SolutionSettings.Add(settings);
+        nextWorkspaceSettings.SolutionSettings.Add(default);
 
 
         _workspaceSettingsUpdateStrategyFactory.UpdateFor(previousWorkspaceSettings, nextWorkspaceSettings);
@@ -152,14 +151,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
     public Tuple<WorkspaceSettingsModel, WorkspaceSettingsModel> CreateOrResolvePreviousAndNextWorkspaceSettings(ResolveOrCreateWorkspaceOptions resolveOrCreateWorkspaceOptions)
     {
 
-        if (!_fileSystem.Exists($"{resolveOrCreateWorkspaceOptions.Directory}{Path.DirectorySeparatorChar}{resolveOrCreateWorkspaceOptions.Name}{Path.DirectorySeparatorChar}Workspace.json"))
-        {
-            _workspaceSettingsGenerationStrategyFactory.CreateFor(WorkspaceSettingsModelFactory.Create(resolveOrCreateWorkspaceOptions));
-
-            return new(WorkspaceSettingsModelFactory.Create(resolveOrCreateWorkspaceOptions), WorkspaceSettingsModelFactory.Create(resolveOrCreateWorkspaceOptions));
-        }
-
-        return new(WorkspaceSettingsModelFactory.Resolve(resolveOrCreateWorkspaceOptions), WorkspaceSettingsModelFactory.Resolve(resolveOrCreateWorkspaceOptions));
+        throw new NotImplementedException();
     }
 
     public bool IsExistingWorkspace(string directory) => _fileSystem.Exists($"{directory}{Path.DirectorySeparatorChar}Workspace.json");

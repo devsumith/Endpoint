@@ -32,7 +32,7 @@ public class RouteHandlerSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
 
         var dbContextNameToken = (Token)model.DbContextName;
 
-        if (model.Type == RouteHandlerType.Create)
+        if (model.Type == RouteType.Create)
         {
             content.Add($"app.MapPost(\"/{resourceNameToken.SnakeCasePlural}\", async ({resourceNameToken.PascalCase} {resourceNameToken.CamelCase}, {dbContextNameToken.PascalCase} context) =>");
             content.Add("{".Indent(1));
@@ -47,14 +47,14 @@ public class RouteHandlerSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
             return string.Join(Environment.NewLine, content);
         }
 
-        if (model.Type == RouteHandlerType.Get)
+        if (model.Type == RouteType.Get)
         {
             content.Add($"app.MapGet(\"/{resourceNameToken.SnakeCasePlural}\", async ({dbContextNameToken.PascalCase} context) =>");
             content.Add($"await context.{resourceNameToken.PascalCasePlural}.ToListAsync())".Indent(1));
             content.Add($".WithName(\"GetAll{resourceNameToken.PascalCasePlural}\");".Indent(1));
         }
 
-        if (model.Type == RouteHandlerType.GetById)
+        if (model.Type == RouteType.GetById)
         {
             content.Add($"app.MapGet(\"/{resourceNameToken.SnakeCasePlural}/" + "{" + "id" + "}" + $"\", async ({idPropertyType} id, {dbContextNameToken.PascalCase} context) =>");
             content.Add($"await context.{resourceNameToken.PascalCasePlural}.FindAsync(id)".Indent(1));
@@ -67,7 +67,7 @@ public class RouteHandlerSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
         }
 
 
-        if (model.Type == RouteHandlerType.Update)
+        if (model.Type == RouteType.Update)
         {
             content.Add($"app.MapPut(\"/{resourceNameToken.SnakeCasePlural}/" + "{" + "id" + "}" + $"\", async ({idPropertyType} id, {resourceNameToken.PascalCase} input{resourceNameToken.PascalCase}, {dbContextNameToken.PascalCase} context) =>");
             content.Add("{".Indent(1));
@@ -96,7 +96,7 @@ public class RouteHandlerSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
         }
 
 
-        if (model.Type == RouteHandlerType.Delete)
+        if (model.Type == RouteType.Delete)
         {
             content.Add($"app.MapDelete(\"/{resourceNameToken.SnakeCasePlural}/" + "{" + "id" + "}" + $"\", async ({idPropertyType} id, {dbContextNameToken.PascalCase} context) =>");
             content.Add("{".Indent(1));
