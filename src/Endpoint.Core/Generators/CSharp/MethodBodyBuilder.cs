@@ -16,21 +16,21 @@ namespace Endpoint.Core.Builders
         private StringBuilder _string;
         private int _indent;
         private int _tab = 4;
-        private EndpointType? _endpointType;
+        private RouteType? _routeType;
         private string _resource;
         private SettingsModel _settings;
-        public MethodBodyBuilder(SettingsModel  settings,EndpointType? endpointType = null, int indent = 0, string resource = null)
+        public MethodBodyBuilder(SettingsModel  settings, RouteType? routeType = null, int indent = 0, string resource = null)
         {
             _string = new StringBuilder();
             _indent = indent;
-            _endpointType = endpointType;
+            _routeType = routeType;
             _resource = resource;
             _settings = settings;
         }
 
         public string[] Build()
         {
-            var logStatementBuilder = new LogStatementBuilder(_settings, _resource, _endpointType, _indent + 1);
+            var logStatementBuilder = new LogStatementBuilder(_settings, _resource, _routeType, _indent + 1);
 
             var logStatement = logStatementBuilder.Build();
 
@@ -40,21 +40,21 @@ namespace Endpoint.Core.Builders
             };
 
 
-            switch (_endpointType)
+            switch (_routeType)
             {
-                case EndpointType.GetById:
+                case RouteType.GetById:
                     body.AddRange(BuildGetByIdEndpointBody(_resource));
                     break;
 
-                case EndpointType.Get:
+                case RouteType.Get:
                     body.AddRange(BuildGetEndpointBody(_resource));
                     break;
 
-                case EndpointType.Page:
+                case RouteType.Page:
                     body.AddRange(BuildPageEndpointBody(_resource));
                     break;
 
-                case EndpointType.Delete:
+                case RouteType.Delete:
                     body.AddRange(BuildDeleteEndpointBody(_resource));
                     break;
 
@@ -128,7 +128,7 @@ namespace Endpoint.Core.Builders
 
             result.Add("");
 
-            result.AddRange(new LogStatementBuilder(_settings, resource, EndpointType.Delete, _indent + 1).Build());
+            result.AddRange(new LogStatementBuilder(_settings, resource, RouteType.Delete, _indent + 1).Build());
 
             result.Add("");
 

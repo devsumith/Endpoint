@@ -18,7 +18,7 @@ namespace Endpoint.Core.Builders
         private List<string> _attributes;
         public List<string> _body;
         private bool _authorize;
-        private EndpointType _endpointType;
+        private RouteType _routeType;
         private string _resource;
         private bool _static;
         private string _name;
@@ -109,9 +109,9 @@ namespace Endpoint.Core.Builders
             return this;
         }
 
-        public MethodBuilder WithEndpointType(EndpointType endpointType)
+        public MethodBuilder WithEndpointType(RouteType routeType)
         {
-            _endpointType = endpointType;
+            _routeType = routeType;
             return this;
         }
 
@@ -135,44 +135,44 @@ namespace Endpoint.Core.Builders
         }
         public string[] Build()
         {
-            if (_endpointType != default)
+            if (_routeType != default)
             {
-                var requestType = _endpointType switch
+                var requestType = _routeType switch
                 {
-                    EndpointType.Create => $"Create{((Token)_resource).PascalCase}",
-                    EndpointType.Delete => $"Remove{((Token)_resource).PascalCase}",
-                    EndpointType.Get => $"Get{((Token)_resource).PascalCasePlural}",
-                    EndpointType.GetById => $"Get{((Token)_resource).PascalCase}ById",
-                    EndpointType.Update => $"Update{((Token)_resource).PascalCase}",
-                    EndpointType.Page => $"Get{((Token)_resource).PascalCasePlural}Page",
+                    RouteType.Create => $"Create{((Token)_resource).PascalCase}",
+                    RouteType.Delete => $"Remove{((Token)_resource).PascalCase}",
+                    RouteType.Get => $"Get{((Token)_resource).PascalCasePlural}",
+                    RouteType.GetById => $"Get{((Token)_resource).PascalCase}ById",
+                    RouteType.Update => $"Update{((Token)_resource).PascalCase}",
+                    RouteType.Page => $"Get{((Token)_resource).PascalCasePlural}Page",
                     _ => throw new System.NotImplementedException()
                 };
 
-                _contents = GenericAttributeGenerationStrategy.EndpointAttributes(_settings, _endpointType, _resource, _authorize).ToList();
+                _contents = GenericAttributeGenerationStrategy.EndpointAttributes(_settings, _routeType, _resource, _authorize).ToList();
 
                 var methodBuilder = new MethodSignatureBuilder()
-                    .WithEndpointType(_endpointType)
+                    .WithEndpointType(_routeType)
                     .WithAsync(true)
                     .WithReturnType(TypeBuilder.WithActionResult($"{requestType}Response"));
 
-                if (_endpointType == EndpointType.GetById || _endpointType == EndpointType.Delete)
+                if (_routeType == RouteType.GetById || _routeType == RouteType.Delete)
                 {
                     methodBuilder.WithParameter(new ParameterBuilder(IdDotNetTypeBuilder.Build(_settings, _resource), ((Token)$"{IdPropertyNameBuilder.Build(_settings,_resource)}").CamelCase).WithFrom(From.Route).Build());
                 }
 
-                if (_endpointType == EndpointType.Page)
+                if (_routeType == RouteType.Page)
                 {
                     methodBuilder.WithParameter(new ParameterBuilder("int", "pageSize").WithFrom(From.Route).Build());
 
                     methodBuilder.WithParameter(new ParameterBuilder("int", "index").WithFrom(From.Route).Build());
                 }
 
-                if (_endpointType == EndpointType.Update)
+                if (_routeType == RouteType.Update)
                 {
                     methodBuilder.WithParameter(new ParameterBuilder($"{requestType}Request", "request").WithFrom(From.Body).Build());
                 }
 
-                if (_endpointType == EndpointType.Create)
+                if (_routeType == RouteType.Create)
                 {
                     methodBuilder.WithParameter(new ParameterBuilder($"{requestType}Request", "request").WithFrom(From.Body).Build());
                 }
@@ -181,7 +181,7 @@ namespace Endpoint.Core.Builders
 
                 _contents.Add(methodBuilder.Build());
 
-                _contents = _contents.Concat(new MethodBodyBuilder(_settings, _endpointType, _indent, _resource).Build()).ToList();
+                _contents = _contents.Concat(new MethodBodyBuilder(_settings, _routeType, _indent, _resource).Build()).ToList();
 
                 return _contents.ToArray();
             }

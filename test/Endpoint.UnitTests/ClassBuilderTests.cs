@@ -71,7 +71,7 @@ namespace Endpoint.UnitTests
                 .WithAttribute(new GenericAttributeGenerationStrategy().WithName("ApiController").Build())
                 .WithAttribute(new GenericAttributeGenerationStrategy().WithName("Route").WithParam("\"api/[controller]\"").Build())
                 .WithDependency("IMediator", "mediator")
-                .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.GetById).WithResource("Customer").WithAuthorize(false).Build())
+                .WithMethod(new MethodBuilder().WithEndpointType(RouteType.GetById).WithResource("Customer").WithAuthorize(false).Build())
                 .Build();
 
             var actual = context.ElementAt(0).Value;

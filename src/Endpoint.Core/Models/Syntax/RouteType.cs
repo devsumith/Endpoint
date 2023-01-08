@@ -6,5 +6,6 @@ public enum RouteType
     Create,
     Get,
     GetById,
-    Delete
+    Delete,
+    Page
 }

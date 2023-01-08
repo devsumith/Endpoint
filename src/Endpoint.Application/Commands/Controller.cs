@@ -47,12 +47,12 @@ public class ControllerCreateRequestHandler : IRequestHandler<ControllerCreateRe
             .WithAttribute(new GenericAttributeGenerationStrategy().WithName("ApiController").Build())
             .WithAttribute(new GenericAttributeGenerationStrategy().WithName("Route").WithParam("\"api/[controller]\"").Build())
             .WithDependency("IMediator", "mediator")
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.GetById).WithResource(request.Entity).WithAuthorize(false).Build())
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Get).WithResource(request.Entity).WithAuthorize(false).Build())
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Create).WithResource(request.Entity).WithAuthorize(false).Build())
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Page).WithResource(request.Entity).WithAuthorize(false).Build())
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Update).WithResource(request.Entity).WithAuthorize(false).Build())
-            .WithMethod(new MethodBuilder().WithEndpointType(EndpointType.Delete).WithResource(request.Entity).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithEndpointType(RouteType.GetById).WithResource(request.Entity).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithEndpointType(RouteType.Get).WithResource(request.Entity).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithEndpointType(RouteType.Create).WithResource(request.Entity).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithEndpointType(RouteType.Page).WithResource(request.Entity).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithEndpointType(RouteType.Update).WithResource(request.Entity).WithAuthorize(false).Build())
+            .WithMethod(new MethodBuilder().WithEndpointType(RouteType.Delete).WithResource(request.Entity).WithAuthorize(false).Build())
             .Build();
 
         return Task.FromResult(new Unit());

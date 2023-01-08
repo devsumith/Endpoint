@@ -97,18 +97,18 @@ namespace Endpoint.Core.Builders
             }).Build();
         }
 
-        public static string[] EndpointAttributes(SettingsModel settings, EndpointType endpointType, string resource, bool authorize = false, int indent = 0)
+        public static string[] EndpointAttributes(SettingsModel settings, RouteType routeType, string resource, bool authorize = false, int indent = 0)
         {
             var attributes = new List<string>();
 
-            var requestType = endpointType switch
+            var requestType = routeType switch
             {
-                EndpointType.Create => $"Create{((Token)resource).PascalCase}",
-                EndpointType.Delete => $"Remove{((Token)resource).PascalCase}",
-                EndpointType.Get => $"Get{((Token)resource).PascalCasePlural}",
-                EndpointType.GetById => $"Get{((Token)resource).PascalCase}ById",
-                EndpointType.Update => $"Update{((Token)resource).PascalCase}",
-                EndpointType.Page => $"Get{((Token)resource).PascalCasePlural}Page",
+                RouteType.Create => $"Create{((Token)resource).PascalCase}",
+                RouteType.Delete => $"Remove{((Token)resource).PascalCase}",
+                RouteType.Get => $"Get{((Token)resource).PascalCasePlural}",
+                RouteType.GetById => $"Get{((Token)resource).PascalCase}ById",
+                RouteType.Update => $"Update{((Token)resource).PascalCase}",
+                RouteType.Page => $"Get{((Token)resource).PascalCasePlural}Page",
                 _ => throw new System.NotImplementedException()
             };
 
@@ -117,38 +117,38 @@ namespace Endpoint.Core.Builders
                 attributes.Add(new GenericAttributeGenerationStrategy().WithName("Authorize").WithIndent(indent).Build());
             }
 
-            if (endpointType == EndpointType.GetById)
+            if (routeType == RouteType.GetById)
             {
                 attributes.AddRange(new SwaggerAnnotationBuilder($"Get {((Token)resource).PascalCase} by id.", $"Get {((Token)resource).PascalCase} by id.", indent).Build());
                 attributes.Add(WithHttp(HttpVerbs.Get, HttpAttributeIdTemplateBuilder.Build(settings,resource), $"{((Token)requestType).CamelCase}", indent));
                 attributes.Add(WithProducesResponseType(HttpStatusCode.NotFound, "string", indent: indent));
             }
 
-            if (endpointType == EndpointType.Delete)
+            if (routeType == RouteType.Delete)
             {
                 attributes.AddRange(new SwaggerAnnotationBuilder($"Delete {((Token)resource).PascalCase}.", $"Delete {((Token)resource).PascalCase}.", indent).Build());
                 attributes.Add(WithHttp(HttpVerbs.Delete, HttpAttributeIdTemplateBuilder.Build(settings, resource), $"{((Token)requestType).CamelCase}", indent));
             }
 
-            if (endpointType == EndpointType.Get)
+            if (routeType == RouteType.Get)
             {
                 attributes.AddRange(new SwaggerAnnotationBuilder($"Get {((Token)resource).PascalCasePlural}.", $"Get {((Token)resource).PascalCasePlural}.", indent).Build());
                 attributes.Add(WithHttp(HttpVerbs.Get, routeName: $"{((Token)requestType).CamelCase}", indent: indent));
             }
 
-            if (endpointType == EndpointType.Create)
+            if (routeType == RouteType.Create)
             {
                 attributes.AddRange(new SwaggerAnnotationBuilder($"Create {((Token)resource).PascalCase}.", $"Create {((Token)resource).PascalCase}.", indent).Build());
                 attributes.Add(WithHttp(HttpVerbs.Post, routeName: $"{((Token)requestType).CamelCase}", indent: indent));
             }
 
-            if (endpointType == EndpointType.Update)
+            if (routeType == RouteType.Update)
             {
                 attributes.AddRange(new SwaggerAnnotationBuilder($"Update {((Token)resource).PascalCase}.", $"Update {((Token)resource).PascalCase}.", indent).Build());
                 attributes.Add(WithHttp(HttpVerbs.Put, routeName: $"{((Token)requestType).CamelCase}", indent: indent));
             }
 
-            if (endpointType == EndpointType.Page)
+            if (routeType == RouteType.Page)
             {
                 attributes.AddRange(new SwaggerAnnotationBuilder($"Get {((Token)resource).PascalCase} Page.", $"Get {((Token)resource).PascalCase} Page.", indent).Build());
                 attributes.Add(WithHttp(HttpVerbs.Get, "page/{pageSize}/{index}", $"{((Token)requestType).CamelCase}", indent));

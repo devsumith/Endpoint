@@ -84,16 +84,16 @@ namespace Endpoint.Core.Builders
             return this;
         }
 
-        public MethodSignatureBuilder WithEndpointType(EndpointType endpointType)
+        public MethodSignatureBuilder WithEndpointType(RouteType routeType)
         {
-            _methodName = endpointType switch
+            _methodName = routeType switch
             {
-                EndpointType.GetById => "GetById",
-                EndpointType.Get => "Get",
-                EndpointType.Create => "Create",
-                EndpointType.Page => "Page",
-                EndpointType.Update => "Update",
-                EndpointType.Delete => "Remove",
+                RouteType.GetById => "GetById",
+                RouteType.Get => "Get",
+                RouteType.Create => "Create",
+                RouteType.Page => "Page",
+                RouteType.Update => "Update",
+                RouteType.Delete => "Remove",
                 _ => throw new System.NotImplementedException()
             };
 

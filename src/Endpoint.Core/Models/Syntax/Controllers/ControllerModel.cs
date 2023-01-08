@@ -36,12 +36,12 @@ public class ControllerGenerationStrategy: SyntaxGenerationStrategyBase<Controll
         .WithAttribute(new GenericAttributeGenerationStrategy().WithName("Consumes").WithParam("MediaTypeNames.Application.Json").Build())
         .WithDependency("IMediator", "mediator")
         .WithDependency($"ILogger<{((Token)model).PascalCase}Controller>", "logger")
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.GetById).WithResource(model).WithAuthorize(false).Build())
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.Get).WithResource(model).WithAuthorize(false).Build())
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.Create).WithResource(model).WithAuthorize(false).Build())
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.Page).WithResource(model).WithAuthorize(false).Build())
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.Update).WithResource(model).WithAuthorize(false).Build())
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(EndpointType.Delete).WithResource(model).WithAuthorize(false).Build())
+        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.GetById).WithResource(model).WithAuthorize(false).Build())
+        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Get).WithResource(model).WithAuthorize(false).Build())
+        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Create).WithResource(model).WithAuthorize(false).Build())
+        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Page).WithResource(model).WithAuthorize(false).Build())
+        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Update).WithResource(model).WithAuthorize(false).Build())
+        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Delete).WithResource(model).WithAuthorize(false).Build())
         .Build();
 */
         return "";

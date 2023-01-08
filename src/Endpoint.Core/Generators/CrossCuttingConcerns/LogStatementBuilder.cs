@@ -11,14 +11,14 @@ namespace Endpoint.Core.Builders
 
         private int _indent;
         private string _resource;
-        private EndpointType _endpointType;
+        private RouteType _routeType;
         private SettingsModel _settings;
 
-        public LogStatementBuilder(SettingsModel settings, string resource, EndpointType? endpointType = EndpointType.Create, int indent = 0)
+        public LogStatementBuilder(SettingsModel settings, string resource, RouteType? routeType = RouteType.Create, int indent = 0)
         {
             _indent = indent;
             _resource = resource ?? throw new System.ArgumentNullException(nameof(resource));
-            _endpointType = endpointType ?? throw new System.ArgumentNullException(nameof(endpointType));
+            _routeType = routeType ?? throw new System.ArgumentNullException(nameof(routeType));
             _settings = settings ?? throw new System.ArgumentNullException(nameof(settings));
         }
 
@@ -55,17 +55,17 @@ namespace Endpoint.Core.Builders
 
         public string[] Build()
         {
-            switch (_endpointType)
+            switch (_routeType)
             {
-                case EndpointType.Create:
+                case RouteType.Create:
                     return BuildForCreateCommand();
 
 
-                case EndpointType.Update:
+                case RouteType.Update:
                     return BuildForUpdateCommand();
 
 
-                case EndpointType.Delete:
+                case RouteType.Delete:
                     return BuildForDeleteCommand();
             }
 

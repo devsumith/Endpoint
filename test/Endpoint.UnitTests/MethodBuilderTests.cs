@@ -23,7 +23,7 @@ namespace Endpoint.UnitTests
             var expected = "        public void Get()";
 
             var actual = new MethodSignatureBuilder()
-                .WithEndpointType(EndpointType.Get)
+                .WithEndpointType(RouteType.Get)
                 .WithIndent(2)
                 .Build();
 
@@ -36,7 +36,7 @@ namespace Endpoint.UnitTests
             var expected = "        public async Task Get()";
 
             var actual = new MethodSignatureBuilder()
-                .WithEndpointType(EndpointType.Get)
+                .WithEndpointType(RouteType.Get)
                 .WithAsync(true)
                 .WithReturnType("Task")
                 .WithIndent(2)
@@ -51,7 +51,7 @@ namespace Endpoint.UnitTests
             var expected = "public async Task Create([FromBody]CreateCustomer.Request request)";
 
             var actual = new MethodSignatureBuilder()
-                .WithEndpointType(EndpointType.Create)
+                .WithEndpointType(RouteType.Create)
                 .WithParameter("[FromBody]CreateCustomer.Request request")
                 .WithAsync(true)
                 .WithReturnType("Task")
@@ -66,7 +66,7 @@ namespace Endpoint.UnitTests
             var expected = "        public async Task<ActionResult<GetCustomerById.Response>> GetById([FromRoute]GetCustomerById.Request request)";
 
             var actual = new MethodSignatureBuilder()
-                .WithEndpointType(EndpointType.GetById)
+                .WithEndpointType(RouteType.GetById)
                 .WithParameter(new ParameterBuilder("GetCustomerById.Request", "request").WithFrom(From.Route).Build())
                 .WithAsync(true)
                 .WithReturnType(TypeBuilder.WithActionResult("GetCustomerById.Response"))
@@ -102,7 +102,7 @@ namespace Endpoint.UnitTests
             Setup();
 
             var actual = new MethodBuilder()
-                .WithEndpointType(EndpointType.GetById)
+                .WithEndpointType(RouteType.GetById)
                 .WithResource("Customer")
                 .WithAuthorize(true)
                 .WithIndent(2)
@@ -127,7 +127,7 @@ namespace Endpoint.UnitTests
             Setup();
 
             var actual = new MethodBuilder()
-                .WithEndpointType(EndpointType.Get)
+                .WithEndpointType(RouteType.Get)
                 .WithResource("Customer")
                 .WithAuthorize(false)
                 .Build();
@@ -151,7 +151,7 @@ namespace Endpoint.UnitTests
             Setup();
 
             var actual = new MethodBuilder()
-                .WithEndpointType(EndpointType.Create)
+                .WithEndpointType(RouteType.Create)
                 .WithResource("Customer")
                 .WithAuthorize(false)
                 .Build();
@@ -180,7 +180,7 @@ namespace Endpoint.UnitTests
             Setup();
 
             var actual = new MethodBuilder()
-                .WithEndpointType(EndpointType.Page)
+                .WithEndpointType(RouteType.Page)
                 .WithResource("Customer")
                 .WithAuthorize(false)
                 .Build();
