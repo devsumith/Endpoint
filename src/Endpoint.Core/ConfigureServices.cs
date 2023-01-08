@@ -47,7 +47,6 @@ public static class ConfigureServices
         services.AddSingleton<IEntityModelFactory, EntityModelFactory>();
         services.AddSingleton<IAggregateRootModelFactory, AggregateRootModelFactory>();
 
-        services.AddSingleton<ITemplateLocator, EmptyTemplateLocator>();
         services.AddSingleton<IFileNamespaceProvider, FileNamespaceProvider>();
         services.AddSingleton<ISolutionTemplateService, EndpointGenerationStrategy>();
         services.AddSingleton<ISolutionFilesGenerationStrategy, SolutionFilesGenerationStrategy>();
@@ -64,6 +63,8 @@ public static class ConfigureServices
         services.AddSingleton<ISolutionSettingsFileGenerationStrategyFactory, SolutionSettingsFileGenerationStrategyFactory>();
         services.AddSingleton<ISolutionModelFactory, SolutionModelFactory>();
 
+        services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<ClassModel>>();
+        services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<EntityModel>>();
 
         services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();
@@ -125,5 +126,12 @@ public static class ConfigureServices
         services.AddSingleton<IRouteHandlerModelFactory, RouteHandlerModelFactory>();
 
 
+    }
+
+    public static void AddCoreServices<T>(this IServiceCollection services)
+        where T : class
+    {
+        services.AddSingleton<ITemplateLocator, EmbeddedResourceTemplateLocatorBase<T>>();
+        AddCoreServices(services);
     }
 }

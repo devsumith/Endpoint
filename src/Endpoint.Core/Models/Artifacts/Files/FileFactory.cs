@@ -1,9 +1,9 @@
-﻿using Endpoint.Core.Models.Syntax.Entities;
+﻿using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Endpoint.Core.Models.Artifacts.Files;
 
@@ -21,70 +21,48 @@ public class FileModelFactory: IFileModelFactory
 
     public TemplatedFileModel CreateTemplate(string template, string name, string directory, string extension = "cs", string filename = null, Dictionary<string, object> tokens = null)
     {
-        return new TemplatedFileModel() { Template = template, Name = name, Directory = directory, Extension = extension, Tokens = tokens };
+        return new TemplatedFileModel(template, name, directory, extension, tokens);
     }
 
     public EntityFileModel Create(EntityModel model, string directory)
     {
-        return new EntityFileModel
-        {
-            Entity = model
-        };
+        return new EntityFileModel(model, directory);
     }
 
     public CSharpTemplatedFileModel CreateCSharp(string template, string @namespace, string name, string directory, Dictionary<string, object> tokens = null)
-        => new()
-        {
-            Template = template,
-            Namespace = @namespace,
-            Name = name,
-            Directory = directory,
-            Extension = "cs",
-            Tokens = tokens ?? new TokensBuilder()
+    {
+        return new CSharpTemplatedFileModel(template, @namespace, name, directory, tokens ?? new TokensBuilder()
             .With("Name", (Token)name)
             .With("Namespace", (Token)@namespace)
-            .Build()
-        };
+            .Build());
+    }
+    
     public TemplatedFileModel LaunchSettingsJson(string projectDirectory, string projectName, int port)
-        => new()
-        {
-            Template = "LaunchSettings",
-            Name = "launchSettings",
-            Directory = $"{projectDirectory}{Path.DirectorySeparatorChar}Properties",
-            Extension = "json",
-            Tokens = new TokensBuilder()
+    {
+        return new TemplatedFileModel("LaunchSettings", "LaunchSettings", projectDirectory, "json", new TokensBuilder()
             .With(nameof(projectName), (Token)projectName)
             .With(nameof(port), (Token)$"{port}")
             .With("SslPort", (Token)$"{port + 1}")
-            .Build()
-        };
+            .Build());
+    }
+
     public TemplatedFileModel AppSettings(string projectDirectory, string projectName, string dbContextName)
-        => new()
-        {
-            Template = "AppSettings",
-            Name = "appSettings",
-            Directory = projectDirectory,
-            Extension = "json",
-            Tokens = new TokensBuilder()
+    {
+        return new TemplatedFileModel("AppSettings", "appSettings", projectDirectory, "json", new TokensBuilder()
             .With(nameof(dbContextName), (Token)dbContextName)
             .With("Namespace", (Token)projectName)
-            .Build()
-        };
+            .Build());
+    }
+
     public MinimalApiProgramFileModel MinimalApiProgram(string projectDirectory, string resources, string properties,  string dbContextName)
     {
-        var model = new MinimalApiProgramFileModel()
-        {
-            DbContextName = dbContextName,
-            Name = "Program",
-            Extension = "cs",
-            Directory = projectDirectory,
-        };
+        var model = new MinimalApiProgramFileModel(dbContextName, projectDirectory);
 
-        model.Usings.Add("Microsoft.EntityFrameworkCore");
+        model.Usings.Add(new UsingDirectiveModel() {  Name = "Microsoft.EntityFrameworkCore" });
 
-        model.Usings.Add("Microsoft.OpenApi.Models");
+        model.Usings.Add(new UsingDirectiveModel() { Name = "Microsoft.OpenApi.Models" });
 
-        model.Usings.Add("System.Reflection");
+        model.Usings.Add(new UsingDirectiveModel() { Name = "System.Reflection" });
 
         foreach (var resource in resources.Split(','))
         {

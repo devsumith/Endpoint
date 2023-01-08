@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Endpoint.Core.Models.Syntax.Classes;
 
-internal class DbContextSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<DbContextModel>
+public class DbContextSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<DbContextModel>
 {
     private readonly ILogger<DbContextSyntaxGenerationStrategy> _logger;
     public DbContextSyntaxGenerationStrategy(

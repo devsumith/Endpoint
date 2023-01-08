@@ -38,13 +38,7 @@ public class EntityFileModelFactory: IEntityFileModelFactory
             entity.Properties.Add(classProperty);
         }
 
-        var entityFileModel = new EntityFileModel
-        {
-            Entity = entity,
-            Directory = directory,
-            Name = name,
-            Extension = "cs",
-        };
+        var entityFileModel = new EntityFileModel(entity, directory);
 
         return entityFileModel;
     }

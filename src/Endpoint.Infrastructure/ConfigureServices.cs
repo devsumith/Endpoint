@@ -3,7 +3,7 @@ using Endpoint.Infrastructure.Services;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-public static class ConfigueServices
+public static class ConfigureServices
 {
     public static void AddInfrastructureServices(this IServiceCollection services)
     {

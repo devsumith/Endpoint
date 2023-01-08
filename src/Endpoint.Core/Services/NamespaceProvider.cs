@@ -31,6 +31,8 @@ public class NamespaceProvider : INamespaceProvider
 
                 return $"{rootNamespace}.{subNamespace}";
             }
+
+            return rootNamespace;
         }
         else
         {

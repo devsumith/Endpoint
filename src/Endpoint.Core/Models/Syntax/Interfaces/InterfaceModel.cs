@@ -15,8 +15,8 @@ public class InterfaceModel : TypeDeclarationModel
         Methods = new List<MethodModel>();
         UsingDirectives = new List<UsingDirectiveModel>();
     }
-    public IList<PropertyModel> Properties { get; set; }
+    public List<PropertyModel> Properties { get; set; }
     public List<TypeModel> Implements { get; set; }
     public List<MethodModel> Methods { get; set; }
-    public IList<UsingDirectiveModel> UsingDirectives { get; set; }
+    public List<UsingDirectiveModel> UsingDirectives { get; set; }
 }
