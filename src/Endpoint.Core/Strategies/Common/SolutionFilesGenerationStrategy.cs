@@ -104,7 +104,7 @@ namespace Endpoint.Core.Services
 
             _fileSystem.CreateDirectory($"{settings.RootDirectory}");
 
-            _fileSystem.WriteAllText($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{CoreConstants.SettingsFileName}", json);
+            _fileSystem.WriteAllText($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{Constants.SettingsFileName}", json);
 
             _commandService.Start($"dotnet new sln -n {settings.SolutionName}", settings.RootDirectory);
 
@@ -120,11 +120,11 @@ namespace Endpoint.Core.Services
 
             if (settings.IsMicroserviceArchitecture)
             {
-                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
+                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
 
-                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
+                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
 
-                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
+                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
 
                 _addReference(settings.TestingDirectory, settings.ApiDirectory);
 
@@ -132,17 +132,17 @@ namespace Endpoint.Core.Services
             }
             else
             {
-                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
+                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
 
-                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.ClassLibrary, settings.DomainDirectory, settings);
+                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.DomainDirectory, settings);
 
-                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.ClassLibrary, settings.ApplicationDirectory, settings);
+                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.ApplicationDirectory, settings);
 
-                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.ClassLibrary, settings.InfrastructureDirectory, settings);
+                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.InfrastructureDirectory, settings);
 
-                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
+                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
 
-                _createProjectAndAddToSolution(CoreConstants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
+                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
 
                 _addReference(settings.ApplicationDirectory, settings.DomainDirectory);
 

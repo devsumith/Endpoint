@@ -19,7 +19,7 @@ namespace Endpoint.Core.Services
 
             for (var i = 1; i <= parts.Length; i++)
             {
-                var path = $"{string.Join(DirectorySeparatorChar, parts.Take(i))}{DirectorySeparatorChar}{CoreConstants.SettingsFileName}";
+                var path = $"{string.Join(DirectorySeparatorChar, parts.Take(i))}{DirectorySeparatorChar}{Constants.SettingsFileName}";
 
                 if (File.Exists(path))
                 {

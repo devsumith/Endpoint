@@ -120,5 +120,8 @@ public static class ConfigureServices
         services.AddSingleton<IEntityFileModelFactory, EntityFileModelFactory>();
         services.AddSingleton<IProjectModelFactory, ProjectModelFactory>();
 
+        services.AddSingleton<IRouteHandlerModelFactory, RouteHandlerModelFactory>();
+
+
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 
-namespace Endpoint.Application.Commands;
+namespace Endpoint.Cli.Commands;
 
 
 [Verb("solution")]

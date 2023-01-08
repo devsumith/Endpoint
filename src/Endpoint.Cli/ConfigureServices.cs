@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Endpoint.Core;
+using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
@@ -10,7 +12,7 @@ public static class ConfigureServices
     public static void AddCliServices(this IServiceCollection services)
     {
         services.AddCoreServices();
-        services.AddApplicationServices();
+        services.AddMediatR(typeof(Program),typeof(Constants));
         services.AddInfrastructureServices();
 
         var configuration = new ConfigurationBuilder()

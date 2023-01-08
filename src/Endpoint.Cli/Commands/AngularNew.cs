@@ -8,7 +8,7 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.WebArtifacts;
 using Endpoint.Core.Enums;
 
-namespace Endpoint.Application.Commands;
+namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-new")]

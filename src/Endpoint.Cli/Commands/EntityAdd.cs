@@ -1,5 +1,4 @@
 using CommandLine;
-using Endpoint.Core.Models.Artifacts.Entities;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Files.Create;
 using MediatR;
@@ -8,7 +7,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Commands;
+namespace Endpoint.Cli.Commands;
 
 [Verb("entity-add")]
 public class EntityAddRequest : IRequest<Unit>

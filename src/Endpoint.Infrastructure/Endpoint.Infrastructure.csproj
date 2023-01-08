@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Endpoint.Application\Endpoint.Application.csproj" />
+    <ProjectReference Include="..\Endpoint.Core\Endpoint.Core.csproj" />
   </ItemGroup>
 
 </Project>

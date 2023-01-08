@@ -68,25 +68,25 @@ namespace Endpoint.Core.Models.Artifacts.Projects
             {
                 switch (metadataItem)
                 {
-                    case CoreConstants.ProjectType.Domain:
+                    case Constants.ProjectType.Domain:
                         project.Packages.Add(new PackageModel("FluentValidation", "11.2.2"));
                         project.Packages.Add(new PackageModel("MediatR", "11.0.0"));
                         project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.1"));
                         project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "7.0.0"));
                         break;
 
-                    case CoreConstants.ProjectType.Application:
+                    case Constants.ProjectType.Application:
                         project.Packages.Add(new PackageModel("MediatR.Extensions.Microsoft.DependencyInjection", "11.0.0"));
                         break;
 
-                    case CoreConstants.ProjectType.Infrastructure:
+                    case Constants.ProjectType.Infrastructure:
                         project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore.Tools", "7.0.0-preview.2.22153.1"));
                         project.Packages.Add(new PackageModel("MediatR", "10.0.1"));
                         project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.1"));
                         project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "6.0.2"));
                         break;
 
-                    case CoreConstants.ProjectType.Api:
+                    case Constants.ProjectType.Api:
                         project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore.Design", "7.0.0"));
                         break;
 

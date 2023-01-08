@@ -1,10 +1,10 @@
-﻿using Endpoint.Application.Commands;
+﻿using Endpoint.Cli.Commands;
 using Endpoint.Core.Commands;
 using Endpoint.Core.Options;
 using Nelibur.ObjectMapper;
 using System.Runtime.CompilerServices;
 
-namespace Endpoint.Application;
+namespace Endpoint.Cli;
 
 public static class ObjectMapperConfiguration
 {

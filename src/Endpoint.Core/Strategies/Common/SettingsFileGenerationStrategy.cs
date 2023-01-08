@@ -15,7 +15,7 @@ namespace Endpoint.Core.Strategies
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         }
 
-        public bool? CanHandle(SolutionSettingsModel request) => !request.Metadata.Contains(CoreConstants.SolutionTemplates.Minimal);
+        public bool? CanHandle(SolutionSettingsModel request) => !request.Metadata.Contains(Constants.SolutionTemplates.Minimal);
         public SolutionSettingsModel Create(SolutionSettingsModel model)
         {
             var json = Serialize(model, new JsonSerializerOptions

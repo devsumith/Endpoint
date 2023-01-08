@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Commands;
+namespace Endpoint.Cli.Commands;
 
 
 [Verb("syntax-generation-strategy-create")]

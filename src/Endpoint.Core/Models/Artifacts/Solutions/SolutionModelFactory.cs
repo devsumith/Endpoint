@@ -96,19 +96,19 @@ public class SolutionModelFactory: ISolutionModelFactory
 
         var domain = _projectModelFactory.CreateLibrary($"{options.Name}.Domain", model.SrcDirectory);
 
-        domain.Metadata.Add(CoreConstants.ProjectType.Domain);
+        domain.Metadata.Add(Constants.ProjectType.Domain);
 
         var infrastructure = _projectModelFactory.CreateLibrary($"{options.Name}.Infrastructure", model.SrcDirectory);
 
-        infrastructure.Metadata.Add(CoreConstants.ProjectType.Infrastructure);
+        infrastructure.Metadata.Add(Constants.ProjectType.Infrastructure);
 
         var application = _projectModelFactory.CreateLibrary($"{options.Name}.Application", model.SrcDirectory);
 
-        application.Metadata.Add(CoreConstants.ProjectType.Application);
+        application.Metadata.Add(Constants.ProjectType.Application);
 
         var api = _projectModelFactory.CreateWebApi($"{options.Name}.Api", model.SrcDirectory);
 
-        api.Metadata.Add(CoreConstants.ProjectType.Api);
+        api.Metadata.Add(Constants.ProjectType.Api);
 
         model.Projects.Add(api);
 

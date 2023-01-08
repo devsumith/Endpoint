@@ -5,7 +5,7 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.ValueObjects;
 using System.IO;
-using static Endpoint.Core.CoreConstants.ApiFileTemplates;
+using static Endpoint.Core.Constants.ApiFileTemplates;
 
 namespace Endpoint.Core.Models.Artifacts.ApiProjectModels;
 

@@ -16,9 +16,9 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using static Endpoint.Core.CoreConstants.SolutionTemplates;
+using static Endpoint.Core.Constants.SolutionTemplates;
 
-namespace Endpoint.Application.Commands;
+namespace Endpoint.Cli.Commands;
 
 
 [Verb("microservice")]

@@ -8,7 +8,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Commands
+namespace Endpoint.Cli.Commands
 {
     public class AddResource
     {

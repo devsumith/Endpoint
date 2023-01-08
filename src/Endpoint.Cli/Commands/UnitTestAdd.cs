@@ -5,7 +5,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Application.Commands;
+namespace Endpoint.Cli.Commands;
 
 [Verb("unit-test")]
 public class UnitTestAddRequest : IRequest<Unit>
