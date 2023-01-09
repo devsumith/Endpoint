@@ -26,6 +26,7 @@ public class AccessModifierSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
         {
             AccessModifier.Public => "public",
             AccessModifier.Protected => "protected",
+            AccessModifier.Private => "private",
             _ => "public"
         });
 

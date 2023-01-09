@@ -21,7 +21,7 @@
     <EmbeddedResource Include="Templates\Api\Program.txt" />
     <EmbeddedResource Include="Templates\Api\Startup.txt" />
     <EmbeddedResource Include="Templates\Api\WebApplicationBuilder.txt" />
-    <EmbeddedResource Include="Templates\Api\WebApplicationConfiguration.txt" />
+    <EmbeddedResource Include="Templates\Api\WebApplication.txt" />
     <EmbeddedResource Include="Templates\Application\Dto.txt" />
     <EmbeddedResource Include="Templates\Console\EmptyProgram.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientExtensions.txt" />

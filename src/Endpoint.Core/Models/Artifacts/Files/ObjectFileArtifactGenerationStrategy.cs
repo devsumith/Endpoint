@@ -13,17 +13,20 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
     private readonly ILogger<ObjectFileArtifactGenerationStrategyBase<T>> _logger;
     private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
     private readonly IFileSystem _fileSystem;
+    private readonly INamespaceProvider _namespaceProvider;
 
     public ObjectFileArtifactGenerationStrategyBase(
         IServiceProvider serviceProvider,
         ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory,
         IFileSystem fileSystem,
+        INamespaceProvider namespaceProvider,
         ILogger<ObjectFileArtifactGenerationStrategyBase<T>> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategyFactory));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
     }
 
     public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ObjectFileModel<T> model, dynamic configuration = null)
@@ -41,6 +44,10 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
                 builder.AppendLine();
             }
         }
+
+        builder.AppendLine($"namespace {_namespaceProvider.Get(model.Directory)};");
+
+        builder.AppendLine();
 
         builder.AppendLine(_syntaxGenerationStrategyFactory.CreateFor(model.Object));
 

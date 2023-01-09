@@ -54,28 +54,4 @@ public class FileModelFactory: IFileModelFactory
             .Build());
     }
 
-    public MinimalApiProgramFileModel MinimalApiProgram(string projectDirectory, string resources, string properties,  string dbContextName)
-    {
-        var model = new MinimalApiProgramFileModel(dbContextName, projectDirectory);
-
-        model.Usings.Add(new UsingDirectiveModel() {  Name = "Microsoft.EntityFrameworkCore" });
-
-        model.Usings.Add(new UsingDirectiveModel() { Name = "Microsoft.OpenApi.Models" });
-
-        model.Usings.Add(new UsingDirectiveModel() { Name = "System.Reflection" });
-
-        foreach (var resource in resources.Split(','))
-        {
-            var aggregate = _aggregateRootModelFactory.Create(resource, properties);
-
-            model.Entities.Add(aggregate);
-
-            foreach (var routeHandler in _routeHandlerModelFactory.Create(dbContextName, aggregate))
-            {
-                model.RouteHandlers.Add(routeHandler);
-            }
-        }
-
-        return model;
-    }
 }

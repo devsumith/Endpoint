@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Syntax;
+﻿using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ namespace Endpoint.Core.Strategies.Tests
 {
     public interface IMinimalApiTestsFileGenerationStrategy
     {
-        void Create(MinimalApiProgramModel model, string directory);
+        void Create(MinimalApiProgramFileModel model, string directory);
     }
 
     public class MinimalApiTestsFileGenerationStrategy : IMinimalApiTestsFileGenerationStrategy
@@ -18,7 +18,7 @@ namespace Endpoint.Core.Strategies.Tests
             _fileSystem = fileSystem ?? throw new System.ArgumentNullException(nameof(fileSystem)); 
         }
 
-        public void Create(MinimalApiProgramModel model, string directory)
+        public void Create(MinimalApiProgramFileModel model, string directory)
         {
             var content = new List<string>();
             

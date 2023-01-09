@@ -1,4 +1,6 @@
 ﻿using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Options;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,25 +31,27 @@ namespace Endpoint.Core.Models.Artifacts.Projects
 
         public ProjectModel CreateMinimalApiProject(CreateMinimalApiProjectOptions options)
         {
-            var projectModel = new ProjectModel(DotNetProjectType.MinimalWebApi, options.Name, options.Directory);
+            var model = new ProjectModel(DotNetProjectType.MinimalWebApi, options.Name, options.Directory);
 
-            projectModel.GenerateDocumentationFile = true;
+            var entities = new List<EntityModel> { new EntityModel(options.Resource) };
 
-            projectModel.Files.Add(_fileModelFactory.LaunchSettingsJson(projectModel.Directory, projectModel.Name, options.Port.Value));
+            model.GenerateDocumentationFile = true;
 
-            projectModel.Files.Add(_fileModelFactory.AppSettings(projectModel.Directory, projectModel.Name, options.DbContextName));
+            model.Files.Add(_fileModelFactory.LaunchSettingsJson(model.Directory, model.Name, options.Port.Value));
 
-            projectModel.Files.Add(_fileModelFactory.MinimalApiProgram(projectModel.Directory, options.Resource, options.Properties, options.DbContextName));
+            model.Files.Add(_fileModelFactory.AppSettings(model.Directory, model.Name, options.DbContextName));
 
-            projectModel.Packages.Add(new() { Name = "Microsoft.EntityFrameworkCore.InMemory", Version = "6.0.2" });
+            model.Files.Add(new MinimalApiProgramFileModel(model.Namespace, model.Directory, model.Namespace, options.DbContextName, entities ));
 
-            projectModel.Packages.Add(new() { Name = "Swashbuckle.AspNetCore.Annotations", Version = "6.2.3" });
+            model.Packages.Add(new() { Name = "Microsoft.EntityFrameworkCore.InMemory", Version = "6.0.2" });
 
-            projectModel.Packages.Add(new() { Name = "Swashbuckle.AspNetCore.Newtonsoft", Version = "6.2.3" });
+            model.Packages.Add(new() { Name = "Swashbuckle.AspNetCore.Annotations", Version = "6.2.3" });
 
-            projectModel.Packages.Add(new() { Name = "MinimalApis.Extensions", IsPreRelease = true });
+            model.Packages.Add(new() { Name = "Swashbuckle.AspNetCore.Newtonsoft", Version = "6.2.3" });
 
-            return projectModel;
+            model.Packages.Add(new() { Name = "MinimalApis.Extensions", IsPreRelease = true });
+
+            return model;
         }
 
         public ProjectModel CreateMinimalApiUnitTestsProject(string name, string directory, string resource)

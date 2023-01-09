@@ -6,13 +6,8 @@ namespace Endpoint.Core.Models.Artifacts.Files;
 public interface IFileModelFactory
 {
     TemplatedFileModel CreateTemplate(string template, string name, string directory, string extension = "cs", string filename = null, Dictionary<string, object> tokens = null);
-
     EntityFileModel Create(EntityModel model, string directory);
-
     CSharpTemplatedFileModel CreateCSharp(string template, string @namespace, string name, string directory, Dictionary<string, object> tokens = null);
-    TemplatedFileModel LaunchSettingsJson(string projectDirectory, string projectName, int port);
-        
+    TemplatedFileModel LaunchSettingsJson(string projectDirectory, string projectName, int port);        
     TemplatedFileModel AppSettings(string projectDirectory, string projectName, string dbContextName);
-
-    MinimalApiProgramFileModel MinimalApiProgram(string projectDirectory, string resources, string properties, string dbContextName);
 }

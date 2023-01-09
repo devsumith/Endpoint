@@ -44,11 +44,9 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
 
         _commandService.Start($"dotnet new {templateType} --framework net7.0", model.Directory);
 
-        foreach (var path in _fileSystem.GetFiles(model.Directory, "*.cs", SearchOption.AllDirectories))
-        {
+        foreach (var path in _fileSystem.GetFiles(model.Directory, "*1.cs", SearchOption.AllDirectories))
             _fileSystem.Delete(path);
-        }
-
+        
         foreach (var package in model.Packages)
         {
             var version = package.IsPreRelease ? "--prerelease" : $"--version {package.Version}";

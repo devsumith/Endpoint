@@ -1,23 +1,33 @@
-﻿using System.Collections.Generic;
-using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Entities;
-using Endpoint.Core.Models.Syntax.RouteHandlers;
+﻿using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.WebApplications;
+using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Artifacts.Files;
 
-public class MinimalApiProgramFileModel : FileModel
+public class MinimalApiProgramFileModel: FileModel
 {
-    public MinimalApiProgramFileModel(string dbContextName, string directory = null) 
-        : base("Program", directory ?? Environment.CurrentDirectory, "cs")
+    public MinimalApiProgramFileModel(string title, string directory, string apiNamespace, string dbContextName, List<EntityModel> entities)
+        : base("Program", directory, "cs")
     {
-        Usings = new List<UsingDirectiveModel>();
-        Entities = new List<EntityModel>();
-        RouteHandlers = new List<RouteHandlerModel>();
+        WebApplicationBuilder = new WebApplicationBuilderModel(title, dbContextName);
+
+        WebApplication = new WebApplicationModel(title, dbContextName, entities);
+
+        Usings = new List<string>()
+        {
+            "Microsoft.EntityFrameworkCore",
+            "Microsoft.OpenApi.Models",
+            "System.Reflection"
+        };
+        ApiNamespace = apiNamespace;
+        DbContextName = dbContextName;
+
     }
 
-    public List<UsingDirectiveModel> Usings { get; set; } = new();
-    public bool SwaggerEnabled { get; set; }
-    public List<EntityModel> Entities { get; set; } = new();
-    public List<RouteHandlerModel> RouteHandlers { get; set; } = new();
-    public string DbContextName { get; init; }
+    public WebApplicationModel WebApplication { get; set; }
+    public WebApplicationBuilderModel WebApplicationBuilder { get; set; }
+    public string DbContextName { get; private set; }
+    public string ApiNamespace { get; set; }
+    public List<string> Usings { get; private set; }    
+    
 }

@@ -3,7 +3,6 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.ApiProjectModels;
 using Endpoint.Core.Models.Artifacts.Entities;
 using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Artifacts.ProgramFiles;
 using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Git;
@@ -66,6 +65,7 @@ public static class ConfigureServices
 
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<ClassModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<EntityModel>>();
+        services.AddSingleton<IArtifactGenerationStrategy, LaunchSettingsFileGenerationStrategy>();
 
         services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();
@@ -75,18 +75,17 @@ public static class ConfigureServices
         services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, GitGenerationStrategy>();
         services.AddSingleton<IGitGenerationStrategyFactory, GitGenerationStrategyFactory>();
-        services.AddSingleton<IMinimalApiProgramFileGenerationStratey, MinimalApiProgramFileGenerationStratey>();
+        services.AddSingleton<IArtifactGenerationStrategy, MinimalApiProgramFileGenerationStratey>();
         services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
         services.AddSingleton<ISolutionSettingsFileGenerationStrategy, SolutionSettingsFileGenerationStrategy>();
         services.AddSingleton<ISolutionUpdateStrategy, SolutionUpdateStrategy>();
         services.AddSingleton<ISolutionUpdateStrategyFactory, SolutionUpdateStrategyFactory>();
-
+        services.AddSingleton<IMinimalApiService, MinimalApiService>();
         services.AddSingleton<IWorkspaceGenerationStrategyFactory, WorkspaceSettingsGenerationStrategyFactory>();
         services.AddSingleton<IWorkspaceSettingsUpdateStrategyFactory, WorkspaceSettingsUpdateStrategyFactory>();
         services.AddSingleton<IWorkspaceSettingsUpdateStrategy, WorkspaceSettingsUpdateStrategy>();
         services.AddSingleton<IFileModelFactory, FileModelFactory>();
         services.AddSingleton<IFileGenerationStrategyFactory, FileGenerationStrategyFactory>();
-        services.AddSingleton<IFileGenerationStrategy, MinimalApiProgramFileGenerationStrategy>();
         services.AddSingleton<IFileGenerationStrategy, EntityFileGenerationStrategy>();
 
         services.AddSingleton<IWebArtifactModelsFactory, WebArtifactModelsFactory>();

@@ -44,14 +44,15 @@ public class ClassCreateRequestHandler : IRequestHandler<ClassCreateRequest, Uni
 
         @class.UsingDirectives.Add(new UsingDirectiveModel() {  Name = "System"  });
 
-        foreach(var property in request.Properties.Split(','))
-        {
-            var parts = property.Split(':');
-            var name = parts[0];
-            var type = parts[1];
+        if(!string.IsNullOrEmpty(request.Properties))
+            foreach(var property in request.Properties.Split(','))
+            {
+                var parts = property.Split(':');
+                var name = parts[0];
+                var type = parts[1];
 
-            @class.Properties.Add(new PropertyModel(@class, AccessModifier.Public, new TypeModel() { Name = type }, name, new List<PropertyAccessorModel>()));
-        }
+                @class.Properties.Add(new PropertyModel(@class, AccessModifier.Public, new TypeModel() { Name = type }, name, new List<PropertyAccessorModel>()));
+            }
 
         var classFile = new ObjectFileModel<ClassModel>(
             @class,
