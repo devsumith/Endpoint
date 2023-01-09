@@ -30,7 +30,7 @@ public class {{ namePascalCase }}RequestHandler : IRequestHandler<{{ namePascalC
 
     public async Task<Unit> Handle({{ namePascalCase }}Request request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Handled: {nameof({{ namePascalCase }}RequestHandler)}");
+        _logger.LogInformation("Handled: {0}", nameof({{ namePascalCase }}RequestHandler));
 
         return new();
     }

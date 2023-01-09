@@ -22,4 +22,6 @@ public class MethodModel
     public TypeModel ReturnType { get; set; }
     public string Body { get; set; }
     public bool Interface { get; set; }
+    public bool Async { get; set; }
+    public bool Static { get; set; }
 }

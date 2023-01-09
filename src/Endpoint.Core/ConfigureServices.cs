@@ -97,6 +97,7 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategyFactory, SyntaxGenerationStrategyFactory>();
         services.AddSingleton<ISyntaxGenerationStrategy, ClassSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, MethodSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, InterfaceMethodSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, FieldsSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, ConstructorSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, PropertySyntaxGenerationStrategy>();

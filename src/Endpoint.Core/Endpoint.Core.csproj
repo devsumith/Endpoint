@@ -50,6 +50,5 @@
 
   <ItemGroup>
     <Folder Include="Models\Syntax\RouteHandlers\Create\" />
-    <Folder Include="Strategies\Workspaces\" />
   </ItemGroup>
 </Project>

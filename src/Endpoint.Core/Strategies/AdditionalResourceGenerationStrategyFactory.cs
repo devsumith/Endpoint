@@ -2,7 +2,6 @@
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
