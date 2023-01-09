@@ -1,7 +1,9 @@
-﻿using Endpoint.Core.Models.Artifacts.Files;
+﻿using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Properties;
+using Endpoint.Core.Models.Syntax.Types;
 using System.Linq;
 using System.Text;
 
@@ -33,7 +35,7 @@ public class EntityFileModelFactory: IEntityFileModelFactory
             var propType = prop.Split(':')[1];
             var propName = prop.Split(':')[0];
 
-            var classProperty = new PropertyModel(entity, "public", propType, propName, PropertyAccessorModel.GetPrivateSet);
+            var classProperty = new PropertyModel(entity, AccessModifier.Public, new TypeModel() { Name = propType }, propName, PropertyAccessorModel.GetPrivateSet);
 
             entity.Properties.Add(classProperty);
         }

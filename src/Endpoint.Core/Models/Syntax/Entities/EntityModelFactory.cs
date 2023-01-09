@@ -1,4 +1,6 @@
-﻿using Endpoint.Core.Models.Syntax.Properties;
+﻿using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Syntax.Properties;
+using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.ValueObjects;
 using System.Linq;
 
@@ -21,7 +23,7 @@ public class EntityModelFactory : IEntityModelFactory
 
         var idDotNetType = _syntaxService.SyntaxModel.IdPropertyType == IdPropertyType.Int ? "int" : "Guid";
 
-        model.Properties.Add(new PropertyModel(model, "public", idDotNetType, idPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
+        model.Properties.Add(new PropertyModel(model, AccessModifier.Public, new TypeModel() { Name = idDotNetType }, idPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 
         if (!string.IsNullOrWhiteSpace(properties))
         {
@@ -29,7 +31,7 @@ public class EntityModelFactory : IEntityModelFactory
             {
                 var nameValuePair = property.Split(':');
 
-                model.Properties.Add(new PropertyModel(model, "public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
+                model.Properties.Add(new PropertyModel(model, AccessModifier.Public, new TypeModel() { Name = nameValuePair.ElementAt(1) }, nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
             }
         }
 

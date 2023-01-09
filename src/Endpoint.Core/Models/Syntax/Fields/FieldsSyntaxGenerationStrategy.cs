@@ -1,11 +1,13 @@
 using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Models.Syntax.Fields;
 
-public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<IEnumerable<FieldModel>>
+
+public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<FieldModel>>
 {
     private readonly ILogger<FieldsSyntaxGenerationStrategy> _logger;
     public FieldsSyntaxGenerationStrategy(
@@ -16,7 +18,7 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<IEnum
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, IEnumerable<FieldModel> model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, List<FieldModel> model, dynamic configuration = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -26,7 +28,8 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<IEnum
         {
             builder.AppendLine(Create(syntaxGenerationStrategyFactory, field, configuration));
 
-            builder.AppendLine();
+            if(field != model.Last())
+                builder.AppendLine();
         }
 
         return builder.ToString();
@@ -38,6 +41,12 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<IEnum
 
         var builder = new StringBuilder();
 
+        builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
+
+        if (model.ReadOnly)
+            builder.Append(" readonly");
+
+        builder.Append($"{syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name}");
 
         return builder.ToString();
     }

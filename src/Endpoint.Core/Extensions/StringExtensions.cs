@@ -6,9 +6,16 @@ public static class StringExtensions
 {
     public static string Indent(this string value, int indent)
     {
-        string[] values = value.Split(Environment.NewLine);
+        try
+        {
+            string[] values = value.Split(Environment.NewLine);
 
-        return string.Join(Environment.NewLine, values.Select(v => $"{string.Join("", Range(1, 4 * indent).Select(i => ' '))}{v}"));
+            var result = string.Join(Environment.NewLine, values.Select(v => string.IsNullOrEmpty(v) ? v : $"{string.Join("", Range(1, 4 * indent).Select(i => ' '))}{v}"));
+
+            return result;
+        } catch (Exception e){
+            throw e;
+        }
     }
 
     public static string GetResourceName(this string[] collection, string name)

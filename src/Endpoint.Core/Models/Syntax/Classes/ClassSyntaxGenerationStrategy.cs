@@ -27,7 +27,7 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
         if (model.Static)
             builder.Append(" static");
 
-        builder.Append($" {model.Name}");
+        builder.Append($" class {model.Name}");
 
         if (model.Implements.Count > 0)
         {
@@ -47,13 +47,18 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
 
         builder.AppendLine("{");
 
-        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Fields, configuration).Indent(1));
 
-        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Constructors, configuration).Indent(1));
+        if(model.Fields.Count > 0)
+            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Fields, configuration).Indent(1));
 
-        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Properties, configuration).Indent(1));
+        if (model.Constructors.Count > 0)
+            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Constructors, configuration).Indent(1));
 
-        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Methods, configuration).Indent(1));
+        if (model.Properties.Count > 0)
+            builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Properties, configuration)).Indent(1));
+        
+        if (model.Methods.Count > 0)
+            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Methods, configuration).Indent(1));
 
         builder.AppendLine("}");
         

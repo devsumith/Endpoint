@@ -81,7 +81,7 @@ namespace Endpoint.Core.Services
                 }
                 else
                 {
-                    aggregateBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(property.Type).WithAccessors(new AccessorsBuilder().Build()).Build());
+                    aggregateBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(property.Type.Name).WithAccessors(new AccessorsBuilder().Build()).Build());
                 }
             }
 
@@ -100,7 +100,7 @@ namespace Endpoint.Core.Services
                 }
                 else
                 {
-                    dtoBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(property.Type).WithAccessors(new AccessorsBuilder().Build()).Build());
+                    dtoBuilder.WithProperty(new PropertyBuilder().WithName(property.Name).WithType(property.Type.Name).WithAccessors(new AccessorsBuilder().Build()).Build());
                 }
             }
 

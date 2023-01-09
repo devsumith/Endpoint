@@ -1,6 +1,13 @@
 ﻿using CommandLine;
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Models.Syntax.Properties;
+using Endpoint.Core.Models.Syntax.Types;
 using MediatR;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,7 +40,28 @@ public class ClassCreateRequestHandler : IRequestHandler<ClassCreateRequest, Uni
 
     public Task<Unit> Handle(ClassCreateRequest request, CancellationToken cancellationToken)
     {
+        var @class = new ClassModel(request.Name);
 
+        @class.UsingDirectives.Add(new UsingDirectiveModel() {  Name = "System"  });
+
+        foreach(var property in request.Properties.Split(','))
+        {
+            var parts = property.Split(':');
+            var name = parts[0];
+            var type = parts[1];
+
+            @class.Properties.Add(new PropertyModel(@class, AccessModifier.Public, new TypeModel() { Name = type }, name, new List<PropertyAccessorModel>()));
+        }
+
+        var classFile = new ObjectFileModel<ClassModel>(
+            @class,
+            @class.UsingDirectives,
+            @class.Name,
+            request.Directory,
+            "cs"
+            );
+
+        _artifactGenerationStrategyFactory.CreateFor(classFile);
 
         return Task.FromResult(new Unit());
     }

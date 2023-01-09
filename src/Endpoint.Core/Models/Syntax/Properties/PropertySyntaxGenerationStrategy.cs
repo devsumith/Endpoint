@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Endpoint.Core.Models.Syntax.Properties;
 
-internal class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<PropertyModel>
+public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<PropertyModel>
 {
     private readonly ILogger<PropertySyntaxGenerationStrategy> _logger;
     public PropertySyntaxGenerationStrategy(
@@ -21,6 +21,9 @@ internal class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<P
 
         var builder = new StringBuilder();
 
+        builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
+
+        builder.Append($" {syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name} {syntaxGenerationStrategyFactory.CreateFor(model.Accessors)}");
 
         return builder.ToString();
     }

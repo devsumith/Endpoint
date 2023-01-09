@@ -1,6 +1,8 @@
+using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Properties;
+using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
@@ -115,7 +117,7 @@ public class SettingsModel
 
         aggregate.IdPropertyType = IdDotNetType == IdPropertyType.Int ? "int" : "Guid";
 
-        aggregate.Properties.Add(new PropertyModel(aggregate, "public", aggregate.IdPropertyType, aggregate.IdPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
+        aggregate.Properties.Add(new PropertyModel(aggregate, AccessModifier.Public, new TypeModel() { Name = aggregate.IdPropertyType }, aggregate.IdPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 
         if (!string.IsNullOrEmpty(properties))
         {
@@ -125,7 +127,7 @@ public class SettingsModel
 
                 if (nameValuePair.ElementAt(0) != aggregate.IdPropertyName)
                 {
-                    aggregate.Properties.Add(new PropertyModel(aggregate, "public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
+                    aggregate.Properties.Add(new PropertyModel(aggregate, AccessModifier.Public, new TypeModel() { Name = nameValuePair.ElementAt(1) }, nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
                 }
             }
         }

@@ -1,4 +1,5 @@
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax.Constructors;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;

@@ -19,8 +19,8 @@ public class ClassModel : InterfaceModel
     }
 
     public AccessModifier AccessModifier { get; set; }
-    public IList<FieldModel> Fields { get; set; }
-    public IList<ConstructorModel> Constructors { get; set; }
+    public List<FieldModel> Fields { get; set; }
+    public List<ConstructorModel> Constructors { get; set; }
     public List<AttributeModel> Attributes { get; set; }    
     public bool Static { get; set; }
 

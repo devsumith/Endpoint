@@ -1,5 +1,7 @@
-﻿using Endpoint.Core.Models.Syntax.Entities;
+﻿using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Properties;
+using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
 using Xunit;
@@ -30,7 +32,7 @@ namespace Endpoint.UnitTests
 
             entity.Properties = new List<PropertyModel>
             {
-                new PropertyModel(entity, "public","string","Name", PropertyAccessorModel.GetPrivateSet)
+                new PropertyModel(entity, AccessModifier.Public,new TypeModel() { Name = "string" },"Name", PropertyAccessorModel.GetPrivateSet)
             };
 
 

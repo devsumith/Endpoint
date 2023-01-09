@@ -2,6 +2,8 @@
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
+using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Syntax.Types;
 
 namespace Endpoint.Core.Models.Syntax.Entities;
 
@@ -29,7 +31,7 @@ public class AggregateRootModel : EntityModel
 
         IdPropertyName = useShortIdProperty ? "Id" : $"{((Token)name).PascalCase}Id";
 
-        Properties.Add(new PropertyModel(this, "public", IdPropertyType, IdPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
+        Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel() { Name = IdPropertyType }, IdPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 
         if (!string.IsNullOrWhiteSpace(properties))
         {
@@ -37,7 +39,7 @@ public class AggregateRootModel : EntityModel
             {
                 var nameValuePair = property.Split(':');
 
-                Properties.Add(new PropertyModel(this, "public", nameValuePair.ElementAt(1), nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
+                Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel() { Name = nameValuePair.ElementAt(1) }, nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
             }
         }
     }

@@ -18,6 +18,7 @@ using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.RequestHandlers;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
+using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Models.WebArtifacts;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
@@ -96,11 +97,15 @@ public static class ConfigureServices
         
         services.AddSingleton<ISyntaxGenerationStrategyFactory, SyntaxGenerationStrategyFactory>();
         services.AddSingleton<ISyntaxGenerationStrategy, ClassSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, MethodsSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, MethodSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, InterfaceMethodSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, FieldsSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, ConstructorsSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, ConstructorSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, PropertySyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, PropertiesSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, PropertyAccessorsSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, AccessModifierSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, InterfaceSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerCreateSyntaxGenerationStrategy>();
@@ -109,8 +114,8 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerGetSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerGetByIdSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, AttributeSyntaxGenerationStrategy>();
-
-
+        services.AddSingleton<ISyntaxGenerationStrategy, TypeSyntaxGenerationStrategy>();
+        
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerCreateSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerDeleteSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerGetByIdSyntaxGenerationStrategy>();
