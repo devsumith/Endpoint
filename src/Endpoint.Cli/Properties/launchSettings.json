@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "service-create -n Foo -d C:\\projects\\Endpoint\\src\\Endpoint.Cli",
+      "commandLineArgs": "worker-create -n Bottlenose -d C:\\projects\\Endpoint\\src\\Endpoint.Cli",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",

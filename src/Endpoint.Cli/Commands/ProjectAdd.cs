@@ -66,7 +66,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest, Unit>
 
         var directory = string.IsNullOrEmpty(request.FolderName) ? request.Directory : $"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}";
 
-        var model = new ProjectModel(request.DotNetProjectType, request.Name, directory, request.References.Split(',').ToList());
+        var model = new ProjectModel(request.DotNetProjectType, request.Name, directory, request.References?.Split(',').ToList());
 
         _projectService.AddProject(model);
 
