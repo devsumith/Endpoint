@@ -43,6 +43,7 @@ public static class ConfigureServices
         services.AddSingleton<IContext, Context>();
         services.AddSingleton<IFileModelFactory, FileModelFactory>();
         services.AddSingleton<INamespaceProvider, NamespaceProvider>();
+        services.AddSingleton<IDomainDrivenDesignFileService, DomainDrivenDesighFileService>();
 
         services.AddSingleton<IEntityModelFactory, EntityModelFactory>();
         services.AddSingleton<IAggregateRootModelFactory, AggregateRootModelFactory>();
@@ -64,6 +65,7 @@ public static class ConfigureServices
         services.AddSingleton<ISolutionModelFactory, SolutionModelFactory>();
 
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<ClassModel>>();
+        services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<InterfaceModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<EntityModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, LaunchSettingsFileGenerationStrategy>();
 

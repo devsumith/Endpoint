@@ -3,26 +3,25 @@ using Endpoint.Core.Services;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Endpoint.Core.Strategies.Tests
+namespace Endpoint.Core.Strategies.Tests;
+
+public interface IMinimalApiTestsFileGenerationStrategy
 {
-    public interface IMinimalApiTestsFileGenerationStrategy
+    void Create(MinimalApiProgramFileModel model, string directory);
+}
+
+public class MinimalApiTestsFileGenerationStrategy : IMinimalApiTestsFileGenerationStrategy
+{
+    private readonly IFileSystem _fileSystem;
+    public MinimalApiTestsFileGenerationStrategy(IFileSystem fileSystem)
     {
-        void Create(MinimalApiProgramFileModel model, string directory);
+        _fileSystem = fileSystem ?? throw new System.ArgumentNullException(nameof(fileSystem)); 
     }
 
-    public class MinimalApiTestsFileGenerationStrategy : IMinimalApiTestsFileGenerationStrategy
+    public void Create(MinimalApiProgramFileModel model, string directory)
     {
-        private readonly IFileSystem _fileSystem;
-        public MinimalApiTestsFileGenerationStrategy(IFileSystem fileSystem)
-        {
-            _fileSystem = fileSystem ?? throw new System.ArgumentNullException(nameof(fileSystem)); 
-        }
-
-        public void Create(MinimalApiProgramFileModel model, string directory)
-        {
-            var content = new List<string>();
-            
-            _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}Tests.cs", string.Join(Environment.NewLine, content));
-        }
+        var content = new List<string>();
+        
+        _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}Tests.cs", string.Join(Environment.NewLine, content));
     }
 }
