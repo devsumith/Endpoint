@@ -3,6 +3,7 @@ using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Fields;
+using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Types;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +37,50 @@ public class ClassSyntaxGenerationStrategyTests
         {
             new ConstructorModel(classModel,classModel.Name)
         };
+
+        var result = sut.Create(syntaxGenerationStrategyFactory, classModel);
+
+        Assert.Equal(expected, result);
+
+    }
+
+    [Fact]
+    public void CreateConfigureServicesClass()
+    {
+        var expected = "public class Foo { }";
+
+        var services = new ServiceCollection();
+
+        services.AddLogging();
+
+        services.AddCliServices();
+
+        var container = services.BuildServiceProvider();
+
+        var syntaxGenerationStrategyFactory = container.GetRequiredService<ISyntaxGenerationStrategyFactory>();
+
+        var sut = ActivatorUtilities.CreateInstance<ClassSyntaxGenerationStrategy>(container);
+
+        var classModel = new ClassModel("ConfigureServices");
+
+        var methodParam = new ParamModel()
+        {
+            Type = new TypeModel("IServiceCollection"),
+            Name = "services",
+            ExtensionMethodParam = true
+        };
+
+        var method = new MethodModel()
+        {
+            Name = "AddApplicationServices",
+            ReturnType = new TypeModel("void"),
+            Static = true,
+            Params = new List<ParamModel>() {  methodParam }
+        };
+
+        classModel.Static = true;
+
+        classModel.Methods.Add(method);
 
         var result = sut.Create(syntaxGenerationStrategyFactory, classModel);
 

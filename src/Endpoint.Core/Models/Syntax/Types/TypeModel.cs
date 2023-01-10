@@ -4,10 +4,12 @@ namespace Endpoint.Core.Models.Syntax.Types;
 
 public class TypeModel
 {
-    public TypeModel()
+    public TypeModel(string name = null)
     {
+        Name = name;
         GenericTypeParameters = new List<TypeModel>();
     }
+
     public string Name { get; set; }
     public List<TypeModel> GenericTypeParameters { get; set; }
     public bool Nullable { get; set; }

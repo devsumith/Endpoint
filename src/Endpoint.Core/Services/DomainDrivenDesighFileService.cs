@@ -7,8 +7,10 @@ using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
+using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Endpoint.Core.Services;
 
@@ -16,11 +18,15 @@ public class DomainDrivenDesighFileService: IDomainDrivenDesignFileService {
 
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly IFileProvider _fileProvider;
-
-    public DomainDrivenDesighFileService(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, IFileProvider fileProvider)
+    private readonly IDependencyInjectionService _dependencyInjectionService;
+    public DomainDrivenDesighFileService(
+        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, 
+        IFileProvider fileProvider,
+        IDependencyInjectionService dependencyInjectionService)
 	{
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        _dependencyInjectionService = dependencyInjectionService ?? throw new ArgumentNullException(nameof(dependencyInjectionService));
 	}
 
 	public void ServiceCreate(string name, string directory)
@@ -31,8 +37,6 @@ public class DomainDrivenDesighFileService: IDomainDrivenDesignFileService {
             new UsingDirectiveModel() { Name = "System" },
             new UsingDirectiveModel() { Name = "System.Threading.Tasks" }
         };
-
-        var @class = new ClassModel(name);
 
         var fields = new List<FieldModel>()
         {
@@ -50,85 +54,91 @@ public class DomainDrivenDesighFileService: IDomainDrivenDesignFileService {
             }
         };
 
-        var constructors = new List<ConstructorModel>()
+        var methods = new List<MethodModel>()
         {
-
-            new ConstructorModel(@class,@class.Name)
+            new MethodModel()
             {
-                Params = new List<ParamModel>
+                Name = "DoWorkAsync",
+                ReturnType = new TypeModel("Task"),
+                Async = true,
+                Body = "_logger.LogInformation(\"DoWorkAsync\");"
+            }
+        };
+
+        var @interface = createInterface(name, methods, usingDirectives, directory);
+
+        _ = createClass(@interface,name,methods,usingDirectives, directory);
+
+        InterfaceModel createInterface(string name, List<MethodModel> methods, List<UsingDirectiveModel> usings, string directory)
+        {
+            var @interface = new InterfaceModel($"I{name}");
+
+            @interface.Methods = methods.Select(x => new MethodModel() { Name = x.Name, ReturnType = x.ReturnType, Async = x.Async, Interface = true }).ToList();
+
+            @interface.UsingDirectives.AddRange(usings);
+
+            var interfaceFile = new ObjectFileModel<InterfaceModel>(
+                @interface,
+                @interface.UsingDirectives,
+                @interface.Name,
+                directory,
+                "cs"
+                );
+
+            _artifactGenerationStrategyFactory.CreateFor(interfaceFile);
+
+            return @interface;
+        }
+
+        ClassModel createClass(InterfaceModel @interface, string name, List<MethodModel> methods, List<UsingDirectiveModel> usings, string directory)
+        {
+            var @class = new ClassModel(name);
+
+            var constructors = new List<ConstructorModel>()
+            {
+
+                new ConstructorModel(@class,@class.Name)
                 {
-                    new ParamModel()
+                    Params = new List<ParamModel>
                     {
-                        Type = new TypeModel()
+                        new ParamModel()
                         {
-                            Name = "ILogger",
-                            GenericTypeParameters = new List<TypeModel>()
+                            Type = new TypeModel()
                             {
-                                new TypeModel() { Name = name}
-                            }
-                        },
-                        Name = "logger"
+                                Name = "ILogger",
+                                GenericTypeParameters = new List<TypeModel>()
+                                {
+                                    new TypeModel() { Name = name}
+                                }
+                            },
+                            Name = "logger"
+                        }
                     }
                 }
-            }
-        };
+            };
+            @class.Constructors = constructors;
 
-        var classMethods = new List<MethodModel>()
-        {
-            new MethodModel()
-            {
-                Name = "DoWorkAsync",
-                ReturnType = new TypeModel() { Name = "Task" },
-                Async = true
-            }
-        };
+            @class.Methods = methods;
 
-        var interfaceMethods = new List<MethodModel>()
-        {
-            new MethodModel()
-            {
-                Name = "DoWorkAsync",
-                ReturnType = new TypeModel() { Name = "Task" },
-                Async = true,
-                Interface = true
-            }
-        };
+            @class.Fields = fields;
 
-        var @interface = new InterfaceModel($"I{name}");
+            @class.UsingDirectives.AddRange(usingDirectives);
 
-        @interface.Methods = interfaceMethods;
+            @class.Implements.Add(new TypeModel() { Name = @interface.Name });
 
-        @interface.UsingDirectives.AddRange(usingDirectives);
+            var classFile = new ObjectFileModel<ClassModel>(
+                @class,
+                @class.UsingDirectives,
+                @class.Name,
+                directory,
+                "cs"
+                );
 
-        var interfaceFile = new ObjectFileModel<InterfaceModel>(
-            @interface,
-            @interface.UsingDirectives,
-            @interface.Name,
-            directory,
-            "cs"
-            );
+            _artifactGenerationStrategyFactory.CreateFor(classFile);
 
-        _artifactGenerationStrategyFactory.CreateFor(interfaceFile);
+            _dependencyInjectionService.Add(@interface.Name, @class.Name, directory);
 
-        @class.Constructors = constructors;
-
-        @class.Methods = classMethods;
-
-        @class.Fields = fields;
-
-        @class.UsingDirectives.AddRange(usingDirectives);
-
-        @class.Implements.Add(new TypeModel() { Name = @interface.Name });
-
-        var classFile = new ObjectFileModel<ClassModel>(
-            @class,
-            @class.UsingDirectives,
-            @class.Name,
-            directory,
-            "cs"
-            );
-
-        _artifactGenerationStrategyFactory.CreateFor(classFile);
-
+            return @class;
+        }
     }
 }

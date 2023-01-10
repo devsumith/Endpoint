@@ -1,24 +1,22 @@
 using CommandLine;
-using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Types;
-using Endpoint.Core.Models.Syntax.Methods;
-using System.Text;
+using Endpoint.Core.Abstractions;
 using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Fields;
+using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
+using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax.Interfaces;
-using System.IO;
-using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Syntax;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
 
@@ -37,13 +35,16 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest, U
 {
     private readonly ILogger<WorkerCreateRequestHandler> _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IDependencyInjectionService _dependencyInjectionService;
 
     public WorkerCreateRequestHandler(
         ILogger<WorkerCreateRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IDependencyInjectionService dependencyInjectionService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _dependencyInjectionService = dependencyInjectionService ?? throw new ArgumentNullException(nameof(dependencyInjectionService));
     }
 
     public async Task<Unit> Handle(WorkerCreateRequest request, CancellationToken cancellationToken)
@@ -109,9 +110,13 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest, U
         var methodBodyBuilder = new StringBuilder();
 
         methodBodyBuilder.AppendLine("while (!stoppingToken.IsCancellationRequested)");
+        
         methodBodyBuilder.AppendLine("{");
+        
         methodBodyBuilder.AppendLine("_logger.LogInformation(\"Worker running at: {time}\", DateTimeOffset.Now);".Indent(1));
+        
         methodBodyBuilder.AppendLine("await Task.Delay(1000, stoppingToken);".Indent(1));
+        
         methodBodyBuilder.AppendLine("}");
 
         var method = new MethodModel()
@@ -137,6 +142,8 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest, U
         var fileModel = new ObjectFileModel<ClassModel>(model, usings, model.Name, request.Directory, "cs");
 
         _artifactGenerationStrategyFactory.CreateFor(fileModel);
+
+        _dependencyInjectionService.AddHosted(model.Name, request.Directory);
 
         return new();
     }

@@ -7,9 +7,9 @@
     <PackageTags>clean-architecture;source-generator;application-code;scaffolding</PackageTags>
     <RepositoryUrl>https://github.com/QuinntyneBrown/Endpoint</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>1.0.8</AssemblyVersion>
-    <FileVersion>1.0.8</FileVersion>
-    <Version>1.0.8</Version>
+    <AssemblyVersion>1.0.10</AssemblyVersion>
+    <FileVersion>1.0.10</FileVersion>
+    <Version>1.0.10</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageId>Quinntyne.Endpoint.Core</PackageId>
@@ -50,5 +50,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Syntax\RouteHandlers\Create\" />
+    <Folder Include="DomainEvents\" />
   </ItemGroup>
 </Project>

@@ -45,7 +45,9 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
             }
         }
 
-        builder.AppendLine($"namespace {_namespaceProvider.Get(model.Directory)};");
+        var fileNamespace = string.IsNullOrEmpty(model.Namespace) ? _namespaceProvider.Get(model.Directory) : model.Namespace;
+
+        builder.AppendLine($"namespace {fileNamespace};");
 
         builder.AppendLine();
 

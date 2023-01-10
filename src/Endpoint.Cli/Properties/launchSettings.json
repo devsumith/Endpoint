@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "worker-create -n Bottlenose -d C:\\projects\\Endpoint\\src\\Endpoint.Cli",
+      "commandLineArgs": "worker-create -n FooBarWorker -d C:\\projects\\Nike\\src\\Nike.Console",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",

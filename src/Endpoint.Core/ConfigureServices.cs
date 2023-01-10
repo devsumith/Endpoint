@@ -45,6 +45,7 @@ public static class ConfigureServices
         services.AddSingleton<IFileModelFactory, FileModelFactory>();
         services.AddSingleton<INamespaceProvider, NamespaceProvider>();
         services.AddSingleton<IDomainDrivenDesignFileService, DomainDrivenDesighFileService>();
+        services.AddSingleton<IDependencyInjectionService, DependencyInjectionService>();
 
         services.AddSingleton<IEntityModelFactory, EntityModelFactory>();
         services.AddSingleton<IAggregateRootModelFactory, AggregateRootModelFactory>();
