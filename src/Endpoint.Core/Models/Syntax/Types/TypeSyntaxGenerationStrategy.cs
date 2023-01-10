@@ -1,5 +1,6 @@
 using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Models.Syntax.Types;
@@ -22,6 +23,15 @@ public class TypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<TypeMod
         var builder = new StringBuilder();
 
         builder.Append(model.Name);
+
+        if(model.GenericTypeParameters.Count > 0)
+        {
+            builder.Append('<');
+
+            builder.AppendJoin(',', model.GenericTypeParameters.Select(x => syntaxGenerationStrategyFactory.CreateFor(x)));
+
+            builder.Append('>');
+        }
 
         return builder.ToString();
     }

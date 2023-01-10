@@ -27,7 +27,7 @@ public class ConstructorSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<
 
         var builder = new StringBuilder();
 
-        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
+        builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
 
         builder.Append($" {model.Name}");
 
@@ -47,7 +47,7 @@ public class ConstructorSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<
 
         foreach(var param in model.Params) {
 
-            var field = model.Class.Fields.SingleOrDefault(x => x.Type == param.Type);
+            var field = model.Class.Fields.SingleOrDefault(x => x.Type.Name == param.Type.Name);
 
             if(field != null)
             {
@@ -55,7 +55,7 @@ public class ConstructorSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<
 
                 var paramName = _namingConventionConverter.Convert(NamingConvention.CamelCase, param.Name);
 
-                builder.AppendLine($"{fieldName} = {paramName} ?? throw new ArgumentNullException(nameof({paramName}));");
+                builder.AppendLine($"{fieldName} = {paramName} ?? throw new ArgumentNullException(nameof({paramName}));".Indent(1));
             }       
         }
 

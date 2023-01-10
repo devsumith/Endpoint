@@ -19,4 +19,10 @@ public class InterfaceModel : TypeDeclarationModel
     public List<TypeModel> Implements { get; set; }
     public List<MethodModel> Methods { get; set; }
     public List<UsingDirectiveModel> UsingDirectives { get; set; }
+
+    public virtual void AddMethod(MethodModel method)
+    {
+        method.Interface = true;
+        Methods.Add(method);
+    }
 }

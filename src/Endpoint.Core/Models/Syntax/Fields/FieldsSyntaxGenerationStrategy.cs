@@ -46,7 +46,7 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
         if (model.ReadOnly)
             builder.Append(" readonly");
 
-        builder.Append($"{syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name}");
+        builder.Append($" {syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name};");
 
         return builder.ToString();
     }

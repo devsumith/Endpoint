@@ -46,7 +46,7 @@ public class InterfaceSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<In
             builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Properties, configuration)).Indent(1));
 
         if (model.Methods.Count > 0)
-            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Methods, configuration).Indent(1));
+            builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Methods, configuration)).Indent(1));
 
         builder.AppendLine("}");
 

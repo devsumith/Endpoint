@@ -4,6 +4,7 @@ using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Interfaces;
+using Endpoint.Core.Models.Syntax.Methods;
 
 namespace Endpoint.Core.Models.Syntax.Classes;
 
@@ -23,5 +24,11 @@ public class ClassModel : InterfaceModel
     public List<ConstructorModel> Constructors { get; set; }
     public List<AttributeModel> Attributes { get; set; }    
     public bool Static { get; set; }
+
+    public override void AddMethod(MethodModel method)
+    {
+        method.Interface = false;
+        Methods.Add(method);
+    }
 
 }

@@ -49,16 +49,16 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
 
 
         if(model.Fields.Count > 0)
-            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Fields, configuration).Indent(1));
+            builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Fields, configuration)).Indent(1));
 
         if (model.Constructors.Count > 0)
-            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Constructors, configuration).Indent(1));
+            builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Constructors, configuration)).Indent(1));
 
         if (model.Properties.Count > 0)
             builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Properties, configuration)).Indent(1));
         
         if (model.Methods.Count > 0)
-            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Methods, configuration).Indent(1));
+            builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Methods, configuration)).Indent(1));
 
         builder.AppendLine("}");
         

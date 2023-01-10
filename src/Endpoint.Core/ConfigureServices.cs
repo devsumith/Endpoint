@@ -14,6 +14,7 @@ using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.Syntax.Methods;
+using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.RequestHandlers;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
@@ -116,6 +117,7 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerGetByIdSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, AttributeSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, TypeSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, ParamSyntaxGenerationStrategy>();
         
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerCreateSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerDeleteSyntaxGenerationStrategy>();
