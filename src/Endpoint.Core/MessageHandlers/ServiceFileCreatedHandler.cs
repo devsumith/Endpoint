@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Core.MessageHandlers;
 
-public class WorkerFileCreatedHandler : INotificationHandler<WorkerFileCreated>
+public class ServiceFileCreatedHandler : INotificationHandler<ServiceFileCreated>
 {
     private readonly IDependencyInjectionService _dependencyInjectionService;
-    private readonly ILogger<WorkerFileCreatedHandler> _logger;
-    public WorkerFileCreatedHandler(
+    private readonly ILogger<ServiceFileCreatedHandler> _logger;
+    public ServiceFileCreatedHandler(
         IDependencyInjectionService dependencyInjectionService,
-        ILogger<WorkerFileCreatedHandler> logger)
+        ILogger<ServiceFileCreatedHandler> logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _dependencyInjectionService = dependencyInjectionService ?? throw new ArgumentNullException(nameof(dependencyInjectionService));
     }
 
-    public async Task Handle(WorkerFileCreated notification, CancellationToken cancellationToken)
+    public async Task Handle(ServiceFileCreated notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(WorkerFileCreatedHandler));
+        _logger.LogInformation("Handled: {0}", nameof(ServiceFileCreatedHandler));
 
-        _dependencyInjectionService.AddHosted(notification.Name, notification.Directory);
+        _dependencyInjectionService.Add(notification.InterfaceName,notification.ClassName,notification.Directory);
     }
 }

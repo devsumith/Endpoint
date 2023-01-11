@@ -1,5 +1,4 @@
 using Endpoint.Cli;
-using Endpoint.Core;
 using Endpoint.Core.Internals;
 using MediatR;
 using Microsoft.Extensions.Configuration;

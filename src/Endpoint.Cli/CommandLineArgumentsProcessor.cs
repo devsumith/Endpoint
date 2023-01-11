@@ -22,25 +22,20 @@ public class CommandLineArgumentsProcessor: BackgroundService
         IMediator mediator,
         IConfiguration configuration)
     {
-        _mediator = mediator;
-        _configuration = configuration;
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    private Parser _createParser()
+    private Parser _createParser() => new Parser(with =>
     {
-        return new Parser(with =>
-        {
-            with.CaseSensitive = false;
-            with.HelpWriter = Console.Out;
-            with.IgnoreUnknownArguments = true;
-        });
-    }
+        with.CaseSensitive = false;
+        with.HelpWriter = Console.Out;
+        with.IgnoreUnknownArguments = true;
+    });
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-
         var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
 
         if (args.Length == 0 || args[0].StartsWith("-"))
@@ -54,26 +49,7 @@ public class CommandLineArgumentsProcessor: BackgroundService
             .ToArray();
 
         _createParser().ParseArguments(args, verbs)
-            .WithParsed(
-              async (dynamic request) =>
-              {
-
-                  try
-                  {
-                      await _mediator.Send(request).ConfigureAwait(false);
-
-                      tcs.SetResult();
-                  }
-                  catch (Exception ex)
-                  {
-
-                      throw ex;
-                  }
-              });
-
-
-        await tcs.Task;
+            .WithParsed(async (dynamic request) => await _mediator.Send(request).ConfigureAwait(false));
     }
-
 }
 

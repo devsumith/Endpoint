@@ -1,7 +1,9 @@
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Internals;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
+using MediatR;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Artifacts.Projects.MicroserviceTemplates;
@@ -45,11 +47,15 @@ public class ConsoleMicroserviceTestProjectModel : ProjectModel
 public class ConsoleMicroserviceArtifactGenerationStrategy : ArtifactGenerationStrategyBase<ConsoleMicroserviceProjectModel>
 {
     private readonly IFileSystem _fileSytem;
-
-    public ConsoleMicroserviceArtifactGenerationStrategy(IServiceProvider serviceProvider, IFileSystem fileSystem) 
+    private readonly Observable<INotification> _notificationListener;
+    public ConsoleMicroserviceArtifactGenerationStrategy(
+        IServiceProvider serviceProvider, 
+        IFileSystem fileSystem,
+        Observable<INotification> notificationListener) 
         :base(serviceProvider)
     { 
         _fileSytem = fileSystem;
+        _notificationListener = notificationListener;
     }
 
     public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ConsoleMicroserviceProjectModel model, dynamic configuration = null)

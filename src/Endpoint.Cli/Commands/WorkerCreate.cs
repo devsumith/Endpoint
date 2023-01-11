@@ -11,7 +11,6 @@ using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Types;
-using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -37,20 +36,17 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest, U
 {
     private readonly ILogger<WorkerCreateRequestHandler> _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
-    private readonly IDependencyInjectionService _dependencyInjectionService;
-    private readonly Observable<INotification> _observableNotifications;
+    private readonly Observable<INotification> _notificationListener;
 
 
     public WorkerCreateRequestHandler(
         ILogger<WorkerCreateRequestHandler> logger,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
-        IDependencyInjectionService dependencyInjectionService,
-        Observable<INotification> observableNotifications)
+        Observable<INotification> notificationListener)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
-        _dependencyInjectionService = dependencyInjectionService ?? throw new ArgumentNullException(nameof(dependencyInjectionService));
-        _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
+        _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
         
     }
 
@@ -150,10 +146,7 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest, U
 
         _artifactGenerationStrategyFactory.CreateFor(fileModel);
 
-
-        _observableNotifications.Broadcast(new WorkerFileCreated());
-
-        _dependencyInjectionService.AddHosted(model.Name, request.Directory);
+        _notificationListener.Broadcast(new WorkerFileCreated(model.Name, request.Directory));
 
         return new();
     }

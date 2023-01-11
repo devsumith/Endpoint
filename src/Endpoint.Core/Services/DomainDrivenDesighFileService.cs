@@ -1,4 +1,6 @@
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Internals;
+using Endpoint.Core.Messages;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Classes;
@@ -9,6 +11,7 @@ using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
+using MediatR;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,15 +21,15 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly IFileProvider _fileProvider;
-    private readonly IDependencyInjectionService _dependencyInjectionService;
+    private readonly Observable<INotification> _notificationListener;
     public DomainDrivenDesignFileService(
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, 
         IFileProvider fileProvider,
-        IDependencyInjectionService dependencyInjectionService)
+        Observable<INotification> notificationListener)
 	{
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _dependencyInjectionService = dependencyInjectionService ?? throw new ArgumentNullException(nameof(dependencyInjectionService));
+        _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
 	}
 
 	public void ServiceCreate(string name, string directory)
@@ -136,8 +139,8 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
             _artifactGenerationStrategyFactory.CreateFor(classFile);
 
-            _dependencyInjectionService.Add(@interface.Name, @class.Name, directory);
-
+            _notificationListener.Broadcast(new ServiceFileCreated(@interface.Name, @class.Name,directory));
+            
             return @class;
         }
     }
