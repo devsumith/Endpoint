@@ -1,9 +1,10 @@
-﻿using Endpoint.Core;
+using Endpoint.Core;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.ApiProjectModels;
 using Endpoint.Core.Models.Artifacts.Entities;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Projects;
+using Endpoint.Core.Models.Artifacts.Projects.MicroserviceTemplates;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Git;
 using Endpoint.Core.Models.Syntax;
@@ -28,6 +29,7 @@ using Endpoint.Core.Strategies.Files.Create;
 using Endpoint.Core.Strategies.Solutions.Crerate;
 using Endpoint.Core.Strategies.Solutions.Update;
 using Endpoint.Core.Strategies.WorkspaceSettingss.Update;
+using MediatR;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -44,7 +46,7 @@ public static class ConfigureServices
         services.AddSingleton<IContext, Context>();
         services.AddSingleton<IFileModelFactory, FileModelFactory>();
         services.AddSingleton<INamespaceProvider, NamespaceProvider>();
-        services.AddSingleton<IDomainDrivenDesignFileService, DomainDrivenDesighFileService>();
+        services.AddSingleton<IDomainDrivenDesignFileService, DomainDrivenDesignFileService>();
         services.AddSingleton<IDependencyInjectionService, DependencyInjectionService>();
 
         services.AddSingleton<IEntityModelFactory, EntityModelFactory>();
@@ -70,6 +72,8 @@ public static class ConfigureServices
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<InterfaceModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<EntityModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, LaunchSettingsFileGenerationStrategy>();
+        services.AddSingleton<IArtifactGenerationStrategy, ConsoleMicroserviceArtifactGenerationStrategy>();
+
 
         services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();
@@ -97,7 +101,7 @@ public static class ConfigureServices
         services.AddSingleton<IWebGenerationStrategy, AngularProjectGenerationStrategy>();
 
         services.AddSingleton<IArtifactGenerationStrategyFactory, ArtifactGenerationStrategyFactory>();
-        
+
         services.AddSingleton<ISyntaxGenerationStrategyFactory, SyntaxGenerationStrategyFactory>();
         services.AddSingleton<ISyntaxGenerationStrategy, ClassSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, MethodsSyntaxGenerationStrategy>();
@@ -119,7 +123,7 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategy, AttributeSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, TypeSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, ParamSyntaxGenerationStrategy>();
-        
+
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerCreateSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerDeleteSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerGetByIdSyntaxGenerationStrategy>();
@@ -128,14 +132,14 @@ public static class ConfigureServices
 
         services.AddSingleton<IArtifactUpdateStrategyFactory, ArtifactUpdateStrategyFactory>();
 
-        services.AddSingleton<IClipboardService,ClipboardService>();
+        services.AddSingleton<IClipboardService, ClipboardService>();
         services.AddSingleton<ISyntaxService, SyntaxService>();
         services.AddSingleton<IEntityFileModelFactory, EntityFileModelFactory>();
         services.AddSingleton<IProjectModelFactory, ProjectModelFactory>();
 
         services.AddSingleton<IRouteHandlerModelFactory, RouteHandlerModelFactory>();
-
-
+        services.AddMediatR(typeof(Constants));
+        services.AddHostedService<ObservableNotificationsProcessor>();
     }
 
     public static void AddCoreServices<T>(this IServiceCollection services)
@@ -145,3 +149,4 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+

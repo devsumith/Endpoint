@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-using Endpoint.Core.Models.Artifacts.Files;
-using Octokit.Internal;
+﻿using Endpoint.Core.Models.Artifacts.Files;
+using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Artifacts.Projects;
 
 public class ProjectModel
 {
-    public string Name { get; private set; }
-    public string Directory { get; private set; }
+    public string Name { get; init; }
+    public string Directory { get; init; }
     public string Path => $"{Directory}{System.IO.Path.DirectorySeparatorChar}{Name}.csproj";
     public string Namespace => Name;
     public DotNetProjectType DotNetProjectType { get; set; }
-    public List<FileModel> Files { get; private set; } = new List<FileModel>();
-    public List<PackageModel> Packages { get; private set; } = new();
+    public List<FileModel> Files { get; init; } = new List<FileModel>();
+    public List<PackageModel> Packages { get; init; } = new();
     public bool HasSecrets { get; init; }
     public bool IsNugetPackage { get; init; }
     public int Order { get; init; } = 0;

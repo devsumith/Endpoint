@@ -1,4 +1,6 @@
-﻿using Endpoint.Core;
+using Endpoint.Cli;
+using Endpoint.Core;
+using Endpoint.Core.Internals;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -9,11 +11,14 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
 {
-    public static void AddCliServices(this IServiceCollection services)
+    public static void AddCliServices(this IServiceCollection services)        
     {
+        
+        services.AddLogging(o => o.AddConsole());
         services.AddCoreServices();
-        services.AddMediatR(typeof(Program),typeof(Constants));
+        services.AddMediatR(typeof(Program));
         services.AddInfrastructureServices();
+        services.AddSingleton(new Observable<INotification>());
 
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
@@ -22,8 +27,8 @@ public static class ConfigureServices
             .AddEnvironmentVariables()
             .Build();
 
-        services.AddLogging(o => o.AddConsole());
-
         services.AddSingleton<IConfiguration>(_ => configuration);
+        services.AddHostedService<CommandLineArgumentsProcessor>();
     }
 }
+

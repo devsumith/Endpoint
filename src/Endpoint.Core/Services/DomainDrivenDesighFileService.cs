@@ -14,12 +14,12 @@ using System.Linq;
 
 namespace Endpoint.Core.Services;
 
-public class DomainDrivenDesighFileService: IDomainDrivenDesignFileService {
+public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly IFileProvider _fileProvider;
     private readonly IDependencyInjectionService _dependencyInjectionService;
-    public DomainDrivenDesighFileService(
+    public DomainDrivenDesignFileService(
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, 
         IFileProvider fileProvider,
         IDependencyInjectionService dependencyInjectionService)

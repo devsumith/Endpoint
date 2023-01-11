@@ -1,6 +1,8 @@
 using CommandLine;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Enums;
+using Endpoint.Core.Internals;
+using Endpoint.Core.Messages;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Classes;
@@ -36,15 +38,20 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest, U
     private readonly ILogger<WorkerCreateRequestHandler> _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly IDependencyInjectionService _dependencyInjectionService;
+    private readonly Observable<INotification> _observableNotifications;
+
 
     public WorkerCreateRequestHandler(
         ILogger<WorkerCreateRequestHandler> logger,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
-        IDependencyInjectionService dependencyInjectionService)
+        IDependencyInjectionService dependencyInjectionService,
+        Observable<INotification> observableNotifications)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _dependencyInjectionService = dependencyInjectionService ?? throw new ArgumentNullException(nameof(dependencyInjectionService));
+        _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
+        
     }
 
     public async Task<Unit> Handle(WorkerCreateRequest request, CancellationToken cancellationToken)
@@ -142,6 +149,9 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest, U
         var fileModel = new ObjectFileModel<ClassModel>(model, usings, model.Name, request.Directory, "cs");
 
         _artifactGenerationStrategyFactory.CreateFor(fileModel);
+
+
+        _observableNotifications.Broadcast(new WorkerFileCreated());
 
         _dependencyInjectionService.AddHosted(model.Name, request.Directory);
 

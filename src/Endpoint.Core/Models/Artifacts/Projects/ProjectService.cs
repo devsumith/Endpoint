@@ -36,6 +36,7 @@ public class ProjectService : IProjectService
 
         _commandService.Start($"dotnet sln {solutionName} add {model.Path}", solutionDirectory);
     }
+
     public void AddGenerateDocumentationFile(string csprojFilePath)
     {
         var doc = XDocument.Load(csprojFilePath);
