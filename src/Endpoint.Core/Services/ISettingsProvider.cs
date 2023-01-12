@@ -1,9 +1,8 @@
 ﻿using Endpoint.Core.Models.Options;
 
-namespace Endpoint.Core.Services
+namespace Endpoint.Core.Services;
+
+public interface ISettingsProvider
 {
-    public interface ISettingsProvider
-    {
-        SettingsModel Get(string directory = null);
-    }
+    SettingsModel Get(string directory = null);
 }

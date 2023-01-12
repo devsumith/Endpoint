@@ -25,9 +25,13 @@ public class PropertyAccessorModel
 
     public static PropertyAccessorModel Get => new PropertyAccessorModel(PropertyAccessorType.Get);
 
+    public static PropertyAccessorModel Set => new PropertyAccessorModel(PropertyAccessorType.Set);
+
     public static PropertyAccessorModel PrivateSet => new PropertyAccessorModel("private", PropertyAccessorType.Set);
 
     public static List<PropertyAccessorModel> GetPrivateSet => new List<PropertyAccessorModel>() { Get, PrivateSet };
+
+    public static List<PropertyAccessorModel> GetSet => new List<PropertyAccessorModel>() { Get, Set };
 
     public static bool IsGetPrivateSet(List<PropertyAccessorModel> accessors)
     {

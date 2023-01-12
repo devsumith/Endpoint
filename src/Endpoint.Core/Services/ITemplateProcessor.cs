@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace Endpoint.Core.Services
+namespace Endpoint.Core.Services;
+
+public interface ITemplateProcessor
 {
-    public interface ITemplateProcessor
-    {
-        string[] Process(string[] template, IDictionary<string, object> tokens, string[] ignoreTokens = null);
-        string Process(string template, IDictionary<string, object> tokens);
-        string Process(string[] template, dynamic model);
-    }
+    string[] Process(string[] template, IDictionary<string, object> tokens, string[] ignoreTokens = null);
+    string Process(string template, IDictionary<string, object> tokens);
+    string Process(string[] template, dynamic model);
 }

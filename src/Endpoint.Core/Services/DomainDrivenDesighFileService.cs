@@ -22,17 +22,98 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly IFileProvider _fileProvider;
     private readonly Observable<INotification> _notificationListener;
+    private readonly INamingConventionConverter _namingConventionConverter;
+    private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
+
     public DomainDrivenDesignFileService(
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, 
         IFileProvider fileProvider,
-        Observable<INotification> notificationListener)
+        Observable<INotification> notificationListener,
+        INamingConventionConverter namingConventionConverter,
+        ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory)
 	{
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
+        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategyFactory));
 	}
 
-	public void ServiceCreate(string name, string directory)
+    public void MessageCreate(string name, List<PropertyModel> properties, string directory)
+    {
+        var classModel = new ClassModel(name);
+
+        classModel.Properties.AddRange(properties);
+
+        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "MediatR" });
+
+        var constructorModel = new ConstructorModel(classModel, classModel.Name);
+
+        foreach(var property in properties)
+        {
+            classModel.Fields.Add(new FieldModel()
+            {
+                Name = $"_{_namingConventionConverter.Convert(NamingConvention.CamelCase, property.Name)}",
+                Type = property.Type
+            });
+
+            constructorModel.Params.Add(new ParamModel()
+            {
+                Name = $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, property.Name)}",
+                Type = property.Type
+            });
+        }
+
+        classModel.Constructors.Add(constructorModel);
+
+        classModel.Implements.Add(new TypeModel("INotification"));
+
+        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
+
+        _artifactGenerationStrategyFactory.CreateFor(classFileModel);
+
+    }
+
+    public void MessageHandlerCreate(string name, string directory)
+    {
+        var classModel = new ClassModel(name);
+
+        var fields = new List<FieldModel>();
+
+        var classParams = new List<ParamModel>();
+
+        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "MediatR" });
+
+        classModel.Fields = fields;
+
+        var constructorModel = new ConstructorModel(classModel, classModel.Name);
+
+        foreach (var typeModel in new List<TypeModel> () {  })
+        {
+            classModel.Fields.Add(new FieldModel()
+            {
+                Name = $"_{_namingConventionConverter.Convert(NamingConvention.CamelCase, _syntaxGenerationStrategyFactory.CreateFor(typeModel))}",
+                Type = typeModel
+            });
+
+            constructorModel.Params.Add(new ParamModel()
+            {
+                Name = $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, _syntaxGenerationStrategyFactory.CreateFor(typeModel))}",
+                Type = typeModel
+            });
+        }
+
+        classModel.Constructors.Add(constructorModel);
+
+        classModel.Implements.Add(new TypeModel("INotification"));
+
+        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
+
+        _artifactGenerationStrategyFactory.CreateFor(classFileModel);
+
+    }
+
+    public void ServiceCreate(string name, string directory)
 	{
         var usingDirectives = new List<UsingDirectiveModel>()
         {

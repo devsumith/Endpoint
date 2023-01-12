@@ -7,33 +7,32 @@ using static System.Environment;
 using static System.IO.Path;
 using static System.Text.Json.JsonSerializer;
 
-namespace Endpoint.Core.Services
+namespace Endpoint.Core.Services;
+
+public class SettingsProvider : ISettingsProvider
 {
-    public class SettingsProvider : ISettingsProvider
+    public SettingsModel Get(string directory = null)
     {
-        public SettingsModel Get(string directory = null)
+        directory ??= CurrentDirectory;
+
+        var parts = directory.Split(DirectorySeparatorChar);
+
+        for (var i = 1; i <= parts.Length; i++)
         {
-            directory ??= CurrentDirectory;
+            var path = $"{string.Join(DirectorySeparatorChar, parts.Take(i))}{DirectorySeparatorChar}{Constants.SettingsFileName}";
 
-            var parts = directory.Split(DirectorySeparatorChar);
-
-            for (var i = 1; i <= parts.Length; i++)
+            if (File.Exists(path))
             {
-                var path = $"{string.Join(DirectorySeparatorChar, parts.Take(i))}{DirectorySeparatorChar}{Constants.SettingsFileName}";
-
-                if (File.Exists(path))
+                var settings = Deserialize<SettingsModel>(File.ReadAllText(path), new JsonSerializerOptions()
                 {
-                    var settings = Deserialize<SettingsModel>(File.ReadAllText(path), new JsonSerializerOptions()
-                    {
-                        PropertyNameCaseInsensitive = true,
-                    });
-                    settings.RootDirectory = new FileInfo(path).Directory.FullName;
-                    return settings;
-                }
+                    PropertyNameCaseInsensitive = true,
+                });
+                settings.RootDirectory = new FileInfo(path).Directory.FullName;
+                return settings;
             }
-
-            return null;
-
         }
+
+        return null;
+
     }
 }

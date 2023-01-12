@@ -49,7 +49,12 @@ public class CommandLineArgumentsProcessor: BackgroundService
             .ToArray();
 
         _createParser().ParseArguments(args, verbs)
-            .WithParsed(async (dynamic request) => await _mediator.Send(request).ConfigureAwait(false));
+            .WithParsed(async (dynamic request) => {
+
+                await _mediator.Send(request).ConfigureAwait(false);
+
+                Environment.Exit(0);
+            });
     }
 }
 

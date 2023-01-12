@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\src\Endpoint.Cli\Endpoint.Cli.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PlantUmlParserStrategy\" />
+  </ItemGroup>
+
 </Project>

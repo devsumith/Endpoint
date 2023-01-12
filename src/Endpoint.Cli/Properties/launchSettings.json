@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "worker-create -n FooBarWorker -d C:\\projects\\Nike\\src\\Nike.Console",
+      "commandLineArgs": "solution-create-from-plant-uml -n MySln -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",

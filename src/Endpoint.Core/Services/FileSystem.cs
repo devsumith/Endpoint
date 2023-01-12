@@ -1,83 +1,82 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace Endpoint.Core.Services
+namespace Endpoint.Core.Services;
+
+public class FileSystem : IFileSystem
 {
-    public class FileSystem : IFileSystem
+    public bool Exists(string path)
+        => File.Exists(path);
+
+    public bool Exists(string[] paths)
+        => paths.Any(x => Exists(x));
+
+    public Stream OpenRead(string path)
+        => File.OpenRead(path);
+
+    public string ReadAllText(string path)
+        => File.ReadAllText(path);
+
+    public void WriteAllText(string path, string contents)
     {
-        public bool Exists(string path)
-            => File.Exists(path);
+        File.WriteAllText(path, contents);
+    }
 
-        public bool Exists(string[] paths)
-            => paths.Any(x => Exists(x));
+    public void WriteAllLines(string path, string[] contents)
+    {
+        var parts = Path.GetDirectoryName(path).Split(Path.DirectorySeparatorChar);
 
-        public Stream OpenRead(string path)
-            => File.OpenRead(path);
-
-        public string ReadAllText(string path)
-            => File.ReadAllText(path);
-
-        public void WriteAllText(string path, string contents)
+        for (var i = 1; i <= parts.Length; i++)
         {
-            File.WriteAllText(path, contents);
-        }
+            var subPath = string.Join(Path.DirectorySeparatorChar, parts.Take(i));
 
-        public void WriteAllLines(string path, string[] contents)
-        {
-            var parts = Path.GetDirectoryName(path).Split(Path.DirectorySeparatorChar);
-
-            for (var i = 1; i <= parts.Length; i++)
+            if (!Exists(subPath))
             {
-                var subPath = string.Join(Path.DirectorySeparatorChar, parts.Take(i));
-
-                if (!Exists(subPath))
-                {
-                    CreateDirectory(subPath);
-                }
-            }
-
-            File.WriteAllLines(path, contents);
-        }
-
-        public string ParentFolder(string path)
-        {
-            var directories = path.Split(Path.DirectorySeparatorChar);
-
-            string parentFolderPath = string.Join($"{Path.DirectorySeparatorChar}", directories.ToList()
-                .Take(directories.Length - 1));
-
-            return parentFolderPath;
-        }
-
-        public void CreateDirectory(string directory)
-        {
-            System.IO.Directory.CreateDirectory(directory);
-        }
-
-        public void Delete(string path)
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
+                CreateDirectory(subPath);
             }
         }
 
-        public void DeleteDirectory(string directory)
-        {
-            if(Directory.Exists(directory))
-            {
-                Directory.Delete(directory, true); 
-            }
-        }
+        File.WriteAllLines(path, contents);
+    }
 
-        public string[] ReadAllLines(string path)
-        {
-            return File.ReadAllLines(path);
-        }
+    public string ParentFolder(string path)
+    {
+        var directories = path.Split(Path.DirectorySeparatorChar);
 
-        public string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
+        string parentFolderPath = string.Join($"{Path.DirectorySeparatorChar}", directories.ToList()
+            .Take(directories.Length - 1));
+
+        return parentFolderPath;
+    }
+
+    public void CreateDirectory(string directory)
+    {
+        System.IO.Directory.CreateDirectory(directory);
+    }
+
+    public void Delete(string path)
+    {
+        if (File.Exists(path))
         {
-            return Directory.GetFiles(path, searchPattern, searchOption);
+            File.Delete(path);
         }
+    }
+
+    public void DeleteDirectory(string directory)
+    {
+        if(Directory.Exists(directory))
+        {
+            Directory.Delete(directory, true); 
+        }
+    }
+
+    public string[] ReadAllLines(string path)
+    {
+        return File.ReadAllLines(path);
+    }
+
+    public string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
+    {
+        return Directory.GetFiles(path, searchPattern, searchOption);
     }
 }

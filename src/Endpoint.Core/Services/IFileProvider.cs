@@ -1,7 +1,6 @@
-﻿namespace Endpoint.Core.Services
+﻿namespace Endpoint.Core.Services;
+
+public interface IFileProvider
 {
-    public interface IFileProvider
-    {
-        string Get(string searchPattern, string directory, int depth = 0);
-    }
+    string Get(string searchPattern, string directory, int depth = 0);
 }

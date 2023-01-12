@@ -1,7 +1,6 @@
-﻿namespace Endpoint.Core.Services
+﻿namespace Endpoint.Core.Services;
+
+public interface ITenseConverter
 {
-    public interface ITenseConverter
-    {
-        string Convert(string value, bool pastTense = true);
-    }
+    string Convert(string value, bool pastTense = true);
 }

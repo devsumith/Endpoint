@@ -1,7 +1,6 @@
-﻿namespace Endpoint.Core.Services
+﻿namespace Endpoint.Core.Services;
+
+public interface IFileNamespaceProvider
 {
-    public interface IFileNamespaceProvider
-    {
-        string Get(string directory);
-    }
+    string Get(string directory);
 }

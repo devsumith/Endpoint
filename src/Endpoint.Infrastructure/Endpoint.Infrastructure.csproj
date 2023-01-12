@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Templates\ArtifactGenerationStrategy.txt" />
+    <None Remove="Templates\Copyright.txt" />
     <None Remove="Templates\SyntaxGenerationStrategy.txt" />
     <None Remove="Templates\Verb.txt" />
   </ItemGroup>
@@ -38,6 +39,7 @@
     <EmbeddedResource Include="Templates\SharedKernel\ResponseBase.txt" />
     <EmbeddedResource Include="Templates\ArtifactGenerationStrategy.txt" />
     <EmbeddedResource Include="Templates\SyntaxGenerationStrategy.txt" />
+    <EmbeddedResource Include="Templates\Copyright.txt" />
     <EmbeddedResource Include="Templates\Verb.txt" />
   </ItemGroup>
 

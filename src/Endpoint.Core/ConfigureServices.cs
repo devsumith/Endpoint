@@ -140,6 +140,16 @@ public static class ConfigureServices
         services.AddSingleton<IRouteHandlerModelFactory, RouteHandlerModelFactory>();
         services.AddMediatR(typeof(Constants));
         services.AddHostedService<ObservableNotificationsProcessor>();
+
+
+        services.AddSingleton<IPlantUmlParserStrategyFactory, PlantUmlParserStrategyFactory>();
+        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlProjectParserStrategy>();
+        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlSolutionParserStrategy>();
+        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlClassFileParserStrategy>();
+        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlInterfaceFileParserStrategy>();
+        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlFieldParserStrategy>();
+        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlMethodParserStrategy>();
+        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlPropertyParserStrategy>();
     }
 
     public static void AddCoreServices<T>(this IServiceCollection services)
