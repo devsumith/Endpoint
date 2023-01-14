@@ -1,5 +1,5 @@
 ﻿using Endpoint.Core;
-using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace Endpoint.Core.Builders.Core
 {
     public class CreateCommandHandlerBodyBuilder
     {
-        public static string[] Build(AggregateRootModel aggregateRoot)
+        public static string[] Build(LegacyAggregateModel aggregateRoot)
         {
             var aggregateName = aggregateRoot.Name;
 

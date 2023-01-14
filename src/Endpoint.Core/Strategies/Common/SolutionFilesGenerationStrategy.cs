@@ -1,7 +1,7 @@
 ﻿using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Strategies.Common;
@@ -35,7 +35,7 @@ namespace Endpoint.Core.Services
 
         public SettingsModel Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
-            AggregateRootModel aggregateRoot = new AggregateRootModel(resource);
+            LegacyAggregateModel aggregateRoot = new LegacyAggregateModel(resource);
 
             aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, AccessModifier.Public, new TypeModel() { Name = "Guid" }, $"{((Token)resource).PascalCase}Id", PropertyAccessorModel.GetPrivateSet, key: true));
 
@@ -49,16 +49,16 @@ namespace Endpoint.Core.Services
                 }
             }
 
-            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<AggregateRootModel>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins, prefix);
+            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<LegacyAggregateModel>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins, prefix);
         }
 
         public SettingsModel Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
-            var aggregates = new List<AggregateRootModel>();
+            var aggregates = new List<LegacyAggregateModel>();
 
             foreach (var resource in resources)
             {
-                AggregateRootModel aggregateRoot = new AggregateRootModel(resource);
+                LegacyAggregateModel aggregateRoot = new LegacyAggregateModel(resource);
 
                 var idPropertyName = useShortIdProperty ? "Id" : $"{((Token)resource).PascalCase}Id";
 
@@ -84,7 +84,7 @@ namespace Endpoint.Core.Services
 
         }
 
-        public SettingsModel Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<AggregateRootModel> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+        public SettingsModel Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<LegacyAggregateModel> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
 
             name = name.Replace("-", "_");

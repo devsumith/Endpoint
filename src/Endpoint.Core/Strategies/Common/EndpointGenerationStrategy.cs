@@ -2,6 +2,7 @@
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Options;
 using Endpoint.Core.Strategies.Common;
 using MediatR;
@@ -88,7 +89,7 @@ namespace Endpoint.Core.Services
             var model = new SettingsModel(
                         request.Name,
                         request.DbContextName,
-                        new AggregateRootModel(request.Resource, request.NumericIdPropertyDataType.Value, request.ShortIdPropertyName.Value, request.Properties),
+                        new LegacyAggregateModel(request.Resource, request.NumericIdPropertyDataType.Value, request.ShortIdPropertyName.Value, request.Properties),
                         request.Directory,
                         !request.Monolith.Value,
                         default,

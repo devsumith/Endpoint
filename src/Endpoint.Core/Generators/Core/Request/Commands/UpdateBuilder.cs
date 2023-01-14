@@ -6,7 +6,7 @@ using Endpoint.Core;
 using Endpoint.Core.Builders.Core;
 using System.Linq;
 using Endpoint.Core.Models.Options;
-using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Entities.Legacy;
 
 namespace Endpoint.Core.Builders
 {
@@ -21,7 +21,7 @@ namespace Endpoint.Core.Builders
         private string _namespace;
         private string _domainNamespace;
         private string _applicationNamespace;
-        private AggregateRootModel _aggregateRoot;
+        private LegacyAggregateModel _aggregateRoot;
         private SettingsModel _settings;
 
         public UpdateBuilder(SettingsModel settings, IContext context, IFileSystem fileSystem)
@@ -32,7 +32,7 @@ namespace Endpoint.Core.Builders
             _settings = settings;
         }
 
-        public UpdateBuilder WithAggregateRoot(AggregateRootModel aggregateRoot)
+        public UpdateBuilder WithAggregateRoot(LegacyAggregateModel aggregateRoot)
         {
             _aggregateRoot = aggregateRoot;
             return this;

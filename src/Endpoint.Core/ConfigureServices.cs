@@ -12,6 +12,7 @@ using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.Syntax.Methods;
@@ -50,7 +51,7 @@ public static class ConfigureServices
         services.AddSingleton<IDependencyInjectionService, DependencyInjectionService>();
 
         services.AddSingleton<IEntityModelFactory, EntityModelFactory>();
-        services.AddSingleton<IAggregateRootModelFactory, AggregateRootModelFactory>();
+        services.AddSingleton<ILegacyAggregateModelFactory, LegacyAggregateModelFactory>();
 
         services.AddSingleton<IFileNamespaceProvider, FileNamespaceProvider>();
         services.AddSingleton<ISolutionTemplateService, EndpointGenerationStrategy>();

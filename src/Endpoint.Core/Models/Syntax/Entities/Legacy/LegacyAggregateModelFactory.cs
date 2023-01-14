@@ -4,20 +4,21 @@ using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.ValueObjects;
 using System.Linq;
 
-namespace Endpoint.Core.Models.Syntax.Entities;
+namespace Endpoint.Core.Models.Syntax.Entities.Legacy;
 
-public class AggregateRootModelFactory : IAggregateRootModelFactory
+[Obsolete]
+public class LegacyAggregateModelFactory : ILegacyAggregateModelFactory
 {
     private readonly ISyntaxService _syntaxService;
 
-    public AggregateRootModelFactory(ISyntaxService syntaxService)
+    public LegacyAggregateModelFactory(ISyntaxService syntaxService)
     {
-        _syntaxService = syntaxService;
+        _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
     }
 
-    public AggregateRootModel Create(string resource, string properties)
+    public LegacyAggregateModel Create(string resource, string properties)
     {
-        AggregateRootModel model = new AggregateRootModel(resource);
+        LegacyAggregateModel model = new LegacyAggregateModel(resource);
 
         var idPropertyName = _syntaxService.SyntaxModel.IdPropertyFormat == IdPropertyFormat.Short ? "Id" : $"{((Token)resource).PascalCase}Id";
 

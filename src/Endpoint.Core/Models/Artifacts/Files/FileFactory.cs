@@ -1,5 +1,6 @@
 ﻿using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
@@ -11,9 +12,9 @@ public class FileModelFactory: IFileModelFactory
 {
     private readonly IRouteHandlerModelFactory _routeHandlerModelFactory;
 
-    private readonly IAggregateRootModelFactory _aggregateRootModelFactory;
+    private readonly ILegacyAggregateModelFactory _aggregateRootModelFactory;
 
-    public FileModelFactory(IAggregateRootModelFactory aggregateRootModelFactory, IRouteHandlerModelFactory routeHandlerModelFactory)
+    public FileModelFactory(ILegacyAggregateModelFactory aggregateRootModelFactory, IRouteHandlerModelFactory routeHandlerModelFactory)
     {
         _aggregateRootModelFactory = aggregateRootModelFactory;
         _routeHandlerModelFactory = routeHandlerModelFactory;

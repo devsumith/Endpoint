@@ -1,6 +1,7 @@
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
@@ -47,14 +48,14 @@ public class SettingsModel
     public int? SslPort { get; set; } = 5001;
     public List<string> Plugins { get; set; }
     public List<EntityModel> Entities { get; set; } = new List<EntityModel>();
-    public List<AggregateRootModel> Resources { get; set; } = new List<AggregateRootModel>();
+    public List<LegacyAggregateModel> Resources { get; set; } = new List<LegacyAggregateModel>();
     public string Directory { get; set; }
     public List<string> Metadata { get; set; } = new List<string>();
-    public SettingsModel(string name, string dbContextName, AggregateRootModel resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdPropertyFormat idFormat = IdPropertyFormat.Long, IdPropertyType idDotNetType = IdPropertyType.Guid, string prefix = "app", bool minimal = false)
-        : this(name, dbContextName, new List<AggregateRootModel>() { resource }, directory, isMicroserviceArchitecture, plugins, idFormat, idDotNetType, prefix, minimal)
+    public SettingsModel(string name, string dbContextName, LegacyAggregateModel resource, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdPropertyFormat idFormat = IdPropertyFormat.Long, IdPropertyType idDotNetType = IdPropertyType.Guid, string prefix = "app", bool minimal = false)
+        : this(name, dbContextName, new List<LegacyAggregateModel>() { resource }, directory, isMicroserviceArchitecture, plugins, idFormat, idDotNetType, prefix, minimal)
     { }
 
-    public SettingsModel(string name, string dbContextName, List<AggregateRootModel> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdPropertyFormat idFormat = IdPropertyFormat.Long, IdPropertyType idDotNetType = IdPropertyType.Guid, string prefix = "app", bool minimal = false)
+    public SettingsModel(string name, string dbContextName, List<LegacyAggregateModel> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdPropertyFormat idFormat = IdPropertyFormat.Long, IdPropertyType idDotNetType = IdPropertyType.Guid, string prefix = "app", bool minimal = false)
     {
         name = ((Token)name).PascalCase.Replace("-", "_");
         Plugins = plugins;
@@ -111,7 +112,7 @@ public class SettingsModel
 
     public void AddResource(string resource, string properties, IFileSystem fileSystem)
     {
-        var aggregate = new AggregateRootModel(resource);
+        var aggregate = new LegacyAggregateModel(resource);
 
         aggregate.IdPropertyName = IdFormat == IdPropertyFormat.Short ? "Id" : $"{resource}Id";
 
@@ -135,7 +136,7 @@ public class SettingsModel
         AddResource(aggregate, fileSystem);
     }
 
-    public void AddResource(AggregateRootModel aggregate, IFileSystem fileSystem)
+    public void AddResource(LegacyAggregateModel aggregate, IFileSystem fileSystem)
     {
         if (Resources.FirstOrDefault(x => x.Name == aggregate.Name) == null)
         {

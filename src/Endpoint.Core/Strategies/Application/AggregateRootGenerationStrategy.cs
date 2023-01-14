@@ -1,17 +1,17 @@
 ﻿using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Strategies.Application;
 
-public class AggregateRootGenerationStrategy : SyntaxGenerationStrategyBase<AggregateRootModel>, IAggregateRootGenerationStrategy
+public class AggregateRootGenerationStrategy : SyntaxGenerationStrategyBase<LegacyAggregateModel>, IAggregateRootGenerationStrategy
 {
     public AggregateRootGenerationStrategy(IServiceProvider serviceProvider)
         :base(serviceProvider)
     { }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, AggregateRootModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, LegacyAggregateModel model, dynamic configuration = null)
     {
         var content = new List<string>
         {

@@ -4,7 +4,7 @@ using Endpoint.Core.Builders.Statements;
 using Endpoint.Core.Core;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Strategies.Application;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
@@ -43,7 +43,7 @@ namespace Endpoint.Core.Services
 
         }
 
-        protected void _buildApplicationFilesForResource(SettingsModel settings, AggregateRootModel resource)
+        protected void _buildApplicationFilesForResource(SettingsModel settings, LegacyAggregateModel resource)
         {
             Token resourceName = ((Token)resource.Name);
             var aggregateDirectory = $"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}AggregatesModel{Path.DirectorySeparatorChar}{resourceName.PascalCase}Aggregate";
@@ -238,7 +238,7 @@ namespace Endpoint.Core.Services
             _buildServiceCollectionExtensions(settings);
         }
 
-        public void BuildAdditionalResource(AggregateRootModel aggregateModel, SettingsModel settings)
+        public void BuildAdditionalResource(LegacyAggregateModel aggregateModel, SettingsModel settings)
         {
             DbContextInterfaceBuilder.Default(settings, _fileSystem);
 

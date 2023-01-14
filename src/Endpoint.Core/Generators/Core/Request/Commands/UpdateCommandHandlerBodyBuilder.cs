@@ -1,7 +1,7 @@
 ﻿using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace Endpoint.Core.Builders.Core
 {
     public class UpdateCommandHandlerBodyBuilder
     {
-        public static string[] Build(SettingsModel settings, AggregateRootModel aggregateRoot)
+        public static string[] Build(SettingsModel settings, LegacyAggregateModel aggregateRoot)
         {
             var aggregateName = aggregateRoot.Name;
 

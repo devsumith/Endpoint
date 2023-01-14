@@ -5,25 +5,26 @@ using System.Linq;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Types;
 
-namespace Endpoint.Core.Models.Syntax.Entities;
+namespace Endpoint.Core.Models.Syntax.Entities.Legacy;
 
-public class AggregateRootModel : EntityModel
+[Obsolete]
+public class LegacyAggregateModel : EntityModel
 {
     public List<EntityModel> Entities { get; private set; }
 
     public string IdPropertyName { get; set; }
     public string IdPropertyType { get; set; }
 
-    public AggregateRootModel(string name, List<PropertyModel> classProperties)
-        :base(name)
+    public LegacyAggregateModel(string name, List<PropertyModel> classProperties)
+        : base(name)
     {
         Name = name;
         Properties = classProperties;
         Entities = new List<EntityModel>();
     }
 
-    public AggregateRootModel(string name, bool useIntIdPropertyType, bool useShortIdProperty, string properties)
-        :base(name)
+    public LegacyAggregateModel(string name, bool useIntIdPropertyType, bool useShortIdProperty, string properties)
+        : base(name)
     {
         Name = name;
 
@@ -44,8 +45,8 @@ public class AggregateRootModel : EntityModel
         }
     }
 
-    public AggregateRootModel(string name)
-        :base(name)
+    public LegacyAggregateModel(string name)
+        : base(name)
     {
         Name = name;
     }
