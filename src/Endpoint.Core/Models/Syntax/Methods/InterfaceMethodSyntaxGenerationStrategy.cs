@@ -27,7 +27,7 @@ public class InterfaceMethodSyntaxGenerationStrategy : SyntaxGenerationStrategyB
 
         var builder = new StringBuilder();
 
-        builder.Append($" {syntaxGenerationStrategyFactory.CreateFor(model.ReturnType)}");
+        builder.Append($"{syntaxGenerationStrategyFactory.CreateFor(model.ReturnType)}");
 
         builder.Append($" {model.Name}");
 

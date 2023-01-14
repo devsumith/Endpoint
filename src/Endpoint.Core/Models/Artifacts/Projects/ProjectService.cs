@@ -1,8 +1,11 @@
 ﻿using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
+using Octokit;
 using Octokit.Internal;
+using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace Endpoint.Core.Models.Artifacts.Projects;
@@ -80,5 +83,12 @@ public class ProjectService : IProjectService
         element.SetAttributeValue("AfterTargets", "Build");
 
         return element;
+    }
+
+    public void PackageAdd(string name, string directory)
+    {
+        var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj",directory));
+
+        _commandService.Start($"dotnet add package {name}", projectDirectory);
     }
 }

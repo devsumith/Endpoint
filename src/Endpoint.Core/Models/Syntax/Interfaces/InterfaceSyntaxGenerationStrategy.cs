@@ -1,4 +1,3 @@
-using CommandLine;
 using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Linq;

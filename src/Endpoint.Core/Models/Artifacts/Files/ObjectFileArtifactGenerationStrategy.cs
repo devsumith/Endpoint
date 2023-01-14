@@ -7,6 +7,31 @@ using System.Text;
 namespace Endpoint.Core.Models.Artifacts.Files;
 
 
+public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : ArtifactGenerationStrategyBase<string>
+{
+    private readonly IFileProvider _fileProvider;
+
+    public DbContextFileFromCoreDirectoryArtifactGenerationStrategy(IServiceProvider serviceProvider, IFileProvider fileProvider) : base(serviceProvider)
+    {
+        _fileProvider = fileProvider;
+    }
+
+    public override bool CanHandle(object model, dynamic configuration = null)
+    {
+        if(model is string value)
+        {
+            var projectDirectory = _fileProvider.Get("*.csproj", value);
+        }
+
+        return false;
+    }
+
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, string directory, dynamic configuration = null)
+    {
+        throw new NotImplementedException();
+    }
+}
+
 public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStrategyBase<ObjectFileModel<T>>
     where T : class
 {

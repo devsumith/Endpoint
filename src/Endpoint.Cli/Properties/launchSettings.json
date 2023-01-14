@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "db-context-create-from-aggregate-model -d C:\\projects\\Huntress\\src\\Services\\IdentityService\\IdentityService.Core\\AggregateModel\\",
+      "commandLineArgs": "package-add -d C:\\projects\\Huntress\\src\\Services\\ContentService\\ContentService.Core\\AggregateModel\\",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",

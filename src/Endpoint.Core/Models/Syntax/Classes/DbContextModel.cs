@@ -78,6 +78,8 @@ public class DbContextModel : ClassModel
 
         interfaceModel.Name = $"I{Name}";
 
+        interfaceModel.Implements = new List<TypeModel>();
+
         var saveChangesAsyncMethodModel = new MethodModel();
 
         saveChangesAsyncMethodModel.Interface = true;
@@ -91,13 +93,7 @@ public class DbContextModel : ClassModel
 
         saveChangesAsyncMethodModel.Name = "SaveChangesAsync";
 
-        saveChangesAsyncMethodModel.ReturnType = new TypeModel("Task")
-        {
-            GenericTypeParameters = new List<TypeModel>()
-            {
-                new TypeModel("int")
-            }
-        };
+        saveChangesAsyncMethodModel.ReturnType = TypeModel.TaskOf("int");
 
         interfaceModel.Methods.Add(saveChangesAsyncMethodModel);
         

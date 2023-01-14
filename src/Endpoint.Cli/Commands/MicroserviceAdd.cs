@@ -51,7 +51,6 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
 
             foreach(var layer in new List<string> { "Core", "Infrastructure", "Api" })
             {
-
                 var microserviceDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{name}{Path.DirectorySeparatorChar}{name}.{layer}";
 
                 var microservice = new ProjectModel { Name = $"{name}.{layer}", Directory = microserviceDirectory , DotNetProjectType = DotNetProjectType.ClassLib };

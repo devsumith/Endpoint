@@ -16,7 +16,10 @@ public static class StringExtensions
         } catch (Exception e){
             throw e;
         }
+
     }
+
+    public static string Remove(this string value, string item) => value.Replace(item, string.Empty);
 
     public static string GetResourceName(this string[] collection, string name)
         => collection.SingleOrDefault(x => x.EndsWith(name)) == null ?
