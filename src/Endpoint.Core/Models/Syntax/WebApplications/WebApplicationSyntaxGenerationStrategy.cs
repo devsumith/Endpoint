@@ -11,6 +11,7 @@ public class WebApplicationSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
     private readonly ILogger<WebApplicationSyntaxGenerationStrategy> _logger;
     private readonly ITemplateLocator _templateLocator;
     private readonly ITemplateProcessor _templateProcessor;
+    private readonly INamingConventionConverter _namingConventionConverter;
     public WebApplicationSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ITemplateProcessor templateProcessor,
@@ -42,7 +43,7 @@ public class WebApplicationSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
             builder.AppendLine();
         }
 
-        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(new DbContextModel(model.DbContextName, model.Entities)));
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(new DbContextModel(_namingConventionConverter, model.DbContextName, model.Entities, "")));
 
         return builder.ToString();
     }

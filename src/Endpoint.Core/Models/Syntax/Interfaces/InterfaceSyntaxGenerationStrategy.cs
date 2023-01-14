@@ -1,3 +1,4 @@
+using CommandLine;
 using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -16,6 +17,10 @@ public class InterfaceSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<In
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    public override bool CanHandle(object model, dynamic configuration = null)
+    {
+        return model as InterfaceModel != null;
+    }
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, InterfaceModel model, dynamic configuration = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);

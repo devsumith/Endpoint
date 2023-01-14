@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "solution-create-from-plant-uml -n MySln -d C:\\projects",
+      "commandLineArgs": "db-context-create-from-aggregate-model -d C:\\projects\\Huntress\\src\\Services\\IdentityService\\IdentityService.Core\\AggregateModel\\",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",

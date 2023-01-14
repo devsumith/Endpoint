@@ -9,7 +9,6 @@ var host = Host.CreateDefaultBuilder()
     {
         services.AddCliServices();
     })
-    //.UseSerilog()
     .Build();
 
 host.Run();

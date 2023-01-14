@@ -1,7 +1,9 @@
-﻿using Endpoint.Core.Models.Syntax.Interfaces;
+﻿using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Types;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,9 +11,13 @@ namespace Endpoint.Core.Models.Artifacts.Solutions;
 
 public class PlantUmlMethodParserStrategy : PlantUmlParserStrategyBase<MethodModel>
 {
-    public PlantUmlMethodParserStrategy(IServiceProvider serviceProvider)
+    private readonly ILogger<PlantUmlMethodParserStrategy> _logger; 
+
+    public PlantUmlMethodParserStrategy(ILogger<PlantUmlMethodParserStrategy> logger, IServiceProvider serviceProvider)
         : base(serviceProvider)
-    { }
+    { 
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
 
     public override bool CanHandle(string plantUml) => plantUml.StartsWith("+");
 
@@ -21,8 +27,13 @@ public class PlantUmlMethodParserStrategy : PlantUmlParserStrategyBase<MethodMod
         var name = plantUml.Replace("+", string.Empty).Split(' ').ElementAt(1).Split('(').First();
 
         var @params = new List<ParamModel>();
-        foreach(var p in plantUml.Split('(').ElementAt(1).Replace(")", string.Empty).Split(','))
+        var rawParams = plantUml.Split('(').ElementAt(1).Replace(")", string.Empty).Split(',');
+
+        foreach (var p in rawParams)
         {
+            if (string.IsNullOrEmpty(p))
+                break;
+
             var parts = p.Split(' ');
             var t = new TypeModel(parts[0]);
             var n = parts[1];
@@ -34,13 +45,17 @@ public class PlantUmlMethodParserStrategy : PlantUmlParserStrategyBase<MethodMod
             });
         }
 
+        var isClassModel = context.TypeDeclarationModel is ClassModel;
+
         return new MethodModel()
         {
-            Interface = context.TypeDeclarationModel is InterfaceModel,
+            AccessModifier = AccessModifier.Public,
+            Interface = !isClassModel,
             ReturnType = returnType,
             Name = name,
             Params = @params,
-            Async = returnType.Name.StartsWith("Task")
+            Async = returnType.Name.StartsWith("Task"),
+            Body = "throw new NotImplementedException();"
         };
     }
 }
