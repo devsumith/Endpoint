@@ -35,7 +35,7 @@ public class PackageAddRequestHandler : IRequestHandler<PackageAddRequest, Unit>
     {
         _logger.LogInformation("Handled: {0}", nameof(PackageAddRequestHandler));
 
-        _projectService.PackageAdd(NugetPackages.FluentValidation, request.Directory);
+        _projectService.PackageAdd(request.Name, request.Directory);
 
         return new();
     }
