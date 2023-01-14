@@ -1,5 +1,6 @@
 ﻿using Endpoint.Core.Models.Artifacts.Projects;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Endpoint.Core.Models.Artifacts.Solutions;
 
@@ -20,7 +21,7 @@ public class PlantUmlSolutionParserStrategy : PlantUmlParserStrategyBase<Solutio
 
         model.Folders.Add(srcFolder);
 
-        var plantUmlLines = plantUml.Split(Environment.NewLine);
+        var plantUmlLines = plantUml.Split(Environment.NewLine).Select(x => x.Trim()).ToArray();
 
         var contextLevel = 0;
 

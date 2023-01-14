@@ -2,6 +2,7 @@
 using System.IO;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Projects;
+using Endpoint.Core.Models.Syntax.Classes;
 
 namespace Endpoint.Core.Models.Artifacts.Solutions
 {
@@ -48,6 +49,26 @@ namespace Endpoint.Core.Models.Artifacts.Solutions
 
         public string SolutionDirectory { get; set; }
         public string SolultionFileName => $"{Name}.sln";
+
+        public ClassModel GetClass(string name)
+        {
+            foreach(var folder in  Folders)
+            {
+                foreach(var project in folder.Projects)
+                {
+                    foreach(var file in project.Files)
+                    {
+                        if(file is ObjectFileModel<ClassModel> classFileModel)
+                        {
+                            if (classFileModel.Name == name)
+                                return classFileModel.Object;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
 
     }
 }

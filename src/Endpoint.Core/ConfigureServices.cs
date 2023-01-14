@@ -12,6 +12,7 @@ using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Entities.Aggregate;
 using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Interfaces;
@@ -36,8 +37,8 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
 {
-    public static void AddCoreServices(this IServiceCollection services)
-    {
+    public static void AddCoreServices(this IServiceCollection services) {
+        services.AddSingleton<IAggregateService, AggregateService>();
         services.AddSingleton<ICommandService, CommandService>();
         services.AddSingleton<IFileSystem, FileSystem>();
         services.AddSingleton<ITemplateProcessor, LiquidTemplateProcessor>();
@@ -134,7 +135,22 @@ public static class ConfigureServices
         services.AddSingleton<IArtifactUpdateStrategyFactory, ArtifactUpdateStrategyFactory>();
 
         services.AddSingleton<IClipboardService, ClipboardService>();
-        services.AddSingleton<ISyntaxService, SyntaxService>();
+        
+        services.AddSingleton<ISyntaxService>(services =>
+        {
+            var factory = services.GetRequiredService<IPlantUmlParserStrategyFactory>();
+            var fileProvider = services.GetRequiredService<IFileProvider>();
+            var fileSystem = services.GetRequiredService<IFileSystem>();
+
+            var args = Environment.GetCommandLineArgs();
+
+            var directoryOptionIndex = Array.IndexOf(args,"-d");
+
+            var directory = directoryOptionIndex != -1 ? args[directoryOptionIndex + 1]  : Environment.CurrentDirectory;
+
+            return new SyntaxService(factory,fileProvider, fileSystem, directory);
+        });
+
         services.AddSingleton<IEntityFileModelFactory, EntityFileModelFactory>();
         services.AddSingleton<IProjectModelFactory, ProjectModelFactory>();
 
@@ -160,4 +176,3 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
-

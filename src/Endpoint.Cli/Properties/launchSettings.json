@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "package-add -d C:\\projects\\Huntress\\src\\Services\\ContentService\\ContentService.Core\\AggregateModel\\",
+      "commandLineArgs": "aggregate-create -n Brand -d C:\\projects\\Huntress\\src\\Services\\CustomerService\\CustomerService.Core",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",
