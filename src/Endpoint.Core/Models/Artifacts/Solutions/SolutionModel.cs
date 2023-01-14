@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Syntax.Classes;
@@ -60,7 +61,7 @@ namespace Endpoint.Core.Models.Artifacts.Solutions
                     {
                         if(file is ObjectFileModel<ClassModel> classFileModel)
                         {
-                            if (classFileModel.Name == name)
+                            if (classFileModel.Object.Name.Split('.').Last() == name)                                
                                 return classFileModel.Object;
                         }
                     }

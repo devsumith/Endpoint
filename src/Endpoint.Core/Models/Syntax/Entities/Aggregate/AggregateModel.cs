@@ -8,7 +8,7 @@ public class AggregateModel
     public string MicroserviceName { get; set; }
     public EntityModel Aggregate { get; set; }
     public ClassModel AggregateDto { get; set; }
-    public ClassModel AggregateExtensions { get; set; }
+    public DtoExtensionsModel AggregateExtensions { get; set; }
     public List<CommandModel> Commands { get; set; }
     public List<QueryModel> Queries { get; set; }
 

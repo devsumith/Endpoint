@@ -20,7 +20,7 @@ public class PlantUmlClassFileParserStrategy : PlantUmlParserStrategyBase<Object
 
         var name = plantUmlLines[0].Replace("class", string.Empty).Replace("{", string.Empty).Trim();
 
-        var classModel = new ClassModel(name);
+        var classModel = new ClassModel(name.Split('.').Last());
 
         for (var i = 1; i < plantUmlLines.Count(); i++)
         {
