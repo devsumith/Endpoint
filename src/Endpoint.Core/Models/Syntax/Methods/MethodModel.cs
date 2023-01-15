@@ -1,5 +1,6 @@
 ﻿using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Attributes;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Types;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ public class MethodModel
         Attributes = new List<AttributeModel>();
     }
 
+    public TypeDeclarationModel ParentType { get; set; }
     public List<ParamModel> Params { get; set; }
     public List<AttributeModel> Attributes { get; set; }
     public AccessModifier AccessModifier { get; set; }
