@@ -4,7 +4,9 @@ using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 
 namespace Endpoint.Core.Builders.Core
 {
@@ -12,27 +14,39 @@ namespace Endpoint.Core.Builders.Core
     {
         public static string[] Build(SettingsModel settings, LegacyAggregateModel aggregateRoot)
         {
-            var aggregateName = aggregateRoot.Name;
+            var entityName = aggregateRoot.Name;
 
-            var result = settings.IdDotNetType == IdPropertyType.Int
-                ? new List<string>() { $"var {((Token)aggregateName).CamelCase} = await _context.{((Token)aggregateName).PascalCasePlural}.SingleAsync(x => x.{IdPropertyNameBuilder.Build(settings, aggregateName)} == request.{((Token)aggregateName).PascalCase}.{IdPropertyNameBuilder.Build(settings, aggregateName)});", "" }
-                : new List<string>() { $"var {((Token)aggregateName).CamelCase} = await _context.{((Token)aggregateName).PascalCasePlural}.SingleAsync(x => x.{IdPropertyNameBuilder.Build(settings, aggregateName)} == new {((Token)aggregateName).PascalCase}Id(request.{((Token)aggregateName).PascalCase}.{IdPropertyNameBuilder.Build(settings, aggregateName)}.Value));", "" };
+            var entityNamePascalCasePlural = ((Token)entityName).PascalCasePlural;
 
+            var entityNameCamelCase = ((Token)entityName).CamelCase;
+
+            var builder = new StringBuilder();
+
+            builder.AppendLine($"var {entityNameCamelCase} = await _context.{entityNamePascalCasePlural}.SingleAsync(x => x.{entityName}Id == new {entityName}Id(request.{entityName}.{entityName}Id.Value));");
+
+            builder.AppendLine("");
 
             foreach (var property in aggregateRoot.Properties.Where(x => x.Id == false))
             {
-                result.Add($"{((Token)aggregateName).CamelCase}.{((Token)property.Name).PascalCase} = request.{((Token)aggregateName).PascalCase}.{((Token)property.Name).PascalCase};");
+                builder.AppendLine($"{entityNameCamelCase}.{property.Name} = request.{entityName}.{property.Name};");
             }
 
-            return result.Concat(new List<string>() {
-                "",
-                "await _context.SaveChangesAsync(cancellationToken);",
-                "",
-                "return new ()",
-                "{",
-                $"{((Token)aggregateName).PascalCase} = {((Token)aggregateName).CamelCase}.ToDto()".Indent(1),
-                "};"
-                }).ToArray();
+            builder.AppendLine("");
+
+            builder.AppendLine("await _context.SaveChangesAsync(cancellationToken);");
+
+            builder.AppendLine("");
+
+            builder.AppendLine("return new ()");
+
+            builder.AppendLine("{");
+
+            builder.AppendLine($"{entityName} = {entityNameCamelCase}.ToDto()".Indent(1));
+
+            builder.AppendLine("}");
+
+            return builder.ToString().Split(Environment.NewLine);
+
 
         }
     }

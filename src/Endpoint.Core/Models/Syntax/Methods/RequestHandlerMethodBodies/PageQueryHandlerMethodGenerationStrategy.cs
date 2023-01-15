@@ -1,25 +1,30 @@
 ﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Methods.Cqrs;
+namespace Endpoint.Core.Models.Syntax.Methods.RequestHandlerMethodBodies;
 
-public class GetByIdQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
+public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
 {
-    public GetByIdQueryHandlerMethodGenerationStrategy(
+    private readonly INamingConventionConverter _namingConventionConverter;
+    public PageQueryHandlerMethodGenerationStrategy(
         IServiceProvider serviceProvider,
+        INamingConventionConverter namingConventionConverter,
         ILogger<MethodSyntaxGenerationStrategy> logger)
         : base(serviceProvider, logger)
     {
+        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
     public override bool CanHandle(object model, dynamic configuration = null)
         => model is MethodModel methodModel
         && methodModel.Name == "Handle"
         && methodModel.Params.FirstOrDefault()?.Name == "request"
-        && methodModel.Params.FirstOrDefault().Type.Name.StartsWith("Update");
+        && methodModel.Params.FirstOrDefault().Type.Name.StartsWith("Get")
+        && methodModel.Params.FirstOrDefault().Type.Name.EndsWith("Page");
 
     public override int Priority => int.MaxValue;
 

@@ -1,5 +1,10 @@
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Models.Syntax.Constructors;
+using Endpoint.Core.Models.Syntax.Fields;
+using Endpoint.Core.Models.Syntax.Params;
+using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
@@ -82,13 +87,13 @@ public class QueryModel : CqrsBase
     public string Name { get; set; }
     public QueryModel(INamingConventionConverter namingConventionConverter, ClassModel entity, RouteType routeType)
     {
-        var entityNamePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true);
+        var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true);
 
         Name = routeType switch
         {
-            RouteType.Get => $"Get{entityNamePlural}",
+            RouteType.Get => $"Get{entityNamePascalCasePlural}",
             RouteType.GetById => $"Get{entity.Name}ById",
-            RouteType.Page => $"Get{entityNamePlural}Page",
+            RouteType.Page => $"Get{entityNamePascalCasePlural}Page",
             _ => throw new NotSupportedException()
         };
 
@@ -107,9 +112,33 @@ public class QueryModel : CqrsBase
         {
             GenericTypeParameters = new List<TypeModel> { new TypeModel(Request.Name), new TypeModel(Response.Name) }
         });
+
+        RequestHandler.Fields.Add(new FieldModel());
+
+        RequestHandler.Fields.Add(new FieldModel());
+
+        var requestHandlerCtor = new ConstructorModel(RequestHandler, RequestHandler.Name);
+
+        requestHandlerCtor.Params.Add(new ParamModel() { });
+
+        requestHandlerCtor.Params.Add(new ParamModel() { });
+        
+        RequestHandler.Constructors.Add(requestHandlerCtor);
+
+        if (routeType == RouteType.Get)
+        {
+            Response.Properties.Add(new PropertyModel(Response, AccessModifier.Public, new TypeModel("List")
+            {
+                GenericTypeParameters = new List<TypeModel>()
+                {
+                    new TypeModel(entity.Name)
+                }
+            }, entity.Name, PropertyAccessorModel.GetSet));
+        }
     }
 
 }
+
 
 public class CommandModel : CqrsBase
 {

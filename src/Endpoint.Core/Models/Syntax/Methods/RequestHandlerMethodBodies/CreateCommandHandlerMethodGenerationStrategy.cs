@@ -1,21 +1,24 @@
 ﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Methods.Cqrs;
+namespace Endpoint.Core.Models.Syntax.Methods.RequestHandlerMethodBodies;
 
 
 public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
 {
+    private readonly INamingConventionConverter _namingConventionConverter;
     public CreateCommandHandlerMethodGenerationStrategy(
         IServiceProvider serviceProvider, 
+        INamingConventionConverter namingConventionConverter,
         ILogger<MethodSyntaxGenerationStrategy> logger) 
         : base(serviceProvider, logger)
     {
+        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
-
     public override bool CanHandle(object model, dynamic configuration = null)
         => model is MethodModel methodModel 
         && methodModel.Name == "Handle" 
@@ -28,19 +31,19 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
     {
         var builder = new StringBuilder();
 
-        var aggregateName = model.ParentType.Name;
+        var entityName = model.ParentType.Name;
 
-        builder.AppendLine($"var {((Token)aggregateName).CamelCase} = new {((Token)aggregateName).PascalCase}();");
+        builder.AppendLine($"var {((Token)entityName).CamelCase} = new {((Token)entityName).PascalCase}();");
 
         builder.AppendLine("");
 
-        builder.AppendLine($"_context.{((Token)aggregateName).PascalCasePlural}.Add({((Token)aggregateName).CamelCase});");
+        builder.AppendLine($"_context.{((Token)entityName).PascalCasePlural}.Add({((Token)entityName).CamelCase});");
 
         builder.AppendLine("");
 
         foreach (var property in model.ParentType.Properties.Where(x => x.Id == false))
         {
-            builder.AppendLine($"{((Token)aggregateName).CamelCase}.{((Token)property.Name).PascalCase} = request.{((Token)aggregateName).PascalCase}.{((Token)property.Name).PascalCase};");
+            builder.AppendLine($"{((Token)entityName).CamelCase}.{((Token)property.Name).PascalCase} = request.{((Token)entityName).PascalCase}.{((Token)property.Name).PascalCase};");
         }
 
         builder.AppendLine("");
@@ -53,7 +56,7 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         builder.AppendLine("{");
 
-        builder.AppendLine($"{((Token)aggregateName).PascalCase} = {((Token)aggregateName).CamelCase}.ToDto()".Indent(1));
+        builder.AppendLine($"{((Token)entityName).PascalCase} = {((Token)entityName).CamelCase}.ToDto()".Indent(1));
 
         builder.AppendLine("}");
 

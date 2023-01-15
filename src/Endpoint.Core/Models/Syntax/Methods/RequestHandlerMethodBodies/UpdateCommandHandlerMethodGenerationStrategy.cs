@@ -1,18 +1,21 @@
 ﻿using Endpoint.Core.Abstractions;
-using Endpoint.Core.ValueObjects;
+using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Methods.Cqrs;
+namespace Endpoint.Core.Models.Syntax.Methods.RequestHandlerMethodBodies;
 
 public class UpdateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
 {
+    private readonly INamingConventionConverter _namingConventionConverter;
     public UpdateCommandHandlerMethodGenerationStrategy(
         IServiceProvider serviceProvider,
+        INamingConventionConverter namingConventionConverter,
         ILogger<MethodSyntaxGenerationStrategy> logger)
         : base(serviceProvider, logger)
     {
+        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
     public override bool CanHandle(object model, dynamic configuration = null)
@@ -25,21 +28,21 @@ public class UpdateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, MethodModel model, dynamic configuration = null)
     {
+        var entityName = model.ParentType.Name;
+
+        var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase,entityName,pluralize: true);
+
+        var entityNameCamelCase = _namingConventionConverter.Convert(NamingConvention.CamelCase, entityName); ;
+
         var builder = new StringBuilder();
 
-        var aggregateName = model.ParentType.Name;
-
-        builder.AppendLine($"var {((Token)aggregateName).CamelCase} = new {((Token)aggregateName).PascalCase}();");
-
-        builder.AppendLine("");
-
-        builder.AppendLine($"_context.{((Token)aggregateName).PascalCasePlural}.Add({((Token)aggregateName).CamelCase});");
+        builder.AppendLine($"var {entityNameCamelCase} = await _context.{entityNamePascalCasePlural}.SingleAsync(x => x.{entityName}Id == new {entityName}Id(request.{entityName}.{entityName}Id.Value));");
 
         builder.AppendLine("");
 
         foreach (var property in model.ParentType.Properties.Where(x => x.Id == false))
         {
-            builder.AppendLine($"{((Token)aggregateName).CamelCase}.{((Token)property.Name).PascalCase} = request.{((Token)aggregateName).PascalCase}.{((Token)property.Name).PascalCase};");
+            builder.AppendLine($"{entityNameCamelCase}.{property.Name} = request.{entityName}.{property.Name};");
         }
 
         builder.AppendLine("");
@@ -52,7 +55,7 @@ public class UpdateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         builder.AppendLine("{");
 
-        builder.AppendLine($"{((Token)aggregateName).PascalCase} = {((Token)aggregateName).CamelCase}.ToDto()".Indent(1));
+        builder.AppendLine($"{entityName} = {entityNameCamelCase}.ToDto()".Indent(1));
 
         builder.AppendLine("}");
 

@@ -52,6 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Syntax\Methods\ControllerMethodBodies\" />
     <Folder Include="Models\Syntax\Microservices\" />
     <Folder Include="Models\Syntax\RouteHandlers\Create\" />
     <Folder Include="Messages\" />
