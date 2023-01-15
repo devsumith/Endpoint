@@ -127,7 +127,13 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategy, AttributeSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, TypeSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, ParamSyntaxGenerationStrategy>();
+
         services.AddSingleton<ISyntaxGenerationStrategy, CreateCommandHandlerMethodGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, UpdateCommandHandlerMethodGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, DeleteCommandHandlerMethodGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, GetQueryHandlerMethodGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, GetByIdQueryHandlerMethodGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, PageQueryHandlerMethodGenerationStrategy>();
 
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerCreateSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerDeleteSyntaxGenerationStrategy>();

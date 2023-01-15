@@ -6,19 +6,18 @@ using System.Text;
 
 namespace Endpoint.Core.Models.Syntax.Methods.Cqrs;
 
-
-public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
+public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
 {
-    public CreateCommandHandlerMethodGenerationStrategy(
-        IServiceProvider serviceProvider, 
-        ILogger<MethodSyntaxGenerationStrategy> logger) 
+    public GetQueryHandlerMethodGenerationStrategy(
+        IServiceProvider serviceProvider,
+        ILogger<MethodSyntaxGenerationStrategy> logger)
         : base(serviceProvider, logger)
     {
     }
 
     public override bool CanHandle(object model, dynamic configuration = null)
-        => model is MethodModel methodModel 
-        && methodModel.Name == "Handle" 
+        => model is MethodModel methodModel
+        && methodModel.Name == "Handle"
         && methodModel.Params.FirstOrDefault()?.Name == "request"
         && methodModel.Params.FirstOrDefault().Type.Name.StartsWith("Create");
 
@@ -58,7 +57,7 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
         builder.AppendLine("}");
 
         model.Body = builder.ToString();
-        
+
         return base.Create(syntaxGenerationStrategyFactory, model);
     }
 }
