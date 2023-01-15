@@ -42,9 +42,16 @@ public class AggregateService: IAggregateService
 
         var classModel = _syntaxService.SolutionModel.GetClass(name);
 
+        var dtoModel = classModel.CreateDto();
+
+
+        AggregateModel model = new AggregateModel(_namingConventionConverter, "", classModel);
+
         if(classModel != null)
         {
             var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, aggregateDirectory, "cs");
+
+            var dtoFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, aggregateDirectory, "cs");
 
             _artifactGenerationStrategyFactory.CreateFor(classFileModel);
         }        

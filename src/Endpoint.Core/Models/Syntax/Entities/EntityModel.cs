@@ -11,4 +11,13 @@ public class EntityModel: ClassModel
     {
         Name = name;
     }
+
+    public ClassModel CreateDto()
+    {
+        var classModel = new ClassModel($"{Name}Dto");
+
+
+
+        return classModel;
+    }
 }

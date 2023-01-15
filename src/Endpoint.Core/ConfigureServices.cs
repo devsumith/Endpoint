@@ -1,5 +1,6 @@
 using Endpoint.Core;
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts;
 using Endpoint.Core.Models.Artifacts.ApiProjectModels;
 using Endpoint.Core.Models.Artifacts.Entities;
 using Endpoint.Core.Models.Artifacts.Files;
@@ -75,7 +76,7 @@ public static class ConfigureServices
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<EntityModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, LaunchSettingsFileGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, ConsoleMicroserviceArtifactGenerationStrategy>();
-
+        services.AddSingleton<IArtifactGenerationStrategy, AggregateArtifactsGenerationStrategy>();
 
         services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();

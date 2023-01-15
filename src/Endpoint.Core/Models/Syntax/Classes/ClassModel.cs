@@ -31,4 +31,10 @@ public class ClassModel : InterfaceModel
         Methods.Add(method);
     }
 
+    public ClassModel CreateDto()
+        => new ClassModel($"{Name}Dto")
+        {
+            Properties = Properties
+        };
+
 }

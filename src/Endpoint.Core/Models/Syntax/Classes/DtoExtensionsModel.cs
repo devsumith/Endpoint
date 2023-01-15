@@ -1,4 +1,5 @@
 using Endpoint.Core.Models.Syntax.Methods;
+using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
 using System.Text;
 
@@ -13,6 +14,13 @@ public class DtoExtensionsModel: ClassModel {
         var methodModel = new MethodModel();
 
         methodModel.Static = true;
+
+        methodModel.Params.Add(new Params.ParamModel
+        {
+            ExtensionMethodParam = true,
+            Name = namingConventionConverter.Convert(NamingConvention.CamelCase,name),
+            Type = new TypeModel(name)
+        });
 
         var builder = new StringBuilder();
 
