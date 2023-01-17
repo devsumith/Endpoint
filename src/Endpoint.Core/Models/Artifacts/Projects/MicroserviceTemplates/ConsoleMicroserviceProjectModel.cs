@@ -58,7 +58,7 @@ public class ConsoleMicroserviceArtifactGenerationStrategy : ArtifactGenerationS
         _notificationListener = notificationListener;
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ConsoleMicroserviceProjectModel model, dynamic configuration = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ConsoleMicroserviceProjectModel model, dynamic context = null)
     {
         throw new NotImplementedException();
     }
@@ -73,7 +73,7 @@ public class ConsoleMicroserviceTestArtifactGenerationStrategy : ArtifactGenerat
         _fileSytem = fileSystem;
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ConsoleMicroserviceProjectModel model, dynamic configuration = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ConsoleMicroserviceProjectModel model, dynamic context = null)
     {
         throw new NotImplementedException();
     }

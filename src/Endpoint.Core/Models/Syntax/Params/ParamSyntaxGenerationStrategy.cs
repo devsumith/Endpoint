@@ -15,7 +15,7 @@ public class ParamSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ParamM
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, ParamModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, ParamModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

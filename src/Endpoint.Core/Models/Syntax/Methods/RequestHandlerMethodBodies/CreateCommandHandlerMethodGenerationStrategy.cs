@@ -20,9 +20,9 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
     {
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
-    public override bool CanHandle(object model, dynamic configuration = null)
+    public override bool CanHandle(object model, dynamic context = null)
     {
-        if (model is MethodModel methodModel && configuration?.Entity is ClassModel entity)
+        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
         {
             return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.StartsWith($"Create");
         }
@@ -32,11 +32,11 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
     public override int Priority => int.MaxValue;
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, MethodModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, MethodModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
-        var entityName = configuration.Entity.Name;
+        var entityName = context.Entity.Name;
 
         builder.AppendLine($"var {((Token)entityName).CamelCase} = new {((Token)entityName).PascalCase}();");
 

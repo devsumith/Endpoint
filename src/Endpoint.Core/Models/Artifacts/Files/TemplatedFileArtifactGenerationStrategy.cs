@@ -28,7 +28,7 @@ public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrateg
         _solutionNamespaceProvider = solutionNamespaceProvider ?? throw new ArgumentNullException(nameof(solutionNamespaceProvider));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, TemplatedFileModel model, dynamic configuration = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, TemplatedFileModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

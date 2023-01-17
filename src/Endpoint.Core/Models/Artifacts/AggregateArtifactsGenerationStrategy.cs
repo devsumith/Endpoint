@@ -16,7 +16,7 @@ public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBa
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, AggregateModel model, dynamic configuration = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, AggregateModel model, dynamic context = null)
     {
         var aggregateDirectory = $"{model.Directory}{Path.DirectorySeparatorChar}{model.Aggregate.Name}Aggregate";
 

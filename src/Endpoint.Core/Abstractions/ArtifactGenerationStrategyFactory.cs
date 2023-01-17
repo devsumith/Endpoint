@@ -10,12 +10,12 @@ public class ArtifactGenerationStrategyFactory : IArtifactGenerationStrategyFact
     {
         _strategies = strategies;
     }
-    public void CreateFor(object model, dynamic configuration = null)
+    public void CreateFor(object model, dynamic context = null)
     {
-        var strategy = _strategies.Where(x => x.CanHandle(model, configuration))
+        var strategy = _strategies.Where(x => x.CanHandle(model, context))
             .OrderBy(x => x.Priority)
             .FirstOrDefault();
 
-        strategy.Create(model, configuration);
+        strategy.Create(model, context);
     }
 }

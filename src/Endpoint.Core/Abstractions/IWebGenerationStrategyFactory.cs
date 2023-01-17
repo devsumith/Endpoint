@@ -4,5 +4,5 @@ namespace Endpoint.Core.Abstractions;
 
 public interface IWebGenerationStrategyFactory
 {
-    void CreateFor(WebModel model, dynamic configuration = null);
+    void CreateFor(WebModel model, dynamic context = null);
 }

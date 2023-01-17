@@ -22,7 +22,7 @@ public class GitGenerationStrategy : ArtifactGenerationStrategyBase<GitModel>
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, GitModel model, dynamic configuration = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, GitModel model, dynamic context = null)
     {
         _logger.LogInformation($"{nameof(GitGenerationStrategy)}: Handled");
 

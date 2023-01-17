@@ -7,7 +7,7 @@ internal class ControllerSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
     public ControllerSyntaxGenerationStrategy(IServiceProvider serviceProvider) 
         : base(serviceProvider) { }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, ControllerModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, ControllerModel model, dynamic context = null)
     {
         throw new NotImplementedException();
     }

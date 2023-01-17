@@ -15,7 +15,7 @@ public class DbContextSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Db
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, DbContextModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, DbContextModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

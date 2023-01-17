@@ -26,7 +26,7 @@ public class MinimalApiProgramFileGenerationStratey : ArtifactGenerationStrategy
         _syntaxGenerationStrategyFactory = symtaxGenerationStrategyFactory;
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, MinimalApiProgramFileModel model, dynamic configuration = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, MinimalApiProgramFileModel model, dynamic context = null)
     {
 
         var builder = new StringBuilder();

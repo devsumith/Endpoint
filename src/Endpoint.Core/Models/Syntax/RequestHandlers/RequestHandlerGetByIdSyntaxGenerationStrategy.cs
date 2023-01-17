@@ -15,9 +15,9 @@ public class RequestHandlerGetByIdSyntaxGenerationStrategy : SyntaxGenerationStr
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override bool CanHandle(object model, dynamic configuration = null)
+    public override bool CanHandle(object model, dynamic context = null)
         => model is RequestHandlerModel requestHandlerModel && requestHandlerModel.RouteType == RouteType.GetById;
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, RequestHandlerModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, RequestHandlerModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0} and type {1}.", model);
 

@@ -16,7 +16,7 @@ public class MinimalApiEndpointGenerationStrategy : ArtifactGenerationStrategyBa
         _fileSystem = fileSystem;
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, MinimalApiSolutionModel model, dynamic configuration = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, MinimalApiSolutionModel model, dynamic context = null)
     {
         var workspaceDirectory = $"{model.Directory}{Path.DirectorySeparatorChar}{model.Name}";
 

@@ -10,18 +10,18 @@ public abstract class SyntaxGenerationStrategyBase<T>: ISyntaxGenerationStrategy
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
-    public virtual bool CanHandle(object model, dynamic configuration = null) => model.GetType() == typeof(T);
-    public string Create(dynamic model, dynamic configuration = null)
+    public virtual bool CanHandle(object model, dynamic context = null) => model.GetType() == typeof(T);
+    public string Create(dynamic model, dynamic context = null)
     {
         using(IServiceScope scope = _serviceProvider.CreateScope())
         {
             var syntaxGenerationStrategyFactory = scope.ServiceProvider
                 .GetRequiredService<ISyntaxGenerationStrategyFactory>();
 
-            return Create(syntaxGenerationStrategyFactory, model, configuration);
+            return Create(syntaxGenerationStrategyFactory, model, context);
         }        
     }
 
-    public abstract string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, T model, dynamic configuration = null);
+    public abstract string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, T model, dynamic context = null);
     public virtual int Priority => 0;
 }

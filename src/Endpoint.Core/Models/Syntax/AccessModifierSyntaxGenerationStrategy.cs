@@ -16,7 +16,7 @@ public class AccessModifierSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, AccessModifier model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, AccessModifier model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -16,7 +16,7 @@ public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : Artifact
         _fileProvider = fileProvider;
     }
 
-    public override bool CanHandle(object model, dynamic configuration = null)
+    public override bool CanHandle(object model, dynamic context = null)
     {
         if(model is string value)
         {
@@ -26,7 +26,7 @@ public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : Artifact
         return false;
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, string directory, dynamic configuration = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, string directory, dynamic context = null)
     {
         throw new NotImplementedException();
     }
@@ -54,7 +54,7 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ObjectFileModel<T> model, dynamic configuration = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ObjectFileModel<T> model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -76,7 +76,7 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
 
         builder.AppendLine();
 
-        builder.AppendLine(_syntaxGenerationStrategyFactory.CreateFor(model.Object, configuration));
+        builder.AppendLine(_syntaxGenerationStrategyFactory.CreateFor(model.Object, context));
 
         _fileSystem.WriteAllText(model.Path, builder.ToString());
     }

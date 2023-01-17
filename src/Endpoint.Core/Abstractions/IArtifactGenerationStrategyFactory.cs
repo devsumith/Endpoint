@@ -6,13 +6,13 @@ namespace Endpoint.Core.Abstractions;
 
 public interface IArtifactGenerationStrategyFactory
 {
-    void CreateFor(object model, dynamic configuration = null);
+    void CreateFor(object model, dynamic context = null);
 }
 
 
 public interface IArtifactUpdateStrategyFactory
 {
-    void CreateFor(dynamic configuration = null, params object[] args);
+    void CreateFor(dynamic context = null, params object[] args);
 }
 
 
@@ -24,11 +24,11 @@ public class ArtifactUpdateStrategyFactory : IArtifactUpdateStrategyFactory
     {
         _strategies = strategies;
     }
-    public void CreateFor(dynamic configuration = null, params object[] args)
+    public void CreateFor(dynamic context = null, params object[] args)
     {
-        var strategy = _strategies.Where(x => x.CanHandle(configuration,args)).OrderBy(x => x.Priority).FirstOrDefault();
+        var strategy = _strategies.Where(x => x.CanHandle(context,args)).OrderBy(x => x.Priority).FirstOrDefault();
 
 
-        strategy.Update(configuration, args);
+        strategy.Update(context, args);
     }
 }

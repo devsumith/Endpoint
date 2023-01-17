@@ -22,10 +22,10 @@ public class IdPropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<P
 
     public override int Priority => 1;
 
-    public override bool CanHandle(object model, dynamic configuration = null)
+    public override bool CanHandle(object model, dynamic context = null)
         => model is PropertyModel propertyModel && propertyModel.Id;
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, PropertyModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, PropertyModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

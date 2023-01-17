@@ -15,7 +15,7 @@ public class ControllerGenerationStrategy: SyntaxGenerationStrategyBase<Controll
         :base(serviceProvider)
     { }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, ControllerModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, ControllerModel model, dynamic context = null)
     {
 /*            new ClassBuilder($"{((Token)model).PascalCase}Controller", new Endpoint.Core.Services.Context(), fileSystem)
         .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")

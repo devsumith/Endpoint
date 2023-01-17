@@ -24,7 +24,7 @@ public class WebApplicationSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));   
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, WebApplicationModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, WebApplicationModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

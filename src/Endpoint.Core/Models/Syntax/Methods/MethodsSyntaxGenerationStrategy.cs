@@ -17,7 +17,7 @@ public class MethodsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, List<MethodModel> model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, List<MethodModel> model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -25,7 +25,7 @@ public class MethodsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List
 
         foreach (var method in model)
         {
-            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(method, configuration));
+            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(method, context));
 
             if (method != model.Last())
             {

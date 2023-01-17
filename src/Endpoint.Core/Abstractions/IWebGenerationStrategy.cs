@@ -4,7 +4,7 @@ namespace Endpoint.Core.Abstractions;
 
 public interface IWebGenerationStrategy
 {
-    bool CanHandle(WebModel model, dynamic configuration = null);
-    void Create(WebModel model, dynamic configuration = null);
+    bool CanHandle(WebModel model, dynamic context = null);
+    void Create(WebModel model, dynamic context = null);
     int Priority { get; }
 }

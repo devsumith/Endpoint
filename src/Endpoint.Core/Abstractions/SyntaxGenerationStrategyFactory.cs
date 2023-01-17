@@ -11,14 +11,14 @@ public class SyntaxGenerationStrategyFactory : ISyntaxGenerationStrategyFactory
     {
         _strategies = strategies;
     }
-    public string CreateFor(object model, dynamic configuration = null)
+    public string CreateFor(object model, dynamic context = null)
     {
         var orderedStrategies = _strategies.OrderByDescending(x => x.Priority);
 
-        var strategies = orderedStrategies.Where(x => x.CanHandle(model, configuration));
+        var strategies = orderedStrategies.Where(x => x.CanHandle(model, context));
 
         var strategy = strategies.FirstOrDefault();
 
-        return strategy.Create(model, configuration);
+        return strategy.Create(model, context);
     }
 }

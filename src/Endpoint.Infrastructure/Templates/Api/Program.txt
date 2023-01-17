@@ -60,7 +60,7 @@ namespace {{ namespace }}
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            .UseSerilog((context, services, configuration) => configuration
+            .UseSerilog((context, services, context) => configuration
                     .ReadFrom.Configuration(context.Configuration)
                     .ReadFrom.Services(services)
                     .Enrich.FromLogContext())

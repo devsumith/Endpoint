@@ -16,7 +16,7 @@ public class PropertyAccessorsSyntaxGenerationStrategy : SyntaxGenerationStrateg
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, List<PropertyAccessorModel> model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, List<PropertyAccessorModel> model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

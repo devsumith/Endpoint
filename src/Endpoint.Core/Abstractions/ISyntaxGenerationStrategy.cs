@@ -2,7 +2,7 @@
 
 public interface ISyntaxGenerationStrategy
 {
-    bool CanHandle(object model, dynamic configuration = null);
-    string Create(object model, dynamic configuration = null);
+    bool CanHandle(object model, dynamic context = null);
+    string Create(object model, dynamic context = null);
     int Priority { get; }
 }

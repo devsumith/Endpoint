@@ -2,5 +2,5 @@
 
 public interface ISyntaxGenerationStrategyFactory
 {
-    string CreateFor(object model, dynamic configuration = null);
+    string CreateFor(object model, dynamic context = null);
 }

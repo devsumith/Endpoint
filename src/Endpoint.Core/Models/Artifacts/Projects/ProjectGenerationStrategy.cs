@@ -26,7 +26,7 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ProjectModel model, dynamic configuration = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ProjectModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

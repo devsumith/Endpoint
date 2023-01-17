@@ -349,7 +349,7 @@ public class QueryModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Q
     public QueryModelSyntaxGenerationStrategy(IServiceProvider serviceProvider) 
         :base(serviceProvider) { }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, QueryModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, QueryModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
@@ -361,7 +361,7 @@ public class QueryModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Q
 
         builder.AppendLine("");
 
-        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.RequestHandler, configuration));
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.RequestHandler, context));
 
         return builder.ToString();
     }
@@ -372,7 +372,7 @@ public class CommandModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
     public CommandModelSyntaxGenerationStrategy(IServiceProvider serviceProvider) 
         :base(serviceProvider) { }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, CommandModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, CommandModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
@@ -388,7 +388,7 @@ public class CommandModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
 
         builder.AppendLine("");
 
-        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.RequestHandler, configuration));
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.RequestHandler, context));
 
         return builder.ToString();
     }

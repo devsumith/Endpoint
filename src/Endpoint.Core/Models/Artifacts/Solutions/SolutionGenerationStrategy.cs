@@ -16,7 +16,7 @@ public class SolutionGenerationStrategy : ArtifactGenerationStrategyBase<Solutio
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));    
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, SolutionModel model, dynamic configuration = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, SolutionModel model, dynamic context = null)
     {
         _fileSystem.CreateDirectory(model.SolutionDirectory);
 

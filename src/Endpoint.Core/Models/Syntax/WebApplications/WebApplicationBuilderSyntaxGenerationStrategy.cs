@@ -22,7 +22,7 @@ public class WebApplicationBuilderSyntaxGenerationStrategy : SyntaxGenerationStr
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, WebApplicationBuilderModel model, dynamic configuration = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, WebApplicationBuilderModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
