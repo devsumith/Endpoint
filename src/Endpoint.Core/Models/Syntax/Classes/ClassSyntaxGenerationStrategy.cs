@@ -16,6 +16,11 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    public override bool CanHandle(object model, dynamic configuration = null)
+    {
+        return model as ClassModel != null;
+    }
+
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, ClassModel model, dynamic configuration = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);

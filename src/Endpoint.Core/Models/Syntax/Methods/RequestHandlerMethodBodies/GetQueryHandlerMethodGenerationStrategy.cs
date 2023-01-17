@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using DotLiquid.Util;
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
@@ -22,11 +23,16 @@ public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStr
     }
 
     public override bool CanHandle(object model, dynamic configuration = null)
-        => model is MethodModel methodModel
-        && methodModel.Name == "Handle"
-        && methodModel.Params.FirstOrDefault()?.Name == "request"
-        && methodModel.Params.FirstOrDefault().Type.Name.StartsWith("Get")
-        && methodModel.Params.FirstOrDefault().Type.Name.Contains(_namingConventionConverter.Convert(NamingConvention.PascalCase, methodModel.ParentType.Name, pluralize: true));
+    {
+        if(model is MethodModel methodModel && configuration?.Entity is ClassModel entity)
+        {
+            var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true);
+
+            return methodModel.Params.First().Type.Name == $"Get{entityNamePascalCasePlural}Request";
+        }
+
+        return false;
+    }
 
     public override int Priority => int.MaxValue;
 
@@ -34,7 +40,7 @@ public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStr
     {
         var builder = new StringBuilder();
 
-        var entityName = model.ParentType.Name;
+        var entityName = configuration.Entity.Name;
         
         var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 

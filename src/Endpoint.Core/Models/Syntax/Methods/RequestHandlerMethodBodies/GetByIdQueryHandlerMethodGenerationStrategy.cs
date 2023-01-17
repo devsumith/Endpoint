@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -20,11 +21,14 @@ public class GetByIdQueryHandlerMethodGenerationStrategy : MethodSyntaxGeneratio
     }
 
     public override bool CanHandle(object model, dynamic configuration = null)
-        => model is MethodModel methodModel
-        && methodModel.Name == "Handle"
-        && methodModel.Params.FirstOrDefault()?.Name == "request"
-        && methodModel.Params.FirstOrDefault().Type.Name.StartsWith("Get")
-        && methodModel.Params.FirstOrDefault().Type.Name.EndsWith("ById");
+    {
+        if (model is MethodModel methodModel && configuration?.Entity is ClassModel entity)
+        {
+            return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.StartsWith($"Get{entity.Name}ByIdRequest");
+        }
+
+        return false;
+    }
 
     public override int Priority => int.MaxValue;
 
@@ -32,7 +36,7 @@ public class GetByIdQueryHandlerMethodGenerationStrategy : MethodSyntaxGeneratio
     {
         var builder = new StringBuilder();
 
-        var entityName = model.ParentType.Name;
+        var entityName = configuration.Entity.Name;
 
         var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 

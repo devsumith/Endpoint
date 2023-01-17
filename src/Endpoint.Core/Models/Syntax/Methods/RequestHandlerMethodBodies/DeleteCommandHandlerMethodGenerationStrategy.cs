@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -20,10 +21,20 @@ public class DeleteCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
     }
 
     public override bool CanHandle(object model, dynamic configuration = null)
-        => model is MethodModel methodModel
-        && methodModel.Name == "Handle"
-        && methodModel.Params.FirstOrDefault()?.Name == "request"
-        && methodModel.Params.FirstOrDefault().Type.Name.StartsWith("Update");
+    {
+        if (model is MethodModel methodModel && configuration?.Entity is ClassModel entity)
+        {
+            return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.StartsWith($"Delete{entity.Name}Request");
+        }
+
+        return false;
+    }
+
+    /*    public override bool CanHandle(object model, dynamic configuration = null)
+            => model is MethodModel methodModel
+            && methodModel.Name == "Handle"
+            && methodModel.Params.FirstOrDefault()?.Name == "request"
+            && methodModel.Params.FirstOrDefault().Type.Name.StartsWith("Update");*/
 
     public override int Priority => int.MaxValue;
 
@@ -31,7 +42,7 @@ public class DeleteCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
     {
         var builder = new StringBuilder();
 
-        var entityName = model.ParentType.Name;
+        var entityName = configuration.Entity.Name;
 
         var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 

@@ -75,6 +75,8 @@ public static class ConfigureServices
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<ClassModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<InterfaceModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<EntityModel>>();
+        services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<QueryModel>>();
+        services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<CommandModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, LaunchSettingsFileGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, ConsoleMicroserviceArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, AggregateArtifactsGenerationStrategy>();
@@ -140,6 +142,9 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerGetByIdSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerGetSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RequestHandlerSyntaxUpdateGenerationStrategy>();
+
+        services.AddSingleton<ISyntaxGenerationStrategy, QueryModelSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, CommandModelSyntaxGenerationStrategy>();
 
         services.AddSingleton<IArtifactUpdateStrategyFactory, ArtifactUpdateStrategyFactory>();
 

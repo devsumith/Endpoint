@@ -1,11 +1,6 @@
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Artifacts.Solutions;
-using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Endpoint.Core.Models.Syntax.Entities.Aggregate;
@@ -34,27 +29,13 @@ public class AggregateService: IAggregateService
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
     }
 
-    public async Task Add(string name, string properties, string directory)
+    public async Task Add(string name, string properties, string directory, string microserviceName)
     {
-        var aggregateDirectory = $"{directory}{Path.DirectorySeparatorChar}{name}Aggregate";
-
-        _fileSystem.CreateDirectory(aggregateDirectory);
-
         var classModel = _syntaxService.SolutionModel.GetClass(name);
 
-        var dtoModel = classModel.CreateDto();
+        AggregateModel model = new AggregateModel(_namingConventionConverter, microserviceName, classModel,directory);
 
-
-        AggregateModel model = new AggregateModel(_namingConventionConverter, "", classModel);
-
-        if(classModel != null)
-        {
-            var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, aggregateDirectory, "cs");
-
-            var dtoFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, aggregateDirectory, "cs");
-
-            _artifactGenerationStrategyFactory.CreateFor(classFileModel);
-        }        
+        _artifactGenerationStrategyFactory.CreateFor(model);        
     }
 
 }

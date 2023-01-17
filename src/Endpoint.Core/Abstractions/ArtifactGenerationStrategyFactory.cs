@@ -16,6 +16,6 @@ public class ArtifactGenerationStrategyFactory : IArtifactGenerationStrategyFact
             .OrderBy(x => x.Priority)
             .FirstOrDefault();
 
-        strategy.Create(model);
+        strategy.Create(model, configuration);
     }
 }

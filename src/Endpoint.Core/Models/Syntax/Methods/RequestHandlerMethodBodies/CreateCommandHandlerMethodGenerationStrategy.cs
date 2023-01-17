@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
@@ -20,10 +21,14 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
     public override bool CanHandle(object model, dynamic configuration = null)
-        => model is MethodModel methodModel 
-        && methodModel.Name == "Handle" 
-        && methodModel.Params.FirstOrDefault()?.Name == "request"
-        && methodModel.Params.FirstOrDefault().Type.Name.StartsWith("Create");
+    {
+        if (model is MethodModel methodModel && configuration?.Entity is ClassModel entity)
+        {
+            return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.StartsWith($"Create");
+        }
+
+        return false;
+    }
 
     public override int Priority => int.MaxValue;
 
@@ -31,7 +36,7 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
     {
         var builder = new StringBuilder();
 
-        var entityName = model.ParentType.Name;
+        var entityName = configuration.Entity.Name;
 
         builder.AppendLine($"var {((Token)entityName).CamelCase} = new {((Token)entityName).PascalCase}();");
 
@@ -58,7 +63,7 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         builder.AppendLine($"{((Token)entityName).PascalCase} = {((Token)entityName).CamelCase}.ToDto()".Indent(1));
 
-        builder.AppendLine("}");
+        builder.AppendLine("};");
 
         model.Body = builder.ToString();
         

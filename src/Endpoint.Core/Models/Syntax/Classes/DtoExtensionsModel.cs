@@ -1,7 +1,10 @@
 using Endpoint.Core.Models.Syntax.Methods;
+using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
+using System.Collections.Generic;
 using System.Text;
+
 
 namespace Endpoint.Core.Models.Syntax.Classes;
 
@@ -11,33 +14,80 @@ public class DtoExtensionsModel: ClassModel {
     {
         Static = true;
 
-        var methodModel = new MethodModel();
+        var toDtoMethodBodyBuilder = new StringBuilder();
 
-        methodModel.Static = true;
+        toDtoMethodBodyBuilder.AppendLine($"return new {entity.Name}Dto");
 
-        methodModel.Params.Add(new Params.ParamModel
+        toDtoMethodBodyBuilder.AppendLine("{");
+
+        foreach (var prop in entity.Properties)
         {
-            ExtensionMethodParam = true,
-            Name = namingConventionConverter.Convert(NamingConvention.CamelCase,name),
-            Type = new TypeModel(name)
-        });
-
-        var builder = new StringBuilder();
-
-        builder.AppendLine($"return new {name}Dto".Indent(1));
-
-        builder.AppendLine("{".Indent(1));
-
-        foreach(var prop in entity.Properties)
-        {
-            builder.AppendLine($"{name}Id = {namingConventionConverter.Convert(NamingConvention.CamelCase, name)}.{prop.Name}".Indent(2));
+            toDtoMethodBodyBuilder.AppendLine($"{prop.Name} = {namingConventionConverter.Convert(NamingConvention.CamelCase, entity.Name)}.{prop.Name},".Indent(1));
         }
 
-        builder.AppendLine("}".Indent(1));
+        toDtoMethodBodyBuilder.AppendLine("};");
 
-        methodModel.Body = builder.ToString();  
 
-        Methods.Add(methodModel);
+        Methods.Add(new MethodModel()
+        {
+            Name = "ToDto",
+            Static = true,
+            ReturnType = new TypeModel($"{entity.Name}Dto"),
+            Params = new List<ParamModel>
+            {
+                new()
+                {
+                    ExtensionMethodParam = true,
+                    Name = namingConventionConverter.Convert(NamingConvention.CamelCase,entity.Name),
+                    Type = new TypeModel(entity.Name)
+                }
+            },
+            Body = toDtoMethodBodyBuilder.ToString()
+        });
+
+        Methods.Add(new MethodModel()
+        {
+            Name = "ToDtosAsync",
+            Async = true,
+            Static = true,
+            ReturnType = new ("Task")
+            {
+                GenericTypeParameters = new()
+                {
+                    new ("List")
+                    {
+                        GenericTypeParameters = new()
+                        {
+                            new ($"{entity.Name}Dto")
+                        }
+                    }
+                }
+            },
+            Params = new List<ParamModel>
+            {
+                new()
+                {
+                    ExtensionMethodParam = true,
+                    Name = namingConventionConverter.Convert(NamingConvention.CamelCase,entity.Name, pluralize: true),
+                    Type = new TypeModel("IQueryable")
+                    {
+                        GenericTypeParameters = new List<TypeModel>
+                        {
+                            new TypeModel(entity.Name)
+                        }
+                    }
+                },
+                new()
+                {
+                    Name = "cancellationToken",
+                    Type = new TypeModel("CancellationToken"),
+                    DefaultValue = "null"
+                }
+            },
+            Body = $"return await {namingConventionConverter.Convert(NamingConvention.CamelCase, entity.Name, pluralize: true)}.Select(x => x.ToDto()).ToListAsync(cancellationToken);"
+        });
+
+
     }
 
 }

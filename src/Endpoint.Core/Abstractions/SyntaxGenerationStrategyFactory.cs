@@ -13,8 +13,12 @@ public class SyntaxGenerationStrategyFactory : ISyntaxGenerationStrategyFactory
     }
     public string CreateFor(object model, dynamic configuration = null)
     {
-        var strategy = _strategies.Where(x => x.CanHandle(model)).OrderBy(x => x.Priority).FirstOrDefault();
+        var orderedStrategies = _strategies.OrderByDescending(x => x.Priority);
 
-        return strategy.Create(model);
+        var strategies = orderedStrategies.Where(x => x.CanHandle(model, configuration));
+
+        var strategy = strategies.FirstOrDefault();
+
+        return strategy.Create(model, configuration);
     }
 }

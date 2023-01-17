@@ -17,6 +17,11 @@ public class AggregateCreateRequest : IRequest<Unit> {
     [Option('p', "properties")]
     public string Properties { get; set; }
 
+
+    [Option('m', "microservice-name")]
+    public string MicroserviceName { get; set; }
+
+
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -39,7 +44,7 @@ public class AggregateCreateRequestHandler : IRequestHandler<AggregateCreateRequ
     {
         _logger.LogInformation("Handled: {0}", nameof(AggregateCreateRequestHandler));
 
-        await _aggregateService.Add(request.Name, request.Properties, request.Directory);
+        await _aggregateService.Add(request.Name, request.Properties, request.Directory, request.MicroserviceName);
 
         return new();
     }

@@ -76,7 +76,7 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
 
         builder.AppendLine();
 
-        builder.AppendLine(_syntaxGenerationStrategyFactory.CreateFor(model.Object));
+        builder.AppendLine(_syntaxGenerationStrategyFactory.CreateFor(model.Object, configuration));
 
         _fileSystem.WriteAllText(model.Path, builder.ToString());
     }

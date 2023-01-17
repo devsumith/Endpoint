@@ -1,4 +1,6 @@
-﻿using Endpoint.Core.Abstractions;
+﻿using CSharpFunctionalExtensions;
+using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
@@ -20,11 +22,14 @@ public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationSt
     }
 
     public override bool CanHandle(object model, dynamic configuration = null)
-        => model is MethodModel methodModel
-        && methodModel.Name == "Handle"
-        && methodModel.Params.FirstOrDefault()?.Name == "request"
-        && methodModel.Params.FirstOrDefault().Type.Name.StartsWith("Get")
-        && methodModel.Params.FirstOrDefault().Type.Name.EndsWith("Page");
+    {
+        if (model is MethodModel methodModel && configuration?.Entity is ClassModel entity)
+        {
+            return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.EndsWith($"PageRequest");
+        }
+
+        return false;
+    }
 
     public override int Priority => int.MaxValue;
 
@@ -32,34 +37,33 @@ public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationSt
     {
         var builder = new StringBuilder();
 
-        var aggregateName = model.ParentType.Name;
+        var entityName = configuration.Entity.Name;
 
-        builder.AppendLine($"var {((Token)aggregateName).CamelCase} = new {((Token)aggregateName).PascalCase}();");
-
+        builder.AppendLine($"var query = from {((Token)entityName).CamelCase} in _context.{((Token)entityName).PascalCasePlural}");
+        
+        builder.AppendLine($"select {((Token)entityName).CamelCase};".Indent(1));
+        
         builder.AppendLine("");
-
-        builder.AppendLine($"_context.{((Token)aggregateName).PascalCasePlural}.Add({((Token)aggregateName).CamelCase});");
-
+        
+        builder.AppendLine($"var length = await _context.{((Token)entityName).PascalCasePlural}.AsNoTracking().CountAsync();");
+        
         builder.AppendLine("");
-
-        foreach (var property in model.ParentType.Properties.Where(x => x.Id == false))
-        {
-            builder.AppendLine($"{((Token)aggregateName).CamelCase}.{((Token)property.Name).PascalCase} = request.{((Token)aggregateName).PascalCase}.{((Token)property.Name).PascalCase};");
-        }
-
+        
+        builder.AppendLine($"var {((Token)entityName).CamelCasePlural} = await query.Page(request.Index, request.PageSize).AsNoTracking()");
+        
+        builder.AppendLine(".Select(x => x.ToDto()).ToListAsync();".Indent(1));
+        
         builder.AppendLine("");
-
-        builder.AppendLine("await _context.SaveChangesAsync(cancellationToken);");
-
-        builder.AppendLine("");
-
+        
         builder.AppendLine("return new ()");
-
+        
         builder.AppendLine("{");
-
-        builder.AppendLine($"{((Token)aggregateName).PascalCase} = {((Token)aggregateName).CamelCase}.ToDto()".Indent(1));
-
-        builder.AppendLine("}");
+        
+        builder.AppendLine("Length = length,".Indent(1));
+        
+        builder.AppendLine($"Entities = {((Token)entityName).CamelCasePlural}".Indent(1));
+        
+        builder.AppendLine("};");
 
         model.Body = builder.ToString();
 

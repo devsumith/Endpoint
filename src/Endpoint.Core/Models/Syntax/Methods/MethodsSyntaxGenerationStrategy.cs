@@ -25,7 +25,7 @@ public class MethodsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List
 
         foreach (var method in model)
         {
-            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(method));
+            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(method, configuration));
 
             if (method != model.Last())
             {

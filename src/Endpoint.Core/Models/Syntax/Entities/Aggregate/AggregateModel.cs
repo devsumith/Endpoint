@@ -3,18 +3,23 @@ using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Fields;
+using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Endpoint.Core.Models.Syntax.Entities.Aggregate;
 
 public class AggregateModel
 {
-    public AggregateModel(INamingConventionConverter namingConventionConverter, string microserviceName, ClassModel aggregate)
+    public AggregateModel(INamingConventionConverter namingConventionConverter, string microserviceName, ClassModel aggregate, string directory)
     {
+        Queries = new List<QueryModel>();
+        Commands = new List<CommandModel>();
+        Directory = directory;
         MicroserviceName = microserviceName;
         Aggregate = aggregate;
         AggregateDto = aggregate.CreateDto();
@@ -25,45 +30,15 @@ public class AggregateModel
             switch(routeType)
             {
                 case RouteType.Get:
-                    Queries.Add(new QueryModel(namingConventionConverter,aggregate,routeType)
-                    {
-
-                    });
-                    break;
-
                 case RouteType.GetById:
-                    Queries.Add(new QueryModel(namingConventionConverter,aggregate,routeType)
-                    {
-
-                    });
-                    break;
-
                 case RouteType.Page:
-                    Queries.Add(new QueryModel(namingConventionConverter,aggregate,routeType)
-                    {
-
-                    });
-                    break;
-
-                case RouteType.Update:
-                    Commands.Add(new CommandModel(namingConventionConverter,aggregate,routeType)
-                    {
-
-                    });
-                    break;
-
-                case RouteType.Create:
-                    Commands.Add(new CommandModel(namingConventionConverter,aggregate,routeType)
-                    {
-
-                    });
+                    Queries.Add(new QueryModel(microserviceName, namingConventionConverter,aggregate,routeType));
                     break;
 
                 case RouteType.Delete:
-                    Commands.Add(new CommandModel(namingConventionConverter,aggregate,routeType)
-                    {
-
-                    });
+                case RouteType.Create:
+                case RouteType.Update:
+                    Commands.Add(new CommandModel(microserviceName, namingConventionConverter,aggregate,routeType));
                     break;
 
                 default:
@@ -78,14 +53,14 @@ public class AggregateModel
     public DtoExtensionsModel AggregateExtensions { get; set; }
     public List<CommandModel> Commands { get; set; }
     public List<QueryModel> Queries { get; set; }
+    public string Directory { get; set; }
 
 }
 
 
 public class QueryModel : CqrsBase
 {
-    public string Name { get; set; }
-    public QueryModel(INamingConventionConverter namingConventionConverter, ClassModel entity, RouteType routeType)
+    public QueryModel(string microserviceName, INamingConventionConverter namingConventionConverter, ClassModel entity, RouteType routeType)
     {
         var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true);
 
@@ -113,15 +88,41 @@ public class QueryModel : CqrsBase
             GenericTypeParameters = new List<TypeModel> { new TypeModel(Request.Name), new TypeModel(Response.Name) }
         });
 
-        RequestHandler.Fields.Add(new FieldModel());
+        RequestHandler.Fields.Add(new FieldModel()
+        {
+            Type = new TypeModel("ILogger")
+            {
+                GenericTypeParameters = new List<TypeModel>
+                {
+                    new TypeModel(RequestHandler.Name)
+                }
+            },
+            Name = "_logger"
+        });
 
-        RequestHandler.Fields.Add(new FieldModel());
+        RequestHandler.Fields.Add(new FieldModel()
+        {
+            Type = new TypeModel($"I{microserviceName}DbContext"),
+            Name = "_context"
+        });
 
         var requestHandlerCtor = new ConstructorModel(RequestHandler, RequestHandler.Name);
 
-        requestHandlerCtor.Params.Add(new ParamModel() { });
+        requestHandlerCtor.Params.Add(new ParamModel() { 
+            Type = new TypeModel("ILogger")
+            {
+                GenericTypeParameters = new List<TypeModel>
+                {
+                    new TypeModel(RequestHandler.Name)
+                }
+            },
+            Name = "logger"
+        });
 
-        requestHandlerCtor.Params.Add(new ParamModel() { });
+        requestHandlerCtor.Params.Add(new ParamModel() {
+            Type = new TypeModel($"I{microserviceName}DbContext"),
+            Name = "context"
+        });
         
         RequestHandler.Constructors.Add(requestHandlerCtor);
 
@@ -131,9 +132,62 @@ public class QueryModel : CqrsBase
             {
                 GenericTypeParameters = new List<TypeModel>()
                 {
-                    new TypeModel(entity.Name)
+                    new TypeModel($"{entity.Name}Dto")
                 }
-            }, entity.Name, PropertyAccessorModel.GetSet));
+            }, namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true) , PropertyAccessorModel.GetSet));
+        }
+
+        var methodModel = new MethodModel()
+        {
+            AccessModifier = AccessModifier.Public,
+            ParentType = RequestHandler,
+            Name = "Handle",
+            Async = true,
+            ReturnType = new TypeModel("Task")
+            {
+                GenericTypeParameters = new List<TypeModel>()
+                {
+                    new TypeModel(Response.Name)
+                }
+            },
+            Params = new List<ParamModel>()
+            {
+                new ParamModel() {
+                    Type = new TypeModel(Request.Name),
+                    Name = "request"
+                },
+                new ParamModel() {
+                    Type = new TypeModel("CancellationToken"),
+                    Name = "cancellationToken"
+                }
+            }
+        };
+
+        RequestHandler.Methods.Add(methodModel);
+
+        if (routeType == RouteType.GetById)
+        {
+            Request.Properties.Add(new PropertyModel(Request, AccessModifier.Public, new TypeModel("Guid"), $"{entity.Name}Id", PropertyAccessorModel.GetSet));
+
+            Response.Properties.Add(new PropertyModel(Response, AccessModifier.Public, new TypeModel($"{entity.Name}Dto"), $"{entity.Name}", PropertyAccessorModel.GetSet));
+        }
+
+
+        if (routeType == RouteType.Page)
+        {
+            Request.Properties.Add(new PropertyModel(Request, AccessModifier.Public, new TypeModel("int"), "PageSize", PropertyAccessorModel.GetSet));
+
+            Request.Properties.Add(new PropertyModel(Request, AccessModifier.Public, new TypeModel("int"), "Index", PropertyAccessorModel.GetSet));
+
+            Response.Properties.Add(new PropertyModel(Response, AccessModifier.Public, new TypeModel("int"), "Length", PropertyAccessorModel.GetSet));
+
+            Response.Properties.Add(new PropertyModel(Response, AccessModifier.Public, new TypeModel("List")
+            {
+                GenericTypeParameters = new List<TypeModel>()
+                {
+                    new TypeModel($"{entity.Name}Dto")
+                }
+            }, "Entities ", PropertyAccessorModel.GetSet));
         }
     }
 
@@ -142,7 +196,7 @@ public class QueryModel : CqrsBase
 
 public class CommandModel : CqrsBase
 {
-    public CommandModel(INamingConventionConverter namingConventionConverter, ClassModel entity, RouteType routeType)
+    public CommandModel(string microserviceName, INamingConventionConverter namingConventionConverter, ClassModel entity, RouteType routeType)
     {
         Name = routeType switch
         {
@@ -178,16 +232,115 @@ public class CommandModel : CqrsBase
             GenericTypeParameters = new List<TypeModel> { new TypeModel(Request.Name), new TypeModel(Response.Name) }
         });
 
+        RequestHandler.Fields.Add(new FieldModel()
+        {
+            Type = new TypeModel("ILogger")
+            {
+                GenericTypeParameters = new List<TypeModel>
+                {
+                    new TypeModel(RequestHandler.Name)
+                }
+            },
+            Name = "_logger"
+        });
+
+        RequestHandler.Fields.Add(new FieldModel()
+        {
+            Type = new TypeModel($"I{microserviceName}DbContext"),
+            Name = "_context"
+        });
+
+        var requestHandlerCtor = new ConstructorModel(RequestHandler, RequestHandler.Name);
+
+        requestHandlerCtor.Params.Add(new ParamModel()
+        {
+            Type = new TypeModel("ILogger")
+            {
+                GenericTypeParameters = new List<TypeModel>
+                {
+                    new TypeModel(RequestHandler.Name)
+                }
+            },
+            Name = "logger"
+        });
+
+        requestHandlerCtor.Params.Add(new ParamModel()
+        {
+            Type = new TypeModel($"I{microserviceName}DbContext"),
+            Name = "context"
+        });
+
+        RequestHandler.Constructors.Add(requestHandlerCtor);
+
+        var methodModel = new MethodModel()
+        {
+            AccessModifier = AccessModifier.Public,
+            ParentType = RequestHandler,
+            Name = "Handle",
+            Async = true,
+            ReturnType = new TypeModel("Task")
+            {
+                GenericTypeParameters = new List<TypeModel>()
+                {
+                    new TypeModel(Response.Name)
+                }
+            },
+            Params = new List<ParamModel>()
+            {
+                new ParamModel() { 
+                    Type = new TypeModel(Request.Name),
+                    Name = "request"
+                },
+                new ParamModel() {
+                    Type = new TypeModel("CancellationToken"),
+                    Name = "cancellationToken"
+                }
+            }
+        };
+
+        RequestHandler.Methods.Add(methodModel);
+
+        if (routeType == RouteType.Create)
+        {
+            foreach (var prop in entity.Properties)
+            {
+                Request.Properties.Add(new PropertyModel(Request, AccessModifier.Public, prop.Type, prop.Name, PropertyAccessorModel.GetSet));
+            }
+
+            Response.Properties.Add(new PropertyModel(Response, AccessModifier.Public, new TypeModel($"{entity.Name}Dto"), $"{entity.Name}", PropertyAccessorModel.GetSet));
+        }
+
+        if (routeType == RouteType.Update)
+        {
+            foreach (var prop in entity.Properties)
+            {
+                Request.Properties.Add(new PropertyModel(Request, AccessModifier.Public, prop.Type, prop.Name, PropertyAccessorModel.GetSet));
+            }
+
+            Response.Properties.Add(new PropertyModel(Response, AccessModifier.Public, new TypeModel($"{entity.Name}Dto"), $"{entity.Name}", PropertyAccessorModel.GetSet));
+        }
+
+        if (routeType == RouteType.Delete)
+        {
+            Request.Properties.Add(new PropertyModel(Request, AccessModifier.Public, new TypeModel("Guid"), $"{entity.Name}Id", PropertyAccessorModel.GetSet));
+
+            Response.Properties.Add(new PropertyModel(Response, AccessModifier.Public, new TypeModel($"{entity.Name}Dto"), $"{entity.Name}", PropertyAccessorModel.GetSet));
+        }
     }
     public ClassModel RequestValidator { get; set; }
 }
 
 public class CqrsBase
 {
+    public CqrsBase()
+    {
+        UsingDirectives = new List<UsingDirectiveModel>();
+    }
     public string Name { get; set; }
     public ClassModel Request { get; set; }
     public ClassModel Response { get; set; }
     public ClassModel RequestHandler { get; set; }
+    public List<UsingDirectiveModel> UsingDirectives { get; set; }
 }
 
 
@@ -198,7 +351,19 @@ public class QueryModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Q
 
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, QueryModel model, dynamic configuration = null)
     {
-        return "";
+        var builder = new StringBuilder();
+
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Request));
+
+        builder.AppendLine("");
+
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Response));
+
+        builder.AppendLine("");
+
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.RequestHandler, configuration));
+
+        return builder.ToString();
     }
 }
 
@@ -209,6 +374,22 @@ public class CommandModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
 
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, CommandModel model, dynamic configuration = null)
     {
-        return "";
+        var builder = new StringBuilder();
+
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.RequestValidator));
+
+        builder.AppendLine("");
+
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Request));
+
+        builder.AppendLine("");
+
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Response));
+
+        builder.AppendLine("");
+
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.RequestHandler, configuration));
+
+        return builder.ToString();
     }
 }
