@@ -9,18 +9,19 @@ using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Models.Syntax.Entities.Aggregate;
 
 public class AggregateModel
 {
-    public AggregateModel(INamingConventionConverter namingConventionConverter, string microserviceName, ClassModel aggregate, string directory)
+    public AggregateModel(INamingConventionConverter namingConventionConverter, string serviceName, ClassModel aggregate, string directory)
     {
         Queries = new List<QueryModel>();
         Commands = new List<CommandModel>();
         Directory = directory;
-        MicroserviceName = microserviceName;
+        MicroserviceName = serviceName;
         Aggregate = aggregate;
         AggregateDto = aggregate.CreateDto();
         AggregateExtensions = new DtoExtensionsModel(namingConventionConverter, $"{aggregate.Name}Extensions", aggregate);
@@ -29,16 +30,18 @@ public class AggregateModel
 
             switch(routeType)
             {
-                case RouteType.Get:
-                case RouteType.GetById:
                 case RouteType.Page:
-                    Queries.Add(new QueryModel(microserviceName, namingConventionConverter,aggregate,routeType));
+                    break;
+
+                case RouteType.Get:
+                case RouteType.GetById:                
+                    Queries.Add(new QueryModel(serviceName, namingConventionConverter,aggregate,routeType));
                     break;
 
                 case RouteType.Delete:
                 case RouteType.Create:
                 case RouteType.Update:
-                    Commands.Add(new CommandModel(microserviceName, namingConventionConverter,aggregate,routeType));
+                    Commands.Add(new CommandModel(serviceName, namingConventionConverter,aggregate,routeType));
                     break;
 
                 default:

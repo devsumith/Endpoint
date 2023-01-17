@@ -36,19 +36,23 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
     {
         var builder = new StringBuilder();
 
-        var entityName = context.Entity.Name;
+        var entity = context.Entity as ClassModel;
 
-        builder.AppendLine($"var {((Token)entityName).CamelCase} = new {((Token)entityName).PascalCase}();");
+        var entityName = entity.Name;
+
+        var entityNameCamelCase = _namingConventionConverter.Convert(NamingConvention.CamelCase, entityName);
+
+        builder.AppendLine($"var {entityNameCamelCase} = new {((Token)entityName).PascalCase}();");
 
         builder.AppendLine("");
 
-        builder.AppendLine($"_context.{((Token)entityName).PascalCasePlural}.Add({((Token)entityName).CamelCase});");
+        builder.AppendLine($"_context.{((Token)entityName).PascalCasePlural}.Add({entityNameCamelCase});");
 
         builder.AppendLine("");
 
-        foreach (var property in model.ParentType.Properties.Where(x => x.Id == false))
+        foreach (var property in entity.Properties.Where(x => x.Name != $"{entityName}Id"))
         {
-            builder.AppendLine($"{((Token)entityName).CamelCase}.{((Token)property.Name).PascalCase} = request.{((Token)entityName).PascalCase}.{((Token)property.Name).PascalCase};");
+            builder.AppendLine($"{entityNameCamelCase}.{property.Name} = request.{ property.Name };");
         }
 
         builder.AppendLine("");
@@ -61,7 +65,7 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         builder.AppendLine("{");
 
-        builder.AppendLine($"{((Token)entityName).PascalCase} = {((Token)entityName).CamelCase}.ToDto()".Indent(1));
+        builder.AppendLine($"{((Token)entityName).PascalCase} = {entityNameCamelCase}.ToDto()".Indent(1));
 
         builder.AppendLine("};");
 

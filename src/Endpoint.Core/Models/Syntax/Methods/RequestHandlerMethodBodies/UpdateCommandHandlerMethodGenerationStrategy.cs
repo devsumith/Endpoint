@@ -36,7 +36,9 @@ public class UpdateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, MethodModel model, dynamic context = null)
     {
-        var entityName = context.Entity.Name;
+        var entity = context.Entity as ClassModel;  
+
+        var entityName = entity.Name;
 
         var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase,entityName,pluralize: true);
 
@@ -44,13 +46,13 @@ public class UpdateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         var builder = new StringBuilder();
 
-        builder.AppendLine($"var {entityNameCamelCase} = await _context.{entityNamePascalCasePlural}.SingleAsync(x => x.{entityName}Id == new {entityName}Id(request.{entityName}.{entityName}Id.Value));");
+        builder.AppendLine($"var {entityNameCamelCase} = await _context.{entityNamePascalCasePlural}.SingleAsync(x => x.{entityName}Id == request.{entityName}Id);");
 
         builder.AppendLine("");
 
-        foreach (var property in model.ParentType.Properties.Where(x => x.Id == false))
+        foreach (var property in entity.Properties.Where(x => x.Id == false))
         {
-            builder.AppendLine($"{entityNameCamelCase}.{property.Name} = request.{entityName}.{property.Name};");
+            builder.AppendLine($"{entityNameCamelCase}.{property.Name} = request.{property.Name};");
         }
 
         builder.AppendLine("");

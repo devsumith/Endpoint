@@ -42,7 +42,7 @@ public class GetByIdQueryHandlerMethodGenerationStrategy : MethodSyntaxGeneratio
 
         builder.AppendLine("return new () {");
 
-        builder.AppendLine($"{entityName} = (await _context.{entityNamePascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{entityName}Id == new {entityName}Id(request.{entityName}Id))).ToDto()".Indent(1));
+        builder.AppendLine($"{entityName} = (await _context.{entityNamePascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{entityName}Id == request.{entityName}Id)).ToDto()".Indent(1));
         
         builder.AppendLine("};");
 
