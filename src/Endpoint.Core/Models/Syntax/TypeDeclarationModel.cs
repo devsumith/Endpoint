@@ -9,8 +9,11 @@ public class TypeDeclarationModel
 	{
 		Name = name;
 		Properties = new List<PropertyModel>();
+		UsingDirectives = new List<UsingDirectiveModel>();
 	}
 
     public string Name { get; set; }
     public List<PropertyModel> Properties { get; set; }
+
+    public List<UsingDirectiveModel> UsingDirectives { get; set; }
 }

@@ -1,51 +1,93 @@
-﻿using Endpoint.Core.Abstractions;
+﻿using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Models.Syntax.Constructors;
+using Endpoint.Core.Models.Syntax.Fields;
+using Endpoint.Core.Models.Syntax.Methods.ControllerMethods;
+using Endpoint.Core.Models.Syntax.Params;
+using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Services;
+using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.Controllers;
 
 public class ControllerModel: ClassModel
 {
-    public ControllerModel(string name)
-        :base(name) { }
-}
-
-public class ControllerGenerationStrategy: SyntaxGenerationStrategyBase<ControllerModel>
-{        
-    public ControllerGenerationStrategy(IServiceProvider serviceProvider)
-        :base(serviceProvider)
-    { }
-
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, ControllerModel model, dynamic context = null)
+    public ControllerModel(INamingConventionConverter namingConventionConverter, ClassModel entity)
+        : base($"{entity.Name}Controller")
     {
-/*            new ClassBuilder($"{((Token)model).PascalCase}Controller", new Endpoint.Core.Services.Context(), fileSystem)
-        .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")
-        .WithUsing("System.Net")
-        .WithUsing("System.Threading")
-        .WithUsing("System.Threading.Tasks")
-        .WithUsing($"{settings.ApplicationNamespace}")
-        .WithUsing("MediatR")
-        .WithUsing("System")
-        .WithUsing("Microsoft.AspNetCore.Mvc")
-        .WithUsing("Microsoft.Extensions.Logging")
-        .WithUsing("Swashbuckle.AspNetCore.Annotations")
-        .WithUsing("System.Net.Mime")
-        .WithNamespace($"{settings.ApiNamespace}.Controllers")
-        .WithAttribute(new GenericAttributeGenerationStrategy().WithName("ApiController").Build())
-        .WithAttribute(new GenericAttributeGenerationStrategy().WithName("Route").WithParam("\"api/[controller]\"").Build())
-        .WithAttribute(new GenericAttributeGenerationStrategy().WithName("Produces").WithParam("MediaTypeNames.Application.Json").Build())
-        .WithAttribute(new GenericAttributeGenerationStrategy().WithName("Consumes").WithParam("MediaTypeNames.Application.Json").Build())
-        .WithDependency("IMediator", "mediator")
-        .WithDependency($"ILogger<{((Token)model).PascalCase}Controller>", "logger")
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.GetById).WithResource(model).WithAuthorize(false).Build())
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Get).WithResource(model).WithAuthorize(false).Build())
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Create).WithResource(model).WithAuthorize(false).Build())
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Page).WithResource(model).WithAuthorize(false).Build())
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Update).WithResource(model).WithAuthorize(false).Build())
-        .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Delete).WithResource(model).WithAuthorize(false).Build())
-        .Build();
-*/
-        return "";
+
+        Attributes.Add(new AttributeModel(AttributeType.ApiController, "ApiController", null));
+
+        Implements.Add(new TypeModel("ControllerBase"));
+
+        Fields.Add(new FieldModel()
+        {
+            Type = new TypeModel("ILogger")
+            {
+                GenericTypeParameters = new List<TypeModel>
+                {
+                    new TypeModel(Name)
+                }
+            },
+            Name = "_logger"
+        });
+
+        Fields.Add(new FieldModel()
+        {
+            Type = new TypeModel($"IMediator"),
+            Name = "_mediator"
+        });
+
+        var ctor = new ConstructorModel(this, Name);
+
+        ctor.Params.Add(new ParamModel()
+        {
+            Type = new TypeModel("ILogger")
+            {
+                GenericTypeParameters = new List<TypeModel>
+                {
+                    new TypeModel(Name)
+                }
+            },
+            Name = "logger"
+        });
+
+        ctor.Params.Add(new ParamModel()
+        {
+            Type = new TypeModel($"IMediator"),
+            Name = "mediator"
+        });
+
+        Constructors.Add(ctor);
+
+        foreach (var routeType in Enum.GetValues<RouteType>())
+        {
+            switch(routeType)
+            {
+                case RouteType.Page:
+                    break;
+                
+                case RouteType.Get:
+                    Methods.Add(new GetControllerMethodModel(namingConventionConverter, entity));
+                    break;
+
+                case RouteType.GetById:
+                    Methods.Add(new GetByIdControllerMethodModel(namingConventionConverter, entity));
+                    break;
+
+                case RouteType.Create:
+                    Methods.Add(new CreateControllerMethodModel(namingConventionConverter, entity));
+                    break;
+
+                case RouteType.Update:
+                    Methods.Add(new UpdateControllerMethodModel(namingConventionConverter, entity));
+                    break;
+
+                case RouteType.Delete:
+                    Methods.Add(new DeleteControllerMethodModel(namingConventionConverter, entity));
+                    break;
+
+            }
+        }
     }
-
-
 }

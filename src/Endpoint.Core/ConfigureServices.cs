@@ -12,6 +12,7 @@ using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
+using Endpoint.Core.Models.Syntax.Controllers;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Entities.Aggregate;
 using Endpoint.Core.Models.Syntax.Entities.Legacy;
@@ -71,6 +72,7 @@ public static class ConfigureServices
         services.AddSingleton<ISolutionNamespaceProvider, SolutionNamespaceProvider>();
         services.AddSingleton<ISolutionSettingsFileGenerationStrategyFactory, SolutionSettingsFileGenerationStrategyFactory>();
         services.AddSingleton<ISolutionModelFactory, SolutionModelFactory>();
+        services.AddSingleton<IControllerModelFactory, ControllerModelFactory>();
 
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<ClassModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<InterfaceModel>>();
@@ -85,6 +87,7 @@ public static class ConfigureServices
         services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, MinimalApiEndpointGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, ProjectGenerationStrategy>();
+        services.AddSingleton<IArtifactGenerationStrategy, ContentFileArtifactGenerationStrategy>();
         services.AddSingleton<IWebApplicationBuilderGenerationStrategy, WebApplicationBuilderGenerationStrategy>();
         services.AddSingleton<IWebApplicationGenerationStrategy, WebApplicationGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, GitGenerationStrategy>();
@@ -145,6 +148,7 @@ public static class ConfigureServices
 
         services.AddSingleton<ISyntaxGenerationStrategy, QueryModelSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, CommandModelSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, ControllerSyntaxGenerationStrategy>();
 
         services.AddSingleton<IArtifactUpdateStrategyFactory, ArtifactUpdateStrategyFactory>();
 

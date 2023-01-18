@@ -6,6 +6,23 @@ using System.Text;
 
 namespace Endpoint.Core.Models.Artifacts.Files;
 
+public class ContentFileArtifactGenerationStrategy : ArtifactGenerationStrategyBase<ContentFileModel>
+{
+    private readonly IFileSystem _fileSystem;
+    public ContentFileArtifactGenerationStrategy(
+        IServiceProvider serviceProvider,
+        IFileSystem fileSystem
+        ) 
+        : base(serviceProvider)
+    {
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+    }
+
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ContentFileModel model, dynamic context = null)
+    {
+        _fileSystem.WriteAllText(model.Path, model.Content);
+    }
+}
 
 public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : ArtifactGenerationStrategyBase<string>
 {

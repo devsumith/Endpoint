@@ -1,10 +1,13 @@
 ﻿using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Endpoint.Core.Models.Artifacts.Files;
 
@@ -55,4 +58,36 @@ public class FileModelFactory: IFileModelFactory
             .Build());
     }
 
+    public FileModel CreateCSharp<T>(T classModel, string directory)
+        where T : TypeDeclarationModel
+        => new ObjectFileModel<T>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
+
+    public FileModel CreateResponseBase(string directory)
+    {
+        var classModel = new ClassModel("ResponseBase");
+
+        return CreateCSharp(classModel, directory);
+    }
+
+    public FileModel CreateIQueryableExtensions(string directory)
+    {
+        var classModel = new ClassModel("IQueryableExtensions");
+
+        return CreateCSharp(classModel, directory);
+    }
+
+    public FileModel CreateCoreUsings(string directory)
+    {
+        var usings = new string[]
+        {
+            "MediatR",
+            "Microsoft.Extensions.Logging",
+            "Microsoft.EntityFrameworkCore",
+            "FluentValidation"
+        }.Select(x => $"global using {x};");
+
+        return new ContentFileModel(new StringBuilder()
+            .AppendJoin(Environment.NewLine, usings)
+            .ToString(), "Usings", directory, "cs");
+    }
 }
