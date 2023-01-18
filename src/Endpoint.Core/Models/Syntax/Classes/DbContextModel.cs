@@ -1,4 +1,5 @@
-﻿using Endpoint.Core.Models.Syntax.Constructors;
+﻿using CommandLine;
+using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.Syntax.Methods;
@@ -74,11 +75,14 @@ public class DbContextModel : ClassModel
 
     public InterfaceModel ToInterface()
     {
-        var interfaceModel = this as InterfaceModel;
+        InterfaceModel interfaceModel = new InterfaceModel($"I{Name}");
 
-        interfaceModel.Name = $"I{Name}";
+        interfaceModel.UsingDirectives = this.UsingDirectives;
 
-        interfaceModel.Implements = new List<TypeModel>();
+        foreach(var prop in Properties)
+        {
+            interfaceModel.Properties.Add(new PropertyModel(interfaceModel, prop.AccessModifier, prop.Type, prop.Name, prop.Accessors));
+        }
 
         var saveChangesAsyncMethodModel = new MethodModel();
 

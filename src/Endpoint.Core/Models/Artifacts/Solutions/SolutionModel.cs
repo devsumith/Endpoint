@@ -51,11 +51,11 @@ namespace Endpoint.Core.Models.Artifacts.Solutions
         public string SolutionDirectory { get; set; }
         public string SolultionFileName => $"{Name}.sln";
 
-        public ClassModel GetClass(string name)
+        public ClassModel GetClass(string name, string serviceName)
         {
             foreach(var folder in  Folders)
             {
-                foreach(var project in folder.Projects)
+                foreach(var project in string.IsNullOrEmpty(serviceName) ? folder.Projects: folder.Projects.Where(x => x.Name == serviceName))
                 {
                     foreach(var file in project.Files)
                     {

@@ -79,7 +79,7 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
 
                     microservice.Files.Add(_fileModelFactory.CreateResponseBase(microservice.Directory));
 
-                    microservice.Files.Add(_fileModelFactory.CreateIQueryableExtensions(microservice.Directory));
+                    microservice.Files.Add(_fileModelFactory.CreateLinqExtensions(microservice.Directory));
 
                 }
 

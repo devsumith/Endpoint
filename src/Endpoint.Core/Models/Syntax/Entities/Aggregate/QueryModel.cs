@@ -27,7 +27,13 @@ public class QueryModel : CqrsBase
 
         Request = new ClassModel($"{Name}Request");
 
-        Response = new ClassModel($"{Name}Response");
+        Response = new ClassModel($"{Name}Response")
+        {
+            Implements = new List<TypeModel>
+            {
+                new TypeModel("ResponseBase")
+            }
+        };
 
         Request.Implements.Add(new TypeModel("IRequest")
         {

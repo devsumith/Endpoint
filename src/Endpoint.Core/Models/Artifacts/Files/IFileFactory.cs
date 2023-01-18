@@ -17,7 +17,9 @@ public interface IFileModelFactory
 
     FileModel CreateResponseBase(string directory);
 
-    FileModel CreateIQueryableExtensions(string directory);
+    FileModel CreateLinqExtensions(string directory);
 
     FileModel CreateCoreUsings(string directory);
+
+    FileModel CreateDbContextInterface(string directory);
 }

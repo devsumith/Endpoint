@@ -12,6 +12,9 @@ public class NamespaceProvider : INamespaceProvider
 
     public string Get(string directory, int depth = 0)
     {
+        if (string.IsNullOrEmpty(directory))
+            return "NamespaceNotFound";
+
         var parts = directory.Split(Path.DirectorySeparatorChar);
 
         if (parts.Length <= depth)

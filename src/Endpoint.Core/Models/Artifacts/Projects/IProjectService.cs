@@ -7,4 +7,5 @@ public interface IProjectService
     void AddGenerateDocumentationFile(string csprojFilePath);
     void AddEndpointPostBuildTargetElement(string csprojFilePath);
     void PackageAdd(string name, string directory);
+    void CoreFilesAdd(string directory);
 }

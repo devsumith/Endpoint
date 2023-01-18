@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "aggregate-create -n Customer -m CustomerService -d C:\\projects\\Huntress\\src\\Services\\CustomerService\\CustomerService.Core\\AggregateModel",
+      "commandLineArgs": "aggregate-create -n Dashboard -m ScrumBoard -d C:\\projects\\ScrumBoard\\src\\ScrumBoard\\AggregatesModel",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "verb",
         "Endpoint:ShortIdPropertyName": "false",

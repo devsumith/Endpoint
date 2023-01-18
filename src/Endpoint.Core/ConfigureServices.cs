@@ -185,6 +185,8 @@ public static class ConfigureServices
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlFieldParserStrategy>();
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlMethodParserStrategy>();
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlPropertyParserStrategy>();
+
+        services.AddSingleton<IClassModelFactory, ClassModelFactory>();
     }
 
     public static void AddCoreServices<T>(this IServiceCollection services)

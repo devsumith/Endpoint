@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Models.Syntax.Entities.Aggregate;
+using Microsoft.Extensions.Configuration;
 
 namespace Endpoint.Cli.Commands;
 
