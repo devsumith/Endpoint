@@ -1,22 +1,24 @@
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
 using MediatR;
 using System.Collections.Generic;
 
-namespace Endpoint.Core.Models.Artifacts.Projects.MicroserviceTemplates;
+namespace Endpoint.Core.Models.Artifacts.Projects;
 
-public class ConsoleMicroserviceProjectModel: ProjectModel {
+public class ConsoleMicroserviceProjectModel : ProjectModel
+{
 
-	public ConsoleMicroserviceProjectModel(string name)
-	{
-		Name = name;
-		DotNetProjectType = DotNetProjectType.Worker;
-		Packages.Add(new PackageModel("Microsoft.Extensions.Hosting", "7.0.0"));
+    public ConsoleMicroserviceProjectModel(string name)
+    {
+        Name = name;
+        DotNetProjectType = DotNetProjectType.Worker;
+        Packages.Add(new PackageModel("Microsoft.Extensions.Hosting", "7.0.0"));
         Order = 0;
-	}
+    }
 }
 
 public class ConsoleMicroserviceTestProjectModel : ProjectModel
@@ -49,11 +51,11 @@ public class ConsoleMicroserviceArtifactGenerationStrategy : ArtifactGenerationS
     private readonly IFileSystem _fileSytem;
     private readonly Observable<INotification> _notificationListener;
     public ConsoleMicroserviceArtifactGenerationStrategy(
-        IServiceProvider serviceProvider, 
+        IServiceProvider serviceProvider,
         IFileSystem fileSystem,
-        Observable<INotification> notificationListener) 
-        :base(serviceProvider)
-    { 
+        Observable<INotification> notificationListener)
+        : base(serviceProvider)
+    {
         _fileSytem = fileSystem;
         _notificationListener = notificationListener;
     }

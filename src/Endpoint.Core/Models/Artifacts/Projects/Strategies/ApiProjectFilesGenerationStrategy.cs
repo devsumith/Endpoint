@@ -7,7 +7,7 @@ using Endpoint.Core.ValueObjects;
 using System.IO;
 using static Endpoint.Core.Constants.ApiFileTemplates;
 
-namespace Endpoint.Core.Models.Artifacts.ApiProjectModels;
+namespace Endpoint.Core.Models.Artifacts.Projects.Strategies;
 
 public class ApiProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrategy, IApiProjectFilesGenerationStrategy
 {

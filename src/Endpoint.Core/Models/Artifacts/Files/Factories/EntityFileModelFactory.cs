@@ -7,9 +7,9 @@ using Endpoint.Core.Models.Syntax.Types;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Artifacts.Entities;
+namespace Endpoint.Core.Models.Artifacts.Files.Factories;
 
-public class EntityFileModelFactory: IEntityFileModelFactory
+public class EntityFileModelFactory : IEntityFileModelFactory
 {
     private readonly ISyntaxService _syntaxService;
 
@@ -25,9 +25,9 @@ public class EntityFileModelFactory: IEntityFileModelFactory
         var idProperty = new StringBuilder();
 
         idProperty.Append(_syntaxService.SyntaxModel.IdPropertyFormat == IdPropertyFormat.Long ? $"{entity.Name}Id" : "Id");
-        
+
         idProperty.Append(':');
-        
+
         idProperty.Append(_syntaxService.SyntaxModel.IdPropertyType == IdPropertyType.Guid ? "guid" : "int");
 
         foreach (var prop in $"{idProperty},{properties}".Split(',').Distinct())

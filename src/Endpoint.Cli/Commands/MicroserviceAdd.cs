@@ -1,6 +1,8 @@
 using CommandLine;
-using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Projects;
+using Endpoint.Core.Models.Artifacts.Projects.Enums;
+using Endpoint.Core.Models.Artifacts.Projects.Services;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
 using MediatR;

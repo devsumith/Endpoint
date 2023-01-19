@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Artifacts.Projects;

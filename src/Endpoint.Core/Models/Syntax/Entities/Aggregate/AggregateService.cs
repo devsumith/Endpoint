@@ -1,7 +1,7 @@
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Artifacts.Projects;
-using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Models.Artifacts.Files.Factories;
+using Endpoint.Core.Models.Artifacts.Projects.Services;
+using Endpoint.Core.Models.Syntax.Classes.Factories;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;

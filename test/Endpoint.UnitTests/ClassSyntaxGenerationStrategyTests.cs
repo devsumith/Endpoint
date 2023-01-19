@@ -1,6 +1,7 @@
 ﻿using Endpoint.Core.Abstractions;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Models.Syntax.Classes.Strategies;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Methods;

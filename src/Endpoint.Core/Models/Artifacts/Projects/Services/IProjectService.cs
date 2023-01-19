@@ -1,4 +1,4 @@
-﻿namespace Endpoint.Core.Models.Artifacts.Projects;
+﻿namespace Endpoint.Core.Models.Artifacts.Projects.Services;
 
 public interface IProjectService
 {

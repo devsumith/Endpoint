@@ -1,4 +1,5 @@
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using Octokit.Internal;
@@ -6,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Endpoint.Core.Models.Artifacts.Projects;
+namespace Endpoint.Core.Models.Artifacts.Projects.Strategies;
 
 public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectModel>
 {
@@ -18,7 +19,7 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
         IServiceProvider serviceProvider,
         ILogger<ProjectGenerationStrategy> logger,
         IFileSystem fileSystem,
-        ICommandService commandService) 
+        ICommandService commandService)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -46,7 +47,7 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
 
         foreach (var path in _fileSystem.GetFiles(model.Directory, "*1.cs", SearchOption.AllDirectories))
             _fileSystem.Delete(path);
-        
+
         foreach (var package in model.Packages)
         {
             var version = package.IsPreRelease ? "--prerelease" : $"--version {package.Version}";
@@ -54,7 +55,7 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
             _commandService.Start($"dotnet add package {package.Name} {version}", model.Directory);
         }
 
-        if(model.References != null)
+        if (model.References != null)
             foreach (var path in model.References)
             {
                 _commandService.Start($"dotnet add {model.Directory} reference {path}", model.Directory);

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Artifacts.Files;
+namespace Endpoint.Core.Models.Artifacts.Files.Strategies;
 
 public class ContentFileArtifactGenerationStrategy : ArtifactGenerationStrategyBase<ContentFileModel>
 {
@@ -12,7 +12,7 @@ public class ContentFileArtifactGenerationStrategy : ArtifactGenerationStrategyB
     public ContentFileArtifactGenerationStrategy(
         IServiceProvider serviceProvider,
         IFileSystem fileSystem
-        ) 
+        )
         : base(serviceProvider)
     {
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -35,7 +35,7 @@ public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : Artifact
 
     public override bool CanHandle(object model, dynamic context = null)
     {
-        if(model is string value)
+        if (model is string value)
         {
             var projectDirectory = _fileProvider.Get("*.csproj", value);
         }

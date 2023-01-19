@@ -1,11 +1,12 @@
 ﻿using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Artifacts.Files.Factories;
+using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Options;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Endpoint.Core.Models.Artifacts.Projects
+namespace Endpoint.Core.Models.Artifacts.Projects.Factories
 {
     public class ProjectModelFactory : IProjectModelFactory
     {
@@ -41,7 +42,7 @@ namespace Endpoint.Core.Models.Artifacts.Projects
 
             model.Files.Add(_fileModelFactory.AppSettings(model.Directory, model.Name, options.DbContextName));
 
-            model.Files.Add(new MinimalApiProgramFileModel(model.Namespace, model.Directory, model.Namespace, options.DbContextName, entities ));
+            model.Files.Add(new MinimalApiProgramFileModel(model.Namespace, model.Directory, model.Namespace, options.DbContextName, entities));
 
             model.Packages.Add(new() { Name = "Microsoft.EntityFrameworkCore.InMemory", Version = "6.0.2" });
 

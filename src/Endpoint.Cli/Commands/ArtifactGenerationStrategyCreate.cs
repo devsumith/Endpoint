@@ -1,6 +1,6 @@
 using CommandLine;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Services;
 using Endpoint.Core.ValueObjects;
 using MediatR;

@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Endpoint.Core.Models.Syntax.Methods;
-using Endpoint.Core.Models.Syntax.Properties;
+﻿using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Types;
+using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.Interfaces;
 
@@ -12,11 +11,10 @@ public class InterfaceModel : TypeDeclarationModel
     {
         Implements = new List<TypeModel>();
         Methods = new List<MethodModel>();
-        UsingDirectives = new List<UsingDirectiveModel>();
     }
+
     public List<TypeModel> Implements { get; set; }
     public List<MethodModel> Methods { get; set; }
-    public List<UsingDirectiveModel> UsingDirectives { get; set; }
 
     public virtual void AddMethod(MethodModel method)
     {

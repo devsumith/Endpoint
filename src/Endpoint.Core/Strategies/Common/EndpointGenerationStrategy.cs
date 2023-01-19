@@ -1,4 +1,4 @@
-﻿using Endpoint.Core.Models.Artifacts.ApiProjectModels;
+﻿using Endpoint.Core.Models.Artifacts.Projects.Strategies;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities;

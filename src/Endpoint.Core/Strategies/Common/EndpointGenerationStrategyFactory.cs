@@ -1,5 +1,5 @@
 ﻿using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.ApiProjectModels;
+using Endpoint.Core.Models.Artifacts.Projects.Strategies;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;

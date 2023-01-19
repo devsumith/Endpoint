@@ -3,14 +3,14 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Classes;
+namespace Endpoint.Core.Models.Syntax.Classes.Strategies;
 
 public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassModel>
 {
     private readonly ILogger<ClassSyntaxGenerationStrategy> _logger;
     public ClassSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<ClassSyntaxGenerationStrategy> logger) 
+        ILogger<ClassSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -41,7 +41,7 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
             builder.Append(string.Join(',', model.Implements.Select(x => syntaxGenerationStrategyFactory.CreateFor(x, context))));
         }
 
-        if(model.Properties.Count + model.Methods.Count + model.Constructors.Count + model.Fields.Count == 0)
+        if (model.Properties.Count + model.Methods.Count + model.Constructors.Count + model.Fields.Count == 0)
         {
             builder.Append(" { }");
 
@@ -53,7 +53,7 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
         builder.AppendLine("{");
 
 
-        if(model.Fields.Count > 0)
+        if (model.Fields.Count > 0)
             builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Fields, context)).Indent(1));
 
         if (model.Constructors.Count > 0)
@@ -61,12 +61,12 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
 
         if (model.Properties.Count > 0)
             builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Properties, context)).Indent(1));
-        
+
         if (model.Methods.Count > 0)
             builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Methods, context)).Indent(1));
 
         builder.AppendLine("}");
-        
+
         return builder.ToString();
     }
 }

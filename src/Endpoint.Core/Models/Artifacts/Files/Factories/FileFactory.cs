@@ -18,10 +18,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Artifacts.Files;
+namespace Endpoint.Core.Models.Artifacts.Files.Factories;
 
 using IFileProvider = Services.IFileProvider;
-public class FileModelFactory: IFileModelFactory
+public class FileModelFactory : IFileModelFactory
 {
     private readonly IRouteHandlerModelFactory _routeHandlerModelFactory;
     private readonly INamingConventionConverter _namingConventionConverter;
@@ -30,8 +30,8 @@ public class FileModelFactory: IFileModelFactory
     private readonly INamespaceProvider _namespaceProvider;
 
     public FileModelFactory(
-        ILegacyAggregateModelFactory aggregateRootModelFactory, 
-        IRouteHandlerModelFactory routeHandlerModelFactory, 
+        ILegacyAggregateModelFactory aggregateRootModelFactory,
+        IRouteHandlerModelFactory routeHandlerModelFactory,
         INamingConventionConverter namingConventionConverter,
         IFileProvider fileProvider,
         INamespaceProvider namespaceProvider)
@@ -60,7 +60,7 @@ public class FileModelFactory: IFileModelFactory
             .With("Namespace", (Token)@namespace)
             .Build());
     }
-    
+
     public TemplatedFileModel LaunchSettingsJson(string projectDirectory, string projectName, int port)
     {
         return new TemplatedFileModel("LaunchSettings", "LaunchSettings", projectDirectory, "json", new TokensBuilder()
@@ -172,14 +172,14 @@ public class FileModelFactory: IFileModelFactory
     }
     public FileModel CreateDbContextInterface(string diretory)
     {
-        
+
         var entities = new List<EntityModel>();
 
         var projectPath = _fileProvider.Get("*.csproj", diretory);
 
         var projectDirectory = Path.GetDirectoryName(projectPath);
 
-        
+
         var serviceName = Path.GetFileNameWithoutExtension(projectDirectory).Split('.')[0];
 
         var usingDirectives = new List<UsingDirectiveModel>();
@@ -194,7 +194,7 @@ public class FileModelFactory: IFileModelFactory
 
                 usingDirectives.Add(new UsingDirectiveModel() { Name = _namespaceProvider.Get(folder) });
             }
-                
+
         }
         var interfaceModel = new DbContextModel(_namingConventionConverter, $"{serviceName}DbContext", entities, serviceName)
         {
@@ -202,7 +202,7 @@ public class FileModelFactory: IFileModelFactory
         }.ToInterface();
 
 
-        return new ObjectFileModel<InterfaceModel>(interfaceModel,interfaceModel.UsingDirectives,interfaceModel.Name,projectDirectory,"cs");
+        return new ObjectFileModel<InterfaceModel>(interfaceModel, interfaceModel.UsingDirectives, interfaceModel.Name, projectDirectory, "cs");
 
     }
 }

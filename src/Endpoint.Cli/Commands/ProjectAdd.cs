@@ -1,6 +1,7 @@
 using CommandLine;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Projects;
+using Endpoint.Core.Models.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;

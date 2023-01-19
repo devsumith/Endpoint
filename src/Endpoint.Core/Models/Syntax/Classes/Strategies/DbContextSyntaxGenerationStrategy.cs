@@ -2,14 +2,14 @@ using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Classes;
+namespace Endpoint.Core.Models.Syntax.Classes.Strategies;
 
 public class DbContextSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<DbContextModel>
 {
     private readonly ILogger<DbContextSyntaxGenerationStrategy> _logger;
     public DbContextSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<DbContextSyntaxGenerationStrategy> logger) 
+        ILogger<DbContextSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

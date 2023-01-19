@@ -2,7 +2,7 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 
-namespace Endpoint.Core.Models.Artifacts.Files;
+namespace Endpoint.Core.Models.Artifacts.Files.Strategies;
 
 public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrategyBase<TemplatedFileModel>
 {
@@ -18,7 +18,7 @@ public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrateg
         ITemplateLocator templateLocator,
         IFileSystem fileSystem,
         ISolutionNamespaceProvider solutionNamespaceProvider,
-        ILogger<TemplatedFileArtifactGenerationStrategy> logger) 
+        ILogger<TemplatedFileArtifactGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

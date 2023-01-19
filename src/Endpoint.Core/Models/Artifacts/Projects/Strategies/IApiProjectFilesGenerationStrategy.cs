@@ -1,6 +1,6 @@
 ﻿using Endpoint.Core.Models.Options;
 
-namespace Endpoint.Core.Models.Artifacts.ApiProjectModels
+namespace Endpoint.Core.Models.Artifacts.Projects.Strategies
 {
     public interface IApiProjectFilesGenerationStrategy
     {

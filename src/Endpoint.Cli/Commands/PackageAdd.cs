@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Services;
-using Endpoint.Core.Models.Artifacts.Projects;
+using Endpoint.Core.Models.Artifacts.Projects.Services;
 
 namespace Endpoint.Cli.Commands;
 

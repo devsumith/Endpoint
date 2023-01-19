@@ -1,5 +1,6 @@
 ﻿using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Services;
 using Octokit;
 using Octokit.Internal;
@@ -10,7 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace Endpoint.Core.Models.Artifacts.Projects;
+namespace Endpoint.Core.Models.Artifacts.Projects.Services;
 
 public class ProjectService : IProjectService
 {
@@ -20,8 +21,8 @@ public class ProjectService : IProjectService
     private readonly IFileSystem _fileSystem;
     private readonly IFileModelFactory _fileModelFactory;
     public ProjectService(
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, 
-        ICommandService commandService, 
+        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        ICommandService commandService,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
         IFileModelFactory fileModelFactory)
@@ -108,7 +109,7 @@ public class ProjectService : IProjectService
         {
             _commandService.Start($"dotnet add package {name}", projectDirectory);
         }
-        
+
     }
 
     public void CoreFilesAdd(string directory)
@@ -117,14 +118,14 @@ public class ProjectService : IProjectService
 
         var projectDirectory = Path.GetDirectoryName(projectPath);
 
-        foreach(var file in new List<FileModel>()
+        foreach (var file in new List<FileModel>()
         {
             _fileModelFactory.CreateResponseBase(projectDirectory),
             _fileModelFactory.CreateCoreUsings(projectDirectory),
             _fileModelFactory.CreateLinqExtensions(projectDirectory)
         })
         {
-            if(!_fileSystem.Exists(file.Path))
+            if (!_fileSystem.Exists(file.Path))
                 _artifactGenerationStrategyFactory.CreateFor(file);
         }
     }

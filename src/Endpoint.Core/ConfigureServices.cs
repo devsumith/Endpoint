@@ -1,16 +1,19 @@
 using Endpoint.Core;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts;
-using Endpoint.Core.Models.Artifacts.ApiProjectModels;
-using Endpoint.Core.Models.Artifacts.Entities;
-using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Artifacts.Files.Factories;
+using Endpoint.Core.Models.Artifacts.Files.Strategies;
 using Endpoint.Core.Models.Artifacts.Projects;
-using Endpoint.Core.Models.Artifacts.Projects.MicroserviceTemplates;
+using Endpoint.Core.Models.Artifacts.Projects.Factories;
+using Endpoint.Core.Models.Artifacts.Projects.Services;
+using Endpoint.Core.Models.Artifacts.Projects.Strategies;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Git;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Models.Syntax.Classes.Factories;
+using Endpoint.Core.Models.Syntax.Classes.Strategies;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Controllers;
 using Endpoint.Core.Models.Syntax.Entities;
@@ -41,6 +44,8 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services) {
+        services.AddSingleton<IInfrastructureProjectService,InfrastructureProjectService>();
+        services.AddSingleton<IApiProjectService,ApiProjectService>();
         services.AddSingleton<IAggregateService, AggregateService>();
         services.AddSingleton<ICommandService, CommandService>();
         services.AddSingleton<IFileSystem, FileSystem>();
@@ -196,3 +201,4 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+

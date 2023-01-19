@@ -2,7 +2,7 @@
 using Endpoint.Core.Services;
 using System.Text;
 
-namespace Endpoint.Core.Models.Artifacts.Files;
+namespace Endpoint.Core.Models.Artifacts.Files.Strategies;
 public class LaunchSettingsFileGenerationStrategy : ArtifactGenerationStrategyBase<LaunchSettingsFileModel>
 {
     private readonly ITemplateProcessor _templateProcessor;
@@ -10,7 +10,7 @@ public class LaunchSettingsFileGenerationStrategy : ArtifactGenerationStrategyBa
     private readonly ITemplateLocator _templateLocator;
 
     public LaunchSettingsFileGenerationStrategy(IServiceProvider serviceProvider, ITemplateProcessor templateProcessor, IFileSystem fileSystem, ITemplateLocator templateLocator)
-        :base(serviceProvider)
+        : base(serviceProvider)
     {
         _templateProcessor = templateProcessor;
         _fileSystem = fileSystem;
@@ -35,7 +35,7 @@ public class LaunchSettingsFileGenerationStrategy : ArtifactGenerationStrategyBa
 
         builder.AppendLine(_templateProcessor.Process(template, model));
 
-        
+
         _fileSystem.WriteAllText(model.Path, builder.ToString());
     }
 }

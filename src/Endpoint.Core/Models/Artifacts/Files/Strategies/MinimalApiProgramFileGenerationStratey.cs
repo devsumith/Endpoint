@@ -3,7 +3,7 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Api;
 using System.Text;
 
-namespace Endpoint.Core.Models.Artifacts.Files;
+namespace Endpoint.Core.Models.Artifacts.Files.Strategies;
 
 public class MinimalApiProgramFileGenerationStratey : ArtifactGenerationStrategyBase<MinimalApiProgramFileModel>
 {

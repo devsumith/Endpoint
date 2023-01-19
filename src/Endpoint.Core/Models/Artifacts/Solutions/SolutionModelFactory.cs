@@ -1,4 +1,6 @@
 ﻿using Endpoint.Core.Models.Artifacts.Projects;
+using Endpoint.Core.Models.Artifacts.Projects.Enums;
+using Endpoint.Core.Models.Artifacts.Projects.Factories;
 using Endpoint.Core.Options;
 using System.IO;
 
