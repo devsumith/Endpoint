@@ -28,7 +28,9 @@ using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.RequestHandlers;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
 using Endpoint.Core.Models.Syntax.Types;
-using Endpoint.Core.Models.WebArtifacts;
+using Endpoint.Core.Models.WebArtifacts.Factories;
+using Endpoint.Core.Models.WebArtifacts.Services;
+using Endpoint.Core.Models.WebArtifacts.Strategies;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies;
 using Endpoint.Core.Strategies.Api;
@@ -44,6 +46,10 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services) {
+        services.AddSingleton<IAngularJsonService,AngularJsonService>();
+        services.AddSingleton<ITsConfigService,TsConfigService>();
+        services.AddSingleton<IJestService,JestService>();
+        services.AddSingleton<IAngularService,AngularService>();
         services.AddSingleton<IInfrastructureProjectService,InfrastructureProjectService>();
         services.AddSingleton<IApiProjectService,ApiProjectService>();
         services.AddSingleton<IAggregateService, AggregateService>();
@@ -171,7 +177,7 @@ public static class ConfigureServices
 
             var directory = directoryOptionIndex != -1 ? args[directoryOptionIndex + 1]  : Environment.CurrentDirectory;
 
-            return new SyntaxService(factory,fileProvider, fileSystem, directory);
+            return new SyntaxService(factory, fileProvider, fileSystem, directory);
         });
 
         services.AddSingleton<IEntityFileModelFactory, EntityFileModelFactory>();
@@ -201,4 +207,8 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+
+
+
+
 

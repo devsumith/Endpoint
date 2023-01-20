@@ -48,11 +48,15 @@ public class DependencyInjectionService: IDependencyInjectionService
 
     private void UpdateConfigureServices(string diRegistration, string projectSuffix, string configureServicesFilePath)
     {
-        var emptyServiceCollection = "public static void Add" + projectSuffix + "Services(this IServiceCollection services){ }".Indent(1);
+        var emptyServiceCollection = new StringBuilder().AppendJoin(Environment.NewLine, new string[] { 
+            "public static void Add" + projectSuffix + "Services(this IServiceCollection services) {", 
+            "}" }).ToString().Indent(1);
 
         var fileContent = _fileSystem.ReadAllText(configureServicesFilePath);
 
         var newContent = new StringBuilder();
+
+        var registrationAdded = false;
 
         if (!fileContent.Contains(diRegistration) && !fileContent.Contains(emptyServiceCollection))
         {
@@ -60,8 +64,12 @@ public class DependencyInjectionService: IDependencyInjectionService
             {
                 newContent.AppendLine(line);
 
-                if (line.Contains("this IServiceCollection services"))
+                if (line.Contains("this IServiceCollection services") && !registrationAdded)
+                {
                     newContent.AppendLine(diRegistration);
+                    registrationAdded = true;
+                }
+                    
             }
         }
 

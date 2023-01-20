@@ -1,4 +1,4 @@
-﻿namespace Endpoint.Core.Models.WebArtifacts;
+﻿namespace Endpoint.Core.Models.WebArtifacts.Strategies;
 
 public interface IWebArtifactModelsFactory
 {

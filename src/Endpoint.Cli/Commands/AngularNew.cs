@@ -5,8 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.WebArtifacts;
 using Endpoint.Core.Enums;
+using Endpoint.Core.Models.WebArtifacts.Strategies;
 
 namespace Endpoint.Cli.Commands;
 

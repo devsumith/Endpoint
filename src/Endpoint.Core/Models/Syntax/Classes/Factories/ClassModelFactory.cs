@@ -291,10 +291,8 @@ public class ClassModelFactory : IClassModelFactory
         return classModel;
     }
 
-    public ClassModel CreateDbContext(string name, List<EntityModel> entities, string directory)
-    {
-        var serviceName = "";
-
+    public ClassModel CreateDbContext(string name, List<EntityModel> entities, string serviceName)
+    {        
         var dbContext = new DbContextModel(_namingConventionConverter, name, entities, serviceName);
 
         return dbContext;

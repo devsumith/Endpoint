@@ -2,7 +2,7 @@
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 
-namespace Endpoint.Core.Models.WebArtifacts;
+namespace Endpoint.Core.Models.WebArtifacts.Factories;
 
 public class AngularProjectGenerationStrategy : WebGenerationStrategyBase<AngularProjectModel>
 {
@@ -12,8 +12,8 @@ public class AngularProjectGenerationStrategy : WebGenerationStrategyBase<Angula
         ICommandService commandService,
         ILogger<AngularProjectGenerationStrategy> logger,
         IServiceProvider serviceProvider)
-        :base(serviceProvider)
-    { 
+        : base(serviceProvider)
+    {
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }

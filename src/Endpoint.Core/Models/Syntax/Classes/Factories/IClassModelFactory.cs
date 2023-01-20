@@ -7,5 +7,5 @@ public interface IClassModelFactory
 {
     ClassModel CreateEntity(string name, string properties);
     ClassModel CreateController(EntityModel model, string directory);
-    ClassModel DbContext(string name, List<EntityModel> entities, string directory);
+    ClassModel CreateDbContext(string name, List<EntityModel> entities, string directory);
 }
