@@ -13,6 +13,7 @@ using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using MediatR;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Endpoint.Core.Services;
@@ -24,8 +25,9 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
     private readonly Observable<INotification> _notificationListener;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
-
+    private readonly IFileSystem _fileSystem;
     public DomainDrivenDesignFileService(
+        IFileSystem fileSystem,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, 
         IFileProvider fileProvider,
         Observable<INotification> notificationListener,
@@ -37,6 +39,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategyFactory));
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 	}
 
     public void MessageCreate(string name, List<PropertyModel> properties, string directory)
@@ -115,6 +118,11 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
     public void ServiceCreate(string name, string directory)
 	{
+        if (_fileSystem.Exists($"{directory}{Path.DirectorySeparatorChar}{name}.cs"))
+        {
+            throw new Exception($"Service exists: {$"{directory}{Path.DirectorySeparatorChar}{name}.cs"}");
+        }
+
         var usingDirectives = new List<UsingDirectiveModel>()
         {
             new UsingDirectiveModel() { Name = "Microsoft.Extensions.Logging" },

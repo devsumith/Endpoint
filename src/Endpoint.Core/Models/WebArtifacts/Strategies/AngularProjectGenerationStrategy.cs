@@ -2,7 +2,7 @@
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 
-namespace Endpoint.Core.Models.WebArtifacts.Factories;
+namespace Endpoint.Core.Models.WebArtifacts.Strategies;
 
 public class AngularProjectGenerationStrategy : WebGenerationStrategyBase<AngularProjectModel>
 {

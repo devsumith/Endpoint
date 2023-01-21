@@ -1,19 +1,41 @@
-﻿namespace Endpoint.Core.Models.WebArtifacts;
+﻿using System.IO;
+using System.Text;
+
+namespace Endpoint.Core.Models.WebArtifacts;
 
 public class AngularProjectModel: WebModel
 {
 	
-	public AngularProjectModel(string name, string directory, string prefix = "app", AngularWorkspaceModel workspace = null)
+	public AngularProjectModel(string name, string projectType, string prefix, string rootDirectory)
 	{
-		Workspace = workspace;
 		Name = name;
-		Directory = directory;
+		RootDirectory = rootDirectory;
+		ProjectType = projectType;
 		Prefix = prefix;
+
+		if(name.StartsWith('@'))
+		{
+            var parts = name.Split('/');
+
+            var stringBuilder = new StringBuilder();
+			
+			stringBuilder.Append($"{RootDirectory}{Path.DirectorySeparatorChar}projects{Path.DirectorySeparatorChar}");
+
+            stringBuilder.Append($"{parts[0].Replace("@", string.Empty)}{Path.DirectorySeparatorChar}{parts[1]}");
+
+			Directory = stringBuilder.ToString();
+		}
+		else
+		{
+            Directory = $"{RootDirectory}{Path.DirectorySeparatorChar}projects{Path.DirectorySeparatorChar}{name}";
+        }
+		
 	}
 
-	public string Name { get; set; }
+    public string Root { get; set; }
+    public string Name { get; set; }
 	public string Prefix { get; set; }
 	public string Directory { get; set; }
-
-	public AngularWorkspaceModel Workspace { get; init; }
+    public string RootDirectory { get; set; }
+    public string ProjectType { get; set; } = "application";
 }

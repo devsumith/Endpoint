@@ -62,10 +62,24 @@ public class DependencyInjectionService: IDependencyInjectionService
         {
             foreach (var line in fileContent.Split(Environment.NewLine))
             {
-                newContent.AppendLine(line);
+                if (line.Contains("this IServiceCollection services") && !registrationAdded && line.Contains("}")) {
+
+                    newContent.AppendLine(line.Replace("}", string.Empty));
+                    
+                    newContent.AppendLine(diRegistration);
+                    
+                    newContent.AppendLine("}".Indent(1));
+
+                    registrationAdded = true;
+                }
+                else
+                {
+                    newContent.AppendLine(line);
+                }
+                
 
                 if (line.Contains("this IServiceCollection services") && !registrationAdded)
-                {
+                {                    
                     newContent.AppendLine(diRegistration);
                     registrationAdded = true;
                 }

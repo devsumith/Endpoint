@@ -46,9 +46,6 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services) {
-        services.AddSingleton<IAngularJsonService,AngularJsonService>();
-        services.AddSingleton<ITsConfigService,TsConfigService>();
-        services.AddSingleton<IJestService,JestService>();
         services.AddSingleton<IAngularService,AngularService>();
         services.AddSingleton<IInfrastructureProjectService,InfrastructureProjectService>();
         services.AddSingleton<IApiProjectService,ApiProjectService>();
@@ -93,6 +90,8 @@ public static class ConfigureServices
         services.AddSingleton<IArtifactGenerationStrategy, LaunchSettingsFileGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, ConsoleMicroserviceArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, AggregateArtifactsGenerationStrategy>();
+        services.AddSingleton<IArtifactGenerationStrategy, AngularWorkspaceArtifactGenerationStrategy>();
+
 
         services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();

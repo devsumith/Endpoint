@@ -2,15 +2,15 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "db-context-add -d C:\\projects\\Huntress\\src\\Services\\CustomerService\\CustomerService.Infrastructure",
+      "commandLineArgs": "",
       "environmentVariables": {
-        "Endpoint:DefaultCommand": "verb",
-        "Endpoint:ShortIdPropertyName": "false",
-        "Endpoint:NumericIdPropertyDataType": "false",
-        "Endpoint:Resource": "Foo",
-        "Endpoint:Propertoes": "Name:string",
-        "Endpoint:Port": "5000",
-        "Endpoint:DbContextName": "FooDbContext"
+        "Endpoint:DefaultCommand": "",
+        "Endpoint:ShortIdPropertyName": "",
+        "Endpoint:NumericIdPropertyDataType": "",
+        "Endpoint:Resource": "",
+        "Endpoint:Propertoes": "",
+        "Endpoint:Port": "",
+        "Endpoint:DbContextName": ""
       }
     }
   }
