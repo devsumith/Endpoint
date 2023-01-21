@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "{{ namespace }}"
+    "DefaultConnection": "{{ serviceName }}"
   }
   "Serilog": {
     "Using": [ "Serilog.Sinks.Console", "Serilog.Sinks.File", "Serilog.Sinks.Seq" ],
@@ -20,7 +20,7 @@
     ],
     "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
     "Properties": {
-      "Application": "{{ namespace }}"
+      "Application": "{{ serviceName }}"
     }
   },
   "AllowedHosts": "*"

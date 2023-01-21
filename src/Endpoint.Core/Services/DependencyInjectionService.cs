@@ -101,7 +101,7 @@ public class DependencyInjectionService: IDependencyInjectionService
         _fileSystem.WriteAllText(configureServicesFilePath, newContent.ToString());
     }
     
-    private void AddConfigureServices(string projectSuffix, string projectDirectory)
+    public void AddConfigureServices(string layer, string directory)
     {
         var classModel = new ClassModel("ConfigureServices");
 
@@ -114,7 +114,7 @@ public class DependencyInjectionService: IDependencyInjectionService
 
         var method = new MethodModel()
         {
-            Name = $"Add{projectSuffix}Services",
+            Name = $"Add{layer}Services",
             ReturnType = new TypeModel("void"),
             Static = true,
             Params = new List<ParamModel>() { methodParam }
@@ -124,7 +124,7 @@ public class DependencyInjectionService: IDependencyInjectionService
 
         classModel.Methods.Add(method);
 
-        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, projectDirectory, "cs")
+        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs")
         {
             Namespace = "Microsoft.Extensions.DependencyInjection"
         };

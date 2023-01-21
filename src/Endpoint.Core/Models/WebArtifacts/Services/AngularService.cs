@@ -83,14 +83,13 @@ public class AngularService : IAngularService
 
     public void AddProject(AngularProjectModel model)
     {
+        var stringBuilder = new StringBuilder().Append($"ng generate {model.ProjectType} {model.Name} --prefix {model.Prefix}");
+
         if(model.ProjectType == "application")
-        {
-            _commandService.Start($"ng generate {model.ProjectType} {model.Name} --prefix {model.Prefix} --style=scss --strict=false --routing", model.RootDirectory);
-        }
-        else
-        {
-            _commandService.Start($"ng generate {model.ProjectType} {model.Name} --prefix {model.Prefix}", model.RootDirectory);
-        }
+            stringBuilder.Append(" --style=scss --strict=false --routing");
+
+        _commandService.Start(stringBuilder.ToString(), model.RootDirectory);
+
 
         if(model.ProjectType == "application")
         {
@@ -103,8 +102,8 @@ public class AngularService : IAngularService
             
             var files = new List<FileModel>
             {
-                _fileModelFactory.CreateTemplate("Angular.app","app.component", appDirectory, "ts"),
-                _fileModelFactory.CreateTemplate("Angular.app.spec","app.component.spec", appDirectory, "ts"),
+                _fileModelFactory.CreateTemplate("Angular.app.component","app.component", appDirectory, "ts"),
+                _fileModelFactory.CreateTemplate("Angular.app.component.spec","app.component.spec", appDirectory, "ts"),
                 _fileModelFactory.CreateTemplate("Angular.main","main", srcDirectory, "ts"),
             };
 
@@ -181,8 +180,5 @@ public class AngularService : IAngularService
 
         _fileSystem.WriteAllText(tsConfigSpecJsonPath, JsonConvert.SerializeObject(tsConfigSpecJson, Formatting.Indented));
     }
-
-
-
 }
 
