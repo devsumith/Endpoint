@@ -13,9 +13,9 @@ public abstract class WebGenerationStrategyBase<T>: IWebGenerationStrategy
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
-    public virtual bool CanHandle(WebModel model, dynamic context = null) => model is T;
+    public virtual bool CanHandle(LitWorkspaceModel model, dynamic context = null) => model is T;
 
-    public void Create(WebModel model, dynamic context = null)
+    public void Create(LitWorkspaceModel model, dynamic context = null)
     {
         using (IServiceScope scope = _serviceProvider.CreateScope())
         {

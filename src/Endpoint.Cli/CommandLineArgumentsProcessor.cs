@@ -51,7 +51,15 @@ public class CommandLineArgumentsProcessor: BackgroundService
         _createParser().ParseArguments(args, verbs)
             .WithParsed(async (dynamic request) => {
 
-                await _mediator.Send(request).ConfigureAwait(false);
+                try
+                {
+                    await _mediator.Send(request).ConfigureAwait(false);
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogCritical(ex.Message);
+                }
+                
 
                 Environment.Exit(0);
             });

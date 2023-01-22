@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "configure-services-create -d C:\\projects\\Huntress\\src\\Services\\CustomerService\\CustomerService.Core",
+      "commandLineArgs": "lit-workspace-create -n vanessa-lit -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",

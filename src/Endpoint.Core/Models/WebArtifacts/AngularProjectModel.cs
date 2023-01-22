@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Endpoint.Core.Models.WebArtifacts;
 
-public class AngularProjectModel: WebModel
+public class AngularProjectModel
 {
 	
 	public AngularProjectModel(string name, string projectType, string prefix, string rootDirectory)

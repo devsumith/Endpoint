@@ -20,4 +20,11 @@ public static class JObjectExtensions
         types.Add("jest");
     }
 
+    public static void AddScript(this JObject jObject, string name, string value)
+    {
+        var scripts = jObject["scripts"] as JObject;
+
+        scripts.Add(name, value);
+    }
+
 }

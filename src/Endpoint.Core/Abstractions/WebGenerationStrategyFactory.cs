@@ -11,7 +11,7 @@ public class WebGenerationStrategyFactory : IWebGenerationStrategyFactory
     {
         _strategies = strategies;
     }
-    public void CreateFor(WebModel model, dynamic context = null)
+    public void CreateFor(LitWorkspaceModel model, dynamic context = null)
     {
         var strategy = _strategies.Where(x => x.CanHandle(model, context))
             .OrderBy(x => x.Priority)

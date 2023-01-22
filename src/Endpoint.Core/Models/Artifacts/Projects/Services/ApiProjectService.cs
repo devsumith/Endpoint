@@ -44,6 +44,8 @@ public class ApiProjectService : IApiProjectService
 
         var csProjDirectory = Path.GetDirectoryName(csProjPath);
 
+        EnsureApiPresets(csProjDirectory);
+
         var controllersDirectory = $"{csProjDirectory}{Path.DirectorySeparatorChar}Controllers";
 
         _fileSystem.CreateDirectory(controllersDirectory);
@@ -77,6 +79,31 @@ public class ApiProjectService : IApiProjectService
         {
             _artifactGenerationStrategyFactory.CreateFor(file);
         }
+    }
+
+
+    public void EnsureApiPresets(string directory)
+    {
+        EnsurePackagesInstalled(directory);
+
+        EnsureProjectsReferenced(directory);
+
+        EnsureFiles(directory);
+    }
+
+    public void EnsureProjectsReferenced(string directory)
+    {
+
+    }
+
+    public void EnsurePackagesInstalled(string directory)
+    {
+
+    }
+
+    public void EnsureFiles(string directory)
+    {
+
     }
 }
 
