@@ -33,6 +33,11 @@ public class InMemoryFileSystem: IFileSystem
         throw new NotImplementedException();
     }
 
+    public string GetDirectoryName(string path)
+    {
+        throw new NotImplementedException();
+    }
+
     public string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
     {
         throw new NotImplementedException();

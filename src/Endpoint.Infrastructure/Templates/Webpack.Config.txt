@@ -1,0 +1,22 @@
+﻿const webpack = require('webpack');
+const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
+const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+
+module.exports = {
+    entry: {
+        'app': './src/index'
+    },
+    output: {
+        path: __dirname + "/dist",
+        filename: "[name].js",
+        publicPath: "dist/"
+    },
+    resolve: {
+        extensions: ['.ts', '.js', '.jpg', '.jpeg', '.gif', '.png', '.css', '.html']
+    },
+    module: {
+        rules: [{ test: /\.ts$/, use: 'ts-loader' }],
+    },
+    plugins: [
+    ]
+};

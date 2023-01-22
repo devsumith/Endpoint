@@ -7,6 +7,7 @@ public interface IAngularService
     void EnableDefaultStandaloneComponents(string directory, string projectName);
     void KarmaRemove(string directory); 
     void UpdateCompilerOptionsToUseJestTypes(AngularProjectModel model);
+    void NgxTranslateAdd(string projectName, string directory);
 
 }
 

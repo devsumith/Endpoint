@@ -79,4 +79,9 @@ public class FileSystem : IFileSystem
     {
         return Directory.GetFiles(path, searchPattern, searchOption);
     }
+
+    public string GetDirectoryName(string path)
+    {
+        return Path.GetDirectoryName(path);
+    }
 }

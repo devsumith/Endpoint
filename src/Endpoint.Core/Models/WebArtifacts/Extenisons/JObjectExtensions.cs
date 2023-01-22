@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Newtonsoft.Json.Linq;
 
 public static class JObjectExtensions
@@ -23,6 +25,27 @@ public static class JObjectExtensions
         var scripts = jObject["scripts"] as JObject;
 
         scripts.Add(name, value);
+    }
+
+    public static void AddScripts(this JObject jObject, IEnumerable<KeyValuePair<string,string>> scripts)
+    {
+        foreach(var script in scripts)
+        {
+            jObject.AddScript(script.Key, script.Value);
+        }
+    }
+
+
+    public static void AddAuthor(this JObject jObject, string author)
+    {
+        jObject["author"] = author;
+    }
+
+    public static void RemoveAllScripts(this JObject jObject)
+    {
+        var scripts = jObject["scripts"] as JObject;
+
+        scripts.RemoveAll();
     }
 
 }

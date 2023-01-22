@@ -16,5 +16,6 @@ public interface IFileSystem
     void Delete(string path);
     void DeleteDirectory(string directory);
     string[] GetFiles(string path, string searchPattern, SearchOption searchOption);
+    string GetDirectoryName(string path);
 
 }

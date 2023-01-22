@@ -2,13 +2,9 @@
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Services;
-using Octokit;
-using Octokit.Internal;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Linq;
 
 namespace Endpoint.Core.Models.Artifacts.Projects.Services;
@@ -37,18 +33,14 @@ public class ProjectService : IProjectService
     public void AddProject(ProjectModel model)
     {
         _artifactGenerationStrategyFactory.CreateFor(model);
-
         AddToSolution(model);
     }
 
     public void AddToSolution(ProjectModel model)
     {
         var solution = _fileProvider.Get("*.sln", model.Directory);
-
         var solutionName = Path.GetFileName(solution);
-
-        var solutionDirectory = Path.GetDirectoryName(solution);
-
+        var solutionDirectory = _fileSystem.GetDirectoryName(solution);
         _commandService.Start($"dotnet sln {solutionName} add {model.Path}", solutionDirectory);
     }
 
@@ -101,7 +93,7 @@ public class ProjectService : IProjectService
     {
         var projectPath = _fileProvider.Get("*.csproj", directory);
 
-        var projectDirectory = Path.GetDirectoryName(projectPath);
+        var projectDirectory = _fileSystem.GetDirectoryName(projectPath);
 
         var projectFileContents = _fileSystem.ReadAllText(projectPath);
 
@@ -116,7 +108,7 @@ public class ProjectService : IProjectService
     {
         var projectPath = _fileProvider.Get("*.csproj", directory);
 
-        var projectDirectory = Path.GetDirectoryName(projectPath);
+        var projectDirectory = _fileSystem.GetDirectoryName(projectPath);
 
         foreach (var file in new List<FileModel>()
         {

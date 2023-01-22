@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace Endpoint.Core.Models.WebArtifacts.Services;
@@ -62,6 +63,33 @@ public class AngularService : IAngularService
         _fileSystem.WriteAllText($"{workspaceDirectory}{Path.DirectorySeparatorChar}setup-jest.ts", string.Empty);
     }
 
+    public void NgxTranslateAdd(string projectName, string directory)
+    {
+        var workspaceDirectory = _fileSystem.GetDirectoryName(_fileProvider.Get("angular.json", directory));
+
+        _commandService.Start("npm install -D @ngx-translate/core", workspaceDirectory);
+
+        _commandService.Start("npm install -D @ngx-translate/http-loader", workspaceDirectory);
+
+        var model = new AngularProjectModel(projectName, "", "", directory);
+
+        _addImports(model);
+
+        _addHttpLoaderFactory(model);
+
+        _registerTranslateModule(model);
+
+        var i18nDirectory = $"{model.Directory}src{Path.DirectorySeparatorChar}assets{Path.DirectorySeparatorChar}i18n";
+
+        _fileSystem.CreateDirectory(i18nDirectory);
+
+        foreach (var lang in new string[] { "en", "fr" })
+        {
+            _fileSystem.WriteAllText($"{i18nDirectory}{Path.DirectorySeparatorChar}{lang}.json", "{}");
+        }
+
+        _setInitialLanguageInAppComponent(model);
+    }
 
     public void CreateWorkspace(string name, string projectName, string projectType, string prefix, string rootDirectory)
     {
@@ -179,5 +207,206 @@ public class AngularService : IAngularService
 
         _fileSystem.WriteAllText(tsConfigSpecJsonPath, JsonConvert.SerializeObject(tsConfigSpecJson, Formatting.Indented));
     }
+
+    private readonly List<ImportModel> _importModels = new List<ImportModel>()
+        {
+            new ImportModel("HttpClient","@angular/common/http"),
+            new ImportModel("TranslateLoader","@ngx-translate/core"),
+            new ImportModel("TranslateModule ","@ngx-translate/core"),
+            new ImportModel("TranslateHttpLoader ","@ngx-translate/http-loader")
+        };
+    private void _addImports(AngularProjectModel model)
+    {
+        var appModulePath = $"{model.Directory}src{Path.DirectorySeparatorChar}app{Path.DirectorySeparatorChar}app.module.ts";
+
+        var lines = _fileSystem.ReadAllLines(appModulePath);
+
+        var newLines = new List<string>();
+
+        var added = false;
+
+        foreach (var line in lines)
+        {
+            if (!line.StartsWith("import") && !added)
+            {
+                foreach (var importModel in _importModels)
+                {
+                    newLines.Add(new StringBuilder()
+                        .Append("import { ")
+                        .Append(importModel.Name)
+                        .Append(" }")
+                        .Append($" from '{importModel.ModuleName}';")
+                        .ToString());
+                }
+
+                added = true;
+            }
+
+            newLines.Add(line);
+
+        }
+
+        _fileSystem.WriteAllLines(appModulePath, newLines.ToArray());
+    }
+
+    private void _addHttpLoaderFactory(AngularProjectModel model)
+    {
+        var appModulePath = $"{model.Directory}src{Path.DirectorySeparatorChar}app{Path.DirectorySeparatorChar}app.module.ts";
+
+        var lines = _fileSystem.ReadAllLines(appModulePath);
+
+        var newLines = new List<string>();
+
+        var added = false;
+
+        foreach (var line in lines)
+        {
+            if (!line.StartsWith("import") && !added)
+            {
+                foreach (var newLine in new string[3] {
+                        "export function HttpLoaderFactory(httpClient: HttpClient) {",
+                        "  return new TranslateHttpLoader(httpClient);",
+                        "}"
+                    })
+                {
+                    newLines.Add(newLine);
+                }
+
+                added = true;
+            }
+
+            newLines.Add(line);
+
+        }
+
+        _fileSystem.WriteAllLines(appModulePath, newLines.ToArray());
+    }
+
+    private void _registerTranslateModule(AngularProjectModel model)
+    {
+        var appModulePath = $"{model.Directory}src{Path.DirectorySeparatorChar}app{Path.DirectorySeparatorChar}app.module.ts";
+
+        var lines = _fileSystem.ReadAllLines(appModulePath);
+
+        var newLines = new List<string>();
+
+        var added = false;
+
+        foreach (var line in lines)
+        {
+            if (line.Contains("imports: [") && !added)
+            {
+                newLines.Add(line);
+
+                foreach (var newLine in new string[7]
+                {
+                        "    TranslateModule.forRoot({",
+                        "       loader: {",
+                        "        provide: TranslateLoader,",
+                        "        useFactory: HttpLoaderFactory,",
+                        "        deps: [HttpClient]",
+                        "      }",
+                        "    }),"
+                })
+                {
+                    newLines.Add(newLine);
+                }
+
+                added = true;
+            }
+            else
+            {
+                newLines.Add(line);
+            }
+        }
+
+        _fileSystem.WriteAllLines(appModulePath, newLines.ToArray());
+    }
+
+    private void _setInitialLanguageInAppComponent(AngularProjectModel model)
+    {
+        var appComponentPath = $"{model.Directory}src{Path.DirectorySeparatorChar}app{Path.DirectorySeparatorChar}app.component.ts";
+
+        var createConstructor = !_fileSystem.ReadAllText(appComponentPath).Contains("constructor");
+
+        var ctor = new string[4]
+        {
+                "  constructor(private readonly _translateService: TranslateService) {",
+                $"    _translateService.setDefaultLang(\"en\");",
+                $"    _translateService.use(localStorage.getItem(\"currentLanguage\") || \"en\");",
+                "  }"
+        };
+
+        var lines = _fileSystem.ReadAllLines(appComponentPath);
+
+        var newLines = new List<string>();
+
+        var importAdded = false;
+
+        var constructorUpdated = false;
+
+        foreach (var line in lines)
+        {
+            if (!line.StartsWith("import") && !importAdded)
+            {
+                newLines.Add("import { TranslateService } from '@ngx-translate/core';");
+
+                importAdded = true;
+            }
+
+            newLines.Add(line);
+
+            if (line.StartsWith("export class AppComponent {") && !constructorUpdated && createConstructor)
+            {
+                foreach (var newLine in ctor)
+                {
+                    newLines.Add(newLine);
+                }
+
+                constructorUpdated = true;
+            }
+
+            if (line.Contains("constructor") && !constructorUpdated && !createConstructor)
+            {
+                newLines.RemoveAt(newLines.Count - 1);
+
+                var newLine = line.Replace("constructor(", "constructor(private readonly _translateService: TranslateService, ");
+
+                newLines.Add(newLine);
+
+                newLines.Add($"    _translateService.setDefaultLang(\"en\");");
+                newLines.Add($"    _translateService.use(localStorage.getItem(\"currentLanguage\") || \"en\");");
+
+
+                constructorUpdated = true;
+            }
+        }
+
+        _fileSystem.WriteAllLines(appComponentPath, newLines.ToArray());
+    }
 }
 
+public class TranslateModuleRegistration
+{
+    public string[] Create() => new []
+    {
+        "    TranslateModule.forRoot({",
+        "       loader: {",
+        "        provide: TranslateLoader,",
+        "        useFactory: HttpLoaderFactory,",
+        "        deps: [HttpClient]",
+        "      }",
+        "    }),"
+    };
+}
+
+public class ImportModel
+{
+    public ImportModel(string name, string moduleName)
+    {
+        Name = name;
+        ModuleName = moduleName;
+    }
+    public string Name { get; set; }
+    public string ModuleName { get; set; }
+}
