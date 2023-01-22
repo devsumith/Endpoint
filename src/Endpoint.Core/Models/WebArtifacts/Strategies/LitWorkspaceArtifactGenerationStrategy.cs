@@ -3,6 +3,7 @@ using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System.IO;
 
@@ -37,10 +38,23 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
 
         _commandService.Start("npm i -D typescript", model.Directory);
 
+        var packageJsonPath = $"{model.Directory}{Path.DirectorySeparatorChar}package.json";
+
+        var packageJsonObject = JObject.Parse(File.ReadAllText(packageJsonPath));
+
+        packageJsonObject.AddScript("build:watch", "tsc --watch");
+
+
         DefaultContractResolver contractResolver = new DefaultContractResolver
         {
             NamingStrategy = new CamelCaseNamingStrategy()
         };
+
+        File.WriteAllText(packageJsonPath,JsonConvert.SerializeObject(packageJsonObject, new JsonSerializerSettings
+        {
+            ContractResolver = contractResolver,
+            Formatting = Formatting.Indented
+        }));
 
         _fileSystem.WriteAllText($"{model.Directory}{Path.DirectorySeparatorChar}tsconfig.json", JsonConvert.SerializeObject(new TsConfigModel(), new JsonSerializerSettings
         {

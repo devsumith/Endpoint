@@ -1,6 +1,4 @@
-using Newtonsoft.Json.Linq;
-
-namespace Endpoint.Core.Models.WebArtifacts.Extenisons;
+namespace Newtonsoft.Json.Linq;
 
 public static class JObjectExtensions
 {
