@@ -6,7 +6,7 @@ namespace Endpoint.Core.Abstractions;
 public abstract class ArtifactUpdateStrategyBase<T> : IArtifactUpdateStrategy
     where T : class
 {
-    private readonly IServiceProvider _serviceProvider;
+    protected readonly IServiceProvider _serviceProvider;
 
     public ArtifactUpdateStrategyBase(IServiceProvider serviceProvider)
     {
@@ -32,7 +32,7 @@ public abstract class ArtifactUpdateStrategyBase<T> : IArtifactUpdateStrategy
 public abstract class ArtifactGenerationStrategyBase<T> : IArtifactGenerationStrategy
     where T : class
 {
-    private readonly IServiceProvider _serviceProvider;
+    protected readonly IServiceProvider _serviceProvider;
 
     public ArtifactGenerationStrategyBase(IServiceProvider serviceProvider)
     {
@@ -41,7 +41,7 @@ public abstract class ArtifactGenerationStrategyBase<T> : IArtifactGenerationStr
 
     public virtual bool CanHandle(object model, dynamic context = null) => model is T;
 
-    public void Create(object model, dynamic context = null)
+    public  virtual void Create(object model, dynamic context = null)
     {
         using (IServiceScope scope = _serviceProvider.CreateScope())
         {

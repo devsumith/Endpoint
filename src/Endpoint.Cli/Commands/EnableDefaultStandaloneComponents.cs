@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Models.WebArtifacts.Services;
+using Endpoint.Core.Models.WebArtifacts;
 
 namespace Endpoint.Cli.Commands;
 
@@ -34,7 +35,7 @@ public class EnableDefaultStandaloneComponentsRequestHandler : IRequestHandler<E
     {
         _logger.LogInformation("Handled: {0}", nameof(EnableDefaultStandaloneComponentsRequestHandler));
 
-        _angularService.EnableDefaultStandaloneComponents(request.Name, request.Directory);
+        _angularService.EnableDefaultStandaloneComponents(new AngularProjectReferenceModel(request.Name,request.Directory));
 
         return new();
     }

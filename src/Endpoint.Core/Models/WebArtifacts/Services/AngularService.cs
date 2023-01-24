@@ -117,11 +117,10 @@ public class AngularService : IAngularService
 
         _commandService.Start(stringBuilder.ToString(), model.RootDirectory);
 
+        EnableDefaultStandaloneComponents(new AngularProjectReferenceModel(model.Name,model.Directory, model.ProjectType));
 
-        if(model.ProjectType == "application")
-        {
-            EnableDefaultStandaloneComponents(model.RootDirectory, model.Name);
-
+        if (model.ProjectType == "application")
+        {            
             var srcDirectory = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}";
 
             var appDirectory = $"{srcDirectory}app{Path.DirectorySeparatorChar}";
@@ -185,13 +184,13 @@ public class AngularService : IAngularService
 
     }
 
-    public void EnableDefaultStandaloneComponents(string directory, string projectName)
+    public void EnableDefaultStandaloneComponents(AngularProjectReferenceModel model)
     {
-        var angularJsonPath = _fileProvider.Get("angular.json", directory);
+        var angularJsonPath = _fileProvider.Get("angular.json", model.ReferencedDirectory);
 
         var angularJson = JObject.Parse(_fileSystem.ReadAllText(angularJsonPath));
 
-        angularJson.EnableDefaultStandaloneComponents(projectName);
+        angularJson.EnableDefaultStandaloneComponents(model.Name);
 
         _fileSystem.WriteAllText(angularJsonPath, JsonConvert.SerializeObject(angularJson, Formatting.Indented));
     }

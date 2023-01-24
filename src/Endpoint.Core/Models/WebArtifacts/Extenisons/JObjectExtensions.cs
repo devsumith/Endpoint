@@ -6,9 +6,15 @@ public static class JObjectExtensions
 {
     public static void EnableDefaultStandaloneComponents(this JObject jObject, string projectName)
     {
-        var schematicsJObject = jObject["projects"][projectName]["schematics"]["@schematics/angular:component"] as JObject;
+        jObject["projects"][projectName]["schematics"] = new JObject
+        {
+            { "@schematics/angular:component", new JObject() {
+                { "standalone", true },
+                { "style", "scss" }
+            }
+            }
+        };
 
-        schematicsJObject.Add("standalone", true);
     }
 
     public static void UpdateCompilerOptionsToUseJestTypes(this JObject jObject)

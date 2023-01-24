@@ -57,6 +57,7 @@
     <Folder Include="Models\Syntax\RouteHandlers\Create\" />
     <Folder Include="Messages\" />
     <Folder Include="MessageHandlers\" />
+    <Folder Include="Models\WebArtifacts\Commands\" />
     <Folder Include="Models\WebArtifacts\Services\" />
   </ItemGroup>
 </Project>
