@@ -11,8 +11,7 @@ public static class JObjectExtensions
         {
             { "@schematics/angular:component", new JObject() {
                 { "standalone", true },
-                { "style", "scss" },
-                { "strict", false }
+                { "style", "scss" }
             }
             }
         };
