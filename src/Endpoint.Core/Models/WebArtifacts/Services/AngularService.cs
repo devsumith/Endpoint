@@ -383,6 +383,60 @@ public class AngularService : IAngularService
 
         _fileSystem.WriteAllLines(appComponentPath, newLines.ToArray());
     }
+
+    public void LocalizeAdd(AngularProjectReferenceModel model, List<string> locales)
+    {
+        var workspaceDirectory = _fileSystem.GetDirectoryName(_fileProvider.Get("angular.json", model.ReferencedDirectory));
+
+        _commandService.Start("ng add @angular/localize --force", workspaceDirectory);
+
+        AddSupportedLocales(model, locales);
+    }
+
+    public void AddSupportedLocales(AngularProjectReferenceModel model, List<string> locales)
+    {
+        var angularJsonPath = _fileProvider.Get("angular.json", model.ReferencedDirectory);
+
+        var angularJson = JObject.Parse(_fileSystem.ReadAllText(angularJsonPath));
+
+        _fileSystem.CreateDirectory($"{GetProjectDirectory(model)}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}locale");
+
+        angularJson.AddSupportedLocales(model.Name, locales);
+
+        _fileSystem.WriteAllText(angularJsonPath, JsonConvert.SerializeObject(angularJson, Formatting.Indented));
+    }
+
+    public void I18nExtract(AngularProjectReferenceModel model)
+    {
+        var localeDirectory = $"{GetProjectDirectory(model)}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}locale{Path.DirectorySeparatorChar}";
+
+        _commandService.Start($"ng extract-i18n --output-path {localeDirectory}", GetProjectDirectory(model));
+
+        foreach(var locale in GetSupportedLocales(model))
+        {
+            File.Copy($"{localeDirectory}messages.xlf", $"{localeDirectory}messages.{locale}.xlf");
+        }
+
+        File.Delete($"{localeDirectory}messages.xlf");
+    }
+
+    public string GetProjectDirectory(AngularProjectReferenceModel model)
+    {
+        var angularJsonPath = _fileProvider.Get("angular.json", model.ReferencedDirectory);
+
+        var angularJson = JObject.Parse(_fileSystem.ReadAllText(angularJsonPath));
+
+        return $"{Path.GetDirectoryName(angularJsonPath)}{Path.DirectorySeparatorChar}{angularJson.GetProjectDirectory(model.Name)}";
+    }
+
+    public List<string> GetSupportedLocales(AngularProjectReferenceModel model)
+    {
+        var angularJsonPath = _fileProvider.Get("angular.json", model.ReferencedDirectory);
+
+        var angularJson = JObject.Parse(_fileSystem.ReadAllText(angularJsonPath));
+
+        return angularJson.GetSupportedLocales(model.Name);
+    }
 }
 
 public class TranslateModuleRegistration

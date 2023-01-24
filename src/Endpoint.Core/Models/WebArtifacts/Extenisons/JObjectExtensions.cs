@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Newtonsoft.Json.Linq;
 
@@ -10,7 +11,8 @@ public static class JObjectExtensions
         {
             { "@schematics/angular:component", new JObject() {
                 { "standalone", true },
-                { "style", "scss" }
+                { "style", "scss" },
+                { "strict", false }
             }
             }
         };
@@ -54,4 +56,40 @@ public static class JObjectExtensions
         scripts.RemoveAll();
     }
 
+
+    public static void AddSupportedLocales(this JObject jObject, string projectName, List<string> locales = null)
+    {
+        var localesObject = new JObject();
+
+        var root = $"{jObject["projects"][projectName]["root"]}";
+
+        foreach(var locale in locales)
+        {
+            localesObject.Add(locale, $"{root}/src/locale/messages.{locale}.xlf");
+        }
+
+        var projectJObject = jObject["projects"][projectName] as JObject;
+
+        projectJObject.Add("i18n", new JObject
+        {
+            { "sourceLocale", "en-US" },
+            { "locales", localesObject }
+        });
+
+        var buildOptions = jObject["projects"][projectName]["architect"]["build"]["options"] as JObject;
+
+        buildOptions.Add("localize", new JArray(locales));
+    }
+
+    public static List<string> GetSupportedLocales(this JObject jObject, string projectName)
+    {
+        var jArray = jObject["projects"][projectName]["architect"]["build"]["options"]["localize"] as JArray;
+
+        return jArray.Select(x => $"{x}").ToList();
+    }
+
+    public static string GetProjectDirectory(this JObject jObject, string projectName)
+    {
+        return $"{jObject["projects"][projectName]["root"]}";
+    }
 }

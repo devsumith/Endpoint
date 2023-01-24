@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "lit-workspace-create -n quinn-lit-w-webpack-again-4 -d C:\\projects",
+      "commandLineArgs": "i18n-extract -n i18n-demo -d C:\\projects\\i18n-demo",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",
