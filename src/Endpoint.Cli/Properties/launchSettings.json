@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "",
+      "commandLineArgs": "angular-translate-add -n app -d C:\\projects\\ngx-translate",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",

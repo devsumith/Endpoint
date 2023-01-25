@@ -37,6 +37,7 @@ public class AngularTranslateAddRequestHandler : IRequestHandler<AngularTranslat
         _logger.LogInformation("Handled: {0}", nameof(AngularTranslateAddRequestHandler));
 
         _angularService.NgxTranslateAdd(request.ProjectName, request.Directory);
+
         return new();
     }
 }

@@ -4,13 +4,13 @@ namespace System;
 
 public static class StringExtensions
 {
-    public static string Indent(this string value, int indent)
+    public static string Indent(this string value, int indent, int spaces = 4)
     {
         try
         {
             string[] values = value.Split(Environment.NewLine);
 
-            var result = string.Join(Environment.NewLine, values.Select(v => string.IsNullOrEmpty(v) ? v : $"{string.Join("", Range(1, 4 * indent).Select(i => ' '))}{v}"));
+            var result = string.Join(Environment.NewLine, values.Select(v => string.IsNullOrEmpty(v) ? v : $"{string.Join("", Range(1, spaces * indent).Select(i => ' '))}{v}"));
 
             return result;
         } catch (Exception e){

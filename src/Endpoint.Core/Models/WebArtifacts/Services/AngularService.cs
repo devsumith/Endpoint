@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Models.WebArtifacts.Services;
@@ -76,7 +77,7 @@ public class AngularService : IAngularService
 
         _registerTranslateModule(model);
 
-        var i18nDirectory = $"{model.Directory}src{Path.DirectorySeparatorChar}assets{Path.DirectorySeparatorChar}i18n";
+        var i18nDirectory = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}assets{Path.DirectorySeparatorChar}i18n";
 
         _fileSystem.CreateDirectory(i18nDirectory);
 
@@ -208,9 +209,11 @@ public class AngularService : IAngularService
         };
     private void _addImports(AngularProjectModel model)
     {
-        var appModulePath = $"{model.Directory}src{Path.DirectorySeparatorChar}app{Path.DirectorySeparatorChar}app.module.ts";
+        var mainPath = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}main.ts";
 
-        var lines = _fileSystem.ReadAllLines(appModulePath);
+        var lines = _fileSystem.ReadAllLines(mainPath);
+
+        var content = string.Join(Environment.NewLine, lines);
 
         var newLines = new List<string>();
 
@@ -222,12 +225,13 @@ public class AngularService : IAngularService
             {
                 foreach (var importModel in _importModels)
                 {
-                    newLines.Add(new StringBuilder()
-                        .Append("import { ")
-                        .Append(importModel.Name)
-                        .Append(" }")
-                        .Append($" from '{importModel.ModuleName}';")
-                        .ToString());
+                    if(!content.Contains(importModel.Name))
+                        newLines.Add(new StringBuilder()
+                            .Append("import { ")
+                            .Append(importModel.Name)
+                            .Append(" }")
+                            .Append($" from '{importModel.ModuleName}';")
+                            .ToString());
                 }
 
                 added = true;
@@ -237,14 +241,16 @@ public class AngularService : IAngularService
 
         }
 
-        _fileSystem.WriteAllLines(appModulePath, newLines.ToArray());
+        _fileSystem.WriteAllLines(mainPath, newLines.ToArray());
     }
 
     private void _addHttpLoaderFactory(AngularProjectModel model)
     {
-        var appModulePath = $"{model.Directory}src{Path.DirectorySeparatorChar}app{Path.DirectorySeparatorChar}app.module.ts";
+        var mainPath = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}main.ts";
 
-        var lines = _fileSystem.ReadAllLines(appModulePath);
+        var lines = _fileSystem.ReadAllLines(mainPath);
+
+        var content = string.Join(Environment.NewLine, lines);
 
         var newLines = new List<string>();
 
@@ -252,8 +258,10 @@ public class AngularService : IAngularService
 
         foreach (var line in lines)
         {
-            if (!line.StartsWith("import") && !added)
+            if (!line.StartsWith("import") && !added && !content.Contains("HttpLoaderFactory"))
             {
+                newLines.Add("");
+
                 foreach (var newLine in new string[3] {
                         "export function HttpLoaderFactory(httpClient: HttpClient) {",
                         "  return new TranslateHttpLoader(httpClient);",
@@ -270,14 +278,17 @@ public class AngularService : IAngularService
 
         }
 
-        _fileSystem.WriteAllLines(appModulePath, newLines.ToArray());
+        _fileSystem.WriteAllLines(mainPath, newLines.ToArray());
     }
 
     private void _registerTranslateModule(AngularProjectModel model)
     {
-        var appModulePath = $"{model.Directory}src{Path.DirectorySeparatorChar}app{Path.DirectorySeparatorChar}app.module.ts";
+        var mainPath = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}main.ts";
 
-        var lines = _fileSystem.ReadAllLines(appModulePath);
+        var lines = _fileSystem.ReadAllLines(mainPath);
+
+        if (string.Join(Environment.NewLine, lines).Contains("TranslateModule.forRoot"))
+            return;
 
         var newLines = new List<string>();
 
@@ -285,22 +296,23 @@ public class AngularService : IAngularService
 
         foreach (var line in lines)
         {
-            if (line.Contains("imports: [") && !added)
+            if (line.Contains("importProvidersFrom(") && !added)
             {
                 newLines.Add(line);
 
-                foreach (var newLine in new string[7]
+                foreach (var newLine in new string[]
                 {
-                        "    TranslateModule.forRoot({",
-                        "       loader: {",
-                        "        provide: TranslateLoader,",
-                        "        useFactory: HttpLoaderFactory,",
-                        "        deps: [HttpClient]",
-                        "      }",
-                        "    }),"
+                    "HttpClientModule,",
+                    "TranslateModule.forRoot({",
+                    "loader: {".Indent(1,2),
+                    "provide: TranslateLoader,".Indent(2,2),
+                    "useFactory: HttpLoaderFactory,".Indent(2,2),
+                    "deps: [HttpClient]".Indent(2,2),
+                    "}".Indent(1,2),
+                    "}),"
                 })
                 {
-                    newLines.Add(newLine);
+                    newLines.Add(newLine.Indent(3,2));
                 }
 
                 added = true;
@@ -311,21 +323,21 @@ public class AngularService : IAngularService
             }
         }
 
-        _fileSystem.WriteAllLines(appModulePath, newLines.ToArray());
+        _fileSystem.WriteAllLines(mainPath, newLines.ToArray());
     }
 
     private void _setInitialLanguageInAppComponent(AngularProjectModel model)
     {
-        var appComponentPath = $"{model.Directory}src{Path.DirectorySeparatorChar}app{Path.DirectorySeparatorChar}app.component.ts";
+        var appComponentPath = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}app{Path.DirectorySeparatorChar}app.component.ts";
 
         var createConstructor = !_fileSystem.ReadAllText(appComponentPath).Contains("constructor");
 
         var ctor = new string[4]
         {
-                "  constructor(private readonly _translateService: TranslateService) {",
-                $"    _translateService.setDefaultLang(\"en\");",
-                $"    _translateService.use(localStorage.getItem(\"currentLanguage\") || \"en\");",
-                "  }"
+                "constructor(private readonly _translateService: TranslateService) {",
+                $"  _translateService.setDefaultLang(\"en\");".Indent(1,2),
+                $"  _translateService.use(localStorage.getItem(\"currentLanguage\") || \"en\");".Indent(1,2),
+                "}"
         };
 
         var lines = _fileSystem.ReadAllLines(appComponentPath);
@@ -351,7 +363,7 @@ public class AngularService : IAngularService
             {
                 foreach (var newLine in ctor)
                 {
-                    newLines.Add(newLine);
+                    newLines.Add(newLine.Indent(1,2));
                 }
 
                 constructorUpdated = true;
