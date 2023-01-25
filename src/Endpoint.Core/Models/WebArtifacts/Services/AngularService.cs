@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Models.WebArtifacts.Services;
@@ -287,6 +286,8 @@ public class AngularService : IAngularService
 
         var lines = _fileSystem.ReadAllLines(mainPath);
 
+        var tabSize = 2;
+
         if (string.Join(Environment.NewLine, lines).Contains("TranslateModule.forRoot"))
             return;
 
@@ -304,15 +305,15 @@ public class AngularService : IAngularService
                 {
                     "HttpClientModule,",
                     "TranslateModule.forRoot({",
-                    "loader: {".Indent(1,2),
-                    "provide: TranslateLoader,".Indent(2,2),
-                    "useFactory: HttpLoaderFactory,".Indent(2,2),
-                    "deps: [HttpClient]".Indent(2,2),
-                    "}".Indent(1,2),
+                    "loader: {".Indent(1,tabSize),
+                    "provide: TranslateLoader,".Indent(2,tabSize),
+                    "useFactory: HttpLoaderFactory,".Indent(2,tabSize),
+                    "deps: [HttpClient]".Indent(2,tabSize),
+                    "}".Indent(1,tabSize),
                     "}),"
                 })
                 {
-                    newLines.Add(newLine.Indent(3,2));
+                    newLines.Add(newLine.Indent(3,tabSize));
                 }
 
                 added = true;
@@ -332,15 +333,17 @@ public class AngularService : IAngularService
 
         var createConstructor = !_fileSystem.ReadAllText(appComponentPath).Contains("constructor");
 
-        var ctor = new string[4]
-        {
-                "constructor(private readonly _translateService: TranslateService) {",
-                $"  _translateService.setDefaultLang(\"en\");".Indent(1,2),
-                $"  _translateService.use(localStorage.getItem(\"currentLanguage\") || \"en\");".Indent(1,2),
-                "}"
-        };
+        var tabSize = 2;
 
         var lines = _fileSystem.ReadAllLines(appComponentPath);
+
+        var ctor = new string[]
+        {
+            "constructor(private readonly _translateService: TranslateService) {",
+            $"_translateService.setDefaultLang(\"en\");".Indent(1,tabSize),
+            $"_translateService.use(localStorage.getItem(\"currentLanguage\") || \"en\");".Indent(1,tabSize),
+            "}"
+        };
 
         var newLines = new List<string>();
 
@@ -363,7 +366,7 @@ public class AngularService : IAngularService
             {
                 foreach (var newLine in ctor)
                 {
-                    newLines.Add(newLine.Indent(1,2));
+                    newLines.Add(newLine.Indent(1,tabSize));
                 }
 
                 constructorUpdated = true;
@@ -377,9 +380,8 @@ public class AngularService : IAngularService
 
                 newLines.Add(newLine);
 
-                newLines.Add($"    _translateService.setDefaultLang(\"en\");");
-                newLines.Add($"    _translateService.use(localStorage.getItem(\"currentLanguage\") || \"en\");");
-
+                newLines.Add($"_translateService.setDefaultLang(\"en\");".Indent(2,tabSize));
+                newLines.Add($"_translateService.use(localStorage.getItem(\"currentLanguage\") || \"en\");".Indent(2, tabSize));
 
                 constructorUpdated = true;
             }
@@ -441,29 +443,32 @@ public class AngularService : IAngularService
 
         return angularJson.GetSupportedLocales(model.Name);
     }
-}
 
-public class TranslateModuleRegistration
-{
-    public string[] Create() => new []
+    public void PrettierAdd(string directory)
     {
-        "    TranslateModule.forRoot({",
-        "       loader: {",
-        "        provide: TranslateLoader,",
-        "        useFactory: HttpLoaderFactory,",
-        "        deps: [HttpClient]",
-        "      }",
-        "    }),"
-    };
-}
+        var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", directory));
 
-public class ImportModel
-{
-    public ImportModel(string name, string moduleName)
-    {
-        Name = name;
-        ModuleName = moduleName;
+        var packageJsonPath = $"{workspaceDirectory}{Path.DirectorySeparatorChar}package.json";
+
+        var packageJson = JObject.Parse(_fileSystem.ReadAllText(packageJsonPath));
+
+        _commandService.Start("npm install prettier npm-run-all husky pretty-quick -D", workspaceDirectory);
+
+        _fileSystem.WriteAllText($"{workspaceDirectory}{Path.DirectorySeparatorChar}.prettierrc.json", JsonConvert.SerializeObject(new
+        {
+            tabWidth = 2,
+            useTabs = false,
+            printWidth = 120,
+        }, Formatting.Indented));
+
+        packageJson.AddScripts(new Dictionary<string,string>()
+        {
+            { "format:fix", "pretty-quick --staged" },
+            { "precommit", "run-s format:fix lint" },
+            { "lint", "ng lint" },
+            { "format:check", "prettier --config ./.prettierrc.json --list-different \"projects/**/src/{app,environments,assets}/**/*{.ts,.js,.json,.css,.scss}\"" }
+        });
+
+        _fileSystem.WriteAllText(packageJsonPath, JsonConvert.SerializeObject(packageJson, Formatting.Indented));
     }
-    public string Name { get; set; }
-    public string ModuleName { get; set; }
 }

@@ -46,6 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services) {
+        services.AddSingleton<IReactService,ReactService>();
         services.AddSingleton<ICoreProjectService,CoreProjectService>();
         services.AddSingleton<ILitService,LitService>();
         services.AddSingleton<IAngularService,AngularService>();
@@ -209,6 +210,7 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+
 
 
 

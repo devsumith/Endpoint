@@ -13,5 +13,7 @@ public interface IAngularService
     void LocalizeAdd(AngularProjectReferenceModel model, List<string> locales);
     void I18nExtract(AngularProjectReferenceModel model);
 
+    void PrettierAdd(string directory);
+
 }
 

@@ -58,6 +58,5 @@
     <Folder Include="Messages\" />
     <Folder Include="MessageHandlers\" />
     <Folder Include="Models\WebArtifacts\Commands\" />
-    <Folder Include="Models\WebArtifacts\Services\" />
   </ItemGroup>
 </Project>
