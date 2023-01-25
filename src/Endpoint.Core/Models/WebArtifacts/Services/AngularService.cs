@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Text;
 
 namespace Endpoint.Core.Models.WebArtifacts.Services;
@@ -59,8 +58,6 @@ public class AngularService : IAngularService
         var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", directory));
 
         _commandService.Start("npm install -D jest jest-preset-angular @angular-builders/jest @types/jest", workspaceDirectory);
-
-        _fileSystem.WriteAllText($"{workspaceDirectory}{Path.DirectorySeparatorChar}setup-jest.ts", string.Empty);
     }
 
     public void NgxTranslateAdd(string projectName, string directory)
@@ -141,7 +138,6 @@ public class AngularService : IAngularService
 
         }
 
-
         UpdateCompilerOptionsToUseJestTypes(model);
 
         JestConfigCreate(model);
@@ -174,14 +170,11 @@ public class AngularService : IAngularService
 
         stringBuilder.AppendLine("preset: 'jest-preset-angular',".Indent(1));
 
-        stringBuilder.AppendLine("setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],".Indent(1));
-
-        stringBuilder.AppendLine("globalSetup: 'jest-preset-angular/global-setup',".Indent(1));
+        stringBuilder.AppendLine("globalSetup: 'jest-preset-angular/global-setup'".Indent(1));
 
         stringBuilder.AppendLine("};");
 
         _fileSystem.WriteAllText($"{model.Directory}{Path.DirectorySeparatorChar}jest.config.js",stringBuilder.ToString());
-
     }
 
     public void EnableDefaultStandaloneComponents(AngularProjectReferenceModel model)
@@ -194,7 +187,6 @@ public class AngularService : IAngularService
 
         _fileSystem.WriteAllText(angularJsonPath, JsonConvert.SerializeObject(angularJson, Formatting.Indented));
     }
-
 
     public void UpdateCompilerOptionsToUseJestTypes(AngularProjectModel model)
     {        
@@ -414,10 +406,10 @@ public class AngularService : IAngularService
 
         foreach(var locale in GetSupportedLocales(model))
         {
-            File.Copy($"{localeDirectory}messages.xlf", $"{localeDirectory}messages.{locale}.xlf");
+            _fileSystem.Copy($"{localeDirectory}messages.xlf", $"{localeDirectory}messages.{locale}.xlf");
         }
 
-        File.Delete($"{localeDirectory}messages.xlf");
+        _fileSystem.Delete($"{localeDirectory}messages.xlf");
     }
 
     public string GetProjectDirectory(AngularProjectReferenceModel model)

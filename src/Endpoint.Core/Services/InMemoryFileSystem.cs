@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace Endpoint.Core.Services;
@@ -7,6 +6,11 @@ namespace Endpoint.Core.Services;
 public class InMemoryFileSystem: IFileSystem
 {
     private readonly IDictionary<string, FileSystemEntry> files = new Dictionary<string, FileSystemEntry>();
+
+    public void Copy(string sourceFileName, string destFileName)
+    {
+        throw new NotImplementedException();
+    }
 
     public void CreateDirectory(string directory)
     {

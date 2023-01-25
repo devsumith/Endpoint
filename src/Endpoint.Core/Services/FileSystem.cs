@@ -5,6 +5,13 @@ namespace Endpoint.Core.Services;
 
 public class FileSystem : IFileSystem
 {
+    public void Copy(string sourceFileName, string destFileName)
+    {
+        if(File.Exists(destFileName) && File.Exists(sourceFileName)) 
+            File.Delete(destFileName);
+
+        File.Copy(sourceFileName, destFileName);
+    }
     public bool Exists(string path)
         => File.Exists(path);
 

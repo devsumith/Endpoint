@@ -4,6 +4,7 @@ namespace Endpoint.Core.Services;
 
 public interface IFileSystem
 {
+    void Copy(string sourceFileName, string destFileName);
     string[] ReadAllLines(string path);
     string ReadAllText(string path);
     Stream OpenRead(string path);

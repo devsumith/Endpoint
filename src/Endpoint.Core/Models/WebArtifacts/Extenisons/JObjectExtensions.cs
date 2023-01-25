@@ -31,7 +31,7 @@ public static class JObjectExtensions
     {
         var scripts = jObject["scripts"] as JObject;
 
-        scripts.Add(name, value);
+        scripts.AddOrUpdate(name, value);
     }
 
     public static void AddScripts(this JObject jObject, IEnumerable<KeyValuePair<string,string>> scripts)
@@ -56,6 +56,17 @@ public static class JObjectExtensions
     }
 
 
+    public static void AddOrUpdate(this JObject jObject, string key, JToken value)
+    {        
+        if(jObject[key] != null)
+        {
+            jObject[key] = value;
+        }
+        else {
+            jObject.Add(key, value);
+        }
+
+    }
     public static void AddSupportedLocales(this JObject jObject, string projectName, List<string> locales = null)
     {
         var localesObject = new JObject();
@@ -64,12 +75,13 @@ public static class JObjectExtensions
 
         foreach(var locale in locales)
         {
-            localesObject.Add(locale, $"{root}/src/locale/messages.{locale}.xlf");
+            localesObject.AddOrUpdate(locale, $"{root}/src/locale/messages.{locale}.xlf");
         }
 
         var projectJObject = jObject["projects"][projectName] as JObject;
 
-        projectJObject.Add("i18n", new JObject
+
+        projectJObject.AddOrUpdate("i18n", new JObject
         {
             { "sourceLocale", "en-US" },
             { "locales", localesObject }
@@ -77,7 +89,7 @@ public static class JObjectExtensions
 
         var buildOptions = jObject["projects"][projectName]["architect"]["build"]["options"] as JObject;
 
-        buildOptions.Add("localize", new JArray(locales));
+        buildOptions.AddOrUpdate("localize", new JArray(locales));
     }
 
     public static List<string> GetSupportedLocales(this JObject jObject, string projectName)

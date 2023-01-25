@@ -58,9 +58,7 @@ public class CommandLineArgumentsProcessor: BackgroundService
                 catch(Exception ex)
                 {
                     _logger.LogCritical(ex.Message);
-                }
-                
-
+                }                
                 Environment.Exit(0);
             });
     }
