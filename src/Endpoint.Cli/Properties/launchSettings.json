@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "react-app-create -n rendering-issue -d C:\\projects",
+      "commandLineArgs": "solution-create --no-create-service -n Fowl2 -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",
