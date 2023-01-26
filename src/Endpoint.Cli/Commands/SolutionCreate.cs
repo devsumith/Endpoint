@@ -1,11 +1,9 @@
 using CommandLine;
-using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -61,7 +59,7 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
         var model = _solutionModelFactory.Create(request.Name, request.ProjectName, request.ProjectType, request.FolderName, request.Directory);
 
         if(request.NoCreateService)
-            model.Folders.Clear();
+            model.RemoveAllServices();
 
         _solutionService.Create(model);
 

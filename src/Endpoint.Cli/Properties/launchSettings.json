@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "solution-create --no-create-service -n Fowl2 -d C:\\projects",
+      "commandLineArgs": "bootstrap-add -n app -d C:\\projects\\delete-me",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",

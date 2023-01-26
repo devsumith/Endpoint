@@ -19,7 +19,6 @@ namespace Endpoint.Core.Models.Artifacts.Solutions
 
         public string Name { get; init; }
         public string Directory { get; init; }
-
         public List<FolderModel> Folders { get; set; }
         public List<DependsOnModel> DependOns { get; set; }
         public List<ProjectModel> Projects { get; private set; }
@@ -50,6 +49,11 @@ namespace Endpoint.Core.Models.Artifacts.Solutions
 
         public string SolutionDirectory { get; set; }
         public string SolultionFileName => $"{Name}.sln";
+
+        public void RemoveAllServices()
+        {
+            Folders.Clear();
+        }
 
         public ClassModel GetClass(string name, string serviceName)
         {

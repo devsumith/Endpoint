@@ -471,4 +471,19 @@ public class AngularService : IAngularService
 
         _fileSystem.WriteAllText(packageJsonPath, JsonConvert.SerializeObject(packageJson, Formatting.Indented));
     }
+
+    public void BootstrapAdd(AngularProjectReferenceModel model)
+    {
+        var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", model.ReferencedDirectory));
+
+        var jsonPath = $"{workspaceDirectory}{Path.DirectorySeparatorChar}angular.json";
+
+        var json = JObject.Parse(_fileSystem.ReadAllText(jsonPath));
+
+        _commandService.Start("npm install bootstrap", workspaceDirectory);
+
+        json.AddStyle(model.Name, "node_modules\\bootstrap\\dist\\css\\bootstrap.min.css".Replace(Path.DirectorySeparatorChar, '/'));
+
+        _fileSystem.WriteAllText(jsonPath, JsonConvert.SerializeObject(json, Formatting.Indented));
+    }
 }

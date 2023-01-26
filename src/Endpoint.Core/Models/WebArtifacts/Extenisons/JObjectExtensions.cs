@@ -42,6 +42,19 @@ public static class JObjectExtensions
         }
     }
 
+    public static void AddStyle(this JObject jobject, string projectName, string path)
+    {
+        var styles = jobject["projects"][projectName]["architect"]["build"]["options"]["styles"] as JArray;
+
+        var o = new JArray { path };
+
+        foreach (var style in styles)
+        {
+            o.Add(style);
+        }
+
+        jobject["projects"][projectName]["architect"]["build"]["options"]["styles"] = o;
+    }
 
     public static void AddAuthor(this JObject jObject, string author)
     {

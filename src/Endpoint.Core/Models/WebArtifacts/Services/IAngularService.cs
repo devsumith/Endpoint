@@ -12,7 +12,7 @@ public interface IAngularService
     void NgxTranslateAdd(string projectName, string directory);
     void LocalizeAdd(AngularProjectReferenceModel model, List<string> locales);
     void I18nExtract(AngularProjectReferenceModel model);
-
+    void BootstrapAdd(AngularProjectReferenceModel model);
     void PrettierAdd(string directory);
 
 }
