@@ -97,6 +97,9 @@ public static class ConfigureServices
         services.AddSingleton<IArtifactGenerationStrategy, AngularWorkspaceArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, LitWorkspaceArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, AddAngularTranslateGenerationStrategy>();
+        services.AddSingleton<IArtifactGenerationStrategy, InfrastructureProjectEnsureArtifactGenerationStrategy>();
+        services.AddSingleton<IArtifactGenerationStrategy, CoreProjectEnsureArtifactGenerationStrategy>();
+        services.AddSingleton<IArtifactGenerationStrategy, ApiProjectEnsureArtifactGenerationStrategy>();
 
         services.AddSingleton<IArtifactGenerationStrategy, TemplatedFileArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, SolutionGenerationStrategy>();

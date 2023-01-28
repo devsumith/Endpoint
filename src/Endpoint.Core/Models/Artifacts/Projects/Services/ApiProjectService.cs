@@ -1,6 +1,7 @@
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
+using Endpoint.Core.Models.Artifacts.Projects.Commands;
 using Endpoint.Core.Models.Syntax.Classes.Factories;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Services;
@@ -40,11 +41,14 @@ public class ApiProjectService : IApiProjectService
     {
         _logger.LogInformation("Controller Add");
 
+        _artifactGenerationStrategyFactory.CreateFor(new ProjectReferenceModel()
+        {
+            ReferenceDirectory = directory
+        }, new { Command = new ApiProjectEnsure() });
+
         var csProjPath = _fileProvider.Get("*.csproj", directory);
 
         var csProjDirectory = Path.GetDirectoryName(csProjPath);
-
-        EnsureApiPresets(csProjDirectory);
 
         var controllersDirectory = $"{csProjDirectory}{Path.DirectorySeparatorChar}Controllers";
 
@@ -81,29 +85,5 @@ public class ApiProjectService : IApiProjectService
         }
     }
 
-
-    public void EnsureApiPresets(string directory)
-    {
-        EnsurePackagesInstalled(directory);
-
-        EnsureProjectsReferenced(directory);
-
-        EnsureFiles(directory);
-    }
-
-    public void EnsureProjectsReferenced(string directory)
-    {
-
-    }
-
-    public void EnsurePackagesInstalled(string directory)
-    {
-
-    }
-
-    public void EnsureFiles(string directory)
-    {
-
-    }
 }
 
