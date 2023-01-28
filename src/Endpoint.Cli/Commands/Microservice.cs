@@ -1,8 +1,8 @@
 using CommandLine;
 using Endpoint.Core;
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts.Git;
 using Endpoint.Core.Models.Artifacts.Solutions;
-using Endpoint.Core.Models.Git;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
@@ -54,20 +54,18 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
     private readonly ILogger<MicroserviceRequestHandler> _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly ISolutionSettingsFileGenerationStrategyFactory _factory;
-    private readonly IGitGenerationStrategyFactory _gitGenerationStrategyFactory;
     private readonly IWorkspaceGenerationStrategyFactory _workspaceSettingsGenerationStrategyFactory;
     private readonly ISolutionUpdateStrategyFactory _solutionUpdateStrategyFactory;
     private readonly IWorkspaceSettingsUpdateStrategyFactory _workspaceSettingsUpdateStrategyFactory;
     private readonly IFileSystem _fileSystem;
     private readonly ISolutionModelFactory _solutionModelFactory;
 
-    public MicroserviceRequestHandler(ISolutionModelFactory solutionModelFactory, ILogger<MicroserviceRequestHandler> logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ISolutionSettingsFileGenerationStrategyFactory factory, IGitGenerationStrategyFactory gitGenerationStrategyFactory, IWorkspaceGenerationStrategyFactory workspaceGenerationStrategyFactory, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
+    public MicroserviceRequestHandler(ISolutionModelFactory solutionModelFactory, ILogger<MicroserviceRequestHandler> logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ISolutionSettingsFileGenerationStrategyFactory factory, IWorkspaceGenerationStrategyFactory workspaceGenerationStrategyFactory, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
     {
         _solutionModelFactory = solutionModelFactory;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _factory = factory ?? throw new ArgumentNullException(nameof(factory));
-        _gitGenerationStrategyFactory = gitGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(gitGenerationStrategyFactory));
         _workspaceSettingsGenerationStrategyFactory = workspaceGenerationStrategyFactory;
         _solutionUpdateStrategyFactory = solutionUpdateStrategyFactory;
         _fileSystem = fileSystem;
@@ -139,7 +137,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, U
         _workspaceSettingsUpdateStrategyFactory.UpdateFor(previousWorkspaceSettings, nextWorkspaceSettings);
 
         if (!IsExistingWorkspace(request.Directory) && request.CreateGitRepository)
-            _gitGenerationStrategyFactory.CreateFor(new GitModel(request.WorkspaceName)
+            _artifactGenerationStrategyFactory.CreateFor(new GitModel(request.WorkspaceName)
             {
                 Directory = solutionModel.SolutionDirectory,
             });

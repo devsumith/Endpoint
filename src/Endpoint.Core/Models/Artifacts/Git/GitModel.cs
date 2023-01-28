@@ -1,4 +1,4 @@
-﻿namespace Endpoint.Core.Models.Git;
+﻿namespace Endpoint.Core.Models.Artifacts.Git;
 
 public class GitModel
 {
@@ -15,5 +15,5 @@ public class GitModel
     public string Email { get; init; }
     public string PersonalAccessToken { get; init; }
     public string RepositoryName { get; init; }
-    public string Directory { get; init; } 
+    public string Directory { get; init; }
 }

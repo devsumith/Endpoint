@@ -1,6 +1,6 @@
 ﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts.Git;
 using Endpoint.Core.Models.Artifacts.Solutions;
-using Endpoint.Core.Models.Git;
 using Endpoint.Core.Services;
 using System.IO;
 

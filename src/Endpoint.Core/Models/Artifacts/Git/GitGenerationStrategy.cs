@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Octokit;
 using System.IO;
 
-namespace Endpoint.Core.Models.Git;
+namespace Endpoint.Core.Models.Artifacts.Git;
 
 public class GitGenerationStrategy : ArtifactGenerationStrategyBase<GitModel>
 {
@@ -14,7 +14,7 @@ public class GitGenerationStrategy : ArtifactGenerationStrategyBase<GitModel>
     private readonly IFileSystem _fileSystem;
 
     public GitGenerationStrategy(IServiceProvider serviceProvider, ILogger<GitGenerationStrategy> logger, ICommandService commandService, ITemplateLocator templateLocator, IFileSystem fileSystem)
-        :base(serviceProvider)
+        : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));

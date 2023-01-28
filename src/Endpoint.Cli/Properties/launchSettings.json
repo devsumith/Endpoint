@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "bootstrap-add -n app -d C:\\projects\\delete-me",
+      "commandLineArgs": "bootstrap-add -n app -d C:\\projects\\top-shell",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",
