@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "bootstrap-add -n app -d C:\\projects\\top-shell",
+      "commandLineArgs": "controller-create -e InventoryItem -d C:\\projects\\Huntress\\src\\Services\\InventoryService\\InventoryService.Api\\Controllers\\",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",
