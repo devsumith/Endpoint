@@ -26,10 +26,10 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileSystem = fileSystem;
-        _fileProvider = fileProvider;
-        _commandService = commandService;
-        _fileModelFactory = fileModelFactory;
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
     }
 
     public override bool CanHandle(object model, dynamic context = null)
