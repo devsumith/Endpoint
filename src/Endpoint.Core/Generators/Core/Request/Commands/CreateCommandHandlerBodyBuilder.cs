@@ -1,6 +1,6 @@
 ﻿using Endpoint.Core;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities.Legacy;
-using Endpoint.Core.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +14,16 @@ namespace Endpoint.Core.Builders.Core
             var aggregateName = aggregateRoot.Name;
 
             var result = new List<string>() {
-                $"var {((Token)aggregateName).CamelCase} = new {((Token)aggregateName).PascalCase}();",
+                $"var {((SyntaxToken)aggregateName).CamelCase} = new {((SyntaxToken)aggregateName).PascalCase}();",
                 "",
-                $"_context.{((Token)aggregateName).PascalCasePlural}.Add({((Token)aggregateName).CamelCase});",
+                $"_context.{((SyntaxToken)aggregateName).PascalCasePlural}.Add({((SyntaxToken)aggregateName).CamelCase});",
                 "",
 
                 };
 
             foreach (var property in aggregateRoot.Properties.Where(x => x.Id == false))
             {
-                result.Add($"{((Token)aggregateName).CamelCase}.{((Token)property.Name).PascalCase} = request.{((Token)aggregateName).PascalCase}.{((Token)property.Name).PascalCase};");
+                result.Add($"{((SyntaxToken)aggregateName).CamelCase}.{((SyntaxToken)property.Name).PascalCase} = request.{((SyntaxToken)aggregateName).PascalCase}.{((SyntaxToken)property.Name).PascalCase};");
             }
 
             result = result.Concat(new List<string>() {
@@ -32,7 +32,7 @@ namespace Endpoint.Core.Builders.Core
                 "",
                 "return new ()",
                 "{",
-                $"{((Token)aggregateName).PascalCase} = {((Token)aggregateName).CamelCase}.ToDto()".Indent(1),
+                $"{((SyntaxToken)aggregateName).PascalCase} = {((SyntaxToken)aggregateName).CamelCase}.ToDto()".Indent(1),
                 "};"
                 }).ToList();
 

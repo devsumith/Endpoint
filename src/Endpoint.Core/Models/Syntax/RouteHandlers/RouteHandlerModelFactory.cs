@@ -1,5 +1,4 @@
 ﻿using Endpoint.Core.Models.Syntax.Entities.Legacy;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.RouteHandlers;
@@ -8,7 +7,7 @@ public class RouteHandlerModelFactory : IRouteHandlerModelFactory
 {
     public List<RouteHandlerModel> Create(string dbContextName, LegacyAggregateModel aggregateRoot)
     {
-        var resourceNameToken = (Token)aggregateRoot.Name;
+        var resourceNameToken = (SyntaxToken)aggregateRoot.Name;
 
         var routes = new List<RouteHandlerModel>
         {

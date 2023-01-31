@@ -1,5 +1,5 @@
-﻿using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
+﻿using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Services;
 
 namespace Endpoint.Core.Strategies.Api;
 
@@ -19,8 +19,8 @@ public class WebApplicationBuilderGenerationStrategy: IWebApplicationBuilderGene
         var template = _templateLocator.Get("WebApplicationBuilder");
 
         var tokens = new TokensBuilder()
-            .With("Namespace", (Token)@namespace)
-            .With(nameof(dbContextName), (Token)dbContextName)
+            .With("Namespace", (SyntaxToken)@namespace)
+            .With(nameof(dbContextName), (SyntaxToken)dbContextName)
             .Build();
 
         var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));

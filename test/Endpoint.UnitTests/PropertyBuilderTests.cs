@@ -1,6 +1,6 @@
 using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
-using Endpoint.Core.ValueObjects;
+using Endpoint.Core.Models.Syntax;
 using Xunit;
 
 namespace Endpoint.UnitTests
@@ -24,15 +24,15 @@ namespace Endpoint.UnitTests
 
             var sut = CreatePropertyBuilder();
 
-            var entity = (Token)"Customer";
+            var entity = (SyntaxToken)"Customer";
 
             var actual = sut
                 .WithIndent(1)
                 .WithType(new TypeBuilder()
-                    .WithGenericType("DbSet", entity.PascalCase)
+                    .WithGenericType("DbSet", entity.PascalCase())
                     .Build())
                 .WithAccessors(new AccessorsBuilder().Build())
-                .WithName(entity.PascalCasePlural)
+                .WithName(entity.PascalCasePlural())
                 .Build();
 
             Assert.Equal(expected, actual);
@@ -47,15 +47,15 @@ namespace Endpoint.UnitTests
 
             var sut = CreatePropertyBuilder();
 
-            var entity = (Token)"Customer";
+            var entity = (SyntaxToken)"Customer";
 
             var actual = sut
                 .WithType(new TypeBuilder()
-                    .WithGenericType("DbSet", entity.PascalCase)
+                    .WithGenericType("DbSet", entity.PascalCase())
                     .Build())
                 .WithAccessors(new AccessorsBuilder().WithGetterOnly().Build())
                 .WithAccessModifier(AccessModifier.Inherited)
-                .WithName(entity.PascalCasePlural)
+                .WithName(entity.PascalCasePlural())
                 .Build();
 
             Assert.Equal(expected, actual);

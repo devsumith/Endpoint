@@ -5,7 +5,6 @@ using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Strategies.Common;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,7 +36,7 @@ namespace Endpoint.Core.Services
         {
             LegacyAggregateModel aggregateRoot = new LegacyAggregateModel(resource);
 
-            aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, AccessModifier.Public, new TypeModel() { Name = "Guid" }, $"{((Token)resource).PascalCase}Id", PropertyAccessorModel.GetPrivateSet, key: true));
+            aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, AccessModifier.Public, new TypeModel() { Name = "Guid" }, $"{((SyntaxToken)resource).PascalCase}Id", PropertyAccessorModel.GetPrivateSet, key: true));
 
             if (!string.IsNullOrWhiteSpace(properties))
             {
@@ -60,7 +59,7 @@ namespace Endpoint.Core.Services
             {
                 LegacyAggregateModel aggregateRoot = new LegacyAggregateModel(resource);
 
-                var idPropertyName = useShortIdProperty ? "Id" : $"{((Token)resource).PascalCase}Id";
+                var idPropertyName = useShortIdProperty ? "Id" : $"{((SyntaxToken)resource).PascalCase}Id";
 
                 var idDotNetType = useIntIdPropertyType ? "int" : "Guid";
 

@@ -1,5 +1,4 @@
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +25,11 @@ public class RouteHandlerSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
 
         List<string> content = new List<string>();
 
-        var resourceNameToken = (Token)model.Entity.Name;
+        var resourceNameToken = (SyntaxToken)model.Entity.Name;
         var idPropertyName = $"{model.Entity.Name}Id";
         var idPropertyType = "guid";
 
-        var dbContextNameToken = (Token)model.DbContextName;
+        var dbContextNameToken = (SyntaxToken)model.DbContextName;
 
         if (model.Type == RouteType.Create)
         {
@@ -78,7 +77,7 @@ public class RouteHandlerSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
 
             foreach (var property in model.Entity.Properties.Where(x => x.Id == false))
             {
-                content.Add($"{resourceNameToken.CamelCase}.{((Token)property.Name).PascalCase} = input{resourceNameToken.PascalCase}.{((Token)property.Name).PascalCase};".Indent(2));
+                content.Add($"{resourceNameToken.CamelCase}.{((SyntaxToken)property.Name).PascalCase} = input{resourceNameToken.PascalCase}.{((SyntaxToken)property.Name).PascalCase};".Indent(2));
             }
 
             content.Add("");

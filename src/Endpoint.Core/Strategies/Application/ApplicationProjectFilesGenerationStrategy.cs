@@ -6,7 +6,6 @@ using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Strategies.Application;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -45,7 +44,7 @@ namespace Endpoint.Core.Services
 
         protected void _buildApplicationFilesForResource(SettingsModel settings, LegacyAggregateModel resource)
         {
-            Token resourceName = ((Token)resource.Name);
+            SyntaxToken resourceName = ((SyntaxToken)resource.Name);
             var aggregateDirectory = $"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}AggregatesModel{Path.DirectorySeparatorChar}{resourceName.PascalCase}Aggregate";
             var commandsDirectory = $"{aggregateDirectory}{Path.DirectorySeparatorChar}Commands";
             var queriesDirectory = $"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries";
@@ -87,7 +86,7 @@ namespace Endpoint.Core.Services
 
             aggregateBuilder.Build();
 
-            var dtoBuilder = new ClassBuilder($"{((Token)resource.Name).PascalCase}Dto", new Context(), _fileSystem)
+            var dtoBuilder = new ClassBuilder($"{((SyntaxToken)resource.Name).PascalCase}Dto", new Context(), _fileSystem)
                 .WithDirectory(aggregateDirectory)
                 .WithUsing("System")
                 .WithNamespace($"{settings.ApplicationNamespace}");
@@ -117,10 +116,10 @@ namespace Endpoint.Core.Services
             {
                 if(property.Id && settings.IdDotNetType == IdPropertyType.Guid)
                 {
-                    extensionsBody.Add($"{property.Name} = {((Token)resource.Name).CamelCase}.{((Token)property.Name).PascalCase}.Value,".Indent(1));
+                    extensionsBody.Add($"{property.Name} = {((SyntaxToken)resource.Name).CamelCase}.{((SyntaxToken)property.Name).PascalCase}.Value,".Indent(1));
                 } else
                 {
-                    extensionsBody.Add($"{property.Name} = {((Token)resource.Name).CamelCase}.{((Token)property.Name).PascalCase},".Indent(1));
+                    extensionsBody.Add($"{property.Name} = {((SyntaxToken)resource.Name).CamelCase}.{((SyntaxToken)property.Name).PascalCase},".Indent(1));
                 }
                 
             }
@@ -128,7 +127,7 @@ namespace Endpoint.Core.Services
             extensionsBody.Add("};");
 
 
-            new ClassBuilder($"{((Token)resource.Name).PascalCase}Extensions", new Context(), _fileSystem)
+            new ClassBuilder($"{((SyntaxToken)resource.Name).PascalCase}Extensions", new Context(), _fileSystem)
                 .WithDirectory(aggregateDirectory)
                 .IsStatic()
                 .WithUsing("System.Collections.Generic")
@@ -140,18 +139,18 @@ namespace Endpoint.Core.Services
                 .WithMethod(new MethodBuilder()
                 .IsStatic()
                 .WithName("ToDto")
-                .WithReturnType($"{((Token)resource.Name).PascalCase}Dto")
-                .WithPropertyName($"{((Token)resource.Name).PascalCase}Id")
-                .WithParameter(new ParameterBuilder(((Token)resource.Name).PascalCase, ((Token)resource.Name).CamelCase, true).Build())
+                .WithReturnType($"{((SyntaxToken)resource.Name).PascalCase}Dto")
+                .WithPropertyName($"{((SyntaxToken)resource.Name).PascalCase}Id")
+                .WithParameter(new ParameterBuilder(((SyntaxToken)resource.Name).PascalCase(), ((SyntaxToken)resource.Name).CamelCase(), true).Build())
                 .WithBody(extensionsBody)
                 .Build())
                 .WithMethod(new MethodBuilder()
                 .IsStatic()
                 .WithAsync(true)
                 .WithName("ToDtosAsync")
-                .WithReturnType($"Task<List<{((Token)resource.Name).PascalCase}Dto>>")
-                .WithPropertyName($"{((Token)resource.Name).PascalCase}Id")
-                .WithParameter(new ParameterBuilder($"IQueryable<{((Token)resource.Name).PascalCase}>", ((Token)resource.Name).CamelCasePlural, true).Build())
+                .WithReturnType($"Task<List<{((SyntaxToken)resource.Name).PascalCase}Dto>>")
+                .WithPropertyName($"{((SyntaxToken)resource.Name).PascalCase}Id")
+                .WithParameter(new ParameterBuilder($"IQueryable<{((SyntaxToken)resource.Name).PascalCase}>", ((SyntaxToken)resource.Name).CamelCasePlural(), true).Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new()
                 {
@@ -163,7 +162,7 @@ namespace Endpoint.Core.Services
                 .WithName("ToDtos")
                 .WithReturnType($"List<{resourceName.PascalCase}Dto>")
                 .WithPropertyName($"{resourceName.PascalCase}Id")
-                .WithParameter(new ParameterBuilder($"IEnumerable<{resourceName.PascalCase}>", resourceName.CamelCasePlural, true).Build())
+                .WithParameter(new ParameterBuilder($"IEnumerable<{resourceName.PascalCase}>", resourceName.CamelCasePlural(), true).Build())
                 .WithBody(new()
                 {
                     $"return {resourceName.CamelCasePlural}.Select(x => x.ToDto()).ToList();"
@@ -250,8 +249,8 @@ namespace Endpoint.Core.Services
             var template = _templateLocator.Get(nameof(ValidationBehaviorBuilder));
 
             var tokens = new TokensBuilder()
-                .With(nameof(settings.ApplicationNamespace), (Token)settings.ApplicationNamespace)
-                .With(nameof(settings.DomainNamespace), (Token)settings.DomainNamespace)
+                .With(nameof(settings.ApplicationNamespace), (SyntaxToken)settings.ApplicationNamespace)
+                .With(nameof(settings.DomainNamespace), (SyntaxToken)settings.DomainNamespace)
                 .Build();
 
             var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
@@ -264,8 +263,8 @@ namespace Endpoint.Core.Services
             var template = _templateLocator.Get("ConfigureValidationServices");
 
             var tokens = new TokensBuilder()
-                .With(nameof(settings.ApplicationNamespace), (Token)settings.ApplicationNamespace)
-                .With(nameof(settings.DomainNamespace), (Token)settings.DomainNamespace)
+                .With(nameof(settings.ApplicationNamespace), (SyntaxToken)settings.ApplicationNamespace)
+                .With(nameof(settings.DomainNamespace), (SyntaxToken)settings.DomainNamespace)
                 .Build();
 
             var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));

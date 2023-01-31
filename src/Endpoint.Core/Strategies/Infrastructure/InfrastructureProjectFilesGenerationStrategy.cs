@@ -3,7 +3,6 @@ using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Strategies.Infrastructure;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -77,13 +76,13 @@ namespace Endpoint.Core.Services
                     {
                     "base.OnModelCreating(modelBuilder);",
                     "",
-                    $"modelBuilder.ApplyConfigurationsFromAssembly(typeof({((Token)settings.DbContextName).PascalCase}).Assembly);"
+                    $"modelBuilder.ApplyConfigurationsFromAssembly(typeof({((SyntaxToken)settings.DbContextName).PascalCase}).Assembly);"
                     })
                     .Build());
 
-            foreach (var resource in settings.Resources.Select(r => (Token)r.Name))
+            foreach (var resource in settings.Resources.Select(r => (SyntaxToken)r.Name))
             {
-                dbContextBuilder.WithProperty(new PropertyBuilder().WithName(resource.PascalCasePlural).WithType(new TypeBuilder().WithGenericType("DbSet", resource.PascalCase).Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build());
+                dbContextBuilder.WithProperty(new PropertyBuilder().WithName(resource.PascalCasePlural()).WithType(new TypeBuilder().WithGenericType("DbSet", resource.PascalCase()).Build()).WithAccessors(new AccessorsBuilder().WithSetAccessModifuer("private").Build()).Build());
             }
 
             dbContextBuilder.Build();
@@ -93,8 +92,8 @@ namespace Endpoint.Core.Services
             var template = _templateLocator.Get("SeedData");
 
             var tokens = new TokensBuilder()
-                .With(nameof(settings.InfrastructureNamespace), (Token)settings.InfrastructureNamespace)
-                .With("DbContext", (Token)settings.DbContextName)
+                .With(nameof(settings.InfrastructureNamespace), (SyntaxToken)settings.InfrastructureNamespace)
+                .With("DbContext", (SyntaxToken)settings.DbContextName)
                 .Build();
 
             var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));

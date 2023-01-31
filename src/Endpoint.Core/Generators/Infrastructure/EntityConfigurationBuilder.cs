@@ -1,5 +1,5 @@
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using System.IO;
 
 namespace Endpoint.Core.Builders
@@ -30,22 +30,22 @@ namespace Endpoint.Core.Builders
                     .WithName("Configure")
                     .WithReturnType("void")
                     .WithBody(new() { "" })
-                    .WithParameter(new ParameterBuilder(new TypeBuilder().WithGenericType("EntityTypeBuilder", ((Token)_entity).PascalCase)
+                    .WithParameter(new ParameterBuilder(new TypeBuilder().WithGenericType("EntityTypeBuilder", ((SyntaxToken)_entity).PascalCase())
                     .Build(), "builder").Build()).Build();
 
-                return new ClassBuilder($"{((Token)_entity).PascalCase}Configuration", _context, _fileSystem)
+                return new ClassBuilder($"{((SyntaxToken)_entity).PascalCase}Configuration", _context, _fileSystem)
                     .WithNamespace($"{_infrastructureNamespace}.Data")
                     .WithUsing($"{_domainNamespace}.Models")
                     .WithUsing("Microsoft.EntityFrameworkCore")
                     .WithUsing("Microsoft.EntityFrameworkCore.Metadata.Builders")
-                    .WithInterface(new TypeBuilder().WithGenericType("IEntityTypeConfiguration", ((Token)_entity).PascalCase).Build())
+                    .WithInterface(new TypeBuilder().WithGenericType("IEntityTypeConfiguration", ((SyntaxToken)_entity).PascalCase()).Build())
                     .WithMethod(configureMethod)
                     .Class;
             }
         }
         public void Build()
         {
-            _fileSystem.WriteAllText($"{_directory}{Path.DirectorySeparatorChar}{((Token)_entity).PascalCase}Configuration.cs", string.Join(Environment.NewLine, Class));
+            _fileSystem.WriteAllText($"{_directory}{Path.DirectorySeparatorChar}{((SyntaxToken)_entity).PascalCase}Configuration.cs", string.Join(Environment.NewLine, Class));
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.ValueObjects;
+﻿using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Classes;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Strategies.Infrastructure
@@ -14,11 +14,11 @@ namespace Endpoint.Core.Strategies.Infrastructure
         {
             var content = new List<string>
             {
-                $"public class {((Token)model.Name).PascalCase} : DbContext",
+                $"public class {((SyntaxToken)model.Name).PascalCase} : DbContext",
 
                 "{",
 
-                $"public {((Token)model.Name).PascalCase}(DbContextOptions<{((Token)model.Name).PascalCase}> options)".Indent(1),
+                $"public {((SyntaxToken)model.Name).PascalCase}(DbContextOptions<{((SyntaxToken)model.Name).PascalCase}> options)".Indent(1),
 
                 ": base(options) { }".Indent(2),
 
@@ -27,7 +27,7 @@ namespace Endpoint.Core.Strategies.Infrastructure
 
             foreach (var aggregateRoot in model.Entities)
             {
-                content.Add($"public DbSet<{((Token)aggregateRoot.Name).PascalCase}> {((Token)aggregateRoot.Name).PascalCasePlural} => Set<{((Token)aggregateRoot.Name).PascalCase}>();".Indent(1));
+                content.Add($"public DbSet<{((SyntaxToken)aggregateRoot.Name).PascalCase}> {((SyntaxToken)aggregateRoot.Name).PascalCasePlural} => Set<{((SyntaxToken)aggregateRoot.Name).PascalCase}>();".Indent(1));
             }
 
             content.Add("}");

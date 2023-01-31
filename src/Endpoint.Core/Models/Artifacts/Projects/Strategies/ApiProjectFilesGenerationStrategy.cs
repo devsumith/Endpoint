@@ -3,7 +3,6 @@ using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Common;
-using Endpoint.Core.ValueObjects;
 using System.IO;
 using static Endpoint.Core.Constants.ApiFileTemplates;
 
@@ -58,9 +57,9 @@ public class ApiProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrat
         var template = _templateLocator.Get(AppSettings);
 
         var tokens = new TokensBuilder()
-            .With("RootNamespace", (Token)settings.RootNamespace)
-            .With("Directory", (Token)settings.ApiDirectory)
-            .With("Namespace", (Token)settings.ApiNamespace)
+            .With("RootNamespace", (SyntaxToken)settings.RootNamespace)
+            .With("Directory", (SyntaxToken)settings.ApiDirectory)
+            .With("Namespace", (SyntaxToken)settings.ApiNamespace)
             .Build();
 
         var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
@@ -73,10 +72,10 @@ public class ApiProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrat
         var template = _templateLocator.Get("Startup");
 
         var tokens = new TokensBuilder()
-            .With("RootNamespace", (Token)settings.RootNamespace)
-            .With("Directory", (Token)settings.ApiDirectory)
-            .With("Namespace", (Token)settings.ApiNamespace)
-            .With("DbContext", (Token)settings.DbContextName)
+            .With("RootNamespace", (SyntaxToken)settings.RootNamespace)
+            .With("Directory", (SyntaxToken)settings.ApiDirectory)
+            .With("Namespace", (SyntaxToken)settings.ApiNamespace)
+            .With("DbContext", (SyntaxToken)settings.DbContextName)
             .Build();
 
         var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
@@ -89,14 +88,14 @@ public class ApiProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrat
         var template = _templateLocator.Get(Dependencies);
 
         var tokens = new TokensBuilder()
-            .With("RootNamespace", (Token)settings.RootNamespace)
-            .With("Directory", (Token)settings.ApiDirectory)
-            .With("Namespace", (Token)settings.ApiNamespace)
-            .With("DbContext", (Token)settings.DbContextName)
-            .With(nameof(settings.ApplicationNamespace), (Token)settings.ApplicationNamespace)
-            .With(nameof(settings.ApiNamespace), (Token)settings.ApiNamespace)
-            .With(nameof(settings.DomainNamespace), (Token)settings.DomainNamespace)
-            .With(nameof(settings.InfrastructureNamespace), (Token)settings.InfrastructureNamespace)
+            .With("RootNamespace", (SyntaxToken)settings.RootNamespace)
+            .With("Directory", (SyntaxToken)settings.ApiDirectory)
+            .With("Namespace", (SyntaxToken)settings.ApiNamespace)
+            .With("DbContext", (SyntaxToken)settings.DbContextName)
+            .With(nameof(settings.ApplicationNamespace), (SyntaxToken)settings.ApplicationNamespace)
+            .With(nameof(settings.ApiNamespace), (SyntaxToken)settings.ApiNamespace)
+            .With(nameof(settings.DomainNamespace), (SyntaxToken)settings.DomainNamespace)
+            .With(nameof(settings.InfrastructureNamespace), (SyntaxToken)settings.InfrastructureNamespace)
             .Build();
 
         var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
@@ -109,13 +108,13 @@ public class ApiProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrat
         var template = _templateLocator.Get("LaunchSettings");
 
         var tokens = new TokensBuilder()
-            .With(nameof(settings.RootNamespace), (Token)settings.RootNamespace)
-            .With("Directory", (Token)settings.ApiDirectory)
-            .With("Namespace", (Token)settings.ApiNamespace)
-            .With(nameof(settings.Port), (Token)$"{settings.Port}")
-            .With(nameof(settings.SslPort), (Token)$"{settings.SslPort}")
-            .With("ProjectName", (Token)settings.ApiNamespace)
-            .With("LaunchUrl", (Token)"")
+            .With(nameof(settings.RootNamespace), (SyntaxToken)settings.RootNamespace)
+            .With("Directory", (SyntaxToken)settings.ApiDirectory)
+            .With("Namespace", (SyntaxToken)settings.ApiNamespace)
+            .With(nameof(settings.Port), (SyntaxToken)$"{settings.Port}")
+            .With(nameof(settings.SslPort), (SyntaxToken)$"{settings.SslPort}")
+            .With("ProjectName", (SyntaxToken)settings.ApiNamespace)
+            .With("LaunchUrl", (SyntaxToken)"")
             .Build();
 
         var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
@@ -147,7 +146,7 @@ public class ApiProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrat
 
     public void BuildAdditionalResource(string additionalResource, SettingsModel settings)
     {
-        new ClassBuilder($"{((Token)additionalResource).PascalCase}Controller", new Context(), _fileSystem)
+        new ClassBuilder($"{((SyntaxToken)additionalResource).PascalCase}Controller", new Context(), _fileSystem)
             .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")
             .WithUsing("System.Net")
             .WithUsing("System.Threading")
@@ -165,7 +164,7 @@ public class ApiProjectFilesGenerationStrategy : BaseProjectFilesGenerationStrat
             .WithAttribute(new GenericAttributeGenerationStrategy().WithName("Produces").WithParam("MediaTypeNames.Application.Json").Build())
             .WithAttribute(new GenericAttributeGenerationStrategy().WithName("Consumes").WithParam("MediaTypeNames.Application.Json").Build())
             .WithDependency("IMediator", "mediator")
-            .WithDependency($"ILogger<{((Token)additionalResource).PascalCase}Controller>", "logger")
+            .WithDependency($"ILogger<{((SyntaxToken)additionalResource).PascalCase}Controller>", "logger")
             .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.GetById).WithResource(additionalResource).WithAuthorize(false).Build())
             .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Get).WithResource(additionalResource).WithAuthorize(false).Build())
             .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Create).WithResource(additionalResource).WithAuthorize(false).Build())

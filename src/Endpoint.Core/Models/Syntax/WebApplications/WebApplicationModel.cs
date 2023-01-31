@@ -1,6 +1,5 @@
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.WebApplications;
@@ -16,7 +15,7 @@ public class WebApplicationModel {
 		
         foreach (var entity in Entities)
         {
-            var resource = (Token)entity.Name;
+            var resource = (SyntaxToken)entity.Name;
 
             RouteHandlers.Add(new RouteHandlerModel(
                 $"Create{resource.PascalCase}",

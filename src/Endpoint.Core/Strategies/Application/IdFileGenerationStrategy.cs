@@ -1,5 +1,5 @@
-﻿using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
+﻿using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Services;
 using System;
 using System.IO;
 
@@ -30,12 +30,12 @@ public class IdFileGenerationStrategy : IIdFileGenerationStrategy
     public void Create(string entityName, string @namepace, string directory)
     {
         var tokens = new TokensBuilder()
-            .With("Namespace",(Token)@namepace)
-            .With("EntityName", (Token)entityName)
+            .With("Namespace",(SyntaxToken)@namepace)
+            .With("EntityName", (SyntaxToken)entityName)
             .Build();
 
         var content = _templateProcessor.Process(_templateLocator.Get("IdFile"), tokens);
 
-        _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}{((Token)entityName).PascalCase}Id.cs", string.Join(Environment.NewLine, content));
+        _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}{((SyntaxToken)entityName).PascalCase}Id.cs", string.Join(Environment.NewLine, content));
     }
 }

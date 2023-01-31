@@ -1,7 +1,6 @@
 ﻿using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
-using Endpoint.Core.ValueObjects;
 using System.Linq;
 
 namespace Endpoint.Core.Models.Syntax.Entities;
@@ -19,7 +18,7 @@ public class EntityModelFactory : IEntityModelFactory
     {
         EntityModel model = new EntityModel(name);
 
-        var idPropertyName = _syntaxService.SyntaxModel.IdPropertyFormat == IdPropertyFormat.Short ? "Id" : $"{((Token)name).PascalCase}Id";
+        var idPropertyName = _syntaxService.SyntaxModel.IdPropertyFormat == IdPropertyFormat.Short ? "Id" : $"{((SyntaxToken)name).PascalCase}Id";
 
         var idDotNetType = _syntaxService.SyntaxModel.IdPropertyType == IdPropertyType.Int ? "int" : "Guid";
 

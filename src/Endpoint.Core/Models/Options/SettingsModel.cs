@@ -5,7 +5,6 @@ using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -57,7 +56,7 @@ public class SettingsModel
 
     public SettingsModel(string name, string dbContextName, List<LegacyAggregateModel> resources, string directory, bool isMicroserviceArchitecture = true, List<string> plugins = default, IdPropertyFormat idFormat = IdPropertyFormat.Long, IdPropertyType idDotNetType = IdPropertyType.Guid, string prefix = "app", bool minimal = false)
     {
-        name = ((Token)name).PascalCase.Replace("-", "_");
+        name = ((SyntaxToken)name).PascalCase().Replace("-", "_");
         Plugins = plugins;
         IdDotNetType = idDotNetType;
         IdFormat = idFormat;

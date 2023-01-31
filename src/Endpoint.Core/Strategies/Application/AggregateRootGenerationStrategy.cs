@@ -1,6 +1,6 @@
 ﻿using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities.Legacy;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Strategies.Application;
@@ -15,7 +15,7 @@ public class AggregateRootGenerationStrategy : SyntaxGenerationStrategyBase<Lega
     {
         var content = new List<string>
         {
-            $"public class {((Token)model.Name).PascalCase}",
+            $"public class {((SyntaxToken)model.Name).PascalCase}",
 
             "{"
         };

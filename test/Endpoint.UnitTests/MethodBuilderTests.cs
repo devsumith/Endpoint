@@ -1,7 +1,6 @@
 using Endpoint.Core.Builders;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using Xunit;
 
@@ -240,7 +239,7 @@ namespace Endpoint.UnitTests
                     .WithName("Configure")
                     .WithReturnType("void")
                     .WithBody(new() { "" })
-                    .WithParameter(new ParameterBuilder(new TypeBuilder().WithGenericType("EntityTypeBuilder", ((Token)"Foo").PascalCase)
+                    .WithParameter(new ParameterBuilder(new TypeBuilder().WithGenericType("EntityTypeBuilder", ((SyntaxToken)"Foo").PascalCase())
                     .Build(), "builder").Build()).Build();
 
             Assert.Equal(expected, actual);

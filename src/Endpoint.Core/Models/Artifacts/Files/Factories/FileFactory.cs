@@ -11,7 +11,6 @@ using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.FileProviders;
 using System.Collections.Generic;
 using System.IO;
@@ -56,25 +55,25 @@ public class FileModelFactory : IFileModelFactory
     public CSharpTemplatedFileModel CreateCSharp(string template, string @namespace, string name, string directory, Dictionary<string, object> tokens = null)
     {
         return new CSharpTemplatedFileModel(template, @namespace, name, directory, tokens ?? new TokensBuilder()
-            .With("Name", (Token)name)
-            .With("Namespace", (Token)@namespace)
+            .With("Name", (SyntaxToken)name)
+            .With("Namespace", (SyntaxToken)@namespace)
             .Build());
     }
 
     public TemplatedFileModel LaunchSettingsJson(string projectDirectory, string projectName, int port)
     {
         return new TemplatedFileModel("LaunchSettings", "LaunchSettings", projectDirectory, "json", new TokensBuilder()
-            .With(nameof(projectName), (Token)projectName)
-            .With(nameof(port), (Token)$"{port}")
-            .With("SslPort", (Token)$"{port + 1}")
+            .With(nameof(projectName), (SyntaxToken)projectName)
+            .With(nameof(port), (SyntaxToken)$"{port}")
+            .With("SslPort", (SyntaxToken)$"{port + 1}")
             .Build());
     }
 
     public TemplatedFileModel AppSettings(string projectDirectory, string projectName, string dbContextName)
     {
         return new TemplatedFileModel("AppSettings", "appSettings", projectDirectory, "json", new TokensBuilder()
-            .With(nameof(dbContextName), (Token)dbContextName)
-            .With("Namespace", (Token)projectName)
+            .With(nameof(dbContextName), (SyntaxToken)dbContextName)
+            .With("Namespace", (SyntaxToken)projectName)
             .Build());
     }
 

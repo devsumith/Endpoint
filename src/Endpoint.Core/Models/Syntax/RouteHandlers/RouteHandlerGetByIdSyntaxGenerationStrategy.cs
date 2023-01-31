@@ -1,5 +1,4 @@
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
@@ -23,13 +22,13 @@ public class RouteHandlerGetByIdSyntaxGenerationStrategy : SyntaxGenerationStrat
     {
         _logger.LogInformation("Generating syntax for {0} and type {1}.", model, model.Type);
 
-        var resource = (Token)model.Entity.Name;
+        var resource = (SyntaxToken)model.Entity.Name;
 
         var idPropertyName = $"{model.Entity.Name}Id";
 
         var idPropertyType = "guid";
 
-        var dbContext = (Token)model.DbContextName;
+        var dbContext = (SyntaxToken)model.DbContextName;
 
         var builder = new StringBuilder();
 

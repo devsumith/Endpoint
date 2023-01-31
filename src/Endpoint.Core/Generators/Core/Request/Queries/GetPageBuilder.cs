@@ -1,9 +1,8 @@
 
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using Endpoint.Core;
-
+using Endpoint.Core.Models.Syntax;
 
 namespace Endpoint.Core.Builders
 {
@@ -65,44 +64,44 @@ namespace Endpoint.Core.Builders
         public void Build()
         {
 
-            var request = new ClassBuilder($"Get{((Token)_entity).PascalCasePlural}PageRequest", _context, _fileSystem)
-                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Get{((Token)_entity).PascalCasePlural}PageResponse").Build())
+            var request = new ClassBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}PageRequest", _context, _fileSystem)
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Get{((SyntaxToken)_entity).PascalCasePlural}PageResponse").Build())
                 .WithProperty(new PropertyBuilder().WithType("int").WithName("PageSize").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .WithProperty(new PropertyBuilder().WithType("int").WithName("Index").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var response = new ClassBuilder($"Get{((Token)_entity).PascalCasePlural}PageResponse", _context, _fileSystem)
+            var response = new ClassBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}PageResponse", _context, _fileSystem)
                 .WithBase("ResponseBase")
                 .WithProperty(new PropertyBuilder().WithType("int").WithName("Length").WithAccessors(new AccessorsBuilder().Build()).Build())
-                .WithProperty(new PropertyBuilder().WithType(new TypeBuilder().WithGenericType("List", $"{((Token)_entity).PascalCase}Dto").Build()).WithName($"Entities").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithType(new TypeBuilder().WithGenericType("List", $"{((SyntaxToken)_entity).PascalCase}Dto").Build()).WithName($"Entities").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var handler = new ClassBuilder($"Get{((Token)_entity).PascalCasePlural}PageHandler", _context, _fileSystem)
-                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Get{((Token)_entity).PascalCasePlural}PageRequest", $"Get{((Token)_entity).PascalCasePlural}PageResponse").Build())
-                .WithDependency($"I{((Token)_dbContext).PascalCase}", "context")
-                .WithDependency($"ILogger<Get{((Token)_entity).PascalCasePlural}PageHandler>", "logger")
+            var handler = new ClassBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}PageHandler", _context, _fileSystem)
+                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Get{((SyntaxToken)_entity).PascalCasePlural}PageRequest", $"Get{((SyntaxToken)_entity).PascalCasePlural}PageResponse").Build())
+                .WithDependency($"I{((SyntaxToken)_dbContext).PascalCase}", "context")
+                .WithDependency($"ILogger<Get{((SyntaxToken)_entity).PascalCasePlural}PageHandler>", "logger")
                 .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
-                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Get{((Token)_entity).PascalCasePlural}PageResponse").Build())
-                .WithParameter(new ParameterBuilder($"Get{((Token)_entity).PascalCasePlural}PageRequest", "request").Build())
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Get{((SyntaxToken)_entity).PascalCasePlural}PageResponse").Build())
+                .WithParameter(new ParameterBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}PageRequest", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
-                $"var query = from {((Token)_entity).CamelCase} in _context.{((Token)_entity).PascalCasePlural}",
-                $"select {((Token)_entity).CamelCase};".Indent(1),
+                $"var query = from {((SyntaxToken)_entity).CamelCase} in _context.{((SyntaxToken)_entity).PascalCasePlural}",
+                $"select {((SyntaxToken)_entity).CamelCase};".Indent(1),
                 "",
-                $"var length = await _context.{((Token)_entity).PascalCasePlural}.AsNoTracking().CountAsync();",
+                $"var length = await _context.{((SyntaxToken)_entity).PascalCasePlural}.AsNoTracking().CountAsync();",
                 "",
-                $"var {((Token)_entity).CamelCasePlural} = await query.Page(request.Index, request.PageSize).AsNoTracking()",
+                $"var {((SyntaxToken)_entity).CamelCasePlural} = await query.Page(request.Index, request.PageSize).AsNoTracking()",
                 ".Select(x => x.ToDto()).ToListAsync();".Indent(1),
                 "",
                 "return new ()",
                 "{",
                 "Length = length,".Indent(1),
-                $"Entities = {((Token)_entity).CamelCasePlural}".Indent(1),
+                $"Entities = {((SyntaxToken)_entity).CamelCasePlural}".Indent(1),
                 "};"
                 }).Build())
                 .Class;
 
-            new NamespaceBuilder($"Get{((Token)_entity).PascalCasePlural}Page", _context, _fileSystem)
+            new NamespaceBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}Page", _context, _fileSystem)
                 .WithDirectory(_directory)
                 .WithNamespace(_namespace)
                 .WithUsing("MediatR")

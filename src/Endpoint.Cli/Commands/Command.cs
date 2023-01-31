@@ -1,7 +1,7 @@
 using CommandLine;
 using Endpoint.Core.Builders;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using MediatR;
 using System;
 using System.Threading;
@@ -40,7 +40,7 @@ public class CommandCreateRequestHandler : IRequestHandler<CommandCreateRequest,
     {
         var settings = _settingsProvder.Get(request.Directory);
 
-        CommandBuilder.Build(settings, (Token)request.Name, new Context(), _fileSystem, request.Directory, settings.ApplicationNamespace);
+        CommandBuilder.Build(settings, (SyntaxToken)request.Name, new Context(), _fileSystem, request.Directory, settings.ApplicationNamespace);
 
         return Task.FromResult(new Unit());
     }

@@ -1,6 +1,6 @@
 ﻿using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using System.IO;
 
 namespace Endpoint.Core.Strategies.Common;
@@ -20,8 +20,8 @@ public class DeploySetupFileGenerationStrategy : IDeploySetupFileGenerationStrat
     public void Generate(SettingsModel settings)
     {
         var tokens = new TokensBuilder()
-            .With("Name", (Token)settings.SolutionName)
-            .With("ApiProjectName",(Token)$"{settings.SolutionName}.Api")
+            .With("Name", (SyntaxToken)settings.SolutionName)
+            .With("ApiProjectName",(SyntaxToken)$"{settings.SolutionName}.Api")
             .Build();
 
         var template = _templateLocator.Get("DeploySetupFile");

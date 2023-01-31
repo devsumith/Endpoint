@@ -1,8 +1,8 @@
 
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using Endpoint.Core;
+using Endpoint.Core.Models.Syntax;
 
 namespace Endpoint.Core.Builders
 {
@@ -64,31 +64,31 @@ namespace Endpoint.Core.Builders
         public void Build()
         {
 
-            var request = new ClassBuilder($"Get{((Token)_entity).PascalCasePlural}Request", _context, _fileSystem)
-                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Get{((Token)_entity).PascalCasePlural}Response").Build())
+            var request = new ClassBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}Request", _context, _fileSystem)
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Get{((SyntaxToken)_entity).PascalCasePlural}Response").Build())
                 .Class;
 
-            var response = new ClassBuilder($"Get{((Token)_entity).PascalCasePlural}Response", _context, _fileSystem)
+            var response = new ClassBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}Response", _context, _fileSystem)
                 .WithBase("ResponseBase")
-                .WithProperty(new PropertyBuilder().WithType(new TypeBuilder().WithGenericType("List", $"{ ((Token)_entity).PascalCase}Dto").Build()).WithName($"{((Token)_entity).PascalCasePlural}").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithType(new TypeBuilder().WithGenericType("List", $"{ ((SyntaxToken)_entity).PascalCase}Dto").Build()).WithName($"{((SyntaxToken)_entity).PascalCasePlural}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var handler = new ClassBuilder($"Get{((Token)_entity).PascalCasePlural}Handler", _context, _fileSystem)
-                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Get{((Token)_entity).PascalCasePlural}Request", $"Get{((Token)_entity).PascalCasePlural}Response").Build())
-                .WithDependency($"I{((Token)_dbContext).PascalCase}", "context")
-                .WithDependency($"ILogger<Get{((Token)_entity).PascalCasePlural}Handler>", "logger")
+            var handler = new ClassBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}Handler", _context, _fileSystem)
+                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Get{((SyntaxToken)_entity).PascalCasePlural}Request", $"Get{((SyntaxToken)_entity).PascalCasePlural}Response").Build())
+                .WithDependency($"I{((SyntaxToken)_dbContext).PascalCase}", "context")
+                .WithDependency($"ILogger<Get{((SyntaxToken)_entity).PascalCasePlural}Handler>", "logger")
                 .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
-                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Get{((Token)_entity).PascalCasePlural}Response").Build())
-                .WithParameter(new ParameterBuilder($"Get{((Token)_entity).PascalCasePlural}Request", "request").Build())
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Get{((SyntaxToken)_entity).PascalCasePlural}Response").Build())
+                .WithParameter(new ParameterBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
                 "return new () {",
-                $"{((Token)_entity).PascalCasePlural} = await _context.{((Token)_entity).PascalCasePlural}.AsNoTracking().ToDtosAsync(cancellationToken)".Indent(1),
+                $"{((SyntaxToken)_entity).PascalCasePlural} = await _context.{((SyntaxToken)_entity).PascalCasePlural}.AsNoTracking().ToDtosAsync(cancellationToken)".Indent(1),
                 "};"
                 }).Build())
                 .Class;
 
-            new NamespaceBuilder($"Get{((Token)_entity).PascalCasePlural}", _context, _fileSystem)
+            new NamespaceBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}", _context, _fileSystem)
                 .WithDirectory(_directory)
                 .WithNamespace(_namespace)
                 .WithUsing("Microsoft.Extensions.Logging")

@@ -1,5 +1,5 @@
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Text;
 
@@ -49,7 +49,7 @@ namespace Endpoint.Core.Builders
         {
             var content = new StringBuilder();
 
-            content.Append($"RuleFor(request => request.{((Token)_entity).PascalCase})");
+            content.Append($"RuleFor(request => request.{((SyntaxToken)_entity).PascalCase})");
 
             if (_notNull)
             {
@@ -58,7 +58,7 @@ namespace Endpoint.Core.Builders
 
             if (_validator)
             {
-                content.Append($".SetValidator(new {((Token)_entity).PascalCase}Validator())");
+                content.Append($".SetValidator(new {((SyntaxToken)_entity).PascalCase}Validator())");
             }
 
             content.Append(";");

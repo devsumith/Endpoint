@@ -1,6 +1,6 @@
 ﻿using CommandLine;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -71,9 +71,9 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest, Unit>
         "}".Indent(2) };
 
         var tokens = new TokensBuilder()
-            .With("name", (Token)eventName)
-            .With("entityName", (Token)request.Aggregate)
-            .With("method", (Token)request.Verb)
+            .With("name", (SyntaxToken)eventName)
+            .With("entityName", (SyntaxToken)request.Aggregate)
+            .With("method", (SyntaxToken)request.Verb)
             .Build();
 
         var whenResult = _templateProcessor.Process(whenTemplate, tokens);
@@ -113,7 +113,7 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest, Unit>
 
         }
 
-        _fileSystem.WriteAllText($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}{((Token)request.Aggregate).PascalCase}.cs", string.Join(Environment.NewLine, newLines));
+        _fileSystem.WriteAllText($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}{((SyntaxToken)request.Aggregate).PascalCase}.cs", string.Join(Environment.NewLine, newLines));
 
         return Task.FromResult(new Unit());
     }

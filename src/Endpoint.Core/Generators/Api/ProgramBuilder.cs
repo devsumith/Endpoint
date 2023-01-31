@@ -1,6 +1,6 @@
 using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 
 namespace Endpoint.Core.Builders;
 
@@ -11,10 +11,10 @@ public class ProgramBuilder
         var template = templateLocator.Get("Program");
 
         var tokens = new TokensBuilder()
-            .With(nameof(settings.InfrastructureNamespace), (Token)settings.InfrastructureNamespace)
-            .With("Directory", (Token)settings.ApiDirectory)
-            .With("Namespace", (Token)settings.ApiNamespace)
-            .With("DbContext", (Token)settings.DbContextName)
+            .With(nameof(settings.InfrastructureNamespace), (SyntaxToken)settings.InfrastructureNamespace)
+            .With("Directory", (SyntaxToken)settings.ApiDirectory)
+            .With("Namespace", (SyntaxToken)settings.ApiNamespace)
+            .With("DbContext", (SyntaxToken)settings.DbContextName)
             .Build();
 
         var contents = templateProcessor.Process(template, tokens);

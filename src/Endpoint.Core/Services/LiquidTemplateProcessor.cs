@@ -1,5 +1,5 @@
 ﻿using DotLiquid;
-using Endpoint.Core.ValueObjects;
+using Endpoint.Core.Models.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -122,7 +122,7 @@ public class LiquidTemplateProcessor : ITemplateProcessor
                     {
 
                         var tokens = new TokensBuilder()
-                            .With(prop.Name, (Token)propValue.ToString())
+                            .With(prop.Name, (SyntaxToken)propValue.ToString())
                             .Build();
 
                         foreach (var token in tokens)

@@ -2,7 +2,6 @@
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
@@ -39,17 +38,17 @@ public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationSt
 
         var entityName = context.Entity.Name;
 
-        builder.AppendLine($"var query = from {((Token)entityName).CamelCase} in _context.{((Token)entityName).PascalCasePlural}");
+        builder.AppendLine($"var query = from {((SyntaxToken)entityName).CamelCase} in _context.{((SyntaxToken)entityName).PascalCasePlural}");
         
-        builder.AppendLine($"select {((Token)entityName).CamelCase};".Indent(1));
-        
-        builder.AppendLine("");
-        
-        builder.AppendLine($"var length = await _context.{((Token)entityName).PascalCasePlural}.AsNoTracking().CountAsync();");
+        builder.AppendLine($"select {((SyntaxToken)entityName).CamelCase};".Indent(1));
         
         builder.AppendLine("");
         
-        builder.AppendLine($"var {((Token)entityName).CamelCasePlural} = await query.Page(request.Index, request.PageSize).AsNoTracking()");
+        builder.AppendLine($"var length = await _context.{((SyntaxToken)entityName).PascalCasePlural}.AsNoTracking().CountAsync();");
+        
+        builder.AppendLine("");
+        
+        builder.AppendLine($"var {((SyntaxToken)entityName).CamelCasePlural} = await query.Page(request.Index, request.PageSize).AsNoTracking()");
         
         builder.AppendLine(".Select(x => x.ToDto()).ToListAsync();".Indent(1));
         
@@ -61,7 +60,7 @@ public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationSt
         
         builder.AppendLine("Length = length,".Indent(1));
         
-        builder.AppendLine($"Entities = {((Token)entityName).CamelCasePlural}".Indent(1));
+        builder.AppendLine($"Entities = {((SyntaxToken)entityName).CamelCasePlural}".Indent(1));
         
         builder.AppendLine("};");
 

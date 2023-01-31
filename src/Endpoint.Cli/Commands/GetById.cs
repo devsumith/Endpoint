@@ -1,7 +1,7 @@
 using CommandLine;
 using Endpoint.Core.Builders;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using MediatR;
 using System.IO;
 using System.Threading;
@@ -37,7 +37,7 @@ namespace Endpoint.Cli.Commands
                 var settings = _settingsProvder.Get(request.Directory);
 
                 new GetByIdBuilder(settings, new Context(), _fileSystem)
-                    .WithDirectory($"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((Token)request.Entity).PascalCasePlural}")
+                    .WithDirectory($"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Features{Path.DirectorySeparatorChar}{((SyntaxToken)request.Entity).PascalCasePlural}")
                     .WithDbContext(settings.DbContextName)
                     .WithNamespace($"{settings.ApplicationNamespace}.Features")
                     .WithApplicationNamespace($"{settings.ApplicationNamespace}")

@@ -1,13 +1,13 @@
 using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Builders
 {
     public class CommandBuilder
     {
-        public static void Build(SettingsModel settings, Token name, Context context, IFileSystem fileSystem, string directory, string @namespace)
+        public static void Build(SettingsModel settings, SyntaxToken name, Context context, IFileSystem fileSystem, string directory, string @namespace)
         {
 
             var validator = new ClassBuilder($"{name.PascalCase}Validator", context, fileSystem)
@@ -24,7 +24,7 @@ namespace Endpoint.Core.Builders
 
             var handler = new ClassBuilder($"{name.PascalCase}Handler", context, fileSystem)
                 .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"{name.PascalCase}Request", $"{name.PascalCase}Response").Build())
-                .WithDependency($"I{((Token)settings.DbContextName).PascalCase}", "context")
+                .WithDependency($"I{((SyntaxToken)settings.DbContextName).PascalCase}", "context")
                 .WithDependency($"ILogger<{name.PascalCase}Handler>", "logger")
                 .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
                 .WithReturnType(new TypeBuilder().WithGenericType("Task", $"{name.PascalCase}Response").Build())
@@ -46,9 +46,9 @@ namespace Endpoint.Core.Builders
                 .WithUsing("System")
                 .WithUsing("System.Threading")
                 .WithUsing("System.Threading.Tasks")
-                .WithUsing($"{((Token)settings.ApplicationNamespace).PascalCase}")
-                .WithUsing($"{((Token)settings.DomainNamespace).PascalCase}.Core")
-                .WithUsing($"{((Token)settings.ApplicationNamespace).PascalCase}.Interfaces")
+                .WithUsing($"{((SyntaxToken)settings.ApplicationNamespace).PascalCase}")
+                .WithUsing($"{((SyntaxToken)settings.DomainNamespace).PascalCase}.Core")
+                .WithUsing($"{((SyntaxToken)settings.ApplicationNamespace).PascalCase}.Interfaces")
                 .WithClass(validator)
                 .WithClass(request)
                 .WithClass(response)

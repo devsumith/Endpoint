@@ -1,6 +1,6 @@
 using CommandLine;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using MediatR;
 using System.IO;
 using System.Threading;
@@ -35,9 +35,9 @@ namespace Endpoint.Cli.Commands
             {
                 if (request.Directory.EndsWith("Features"))
                 {                    
-                    _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{((Token)request.Entity).PascalCasePlural}");
+                    _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{((SyntaxToken)request.Entity).PascalCasePlural}");
 
-                    request.Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{((Token)request.Entity).PascalCasePlural}";
+                    request.Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{((SyntaxToken)request.Entity).PascalCasePlural}";
                 }
 
                 _commandService.Start($"endpoint command Create{request.Entity} {request.Entity}", request.Directory);
@@ -46,7 +46,7 @@ namespace Endpoint.Cli.Commands
                 
                 _commandService.Start($"endpoint command Delete{request.Entity} {request.Entity}", request.Directory);
                 
-                _commandService.Start($"endpoint query Get{((Token)request.Entity).PascalCasePlural} {request.Entity}", request.Directory);
+                _commandService.Start($"endpoint query Get{((SyntaxToken)request.Entity).PascalCasePlural} {request.Entity}", request.Directory);
                 
                 _commandService.Start($"endpoint query Get{request.Entity}ById {request.Entity}", request.Directory);
                 

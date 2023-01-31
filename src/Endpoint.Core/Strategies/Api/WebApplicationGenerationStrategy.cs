@@ -1,6 +1,6 @@
-﻿using Endpoint.Core.Models.Syntax.RouteHandlers;
+﻿using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.RouteHandlers;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Strategies.Api
@@ -19,8 +19,8 @@ namespace Endpoint.Core.Strategies.Api
         public string Create(string @namespace, string dbContextName, List<RouteHandlerModel> routeHandlers)
         {
             var tokens = new TokensBuilder()
-                .With("Namespace", (Token)@namespace)
-                .With(nameof(dbContextName), (Token)dbContextName)
+                .With("Namespace", (SyntaxToken)@namespace)
+                .With(nameof(dbContextName), (SyntaxToken)dbContextName)
                 .Build();
 
             List<string> content = new List<string>
@@ -50,8 +50,8 @@ namespace Endpoint.Core.Strategies.Api
         public string Update(List<string> existingWebApplication, string @namespace, string dbContextName, List<RouteHandlerModel> routeHandlers)
         {
             var tokens = new TokensBuilder()
-                .With("Namespace", (Token)@namespace)
-                .With(nameof(dbContextName), (Token)dbContextName)
+                .With("Namespace", (SyntaxToken)@namespace)
+                .With(nameof(dbContextName), (SyntaxToken)dbContextName)
                 .Build();
 
             List<string> content = new List<string>

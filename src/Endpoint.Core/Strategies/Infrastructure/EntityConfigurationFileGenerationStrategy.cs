@@ -1,5 +1,5 @@
-﻿using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
+﻿using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Services;
 using System;
 using System.IO;
 
@@ -30,15 +30,15 @@ namespace Endpoint.Core.Strategies.Infrastructure
         public void Create(string entityName, string idPropertyName, string applicationNamespace, string infrastructureNamespace, string directory)
         {
             var tokens = new TokensBuilder()
-                .With(nameof(applicationNamespace), (Token)applicationNamespace)
-                .With(nameof(infrastructureNamespace), (Token)infrastructureNamespace)
-                .With(nameof(idPropertyName), (Token)idPropertyName)
-                .With("EntityName", (Token)entityName)
+                .With(nameof(applicationNamespace), (SyntaxToken)applicationNamespace)
+                .With(nameof(infrastructureNamespace), (SyntaxToken)infrastructureNamespace)
+                .With(nameof(idPropertyName), (SyntaxToken)idPropertyName)
+                .With("EntityName", (SyntaxToken)entityName)
                 .Build();
 
             var content = _templateProcessor.Process(_templateLocator.Get("EntityConfiguration"), tokens);
 
-            _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}{((Token)entityName).PascalCase}EntityConfiguration.cs", string.Join(Environment.NewLine, content));
+            _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}{((SyntaxToken)entityName).PascalCase}EntityConfiguration.cs", string.Join(Environment.NewLine, content));
         }
     }
 }

@@ -1,6 +1,6 @@
 using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 
 namespace Endpoint.Core.Builders
 {
@@ -31,14 +31,14 @@ namespace Endpoint.Core.Builders
             var template = _templateLocator.Get("ResponseBase");
 
             var tokens = new TokensBuilder()
-                .With("RootNamespace", (Token)settings.RootNamespace)
-                .With("Directory", (Token)settings.DomainDirectory)
-                .With("Namespace", (Token)settings.DomainNamespace)
+                .With("RootNamespace", (SyntaxToken)settings.RootNamespace)
+                .With("Directory", (SyntaxToken)settings.DomainDirectory)
+                .With("Namespace", (SyntaxToken)settings.DomainNamespace)
                 .Build();
 
             var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllText($@"{(Token)settings.DomainDirectory}/ResponseBase.cs", contents);
+            _fileSystem.WriteAllText($@"{(SyntaxToken)settings.DomainDirectory}/ResponseBase.cs", contents);
         }
     }
 }

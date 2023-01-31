@@ -1,7 +1,6 @@
 ﻿using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
@@ -42,11 +41,11 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         var entityNameCamelCase = _namingConventionConverter.Convert(NamingConvention.CamelCase, entityName);
 
-        builder.AppendLine($"var {entityNameCamelCase} = new {((Token)entityName).PascalCase}();");
+        builder.AppendLine($"var {entityNameCamelCase} = new {((SyntaxToken)entityName).PascalCase}();");
 
         builder.AppendLine("");
 
-        builder.AppendLine($"_context.{((Token)entityName).PascalCasePlural}.Add({entityNameCamelCase});");
+        builder.AppendLine($"_context.{((SyntaxToken)entityName).PascalCasePlural}.Add({entityNameCamelCase});");
 
         builder.AppendLine("");
 
@@ -65,7 +64,7 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         builder.AppendLine("{");
 
-        builder.AppendLine($"{((Token)entityName).PascalCase} = {entityNameCamelCase}.ToDto()".Indent(1));
+        builder.AppendLine($"{((SyntaxToken)entityName).PascalCase} = {entityNameCamelCase}.ToDto()".Indent(1));
 
         builder.AppendLine("};");
 

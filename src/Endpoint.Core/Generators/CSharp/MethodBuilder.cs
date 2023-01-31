@@ -1,6 +1,5 @@
 using Endpoint.Core.Enums;
 using Endpoint.Core;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 using Endpoint.Core.Builders.Common;
@@ -139,12 +138,12 @@ namespace Endpoint.Core.Builders
             {
                 var requestType = _routeType switch
                 {
-                    RouteType.Create => $"Create{((Token)_resource).PascalCase}",
-                    RouteType.Delete => $"Remove{((Token)_resource).PascalCase}",
-                    RouteType.Get => $"Get{((Token)_resource).PascalCasePlural}",
-                    RouteType.GetById => $"Get{((Token)_resource).PascalCase}ById",
-                    RouteType.Update => $"Update{((Token)_resource).PascalCase}",
-                    RouteType.Page => $"Get{((Token)_resource).PascalCasePlural}Page",
+                    RouteType.Create => $"Create{((SyntaxToken)_resource).PascalCase}",
+                    RouteType.Delete => $"Remove{((SyntaxToken)_resource).PascalCase}",
+                    RouteType.Get => $"Get{((SyntaxToken)_resource).PascalCasePlural}",
+                    RouteType.GetById => $"Get{((SyntaxToken)_resource).PascalCase}ById",
+                    RouteType.Update => $"Update{((SyntaxToken)_resource).PascalCase}",
+                    RouteType.Page => $"Get{((SyntaxToken)_resource).PascalCasePlural}Page",
                     _ => throw new System.NotImplementedException()
                 };
 
@@ -157,7 +156,7 @@ namespace Endpoint.Core.Builders
 
                 if (_routeType == RouteType.GetById || _routeType == RouteType.Delete)
                 {
-                    methodBuilder.WithParameter(new ParameterBuilder(IdDotNetTypeBuilder.Build(_settings, _resource), ((Token)$"{IdPropertyNameBuilder.Build(_settings,_resource)}").CamelCase).WithFrom(From.Route).Build());
+                    methodBuilder.WithParameter(new ParameterBuilder(IdDotNetTypeBuilder.Build(_settings, _resource), ((SyntaxToken)$"{IdPropertyNameBuilder.Build(_settings,_resource)}").CamelCase()).WithFrom(From.Route).Build());
                 }
 
                 if (_routeType == RouteType.Page)

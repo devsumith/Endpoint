@@ -1,8 +1,8 @@
 ﻿using CommandLine;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -46,8 +46,8 @@ public class VerbRequestHandler : IRequestHandler<VerbRequest, Unit>
         var @namespace = _namespaceProvider.Get(request.Directory);
 
         var tokens = new TokensBuilder()
-            .With("Name",(Token)request.Name)
-            .With("Namespace",(Token)@namespace)
+            .With("Name",(SyntaxToken)request.Name)
+            .With("Namespace",(SyntaxToken)@namespace)
             .Build();
 
         var model = _fileFactory.CreateTemplate("Verb", request.Name, request.Directory, tokens: tokens);

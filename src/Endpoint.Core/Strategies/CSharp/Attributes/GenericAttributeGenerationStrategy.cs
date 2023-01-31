@@ -3,7 +3,6 @@ using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Attributes;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -103,12 +102,12 @@ namespace Endpoint.Core.Builders
 
             var requestType = routeType switch
             {
-                RouteType.Create => $"Create{((Token)resource).PascalCase}",
-                RouteType.Delete => $"Remove{((Token)resource).PascalCase}",
-                RouteType.Get => $"Get{((Token)resource).PascalCasePlural}",
-                RouteType.GetById => $"Get{((Token)resource).PascalCase}ById",
-                RouteType.Update => $"Update{((Token)resource).PascalCase}",
-                RouteType.Page => $"Get{((Token)resource).PascalCasePlural}Page",
+                RouteType.Create => $"Create{((SyntaxToken)resource).PascalCase}",
+                RouteType.Delete => $"Remove{((SyntaxToken)resource).PascalCase}",
+                RouteType.Get => $"Get{((SyntaxToken)resource).PascalCasePlural}",
+                RouteType.GetById => $"Get{((SyntaxToken)resource).PascalCase}ById",
+                RouteType.Update => $"Update{((SyntaxToken)resource).PascalCase}",
+                RouteType.Page => $"Get{((SyntaxToken)resource).PascalCasePlural}Page",
                 _ => throw new System.NotImplementedException()
             };
 
@@ -119,39 +118,39 @@ namespace Endpoint.Core.Builders
 
             if (routeType == RouteType.GetById)
             {
-                attributes.AddRange(new SwaggerAnnotationBuilder($"Get {((Token)resource).PascalCase} by id.", $"Get {((Token)resource).PascalCase} by id.", indent).Build());
-                attributes.Add(WithHttp(HttpVerbs.Get, HttpAttributeIdTemplateBuilder.Build(settings,resource), $"{((Token)requestType).CamelCase}", indent));
+                attributes.AddRange(new SwaggerAnnotationBuilder($"Get {((SyntaxToken)resource).PascalCase} by id.", $"Get {((SyntaxToken)resource).PascalCase} by id.", indent).Build());
+                attributes.Add(WithHttp(HttpVerbs.Get, HttpAttributeIdTemplateBuilder.Build(settings,resource), $"{((SyntaxToken)requestType).CamelCase}", indent));
                 attributes.Add(WithProducesResponseType(HttpStatusCode.NotFound, "string", indent: indent));
             }
 
             if (routeType == RouteType.Delete)
             {
-                attributes.AddRange(new SwaggerAnnotationBuilder($"Delete {((Token)resource).PascalCase}.", $"Delete {((Token)resource).PascalCase}.", indent).Build());
-                attributes.Add(WithHttp(HttpVerbs.Delete, HttpAttributeIdTemplateBuilder.Build(settings, resource), $"{((Token)requestType).CamelCase}", indent));
+                attributes.AddRange(new SwaggerAnnotationBuilder($"Delete {((SyntaxToken)resource).PascalCase}.", $"Delete {((SyntaxToken)resource).PascalCase}.", indent).Build());
+                attributes.Add(WithHttp(HttpVerbs.Delete, HttpAttributeIdTemplateBuilder.Build(settings, resource), $"{((SyntaxToken)requestType).CamelCase}", indent));
             }
 
             if (routeType == RouteType.Get)
             {
-                attributes.AddRange(new SwaggerAnnotationBuilder($"Get {((Token)resource).PascalCasePlural}.", $"Get {((Token)resource).PascalCasePlural}.", indent).Build());
-                attributes.Add(WithHttp(HttpVerbs.Get, routeName: $"{((Token)requestType).CamelCase}", indent: indent));
+                attributes.AddRange(new SwaggerAnnotationBuilder($"Get {((SyntaxToken)resource).PascalCasePlural}.", $"Get {((SyntaxToken)resource).PascalCasePlural}.", indent).Build());
+                attributes.Add(WithHttp(HttpVerbs.Get, routeName: $"{((SyntaxToken)requestType).CamelCase}", indent: indent));
             }
 
             if (routeType == RouteType.Create)
             {
-                attributes.AddRange(new SwaggerAnnotationBuilder($"Create {((Token)resource).PascalCase}.", $"Create {((Token)resource).PascalCase}.", indent).Build());
-                attributes.Add(WithHttp(HttpVerbs.Post, routeName: $"{((Token)requestType).CamelCase}", indent: indent));
+                attributes.AddRange(new SwaggerAnnotationBuilder($"Create {((SyntaxToken)resource).PascalCase}.", $"Create {((SyntaxToken)resource).PascalCase}.", indent).Build());
+                attributes.Add(WithHttp(HttpVerbs.Post, routeName: $"{((SyntaxToken)requestType).CamelCase}", indent: indent));
             }
 
             if (routeType == RouteType.Update)
             {
-                attributes.AddRange(new SwaggerAnnotationBuilder($"Update {((Token)resource).PascalCase}.", $"Update {((Token)resource).PascalCase}.", indent).Build());
-                attributes.Add(WithHttp(HttpVerbs.Put, routeName: $"{((Token)requestType).CamelCase}", indent: indent));
+                attributes.AddRange(new SwaggerAnnotationBuilder($"Update {((SyntaxToken)resource).PascalCase}.", $"Update {((SyntaxToken)resource).PascalCase}.", indent).Build());
+                attributes.Add(WithHttp(HttpVerbs.Put, routeName: $"{((SyntaxToken)requestType).CamelCase}", indent: indent));
             }
 
             if (routeType == RouteType.Page)
             {
-                attributes.AddRange(new SwaggerAnnotationBuilder($"Get {((Token)resource).PascalCase} Page.", $"Get {((Token)resource).PascalCase} Page.", indent).Build());
-                attributes.Add(WithHttp(HttpVerbs.Get, "page/{pageSize}/{index}", $"{((Token)requestType).CamelCase}", indent));
+                attributes.AddRange(new SwaggerAnnotationBuilder($"Get {((SyntaxToken)resource).PascalCase} Page.", $"Get {((SyntaxToken)resource).PascalCase} Page.", indent).Build());
+                attributes.Add(WithHttp(HttpVerbs.Get, "page/{pageSize}/{index}", $"{((SyntaxToken)requestType).CamelCase}", indent));
             }
 
             attributes.Add(WithProducesResponseType(HttpStatusCode.InternalServerError, indent: indent));

@@ -1,8 +1,8 @@
 using CommandLine;
 using Endpoint.Core.Generators;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Options;
 using Endpoint.Core.Strategies.Common;
-using Endpoint.Core.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -85,7 +85,7 @@ namespace Endpoint.Core.Commands
                 
                 request.Minimal ??= bool.Parse(_configuration["Default:Minimal"]);
                 
-                request.DbContextName ??= _configuration["Default:DbContextName"] ??= $"{((Token)request.Name).PascalCase}DbContext";
+                request.DbContextName ??= _configuration["Default:DbContextName"] ??= $"{((SyntaxToken)request.Name).PascalCase}DbContext";
                 
                 request.ShortIdPropertyName ??= bool.Parse(_configuration["Default:ShortIdPropertyName"]);
                 

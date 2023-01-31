@@ -1,6 +1,6 @@
 using Endpoint.Core.Models.Options;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using System.IO;
 
 namespace Endpoint.Core.Builders
@@ -12,10 +12,10 @@ namespace Endpoint.Core.Builders
             var template = templateLocator.Get("QueryableExtensions");
 
             var tokens = new TokensBuilder()
-                .With(nameof(settings.RootNamespace), (Token)settings.RootNamespace)
-                .With(directory, (Token)directory)
-                .With("Namespace", (Token)settings.ApplicationNamespace)
-                .With(nameof(settings.ApplicationNamespace), (Token)settings.ApplicationNamespace)
+                .With(nameof(settings.RootNamespace), (SyntaxToken)settings.RootNamespace)
+                .With(directory, (SyntaxToken)directory)
+                .With("Namespace", (SyntaxToken)settings.ApplicationNamespace)
+                .With(nameof(settings.ApplicationNamespace), (SyntaxToken)settings.ApplicationNamespace)
                 .Build();
 
             var contents = templateProcessor.Process(template, tokens);

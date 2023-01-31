@@ -1,5 +1,5 @@
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 
 namespace Endpoint.Core.Builders;
 
@@ -36,18 +36,18 @@ public class UnitTestBuilder
 
     public void Build()
     {
-        new ClassBuilder($"{((Token)_name).PascalCase}Tests", _context, _fileSystem)
+        new ClassBuilder($"{((SyntaxToken)_name).PascalCase}Tests", _context, _fileSystem)
             .WithUsing("Xunit")
             .WithNamespace($"{_rootNamespace}.UnitTests")
             .WithDirectory(_directory)
             .WithMethod(new MethodBuilder().WithName("Constuctor")
             .WithReturnType("void")
             .WithAttribute("[Fact]")
-            .WithBody(new() { $"var actual = Create{((Token)_name).PascalCase}();" })
+            .WithBody(new() { $"var actual = Create{((SyntaxToken)_name).PascalCase}();" })
             .Build())
             .WithMethod(new MethodBuilder()
-            .WithName($"Create{((Token)_name).PascalCase}")
-            .WithReturnType(((Token)_name).PascalCase)
+            .WithName($"Create{((SyntaxToken)_name).PascalCase}")
+            .WithReturnType(((SyntaxToken)_name).PascalCase())
             .WithBody(new() { "return new();" })
             .Build())
             .Build();

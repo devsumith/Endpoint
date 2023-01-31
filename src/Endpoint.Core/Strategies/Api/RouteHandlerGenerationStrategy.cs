@@ -1,6 +1,5 @@
 ﻿using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,11 +11,11 @@ namespace Endpoint.Core.Strategies.Api
         {
             List<string> content = new List<string>();
 
-            var resourceNameToken = (Token)model.Entity.Name;
+            var resourceNameToken = (SyntaxToken)model.Entity.Name;
             var idPropertyName = $"{model.Entity.Name}Id";
             var idPropertyType = "guid";
 
-            var dbContextNameToken = (Token)model.DbContextName;
+            var dbContextNameToken = (SyntaxToken)model.DbContextName;
 
             if (model.Type == RouteType.Create)
             {
@@ -64,7 +63,7 @@ namespace Endpoint.Core.Strategies.Api
 
                 foreach(var property in model.Entity.Properties.Where(x => x.Id == false))
                 {
-                    content.Add($"{resourceNameToken.CamelCase}.{((Token)property.Name).PascalCase} = input{resourceNameToken.PascalCase}.{((Token)property.Name).PascalCase};".Indent(2));
+                    content.Add($"{resourceNameToken.CamelCase}.{((SyntaxToken)property.Name).PascalCase} = input{resourceNameToken.PascalCase}.{((SyntaxToken)property.Name).PascalCase};".Indent(2));
                 }
 
                 content.Add("");

@@ -2,7 +2,6 @@
 using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities.Legacy;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,9 +15,9 @@ namespace Endpoint.Core.Builders.Core
         {
             var entityName = aggregateRoot.Name;
 
-            var entityNamePascalCasePlural = ((Token)entityName).PascalCasePlural;
+            var entityNamePascalCasePlural = ((SyntaxToken)entityName).PascalCasePlural;
 
-            var entityNameCamelCase = ((Token)entityName).CamelCase;
+            var entityNameCamelCase = ((SyntaxToken)entityName).CamelCase;
 
             var builder = new StringBuilder();
 

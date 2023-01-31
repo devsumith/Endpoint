@@ -1,6 +1,5 @@
 
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using Endpoint.Core;
 using Endpoint.Core.Builders.Common;
@@ -70,44 +69,44 @@ namespace Endpoint.Core.Builders
 
         public void Build()
         {
-            var request = new ClassBuilder($"Remove{((Token)_entity).PascalCase}Request", _context, _fileSystem)
-                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Remove{((Token)_entity).PascalCase}Response").Build())
+            var request = new ClassBuilder($"Remove{((SyntaxToken)_entity).PascalCase}Request", _context, _fileSystem)
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Remove{((SyntaxToken)_entity).PascalCase}Response").Build())
                 .WithProperty(new PropertyBuilder().WithType(IdDotNetTypeBuilder.Build(_settings, _entity)).WithName(IdPropertyNameBuilder.Build(_settings,_entity)).WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var response = new ClassBuilder($"Remove{((Token)_entity).PascalCase}Response", _context, _fileSystem)
+            var response = new ClassBuilder($"Remove{((SyntaxToken)_entity).PascalCase}Response", _context, _fileSystem)
                 .WithBase("ResponseBase")
-                .WithProperty(new PropertyBuilder().WithType($"{((Token)_entity).PascalCase}Dto").WithName($"{((Token)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithType($"{((SyntaxToken)_entity).PascalCase}Dto").WithName($"{((SyntaxToken)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
             var handlerBodyLine1 = _settings.IdDotNetType == IdPropertyType.Int
-                ? $"var {((Token)_entity).CamelCase} = await _context.{((Token)_entity).PascalCasePlural}.FindAsync(request.{IdPropertyNameBuilder.Build(_settings, _entity)});"
-                : $"var {((Token)_entity).CamelCase} = await _context.{((Token)_entity).PascalCasePlural}.FindAsync(new {((Token)_entity).PascalCase}Id(request.{IdPropertyNameBuilder.Build(_settings, _entity)}));";
+                ? $"var {((SyntaxToken)_entity).CamelCase} = await _context.{((SyntaxToken)_entity).PascalCasePlural}.FindAsync(request.{IdPropertyNameBuilder.Build(_settings, _entity)});"
+                : $"var {((SyntaxToken)_entity).CamelCase} = await _context.{((SyntaxToken)_entity).PascalCasePlural}.FindAsync(new {((SyntaxToken)_entity).PascalCase}Id(request.{IdPropertyNameBuilder.Build(_settings, _entity)}));";
 
 
-            var handler = new ClassBuilder($"Remove{((Token)_entity).PascalCase}Handler", _context, _fileSystem)
-                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Remove{((Token)_entity).PascalCase}Request", $"Remove{((Token)_entity).PascalCase}Response").Build())
-                .WithDependency($"I{((Token)_dbContext).PascalCase}", "context")
-                .WithDependency($"ILogger<Remove{((Token)_entity).PascalCase}Handler>", "logger")
+            var handler = new ClassBuilder($"Remove{((SyntaxToken)_entity).PascalCase}Handler", _context, _fileSystem)
+                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Remove{((SyntaxToken)_entity).PascalCase}Request", $"Remove{((SyntaxToken)_entity).PascalCase}Response").Build())
+                .WithDependency($"I{((SyntaxToken)_dbContext).PascalCase}", "context")
+                .WithDependency($"ILogger<Remove{((SyntaxToken)_entity).PascalCase}Handler>", "logger")
                 .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
-                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Remove{((Token)_entity).PascalCase}Response").Build())
-                .WithParameter(new ParameterBuilder($"Remove{((Token)_entity).PascalCase}Request", "request").Build())
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Remove{((SyntaxToken)_entity).PascalCase}Response").Build())
+                .WithParameter(new ParameterBuilder($"Remove{((SyntaxToken)_entity).PascalCase}Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(new List<string>() {
                 handlerBodyLine1,
                 "",
-                $"_context.{((Token)_entity).PascalCasePlural}.Remove({((Token)_entity).CamelCase});",
+                $"_context.{((SyntaxToken)_entity).PascalCasePlural}.Remove({((SyntaxToken)_entity).CamelCase});",
                 "",
                 "await _context.SaveChangesAsync(cancellationToken);",
                 "",
                 "return new ()",
                 "{",
-                $"{((Token)_entity).PascalCase} = {((Token)_entity).CamelCase}.ToDto()".Indent(1),
+                $"{((SyntaxToken)_entity).PascalCase} = {((SyntaxToken)_entity).CamelCase}.ToDto()".Indent(1),
                 "};"
                 }).Build())
                 .Class;
 
-            new NamespaceBuilder($"Remove{((Token)_entity).PascalCase}", _context, _fileSystem)
+            new NamespaceBuilder($"Remove{((SyntaxToken)_entity).PascalCase}", _context, _fileSystem)
                 .WithDirectory(_directory)
                 .WithNamespace(_namespace)
                 .WithUsing("FluentValidation")

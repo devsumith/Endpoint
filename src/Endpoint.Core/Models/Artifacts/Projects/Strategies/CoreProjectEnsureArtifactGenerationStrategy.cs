@@ -71,7 +71,7 @@ public class CoreProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStr
         var projectPath = _fileProvider.Get("*.csproj", projectDirectory);
 
         foreach (var package in new string[] {
-
+            "Microsoft.EntityFrameworkCore"
         })
         {
             var projectFileContents = _fileSystem.ReadAllText(projectPath);

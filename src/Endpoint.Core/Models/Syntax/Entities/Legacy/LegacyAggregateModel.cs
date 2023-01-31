@@ -1,5 +1,4 @@
 ﻿using Endpoint.Core.Models.Syntax.Properties;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 using Endpoint.Core.Enums;
@@ -30,7 +29,7 @@ public class LegacyAggregateModel : EntityModel
 
         IdPropertyType = useIntIdPropertyType ? "int" : "Guid";
 
-        IdPropertyName = useShortIdProperty ? "Id" : $"{((Token)name).PascalCase}Id";
+        IdPropertyName = useShortIdProperty ? "Id" : $"{((SyntaxToken)name).PascalCase}Id";
 
         Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel() { Name = IdPropertyType }, IdPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 

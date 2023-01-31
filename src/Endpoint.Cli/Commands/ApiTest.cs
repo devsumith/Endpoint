@@ -1,6 +1,6 @@
 using CommandLine;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using MediatR;
 using System;
 using System.Threading;
@@ -36,12 +36,12 @@ public class ApiTest
             var template = _templateLocator.Get(nameof(ApiTest));
 
             var tokens = new TokensBuilder()
-                .With(nameof(request.EntityName), (Token)request.EntityName)
+                .With(nameof(request.EntityName), (SyntaxToken)request.EntityName)
                 .Build();
 
             var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllText($@"{request.Directory}/{((Token)request.EntityName).PascalCase}ControllerTests.cs", contents);
+            _fileSystem.WriteAllText($@"{request.Directory}/{((SyntaxToken)request.EntityName).PascalCase}ControllerTests.cs", contents);
             
             return Task.FromResult(new Unit());
         }

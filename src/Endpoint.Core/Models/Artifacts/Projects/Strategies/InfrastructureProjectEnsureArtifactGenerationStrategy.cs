@@ -71,7 +71,9 @@ public class InfrastructureProjectEnsureArtifactGenerationStrategy : ArtifactGen
         var projectPath = _fileProvider.Get("*.csproj", projectDirectory);
 
         foreach (var package in new string[] {
-
+            "Microsoft.EntityFrameworkCore",
+            "Microsoft.EntityFrameworkCore.InMemory",
+            "Microsoft.EntityFrameworkCore.SqlServer",
         })
         {
             var projectFileContents = _fileSystem.ReadAllText(projectPath);

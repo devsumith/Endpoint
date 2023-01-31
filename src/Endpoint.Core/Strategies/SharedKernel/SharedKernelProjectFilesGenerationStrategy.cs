@@ -1,5 +1,5 @@
 ﻿using Endpoint.Core.Models.Options;
-using Endpoint.Core.ValueObjects;
+using Endpoint.Core.Models.Syntax;
 using System.IO;
 
 namespace Endpoint.Core.Services
@@ -29,9 +29,9 @@ namespace Endpoint.Core.Services
             var template = _templateLocator.Get("ResponseBase");
 
             var tokens = new TokensBuilder()
-                .With("RootNamespace", (Token)settings.RootNamespace)
-                .With("Directory", (Token)settings.DomainDirectory)
-                .With("Namespace", (Token)settings.DomainNamespace)
+                .With("RootNamespace", (SyntaxToken)settings.RootNamespace)
+                .With("Directory", (SyntaxToken)settings.DomainDirectory)
+                .With("Namespace", (SyntaxToken)settings.DomainNamespace)
                 .Build();
 
             var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
@@ -46,10 +46,10 @@ namespace Endpoint.Core.Services
             var template = _templateLocator.Get("QueryableExtensions");
 
             var tokens = new TokensBuilder()
-                .With("RootNamespace", (Token)settings.RootNamespace)
-                .With("Directory", (Token)settings.DomainDirectory)
-                .With("Namespace", (Token)settings.DomainNamespace)
-                .With("DomainNamespace", (Token)settings.DomainNamespace)
+                .With("RootNamespace", (SyntaxToken)settings.RootNamespace)
+                .With("Directory", (SyntaxToken)settings.DomainDirectory)
+                .With("Namespace", (SyntaxToken)settings.DomainNamespace)
+                .With("DomainNamespace", (SyntaxToken)settings.DomainNamespace)
                 .Build();
 
             var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));

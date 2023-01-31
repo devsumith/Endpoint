@@ -1,6 +1,5 @@
 
 using Endpoint.Core.Services;
-using Endpoint.Core.ValueObjects;
 using System.Collections.Generic;
 using Endpoint.Core;
 using Endpoint.Core.Builders.Statements;
@@ -70,39 +69,39 @@ namespace Endpoint.Core.Builders
         public void Build()
         {
 
-            var request = new ClassBuilder($"Get{((Token)_entity).PascalCase}ByIdRequest", _context, _fileSystem)
-                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Get{((Token)_entity).PascalCase}ByIdResponse").Build())
+            var request = new ClassBuilder($"Get{((SyntaxToken)_entity).PascalCase}ByIdRequest", _context, _fileSystem)
+                .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Get{((SyntaxToken)_entity).PascalCase}ByIdResponse").Build())
                 .WithProperty(new PropertyBuilder().WithType(IdDotNetTypeBuilder.Build(_settings,_entity)).WithName(IdPropertyNameBuilder.Build(_settings, _entity)).WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
-            var response = new ClassBuilder($"Get{((Token)_entity).PascalCase}ByIdResponse", _context, _fileSystem)
+            var response = new ClassBuilder($"Get{((SyntaxToken)_entity).PascalCase}ByIdResponse", _context, _fileSystem)
                 .WithBase("ResponseBase")
-                .WithProperty(new PropertyBuilder().WithType($"{((Token)_entity).PascalCase}Dto").WithName($"{((Token)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithType($"{((SyntaxToken)_entity).PascalCase}Dto").WithName($"{((SyntaxToken)_entity).PascalCase}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
             var handlerBody = _settings.IdDotNetType == IdPropertyType.Int ? new List<string>() {
                 "return new () {",
-                $"{((Token)_entity).PascalCase} = (await _context.{((Token)_entity).PascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{IdPropertyNameBuilder.Build(_settings, _entity)} == request.{IdPropertyNameBuilder.Build(_settings, _entity)})).ToDto()".Indent(1),
+                $"{((SyntaxToken)_entity).PascalCase} = (await _context.{((SyntaxToken)_entity).PascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{IdPropertyNameBuilder.Build(_settings, _entity)} == request.{IdPropertyNameBuilder.Build(_settings, _entity)})).ToDto()".Indent(1),
                 "};"
                 }
             : new List<string>() {
                 "return new () {",
-                $"{((Token)_entity).PascalCase} = (await _context.{((Token)_entity).PascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{IdPropertyNameBuilder.Build(_settings, _entity)} == new {((Token)_entity).PascalCase}Id(request.{IdPropertyNameBuilder.Build(_settings, _entity)}))).ToDto()".Indent(1),
+                $"{((SyntaxToken)_entity).PascalCase} = (await _context.{((SyntaxToken)_entity).PascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{IdPropertyNameBuilder.Build(_settings, _entity)} == new {((SyntaxToken)_entity).PascalCase}Id(request.{IdPropertyNameBuilder.Build(_settings, _entity)}))).ToDto()".Indent(1),
                 "};"
                 };
 
-            var handler = new ClassBuilder($"Get{((Token)_entity).PascalCase}ByIdHandler", _context, _fileSystem)
-                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Get{((Token)_entity).PascalCase}ByIdRequest", $"Get{((Token)_entity).PascalCase}ByIdResponse").Build())
-                .WithDependency($"I{((Token)_dbContext).PascalCase}", "context")
-                .WithDependency($"ILogger<Get{((Token)_entity).PascalCase}ByIdHandler>", "logger")
+            var handler = new ClassBuilder($"Get{((SyntaxToken)_entity).PascalCase}ByIdHandler", _context, _fileSystem)
+                .WithBase(new TypeBuilder().WithGenericType("IRequestHandler", $"Get{((SyntaxToken)_entity).PascalCase}ByIdRequest", $"Get{((SyntaxToken)_entity).PascalCase}ByIdResponse").Build())
+                .WithDependency($"I{((SyntaxToken)_dbContext).PascalCase}", "context")
+                .WithDependency($"ILogger<Get{((SyntaxToken)_entity).PascalCase}ByIdHandler>", "logger")
                 .WithMethod(new MethodBuilder().WithName("Handle").WithAsync(true)
-                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Get{((Token)_entity).PascalCase}ByIdResponse").Build())
-                .WithParameter(new ParameterBuilder($"Get{((Token)_entity).PascalCase}ByIdRequest", "request").Build())
+                .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Get{((SyntaxToken)_entity).PascalCase}ByIdResponse").Build())
+                .WithParameter(new ParameterBuilder($"Get{((SyntaxToken)_entity).PascalCase}ByIdRequest", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
                 .WithBody(handlerBody).Build())
                 .Class;
 
-            new NamespaceBuilder($"Get{((Token)_entity).PascalCase}ById", _context, _fileSystem)
+            new NamespaceBuilder($"Get{((SyntaxToken)_entity).PascalCase}ById", _context, _fileSystem)
                 .WithDirectory(_directory)
                 .WithNamespace(_namespace)
                 .WithUsing("Microsoft.Extensions.Logging")
