@@ -1,4 +1,7 @@
-﻿namespace Endpoint.Core.Enums;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+namespace Endpoint.Core.Enums;
 
 public enum HttpVerbs
 {
@@ -10,3 +13,4 @@ public enum HttpVerbs
     Post,
     Put
 }
+

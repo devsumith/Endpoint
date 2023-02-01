@@ -1,4 +1,7 @@
-﻿using System.IO;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using System.IO;
 using System.Text;
 
 namespace Endpoint.Core.Models.WebArtifacts;
@@ -39,3 +42,4 @@ public class AngularProjectModel
     public string RootDirectory { get; set; }
     public string ProjectType { get; set; } = "application";
 }
+

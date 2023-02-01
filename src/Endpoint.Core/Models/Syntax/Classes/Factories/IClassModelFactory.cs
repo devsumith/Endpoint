@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Syntax.Entities;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Syntax.Entities;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.Classes.Factories;
@@ -9,3 +12,4 @@ public interface IClassModelFactory
     ClassModel CreateController(EntityModel model, string directory);
     ClassModel CreateDbContext(string name, List<EntityModel> entities, string directory);
 }
+

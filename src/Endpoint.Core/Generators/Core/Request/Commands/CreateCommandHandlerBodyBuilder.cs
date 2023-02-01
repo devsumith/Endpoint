@@ -1,4 +1,7 @@
-﻿using Endpoint.Core;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using System;
@@ -40,3 +43,4 @@ namespace Endpoint.Core.Builders.Core
         }
     }
 }
+

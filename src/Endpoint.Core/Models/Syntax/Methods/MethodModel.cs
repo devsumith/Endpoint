@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Enums;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Params;
@@ -27,3 +30,4 @@ public class MethodModel
     public bool Async { get; set; }
     public bool Static { get; set; }
 }
+

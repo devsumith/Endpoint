@@ -1,4 +1,7 @@
-﻿using CommandLine;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using CommandLine;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Syntax;
@@ -57,3 +60,4 @@ public class VerbRequestHandler : IRequestHandler<VerbRequest, Unit>
         return new();
     }
 }
+

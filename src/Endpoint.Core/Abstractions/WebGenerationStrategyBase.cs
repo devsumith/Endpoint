@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.WebArtifacts;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.WebArtifacts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core.Abstractions;
@@ -28,3 +31,4 @@ public abstract class WebGenerationStrategyBase<T>: IWebGenerationStrategy
     public abstract void Create(IWebGenerationStrategyFactory webGenerationStrategyFactory, T model, dynamic context = null);
     public virtual int Priority => 0;
 }
+

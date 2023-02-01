@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core.Abstractions;
 
@@ -25,3 +28,4 @@ public abstract class SyntaxGenerationStrategyBase<T>: ISyntaxGenerationStrategy
     public abstract string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, T model, dynamic context = null);
     public virtual int Priority => 0;
 }
+

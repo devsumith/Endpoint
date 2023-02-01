@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using System.Collections.Generic;
 
 namespace Endpoint.Core.Builders;
 
@@ -29,3 +32,4 @@ public class SwaggerAnnotationBuilder
         return results.ToArray();
     }
 }
+

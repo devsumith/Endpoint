@@ -1,4 +1,7 @@
-﻿namespace Endpoint.Core.Options;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+namespace Endpoint.Core.Options;
 
 public class CreateCleanArchitectureMicroserviceOptions
 {
@@ -13,3 +16,4 @@ public class ResolveOrCreateWorkspaceOptions
     public string Directory { get; set; } = string.Empty;
     public string Name { get; set; }
 }
+

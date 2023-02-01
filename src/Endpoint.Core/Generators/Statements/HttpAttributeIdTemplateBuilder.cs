@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Options;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Options;
 using Endpoint.Core.Models.Syntax;
 
 namespace Endpoint.Core.Builders.Statements
@@ -13,3 +16,4 @@ namespace Endpoint.Core.Builders.Statements
         }
     }
 }
+

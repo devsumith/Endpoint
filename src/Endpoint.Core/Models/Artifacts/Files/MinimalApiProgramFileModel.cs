@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Syntax.Entities;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.WebApplications;
 using System.Collections.Generic;
 
@@ -31,3 +34,4 @@ public class MinimalApiProgramFileModel: FileModel
     public List<string> Usings { get; private set; }    
     
 }
+

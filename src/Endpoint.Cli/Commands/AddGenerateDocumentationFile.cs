@@ -1,3 +1,6 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 using CommandLine;
 using Endpoint.Core.Models.Artifacts.Projects.Strategies;
 using Endpoint.Core.Services;
@@ -39,3 +42,4 @@ public class GenerateDocumentationFileAddRequestHandler : IRequestHandler<Genera
         return Task.FromResult(new Unit());
     }
 }
+

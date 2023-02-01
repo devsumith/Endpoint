@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Syntax;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,3 +21,4 @@ public class ObjectFileModel<T> : FileModel
 
     public string Namespace { get; set; }
 }
+

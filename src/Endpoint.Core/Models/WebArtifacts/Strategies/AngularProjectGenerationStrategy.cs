@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Abstractions;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 
@@ -23,4 +26,5 @@ public class AngularProjectGenerationStrategy : WebGenerationStrategyBase<Angula
         _commandService.Start($"ng new {model.Name}", model.Directory);
     }
 }
+
 

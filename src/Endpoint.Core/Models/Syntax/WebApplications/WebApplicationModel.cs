@@ -1,3 +1,6 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
 using System.Collections.Generic;
@@ -64,3 +67,4 @@ public class WebApplicationModel {
 	public List<EntityModel> Entities { get; set; }
 	public string DbContextName { get; set; }
 }
+

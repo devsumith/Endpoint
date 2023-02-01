@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Artifacts.Files;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Artifacts.Files;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,3 +28,4 @@ namespace Endpoint.Core.Strategies.Files.Create
         }
     }
 }
+

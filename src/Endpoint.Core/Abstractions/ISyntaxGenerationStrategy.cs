@@ -1,4 +1,7 @@
-﻿namespace Endpoint.Core.Abstractions;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+namespace Endpoint.Core.Abstractions;
 
 public interface ISyntaxGenerationStrategy
 {
@@ -6,3 +9,4 @@ public interface ISyntaxGenerationStrategy
     string Create(object model, dynamic context = null);
     int Priority { get; }
 }
+

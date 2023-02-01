@@ -1,4 +1,7 @@
-﻿namespace Endpoint.Core.Models.Artifacts.Projects.Services;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+namespace Endpoint.Core.Models.Artifacts.Projects.Services;
 
 public interface IProjectService
 {
@@ -9,3 +12,4 @@ public interface IProjectService
     void PackageAdd(string name, string directory);
     void CoreFilesAdd(string directory);
 }
+

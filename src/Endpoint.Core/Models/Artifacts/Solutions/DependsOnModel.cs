@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Artifacts.Projects;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Artifacts.Projects;
 
 namespace Endpoint.Core.Models.Artifacts.Solutions;
 
@@ -13,3 +16,4 @@ public class DependsOnModel
         Service = service;
     }
 }
+

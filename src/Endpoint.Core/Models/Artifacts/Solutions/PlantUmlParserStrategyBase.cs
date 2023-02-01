@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core.Models.Artifacts.Solutions;
 
@@ -27,3 +30,4 @@ public abstract class PlantUmlParserStrategyBase<T>: IPlantUmlParserStrategy
 
     protected abstract T Create(IPlantUmlParserStrategyFactory factory, string plantUml, dynamic context = null);
 }
+

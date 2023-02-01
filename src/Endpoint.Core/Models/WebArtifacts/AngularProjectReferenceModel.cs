@@ -1,4 +1,7 @@
-﻿namespace Endpoint.Core.Models.WebArtifacts;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+namespace Endpoint.Core.Models.WebArtifacts;
 
 public class AngularProjectReferenceModel
 {
@@ -13,3 +16,4 @@ public class AngularProjectReferenceModel
     public string ReferencedDirectory { get; set; }
     public string ProjectType { get; set; }
 }
+

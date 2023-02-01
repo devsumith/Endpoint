@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Artifacts.Files;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using Endpoint.Core.Models.Syntax.Entities;
@@ -146,3 +149,4 @@ namespace Endpoint.Core.Models.Artifacts.Projects.Factories
         ProjectModel CreateIntegrationTestsProject();
     }
 }
+

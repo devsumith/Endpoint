@@ -1,3 +1,6 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 namespace Endpoint.Core.Models.Syntax.WebApplications;
 
 public class WebApplicationBuilderModel {
@@ -10,3 +13,4 @@ public class WebApplicationBuilderModel {
     public string Title { get; set; }
     public string DbContextName { get; set; }
 }
+

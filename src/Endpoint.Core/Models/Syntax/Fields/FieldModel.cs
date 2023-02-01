@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Enums;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Types;
 
 namespace Endpoint.Core.Models.Syntax.Fields;
@@ -16,3 +19,4 @@ public class FieldModel
     public bool ReadOnly { get; set; }
     public AccessModifier AccessModifier { get; set; }
 }
+

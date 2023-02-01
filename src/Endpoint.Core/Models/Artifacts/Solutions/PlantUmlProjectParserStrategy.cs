@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Artifacts.Files;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Projects;
 using System.Collections.Generic;
 using System.IO;
@@ -72,3 +75,4 @@ public class PlantUmlProjectParserStrategy : PlantUmlParserStrategyBase<ProjectM
         return model;
     }
 }
+

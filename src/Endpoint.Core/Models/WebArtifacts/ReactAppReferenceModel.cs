@@ -1,4 +1,7 @@
-﻿namespace Endpoint.Core.Models.WebArtifacts;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+namespace Endpoint.Core.Models.WebArtifacts;
 
 public class ReactAppReferenceModel
 {
@@ -11,3 +14,4 @@ public class ReactAppReferenceModel
     public string Name { get; set; }
     public string ReferenceDirectory { get; set; }
 }
+

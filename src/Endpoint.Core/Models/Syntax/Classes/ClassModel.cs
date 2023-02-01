@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using System.Collections.Generic;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Constructors;
@@ -38,3 +41,4 @@ public class ClassModel : InterfaceModel
         };
 
 }
+

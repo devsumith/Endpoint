@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Syntax;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
 using System;
 using System.IO;
@@ -39,3 +42,4 @@ public class IdFileGenerationStrategy : IIdFileGenerationStrategy
         _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}{((SyntaxToken)entityName).PascalCase}Id.cs", string.Join(Environment.NewLine, content));
     }
 }
+

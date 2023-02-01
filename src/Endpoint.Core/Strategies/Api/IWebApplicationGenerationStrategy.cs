@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Syntax.RouteHandlers;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Syntax.RouteHandlers;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Strategies.Api
@@ -9,3 +12,4 @@ namespace Endpoint.Core.Strategies.Api
         string Update(List<string> existingWebApplication, string @namespace, string dbContextName, List<RouteHandlerModel> routeHandlers);
     }
 }
+

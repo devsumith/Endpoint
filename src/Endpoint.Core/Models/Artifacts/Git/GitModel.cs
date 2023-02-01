@@ -1,4 +1,7 @@
-﻿namespace Endpoint.Core.Models.Artifacts.Git;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+namespace Endpoint.Core.Models.Artifacts.Git;
 
 public class GitModel
 {
@@ -17,3 +20,4 @@ public class GitModel
     public string RepositoryName { get; init; }
     public string Directory { get; init; }
 }
+

@@ -1,3 +1,6 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core.Services;
@@ -9,4 +12,5 @@ public interface IDependencyInjectionService
     void AddHosted(string hostedServiceName, string directory);
     void AddConfigureServices(string layer, string directory);
 }
+
 

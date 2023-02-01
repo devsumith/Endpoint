@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Services;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -98,3 +101,4 @@ namespace Endpoint.Core.Builders
         }
     }
 }
+

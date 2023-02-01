@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Syntax.Properties;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Syntax.Properties;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax;
@@ -17,3 +20,4 @@ public class TypeDeclarationModel
 
     public List<UsingDirectiveModel> UsingDirectives { get; set; }
 }
+

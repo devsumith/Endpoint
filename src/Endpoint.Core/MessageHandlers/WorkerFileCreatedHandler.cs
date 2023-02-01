@@ -1,3 +1,6 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 using Endpoint.Core.Messages;
 using Endpoint.Core.Services;
 using MediatR;
@@ -26,3 +29,4 @@ public class WorkerFileCreatedHandler : INotificationHandler<WorkerFileCreated>
         _dependencyInjectionService.AddHosted(notification.Name, notification.Directory);
     }
 }
+

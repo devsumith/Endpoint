@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "controller-create -e InventoryItem -d C:\\projects\\Huntress\\src\\Services\\InventoryService\\InventoryService.Api\\Controllers\\",
+      "commandLineArgs": "copyright-add -d C:\\projects\\Library\\src",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",

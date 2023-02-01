@@ -1,4 +1,7 @@
-﻿using CommandLine;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using CommandLine;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Interfaces;
@@ -104,3 +107,4 @@ public class DbContextModel : ClassModel
         return interfaceModel;
     }
 }
+

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using System.Collections.Generic;
 using Endpoint.Core.Models.Syntax.Entities;
 
 namespace Endpoint.Core.Models.Options;
@@ -15,3 +18,4 @@ public class SolutionSettingsModel
     public string Directory { get; set; }
     public List<string> Metadata { get; set; } = new List<string>();
 }
+

@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Options;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Options;
 using Endpoint.Core.Services;
 using System.IO;
 
@@ -24,3 +27,4 @@ public class BicepFileGenerationStrategy: IBicepFileGenerationStrategy
         _fileSystem.WriteAllText($"{settings.RootDirectory}{Path.DirectorySeparatorChar}deploy{Path.DirectorySeparatorChar}main.bicep", string.Join(Environment.NewLine, _templateLocator.Get("BicepFile")));
     }
 }
+

@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Syntax.Attributes;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Fields;
@@ -91,3 +94,4 @@ public class ControllerModel: ClassModel
         }
     }
 }
+

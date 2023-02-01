@@ -1,4 +1,7 @@
-﻿using static System.Linq.Enumerable;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using static System.Linq.Enumerable;
 
 namespace System;
 
@@ -27,3 +30,4 @@ public static class StringExtensions
             : collection.SingleOrDefault(x => x.EndsWith(name));
 
 }
+

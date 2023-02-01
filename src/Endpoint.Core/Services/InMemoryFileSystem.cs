@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using System.Collections.Generic;
 using System.IO;
 
 namespace Endpoint.Core.Services;
@@ -92,3 +95,4 @@ public class FileSystemEntry
     public string OriginalRootDirectory { get; set; }
     public string RootDirectory { get; set; }
 }
+

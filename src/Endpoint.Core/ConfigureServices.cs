@@ -1,3 +1,6 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 using Endpoint.Core;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts;
@@ -46,6 +49,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services) {
+        services.AddSingleton<IUtlitityService,UtlitityService>();
         services.AddSingleton<ISignalRService,SignalRService>();
         services.AddSingleton<IReactService,ReactService>();
         services.AddSingleton<ICoreProjectService,CoreProjectService>();
@@ -213,6 +217,8 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+
+
 
 
 

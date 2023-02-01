@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Enums;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Enums;
 using System.Text;
 
 namespace Endpoint.Core.Builders
@@ -51,3 +54,4 @@ namespace Endpoint.Core.Builders
         }
     }
 }
+

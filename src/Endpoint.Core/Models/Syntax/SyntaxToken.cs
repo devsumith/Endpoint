@@ -1,3 +1,6 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 using CSharpFunctionalExtensions;
 using Endpoint.Core.Services;
 using Newtonsoft.Json;
@@ -39,3 +42,4 @@ public class SyntaxToken : ValueObject
         return Create(token).Value;
     }
 }
+
