@@ -2,15 +2,8 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Abstractions;
-using Endpoint.Core.Enums;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Properties;
-using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Models.Artifacts.Files.Services;
 using MediatR;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,38 +27,16 @@ public class ClassCreateRequest : IRequest<Unit>
 
 public class ClassCreateRequestHandler : IRequestHandler<ClassCreateRequest, Unit>
 {
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IClassService _classService;
 
-    public ClassCreateRequestHandler(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+    public ClassCreateRequestHandler(IClassService classService)
     {
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
+        _classService = classService;
     }
 
     public Task<Unit> Handle(ClassCreateRequest request, CancellationToken cancellationToken)
     {
-        var @class = new ClassModel(request.Name);
-
-        @class.UsingDirectives.Add(new UsingDirectiveModel() {  Name = "System"  });
-
-        if(!string.IsNullOrEmpty(request.Properties))
-            foreach(var property in request.Properties.Split(','))
-            {
-                var parts = property.Split(':');
-                var name = parts[0];
-                var type = parts[1];
-
-                @class.Properties.Add(new PropertyModel(@class, AccessModifier.Public, new TypeModel() { Name = type }, name, new List<PropertyAccessorModel>()));
-            }
-
-        var classFile = new ObjectFileModel<ClassModel>(
-            @class,
-            @class.UsingDirectives,
-            @class.Name,
-            request.Directory,
-            "cs"
-            );
-
-        _artifactGenerationStrategyFactory.CreateFor(classFile);
+        _classService.Create(request.Name, request.Properties, request.Directory);
 
         return Task.FromResult(new Unit());
     }

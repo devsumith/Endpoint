@@ -3,15 +3,18 @@
 
 using CommandLine;
 using Endpoint.Core.Builders;
+using Endpoint.Core.Models.Artifacts.Files.Services;
 using Endpoint.Core.Services;
 using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
 
-[Verb("unit-test")]
-public class UnitTestAddRequest : IRequest<Unit>
+[Verb("unit-test-create")]
+public class UnitTestCreateRequest : IRequest<Unit>
 {
     [Value('n')]
     public string Name { get; set; }
@@ -20,30 +23,24 @@ public class UnitTestAddRequest : IRequest<Unit>
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class UnitTestAddRequestHandler : IRequestHandler<UnitTestAddRequest, Unit>
+public class UnitTestCreateRequestHandler : IRequestHandler<UnitTestCreateRequest, Unit>
 {
-    private readonly IContext _context;
-    private readonly IFileSystem _fileSystem;
-    private readonly ISettingsProvider _settingsProvider;
+    private readonly IClassService _classService;
+    private readonly ILogger<UnitTestCreateRequestHandler> _logger;
 
-    public UnitTestAddRequestHandler(IContext context, IFileSystem fileSystem, ISettingsProvider settingsProvider)
+    public UnitTestCreateRequestHandler(IClassService classService, ILogger<UnitTestCreateRequestHandler> logger)
     {
-        _context = context;
-        _fileSystem = fileSystem;
-        _settingsProvider = settingsProvider;
+        _classService = classService ?? throw new ArgumentNullException(nameof(classService));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public Task<Unit> Handle(UnitTestAddRequest request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UnitTestCreateRequest request, CancellationToken cancellationToken)
     {
-        var settings = _settingsProvider.Get();
+        _logger.LogInformation("", request.Name);
 
-        new UnitTestBuilder(_context, _fileSystem)
-            .WithName(request.Name)
-            .WithRootNamespace(settings.RootNamespace)
-            .WithDirectory(request.Directory)
-            .Build();
+        _classService.UnitTestCreateFor(request.Name, request.Directory);
 
-        return Task.FromResult(new Unit());
+        return new ();
     }
 }
 

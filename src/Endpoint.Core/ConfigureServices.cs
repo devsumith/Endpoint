@@ -5,6 +5,7 @@ using Endpoint.Core;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
+using Endpoint.Core.Models.Artifacts.Files.Services;
 using Endpoint.Core.Models.Artifacts.Files.Strategies;
 using Endpoint.Core.Models.Artifacts.Git;
 using Endpoint.Core.Models.Artifacts.Projects;
@@ -49,6 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services) {
+        services.AddSingleton<IClassService,ClassService>();
         services.AddSingleton<IUtlitityService,UtlitityService>();
         services.AddSingleton<ISignalRService,SignalRService>();
         services.AddSingleton<IReactService,ReactService>();
@@ -218,6 +220,7 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+
 
 
 

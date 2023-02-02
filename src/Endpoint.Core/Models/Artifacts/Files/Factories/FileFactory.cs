@@ -14,7 +14,6 @@ using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
-using Microsoft.Extensions.FileProviders;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,7 +21,7 @@ using System.Text;
 
 namespace Endpoint.Core.Models.Artifacts.Files.Factories;
 
-using IFileProvider = Services.IFileProvider;
+using IFileProvider = Endpoint.Core.Services.IFileProvider;
 public class FileModelFactory : IFileModelFactory
 {
     private readonly IRouteHandlerModelFactory _routeHandlerModelFactory;
