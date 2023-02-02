@@ -2,7 +2,10 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Internals;
+using Endpoint.Core.Messages;
 using Endpoint.Core.Services;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
@@ -59,12 +62,14 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
     private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
     private readonly IFileSystem _fileSystem;
     private readonly INamespaceProvider _namespaceProvider;
+    private readonly Observable<INotification> _notificationListener;
 
     public ObjectFileArtifactGenerationStrategyBase(
         IServiceProvider serviceProvider,
         ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory,
         IFileSystem fileSystem,
         INamespaceProvider namespaceProvider,
+        Observable<INotification> notificationListener,
         ILogger<ObjectFileArtifactGenerationStrategyBase<T>> logger)
         : base(serviceProvider)
     {
@@ -72,6 +77,7 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
         _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategyFactory));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
+        _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
     }
 
     public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ObjectFileModel<T> model, dynamic context = null)
@@ -99,5 +105,7 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
         builder.AppendLine(_syntaxGenerationStrategyFactory.CreateFor(model.Object, context));
 
         _fileSystem.WriteAllText(model.Path, builder.ToString());
+
+        _notificationListener.Broadcast(new FileCreated(model.Path));
     }
 }

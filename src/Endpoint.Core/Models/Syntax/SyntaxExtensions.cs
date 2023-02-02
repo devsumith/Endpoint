@@ -14,7 +14,8 @@ public static class SyntaxExtensions
     {
         propertyName = propertyName.Substring(propertyName.IndexOf('_') + 1);
 
-        var propertyNameCamelCase = ((SyntaxToken)propertyName).CamelCase;
+        var propertyNameCamelCase = ((SyntaxToken)propertyName).CamelCase();
+
         return new()
         {
             { $"{propertyName}", token.Value },
