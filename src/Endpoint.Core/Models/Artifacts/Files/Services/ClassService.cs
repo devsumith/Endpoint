@@ -9,18 +9,36 @@ using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Models.Syntax;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using Endpoint.Core.Services;
+using System.Net.NetworkInformation;
+using System.IO;
+using Endpoint.Core.Models.Syntax.Methods;
+using Endpoint.Core.Models.Syntax.Attributes;
+using CommandLine;
+using System.Linq;
 
 namespace Endpoint.Core.Models.Artifacts.Files.Services;
 
 public class ClassService: IClassService
 {
     private readonly ILogger<ClassService> _logger;
+    private readonly IFileSystem _fileSystem;
+    private readonly IFileProvider _fileProvider;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly INamespaceProvider _nameSpaceProvider;
 
-    public ClassService(ILogger<ClassService> logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+    public ClassService(
+        ILogger<ClassService> logger, 
+        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IFileProvider fileProvider,
+        IFileSystem fileSystem,
+        INamespaceProvider namespaceProvider)
     {
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        _nameSpaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
     }
 
     public void Create(string name, string properties, string directory)
@@ -56,6 +74,97 @@ public class ClassService: IClassService
     public void UnitTestCreateFor(string name, string directory)
     {
         _logger.LogInformation("Create Unit Test for {name}", name);
+
+        var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj", directory));
+
+        var slnDirectory = Path.GetDirectoryName(_fileProvider.Get("*.sln", directory));
+
+        var classPath = Directory.GetFiles(slnDirectory, $"{name}.cs", SearchOption.AllDirectories).FirstOrDefault();
+
+        if(classPath == null)
+        {
+            foreach(var path in Directory.GetFiles(Path.GetDirectoryName(projectDirectory),"*.cs", SearchOption.AllDirectories))
+            {
+                if(_fileSystem.ReadAllText(path).Contains($"class {name}"))
+                {
+                    classPath = path;
+                    break;
+                }
+            }
+        }
+
+        _fileSystem.CreateDirectory($"{projectDirectory}{Path.DirectorySeparatorChar}{name}");
+
+        foreach(var methodModel in Parse(name, classPath))
+        {
+            var classModel = new ClassModel($"{methodModel.Name}Should");
+
+            var fact = new MethodModel()
+            {
+                Name = "DoSomething_GivenSomething",
+                ReturnType = new TypeModel("void"),
+                Attributes = new List<AttributeModel>() {
+                    new AttributeModel()
+                    {
+                        Type = AttributeType.Fact,
+                        Name = "Fact"
+                    }
+                },
+                Body = string.Join(Environment.NewLine, new string[]
+                                {
+                                    "ARRANGE",
+                                    "ACT",
+                                    "ASSERT"
+                                }.Select(x => $"// {x}{Environment.NewLine}"))
+            };
+
+            classModel.Methods.Add(fact);
+
+            classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Xunit" });
+
+            classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = _nameSpaceProvider.Get(Path.GetDirectoryName(classPath)) });
+
+            _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(classModel,classModel.UsingDirectives,classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", "cs"));
+        }
+    }
+
+    public List<MethodModel> Parse(string className, string path)
+    {
+        var methods = new List<MethodModel>();
+
+        var insideClass = false;
+
+        foreach(var line in _fileSystem.ReadAllLines(path))
+        {
+            if (insideClass)
+            {
+                if(line.Trim().StartsWith("public") && !line.Trim().StartsWith($"public {className}"))
+                {
+                    var indexOfEndOfName = line.IndexOf('(') - 1;
+
+                    for(var i = indexOfEndOfName; i > 0; i--) {
+
+                        if (line.ToCharArray().ElementAt(i) == ' ')
+                        {
+                            var methodName = line.Substring(i + 1, indexOfEndOfName - i);
+
+                            methods.Add(new MethodModel()
+                            {
+                                Name = methodName
+                            });
+
+                            i = -1;
+                        }
+                    
+                    }
+                }
+            }
+            if (line.Contains($"class {className}"))
+            {
+                insideClass = true;
+            }
+        }
+        return methods;
     }
 }
 

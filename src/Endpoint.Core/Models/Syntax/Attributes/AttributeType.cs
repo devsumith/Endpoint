@@ -12,7 +12,8 @@ namespace Endpoint.Core.Models.Syntax.Attributes
         ProducesResponseType,
         Http,
         SwaggerOperation,
-        Route
+        Route,
+        Fact
     }
 }
 

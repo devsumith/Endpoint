@@ -28,6 +28,11 @@ public class MethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Metho
 
         var builder = new StringBuilder();
 
+        foreach(var attribute in model.Attributes)
+        {
+            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(attribute));
+        }
+
         builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
 
         if (model.Override)
