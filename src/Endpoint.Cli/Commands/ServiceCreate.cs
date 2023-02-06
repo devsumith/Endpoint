@@ -13,7 +13,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("service-create")]
-public class ServiceCreateRequest : IRequest<Unit> {
+public class ServiceCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -22,7 +22,7 @@ public class ServiceCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class ServiceCreateRequestHandler : IRequestHandler<ServiceCreateRequest, Unit>
+public class ServiceCreateRequestHandler : IRequestHandler<ServiceCreateRequest>
 {
     private readonly ILogger<ServiceCreateRequestHandler> _logger;
     private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;

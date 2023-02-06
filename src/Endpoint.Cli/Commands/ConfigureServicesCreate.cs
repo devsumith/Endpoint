@@ -15,12 +15,12 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("configure-services-create")]
-public class ConfigureServicesCreateRequest : IRequest<Unit> {
+public class ConfigureServicesCreateRequest : IRequest {
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class ConfigureServicesCreateRequestHandler : IRequestHandler<ConfigureServicesCreateRequest, Unit>
+public class ConfigureServicesCreateRequestHandler : IRequestHandler<ConfigureServicesCreateRequest>
 {
     private readonly ILogger<ConfigureServicesCreateRequestHandler> _logger;
     private readonly IDependencyInjectionService _dependencyInjectionService;

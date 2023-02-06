@@ -10,7 +10,7 @@ namespace {{ namespace }};
 
 
 [Verb("{{ nameSnakeCase }}")]
-public class {{ namePascalCase }}Request : IRequest<Unit> {
+public class {{ namePascalCase }}Request : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -19,7 +19,7 @@ public class {{ namePascalCase }}Request : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class {{ namePascalCase }}RequestHandler : IRequestHandler<{{ namePascalCase }}Request, Unit>
+public class {{ namePascalCase }}RequestHandler : IRequestHandler<{{ namePascalCase }}Request>
 {
     private readonly ILogger<{{ namePascalCase }}RequestHandler> _logger;
 

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Endpoint.Cli.Commands;
 
 [Verb("http-project")]
-internal class HttpProjectRequest : IRequest<Unit>
+internal class HttpProjectRequest : IRequest
 {
     [Option('n',"name")]
     public string Name { get; set; }
@@ -22,7 +22,7 @@ internal class HttpProjectRequest : IRequest<Unit>
     public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
-internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest, Unit>
+internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest>
 {
     private readonly ILogger _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;

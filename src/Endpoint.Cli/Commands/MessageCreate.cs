@@ -19,7 +19,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("message-create")]
-public class MessageCreateRequest : IRequest<Unit> {
+public class MessageCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -31,7 +31,7 @@ public class MessageCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class MessageCreateRequestHandler : IRequestHandler<MessageCreateRequest, Unit>
+public class MessageCreateRequestHandler : IRequestHandler<MessageCreateRequest>
 {
     private readonly ILogger<MessageCreateRequestHandler> _logger;
     private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;

@@ -14,7 +14,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("controller-create")]
-public class ControllerCreateRequest : IRequest<Unit>
+public class ControllerCreateRequest : IRequest
 {
     [Option('e')]
     public string EntityName { get; set; }
@@ -23,7 +23,7 @@ public class ControllerCreateRequest : IRequest<Unit>
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class ControllerCreateRequestHandler : IRequestHandler<ControllerCreateRequest, Unit>
+public class ControllerCreateRequestHandler : IRequestHandler<ControllerCreateRequest>
 {
     private readonly ILogger<ControllerCreateRequestHandler> _logger;
     private readonly IApiProjectService _apiProjectService;

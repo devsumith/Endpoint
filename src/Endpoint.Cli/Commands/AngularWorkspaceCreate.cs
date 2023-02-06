@@ -13,7 +13,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-new")]
-internal class AngularWorkspaceCreateRequest : IRequest<Unit> {
+internal class AngularWorkspaceCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -30,7 +30,7 @@ internal class AngularWorkspaceCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-internal class AngularWorkspaceCreateRequestHandler : IRequestHandler<AngularWorkspaceCreateRequest, Unit>
+internal class AngularWorkspaceCreateRequestHandler : IRequestHandler<AngularWorkspaceCreateRequest>
 {
     private readonly ILogger<AngularWorkspaceCreateRequestHandler> _logger;
     private readonly IAngularService _angularService;

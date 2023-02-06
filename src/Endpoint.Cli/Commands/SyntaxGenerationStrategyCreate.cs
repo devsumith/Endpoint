@@ -14,7 +14,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("syntax-generation-strategy-create")]
-public class SyntaxGenerationStrategyCreateRequest : IRequest<Unit> {
+public class SyntaxGenerationStrategyCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -22,7 +22,7 @@ public class SyntaxGenerationStrategyCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class SyntaxGenerationStrategyCreateRequestHandler : IRequestHandler<SyntaxGenerationStrategyCreateRequest, Unit>
+public class SyntaxGenerationStrategyCreateRequestHandler : IRequestHandler<SyntaxGenerationStrategyCreateRequest>
 {
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly ILogger<VerbRequestHandler> _logger;

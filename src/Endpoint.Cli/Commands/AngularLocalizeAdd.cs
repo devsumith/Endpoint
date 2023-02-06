@@ -15,7 +15,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-localize-add")]
-public class AngularLocalizeAddRequest : IRequest<Unit> {
+public class AngularLocalizeAddRequest : IRequest {
     [Option('n',"name", Required = true)]
     public string Name { get; set; }
 
@@ -27,7 +27,7 @@ public class AngularLocalizeAddRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class AngularLocalizeAddRequestHandler : IRequestHandler<AngularLocalizeAddRequest, Unit>
+public class AngularLocalizeAddRequestHandler : IRequestHandler<AngularLocalizeAddRequest>
 {
     private readonly ILogger<AngularLocalizeAddRequestHandler> _logger;
     private readonly IAngularService _angularService;

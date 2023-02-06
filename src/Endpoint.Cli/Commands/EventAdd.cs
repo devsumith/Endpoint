@@ -15,7 +15,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("event-add")]
-public class EventAddRequest : IRequest<Unit>
+public class EventAddRequest : IRequest
 {
     [Value('a')]
     public string Aggregate { get; set; }
@@ -27,7 +27,7 @@ public class EventAddRequest : IRequest<Unit>
     public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
-public class EventAddRequestHandler : IRequestHandler<EventAddRequest, Unit>
+public class EventAddRequestHandler : IRequestHandler<EventAddRequest>
 {
 
     private readonly IFileSystem _fileSystem;

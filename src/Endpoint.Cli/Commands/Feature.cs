@@ -14,7 +14,7 @@ namespace Endpoint.Cli.Commands;
 public class Feature
 {
     [Verb("feature")]
-    public class Request : IRequest<Unit>
+    public class Request : IRequest
     {
         [Value(0)]
         public string Entity { get; set; }
@@ -22,7 +22,7 @@ public class Feature
         public string Directory { get; set; } = System.Environment.CurrentDirectory;
     }
 
-    public class Handler : IRequestHandler<Request, Unit>
+    public class Handler : IRequestHandler<Request>
     {
         private readonly ICommandService _commandService;
         private readonly ISettingsProvider _settingsProvider;

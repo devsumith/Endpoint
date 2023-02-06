@@ -14,7 +14,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("update-compiler-options-to-use-jest-types")]
-public class UpdateCompilerOptionsToUseJestTypesRequest : IRequest<Unit> {
+public class UpdateCompilerOptionsToUseJestTypesRequest : IRequest {
     [Option('n',"name")]
     public string ProjectName { get; set; }
 
@@ -23,7 +23,7 @@ public class UpdateCompilerOptionsToUseJestTypesRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class UpdateCompilerOptionsToUseJestTypesRequestHandler : IRequestHandler<UpdateCompilerOptionsToUseJestTypesRequest, Unit>
+public class UpdateCompilerOptionsToUseJestTypesRequestHandler : IRequestHandler<UpdateCompilerOptionsToUseJestTypesRequest>
 {
     private readonly ILogger<UpdateCompilerOptionsToUseJestTypesRequestHandler> _logger;
     private readonly IAngularService _angularService;

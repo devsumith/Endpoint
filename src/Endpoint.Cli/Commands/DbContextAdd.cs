@@ -13,7 +13,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("db-context-add")]
-public class DbContextAddRequest : IRequest<Unit> {
+public class DbContextAddRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -22,7 +22,7 @@ public class DbContextAddRequest : IRequest<Unit> {
     public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
-public class DbContextAddRequestHandler : IRequestHandler<DbContextAddRequest, Unit>
+public class DbContextAddRequestHandler : IRequestHandler<DbContextAddRequest>
 {
     private readonly ILogger<DbContextAddRequestHandler> _logger;
     private readonly IInfrastructureProjectService _infrastructureProjectService;

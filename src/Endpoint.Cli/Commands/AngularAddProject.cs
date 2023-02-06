@@ -16,7 +16,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-project-add")]
-public class AngularAddProjectRequest : IRequest<Unit> {
+public class AngularAddProjectRequest : IRequest {
     [Option('n', "name")]
     public string Name { get; set; } = "components";
 
@@ -30,7 +30,7 @@ public class AngularAddProjectRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class AngularAddProjectRequestHandler : IRequestHandler<AngularAddProjectRequest, Unit>
+public class AngularAddProjectRequestHandler : IRequestHandler<AngularAddProjectRequest>
 {
     private readonly ILogger<AngularAddProjectRequestHandler> _logger;
     private readonly IAngularService _angularService;

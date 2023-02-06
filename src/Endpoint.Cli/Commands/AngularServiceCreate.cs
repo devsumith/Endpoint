@@ -10,7 +10,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-service-create")]
-public class AngularServiceCreateRequest : IRequest<Unit> {
+public class AngularServiceCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -19,7 +19,7 @@ public class AngularServiceCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class AngularServiceCreateRequestHandler : IRequestHandler<AngularServiceCreateRequest, Unit>
+public class AngularServiceCreateRequestHandler : IRequestHandler<AngularServiceCreateRequest>
 {
     private readonly ILogger<AngularServiceCreateRequestHandler> _logger;
     private readonly IAngularService _angularService;

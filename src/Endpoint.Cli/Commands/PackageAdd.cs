@@ -14,7 +14,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("package-add")]
-public class PackageAddRequest : IRequest<Unit> {
+public class PackageAddRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -23,7 +23,7 @@ public class PackageAddRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class PackageAddRequestHandler : IRequestHandler<PackageAddRequest, Unit>
+public class PackageAddRequestHandler : IRequestHandler<PackageAddRequest>
 {
     private readonly ILogger<PackageAddRequestHandler> _logger;
     private readonly IProjectService _projectService;

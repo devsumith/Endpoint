@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Endpoint.Cli.Commands;
 
 [Verb("page")]
-public class PageRequest : IRequest<Unit>
+public class PageRequest : IRequest
 {
     [Value(0)]
     public string Entity { get; set; }
@@ -22,7 +22,7 @@ public class PageRequest : IRequest<Unit>
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class PageRequestHandler : IRequestHandler<PageRequest, Unit>
+public class PageRequestHandler : IRequestHandler<PageRequest>
 {
     private readonly ISettingsProvider _settingsProvder;
     private readonly IFileSystem _fileSystem;

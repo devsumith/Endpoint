@@ -14,7 +14,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("i18n-extract")]
-public class I18nExtractRequest : IRequest<Unit> {
+public class I18nExtractRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -23,7 +23,7 @@ public class I18nExtractRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class I18nExtractRequestHandler : IRequestHandler<I18nExtractRequest, Unit>
+public class I18nExtractRequestHandler : IRequestHandler<I18nExtractRequest>
 {
     private readonly ILogger<I18nExtractRequestHandler> _logger;
     private readonly IAngularService _angularService;

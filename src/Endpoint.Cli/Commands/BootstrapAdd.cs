@@ -14,7 +14,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("bootstrap-add")]
-public class BootstrapAddRequest : IRequest<Unit> {
+public class BootstrapAddRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -23,7 +23,7 @@ public class BootstrapAddRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class BootstrapAddRequestHandler : IRequestHandler<BootstrapAddRequest, Unit>
+public class BootstrapAddRequestHandler : IRequestHandler<BootstrapAddRequest>
 {
     private readonly ILogger<BootstrapAddRequestHandler> _logger;
     private readonly IAngularService _angularService;

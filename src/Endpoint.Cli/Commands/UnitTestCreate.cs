@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Endpoint.Cli.Commands;
 
 [Verb("unit-test-create")]
-public class UnitTestCreateRequest : IRequest<Unit>
+public class UnitTestCreateRequest : IRequest
 {
     [Option('n')]
     public string Name { get; set; }
@@ -24,7 +24,7 @@ public class UnitTestCreateRequest : IRequest<Unit>
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class UnitTestCreateRequestHandler : IRequestHandler<UnitTestCreateRequest, Unit>
+public class UnitTestCreateRequestHandler : IRequestHandler<UnitTestCreateRequest>
 {
     private readonly IClassService _classService;
     private readonly ILogger<UnitTestCreateRequestHandler> _logger;

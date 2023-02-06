@@ -14,13 +14,13 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("generate-documentation-file-add")]
-public class GenerateDocumentationFileAddRequest : IRequest<Unit>
+public class GenerateDocumentationFileAddRequest : IRequest
 {
     [Option('d', Required = false)]
     public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
-public class GenerateDocumentationFileAddRequestHandler : IRequestHandler<GenerateDocumentationFileAddRequest, Unit>
+public class GenerateDocumentationFileAddRequestHandler : IRequestHandler<GenerateDocumentationFileAddRequest>
 {
     private readonly ISettingsProvider _settingsProvider;
     private readonly IApiProjectFilesGenerationStrategy _apiProjectFilesGenerationStrategy;

@@ -20,13 +20,13 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("db-context-create-from-aggregate-model")]
-public class DbContextCreateFromAggregateModelRequest : IRequest<Unit> {
+public class DbContextCreateFromAggregateModelRequest : IRequest {
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class DbContextCreateFromAggregateModelRequestHandler : IRequestHandler<DbContextCreateFromAggregateModelRequest, Unit>
+public class DbContextCreateFromAggregateModelRequestHandler : IRequestHandler<DbContextCreateFromAggregateModelRequest>
 {
     private readonly ILogger<DbContextCreateFromAggregateModelRequestHandler> _logger;
     private readonly IFileProvider _fileProvider;

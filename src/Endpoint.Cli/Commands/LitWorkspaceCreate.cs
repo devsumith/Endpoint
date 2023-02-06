@@ -15,7 +15,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("lit-workspace-create")]
-public class LitWorkspaceCreateRequest : IRequest<Unit> {
+public class LitWorkspaceCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -24,7 +24,7 @@ public class LitWorkspaceCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class LitWorkspaceCreateRequestHandler : IRequestHandler<LitWorkspaceCreateRequest, Unit>
+public class LitWorkspaceCreateRequestHandler : IRequestHandler<LitWorkspaceCreateRequest>
 {
     private readonly ILogger<LitWorkspaceCreateRequestHandler> _logger;
     private readonly ICommandService _commandService;

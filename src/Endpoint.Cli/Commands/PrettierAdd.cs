@@ -13,12 +13,12 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("prettier-add")]
-public class PrettierAddRequest : IRequest<Unit> {
+public class PrettierAddRequest : IRequest {
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class PrettierAddRequestHandler : IRequestHandler<PrettierAddRequest, Unit>
+public class PrettierAddRequestHandler : IRequestHandler<PrettierAddRequest>
 {
     private readonly ILogger<PrettierAddRequestHandler> _logger;
     private readonly IAngularService _angularService;

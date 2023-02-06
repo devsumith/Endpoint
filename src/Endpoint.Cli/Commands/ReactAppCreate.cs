@@ -16,7 +16,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("react-app-create")]
-public class ReactAppCreateRequest : IRequest<Unit> {
+public class ReactAppCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -25,7 +25,7 @@ public class ReactAppCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class ReactAppCreateRequestHandler : IRequestHandler<ReactAppCreateRequest, Unit>
+public class ReactAppCreateRequestHandler : IRequestHandler<ReactAppCreateRequest>
 {
     private readonly ILogger<ReactAppCreateRequestHandler> _logger;
     private readonly IReactService _reactService;

@@ -8,13 +8,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Models.Syntax.Entities.Aggregate;
-using Microsoft.Extensions.Configuration;
 
 namespace Endpoint.Cli.Commands;
 
 
 [Verb("aggregate-create")]
-public class AggregateCreateRequest : IRequest<Unit> {
+public class AggregateCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -30,7 +29,7 @@ public class AggregateCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class AggregateCreateRequestHandler : IRequestHandler<AggregateCreateRequest, Unit>
+public class AggregateCreateRequestHandler : IRequestHandler<AggregateCreateRequest>
 {
     private readonly ILogger<AggregateCreateRequestHandler> _logger;
     private readonly IAggregateService _aggregateService;

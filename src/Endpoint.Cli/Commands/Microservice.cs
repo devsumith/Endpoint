@@ -25,7 +25,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("microservice")]
-public class MicroserviceRequest : IRequest<Unit>
+public class MicroserviceRequest : IRequest
 {
     [Option('n', "name")]
     public string Name { get; set; }
@@ -52,7 +52,7 @@ public class MicroserviceRequest : IRequest<Unit>
     public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
-public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest, Unit>
+public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
 {
     private readonly ILogger<MicroserviceRequestHandler> _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;

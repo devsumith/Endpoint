@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Endpoint.Cli.Commands;
 
 [Verb("entity-add")]
-public class EntityAddRequest : IRequest<Unit>
+public class EntityAddRequest : IRequest
 {
     [Option('n', "name")]
     public string Name { get; set; }
@@ -25,7 +25,7 @@ public class EntityAddRequest : IRequest<Unit>
     public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
-public class EntityAddRequestHandler : IRequestHandler<EntityAddRequest, Unit>
+public class EntityAddRequestHandler : IRequestHandler<EntityAddRequest>
 {
     private readonly ILogger _logger;
     private readonly IFileGenerationStrategyFactory _fileGenerationStrategyFactory;

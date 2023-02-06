@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Endpoint.Cli.Commands;
 
 [Verb("verb")]
-public class VerbRequest: IRequest<Unit>
+public class VerbRequest: IRequest
 {
     [Option('n',"name")]
     public string Name { get; set; }
@@ -24,7 +24,7 @@ public class VerbRequest: IRequest<Unit>
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class VerbRequestHandler : IRequestHandler<VerbRequest, Unit>
+public class VerbRequestHandler : IRequestHandler<VerbRequest>
 {
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly ILogger<VerbRequestHandler> _logger;

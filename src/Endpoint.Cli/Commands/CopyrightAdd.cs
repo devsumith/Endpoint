@@ -13,12 +13,12 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("copyright-add")]
-public class CopyrightAddRequest : IRequest<Unit> {
+public class CopyrightAddRequest : IRequest {
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class CopyrightAddRequestHandler : IRequestHandler<CopyrightAddRequest, Unit>
+public class CopyrightAddRequestHandler : IRequestHandler<CopyrightAddRequest>
 {
     private readonly ILogger<CopyrightAddRequestHandler> _logger;
     private readonly IUtlitityService _utlitityService;

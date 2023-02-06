@@ -20,7 +20,7 @@ namespace Endpoint.Core.Commands;
 public class Default
 {
     [Verb("default")]
-    public class Request : IRequest<Unit>
+    public class Request : IRequest
     {
         [Option("port")]
         public int? Port { get; set; }
@@ -56,7 +56,7 @@ public class Default
         public string Directory { get; set; } = Environment.CurrentDirectory;
     }
 
-    public class Handler : IRequestHandler<Request, Unit>
+    public class Handler : IRequestHandler<Request>
     {
         private readonly IEndpointGenerationStrategyFactory _endpointGenerationStrategyFactory;
         private readonly ILogger _logger;

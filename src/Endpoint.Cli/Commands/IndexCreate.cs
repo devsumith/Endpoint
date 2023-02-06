@@ -16,7 +16,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb(".")]
-public class IndexCreateRequest : IRequest<Unit> {
+public class IndexCreateRequest : IRequest {
 
     [Option('s')]
     public bool Scss { get; set; }
@@ -25,7 +25,7 @@ public class IndexCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class IndexCreateRequestHandler : IRequestHandler<IndexCreateRequest, Unit>
+public class IndexCreateRequestHandler : IRequestHandler<IndexCreateRequest>
 {
     private readonly ILogger<IndexCreateRequestHandler> _logger;
     private readonly IFileSystem _fileSystem;

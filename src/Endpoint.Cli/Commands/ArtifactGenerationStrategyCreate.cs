@@ -15,7 +15,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("artifact-generation-strategy-create")]
-public class ArtifactGenerationStrategyCreateRequest : IRequest<Unit> {
+public class ArtifactGenerationStrategyCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -23,7 +23,7 @@ public class ArtifactGenerationStrategyCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class ArtifactGenerationStrategyCreateRequestHandler : IRequestHandler<ArtifactGenerationStrategyCreateRequest, Unit>
+public class ArtifactGenerationStrategyCreateRequestHandler : IRequestHandler<ArtifactGenerationStrategyCreateRequest>
 {
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly ILogger<VerbRequestHandler> _logger;

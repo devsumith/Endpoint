@@ -12,7 +12,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("readme-create")]
-public class ReadmeCreateRequest : IRequest<Unit> {
+public class ReadmeCreateRequest : IRequest {
     [Option('n')]
     public string ProjectName { get; set; } = "Project";
 
@@ -20,7 +20,7 @@ public class ReadmeCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest, Unit>
+public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
 {
     private readonly ILogger<ReadmeCreateRequestHandler> _logger;
     private readonly IFileModelFactory _fileModelFactory;

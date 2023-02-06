@@ -15,7 +15,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("git-create")]
-public class GitCreateRequest : IRequest<Unit>
+public class GitCreateRequest : IRequest
 {
     [Option('n',"name")]
     public string RepositoryName { get; set; }
@@ -24,7 +24,7 @@ public class GitCreateRequest : IRequest<Unit>
     public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
-public class GitCreateRequestHandler : IRequestHandler<GitCreateRequest, Unit>
+public class GitCreateRequestHandler : IRequestHandler<GitCreateRequest>
 {
     private readonly ILogger<GitCreateRequestHandler> _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;

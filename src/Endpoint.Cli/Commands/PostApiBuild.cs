@@ -14,14 +14,14 @@ namespace Endpoint.Cli.Commands;
 public class PostApiBuild
 {
     [Verb("post-api-build")]
-    public class Request : IRequest<Unit>
+    public class Request : IRequest
     {
 
         [Option('d', Required = false)]
         public string Directory { get; set; } = Environment.CurrentDirectory;
     }
 
-    public class Handler : IRequestHandler<Request, Unit>
+    public class Handler : IRequestHandler<Request>
     {
         private readonly ICommandService _commandService;
         private readonly ISettingsProvider _settingsProvider;

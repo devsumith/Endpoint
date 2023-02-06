@@ -15,7 +15,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("command-create")]
-public class CommandCreateRequest : IRequest<Unit>
+public class CommandCreateRequest : IRequest
 {
 
     [Value(0)]
@@ -28,7 +28,7 @@ public class CommandCreateRequest : IRequest<Unit>
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class CommandCreateRequestHandler : IRequestHandler<CommandCreateRequest, Unit>
+public class CommandCreateRequestHandler : IRequestHandler<CommandCreateRequest>
 {
     private readonly ISettingsProvider _settingsProvder;
     private readonly IFileSystem _fileSystem;

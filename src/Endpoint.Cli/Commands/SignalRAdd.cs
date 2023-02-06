@@ -13,12 +13,12 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("signalr-add")]
-public class SignalRAddRequest : IRequest<Unit> {
+public class SignalRAddRequest : IRequest {
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class SignalRAddRequestHandler : IRequestHandler<SignalRAddRequest, Unit>
+public class SignalRAddRequestHandler : IRequestHandler<SignalRAddRequest>
 {
     private readonly ILogger<SignalRAddRequestHandler> _logger;
     private readonly ISignalRService _signalRService;

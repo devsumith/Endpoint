@@ -13,12 +13,12 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("karma-remove")]
-public class KarmaRemoveRequest : IRequest<Unit> {
+public class KarmaRemoveRequest : IRequest {
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class KarmaRemoveRequestHandler : IRequestHandler<KarmaRemoveRequest, Unit>
+public class KarmaRemoveRequestHandler : IRequestHandler<KarmaRemoveRequest>
 {
     private readonly ILogger<KarmaRemoveRequestHandler> _logger;
     private readonly IAngularService _angularService;

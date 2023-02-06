@@ -15,7 +15,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("solution-create")]
-public class SolutionCreateRequest : IRequest<Unit> {
+public class SolutionCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -35,7 +35,7 @@ public class SolutionCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateRequest, Unit>
+public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateRequest>
 {
     private readonly ILogger<SolutionCreateRequestHandler> _logger;
     private readonly ISolutionModelFactory _solutionModelFactory;

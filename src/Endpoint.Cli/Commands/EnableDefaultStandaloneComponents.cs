@@ -13,7 +13,7 @@ using Endpoint.Core.Models.WebArtifacts;
 namespace Endpoint.Cli.Commands;
 
 [Verb("enable-default-standalone-components")]
-public class EnableDefaultStandaloneComponentsRequest : IRequest<Unit> {
+public class EnableDefaultStandaloneComponentsRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -21,7 +21,7 @@ public class EnableDefaultStandaloneComponentsRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class EnableDefaultStandaloneComponentsRequestHandler : IRequestHandler<EnableDefaultStandaloneComponentsRequest, Unit>
+public class EnableDefaultStandaloneComponentsRequestHandler : IRequestHandler<EnableDefaultStandaloneComponentsRequest>
 {
     private readonly ILogger<EnableDefaultStandaloneComponentsRequestHandler> _logger;
     private readonly IAngularService _angularService;

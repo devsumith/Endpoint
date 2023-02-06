@@ -13,7 +13,7 @@ namespace Endpoint.Cli.Commands;
 public class EntityConfiguration
 {
     [Verb("entity-config")]
-    public class Request : IRequest<Unit>
+    public class Request : IRequest
     {
         [Value(0)]
         public string Entity { get; set; }
@@ -22,7 +22,7 @@ public class EntityConfiguration
         public string Directory { get; set; } = System.Environment.CurrentDirectory;
     }
 
-    public class Handler : IRequestHandler<Request, Unit>
+    public class Handler : IRequestHandler<Request>
     {
         private readonly ISettingsProvider _settingsProvider;
         private readonly IFileSystem _fileSystem;

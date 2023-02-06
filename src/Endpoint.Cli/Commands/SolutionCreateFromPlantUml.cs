@@ -14,7 +14,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("solution-create-from-plant-uml")]
-public class SolutionCreateFromPlantUmlRequest : IRequest<Unit> {
+public class SolutionCreateFromPlantUmlRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -26,7 +26,7 @@ public class SolutionCreateFromPlantUmlRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class SolutionCreateFromPlantUmlRequestHandler : IRequestHandler<SolutionCreateFromPlantUmlRequest, Unit>
+public class SolutionCreateFromPlantUmlRequestHandler : IRequestHandler<SolutionCreateFromPlantUmlRequest>
 {
     private readonly ILogger<SolutionCreateFromPlantUmlRequestHandler> _logger;
     private readonly ISolutionService _solutionService;

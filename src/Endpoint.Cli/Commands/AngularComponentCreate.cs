@@ -10,7 +10,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-component-create")]
-public class AngularComponentCreateRequest : IRequest<Unit> {
+public class AngularComponentCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -19,7 +19,7 @@ public class AngularComponentCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class AngularComponentCreateRequestHandler : IRequestHandler<AngularComponentCreateRequest, Unit>
+public class AngularComponentCreateRequestHandler : IRequestHandler<AngularComponentCreateRequest>
 {
     private readonly ILogger<AngularComponentCreateRequestHandler> _logger;
     private readonly IAngularService _angularService;

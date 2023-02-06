@@ -10,7 +10,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("test-header-create")]
-public class TestHeaderCreateRequest : IRequest<Unit> {
+public class TestHeaderCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -19,7 +19,7 @@ public class TestHeaderCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class TestIdCreateRequestHandler : IRequestHandler<TestHeaderCreateRequest, Unit>
+public class TestIdCreateRequestHandler : IRequestHandler<TestHeaderCreateRequest>
 {
     private readonly ILogger<TestIdCreateRequestHandler> _logger;
     private readonly IClipboardService _clipboardService;

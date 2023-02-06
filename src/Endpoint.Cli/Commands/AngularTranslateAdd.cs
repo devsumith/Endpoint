@@ -13,7 +13,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("angular-translate-add")]
-public class AngularTranslateAddRequest : IRequest<Unit> {
+public class AngularTranslateAddRequest : IRequest {
     [Option('n',"name")]
     public string ProjectName { get; set; }
 
@@ -22,7 +22,7 @@ public class AngularTranslateAddRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class AngularTranslateAddRequestHandler : IRequestHandler<AngularTranslateAddRequest, Unit>
+public class AngularTranslateAddRequestHandler : IRequestHandler<AngularTranslateAddRequest>
 {
     private readonly ILogger<AngularTranslateAddRequestHandler> _logger;
     private readonly IAngularService _angularService;

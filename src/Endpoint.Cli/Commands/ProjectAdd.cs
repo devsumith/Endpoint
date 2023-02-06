@@ -18,7 +18,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("project-add")]
-public class ProjectAddRequest : IRequest<Unit> {
+public class ProjectAddRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -36,7 +36,7 @@ public class ProjectAddRequest : IRequest<Unit> {
     public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
-public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest, Unit>
+public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 {
     private readonly ILogger<ProjectAddRequestHandler> _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;

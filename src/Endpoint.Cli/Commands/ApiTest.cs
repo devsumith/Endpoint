@@ -14,7 +14,7 @@ namespace Endpoint.Cli.Commands;
 public class ApiTest
 {
     [Verb("api-test")]
-    public class Request : IRequest<Unit>
+    public class Request : IRequest
     {
         [Value(0)]
         public string EntityName { get; set; }
@@ -23,7 +23,7 @@ public class ApiTest
         public string Directory { get; private set; } = System.Environment.CurrentDirectory;
     }
 
-    public class Handler : IRequestHandler<Request, Unit>
+    public class Handler : IRequestHandler<Request>
     {
         private readonly ITemplateLocator _templateLocator;
         private readonly ITemplateProcessor _templateProcessor;

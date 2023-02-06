@@ -16,7 +16,7 @@ namespace Endpoint.Cli.Commands
     public class AddResource
     {
         [Verb("add-resource")]
-        public class Request : IRequest<Unit>
+        public class Request : IRequest
         {
             [Value(0)]
             public string Resource { get; set; }
@@ -28,7 +28,7 @@ namespace Endpoint.Cli.Commands
             public string Directory { get; set; } = Environment.CurrentDirectory;
         }
 
-        public class Handler : IRequestHandler<Request, Unit>
+        public class Handler : IRequestHandler<Request>
         {
             private readonly IAdditionalResourceGenerationStrategyFactory _factory;
             public Handler(

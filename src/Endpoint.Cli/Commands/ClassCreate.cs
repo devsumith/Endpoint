@@ -12,7 +12,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("class-create")]
-public class ClassCreateRequest : IRequest<Unit>
+public class ClassCreateRequest : IRequest
 {
 
     [Option('n')]
@@ -25,7 +25,7 @@ public class ClassCreateRequest : IRequest<Unit>
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class ClassCreateRequestHandler : IRequestHandler<ClassCreateRequest, Unit>
+public class ClassCreateRequestHandler : IRequestHandler<ClassCreateRequest>
 {
     private readonly IClassService _classService;
 

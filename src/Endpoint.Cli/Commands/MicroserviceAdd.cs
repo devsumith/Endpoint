@@ -20,7 +20,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("microservice-add")]
-public class MicroserviceAddRequest : IRequest<Unit> {
+public class MicroserviceAddRequest : IRequest {
     [Option('n',"name")]
     public string Names { get; set; }
 
@@ -29,7 +29,7 @@ public class MicroserviceAddRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequest, Unit>
+public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequest>
 {
     private readonly ILogger<MicroserviceAddRequestHandler> _logger;
     private readonly IProjectService _projectService;

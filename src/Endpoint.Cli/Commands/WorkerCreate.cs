@@ -26,7 +26,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("worker-create")]
-public class WorkerCreateRequest : IRequest<Unit> {
+public class WorkerCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -35,7 +35,7 @@ public class WorkerCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest, Unit>
+public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
 {
     private readonly ILogger<WorkerCreateRequestHandler> _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;

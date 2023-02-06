@@ -13,7 +13,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("message-handler-create")]
-public class MessageHandlerCreateRequest : IRequest<Unit> {
+public class MessageHandlerCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
@@ -22,7 +22,7 @@ public class MessageHandlerCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class MessageHandlerCreateRequestHandler : IRequestHandler<MessageHandlerCreateRequest, Unit>
+public class MessageHandlerCreateRequestHandler : IRequestHandler<MessageHandlerCreateRequest>
 {
     private readonly ILogger<MessageHandlerCreateRequestHandler> _logger;
 
