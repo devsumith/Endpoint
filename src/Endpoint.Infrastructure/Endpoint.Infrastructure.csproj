@@ -12,7 +12,9 @@
     <None Remove="Templates\Angular\main.txt" />
     <None Remove="Templates\ArtifactGenerationStrategy.txt" />
     <None Remove="Templates\Copyright.txt" />
+    <None Remove="Templates\README.txt" />
     <None Remove="Templates\SyntaxGenerationStrategy.txt" />
+    <None Remove="Templates\TestHeader.txt" />
     <None Remove="Templates\Verb.txt" />
     <None Remove="Templates\Webpack.Config.txt" />
   </ItemGroup>
@@ -40,11 +42,13 @@
     <EmbeddedResource Include="Templates\Infrastructure\SeedData.txt" />
     <EmbeddedResource Include="Templates\IntegrationTests\ApiTest.txt" />
     <EmbeddedResource Include="Templates\IntegrationTests\WebApplicationFactory.txt" />
+    <EmbeddedResource Include="Templates\TestHeader.txt" />
     <EmbeddedResource Include="Templates\SharedKernel\QueryableExtensions.txt" />
     <EmbeddedResource Include="Templates\SharedKernel\ResponseBase.txt" />
     <EmbeddedResource Include="Templates\ArtifactGenerationStrategy.txt" />
     <EmbeddedResource Include="Templates\SyntaxGenerationStrategy.txt" />
     <EmbeddedResource Include="Templates\Copyright.txt" />
+    <EmbeddedResource Include="Templates\Readme.txt" />
     <EmbeddedResource Include="Templates\Webpack.Config.txt" />
     <EmbeddedResource Include="Templates\Verb.txt" />
   </ItemGroup>

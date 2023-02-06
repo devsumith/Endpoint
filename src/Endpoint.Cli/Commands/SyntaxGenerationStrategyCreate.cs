@@ -4,7 +4,6 @@
 using CommandLine;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
-using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -47,11 +46,9 @@ public class SyntaxGenerationStrategyCreateRequestHandler : IRequestHandler<Synt
     {
         _logger.LogInformation($"Handled: {nameof(SyntaxGenerationStrategyCreateRequestHandler)}");
 
-        var @namespace = _namespaceProvider.Get(request.Directory);
-
         var tokens = new TokensBuilder()
-            .With("ModelName", (SyntaxToken)request.Name)
-            .With("Namespace", (SyntaxToken)@namespace)
+            .With("ModelName", request.Name)
+            .With("Namespace", _namespaceProvider.Get(request.Directory))
             .Build();
 
         var model = _fileFactory.CreateTemplate("SyntaxGenerationStrategy", $"{request.Name}SyntaxGenerationStrategy", request.Directory, tokens: tokens);

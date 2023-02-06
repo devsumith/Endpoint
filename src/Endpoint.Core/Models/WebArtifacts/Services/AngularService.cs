@@ -2,9 +2,14 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Internals;
+using Endpoint.Core.Messages;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
+using Endpoint.Core.Models.Artifacts.Workspaces;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -22,13 +27,18 @@ public class AngularService : IAngularService
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
     private readonly IFileModelFactory _fileModelFactory;
+    private readonly Observable<INotification> _observableNotifications;
+    private readonly IUtlitityService _utlitityService;
+
     public AngularService(
         ILogger<AngularService> logger,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         ICommandService commandService,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileModelFactory fileModelFactory
+        IFileModelFactory fileModelFactory,
+        Observable<INotification> observableNotifications,
+        IUtlitityService utlitityService
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -37,6 +47,36 @@ public class AngularService : IAngularService
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
+        _utlitityService =  utlitityService ?? throw new ArgumentNullException(nameof(utlitityService));
+    }
+
+    public void ComponentCreate(string name, string directory)
+    {
+        var nameSnakeCase = ((SyntaxToken)name).SnakeCase();
+
+        _commandService.Start($"ng g c {name}", directory);
+
+        var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
+
+        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.ts"));
+
+        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.scss"));
+
+        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.html"));
+
+        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.spec.ts"));
+    }
+
+    public void ServiceCreate(string name, string directory)
+    {
+        _commandService.Start($"ng g s {name}", directory);
+
+        var nameSnakeCase = ((SyntaxToken)name).SnakeCase();
+
+        _observableNotifications.Broadcast(new FileCreated($"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}.service.ts"));
+
+        _observableNotifications.Broadcast(new FileCreated($"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}.service.spec.ts"));
     }
 
     public void KarmaRemove(string directory)
@@ -97,6 +137,8 @@ public class AngularService : IAngularService
 
         _artifactGenerationStrategyFactory.CreateFor(workspaceModel);
 
+        _utlitityService.CopyrightAdd(workspaceModel.Directory);
+
         KarmaRemove(workspaceModel.Directory);
 
         JestInstall(workspaceModel.Directory);
@@ -106,6 +148,7 @@ public class AngularService : IAngularService
         AddProject(angularProjectModel);
 
         _commandService.Start("code .", workspaceModel.Directory);
+
     }
 
     public void AddProject(AngularProjectModel model)
@@ -146,6 +189,8 @@ public class AngularService : IAngularService
         JestConfigCreate(model);
 
         UpdateAngularJsonToUseJest(model);
+
+        _utlitityService.CopyrightAdd(model.RootDirectory);
 
     }
 

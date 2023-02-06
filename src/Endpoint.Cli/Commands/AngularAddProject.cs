@@ -15,7 +15,7 @@ using Endpoint.Core.Models.WebArtifacts;
 namespace Endpoint.Cli.Commands;
 
 
-[Verb("ng-add-project")]
+[Verb("ng-project-add")]
 public class AngularAddProjectRequest : IRequest<Unit> {
     [Option('n', "name")]
     public string Name { get; set; } = "components";

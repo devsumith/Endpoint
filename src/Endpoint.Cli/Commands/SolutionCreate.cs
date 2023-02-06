@@ -1,4 +1,4 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
+                                                                                                                                                                                                                // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
@@ -25,8 +25,8 @@ public class SolutionCreateRequest : IRequest<Unit> {
     [Option('f')]
     public string FolderName { get; set; }
 
-    [Option("no-create-service")]
-    public bool NoCreateService { get; set; }
+    [Option("no-service-create")]
+    public bool NoServiceCreate { get; set; }
 
     [Option('t')]
     public string ProjectType { get; set; } = "worker";
@@ -61,7 +61,7 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
 
         var model = _solutionModelFactory.Create(request.Name, request.ProjectName, request.ProjectType, request.FolderName, request.Directory);
 
-        if(request.NoCreateService)
+        if(request.NoServiceCreate)
             model.RemoveAllServices();
 
         _solutionService.Create(model);

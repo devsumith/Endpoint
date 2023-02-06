@@ -71,7 +71,7 @@ public class ClassService: IClassService
 
     }
 
-    public void UnitTestCreateFor(string name, string directory)
+    public void UnitTestCreateFor(string name, string methods, string directory)
     {
         _logger.LogInformation("Create Unit Test for {name}", name);
 
@@ -93,11 +93,38 @@ public class ClassService: IClassService
             }
         }
 
+        if (classPath == null)
+        {
+            foreach (var path in Directory.GetFiles(Path.GetDirectoryName(Path.GetDirectoryName(projectDirectory)), "*.cs", SearchOption.AllDirectories))
+            {
+                if (_fileSystem.ReadAllText(path).Contains($"class {name}"))
+                {
+                    classPath = path;
+                    break;
+                }
+            }
+        }
+
         _fileSystem.CreateDirectory($"{projectDirectory}{Path.DirectorySeparatorChar}{name}");
+
 
         foreach(var methodModel in Parse(name, classPath))
         {
-            var classModel = new ClassModel($"{methodModel.Name}Should");
+            CreateMethodTestFile(methodModel.Name);
+        }
+
+
+        if (!string.IsNullOrEmpty(methods))
+        {
+            foreach (var methodName in methods.Split(','))
+            {
+                CreateMethodTestFile(methodName);
+            }
+        }
+
+        void CreateMethodTestFile(string methodName)
+        {
+            var classModel = new ClassModel($"{methodName}Should");
 
             var fact = new MethodModel()
             {
@@ -124,7 +151,9 @@ public class ClassService: IClassService
 
             classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = _nameSpaceProvider.Get(Path.GetDirectoryName(classPath)) });
 
-            _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(classModel,classModel.UsingDirectives,classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", "cs"));
+            classModel.UsingAsDirectives.Add(new UsingAsDirectiveModel($"{_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))}.{name}", name));
+
+            _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", "cs"));
         }
     }
 
@@ -159,6 +188,12 @@ public class ClassService: IClassService
                     }
                 }
             }
+
+            if(line.Contains("class") && insideClass)
+            {
+                insideClass = false;
+            }
+
             if (line.Contains($"class {className}"))
             {
                 insideClass = true;

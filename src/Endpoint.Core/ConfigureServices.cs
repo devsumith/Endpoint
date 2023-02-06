@@ -50,6 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services) {
+        services.AddSingleton<ISyntaxGenerationStrategy, TestReferenceSyntaxGenerationStrategy>();
         services.AddSingleton<IClassService,ClassService>();
         services.AddSingleton<IUtlitityService,UtlitityService>();
         services.AddSingleton<ISignalRService,SignalRService>();

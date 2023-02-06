@@ -25,4 +25,3 @@ public class FileCreatedHandler : INotificationHandler<FileCreated>
         _artifactGenerationStrategyFactory.CreateFor(model, new Models.Artifacts.Files.Commands.CopyrightAdd());
     }
 }
-

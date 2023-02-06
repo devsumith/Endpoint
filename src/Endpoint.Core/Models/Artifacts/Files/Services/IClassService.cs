@@ -6,7 +6,7 @@ namespace Endpoint.Core.Models.Artifacts.Files.Services;
 public interface IClassService
 {
     void Create(string name, string properties, string directory);
-    void UnitTestCreateFor(string name, string directory);
+    void UnitTestCreateFor(string name, string methods, string directory);
 }
 
 

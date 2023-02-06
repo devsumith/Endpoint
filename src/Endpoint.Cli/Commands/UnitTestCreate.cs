@@ -2,9 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Builders;
 using Endpoint.Core.Models.Artifacts.Files.Services;
-using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,8 +14,11 @@ namespace Endpoint.Cli.Commands;
 [Verb("unit-test-create")]
 public class UnitTestCreateRequest : IRequest<Unit>
 {
-    [Value('n')]
+    [Option('n')]
     public string Name { get; set; }
+
+    [Option('m')]
+    public string Methods { get; set; }
 
     [Option('d')]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -38,7 +39,7 @@ public class UnitTestCreateRequestHandler : IRequestHandler<UnitTestCreateReques
     {
         _logger.LogInformation("", request.Name);
 
-        _classService.UnitTestCreateFor(request.Name, request.Directory);
+        _classService.UnitTestCreateFor(request.Name, request.Methods, request.Directory);
 
         return new ();
     }

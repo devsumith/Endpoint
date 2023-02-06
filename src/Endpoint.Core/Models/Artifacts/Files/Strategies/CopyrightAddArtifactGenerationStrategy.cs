@@ -49,7 +49,7 @@ public class CopyrightAddArtifactGenerationStrategy : ArtifactGenerationStrategy
 
         var extension = Path.GetExtension(model.Path);
 
-        var validExtension = extension == ".cs" || extension == ".ts";
+        var validExtension = extension == ".cs" || extension == ".ts" || extension == ".js";
 
         if (validExtension && !ignore)
         {

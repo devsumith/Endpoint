@@ -41,6 +41,6 @@ public class ServiceCreateRequestHandler : IRequestHandler<ServiceCreateRequest,
 
         _domainDrivenDesignFileService.ServiceCreate(request.Name, request.Directory);
 
-        return new Unit();
+        return new();
     }
 }

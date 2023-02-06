@@ -1,0 +1,42 @@
+using CommandLine;
+using MediatR;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Endpoint.Core.Models.WebArtifacts.Services;
+
+namespace Endpoint.Cli.Commands;
+
+
+[Verb("ng-service-create")]
+public class AngularServiceCreateRequest : IRequest<Unit> {
+    [Option('n',"name")]
+    public string Name { get; set; }
+
+
+    [Option('d', Required = false)]
+    public string Directory { get; set; } = System.Environment.CurrentDirectory;
+}
+
+public class AngularServiceCreateRequestHandler : IRequestHandler<AngularServiceCreateRequest, Unit>
+{
+    private readonly ILogger<AngularServiceCreateRequestHandler> _logger;
+    private readonly IAngularService _angularService;
+    public AngularServiceCreateRequestHandler(
+        ILogger<AngularServiceCreateRequestHandler> logger,
+        IAngularService angularService)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
+    }
+
+    public async Task<Unit> Handle(AngularServiceCreateRequest request, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Handled: {0}", nameof(AngularServiceCreateRequestHandler));
+
+        _angularService.ServiceCreate(request.Name, request.Directory);
+
+        return new();
+    }
+}

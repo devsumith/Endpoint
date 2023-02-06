@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "unit-test-create -n CreateUserRequestHandler -d C:\\projects\\Huntress\\src\\Services\\OtpService\\OtpService.Core.Tests",
+      "commandLineArgs": "unit-test-create -n RemoveToDoValidator -m Validate -d C:\\projects\\OverEngineeredToDoList\\tests\\OverEngineeredToDoList.Application.Tests",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",

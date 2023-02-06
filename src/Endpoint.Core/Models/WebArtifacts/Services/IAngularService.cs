@@ -17,7 +17,8 @@ public interface IAngularService
     void I18nExtract(AngularProjectReferenceModel model);
     void BootstrapAdd(AngularProjectReferenceModel model);
     void PrettierAdd(string directory);
-
+    public void ComponentCreate(string name, string directory);
+    public void ServiceCreate(string name, string directory);
 }
 
 
