@@ -11,40 +11,39 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Endpoint.Cli.Commands
+namespace Endpoint.Cli.Commands;
+
+public class AddResource
 {
-    public class AddResource
+    [Verb("add-resource")]
+    public class Request : IRequest
     {
-        [Verb("add-resource")]
-        public class Request : IRequest
+        [Value(0)]
+        public string Resource { get; set; }
+
+        [Option("properties")]
+        public string Properties { get; set; }
+
+        [Option('d', "directory")]
+        public string Directory { get; set; } = Environment.CurrentDirectory;
+    }
+
+    public class Handler : IRequestHandler<Request>
+    {
+        private readonly IAdditionalResourceGenerationStrategyFactory _factory;
+        public Handler(
+            IAdditionalResourceGenerationStrategyFactory factory)
         {
-            [Value(0)]
-            public string Resource { get; set; }
-
-            [Option("properties")]
-            public string Properties { get; set; }
-
-            [Option('d', "directory")]
-            public string Directory { get; set; } = Environment.CurrentDirectory;
+            _factory = factory;
         }
 
-        public class Handler : IRequestHandler<Request>
+        public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
         {
-            private readonly IAdditionalResourceGenerationStrategyFactory _factory;
-            public Handler(
-                IAdditionalResourceGenerationStrategyFactory factory)
-            {
-                _factory = factory;
-            }
+            var options = TinyMapper.Map<AddResourceOptions>(request);
 
-            public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
-            {
-                var options = TinyMapper.Map<AddResourceOptions>(request);
+            AdditionalResourceGenerator.Generate(options, _factory);
 
-                AdditionalResourceGenerator.Generate(options, _factory);
-
-                return Task.FromResult(new Unit());
-            }
+            return Task.FromResult(new Unit());
         }
     }
 }

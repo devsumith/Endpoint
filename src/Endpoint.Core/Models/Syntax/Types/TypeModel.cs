@@ -29,4 +29,15 @@ public class TypeModel
         };
     }
 
+    public static TypeModel LoggerOf(string typeName)
+    {
+        return new TypeModel("ILogger")
+        {
+            GenericTypeParameters = new List<TypeModel>()
+            {
+                new TypeModel(typeName)
+            }
+        };
+    }
+
 }
