@@ -1,3 +1,6 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 using CommandLine;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Enums;
@@ -78,6 +81,10 @@ public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<Ser
         classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Messaging" });
 
         classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Newtonsoft.Json" });
+
+        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.Extensions.Hosting" });
+
+        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.Extensions.Logging" });
 
         var ctor = new ConstructorModel(classModel, classModel.Name);
 

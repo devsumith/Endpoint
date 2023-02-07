@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core.Abstractions;
 
-
 public abstract class ArtifactUpdateStrategyBase<T> : IArtifactUpdateStrategy
     where T : class
 {

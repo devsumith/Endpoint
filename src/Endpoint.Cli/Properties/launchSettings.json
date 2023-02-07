@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "unit-test-create -n RemoveToDoValidator -m Validate -d C:\\projects\\OverEngineeredToDoList\\tests\\OverEngineeredToDoList.Application.Tests",
+      "commandLineArgs": "verb -n Foo -d C:\\projects\\Endpoint\\src\\Endpoint.Cli\\Commands",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",

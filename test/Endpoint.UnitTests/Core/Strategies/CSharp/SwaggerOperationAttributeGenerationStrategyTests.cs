@@ -1,4 +1,7 @@
-﻿using Endpoint.Core.Models.Syntax.Attributes;
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Strategies.CSharp.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -41,3 +44,4 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp
         }
     }
 }
+

@@ -2,8 +2,13 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Internals;
+using Endpoint.Core.Messages;
 using Endpoint.Core.Services;
+using MediatR;
 using Microsoft.Extensions.Logging;
+using SimpleNLG.Extensions;
+using System.Reactive.Linq;
 
 namespace Endpoint.Core.Models.Artifacts.Files.Strategies;
 
@@ -14,6 +19,7 @@ public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrateg
     private readonly IFileSystem _fileSystem;
     private readonly ITemplateProcessor _templateProcessor;
     private readonly ISolutionNamespaceProvider _solutionNamespaceProvider;
+    private readonly Observable<INotification> _observableNotifications;
 
     public TemplatedFileArtifactGenerationStrategy(
         IServiceProvider serviceProvider,
@@ -21,7 +27,8 @@ public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrateg
         ITemplateLocator templateLocator,
         IFileSystem fileSystem,
         ISolutionNamespaceProvider solutionNamespaceProvider,
-        ILogger<TemplatedFileArtifactGenerationStrategy> logger)
+        ILogger<TemplatedFileArtifactGenerationStrategy> logger,
+        Observable<INotification> observableNotifications)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -29,6 +36,7 @@ public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrateg
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _solutionNamespaceProvider = solutionNamespaceProvider ?? throw new ArgumentNullException(nameof(solutionNamespaceProvider));
+        _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
     }
 
     public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, TemplatedFileModel model, dynamic context = null)
@@ -49,6 +57,8 @@ public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrateg
         var result = _templateProcessor.Process(template, model.Tokens); ;
 
         _fileSystem.WriteAllText(model.Path, string.Join(Environment.NewLine, result));
+
+        _observableNotifications.Broadcast(new FileCreated(model.Path));
 
     }
 }
