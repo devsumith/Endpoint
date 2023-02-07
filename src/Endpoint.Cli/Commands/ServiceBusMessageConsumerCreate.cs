@@ -11,9 +11,12 @@ using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,14 +40,20 @@ public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<Ser
     private readonly ILogger<ServiceBusMessageConsumerCreateRequestHandler> _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly Observable<INotification> _notificationListener;
+    private readonly IFileProvider _fileProvider;
+    private readonly INamespaceProvider _namespaceProvider;
     public ServiceBusMessageConsumerCreateRequestHandler(
         ILogger<ServiceBusMessageConsumerCreateRequestHandler> logger,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
-        Observable<INotification> notificationListener)
+        Observable<INotification> notificationListener,
+        IFileProvider fileProvider,
+        INamespaceProvider namespaceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
+        _namespaceProvider = namespaceProvider;
+        _fileProvider = fileProvider;
     }
 
     public async Task<Unit> Handle(ServiceBusMessageConsumerCreateRequest request, CancellationToken cancellationToken)
@@ -52,6 +61,15 @@ public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<Ser
         _logger.LogInformation("Handled: {0}", nameof(ServiceBusMessageConsumerCreateRequestHandler));
 
         var classModel = new ClassModel(request.Name);
+
+        if(string.IsNullOrEmpty(request.MessagesNamespace))
+        {
+            var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj", request.Directory));
+
+            var projectNamespace = _namespaceProvider.Get(projectDirectory);
+
+            request.MessagesNamespace = $"{projectNamespace.Split('.').First()}.Core.Messages";
+        }
 
         classModel.Implements.Add(new TypeModel("BackgroundService"));
 
