@@ -7,7 +7,8 @@ using Endpoint.Core.Messages;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SimpleNLG.Extensions;
+using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
 
 namespace Endpoint.Core.Models.Artifacts.Files.Strategies;
@@ -54,7 +55,17 @@ public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrateg
             model.Tokens.Add(token.Key, token.Value);
         }
 
-        var result = _templateProcessor.Process(template, model.Tokens); ;
+        var result = _templateProcessor.Process(template, model.Tokens);
+
+        var parts = Path.GetDirectoryName(model.Path).Split(System.IO.Path.DirectorySeparatorChar);
+
+        for(var i = 1; i <= parts.Length; i++)
+        {
+            var dir = string.Join(Path.DirectorySeparatorChar, parts.Take(i));
+
+            if (!Directory.Exists(dir))
+                _fileSystem.CreateDirectory(dir);
+        }
 
         _fileSystem.WriteAllText(model.Path, string.Join(Environment.NewLine, result));
 

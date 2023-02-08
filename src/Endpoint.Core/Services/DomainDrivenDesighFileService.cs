@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Enums;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
 using Endpoint.Core.Models.Artifacts.Files;
@@ -15,6 +16,7 @@ using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using MediatR;
+using Octokit.Internal;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,7 +31,9 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
     private readonly IFileSystem _fileSystem;
+    private readonly INamespaceProvider _namespaceProvider;
     public DomainDrivenDesignFileService(
+        INamespaceProvider namespaceProvider,
         IFileSystem fileSystem,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, 
         IFileProvider fileProvider,
@@ -43,6 +47,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategyFactory));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
 	}
 
     public void MessageCreate(string name, List<PropertyModel> properties, string directory)
@@ -116,6 +121,109 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
         var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
         _artifactGenerationStrategyFactory.CreateFor(classFileModel);
+
+    }
+
+    public void ServiceBusMessageConsumerCreate(string name = "ServiceBusMessageConsumer", string messagesNamespace= null, string directory = null)
+    {
+        var classModel = new ClassModel(name);
+
+        if (string.IsNullOrEmpty(messagesNamespace))
+        {
+            var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj", directory));
+
+            var projectNamespace = _namespaceProvider.Get(projectDirectory);
+
+            messagesNamespace = $"{projectNamespace.Split('.').First()}.Core.Messages";
+        }
+
+        classModel.Implements.Add(new TypeModel("BackgroundService"));
+
+        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "MediatR" });
+
+        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Messaging" });
+
+        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Newtonsoft.Json" });
+
+        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.Extensions.Hosting" });
+
+        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.Extensions.Logging" });
+
+        var ctor = new ConstructorModel(classModel, classModel.Name);
+
+        foreach (var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new TypeModel("IMediator"), new TypeModel("IMessagingClient") })
+        {
+            var propName = type.Name switch
+            {
+                "ILogger" => "logger",
+                "IMessagingClient" => "messagingClient",
+                "IMediator" => "mediator"
+            };
+
+            classModel.Fields.Add(new FieldModel()
+            {
+                Name = $"_{propName}",
+                Type = type
+            });
+
+            ctor.Params.Add(new ParamModel()
+            {
+                Name = propName,
+                Type = type
+            });
+        }
+
+        var methodBody = new string[]
+        {
+            "await _messagingClient.StartAsync(stoppingToken);",
+            "",
+            "while(!stoppingToken.IsCancellationRequested) {",
+            "",
+            "try".Indent(1),
+            "{".Indent(1),
+            "var message = await _messagingClient.ReceiveAsync(new ReceiveRequest());".Indent(2),
+            "",
+            "var messageType = message.MessageAttributes[\"MessageType\"];".Indent(2),
+            "",
+            ($"var type = Type.GetType($\"{messagesNamespace}." + "{messageType}\");").Indent(2),
+            "",
+            "var request = JsonConvert.DeserializeObject(message.Body, type!) as IRequest;".Indent(2),
+            "",
+            "await _mediator.Send(request!);".Indent(2),
+            "",
+            "await Task.Delay(100);".Indent(2),
+            "}".Indent(1),
+            "catch(Exception exception)".Indent(1),
+            "{".Indent(1),
+            "_logger.LogError(exception.Message);".Indent(2),
+            "",
+            "continue;".Indent(2),
+            "}".Indent(1),
+            "}"
+        };
+
+        var method = new MethodModel
+        {
+            Name = "ExecuteAsync",
+            Override = true,
+            AccessModifier = AccessModifier.Protected,
+            Async = true,
+            ReturnType = new TypeModel("Task"),
+            Body = string.Join(Environment.NewLine, methodBody)
+        };
+
+        method.Params.Add(new ParamModel()
+        {
+            Name = "stoppingToken",
+            Type = new TypeModel("CancellationToken")
+        });
+
+        classModel.Constructors.Add(ctor);
+        classModel.Methods.Add(method);
+
+        _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs"));
+
+        _notificationListener.Broadcast(new WorkerFileCreated(classModel.Name, directory));
 
     }
 

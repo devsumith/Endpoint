@@ -7,10 +7,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Templates\BuildingBlocks\Messaging.Udp\**" />
+    <EmbeddedResource Remove="Templates\BuildingBlocks\Messaging.Udp\**" />
+    <None Remove="Templates\BuildingBlocks\Messaging.Udp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Templates\Angular\app.component.spec.txt" />
     <None Remove="Templates\Angular\app.component.txt" />
     <None Remove="Templates\Angular\main.txt" />
     <None Remove="Templates\ArtifactGenerationStrategy.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\ConfigureServices.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\IUdpClientFactory.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\MessagingClient.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\ServiceBusMessageListener.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\ServiceBusMessageSender.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\UdpClientFactory.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging\IMessagingClient.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging\Internals\Observable.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging\IServiceBusMessage.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging\IServiceBusMessageListener.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging\IServiceBusMessageSender.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging\ReceiveRequest.txt" />
+    <None Remove="Templates\BuildingBlocks\Messaging\Messaging\ServiceBusMessage.txt" />
+    <None Remove="Templates\BuildingBlocks\Validation\ConfigureServices.txt" />
+    <None Remove="Templates\BuildingBlocks\Validation\ResponseBase.txt" />
+    <None Remove="Templates\BuildingBlocks\Validation\ValidationBehavior.txt" />
     <None Remove="Templates\Copyright.txt" />
     <None Remove="Templates\README.txt" />
     <None Remove="Templates\SyntaxGenerationStrategy.txt" />
@@ -31,6 +53,22 @@
     <EmbeddedResource Include="Templates\Api\WebApplicationBuilder.txt" />
     <EmbeddedResource Include="Templates\Api\WebApplication.txt" />
     <EmbeddedResource Include="Templates\Application\Dto.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging.Udp\ConfigureServices.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging.Udp\IUdpClientFactory.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging.Udp\MessagingClient.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging.Udp\ServiceBusMessageListener.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging.Udp\ServiceBusMessageSender.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging.Udp\UdpClientFactory.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging\IMessagingClient.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging\Internals\Observable.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging\IServiceBusMessage.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging\IServiceBusMessageListener.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging\IServiceBusMessageSender.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging\ReceiveRequest.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging\ServiceBusMessage.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Validation\ConfigureServices.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Validation\ResponseBase.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Validation\ValidationBehavior.txt" />
     <EmbeddedResource Include="Templates\Console\EmptyProgram.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientExtensions.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientFactory.txt" />

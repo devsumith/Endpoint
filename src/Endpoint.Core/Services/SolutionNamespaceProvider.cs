@@ -13,6 +13,14 @@ public class SolutionNamespaceProvider : ISolutionNamespaceProvider
     {
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
-    public string Get(string directory) => Path.GetFileNameWithoutExtension(_fileProvider.Get("*.sln", directory));
+    public string Get(string directory)
+    {
+        if(!Directory.Exists(directory))
+        {
+            return "SolutionNamespaceNotFound";
+        }
+
+        return Path.GetFileNameWithoutExtension(_fileProvider.Get("*.sln", directory));
+    }
 }
 

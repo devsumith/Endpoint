@@ -41,21 +41,20 @@ public class ProjectModel
         DotNetProjectType = dotNetProjectType;
         Name = name;
         Directory = $"{parentDirectory}{System.IO.Path.DirectorySeparatorChar}{name}";
-        References = references;
+        References = references ?? new List<string>();
     }
 
     public ProjectModel(string name, string parentDirectory)
     {
         DotNetProjectType = DotNetProjectType.ClassLib;
-
         Name = name;
-
         Directory = $"{parentDirectory}{System.IO.Path.DirectorySeparatorChar}{name}";
+        References = new List<string>();
     }
 
     public ProjectModel()
     {
-
+        References = new List<string>();
     }
 }
 

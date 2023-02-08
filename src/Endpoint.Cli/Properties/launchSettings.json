@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "verb -n Foo -d C:\\projects\\Endpoint\\src\\Endpoint.Cli\\Commands",
+      "commandLineArgs": "event-driven-microservices-create -n FooOnContainers -s IdentityService,DashboardService -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",

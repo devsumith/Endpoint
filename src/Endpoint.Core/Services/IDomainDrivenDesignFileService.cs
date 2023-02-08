@@ -13,5 +13,6 @@ public interface IDomainDrivenDesignFileService
     void MessageCreate(string name, List<PropertyModel> properties, string directory);
 
     void MessageHandlerCreate(string name, string directory);
+    void ServiceBusMessageConsumerCreate(string name = "ServiceBusMessageConsumer", string messagesNamespace = null, string directory = null);
 }
 

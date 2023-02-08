@@ -45,8 +45,10 @@ public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<Ser
     private readonly Observable<INotification> _notificationListener;
     private readonly IFileProvider _fileProvider;
     private readonly INamespaceProvider _namespaceProvider;
+    private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;
     public ServiceBusMessageConsumerCreateRequestHandler(
         ILogger<ServiceBusMessageConsumerCreateRequestHandler> logger,
+        IDomainDrivenDesignFileService domainDrivenDesignFileService,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         Observable<INotification> notificationListener,
         IFileProvider fileProvider,
@@ -57,6 +59,7 @@ public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<Ser
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
         _namespaceProvider = namespaceProvider;
         _fileProvider = fileProvider;
+        _domainDrivenDesignFileService = domainDrivenDesignFileService ?? throw new ArgumentNullException(nameof(domainDrivenDesignFileService));
     }
 
     public async Task<Unit> Handle(ServiceBusMessageConsumerCreateRequest request, CancellationToken cancellationToken)
