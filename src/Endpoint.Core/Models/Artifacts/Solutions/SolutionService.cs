@@ -2,13 +2,16 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Internals;
+using Endpoint.Core.Messages;
+using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using Endpoint.Core.Models.Artifacts.Projects.Factories;
+using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Models.Syntax.Classes.Services;
 using Endpoint.Core.Services;
+using MediatR;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Reactive.Linq;
-using System.Reflection;
 
 namespace Endpoint.Core.Models.Artifacts.Solutions;
 
@@ -18,16 +21,23 @@ public class SolutionService : ISolutionService
     private readonly IPlantUmlParserStrategyFactory _plantUmlParserStrategyFactory;
     private readonly IProjectModelFactory _projectModelFactory;
     private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;
+    private readonly IDomainDrivenDesignService _domainDrivenDesignService;
+    private readonly Observable<INotification> _notificationListener;
+
     public SolutionService(
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         IPlantUmlParserStrategyFactory plantUmlParserStrategyFactory,
         IProjectModelFactory projectModelFactory,
-        IDomainDrivenDesignFileService domainDrivenDesignFileService)
+        IDomainDrivenDesignFileService domainDrivenDesignFileService,
+        IDomainDrivenDesignService domainDrivenDesignService,
+        Observable<INotification> notificationListener)
     {
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
         _plantUmlParserStrategyFactory = plantUmlParserStrategyFactory;
         _projectModelFactory = projectModelFactory;
         _domainDrivenDesignFileService = domainDrivenDesignFileService;
+        _domainDrivenDesignService = domainDrivenDesignService;
+        _notificationListener = notificationListener;
     }
 
     public void AddSolutionItem(string path)
@@ -42,6 +52,8 @@ public class SolutionService : ISolutionService
 
     public void EventDrivenMicroservicesCreate(string name, string services, string directory)
     {
+        var notifications = new List<INotification>();
+
         var solutionModel = new SolutionModel(name, directory);
 
         var buildingBlocksFolder = new FolderModel("BuildingBlocks", solutionModel.SolutionDirectory);
@@ -68,6 +80,14 @@ public class SolutionService : ISolutionService
                 {
                     Constants.ProjectType.Core
                 });
+
+                var serviceBusMessageConsumer = _domainDrivenDesignService.ServiceBusMessageConsumerCreate($"{coreModel.Name}.Messages", coreModel.Directory);
+
+                var fileModel = new ObjectFileModel<ClassModel>(serviceBusMessageConsumer, serviceBusMessageConsumer.UsingDirectives, serviceBusMessageConsumer.Name, coreModel.Directory, "cs");
+
+                coreModel.Files.Add(fileModel);
+
+                notifications.Add(new WorkerFileCreated(fileModel.Name, fileModel.Directory));
 
                 coreModel.References.Add(@"..\..\..\BuildingBlocks\Messaging\Messaging.Udp\Messaging.Udp.csproj");
 
@@ -102,18 +122,10 @@ public class SolutionService : ISolutionService
 
         _artifactGenerationStrategyFactory.CreateFor(solutionModel);
 
-        foreach(var serviceFolder in servicesFolder.SubFolders)
+        foreach(var notification in notifications)
         {
-            foreach(var projectModel in serviceFolder.Projects)
-            {
-                if(projectModel.Name.EndsWith("Core"))
-                {
-                    _domainDrivenDesignFileService.ServiceBusMessageConsumerCreate(directory: projectModel.Directory);
-                }
-            }
+            _notificationListener.Broadcast(notification);
         }
-
-        
     }
 
     public void Create(string name, string plantUmlSourcePath, string directory)

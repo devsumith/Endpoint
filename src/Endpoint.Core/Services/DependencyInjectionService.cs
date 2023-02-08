@@ -22,17 +22,20 @@ public class DependencyInjectionService: IDependencyInjectionService
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly INamespaceProvider _namespaceProvider;
 
     public DependencyInjectionService(
         ILogger<DependencyInjectionService> logger, 
         IFileProvider fileProvider,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
-        IFileSystem fileSystem)
+        IFileSystem fileSystem,
+        INamespaceProvider namespaceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _namespaceProvider = namespaceProvider;
     }
 
     public void Add(string interfaceName, string className, string directory, ServiceLifetime? serviceLifetime = null)
@@ -107,6 +110,10 @@ public class DependencyInjectionService: IDependencyInjectionService
     public void AddConfigureServices(string layer, string directory)
     {
         var classModel = new ClassModel("ConfigureServices");
+
+        var @namespace = _namespaceProvider.Get(directory);
+
+        classModel.UsingDirectives.Add(new Models.Syntax.UsingDirectiveModel() { Name = @namespace });
 
         var methodParam = new ParamModel()
         {

@@ -17,6 +17,7 @@ using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Classes.Factories;
+using Endpoint.Core.Models.Syntax.Classes.Services;
 using Endpoint.Core.Models.Syntax.Classes.Strategies;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Controllers;
@@ -50,6 +51,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services) {
+        services.AddSingleton<IDomainDrivenDesignService,DomainDrivenDesignService>();
         services.AddSingleton<ISyntaxGenerationStrategy, TestReferenceSyntaxGenerationStrategy>();
         services.AddSingleton<IClassService,ClassService>();
         services.AddSingleton<IUtlitityService,UtlitityService>();
@@ -221,6 +223,7 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+
 
 
 

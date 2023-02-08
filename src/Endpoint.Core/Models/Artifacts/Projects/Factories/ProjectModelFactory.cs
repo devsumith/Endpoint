@@ -72,7 +72,13 @@ public class ProjectModelFactory : IProjectModelFactory
         var project = new ProjectModel(name, parentDirectory);
 
         if (additionalMetadata != null)
-            project.Metadata.Concat(additionalMetadata);
+        {
+            foreach(var m in additionalMetadata)
+            {
+                project.Metadata.Add(m);
+            }
+        }
+        
 
         foreach (var metadataItem in project.Metadata)
         {
@@ -81,7 +87,7 @@ public class ProjectModelFactory : IProjectModelFactory
                 case Constants.ProjectType.Core:
                     project.Packages.Add(new PackageModel("FluentValidation", "11.4.0"));
                     project.Packages.Add(new PackageModel("MediatR", "11.0.0"));
-                    project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.1"));
+                    project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.2"));
                     project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "7.0.2"));
                     project.Packages.Add(new PackageModel("MediatR.Extensions.Microsoft.DependencyInjection", "11.0.0"));
                     project.Packages.Add(new PackageModel("Microsoft.Extensions.Hosting.Abstractions", "7.0.0"));
@@ -90,7 +96,7 @@ public class ProjectModelFactory : IProjectModelFactory
                 case Constants.ProjectType.Domain:
                     project.Packages.Add(new PackageModel("FluentValidation", "11.4.0"));
                     project.Packages.Add(new PackageModel("MediatR", "11.0.0"));
-                    project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.1"));
+                    project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.2"));
                     project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "7.0.2"));
                     break;
 
