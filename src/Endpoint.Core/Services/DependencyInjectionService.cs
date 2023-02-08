@@ -111,9 +111,7 @@ public class DependencyInjectionService: IDependencyInjectionService
     {
         var classModel = new ClassModel("ConfigureServices");
 
-        var @namespace = _namespaceProvider.Get(directory);
-
-        classModel.UsingDirectives.Add(new Models.Syntax.UsingDirectiveModel() { Name = @namespace });
+        classModel.UsingDirectives.Add(new Models.Syntax.UsingDirectiveModel() { Name = _namespaceProvider.Get(directory) });
 
         var methodParam = new ParamModel()
         {

@@ -1,19 +1,18 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-namespace Endpoint.Core.Models.Syntax.Attributes
+namespace Endpoint.Core.Models.Syntax.Attributes;
+
+public enum AttributeType
 {
-    public enum AttributeType
-    {
-        Authorize,
-        ApiController,
-        Produces,
-        Consumes,
-        ProducesResponseType,
-        Http,
-        SwaggerOperation,
-        Route,
-        Fact
-    }
+    Authorize,
+    ApiController,
+    Produces,
+    Consumes,
+    ProducesResponseType,
+    Http,
+    SwaggerOperation,
+    Route,
+    Fact
 }
 
