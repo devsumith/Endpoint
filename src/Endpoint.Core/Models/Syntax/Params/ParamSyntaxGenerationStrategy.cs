@@ -27,6 +27,9 @@ public class ParamSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ParamM
         if(model.ExtensionMethodParam)
             builder.Append("this ");
 
+        if (model.Attribute != null)
+            builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.Attribute));
+
         builder.Append($"{syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name}");
 
         return builder.ToString();

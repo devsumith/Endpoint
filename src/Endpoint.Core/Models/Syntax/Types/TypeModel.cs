@@ -51,4 +51,21 @@ public class TypeModel
         };
     }
 
+    public static TypeModel CreateTaskOfActionResultOf(string typeName)
+    {
+        return new TypeModel("Task")
+        {
+            GenericTypeParameters = new List<TypeModel>
+                {
+                    new TypeModel("ActionResult")
+                    {
+                        GenericTypeParameters = new List<TypeModel>()
+                        {
+                            new TypeModel(typeName)
+                        }
+                    }
+                }
+        };
+    }
+
 }

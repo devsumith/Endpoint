@@ -143,12 +143,12 @@ public class ClassModelFactory : IClassModelFactory
 
         methodModel.ReturnType = routeType switch
         {
-            RouteType.Get => createTaskOfActionResultOf($"Get{entityNamePascalCasePlural}Response"),
-            RouteType.GetById => createTaskOfActionResultOf($"Get{entityNamePascalCase}ByIdResponse"),
-            RouteType.Page => createTaskOfActionResultOf($"Get{entityNamePascalCasePlural}PageResponse"),
-            RouteType.Create => createTaskOfActionResultOf($"Create{entityNamePascalCase}Response"),
-            RouteType.Update => createTaskOfActionResultOf($"Update{entityNamePascalCase}Response"),
-            RouteType.Delete => createTaskOfActionResultOf($"Delete{entityNamePascalCase}Response"),
+            RouteType.Get => TypeModel.CreateTaskOfActionResultOf($"Get{entityNamePascalCasePlural}Response"),
+            RouteType.GetById => TypeModel.CreateTaskOfActionResultOf($"Get{entityNamePascalCase}ByIdResponse"),
+            RouteType.Page => TypeModel.CreateTaskOfActionResultOf($"Get{entityNamePascalCasePlural}PageResponse"),
+            RouteType.Create => TypeModel.CreateTaskOfActionResultOf($"Create{entityNamePascalCase}Response"),
+            RouteType.Update => TypeModel.CreateTaskOfActionResultOf($"Update{entityNamePascalCase}Response"),
+            RouteType.Delete => TypeModel.CreateTaskOfActionResultOf($"Delete{entityNamePascalCase}Response"),
             _ => null
         };
 
@@ -208,6 +208,23 @@ public class ClassModelFactory : IClassModelFactory
                 break;
 
             case RouteType.Get:
+
+                methodModel.Attributes.Add(new SwaggerOperationAttributeModel($"Get {entityNamePascalCasePlural}", $"Get {entityNamePascalCasePlural}"));
+
+                methodModel.Attributes.Add(new AttributeModel()
+                {
+                    Name = "HttpGet",
+                    Properties = new Dictionary<string, string>() {
+                    { "Name", $"get{entityNamePascalCasePlural}" }
+                }
+                });
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("BadRequest", "ProblemDetails"));
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("OK", $"Get{entityNamePascalCasePlural}Response"));
+
                 methodModel.Params = new List<ParamModel>
                 {
                     cancellationTokenParam
@@ -218,6 +235,23 @@ public class ClassModelFactory : IClassModelFactory
                 break;
 
             case RouteType.Create:
+
+                methodModel.Attributes.Add(new SwaggerOperationAttributeModel($"Create {entityNamePascalCase}", $"Create {entityNamePascalCase}"));
+
+                methodModel.Attributes.Add(new AttributeModel()
+                {
+                    Name = "HttpPost",
+                    Properties = new Dictionary<string, string>() {
+                    { "Name", $"create{entityNamePascalCase}" }
+                }
+                });
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("BadRequest", "ProblemDetails"));
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("OK", $"Create{entityNamePascalCase}Response"));
+
                 methodModel.Params = new List<ParamModel>
                 {
                     new ParamModel { Type = new TypeModel($"Create{entityNamePascalCase}Request "), Name = "request", Attribute = new AttributeModel() { Name ="FromBody" } },
@@ -252,6 +286,23 @@ public class ClassModelFactory : IClassModelFactory
                 break;
 
             case RouteType.Delete:
+                methodModel.Attributes.Add(new SwaggerOperationAttributeModel($"Delete {entityNamePascalCase}", $"Delete {entityNamePascalCase}"));
+
+                methodModel.Attributes.Add(new AttributeModel()
+                {
+                    Name = "HttpDelete",
+                    Template = "\"{toDoId:guid}\"",
+                    Properties = new Dictionary<string, string>() {
+                    { "Name", $"delete{entityNamePascalCase}" }
+                }
+                });
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("BadRequest", "ProblemDetails"));
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("OK", $"Delete{entityNamePascalCase}Response"));
+
                 methodModel.Params = new List<ParamModel>
                 {
                     new ParamModel { Type = new TypeModel("Guid"), Name = entityIdNameCamelCase, Attribute = new AttributeModel() { Name ="FromRoute" } },
@@ -267,24 +318,6 @@ public class ClassModelFactory : IClassModelFactory
 
                 break;
 
-        }
-
-
-        TypeModel createTaskOfActionResultOf(string typeName)
-        {
-            return new TypeModel("Task")
-            {
-                GenericTypeParameters = new List<TypeModel>
-                {
-                    new TypeModel("ActionResult")
-                    {
-                        GenericTypeParameters = new List<TypeModel>()
-                        {
-                            new TypeModel(typeName)
-                        }
-                    }
-                }
-            };
         }
 
         return methodModel;

@@ -29,7 +29,7 @@ public class AttributeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<At
 
         builder.Append(model.Name);
 
-        if (model.Template != null)
+        if (model.Template != null && model.Properties.Count == 0)
         {
             builder.Append($"({model.Template})");
         }
@@ -37,6 +37,11 @@ public class AttributeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<At
         if (model.Properties.Count == 1)
         {
             builder.Append('(');
+
+            if(model.Template != null)
+            {
+                builder.Append($"{model.Template}, ");
+            }
 
             foreach (var property in model.Properties)
             {

@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "controller-create -n User -d C:\\projects\\Huntress\\src\\Services\\IdentityService\\IdentityService.Api\\Controllers",
+      "commandLineArgs": "controller-create -n Privilege -d C:\\projects\\Huntress\\src\\Services\\IdentityService\\IdentityService.Api\\Controllers",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",
