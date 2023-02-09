@@ -125,5 +125,18 @@ public class ProjectService : IProjectService
         }
     }
 
+    public void CorePackagesAdd(string directory)
+    {
+        PackageAdd("MediatR", directory);
+        PackageAdd("FluentValidation", directory);
+        PackageAdd("Microsoft.EntityFrameworkCore", directory);
+        PackageAdd("Microsoft.Extensions.Logging.Abstractions", directory);
+    }
+
+    public void CorePackagesAndFiles(string directory)
+    {
+        CorePackagesAdd(directory);
+        CoreFilesAdd(directory);
+    }
 }
 

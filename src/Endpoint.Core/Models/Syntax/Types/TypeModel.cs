@@ -40,4 +40,15 @@ public class TypeModel
         };
     }
 
+    public static TypeModel ListOf(string typeName)
+    {
+        return new TypeModel("List")
+        {
+            GenericTypeParameters = new List<TypeModel>()
+            {
+                new TypeModel(typeName)
+            }
+        };
+    }
+
 }

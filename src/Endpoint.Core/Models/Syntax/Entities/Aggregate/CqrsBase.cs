@@ -18,4 +18,3 @@ public class CqrsBase
     public ClassModel RequestHandler { get; set; }
     public List<UsingDirectiveModel> UsingDirectives { get; set; }
 }
-

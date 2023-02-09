@@ -39,6 +39,11 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
             builder.AppendLine();
         }
 
+        foreach(var attribute in model.Attributes)
+        {
+            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(attribute));
+        }
+
         builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
 
         if (model.Static)

@@ -9,16 +9,15 @@ using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
-using Endpoint.Core.Services;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.Entities.Aggregate;
 
 public class CommandModel : CqrsBase
 {
-    public CommandModel(string microserviceName, INamingConventionConverter namingConventionConverter, ClassModel entity, RouteType routeType)
+    public CommandModel(string microserviceName, ClassModel entity, RouteType routeType = default, string name = null)
     {
-        Name = routeType switch
+        Name = name ?? routeType switch
         {
             RouteType.Create => $"Create{entity.Name}",
             RouteType.Update => $"Update{entity.Name}",

@@ -1,12 +1,16 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
+using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Properties;
+using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Options;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -207,6 +211,71 @@ public class ProjectModelFactory : IProjectModelFactory
     public ProjectModel CreateValidationProject(string directory)
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Validation", directory);
+
+        return model;
+    }
+
+    public ProjectModel CreateKernelProject(string directory)
+    {
+        var model = new ProjectModel(DotNetProjectType.ClassLib, "Kernel", directory);
+
+        var responseBase = new ClassModel("ResponseBase");
+
+        var responseBaseConstructor = new ConstructorModel(responseBase, responseBase.Name)
+        {
+            Body = "Errors = new List<string>();"
+        };
+
+        responseBase.Properties.Add(new PropertyModel(responseBase, AccessModifier.Public, TypeModel.ListOf("string"), "Errors", PropertyAccessorModel.GetPrivateSet));
+
+        responseBase.Constructors.Add(responseBaseConstructor);
+
+        model.Files.Add(new ObjectFileModel<ClassModel>(responseBase, responseBase.UsingDirectives, responseBase.Name, model.Directory, "cs"));
+
+        return model;
+    }
+
+    public ProjectModel CreateSecurityProject(string directory)
+    {
+        var model = new ProjectModel(DotNetProjectType.ClassLib, "Security", directory);
+
+        model.Packages.Add(new PackageModel { Name = "MediatR", Version = "11.1.0" });
+
+        model.Packages.Add(new PackageModel { Name = "Microsoft.AspNetCore.Authentication.JwtBearer", Version = "7.0.2" });
+
+        model.Packages.Add(new PackageModel { Name = "Swashbuckle.AspNetCore.SwaggerGen", Version = "6.5.0" });
+
+        model.Packages.Add(new PackageModel { Name = "System.IdentityModel.Tokens.Jwt", Version = "6.25.1" });
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("AccessRight", "AccessRight", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("Authentication", "Authentication", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("AuthorizationHeaderParameterOperationFilter", "AuthorizationHeaderParameterOperationFilter", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("AuthorizeResourceOperationAttribute", "AuthorizeResourceOperationAttribute", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("ConfigureServices", "ConfigureServices", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("IPasswordHasher", "IPasswordHasher", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("ITokenBuilder", "ITokenBuilder", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("ITokenProvider", "ITokenProvider", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("Operations", "Operations", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("PasswordHasher", "PasswordHasher", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("ResourceOperationAuthorizationBehavior", "ResourceOperationAuthorizationBehavior", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("ResourceOperationAuthorizationHandler", "ResourceOperationAuthorizationHandler", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("SecurityConstants", "SecurityConstants", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("TokenBuilder", "TokenBuilder", model.Directory));
+
+        model.Files.Add(_fileModelFactory.CreateTemplate("TokenProvider", "TokenProvider", model.Directory));
 
         return model;
     }

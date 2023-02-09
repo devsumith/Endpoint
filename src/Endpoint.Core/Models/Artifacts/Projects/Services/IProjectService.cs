@@ -11,5 +11,8 @@ public interface IProjectService
     void AddEndpointPostBuildTargetElement(string csprojFilePath);
     void PackageAdd(string name, string directory);
     void CoreFilesAdd(string directory);
+    void CorePackagesAdd(string directory);
+    void CorePackagesAndFiles(string directory);
+
 }
 

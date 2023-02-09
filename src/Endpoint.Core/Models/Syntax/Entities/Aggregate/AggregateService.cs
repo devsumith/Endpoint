@@ -2,12 +2,16 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Projects.Services;
 using Endpoint.Core.Models.Syntax.Classes.Factories;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Endpoint.Core.Models.Syntax.Entities.Aggregate;
 
@@ -20,6 +24,8 @@ public class AggregateService: IAggregateService
     private readonly IClassModelFactory _classModelFactory;
     private readonly IProjectService _projectService;
     private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileProvider _fileProvider;
+
     public AggregateService(
         ILogger<AggregateService> logger,
         INamingConventionConverter namingConventionConverter,
@@ -27,7 +33,8 @@ public class AggregateService: IAggregateService
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         IClassModelFactory classModelFactory,
         IProjectService projectService,
-        IFileModelFactory fileModelFactory) {
+        IFileModelFactory fileModelFactory,
+        IFileProvider fileProvider) {
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -35,6 +42,7 @@ public class AggregateService: IAggregateService
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
     public async Task Add(string name, string properties, string directory, string serviceName)
@@ -72,6 +80,21 @@ public class AggregateService: IAggregateService
     private void EnsureCoreFilesAreAdded(string directory)
     {
         _projectService.CoreFilesAdd(directory);
+
+    }
+
+    public void CommandCreate(string name, string aggregate, string directory)
+    {
+        var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj",directory)).Split('.').First();
+
+        var classModel = _syntaxService.SolutionModel?.GetClass(aggregate, serviceName);
+
+        var commandModel = new CommandModel(serviceName, classModel, name: name);
+
+        var model = new ObjectFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, "cs");
+
+        _artifactGenerationStrategyFactory.CreateFor(model);
+
 
     }
 }

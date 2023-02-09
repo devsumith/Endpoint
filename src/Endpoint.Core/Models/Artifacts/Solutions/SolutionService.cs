@@ -11,6 +11,7 @@ using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Classes.Services;
 using Endpoint.Core.Services;
 using MediatR;
+using Octokit;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Artifacts.Solutions;
@@ -56,69 +57,9 @@ public class SolutionService : ISolutionService
 
         var solutionModel = new SolutionModel(name, directory);
 
-        var buildingBlocksFolder = new FolderModel("BuildingBlocks", solutionModel.SolutionDirectory);
+        solutionModel.Folders.Add(BuildingBlocksCreate(solutionModel.SolutionDirectory));
 
-        var servicesFolder = new FolderModel("Services", solutionModel.SolutionDirectory);
-
-        var messagingFolder = new FolderModel("Messaging", buildingBlocksFolder.Directory);
-
-        messagingFolder.Projects.Add(_projectModelFactory.CreateMessagingProject(messagingFolder.Directory));
-
-        messagingFolder.Projects.Add(_projectModelFactory.CreateMessagingUdpProject(messagingFolder.Directory));
-
-        buildingBlocksFolder.SubFolders.Add(messagingFolder);
-
-        solutionModel.Folders.Add(buildingBlocksFolder);
-
-        if(!string.IsNullOrEmpty(services))
-        {
-            foreach(var service in services.Split(','))
-            {
-                var serviceFolder = new FolderModel(service, servicesFolder.Directory);
-
-                var coreModel = _projectModelFactory.CreateLibrary($"{service}.Core", serviceFolder.Directory, new List<string>()
-                {
-                    Constants.ProjectType.Core
-                });
-
-                var serviceBusMessageConsumer = _domainDrivenDesignService.ServiceBusMessageConsumerCreate($"{coreModel.Name}.Messages", coreModel.Directory);
-
-                var fileModel = new ObjectFileModel<ClassModel>(serviceBusMessageConsumer, serviceBusMessageConsumer.UsingDirectives, serviceBusMessageConsumer.Name, coreModel.Directory, "cs");
-
-                coreModel.Files.Add(fileModel);
-
-                notifications.Add(new WorkerFileCreated(fileModel.Name, fileModel.Directory));
-
-                coreModel.References.Add(@"..\..\..\BuildingBlocks\Messaging\Messaging.Udp\Messaging.Udp.csproj");
-
-                serviceFolder.Projects.Add(coreModel);
-
-
-                var infrastructureModel = _projectModelFactory.CreateLibrary($"{service}.Infrastructure", serviceFolder.Directory, new List<string>()
-                {
-                    Constants.ProjectType.Infrastructure
-                });
-
-                infrastructureModel.References.Add(@$"..\{service}.Core\{service}.Core.csproj");
-
-                serviceFolder.Projects.Add(infrastructureModel);
-
-                var apiProjectModel = _projectModelFactory.CreateLibrary($"{service}.Api", serviceFolder.Directory, new List<string>()
-                {
-                    Constants.ProjectType.Api
-                });
-
-                apiProjectModel.References.Add(@$"..\{service}.Infrastructure\{service}.Infrastructure.csproj");
-
-                apiProjectModel.DotNetProjectType = DotNetProjectType.Web;
-
-                serviceFolder.Projects.Add(apiProjectModel);
-
-                servicesFolder.SubFolders.Add(serviceFolder);
-            }
-        }
-
-        solutionModel.Folders.Add(servicesFolder);
+        solutionModel.Folders.Add(ServicesCreate(services, solutionModel.SolutionDirectory, notifications));
 
         _artifactGenerationStrategyFactory.CreateFor(solutionModel);
 
@@ -127,6 +68,88 @@ public class SolutionService : ISolutionService
             _notificationListener.Broadcast(notification);
         }
     }
+
+    private FolderModel BuildingBlocksCreate(string directory)
+    {
+        var model = new FolderModel("BuildingBlocks", directory);
+
+        var messagingFolder = new FolderModel("Messaging", model.Directory);
+
+        model.Projects.Add(_projectModelFactory.CreateKernelProject(model.Directory));
+
+        messagingFolder.Projects.Add(_projectModelFactory.CreateMessagingProject(messagingFolder.Directory));
+
+        messagingFolder.Projects.Add(_projectModelFactory.CreateMessagingUdpProject(messagingFolder.Directory));
+
+        model.SubFolders.Add(messagingFolder);
+
+        return model;
+    }
+
+    private FolderModel ServicesCreate(string services, string directory, List<INotification> notifications)
+    {
+        var model = new FolderModel("Services", directory);
+
+        if (string.IsNullOrEmpty(services))
+            return model;
+
+
+        foreach (var service in services.Split(','))
+        {
+            var serviceFolder = new FolderModel(service, model.Directory);
+
+            var coreModel = _projectModelFactory.CreateLibrary($"{service}.Core", serviceFolder.Directory, new List<string>()
+            {
+                Constants.ProjectType.Core
+            });
+
+            var serviceBusMessageConsumer = _domainDrivenDesignService.ServiceBusMessageConsumerCreate($"{coreModel.Name}.Messages", coreModel.Directory);
+
+            var fileModel = new ObjectFileModel<ClassModel>(serviceBusMessageConsumer, serviceBusMessageConsumer.UsingDirectives, serviceBusMessageConsumer.Name, coreModel.Directory, "cs");
+
+            coreModel.Files.Add(fileModel);
+
+            notifications.Add(new WorkerFileCreated(fileModel.Name, coreModel.Directory));
+
+            coreModel.References.Add(@"..\..\..\BuildingBlocks\Messaging\Messaging.Udp\Messaging.Udp.csproj");
+
+            serviceFolder.Projects.Add(coreModel);
+
+            var infrastructureModel = _projectModelFactory.CreateLibrary($"{service}.Infrastructure", serviceFolder.Directory, new List<string>()
+            {
+                Constants.ProjectType.Infrastructure
+            });
+
+            infrastructureModel.References.Add(@$"..\{service}.Core\{service}.Core.csproj");
+
+            serviceFolder.Projects.Add(infrastructureModel);
+
+            var apiProjectModel = _projectModelFactory.CreateLibrary($"{service}.Api", serviceFolder.Directory, new List<string>()
+            {
+                Constants.ProjectType.Api
+            });
+
+            apiProjectModel.References.Add(@$"..\{service}.Infrastructure\{service}.Infrastructure.csproj");
+
+            apiProjectModel.DotNetProjectType = DotNetProjectType.Web;
+
+            serviceFolder.Projects.Add(apiProjectModel);
+
+            model.SubFolders.Add(serviceFolder);
+        }
+
+        return model;
+    }
+
+    private FolderModel AppsCreate(string directory)
+    {
+        var model = new FolderModel("Apps", directory);
+
+
+
+        return model;
+    }
+
 
     public void Create(string name, string plantUmlSourcePath, string directory)
     {

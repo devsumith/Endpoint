@@ -7,6 +7,7 @@ using Endpoint.Core.Models.Artifacts;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Files.Services;
 using Endpoint.Core.Models.Artifacts.Files.Strategies;
+using Endpoint.Core.Models.Artifacts.Folders;
 using Endpoint.Core.Models.Artifacts.Git;
 using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Projects.Factories;
@@ -14,7 +15,7 @@ using Endpoint.Core.Models.Artifacts.Projects.Services;
 using Endpoint.Core.Models.Artifacts.Projects.Strategies;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Attributes;
+using Endpoint.Core.Models.Syntax.Attributes.Strategies;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Classes.Factories;
 using Endpoint.Core.Models.Syntax.Classes.Services;
@@ -51,6 +52,8 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services) {
+        services.AddSingleton<IFolderFactory,FolderFactory>();
+        services.AddSingleton<IFolderService,FolderService>();
         services.AddSingleton<IDomainDrivenDesignService,DomainDrivenDesignService>();
         services.AddSingleton<ISyntaxGenerationStrategy, TestReferenceSyntaxGenerationStrategy>();
         services.AddSingleton<IClassService,ClassService>();
@@ -95,6 +98,7 @@ public static class ConfigureServices
         services.AddSingleton<ISolutionModelFactory, SolutionModelFactory>();
         services.AddSingleton<IControllerModelFactory, ControllerModelFactory>();
 
+        services.AddSingleton<IArtifactGenerationStrategy, FolderArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<ClassModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<InterfaceModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<EntityModel>>();
@@ -157,6 +161,8 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerGetSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RouteHandlerGetByIdSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, AttributeSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, ProducesResponseTypeAttributeSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, SwaggerOperationAttributeSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, TypeSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, ParamSyntaxGenerationStrategy>();
 
@@ -223,6 +229,8 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+
+
 
 
 

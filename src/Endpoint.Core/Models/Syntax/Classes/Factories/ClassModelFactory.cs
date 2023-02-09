@@ -51,13 +51,17 @@ public class ClassModelFactory : IClassModelFactory
 
         classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.AspNetCore.Mvc" });
 
-        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.ApiController });
+        classModel.UsingDirectives.Add(new UsingDirectiveModel { Name = "System.Net.Mime" });
 
-        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.Route });
+        classModel.UsingDirectives.Add(new UsingDirectiveModel { Name = "Swashbuckle.AspNetCore.Annotations" });
 
-        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.Produces });
+        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.ApiController, Name = nameof(AttributeType.ApiController) });
 
-        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.Consumes });
+        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.Route, Name = nameof(AttributeType.Route), Template = "\"api/[controller]\"" });
+
+        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.Produces, Name = nameof(AttributeType.Produces), Template = "MediaTypeNames.Application.Json" });
+
+        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.Consumes, Name = nameof(AttributeType.Consumes), Template = "MediaTypeNames.Application.Json" });
 
         classModel.Fields.Add(new FieldModel()
         {
@@ -68,13 +72,7 @@ public class ClassModelFactory : IClassModelFactory
 
         classModel.Fields.Add(new FieldModel()
         {
-            Type = new TypeModel("ILogger")
-            {
-                GenericTypeParameters = new List<TypeModel>()
-                        {
-                            new TypeModel(classModel.Name)
-                        }
-            },
+            Type = TypeModel.LoggerOf(classModel.Name),
             Name = "_logger"
         });
 
@@ -90,13 +88,7 @@ public class ClassModelFactory : IClassModelFactory
                 },
                 new ParamModel()
                 {
-                    Type = new TypeModel("ILogger")
-                    {
-                        GenericTypeParameters = new List<TypeModel>()
-                        {
-                            new TypeModel(classModel.Name)
-                        }
-                    },
+                    Type = TypeModel.LoggerOf(classModel.Name),
                     Name = "logger"
                 }
             }
@@ -163,6 +155,26 @@ public class ClassModelFactory : IClassModelFactory
         switch (routeType)
         {
             case RouteType.GetById:
+
+                methodModel.Attributes.Add(new SwaggerOperationAttributeModel($"Get {entityIdNamePascalCase}  by id", $"Get {entityIdNamePascalCase} by id"));
+
+                methodModel.Attributes.Add(new AttributeModel()
+                {
+                    Name = "HttpGet",
+                    Template = "\"{toDoId:guid}\"",
+                    Properties = new Dictionary<string, string>() {
+                    { "Name", $"get{entityIdNamePascalCase}ById" }
+                }
+                });
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("NotFound", "string"));
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("BadRequest", "ProblemDetails"));
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("OK", $"Get{entityNamePascalCase}ByIdResponse"));
+
                 methodModel.Params = new List<ParamModel>
                 {
                     new ParamModel { Type = new TypeModel("Guid"), Name = entityIdNameCamelCase, Attribute = new AttributeModel() { Name ="FromRoute" } },
@@ -217,6 +229,19 @@ public class ClassModelFactory : IClassModelFactory
                 break;
 
             case RouteType.Update:
+
+                methodModel.Attributes.Add(new SwaggerOperationAttributeModel($"Update {entityIdNamePascalCase}", $"Update {entityIdNamePascalCase}"));
+
+                methodModel.Attributes.Add(new AttributeModel() { Name = "HttpPut", Properties = new Dictionary<string, string>() {
+                    { "Name", $"update{entityIdNamePascalCase}" }
+                }});
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("BadRequest", "ProblemDetails"));
+
+                methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("OK", $"Update{entityNamePascalCase}Response"));
+
                 methodModel.Params = new List<ParamModel>
                 {
                     new ParamModel { Type = new TypeModel($"Update{entityNamePascalCase}Request "), Name = "request", Attribute = new AttributeModel() { Name ="FromBody" } },

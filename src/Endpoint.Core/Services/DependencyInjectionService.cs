@@ -7,6 +7,7 @@ using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Models.Syntax;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -53,7 +54,7 @@ public class DependencyInjectionService: IDependencyInjectionService
     }
 
     private void UpdateConfigureServices(string diRegistration, string projectSuffix, string configureServicesFilePath)
-    {
+    {        
         var emptyServiceCollection = new StringBuilder().AppendJoin(Environment.NewLine, new string[] { 
             "public static void Add" + projectSuffix + "Services(this IServiceCollection services) {", 
             "}" }).ToString().Indent(1);
@@ -111,7 +112,7 @@ public class DependencyInjectionService: IDependencyInjectionService
     {
         var classModel = new ClassModel("ConfigureServices");
 
-        classModel.UsingDirectives.Add(new Models.Syntax.UsingDirectiveModel() { Name = _namespaceProvider.Get(directory) });
+        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = _namespaceProvider.Get(directory) });
 
         var methodParam = new ParamModel()
         {

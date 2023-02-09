@@ -34,7 +34,7 @@ public class AggregateModel
                 case RouteType.Delete:
                 case RouteType.Create:
                 case RouteType.Update:
-                    Commands.Add(new CommandModel(serviceName, namingConventionConverter,aggregate,routeType));
+                    Commands.Add(new CommandModel(serviceName, aggregate, routeType));
                     break;
 
                 default:

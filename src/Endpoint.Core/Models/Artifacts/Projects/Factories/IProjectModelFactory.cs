@@ -18,5 +18,7 @@ public interface IProjectModelFactory
     ProjectModel CreateIntegrationTestsProject();
     ProjectModel CreateMessagingProject(string directory);
     ProjectModel CreateMessagingUdpProject(string directory);
+    ProjectModel CreateSecurityProject(string directory);
+    ProjectModel CreateKernelProject(string directory);
 }
 

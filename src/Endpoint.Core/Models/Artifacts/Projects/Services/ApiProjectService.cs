@@ -40,9 +40,11 @@ public class ApiProjectService : IApiProjectService
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
     }
 
-    public void ControllerAdd(EntityModel entity, string directory)
+    public void ControllerAdd(string entityName, string directory)
     {
         _logger.LogInformation("Controller Add");
+
+        var entity = new EntityModel(entityName);
 
         _artifactGenerationStrategyFactory.CreateFor(new ProjectReferenceModel()
         {

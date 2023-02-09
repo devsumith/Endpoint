@@ -44,11 +44,11 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         var entityNameCamelCase = _namingConventionConverter.Convert(NamingConvention.CamelCase, entityName);
 
-        builder.AppendLine($"var {entityNameCamelCase} = new {((SyntaxToken)entityName).PascalCase}();");
+        builder.AppendLine($"var {entityNameCamelCase} = new {((SyntaxToken)entityName).PascalCase()}();");
 
         builder.AppendLine("");
 
-        builder.AppendLine($"_context.{((SyntaxToken)entityName).PascalCasePlural}.Add({entityNameCamelCase});");
+        builder.AppendLine($"_context.{((SyntaxToken)entityName).PascalCasePlural()}.Add({entityNameCamelCase});");
 
         builder.AppendLine("");
 
@@ -67,7 +67,7 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         builder.AppendLine("{");
 
-        builder.AppendLine($"{((SyntaxToken)entityName).PascalCase} = {entityNameCamelCase}.ToDto()".Indent(1));
+        builder.AppendLine($"{((SyntaxToken)entityName).PascalCase()} = {entityNameCamelCase}.ToDto()".Indent(1));
 
         builder.AppendLine("};");
 

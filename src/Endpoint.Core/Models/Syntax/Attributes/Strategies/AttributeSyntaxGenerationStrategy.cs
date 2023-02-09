@@ -6,14 +6,14 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Attributes;
+namespace Endpoint.Core.Models.Syntax.Attributes.Strategies;
 
 public class AttributeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<AttributeModel>
 {
     private readonly ILogger<AttributeSyntaxGenerationStrategy> _logger;
     public AttributeSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<AttributeSyntaxGenerationStrategy> logger) 
+        ILogger<AttributeSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -29,7 +29,12 @@ public class AttributeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<At
 
         builder.Append(model.Name);
 
-        if(model.Properties.Count == 1)
+        if (model.Template != null)
+        {
+            builder.Append($"({model.Template})");
+        }
+
+        if (model.Properties.Count == 1)
         {
             builder.Append('(');
 
@@ -41,7 +46,7 @@ public class AttributeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<At
             builder.Append(')');
         }
 
-        if(model.Properties.Count > 1)
+        if (model.Properties.Count > 1)
         {
             builder.AppendLine("(");
 

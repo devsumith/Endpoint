@@ -5,7 +5,6 @@ using Endpoint.Core.Internals;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,7 +29,6 @@ public class ObservableNotificationsProcessor: BackgroundService
 
         _observableNotifications.Subscribe(async message =>
         {
-
             await _mediator.Publish(message);
         });
 

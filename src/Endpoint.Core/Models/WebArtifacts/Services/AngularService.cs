@@ -6,7 +6,6 @@ using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
-using Endpoint.Core.Models.Artifacts.Workspaces;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
 using MediatR;

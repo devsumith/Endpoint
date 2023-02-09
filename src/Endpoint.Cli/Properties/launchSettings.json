@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "event-driven-microservices-create -n FooOnContainers -s IdentityService,DashboardService -d C:\\projects",
+      "commandLineArgs": "controller-create -n User -d C:\\projects\\Huntress\\src\\Services\\IdentityService\\IdentityService.Api\\Controllers",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "",
         "Endpoint:ShortIdPropertyName": "",

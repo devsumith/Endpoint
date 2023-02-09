@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core.UnitTests.AttributeSyntaxGenerationStrategy;
 
-using AttributeSyntaxGenerationStrategy = Endpoint.Core.Models.Syntax.Attributes.AttributeSyntaxGenerationStrategy;
+using AttributeSyntaxGenerationStrategy = Models.Syntax.Attributes.Strategies.AttributeSyntaxGenerationStrategy;
 
 public class CreateShould
 {

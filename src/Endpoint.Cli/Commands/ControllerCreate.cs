@@ -3,7 +3,6 @@
 
 using CommandLine;
 using Endpoint.Core.Models.Artifacts.Projects.Services;
-using Endpoint.Core.Models.Syntax.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,7 +15,7 @@ namespace Endpoint.Cli.Commands;
 [Verb("controller-create")]
 public class ControllerCreateRequest : IRequest
 {
-    [Option('e')]
+    [Option('n')]
     public string EntityName { get; set; }
 
     [Option('d')]
@@ -36,9 +35,9 @@ public class ControllerCreateRequestHandler : IRequestHandler<ControllerCreateRe
 
     public async Task<Unit> Handle(ControllerCreateRequest request, CancellationToken cancellationToken)
     {
-        var entity = new EntityModel(request.EntityName);
+        _logger.LogInformation("Handled: {0}", nameof(ControllerCreateRequestHandler));
 
-        _apiProjectService.ControllerAdd(entity, request.Directory);
+        _apiProjectService.ControllerAdd(request.EntityName, request.Directory);
 
         return new();
     }

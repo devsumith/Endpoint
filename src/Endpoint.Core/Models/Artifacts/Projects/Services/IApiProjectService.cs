@@ -7,7 +7,7 @@ namespace Endpoint.Core.Models.Artifacts.Projects.Services;
 
 public interface IApiProjectService
 {
-    void ControllerAdd(EntityModel entity, string directory);
+    void ControllerAdd(string entityName, string directory);
 
 }
 
