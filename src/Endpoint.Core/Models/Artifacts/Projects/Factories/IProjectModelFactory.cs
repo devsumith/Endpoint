@@ -8,6 +8,7 @@ namespace Endpoint.Core.Models.Artifacts.Projects.Factories;
 
 public interface IProjectModelFactory
 {
+    ProjectModel CreateSpecFlowProject(string name, string directory);
     ProjectModel CreateHttpProject(string name, string directory);
     ProjectModel CreateMinimalApiProject(CreateMinimalApiProjectOptions options);
     ProjectModel CreateMinimalApiUnitTestsProject(string name, string directory, string resource);
@@ -20,5 +21,6 @@ public interface IProjectModelFactory
     ProjectModel CreateMessagingUdpProject(string directory);
     ProjectModel CreateSecurityProject(string directory);
     ProjectModel CreateKernelProject(string directory);
+    ProjectModel CreatePlaywrightProject(string name, string directory);
 }
 

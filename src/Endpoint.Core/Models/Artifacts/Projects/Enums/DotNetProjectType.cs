@@ -6,11 +6,13 @@ namespace Endpoint.Core.Models.Artifacts.Projects.Enums;
 public enum DotNetProjectType
 {
     Console,
+    NUnit,
     XUnit,
     ClassLib,
     WebApi,
     MinimalWebApi,
     Web,
-    Worker
+    Worker,
+    Angular
 }
 

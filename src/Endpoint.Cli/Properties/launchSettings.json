@@ -2,15 +2,8 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "controller-create -n Privilege -d C:\\projects\\Huntress\\src\\Services\\IdentityService\\IdentityService.Api\\Controllers",
+      "commandLineArgs": "spec-flow-feature-create -n Random -d C:\\projects\\E2e\\E2e.Tests_2",
       "environmentVariables": {
-        "Endpoint:DefaultCommand": "",
-        "Endpoint:ShortIdPropertyName": "",
-        "Endpoint:NumericIdPropertyDataType": "",
-        "Endpoint:Resource": "",
-        "Endpoint:Propertoes": "",
-        "Endpoint:Port": "",
-        "Endpoint:DbContextName": ""
       }
     }
   }

@@ -11,6 +11,7 @@ using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Options;
+using Octokit;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,6 +25,36 @@ public class ProjectModelFactory : IProjectModelFactory
     public ProjectModelFactory(IFileModelFactory fileModelFactory)
     {
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+    }
+
+    public ProjectModel CreateSpecFlowProject(string name, string directory)
+    {
+        var model = CreateLibrary(name, directory);
+
+        model.DotNetProjectType = DotNetProjectType.XUnit;
+
+        model.Packages.Add(new PackageModel() { Name = "SpecFlow.XUnit" });
+
+        model.Packages.Add(new PackageModel() { Name = "Microsoft.Extensions.Configuration.Json" });
+
+        model.Packages.Add(new PackageModel() { Name = "FluentAssertions" });
+
+        model.Packages.Add(new PackageModel() { Name = "Ductus.FluentDocker" });
+
+        return model;
+    }
+
+    public ProjectModel CreatePlaywrightProject(string name, string directory)
+    {
+        var model = CreateLibrary(name, directory);
+
+        model.DotNetProjectType = DotNetProjectType.NUnit;
+
+        model.Packages.Add(new PackageModel() { Name = "Microsoft.Playwright.NUnit" });
+
+        model.Packages.Add(new PackageModel() { Name = "SpecFlow.NUnit" });
+
+        return model;
     }
 
     public ProjectModel CreateHttpProject(string name, string directory)

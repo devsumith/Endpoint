@@ -5,7 +5,6 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
-using Octokit.Internal;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -41,6 +40,8 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
             DotNetProjectType.ClassLib => "classlib",
             DotNetProjectType.Worker => "worker",
             DotNetProjectType.XUnit => "xunit",
+            DotNetProjectType.NUnit => "nunit",
+            DotNetProjectType.Angular => "angular",
             _ => "console"
         };
 
@@ -54,6 +55,9 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
         foreach (var package in model.Packages)
         {
             var version = package.IsPreRelease ? "--prerelease" : $"--version {package.Version}";
+
+            if (!package.IsPreRelease && string.IsNullOrEmpty(package.Version))
+                version = null;
 
             _commandService.Start($"dotnet add package {package.Name} {version}", model.Directory);
         }
@@ -69,7 +73,7 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
             artifactGenerationStrategyFactory.CreateFor(file);
         }
 
-        if (model.GenerateDocumentationFile)
+        if (model.GenerateDocumentationFile || templateType == "web" || templateType == "webapi" || templateType == "angular")
         {
             var doc = XDocument.Load(model.Path);
             var projectNode = doc.FirstNode as XElement;

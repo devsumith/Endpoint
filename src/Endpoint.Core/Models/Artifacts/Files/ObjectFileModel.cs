@@ -16,6 +16,13 @@ public class ObjectFileModel<T> : FileModel
         Usings = usings;
     }
 
+    public ObjectFileModel(T @object, string name, string directory, string extension)
+    : base(name.Split('.').Last(), directory, extension)
+    {
+        Object = @object;
+        Usings = new List<UsingDirectiveModel>();
+    }
+
     public T Object { get; init; }
     public List<UsingDirectiveModel> Usings { get; set; } = new List<UsingDirectiveModel>();
 
