@@ -1,0 +1,42 @@
+import { Inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BASE_URL } from '../../constants';
+import { map, Observable } from 'rxjs';
+import { {{ entityNamePascalCase }} } from './{{ entityNameSnakeCase }}';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class {{ entityNamePascalCase }}Service {
+
+  constructor(
+    @Inject(BASE_URL) private readonly _baseUrl: string,
+    private readonly _client: HttpClient
+  ) { }
+
+  public get(): Observable<Array<{{ entityNamePascalCase }}>> {
+    return this._client.get<{ {{ entityNameCamelCasePlural }}: Array<{{ entityNamePascalCase }}> }>(`${this._baseUrl}api/{{ entityNameSnakeCase }}`)
+      .pipe(
+        map(x => x.{{ entityNameCamelCasePlural }})
+      );
+  }
+
+  public getById(options: { {{ entityNameCamelCase }}Id: string }): Observable<{{ entityNamePascalCase }}> {
+    return this._client.get<{ {{ entityNameCamelCase }}: {{ entityNamePascalCase }} }>(`${this._baseUrl}api/{{ entityNameSnakeCase }}/${options.{{ entityNameCamelCase }}Id}`)
+      .pipe(
+        map(x => x.{{ entityNameCamelCase }})
+      );
+  }
+
+  public delete(options: { {{ entityNameCamelCase }}: {{ entityNamePascalCase }} }): Observable<void> {
+    return this._client.delete<void>(`${this._baseUrl}api/{{ entityNameSnakeCase }}/${options.{{ entityNameCamelCase }}.{{ entityNameCamelCase }}Id}`);
+  }
+
+  public create(options: { {{ entityNameCamelCase }}: {{ entityNamePascalCase }} }): Observable<{ {{ entityNameCamelCase }}Id: string  }> {    
+    return this._client.post<{ {{ entityNameCamelCase }}Id: string }>(`${this._baseUrl}api/{{ entityNameSnakeCase }}`, { {{ entityNameCamelCase }}: options.{{ entityNameCamelCase }} });
+  }
+
+  public update(options: { {{ entityNameCamelCase }}: {{ entityNamePascalCase }} }): Observable<{ {{ entityNameCamelCase }}Id: string }> {    
+    return this._client.post<{ {{ entityNameCamelCase }}Id: string }>(`${this._baseUrl}api/{{ entityNameSnakeCase }}`, { {{ entityNameCamelCase }}: options.{{ entityNameCamelCase }} });
+  }
+}

@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "ts-model-add -n User -d C:\\projects\\Huntress\\src\\Apps\\WebSpa\\ClientApp\\projects\\identity\\core\\src\\lib\\models",
+      "commandLineArgs": "ng-http-service-create -n Role -d C:\\projects\\Huntress\\src\\Apps\\WebSpa\\ClientApp\\projects\\identity\\core\\src\\lib\\models\\role",
       "environmentVariables": {
       }
     }

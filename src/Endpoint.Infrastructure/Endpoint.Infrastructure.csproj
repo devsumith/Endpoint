@@ -15,6 +15,7 @@
   <ItemGroup>
     <None Remove="Templates\Angular\app.component.spec.txt" />
     <None Remove="Templates\Angular\app.component.txt" />
+    <None Remove="Templates\Angular\http-service.txt" />
     <None Remove="Templates\Angular\main.txt" />
     <None Remove="Templates\Api\ConfigureServices.txt" />
     <None Remove="Templates\ArtifactGenerationStrategy.txt" />
@@ -61,6 +62,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Templates\Angular\app.component.spec.txt" />
     <EmbeddedResource Include="Templates\Angular\app.component.txt" />
+    <EmbeddedResource Include="Templates\Angular\http-service.txt" />
     <EmbeddedResource Include="Templates\Angular\main.txt" />
     <EmbeddedResource Include="Templates\Api\AppSettings.txt" />
     <EmbeddedResource Include="Templates\Api\ConfigureServices.txt" />
