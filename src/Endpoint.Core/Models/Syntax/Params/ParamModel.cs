@@ -13,5 +13,20 @@ public class ParamModel
     public AttributeModel Attribute { get; set; }
     public string DefaultValue { get; set; }
     public bool ExtensionMethodParam { get; set; }
+
+    public static ParamModel CancellationToken = new ParamModel()
+    {
+        Type = new TypeModel("CancellationToken"),
+        Name = "cancellationToken"
+    };
+
+    public static ParamModel LoggerOf(string name)
+    {
+        return new ParamModel()
+        {
+            Type = TypeModel.LoggerOf(name),
+            Name = "logger"
+        };
+    }
 }
 

@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "spec-flow-feature-create -n Random -d C:\\projects\\E2e\\E2e.Tests_2",
+      "commandLineArgs": "ts-model-add -n User -d C:\\projects\\Huntress\\src\\Apps\\WebSpa\\ClientApp\\projects\\identity\\core\\src\\lib\\models",
       "environmentVariables": {
       }
     }

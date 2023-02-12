@@ -16,10 +16,10 @@ using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using MediatR;
-using Octokit.Internal;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Endpoint.Core.Services;
 
@@ -77,7 +77,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
         classModel.Constructors.Add(constructorModel);
 
-        classModel.Implements.Add(new TypeModel("INotification"));
+        classModel.Implements.Add(new TypeModel("IRequest"));
 
         var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
@@ -87,17 +87,26 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
     public void MessageHandlerCreate(string name, string directory)
     {
-        var classModel = new ClassModel(name);
+        var messageName = $"{name}Message";
 
-        var fields = new List<FieldModel>();
+        var messageHandlerName = $"{messageName}Handler";
 
-        var classParams = new List<ParamModel>();
+        var classModel = new ClassModel(messageHandlerName);
 
         classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "MediatR" });
 
-        classModel.Fields = fields;
+        classModel.Fields = new List<FieldModel>()
+        {
+            FieldModel.LoggerOf(name)
+        };
 
-        var constructorModel = new ConstructorModel(classModel, classModel.Name);
+        var constructorModel = new ConstructorModel(classModel, classModel.Name)
+        {
+            Params = new List<ParamModel>()
+            {
+                ParamModel.LoggerOf(name)
+            }
+        };
 
         foreach (var typeModel in new List<TypeModel> () {  })
         {
@@ -116,7 +125,33 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
         classModel.Constructors.Add(constructorModel);
 
-        classModel.Implements.Add(new TypeModel("INotification"));
+        classModel.Implements.Add(new TypeModel("IRequestHandler")
+        {
+            GenericTypeParameters = new List<TypeModel>
+            {
+                new TypeModel(messageName)
+            }
+        });
+
+        var methodModel = new MethodModel()
+        {
+            ReturnType = TypeModel.TaskOf("Unit"),
+            Async = true,
+            Name = "Handle",
+            AccessModifier = AccessModifier.Public,
+            Params = new List<ParamModel>()
+            {
+                new ParamModel()
+                {
+                    Type = new TypeModel(messageName),
+                    Name = "message"
+                },
+                ParamModel.CancellationToken
+            },
+            Body = new StringBuilder().AppendLine("_logger.LogInformation(\"Message Handled: {message}\", message);").ToString()
+        };
+
+        classModel.Methods.Add(methodModel);
 
         var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
@@ -124,7 +159,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
     }
 
-    public void ServiceBusMessageConsumerCreate(string name = "ServiceBusMessageConsumer", string messagesNamespace= null, string directory = null)
+    public void ServiceBusMessageConsumerCreate(string name = "ServiceBusMessageConsumer", string messagesNamespace = null, string directory = null)
     {
         var classModel = new ClassModel(name);
 
@@ -176,29 +211,53 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
         var methodBody = new string[]
         {
             "await _messagingClient.StartAsync(stoppingToken);",
+
             "",
+            
             "while(!stoppingToken.IsCancellationRequested) {",
+            
             "",
+            
             "try".Indent(1),
+            
             "{".Indent(1),
+            
             "var message = await _messagingClient.ReceiveAsync(new ReceiveRequest());".Indent(2),
+            
             "",
+            
             "var messageType = message.MessageAttributes[\"MessageType\"];".Indent(2),
+            
             "",
+            
             ($"var type = Type.GetType($\"{messagesNamespace}." + "{messageType}\");").Indent(2),
+            
             "",
+            
             "var request = JsonConvert.DeserializeObject(message.Body, type!) as IRequest;".Indent(2),
+            
             "",
+            
             "await _mediator.Send(request!);".Indent(2),
+            
             "",
+            
             "await Task.Delay(100);".Indent(2),
+            
             "}".Indent(1),
+            
             "catch(Exception exception)".Indent(1),
+            
             "{".Indent(1),
+            
             "_logger.LogError(exception.Message);".Indent(2),
+            
             "",
+            
             "continue;".Indent(2),
+            
             "}".Indent(1),
+            
             "}"
         };
 
@@ -219,6 +278,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
         });
 
         classModel.Constructors.Add(ctor);
+
         classModel.Methods.Add(method);
 
         _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs"));
@@ -246,14 +306,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
             new FieldModel()
             {
                 Name = "_logger",
-                Type = new TypeModel()
-                {
-                    Name = "ILogger",
-                    GenericTypeParameters = new List<TypeModel>()
-                    {
-                        new TypeModel() { Name = name}
-                    }
-                }
+                Type = TypeModel.LoggerOf(name)
             }
         };
 
@@ -299,21 +352,13 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
             var constructors = new List<ConstructorModel>()
             {
-
-                new ConstructorModel(@class,@class.Name)
+                new ConstructorModel(@class, @class.Name)
                 {
                     Params = new List<ParamModel>
                     {
                         new ParamModel()
                         {
-                            Type = new TypeModel()
-                            {
-                                Name = "ILogger",
-                                GenericTypeParameters = new List<TypeModel>()
-                                {
-                                    new TypeModel() { Name = name}
-                                }
-                            },
+                            Type = TypeModel.LoggerOf(name),
                             Name = "logger"
                         }
                     }

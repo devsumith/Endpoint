@@ -16,6 +16,7 @@
     <None Remove="Templates\Angular\app.component.spec.txt" />
     <None Remove="Templates\Angular\app.component.txt" />
     <None Remove="Templates\Angular\main.txt" />
+    <None Remove="Templates\Api\ConfigureServices.txt" />
     <None Remove="Templates\ArtifactGenerationStrategy.txt" />
     <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\ConfigureServices.txt" />
     <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\IUdpClientFactory.txt" />
@@ -50,6 +51,7 @@
     <None Remove="Templates\BuildingBlocks\Validation\ValidationBehavior.txt" />
     <None Remove="Templates\Copyright.txt" />
     <None Remove="Templates\README.txt" />
+    <None Remove="Templates\SpecFlow\DockerControllerHooks.txt" />
     <None Remove="Templates\SyntaxGenerationStrategy.txt" />
     <None Remove="Templates\TestHeader.txt" />
     <None Remove="Templates\Verb.txt" />
@@ -61,6 +63,7 @@
     <EmbeddedResource Include="Templates\Angular\app.component.txt" />
     <EmbeddedResource Include="Templates\Angular\main.txt" />
     <EmbeddedResource Include="Templates\Api\AppSettings.txt" />
+    <EmbeddedResource Include="Templates\Api\ConfigureServices.txt" />
     <EmbeddedResource Include="Templates\Api\IdFile.txt" />
     <EmbeddedResource Include="Templates\Api\LaunchSettings.txt" />
     <EmbeddedResource Include="Templates\Api\MinimalAppSettings.txt" />
@@ -110,6 +113,7 @@
     <EmbeddedResource Include="Templates\Infrastructure\SeedData.txt" />
     <EmbeddedResource Include="Templates\IntegrationTests\ApiTest.txt" />
     <EmbeddedResource Include="Templates\IntegrationTests\WebApplicationFactory.txt" />
+    <EmbeddedResource Include="Templates\SpecFlow\DockerControllerHooks.txt" />
     <EmbeddedResource Include="Templates\TestHeader.txt" />
     <EmbeddedResource Include="Templates\SharedKernel\QueryableExtensions.txt" />
     <EmbeddedResource Include="Templates\SharedKernel\ResponseBase.txt" />

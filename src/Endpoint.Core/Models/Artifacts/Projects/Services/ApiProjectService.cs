@@ -67,7 +67,7 @@ public class ApiProjectService : IApiProjectService
     public void AddApiFiles(string serviceName, string directory)
     {
         var tokens = new TokensBuilder()
-            .With("ServiceName", serviceName)
+            .With("serviceName", serviceName)
             .With("DbContextName", $"{serviceName}DbContext")
             .With("Port","5001")
             .With("SslPort","5000")

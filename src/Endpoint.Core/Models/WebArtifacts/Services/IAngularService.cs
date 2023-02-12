@@ -19,6 +19,5 @@ public interface IAngularService
     void PrettierAdd(string directory);
     public void ComponentCreate(string name, string directory);
     public void ServiceCreate(string name, string directory);
+    public void ModelCreate(string name, string directory, string properties = null);
 }
-
-

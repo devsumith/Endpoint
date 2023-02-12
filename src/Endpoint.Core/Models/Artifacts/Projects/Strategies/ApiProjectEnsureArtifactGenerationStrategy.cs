@@ -76,13 +76,13 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
         {
             artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", projectDirectory, tokens: new TokensBuilder()
                 .With("DbContext", dbContext)
+                .With("serviceName",projectName)
                 .Build()));
-        }
 
-
-        if (!_fileSystem.Exists($"{projectDirectory}{Path.DirectorySeparatorChar}Program.cs"))
-        {
-            artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate("Api.Program", "Program", projectDirectory));
+            artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate("Api.Program", "Program", projectDirectory, tokens: new TokensBuilder()
+                .With("DbContext", dbContext)
+                .With("serviceName", projectName)
+                .Build()));
         }
     }
 
@@ -113,8 +113,16 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
     {
         var projectName = Path.GetFileNameWithoutExtension(projectDirectory).Split('.').First();
 
-        _commandService.Start($"dotnet add {projectDirectory} reference \"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}BuildingBlocks{Path.DirectorySeparatorChar}Messaging{Path.DirectorySeparatorChar}Messaging.Udp{Path.DirectorySeparatorChar}Messaging.Udp.csproj{Path.DirectorySeparatorChar}\"", projectDirectory);
+        var solutionDirectory = projectDirectory;
 
-        _commandService.Start($"dotnet add {projectDirectory} reference \"..{Path.DirectorySeparatorChar}{projectName}.Infrastructure{Path.DirectorySeparatorChar}{projectName}.Infrastructure.csproj\"", projectDirectory);
+        while (!Directory.EnumerateFiles(solutionDirectory, "*.sln").Any(x => x.EndsWith($"sln")))
+        {
+            solutionDirectory = solutionDirectory.Substring(0, solutionDirectory.LastIndexOf(Path.DirectorySeparatorChar));
+        }
+
+        foreach(var infrastructureProjectPath in Directory.GetFiles(solutionDirectory,$"{projectName}.Infrastructure.csproj", SearchOption.AllDirectories))
+        {
+            _commandService.Start($"dotnet add {projectDirectory} reference {infrastructureProjectPath}", projectDirectory);
+        }
     }
 }

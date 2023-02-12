@@ -7,6 +7,8 @@ using Endpoint.Core.Messages;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Properties;
+using Endpoint.Core.Models.Syntax.TypeScript;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -28,7 +30,7 @@ public class AngularService : IAngularService
     private readonly IFileModelFactory _fileModelFactory;
     private readonly Observable<INotification> _observableNotifications;
     private readonly IUtlitityService _utlitityService;
-
+    private readonly ISyntaxService _syntaxService;
     public AngularService(
         ILogger<AngularService> logger,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
@@ -37,7 +39,8 @@ public class AngularService : IAngularService
         IFileSystem fileSystem,
         IFileModelFactory fileModelFactory,
         Observable<INotification> observableNotifications,
-        IUtlitityService utlitityService
+        IUtlitityService utlitityService,
+        ISyntaxService syntaxService
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -48,6 +51,7 @@ public class AngularService : IAngularService
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
         _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
         _utlitityService =  utlitityService ?? throw new ArgumentNullException(nameof(utlitityService));
+        _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
     }
 
     public void ComponentCreate(string name, string directory)
@@ -532,5 +536,36 @@ public class AngularService : IAngularService
         json.AddStyle(model.Name, "node_modules\\bootstrap\\dist\\css\\bootstrap.min.css".Replace(Path.DirectorySeparatorChar, '/'));
 
         _fileSystem.WriteAllText(jsonPath, JsonConvert.SerializeObject(json, Formatting.Indented));
+    }
+
+    public void ModelCreate(string name, string directory, string properties = null)
+    {
+        var serviceName = "IdentityService";
+
+        var classModel = _syntaxService.SolutionModel?.GetClass(name, serviceName);
+
+        var model = new TypeScriptTypeModel(name);
+
+        foreach(var property in classModel.Properties)
+        {
+
+            model.Properties.Add(property.ToTs());
+        }
+
+        if(!string.IsNullOrEmpty(properties))
+        {
+            foreach (var property in properties.Split(','))
+            {
+                var parts = property.Split(':');
+                var propertyName = parts[0];
+                var propertyType = parts[1];
+
+                model.Properties.Add(PropertyModel.TypeScriptProperty(propertyName, propertyType));
+            }
+        }
+
+        var fileModel = new ObjectFileModel<TypeScriptTypeModel>(model, ((SyntaxToken)model.Name).SnakeCase(), directory, "ts");
+
+        _artifactGenerationStrategyFactory.CreateFor(fileModel);
     }
 }

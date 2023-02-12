@@ -57,8 +57,10 @@
     <Folder Include="Models\Syntax\Classes\Services\" />
     <Folder Include="Models\Syntax\Methods\ControllerMethods\" />
     <Folder Include="Models\Syntax\Microservices\" />
+    <Folder Include="Models\Syntax\TypeScript\" />
     <Folder Include="Models\Syntax\RouteHandlers\Create\" />
     <Folder Include="Messages\" />
+    <Folder Include="Models\Syntax\SpecFlow\Services\" />
     <Folder Include="Models\WebArtifacts\Commands\" />
   </ItemGroup>
 </Project>

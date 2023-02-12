@@ -7,7 +7,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-
+using Endpoint.Core.Services;
 
 namespace Endpoint.Cli.Commands;
 
@@ -25,15 +25,21 @@ public class MessageHandlerCreateRequest : IRequest {
 public class MessageHandlerCreateRequestHandler : IRequestHandler<MessageHandlerCreateRequest>
 {
     private readonly ILogger<MessageHandlerCreateRequestHandler> _logger;
+    private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;
 
-    public MessageHandlerCreateRequestHandler(ILogger<MessageHandlerCreateRequestHandler> logger)
+    public MessageHandlerCreateRequestHandler(
+        ILogger<MessageHandlerCreateRequestHandler> logger,
+        IDomainDrivenDesignFileService domainDrivenDesignFileService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _domainDrivenDesignFileService = domainDrivenDesignFileService ?? throw new ArgumentNullException(nameof(domainDrivenDesignFileService));
     }
 
     public async Task<Unit> Handle(MessageHandlerCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(MessageHandlerCreateRequestHandler));
+
+        _domainDrivenDesignFileService.MessageHandlerCreate(request.Name, request.Directory);
 
         return new();
     }

@@ -17,16 +17,16 @@ namespace Endpoint.Cli.Commands;
 
 [Verb("ng-project-add")]
 public class AngularAddProjectRequest : IRequest {
-    [Option('n', "name")]
-    public string Name { get; set; } = "components";
+    [Option('n', "name", Required = true)]
+    public string Name { get; set; }
 
-    [Option("prefix")]
+    [Option('p', "prefix")]
     public string Prefix { get; set; } = "lib";
 
-    [Option('t')]
+    [Option('t', "project-type")]
     public string ProjectType { get; set; } = "library";
 
-    [Option('d', Required = false)]
+    [Option('d', "directory", Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 

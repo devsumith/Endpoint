@@ -16,6 +16,29 @@ public class PropertyModel
     public bool Interface { get; set; }
     public TypeDeclarationModel Parent { get; set; }
 
+    public PropertyModel ToTs()
+    {
+        var model = TypeScriptProperty(Name, Type.Name);
+
+        switch(model.Type.Name.ToLower())
+        {
+            case "guid":
+                model.Type.Name = "string";
+                break;
+
+            case "int":
+                model.Type.Name = "number";
+                break;
+        }
+
+        return model;
+    }
+
+    public static PropertyModel TypeScriptProperty(string name, string type)
+    {
+        return new PropertyModel(null, default, new TypeModel(type), name, null);
+    }
+
     public PropertyModel(TypeDeclarationModel parent, AccessModifier accessModifier, TypeModel type, string name, List<PropertyAccessorModel> accessors, bool required = true, bool key = false)
     {
         AccessModifier = accessModifier;
