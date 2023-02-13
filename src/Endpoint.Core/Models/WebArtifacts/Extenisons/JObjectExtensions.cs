@@ -8,6 +8,12 @@ namespace Newtonsoft.Json.Linq;
 
 public static class JObjectExtensions
 {
+
+    public static void ExportsAssetsAndStyles(this JObject jObject)
+    {
+        jObject["assets"] = new JArray("\"./scss/*.*\"", "\"./assets/**/*.*\"");
+    }
+
     public static void EnableDefaultStandaloneComponents(this JObject jObject, string projectName)
     {
         jObject["projects"][projectName]["schematics"] = new JObject

@@ -174,7 +174,11 @@ public class AngularService : IAngularService
 
         _commandService.Start(stringBuilder.ToString(), model.RootDirectory);
 
-        EnableDefaultStandaloneComponents(new AngularProjectReferenceModel(model.Name,model.Directory, model.ProjectType));
+        var angularProjectReferenceModel = new AngularProjectReferenceModel(model.Name, model.Directory, model.ProjectType);
+
+        EnableDefaultStandaloneComponents(angularProjectReferenceModel);
+
+        ExportsAssetsAndStyles(angularProjectReferenceModel);
 
         if (model.ProjectType == "application")
         {            
@@ -237,6 +241,27 @@ public class AngularService : IAngularService
         stringBuilder.AppendLine("};");
 
         _fileSystem.WriteAllText($"{model.Directory}{Path.DirectorySeparatorChar}jest.config.js",stringBuilder.ToString());
+    }
+
+    public void ExportsAssetsAndStyles(AngularProjectReferenceModel model)
+    {
+        if (model.ProjectType == "application")
+            return;
+
+        var ngPackagePath = _fileProvider.Get("ng-package.json", model.ReferencedDirectory);
+
+        var ngPackageJson = JObject.Parse(_fileSystem.ReadAllText(ngPackagePath));
+
+        ngPackageJson.ExportsAssetsAndStyles();
+
+        _fileSystem.WriteAllText(ngPackagePath, JsonConvert.SerializeObject(ngPackageJson, Formatting.Indented));
+    }
+
+    public void MaterialAdd(AngularProjectReferenceModel model)
+    {
+        var rootDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", model.ReferencedDirectory));
+
+        _commandService.Start($"ng add @angular/material --project {model.Name} --theme custom --typography true --animations enabled --interactive false", rootDirectory);
     }
 
     public void EnableDefaultStandaloneComponents(AngularProjectReferenceModel model)

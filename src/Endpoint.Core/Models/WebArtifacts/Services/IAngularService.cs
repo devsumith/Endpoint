@@ -17,12 +17,13 @@ public interface IAngularService
     void I18nExtract(AngularProjectReferenceModel model);
     void BootstrapAdd(AngularProjectReferenceModel model);
     void PrettierAdd(string directory);
-    public void ComponentCreate(string name, string directory);
-    public void ServiceCreate(string name, string directory);
-    public void ModelCreate(string name, string directory, string properties = null);
-    public void ListComponentCreate(string name, string directory);
-    public void DetailComponentCreate(string name, string directory);
-    public void IndexCreate(bool scss, string directory);
-    public void DefaultScssCreate(string directory);
-    public void ScssComponentCreate(string name, string directory);
+    void ComponentCreate(string name, string directory);
+    void ServiceCreate(string name, string directory);
+    void ModelCreate(string name, string directory, string properties = null);
+    void ListComponentCreate(string name, string directory);
+    void DetailComponentCreate(string name, string directory);
+    void IndexCreate(bool scss, string directory);
+    void DefaultScssCreate(string directory);
+    void ScssComponentCreate(string name, string directory);
+    void MaterialAdd(AngularProjectReferenceModel model);
 }
