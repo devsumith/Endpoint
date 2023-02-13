@@ -12,34 +12,34 @@ using Endpoint.Core.Models.WebArtifacts.Services;
 namespace Endpoint.Cli.Commands;
 
 
-[Verb("ng-translate-add")]
-public class AngularTranslateAddRequest : IRequest {
+[Verb("angular-list-component-create")]
+public class AngularListComponentCreateRequest : IRequest {
     [Option('n',"name")]
-    public string ProjectName { get; set; }
+    public string Name { get; set; }
 
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class AngularTranslateAddRequestHandler : IRequestHandler<AngularTranslateAddRequest>
+public class AngularListComponentCreateRequestHandler : IRequestHandler<AngularListComponentCreateRequest>
 {
-    private readonly ILogger<AngularTranslateAddRequestHandler> _logger;
+    private readonly ILogger<AngularListComponentCreateRequestHandler> _logger;
     private readonly IAngularService _angularService;
 
-    public AngularTranslateAddRequestHandler(
-        IAngularService angularService,
-        ILogger<AngularTranslateAddRequestHandler> logger)
+    public AngularListComponentCreateRequestHandler(
+        ILogger<AngularListComponentCreateRequestHandler> logger,
+        IAngularService angularService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(AngularTranslateAddRequest request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(AngularListComponentCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(AngularTranslateAddRequestHandler));
+        _logger.LogInformation("Handled: {0}", nameof(AngularListComponentCreateRequestHandler));
 
-        _angularService.NgxTranslateAdd(request.ProjectName, request.Directory);
+        _angularService.ListComponentCreate(request.Name, request.Directory);
 
         return new();
     }

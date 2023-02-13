@@ -185,7 +185,7 @@ public class FileModelFactory : IFileModelFactory
 
         var usingDirectives = new List<UsingDirectiveModel>();
 
-        foreach (var folder in Directory.GetDirectories($"{projectDirectory}{Path.DirectorySeparatorChar}AggregatesModel"))
+        foreach (var folder in Directory.GetDirectories($"{projectDirectory}{Path.DirectorySeparatorChar}AggregateModel"))
         {
             var folderName = Path.GetFileNameWithoutExtension(folder);
 

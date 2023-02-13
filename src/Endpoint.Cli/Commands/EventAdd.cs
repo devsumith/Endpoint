@@ -49,7 +49,7 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest>
     {
         var settings = _settingsProvider.Get(request.Directory);
 
-        var aggregateEventsDirectory = $@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}AggregatesModel{Path.DirectorySeparatorChar}{request.Aggregate}Aggregate{Path.DirectorySeparatorChar}DomainEvents";
+        var aggregateEventsDirectory = $@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}AggregateModel{Path.DirectorySeparatorChar}{request.Aggregate}Aggregate{Path.DirectorySeparatorChar}DomainEvents";
 
         var eventName = $"{request.Aggregate}{_tenseConverter.Convert(request.Verb)}";
 

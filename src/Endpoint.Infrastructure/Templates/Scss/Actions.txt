@@ -1,0 +1,6 @@
+.{{ prefix }}-actions {
+  display: flex;
+  gap:20px;
+  justify-content: right;
+  align-items: center;
+}

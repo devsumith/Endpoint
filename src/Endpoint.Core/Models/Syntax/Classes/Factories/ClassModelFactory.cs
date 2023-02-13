@@ -161,7 +161,7 @@ public class ClassModelFactory : IClassModelFactory
                 methodModel.Attributes.Add(new AttributeModel()
                 {
                     Name = "HttpGet",
-                    Template = "\"{toDoId:guid}\"",
+                    Template = "\"{" + entityIdNameCamelCase + ":guid}\"",
                     Properties = new Dictionary<string, string>() {
                     { "Name", $"get{entityIdNamePascalCase}ById" }
                 }
@@ -291,7 +291,7 @@ public class ClassModelFactory : IClassModelFactory
                 methodModel.Attributes.Add(new AttributeModel()
                 {
                     Name = "HttpDelete",
-                    Template = "\"{toDoId:guid}\"",
+                    Template = "\"{" + entityIdNameCamelCase + ":guid}\"",
                     Properties = new Dictionary<string, string>() {
                     { "Name", $"delete{entityNamePascalCase}" }
                 }

@@ -20,4 +20,9 @@ public interface IAngularService
     public void ComponentCreate(string name, string directory);
     public void ServiceCreate(string name, string directory);
     public void ModelCreate(string name, string directory, string properties = null);
+    public void ListComponentCreate(string name, string directory);
+    public void DetailComponentCreate(string name, string directory);
+    public void IndexCreate(bool scss, string directory);
+    public void DefaultScssCreate(string directory);
+    public void ScssComponentCreate(string name, string directory);
 }

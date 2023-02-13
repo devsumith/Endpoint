@@ -1,0 +1,33 @@
+.{{ prefix }}-button {
+  border: none;
+  min-width: 116px;
+  border-radius: 5px;
+  min-height: 46px;
+  box-sizing: border-box;
+  border:1px solid #D7D3CB;
+  background-color: #F8F6F3;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 16.8px;
+
+  &:hover {
+    border:1px solid #0E314C;
+  }
+}
+
+.{{ prefix }}-icon-button {
+  @extend .{{ prefix }}-button;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  place-items: center;
+  justify-content: center;
+  padding-left: 22px;
+  padding-right: 17px;
+
+  mat-icon {
+    --mat-icon-size: 20px;
+    font-size: var(--mat-icon-size);
+    height: var(--mat-icon-size);
+    width: var(--mat-icon-size);
+  }
+}

@@ -1,0 +1,17 @@
+﻿@use 'src/scss/breakpoints';
+
+@media screen and (min-width: breakpoints.$screen-sm) { 
+
+}
+
+@media screen and (min-width: breakpoints.$screen-md) { 
+
+}
+
+@media screen and (min-width: breakpoints.$screen-lg) { 
+
+}
+
+@media screen and (min-width: breakpoints.$screen-md) { 
+
+}

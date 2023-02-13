@@ -1,0 +1,9 @@
+.{{ prefix }}-dialog-panel {
+  .mat-dialog-container {
+    padding:30px;
+
+    [{{ prefix }}-title-bar] {
+      margin-bottom: 30px;
+    }
+  }
+}

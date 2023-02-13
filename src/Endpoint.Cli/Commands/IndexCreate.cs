@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Endpoint.Core.Services;
+using Endpoint.Core.Models.WebArtifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 
@@ -29,57 +30,22 @@ public class IndexCreateRequestHandler : IRequestHandler<IndexCreateRequest>
 {
     private readonly ILogger<IndexCreateRequestHandler> _logger;
     private readonly IFileSystem _fileSystem;
-    public IndexCreateRequestHandler(ILogger<IndexCreateRequestHandler> logger, IFileSystem fileSystem)
+    private readonly IAngularService _angularService;
+    public IndexCreateRequestHandler(
+        ILogger<IndexCreateRequestHandler> logger, 
+        IFileSystem fileSystem,
+        IAngularService angularService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
     public async Task<Unit> Handle(IndexCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(IndexCreateRequestHandler));
 
-        List<string> lines = new();
-
-        foreach (var path in Directory.GetDirectories(request.Directory))
-        {
-            var files = Directory.GetFiles(path);
-
-            var fileNames = Directory.GetFiles(path).Select(Path.GetFileNameWithoutExtension);
-
-            var containsIndex = Directory.GetFiles(path)
-                .Select(Path.GetFileNameWithoutExtension)
-                .Contains("index");
-
-            if (!request.Scss && Directory.GetFiles(path)
-                .Select(Path.GetFileNameWithoutExtension)
-                .Contains("index"))
-            {
-                lines.Add($"export * from './{Path.GetFileNameWithoutExtension(path)}';");
-            }
-        }
-
-        if (request.Scss)
-        {
-
-            foreach (var file in Directory.GetFiles(request.Directory, "*.scss"))
-            {
-                if (!file.EndsWith("index.scss"))
-                    lines.Add($"@use './{Path.GetFileNameWithoutExtension(file)}';");
-            }
-
-            _fileSystem.WriteAllLines($"{request.Directory}{Path.DirectorySeparatorChar}index.scss", lines.ToArray());
-        }
-        else
-        {
-            foreach (var file in Directory.GetFiles(request.Directory, "*.ts"))
-            {
-                if (!file.Contains(".spec.") && !file.EndsWith("index.ts"))
-                    lines.Add($"export * from './{Path.GetFileNameWithoutExtension(file)}';");
-            }
-
-            _fileSystem.WriteAllLines($"{request.Directory}{Path.DirectorySeparatorChar}index.ts", lines.ToArray());
-        }
+        _angularService.IndexCreate(request.Scss, request.Directory);
 
         return new();
     }

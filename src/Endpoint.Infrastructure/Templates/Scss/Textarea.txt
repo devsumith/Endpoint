@@ -1,0 +1,16 @@
+.{{ prefix }}-textarea {
+  width: 100%;
+  min-height: 150px;
+  font-family: Roboto;
+  border: 1px solid #D7D3CB;
+  border-radius: 10px;
+  resize: none;
+  padding: 22px;
+  box-sizing: border-box;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: #0e314c;
+  margin-bottom: 20px;
+  display: block;
+}

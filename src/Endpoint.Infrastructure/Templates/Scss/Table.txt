@@ -1,0 +1,67 @@
+.{{ prefix }}-root {
+
+  .{{ prefix }}-table {
+    width: 100%;
+    background-color: rgba(0,0,0,0);
+    box-sizing: border-box;
+
+    thead[role="rowgroup"] {
+      background-color: rgba(0,0,0,0);
+
+      .mat-header-row.cdk-header-row {
+        background-color: red;
+        background-color: rgba(0,0,0,0);
+        display: grid;
+        padding: 0px 20px;
+        grid-template-columns:var(--grid-template-columns, 1fr);
+        th {
+          background-color: rgba(0,0,0,0);
+          padding:0;
+        }
+      }
+
+      th {
+        display: flex;
+        place-items: center start;
+        border:none;
+        background-color: rgba(0,0,0,0);
+      }
+    }
+
+    tbody[role="rowgroup"] {
+      background-color: white;
+      border:1px solid #E5E5E5;
+      border-radius: 10px;
+      display: block;
+
+      .mat-row.cdk-row  {
+        display: grid;
+        grid-template-columns: var(--grid-template-columns, 1fr);
+        border-radius: 10px;
+        box-sizing: border-box;
+        padding:0px 20px 0 20px;
+        user-select: none;
+      }
+
+      td {
+        display: flex;
+        place-items: center start;
+        border:none;
+        border-bottom: 1px solid #E5E5E5;
+        padding:0;
+      }
+
+      tr.mat-row.cdk-row:last-of-type {
+        td {
+          border:none;
+        }
+      }
+    }
+  }
+
+
+  .{{ prefix }}-paginator {
+    background-color: initial;
+    box-shadow:none;
+  }
+}

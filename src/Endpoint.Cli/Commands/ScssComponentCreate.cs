@@ -7,39 +7,40 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 using Endpoint.Core.Models.WebArtifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 
 
-[Verb("ng-translate-add")]
-public class AngularTranslateAddRequest : IRequest {
+[Verb("scss-component-create")]
+public class ScssComponentCreateRequest : IRequest {
     [Option('n',"name")]
-    public string ProjectName { get; set; }
+    public string Name { get; set; }
 
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class AngularTranslateAddRequestHandler : IRequestHandler<AngularTranslateAddRequest>
+public class ScssComponentCreateRequestHandler : IRequestHandler<ScssComponentCreateRequest>
 {
-    private readonly ILogger<AngularTranslateAddRequestHandler> _logger;
+    private readonly ILogger<ScssComponentCreateRequestHandler> _logger;
     private readonly IAngularService _angularService;
 
-    public AngularTranslateAddRequestHandler(
-        IAngularService angularService,
-        ILogger<AngularTranslateAddRequestHandler> logger)
+    public ScssComponentCreateRequestHandler(
+        ILogger<ScssComponentCreateRequestHandler> logger,
+        IAngularService angularService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(AngularTranslateAddRequest request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(ScssComponentCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(AngularTranslateAddRequestHandler));
+        _logger.LogInformation("Handled: {0}", nameof(ScssComponentCreateRequestHandler));
 
-        _angularService.NgxTranslateAdd(request.ProjectName, request.Directory);
+        _angularService.ScssComponentCreate(request.Name, request.Directory);
 
         return new();
     }

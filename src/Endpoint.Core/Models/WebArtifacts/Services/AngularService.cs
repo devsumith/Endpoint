@@ -14,8 +14,10 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Octokit.Internal;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Models.WebArtifacts.Services;
@@ -31,6 +33,7 @@ public class AngularService : IAngularService
     private readonly Observable<INotification> _observableNotifications;
     private readonly IUtlitityService _utlitityService;
     private readonly ISyntaxService _syntaxService;
+    private readonly INamingConventionConverter _namingConventionConverter;
     public AngularService(
         ILogger<AngularService> logger,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
@@ -40,7 +43,8 @@ public class AngularService : IAngularService
         IFileModelFactory fileModelFactory,
         Observable<INotification> observableNotifications,
         IUtlitityService utlitityService,
-        ISyntaxService syntaxService
+        ISyntaxService syntaxService,
+        INamingConventionConverter namingConventionConverter
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -52,6 +56,7 @@ public class AngularService : IAngularService
         _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
         _utlitityService =  utlitityService ?? throw new ArgumentNullException(nameof(utlitityService));
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
+        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
     public void ComponentCreate(string name, string directory)
@@ -61,6 +66,10 @@ public class AngularService : IAngularService
         _commandService.Start($"ng g c {name}", directory);
 
         var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
+
+        IndexCreate(false, componentDirectory);
+
+        IndexCreate(false, directory);
 
         _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.ts"));
 
@@ -76,6 +85,8 @@ public class AngularService : IAngularService
         _commandService.Start($"ng g s {name}", directory);
 
         var nameSnakeCase = ((SyntaxToken)name).SnakeCase();
+
+        IndexCreate(false, directory);
 
         _observableNotifications.Broadcast(new FileCreated($"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}.service.ts"));
 
@@ -540,7 +551,7 @@ public class AngularService : IAngularService
 
     public void ModelCreate(string name, string directory, string properties = null)
     {
-        var serviceName = "IdentityService";
+        var serviceName = "DashboardService";
 
         var classModel = _syntaxService.SolutionModel?.GetClass(name, serviceName);
 
@@ -567,5 +578,119 @@ public class AngularService : IAngularService
         var fileModel = new ObjectFileModel<TypeScriptTypeModel>(model, ((SyntaxToken)model.Name).SnakeCase(), directory, "ts");
 
         _artifactGenerationStrategyFactory.CreateFor(fileModel);
+    }
+
+    public void ListComponentCreate(string name, string directory)
+    {
+        var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
+
+        ComponentCreate($"{nameSnakeCase}-list", directory);
+    }
+
+    public void DetailComponentCreate(string name, string directory)
+    {
+        var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
+
+        ComponentCreate($"{nameSnakeCase}-detail", directory);
+    }
+
+    public void IndexCreate(bool scss, string directory)
+    {
+        List<string> lines = new();
+
+        foreach (var path in Directory.GetDirectories(directory))
+        {
+            var files = Directory.GetFiles(path);
+
+            var fileNames = Directory.GetFiles(path).Select(Path.GetFileNameWithoutExtension);
+
+            var containsIndex = Directory.GetFiles(path)
+                .Select(Path.GetFileNameWithoutExtension)
+            .Contains("index");
+
+            if (!scss && Directory.GetFiles(path)
+                .Select(Path.GetFileNameWithoutExtension)
+                .Contains("index"))
+            {
+                lines.Add($"export * from './{Path.GetFileNameWithoutExtension(path)}';");
+            }
+        }
+        if (scss)
+        {
+
+            foreach (var file in Directory.GetFiles(directory, "*.scss"))
+            {
+                if (!file.EndsWith("index.scss"))
+                    lines.Add($"@use './{Path.GetFileNameWithoutExtension(file)}';");
+            }
+
+            _fileSystem.WriteAllLines($"{directory}{Path.DirectorySeparatorChar}index.scss", lines.ToArray());
+        }
+        else
+        {
+            foreach (var file in Directory.GetFiles(directory, "*.ts"))
+            {
+                if (!file.Contains(".spec.") && !file.EndsWith("index.ts"))
+                    lines.Add($"export * from './{Path.GetFileNameWithoutExtension(file)}';");
+            }
+
+            _fileSystem.WriteAllLines($"{directory}{Path.DirectorySeparatorChar}index.ts", lines.ToArray());
+        }
+    }
+
+    public void DefaultScssCreate(string directory)
+    {
+        var applicationDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.app.json",directory));
+
+        var scssDirectory = Path.Combine(applicationDirectory, "src", "scss");
+
+        _fileSystem.CreateDirectory(scssDirectory);
+
+        foreach (var name in new string[] {
+                "Actions",
+                "Brand",
+                "Breakpoints",
+                "Buttons",
+                "Dialogs",
+                "Field",
+                "FormFields",
+                "Header",
+                "Label",
+                "Pills",
+                "RouterLinkActive",
+                "Table",
+                "Textarea",
+                "Title",
+                "TitleBar",
+                "Variables"
+            })
+        {
+            var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
+
+            var model = _fileModelFactory.CreateTemplate(name, $"_{nameSnakeCase}", scssDirectory, "scss", tokens: new TokensBuilder().With("prefix", "g").Build());
+
+            _artifactGenerationStrategyFactory.CreateFor(model);
+        }
+
+        IndexCreate(true, scssDirectory);
+    }
+
+    public void ScssComponentCreate(string name, string directory)
+    {
+        var applicationDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.app.json", directory));
+
+        var scssDirectory = Path.Combine(applicationDirectory, "src", "scss");
+
+        _fileSystem.CreateDirectory(scssDirectory);
+
+        var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
+
+        _fileSystem.WriteAllLines(Path.Combine(scssDirectory,$"_{nameSnakeCase}.scss"), new string[3] {
+                    $".g-{nameSnakeCase}" + " {",
+                    "",
+                    "}"
+                });
+
+        IndexCreate(true, scssDirectory);
     }
 }
