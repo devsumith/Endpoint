@@ -94,8 +94,19 @@ public class AggregateService: IAggregateService
         var model = new ObjectFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, "cs");
 
         _artifactGenerationStrategyFactory.CreateFor(model);
+    }
 
+    public void QueryCreate(string name, string aggregate, string directory)
+    {
+        var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
 
+        var classModel = _syntaxService.SolutionModel?.GetClass(aggregate, serviceName);
+
+        var queryModel = new QueryModel(serviceName, _namingConventionConverter, classModel, name: name);
+
+        var model = new ObjectFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, "cs");
+
+        _artifactGenerationStrategyFactory.CreateFor(model);
     }
 }
 

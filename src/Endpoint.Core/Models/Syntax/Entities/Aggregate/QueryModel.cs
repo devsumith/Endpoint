@@ -16,11 +16,11 @@ namespace Endpoint.Core.Models.Syntax.Entities.Aggregate;
 
 public class QueryModel : CqrsBase
 {
-    public QueryModel(string microserviceName, INamingConventionConverter namingConventionConverter, ClassModel entity, RouteType routeType)
+    public QueryModel(string microserviceName, INamingConventionConverter namingConventionConverter, ClassModel entity, RouteType routeType = RouteType.Get, string name = null)
     {
         var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true);
 
-        Name = routeType switch
+        Name = name ?? routeType switch
         {
             RouteType.Get => $"Get{entityNamePascalCasePlural}",
             RouteType.GetById => $"Get{entity.Name}ById",
@@ -52,13 +52,7 @@ public class QueryModel : CqrsBase
 
         RequestHandler.Fields.Add(new FieldModel()
         {
-            Type = new TypeModel("ILogger")
-            {
-                GenericTypeParameters = new List<TypeModel>
-                {
-                    new TypeModel(RequestHandler.Name)
-                }
-            },
+            Type = TypeModel.LoggerOf(RequestHandler.Name),
             Name = "_logger"
         });
 
@@ -71,13 +65,7 @@ public class QueryModel : CqrsBase
         var requestHandlerCtor = new ConstructorModel(RequestHandler, RequestHandler.Name);
 
         requestHandlerCtor.Params.Add(new ParamModel() { 
-            Type = new TypeModel("ILogger")
-            {
-                GenericTypeParameters = new List<TypeModel>
-                {
-                    new TypeModel(RequestHandler.Name)
-                }
-            },
+            Type = TypeModel.LoggerOf(RequestHandler.Name),
             Name = "logger"
         });
 

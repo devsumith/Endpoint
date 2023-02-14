@@ -261,7 +261,7 @@ public class AngularService : IAngularService
     {
         var rootDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", model.ReferencedDirectory));
 
-        _commandService.Start($"ng add @angular/material --project {model.Name} --theme custom --typography true --animations enabled --interactive false", rootDirectory);
+        _commandService.Start($"ng add @angular/material --project {model.Name} --theme custom", rootDirectory);
     }
 
     public void EnableDefaultStandaloneComponents(AngularProjectReferenceModel model)

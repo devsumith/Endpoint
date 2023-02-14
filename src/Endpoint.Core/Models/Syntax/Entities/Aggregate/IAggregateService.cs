@@ -9,6 +9,7 @@ public interface IAggregateService
 {
     Task Add(string name, string properties, string directory, string microserviceName);
     void CommandCreate(string name, string aggregate, string directory);
+    void QueryCreate(string Name, string aggregate, string directory);
 
 }
 
