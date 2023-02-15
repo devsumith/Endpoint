@@ -31,12 +31,12 @@ public class KarmaRemoveRequestHandler : IRequestHandler<KarmaRemoveRequest>
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(KarmaRemoveRequest request, CancellationToken cancellationToken)
+    public async Task Handle(KarmaRemoveRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(KarmaRemoveRequestHandler));
 
         _angularService.KarmaRemove(request.Directory);
 
-        return new();
+
     }
 }

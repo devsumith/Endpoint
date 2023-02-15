@@ -43,7 +43,7 @@ public class AngularHttpServiceCreateRequestHandler : IRequestHandler<AngularHtt
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    public async Task<Unit> Handle(AngularHttpServiceCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AngularHttpServiceCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularHttpServiceCreateRequestHandler));
 
@@ -55,6 +55,6 @@ public class AngularHttpServiceCreateRequestHandler : IRequestHandler<AngularHtt
 
         _artifactGenerationStrategyFactory.CreateFor(model);
 
-        return new();
+
     }
 }

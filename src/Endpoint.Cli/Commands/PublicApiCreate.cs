@@ -31,10 +31,10 @@ public class PublicApiCreateRequestHandler : IRequestHandler<PublicApiCreateRequ
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<Unit> Handle(PublicApiCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(PublicApiCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(PublicApiCreateRequestHandler));
 
-        return new();
+
     }
 }

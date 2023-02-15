@@ -36,7 +36,7 @@ public class ConfigureServicesCreateRequestHandler : IRequestHandler<ConfigureSe
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<Unit> Handle(ConfigureServicesCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ConfigureServicesCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(ConfigureServicesCreateRequestHandler));
 
@@ -50,6 +50,6 @@ public class ConfigureServicesCreateRequestHandler : IRequestHandler<ConfigureSe
 
         _dependencyInjectionService.AddConfigureServices(layer, request.Directory);
 
-        return new();
+
     }
 }

@@ -39,7 +39,7 @@ public class SpecFlowFeatureCreateRequestHandler : IRequestHandler<SpecFlowFeatu
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
     }
 
-    public async Task<Unit> Handle(SpecFlowFeatureCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(SpecFlowFeatureCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(SpecFlowFeatureCreateRequestHandler));
 
@@ -49,6 +49,6 @@ public class SpecFlowFeatureCreateRequestHandler : IRequestHandler<SpecFlowFeatu
 
         _artifactGenerationStrategyFactory.CreateFor(fileModel);
 
-        return new();
+
     }
 }

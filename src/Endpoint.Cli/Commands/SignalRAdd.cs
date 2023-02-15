@@ -31,12 +31,12 @@ public class SignalRAddRequestHandler : IRequestHandler<SignalRAddRequest>
         _signalRService = signalRService ?? throw new ArgumentNullException(nameof(signalRService));
     }
 
-    public async Task<Unit> Handle(SignalRAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(SignalRAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(SignalRAddRequestHandler));
 
         _signalRService.Add(request.Directory);
 
-        return new();
+
     }
 }

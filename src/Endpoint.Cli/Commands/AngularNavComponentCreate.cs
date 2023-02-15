@@ -31,10 +31,10 @@ public class AngularNavComponentCreateRequestHandler : IRequestHandler<AngularNa
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<Unit> Handle(AngularNavComponentCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AngularNavComponentCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularNavComponentCreateRequestHandler));
 
-        return new();
+
     }
 }

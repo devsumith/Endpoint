@@ -35,12 +35,12 @@ public class DockerControllerHooksCreateRequestHandler : IRequestHandler<DockerC
         _specFlowService = specFlowService ?? throw new ArgumentNullException(nameof(specFlowService));
     }
 
-    public async Task<Unit> Handle(DockerControllerHooksCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(DockerControllerHooksCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(DockerControllerHooksCreateRequestHandler));
 
         _specFlowService.CreateDockerControllerHooks(request.Directory);
 
-        return new();
+
     }
 }

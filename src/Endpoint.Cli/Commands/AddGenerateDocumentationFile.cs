@@ -31,7 +31,7 @@ public class GenerateDocumentationFileAddRequestHandler : IRequestHandler<Genera
         _apiProjectFilesGenerationStrategy = apiProjectFilesGenerationStrategy ?? throw new System.ArgumentNullException(nameof(apiProjectFilesGenerationStrategy));    
     }
 
-    public Task<Unit> Handle(GenerateDocumentationFileAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(GenerateDocumentationFileAddRequest request, CancellationToken cancellationToken)
     {
         var settings = _settingsProvider.Get(request.Directory);
 
@@ -39,7 +39,7 @@ public class GenerateDocumentationFileAddRequestHandler : IRequestHandler<Genera
 
         _apiProjectFilesGenerationStrategy.AddGenerateDocumentationFile(apiCsProjPath);
 
-        return Task.FromResult(new Unit());
+
     }
 }
 

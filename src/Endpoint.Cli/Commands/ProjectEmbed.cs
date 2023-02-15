@@ -40,7 +40,7 @@ public class ProjectEmbedRequestHandler : IRequestHandler<ProjectEmbedRequest>
         _fileSystem = fileSystem;
     }
 
-    public async Task<Unit> Handle(ProjectEmbedRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ProjectEmbedRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(ProjectEmbedRequestHandler));
 
@@ -73,6 +73,6 @@ public class ProjectEmbedRequestHandler : IRequestHandler<ProjectEmbedRequest>
             }
             _fileSystem.WriteAllText(resolvedPath, content);
         }
-        return new();
+
     }
 }

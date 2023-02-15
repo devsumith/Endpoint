@@ -35,12 +35,12 @@ public class MessageHandlerCreateRequestHandler : IRequestHandler<MessageHandler
         _domainDrivenDesignFileService = domainDrivenDesignFileService ?? throw new ArgumentNullException(nameof(domainDrivenDesignFileService));
     }
 
-    public async Task<Unit> Handle(MessageHandlerCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(MessageHandlerCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(MessageHandlerCreateRequestHandler));
 
         _domainDrivenDesignFileService.MessageHandlerCreate(request.Name, request.Directory);
 
-        return new();
+
     }
 }

@@ -36,12 +36,12 @@ public class EventDrivenMicroservicesCreateRequestHandler : IRequestHandler<Even
         _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
     }
 
-    public async Task<Unit> Handle(EventDrivenMicroservicesCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(EventDrivenMicroservicesCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(EventDrivenMicroservicesCreateRequestHandler));
 
         _solutionService.EventDrivenMicroservicesCreate(request.Name, request.Services, request.Directory);
 
-        return new();
+
     }
 }

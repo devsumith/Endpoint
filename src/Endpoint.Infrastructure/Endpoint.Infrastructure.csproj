@@ -40,6 +40,8 @@
     <None Remove="Templates\Angular\Services\HttpService\Service.txt" />
     <None Remove="Templates\Angular\Services\HttpService\Spec.txt" />
     <None Remove="Templates\Api\ConfigureServices.txt" />
+    <None Remove="Templates\Api\DefaultConfigureServices.txt" />
+    <None Remove="Templates\Api\DefaultProgram.txt" />
     <None Remove="Templates\ArtifactGenerationStrategy.txt" />
     <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\ConfigureServices.txt" />
     <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\IUdpClientFactory.txt" />
@@ -126,10 +128,12 @@
     <EmbeddedResource Include="Templates\Angular\Services\HttpService\Service.txt" />
     <EmbeddedResource Include="Templates\Angular\Services\HttpService\Spec.txt" />
     <EmbeddedResource Include="Templates\Api\AppSettings.txt" />
+    <EmbeddedResource Include="Templates\Api\DefaultConfigureServices.txt" />
     <EmbeddedResource Include="Templates\Api\ConfigureServices.txt" />
     <EmbeddedResource Include="Templates\Api\IdFile.txt" />
     <EmbeddedResource Include="Templates\Api\LaunchSettings.txt" />
     <EmbeddedResource Include="Templates\Api\MinimalAppSettings.txt" />
+    <EmbeddedResource Include="Templates\Api\DefaultProgram.txt" />
     <EmbeddedResource Include="Templates\Api\Program.txt" />
     <EmbeddedResource Include="Templates\Api\WebApplicationBuilder.txt" />
     <EmbeddedResource Include="Templates\Api\WebApplication.txt" />

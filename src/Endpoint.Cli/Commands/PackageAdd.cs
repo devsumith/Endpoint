@@ -34,12 +34,12 @@ public class PackageAddRequestHandler : IRequestHandler<PackageAddRequest>
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
     }
 
-    public async Task<Unit> Handle(PackageAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(PackageAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(PackageAddRequestHandler));
 
         _projectService.PackageAdd(request.Name, request.Directory);
 
-        return new();
+
     }
 }

@@ -39,7 +39,7 @@ public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
     }
 
-    public async Task<Unit> Handle(ReadmeCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ReadmeCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(ReadmeCreateRequestHandler));
 
@@ -49,6 +49,6 @@ public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
 
         _artifactGenerationStrategyFactory.CreateFor(model);
 
-        return new();
+
     }
 }

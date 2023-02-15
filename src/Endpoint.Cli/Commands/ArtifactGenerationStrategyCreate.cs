@@ -43,7 +43,7 @@ public class ArtifactGenerationStrategyCreateRequestHandler : IRequestHandler<Ar
         _namespaceProvider = namespaceProvider;
     }
 
-    public async Task<Unit> Handle(ArtifactGenerationStrategyCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ArtifactGenerationStrategyCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Handled: {nameof(ArtifactGenerationStrategyCreateRequestHandler)}");
 
@@ -58,6 +58,6 @@ public class ArtifactGenerationStrategyCreateRequestHandler : IRequestHandler<Ar
 
         _artifactGenerationStrategyFactory.CreateFor(model);
 
-        return new();
+
     }
 }

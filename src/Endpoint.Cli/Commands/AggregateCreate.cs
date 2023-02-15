@@ -43,12 +43,12 @@ public class AggregateCreateRequestHandler : IRequestHandler<AggregateCreateRequ
         _aggregateService = aggregateService ?? throw new ArgumentNullException(nameof(aggregateService));
     }
 
-    public async Task<Unit> Handle(AggregateCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AggregateCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AggregateCreateRequestHandler));
 
         await _aggregateService.Add(request.Name, request.Properties, request.Directory, request.MicroserviceName);
 
-        return new();
+
     }
 }

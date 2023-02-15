@@ -44,7 +44,7 @@ public class SpecFlowProjectAddRequestHandler : IRequestHandler<SpecFlowProjectA
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public async Task<Unit> Handle(SpecFlowProjectAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(SpecFlowProjectAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(SpecFlowProjectAddRequestHandler));
 
@@ -85,6 +85,6 @@ public class SpecFlowProjectAddRequestHandler : IRequestHandler<SpecFlowProjectA
         }
 
 
-        return new();
+
     }
 }

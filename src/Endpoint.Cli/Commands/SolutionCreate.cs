@@ -55,7 +55,7 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public async Task<Unit> Handle(SolutionCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(SolutionCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(SolutionCreateRequestHandler));
 
@@ -68,6 +68,6 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
 
         _commandService.Start($"start {model.SolultionFileName}", model.SolutionDirectory);
 
-        return new();
+
     }
 }

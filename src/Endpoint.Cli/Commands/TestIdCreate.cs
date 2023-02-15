@@ -41,7 +41,7 @@ public class TestIdCreateRequestHandler : IRequestHandler<TestHeaderCreateReques
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
     }
 
-    public async Task<Unit> Handle(TestHeaderCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(TestHeaderCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(TestIdCreateRequestHandler));
 
@@ -53,6 +53,6 @@ public class TestIdCreateRequestHandler : IRequestHandler<TestHeaderCreateReques
 
         _clipboardService.SetText(result);
 
-        return new();
+
     }
 }

@@ -36,12 +36,12 @@ public class BootstrapAddRequestHandler : IRequestHandler<BootstrapAddRequest>
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(BootstrapAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(BootstrapAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(BootstrapAddRequestHandler));
 
         _angularService.BootstrapAdd(new AngularProjectReferenceModel(request.Name, request.Directory));
 
-        return new();
+
     }
 }

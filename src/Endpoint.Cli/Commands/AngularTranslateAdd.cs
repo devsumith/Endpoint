@@ -35,12 +35,12 @@ public class AngularTranslateAddRequestHandler : IRequestHandler<AngularTranslat
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(AngularTranslateAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AngularTranslateAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularTranslateAddRequestHandler));
 
         _angularService.NgxTranslateAdd(request.ProjectName, request.Directory);
 
-        return new();
+
     }
 }

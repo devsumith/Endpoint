@@ -31,12 +31,12 @@ public class CopyrightAddRequestHandler : IRequestHandler<CopyrightAddRequest>
         _utlitityService = utlitityService ?? throw new ArgumentNullException(nameof(utlitityService));
     }
 
-    public async Task<Unit> Handle(CopyrightAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(CopyrightAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(CopyrightAddRequestHandler));
 
         _utlitityService.CopyrightAdd(request.Directory);
 
-        return new();
+
     }
 }

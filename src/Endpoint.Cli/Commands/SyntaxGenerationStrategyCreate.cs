@@ -42,7 +42,7 @@ public class SyntaxGenerationStrategyCreateRequestHandler : IRequestHandler<Synt
         _namespaceProvider = namespaceProvider;
     }
 
-    public async Task<Unit> Handle(SyntaxGenerationStrategyCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(SyntaxGenerationStrategyCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Handled: {nameof(SyntaxGenerationStrategyCreateRequestHandler)}");
 
@@ -55,6 +55,6 @@ public class SyntaxGenerationStrategyCreateRequestHandler : IRequestHandler<Synt
 
         _artifactGenerationStrategyFactory.CreateFor(model);
 
-        return new();
+
     }
 }

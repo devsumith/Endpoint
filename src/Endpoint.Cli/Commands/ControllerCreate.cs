@@ -33,13 +33,13 @@ public class ControllerCreateRequestHandler : IRequestHandler<ControllerCreateRe
         _apiProjectService = apiProjectService ?? throw new ArgumentNullException(nameof(apiProjectService));
     }
 
-    public async Task<Unit> Handle(ControllerCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ControllerCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(ControllerCreateRequestHandler));
 
         _apiProjectService.ControllerAdd(request.EntityName, request.Directory);
 
-        return new();
+
     }
 }
 

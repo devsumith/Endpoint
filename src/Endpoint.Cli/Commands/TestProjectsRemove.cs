@@ -34,7 +34,7 @@ public class TestProjectsRemoveRequestHandler : IRequestHandler<TestProjectsRemo
         _fileProvider = fileProvider;
     }
 
-    public async Task<Unit> Handle(TestProjectsRemoveRequest request, CancellationToken cancellationToken)
+    public async Task Handle(TestProjectsRemoveRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(TestProjectsRemoveRequestHandler));
 
@@ -48,6 +48,6 @@ public class TestProjectsRemoveRequestHandler : IRequestHandler<TestProjectsRemo
         {
             _commandService.Start($"dotnet sln {solutionFileName} remove {projectPath}", solutionDirectory);
         }
-        return new();
+
     }
 }

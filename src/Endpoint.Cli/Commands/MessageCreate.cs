@@ -44,7 +44,7 @@ public class MessageCreateRequestHandler : IRequestHandler<MessageCreateRequest>
         _domainDrivenDesignFileService = domainDrivenDesignFileService ?? throw new ArgumentNullException(nameof(domainDrivenDesignFileService));
     }
 
-    public async Task<Unit> Handle(MessageCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(MessageCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(MessageCreateRequestHandler));
 
@@ -63,6 +63,6 @@ public class MessageCreateRequestHandler : IRequestHandler<MessageCreateRequest>
 
         _domainDrivenDesignFileService.MessageCreate(request.Name, properties, request.Directory);
 
-        return new();
+
     }
 }

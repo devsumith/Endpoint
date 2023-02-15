@@ -37,13 +37,13 @@ public class AddResource
             _factory = factory;
         }
 
-        public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+        public async Task Handle(Request request, CancellationToken cancellationToken)
         {
             var options = TinyMapper.Map<AddResourceOptions>(request);
 
             AdditionalResourceGenerator.Generate(options, _factory);
 
-            return Task.FromResult(new Unit());
+    
         }
     }
 }

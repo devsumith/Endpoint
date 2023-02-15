@@ -35,12 +35,12 @@ public class SpecFlowHookCreateRequestHandler : IRequestHandler<SpecFlowHookCrea
         _specFlowService = specFlowService ?? throw new ArgumentNullException(nameof(specFlowService));
     }
 
-    public async Task<Unit> Handle(SpecFlowHookCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(SpecFlowHookCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(SpecFlowHookCreateRequestHandler));
 
         _specFlowService.CreateHook(request.Name, request.Directory);
 
-        return new();
+
     }
 }

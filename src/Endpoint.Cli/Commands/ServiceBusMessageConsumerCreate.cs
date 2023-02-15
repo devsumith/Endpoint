@@ -27,7 +27,7 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("service-bus-message-consumer-create")]
-public class ServiceBusMessageConsumerCreateRequest : IRequest<Unit> {
+public class ServiceBusMessageConsumerCreateRequest : IRequest {
     [Option('n')]
     public string Name { get; set; } = "ServiceBusMessageConsumer";
 
@@ -38,7 +38,7 @@ public class ServiceBusMessageConsumerCreateRequest : IRequest<Unit> {
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<ServiceBusMessageConsumerCreateRequest, Unit>
+public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<ServiceBusMessageConsumerCreateRequest>
 {
     private readonly ILogger<ServiceBusMessageConsumerCreateRequestHandler> _logger;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
@@ -62,7 +62,7 @@ public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<Ser
         _domainDrivenDesignFileService = domainDrivenDesignFileService ?? throw new ArgumentNullException(nameof(domainDrivenDesignFileService));
     }
 
-    public async Task<Unit> Handle(ServiceBusMessageConsumerCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ServiceBusMessageConsumerCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(ServiceBusMessageConsumerCreateRequestHandler));
 
@@ -166,6 +166,6 @@ public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<Ser
 
         _notificationListener.Broadcast(new WorkerFileCreated(classModel.Name, request.Directory));
 
-        return new();
+
     }
 }

@@ -38,7 +38,7 @@ public class EntityAddRequestHandler : IRequestHandler<EntityAddRequest>
         _fileNamespaceProvider = fileNamespaceProvider ?? throw new ArgumentNullException(nameof(fileNamespaceProvider));
     }
 
-    public async Task<Unit> Handle(EntityAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(EntityAddRequest request, CancellationToken cancellationToken)
     {
 /*        _logger.LogInformation($"Handled: {nameof(EntityAddRequestHandler)}");
 
@@ -46,6 +46,6 @@ public class EntityAddRequestHandler : IRequestHandler<EntityAddRequest>
 
         _fileGenerationStrategyFactory.CreateFor(model);*/
 
-        return new();
+
     }
 }

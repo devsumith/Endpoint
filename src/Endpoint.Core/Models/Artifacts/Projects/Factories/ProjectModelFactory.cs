@@ -1,6 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using DotLiquid.Tags;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
@@ -11,7 +12,8 @@ using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Options;
-using Octokit;
+using Endpoint.Core.Services;
+using Octokit.Internal;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -307,6 +309,31 @@ public class ProjectModelFactory : IProjectModelFactory
         model.Files.Add(_fileModelFactory.CreateTemplate("TokenBuilder", "TokenBuilder", model.Directory));
 
         model.Files.Add(_fileModelFactory.CreateTemplate("TokenProvider", "TokenProvider", model.Directory));
+
+        return model;
+    }
+
+    public ProjectModel Create(string type, string name, string directory, List<string> references = null)
+    {
+        var model = new ProjectModel(type, name, directory, references);
+
+        var parts = name.Split('.');
+
+        var layer = parts.Length > 1 ? parts.Last() : name;
+
+        var tokens = new TokensBuilder()
+                .With("Layer", layer)
+                .Build();
+
+        if (type.StartsWith("web")) {
+            model.Files.Add(_fileModelFactory.CreateTemplate("DefaultProgram", "Program", model.Directory, tokens: tokens));
+
+            model.Files.Add(_fileModelFactory.CreateTemplate("DefaultConfigureServices", "ConfigureServices", model.Directory, tokens: tokens));
+
+            model.Packages.Add(new PackageModel() { Name = "Microsoft.AspNetCore.OpenApi", Version = "7.0.2" });
+
+            model.Packages.Add(new PackageModel() { Name = "Swashbuckle.AspNetCore", Version = "6.4.0" });
+        }
 
         return model;
     }

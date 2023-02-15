@@ -47,7 +47,7 @@ public class AngularAddProjectRequestHandler : IRequestHandler<AngularAddProject
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
-    public async Task<Unit> Handle(AngularAddProjectRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AngularAddProjectRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularAddProjectRequestHandler));
 
@@ -55,6 +55,6 @@ public class AngularAddProjectRequestHandler : IRequestHandler<AngularAddProject
 
         _angularService.AddProject(new AngularProjectModel(request.Name, request.ProjectType, request.Prefix, workspaceDirectory));
 
-        return new();
+
     }
 }

@@ -35,7 +35,7 @@ public class GetById
             _fileSystem = fileSystem;
         }
 
-        public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+        public async Task Handle(Request request, CancellationToken cancellationToken)
         {
             var settings = _settingsProvder.Get(request.Directory);
 
@@ -48,7 +48,7 @@ public class GetById
                 .WithEntity(request.Entity)
                 .Build();
 
-            return Task.FromResult(new Unit());
+    
         }
     }
 }

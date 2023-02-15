@@ -48,7 +48,7 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
     }
 
-    public async Task<Unit> Handle(MicroserviceAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(MicroserviceAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(MicroserviceAddRequestHandler));
 
@@ -75,7 +75,7 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
 
                     microservice.Packages.AddRange(new PackageModel[]
                     {
-                        new PackageModel("MediatR", "11.1.0"),
+                        new PackageModel("MediatR", "12.0.0"),
                         new PackageModel("Microsoft.EntityFrameworkCore", "7.0.2"),
                         new PackageModel("Microsoft.Extensions.Logging.Abstractions","7.0.0")
                     });
@@ -111,6 +111,6 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
             }
         }
 
-        return new();
+
     }
 }

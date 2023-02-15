@@ -35,12 +35,12 @@ public class DbContextAddRequestHandler : IRequestHandler<DbContextAddRequest>
         _infrastructureProjectService = infrastructureProjectService ?? throw new ArgumentNullException(nameof(infrastructureProjectService));
     }
 
-    public async Task<Unit> Handle(DbContextAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(DbContextAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(DbContextAddRequestHandler));
 
         _infrastructureProjectService.DbContextAdd(request.Directory);
 
-        return new();
+
     }
 }

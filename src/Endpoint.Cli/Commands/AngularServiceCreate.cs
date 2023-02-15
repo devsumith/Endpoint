@@ -34,12 +34,12 @@ public class AngularServiceCreateRequestHandler : IRequestHandler<AngularService
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(AngularServiceCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AngularServiceCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularServiceCreateRequestHandler));
 
         _angularService.ServiceCreate(request.Name, request.Directory);
 
-        return new();
+
     }
 }

@@ -43,13 +43,13 @@ internal class AngularWorkspaceCreateRequestHandler : IRequestHandler<AngularWor
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(AngularWorkspaceCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AngularWorkspaceCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Handled: {nameof(AngularWorkspaceCreateRequestHandler)}");
 
         _angularService.CreateWorkspace(request.Name, request.ProjectName, request.ProjectType, request.Prefix, request.Directory);
 
-        return new();
+
     }
 }
 

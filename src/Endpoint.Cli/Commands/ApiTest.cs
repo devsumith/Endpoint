@@ -34,7 +34,7 @@ public class ApiTest
             _templateProcessor = templateProcessor;
             _fileSystem = fileSystem;
         }
-        public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+        public async Task Handle(Request request, CancellationToken cancellationToken)
         {
             var template = _templateLocator.Get(nameof(ApiTest));
 
@@ -46,7 +46,7 @@ public class ApiTest
 
             _fileSystem.WriteAllText($@"{request.Directory}/{((SyntaxToken)request.EntityName).PascalCase}ControllerTests.cs", contents);
             
-            return Task.FromResult(new Unit());
+    
         }
     }
 }

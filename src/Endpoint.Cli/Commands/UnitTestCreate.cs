@@ -35,13 +35,11 @@ public class UnitTestCreateRequestHandler : IRequestHandler<UnitTestCreateReques
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<Unit> Handle(UnitTestCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(UnitTestCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("", request.Name);
 
         _classService.UnitTestCreateFor(request.Name, request.Methods, request.Directory);
-
-        return new ();
     }
 }
 

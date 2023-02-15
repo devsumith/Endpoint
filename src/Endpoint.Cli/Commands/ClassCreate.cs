@@ -34,11 +34,11 @@ public class ClassCreateRequestHandler : IRequestHandler<ClassCreateRequest>
         _classService = classService;
     }
 
-    public Task<Unit> Handle(ClassCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ClassCreateRequest request, CancellationToken cancellationToken)
     {
         _classService.Create(request.Name, request.Properties, request.Directory);
 
-        return Task.FromResult(new Unit());
+
     }
 }
 

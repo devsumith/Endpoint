@@ -45,7 +45,7 @@ public class DbContextCreateFromAggregateModelRequestHandler : IRequestHandler<D
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
     }
 
-    public async Task<Unit> Handle(DbContextCreateFromAggregateModelRequest request, CancellationToken cancellationToken)
+    public async Task Handle(DbContextCreateFromAggregateModelRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(DbContextCreateFromAggregateModelRequestHandler));
 
@@ -88,6 +88,6 @@ public class DbContextCreateFromAggregateModelRequestHandler : IRequestHandler<D
                 "cs"));
 
 
-        return new();
+
     }
 }

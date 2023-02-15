@@ -34,7 +34,7 @@ public class Feature
             _settingsProvider = settingsProvider;
             _fileSystem = fileSystem;
         }
-        public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+        public async Task Handle(Request request, CancellationToken cancellationToken)
         {
             if (request.Directory.EndsWith("Features"))
             {                    
@@ -59,7 +59,7 @@ public class Feature
             
             _commandService.Start($"endpoint extensions {request.Entity}", request.Directory);
 
-            return Task.FromResult(new Unit());
+    
         }
     }
 }

@@ -31,12 +31,12 @@ public class PrettierAddRequestHandler : IRequestHandler<PrettierAddRequest>
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(PrettierAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(PrettierAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(PrettierAddRequestHandler));
 
         _angularService.PrettierAdd(request.Directory);
 
-        return new();
+
     }
 }

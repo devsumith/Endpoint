@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "test-projects-remove -d C:\\projects\\Huntress",
+      "commandLineArgs": "test-projects-remove -d C:\\projects",
       "environmentVariables": {
       }
     }

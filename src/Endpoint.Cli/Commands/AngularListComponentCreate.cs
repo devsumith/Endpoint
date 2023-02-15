@@ -35,12 +35,12 @@ public class AngularListComponentCreateRequestHandler : IRequestHandler<AngularL
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(AngularListComponentCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AngularListComponentCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularListComponentCreateRequestHandler));
 
         _angularService.ListComponentCreate(request.Name, request.Directory);
 
-        return new();
+
     }
 }

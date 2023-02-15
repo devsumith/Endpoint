@@ -34,12 +34,12 @@ public class EnableDefaultStandaloneComponentsRequestHandler : IRequestHandler<E
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(EnableDefaultStandaloneComponentsRequest request, CancellationToken cancellationToken)
+    public async Task Handle(EnableDefaultStandaloneComponentsRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(EnableDefaultStandaloneComponentsRequestHandler));
 
         _angularService.EnableDefaultStandaloneComponents(new AngularProjectReferenceModel(request.Name,request.Directory));
 
-        return new();
+
     }
 }

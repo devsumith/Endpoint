@@ -101,7 +101,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
         });
     }
 
-    public async Task<Unit> Handle(MicroserviceRequest request, CancellationToken cancellationToken)
+    public async Task Handle(MicroserviceRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Handled: {nameof(MicroserviceRequest)}");
 
@@ -145,7 +145,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
                 Directory = solutionModel.SolutionDirectory,
             });
 
-        return new();
+
     }
 
 

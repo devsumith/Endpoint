@@ -14,7 +14,7 @@ public static class ConfigureServices
     {        
         services.AddLogging(o => o.AddConsole());
         services.AddCoreServices();
-        services.AddMediatR(typeof(Program));
+        services.AddMediatR( configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
         services.AddInfrastructureServices();
         services.AddSingleton(new Observable<INotification>());
         services.AddHostedService<CommandLineArgumentsProcessor>();

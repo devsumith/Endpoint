@@ -41,12 +41,12 @@ public class IndexCreateRequestHandler : IRequestHandler<IndexCreateRequest>
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(IndexCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(IndexCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(IndexCreateRequestHandler));
 
         _angularService.IndexCreate(request.Scss, request.Directory);
 
-        return new();
+
     }
 }

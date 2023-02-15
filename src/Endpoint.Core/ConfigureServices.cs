@@ -221,7 +221,7 @@ public static class ConfigureServices
         services.AddSingleton<IProjectModelFactory, ProjectModelFactory>();
 
         services.AddSingleton<IRouteHandlerModelFactory, RouteHandlerModelFactory>();
-        services.AddMediatR(typeof(Constants));
+        services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Constants).Assembly));
         services.AddHostedService<ObservableNotificationsProcessor>();
 
 

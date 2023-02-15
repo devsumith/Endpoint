@@ -36,12 +36,12 @@ public class AngularMaterialAddRequestHandler : IRequestHandler<AngularMaterialA
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(AngularMaterialAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AngularMaterialAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularMaterialAddRequestHandler));
 
         _angularService.MaterialAdd(new(request.Name, request.Directory));
 
-        return new();
+
     }
 }

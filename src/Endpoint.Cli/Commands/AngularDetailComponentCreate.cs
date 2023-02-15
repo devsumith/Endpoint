@@ -31,10 +31,10 @@ public class AngularDetailComponentCreateRequestHandler : IRequestHandler<Angula
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<Unit> Handle(AngularDetailComponentCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AngularDetailComponentCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularDetailComponentCreateRequestHandler));
 
-        return new();
+
     }
 }

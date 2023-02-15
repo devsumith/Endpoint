@@ -35,12 +35,12 @@ public class ServiceCreateRequestHandler : IRequestHandler<ServiceCreateRequest>
         _domainDrivenDesignFileService = domainDrivenDesignFileService ?? throw new ArgumentNullException(nameof(domainDrivenDesignFileService));
     }
 
-    public async Task<Unit> Handle(ServiceCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ServiceCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(ServiceCreateRequestHandler));
 
         _domainDrivenDesignFileService.ServiceCreate(request.Name, request.Directory);
 
-        return new();
+
     }
 }

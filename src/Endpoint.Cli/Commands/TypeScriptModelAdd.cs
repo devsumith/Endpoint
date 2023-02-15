@@ -38,12 +38,12 @@ public class TypeScriptModelAddRequestHandler : IRequestHandler<TypeScriptModelA
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(TypeScriptModelAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(TypeScriptModelAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(TypeScriptModelAddRequestHandler));
 
         _angularService.ModelCreate(request.Name,request.Directory,request.Properties);
 
-        return new();
+
     }
 }

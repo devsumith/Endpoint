@@ -45,7 +45,7 @@ public class PlaywrightProjectAddRequestHandler : IRequestHandler<PlaywrightProj
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public async Task<Unit> Handle(PlaywrightProjectAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(PlaywrightProjectAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(PlaywrightProjectAddRequestHandler));
 
@@ -79,6 +79,6 @@ public class PlaywrightProjectAddRequestHandler : IRequestHandler<PlaywrightProj
         }
 
 
-        return new();
+
     }
 }

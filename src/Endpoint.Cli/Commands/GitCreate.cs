@@ -37,7 +37,7 @@ public class GitCreateRequestHandler : IRequestHandler<GitCreateRequest>
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
     }
 
-    public async Task<Unit> Handle(GitCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(GitCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Handled: {nameof(GitCreateRequestHandler)}");
 
@@ -48,7 +48,7 @@ public class GitCreateRequestHandler : IRequestHandler<GitCreateRequest>
 
         _artifactGenerationStrategyFactory.CreateFor(model);
 
-        return new();
+
     }
 }
 

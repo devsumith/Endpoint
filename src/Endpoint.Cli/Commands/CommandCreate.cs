@@ -38,12 +38,12 @@ public class CommandCreateRequestHandler : IRequestHandler<CommandCreateRequest>
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public Task<Unit> Handle(CommandCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(CommandCreateRequest request, CancellationToken cancellationToken)
     {
 
         _aggregateService.CommandCreate(request.Name, request.Aggregate, request.Directory);
 
-        return Task.FromResult(new Unit());
+
     }
 }
 

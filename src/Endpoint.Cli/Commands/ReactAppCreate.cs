@@ -41,7 +41,7 @@ public class ReactAppCreateRequestHandler : IRequestHandler<ReactAppCreateReques
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));    
     }
 
-    public async Task<Unit> Handle(ReactAppCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ReactAppCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(ReactAppCreateRequestHandler));
 
@@ -49,6 +49,6 @@ public class ReactAppCreateRequestHandler : IRequestHandler<ReactAppCreateReques
 
         _commandService.Start("code .", $"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}");
 
-        return new();
+
     }
 }

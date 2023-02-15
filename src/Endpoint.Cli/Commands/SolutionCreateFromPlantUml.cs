@@ -45,7 +45,7 @@ public class SolutionCreateFromPlantUmlRequestHandler : IRequestHandler<Solution
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public async Task<Unit> Handle(SolutionCreateFromPlantUmlRequest request, CancellationToken cancellationToken)
+    public async Task Handle(SolutionCreateFromPlantUmlRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(SolutionCreateFromPlantUmlRequestHandler));
 
@@ -55,6 +55,6 @@ public class SolutionCreateFromPlantUmlRequestHandler : IRequestHandler<Solution
 
         _commandService.Start($"start {model.SolutionPath}", model.Directory);
 
-        return new();
+
     }
 }

@@ -40,12 +40,12 @@ public class AngularLocalizeAddRequestHandler : IRequestHandler<AngularLocalizeA
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(AngularLocalizeAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AngularLocalizeAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularLocalizeAddRequestHandler));
 
         _angularService.LocalizeAdd(new AngularProjectReferenceModel(request.Name, request.Directory), request.Locales.Split(',').ToList());
 
-        return new();
+
     }
 }

@@ -37,11 +37,11 @@ public class QueryCreateRequestHandler : IRequestHandler<QueryCreateRequest>
         _aggregateService = aggregateService ?? throw new ArgumentNullException(nameof(aggregateService));
     }
 
-    public async Task<Unit> Handle(QueryCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(QueryCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(QueryCreateRequestHandler));
 
         _aggregateService.QueryCreate(request.Name, request.Aggregate, request.Directory);
-        return new();
+
     }
 }

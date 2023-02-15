@@ -34,7 +34,7 @@ internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest>
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
     }
 
-    public async Task<Unit> Handle(HttpProjectRequest request, CancellationToken cancellationToken)
+    public async Task Handle(HttpProjectRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Handled: {nameof(HttpProjectRequestHandler)}");
 
@@ -46,7 +46,7 @@ internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest>
 
         _artifactGenerationStrategyFactory.CreateFor(model);
 
-        return new();
+
     }
 }
 

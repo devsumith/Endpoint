@@ -72,7 +72,7 @@ public class Default
             _configuration = configuration;
         }
 
-        public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+        public async Task Handle(Request request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Default Handler");
 
@@ -114,7 +114,7 @@ public class Default
 
                         EndpointGenerator.Generate(options, _endpointGenerationStrategyFactory);
 
-                        return Task.FromResult(new Unit());
+                
                     }
 
                     retries++;
@@ -126,7 +126,7 @@ public class Default
             {
                 _logger.LogError(e.Message);
 
-                return Task.FromResult(new Unit());
+        
             }
         }
     }

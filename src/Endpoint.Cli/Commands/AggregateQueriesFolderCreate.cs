@@ -35,12 +35,12 @@ public class AggregateQueriesFolderCreateRequestHandler : IRequestHandler<Aggreg
         _folderService = folderService ?? throw new ArgumentNullException(nameof(folderService));
     }
 
-    public async Task<Unit> Handle(AggregateQueriesFolderCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(AggregateQueriesFolderCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AggregateQueriesFolderCreateRequestHandler));
 
         _folderService.AggregateQueries(request.AggregateName, request.Directory);
 
-        return new();
+
     }
 }

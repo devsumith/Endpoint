@@ -4,6 +4,7 @@
 using CommandLine;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Projects;
+using Endpoint.Core.Models.Artifacts.Projects.Factories;
 using Endpoint.Core.Models.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
 using MediatR;
@@ -43,13 +44,14 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
     private readonly ICommandService _commandService;
     private readonly IFileSystem _fileSystem;
     private readonly IProjectService _projectService;
-
+    private readonly IProjectModelFactory _projectModelFactory;
     public ProjectAddRequestHandler(
         ILogger<ProjectAddRequestHandler> logger,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         ICommandService commandService,
         IFileSystem fileSystem,
-        IProjectService projectService
+        IProjectService projectService,
+        IProjectModelFactory projectModelFactory
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -57,9 +59,10 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
+        _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
     }
 
-    public async Task<Unit> Handle(ProjectAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ProjectAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(ProjectAddRequestHandler));
 
@@ -70,10 +73,10 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
         var directory = string.IsNullOrEmpty(request.FolderName) ? request.Directory : $"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}";
 
-        var model = new ProjectModel(request.DotNetProjectType, request.Name, directory, request.References?.Split(',').ToList());
+        var model = _projectModelFactory.Create(request.DotNetProjectType, request.Name, directory, request.References?.Split(',').ToList());
 
         _projectService.AddProject(model);
 
-        return new();
+
     }
 }

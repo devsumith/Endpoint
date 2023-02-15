@@ -45,7 +45,7 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest>
         _settingsProvider = settingsProvider;
     }
 
-    public Task<Unit> Handle(EventAddRequest request, CancellationToken cancellationToken)
+    public async Task Handle(EventAddRequest request, CancellationToken cancellationToken)
     {
         var settings = _settingsProvider.Get(request.Directory);
 
@@ -118,6 +118,6 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest>
 
         _fileSystem.WriteAllText($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}{((SyntaxToken)request.Aggregate).PascalCase}.cs", string.Join(Environment.NewLine, newLines));
 
-        return Task.FromResult(new Unit());
+
     }
 }

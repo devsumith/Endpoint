@@ -39,7 +39,7 @@ public class LitWorkspaceCreateRequestHandler : IRequestHandler<LitWorkspaceCrea
         _litService = litService ?? throw new ArgumentNullException(nameof(litService));
     }
 
-    public async Task<Unit> Handle(LitWorkspaceCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(LitWorkspaceCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(LitWorkspaceCreateRequestHandler));
 
@@ -47,6 +47,6 @@ public class LitWorkspaceCreateRequestHandler : IRequestHandler<LitWorkspaceCrea
 
         _commandService.Start("code .", $"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}");
 
-        return new();
+
     }
 }

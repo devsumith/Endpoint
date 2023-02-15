@@ -22,5 +22,6 @@ public interface IProjectModelFactory
     ProjectModel CreateSecurityProject(string directory);
     ProjectModel CreateKernelProject(string directory);
     ProjectModel CreatePlaywrightProject(string name, string directory);
+    ProjectModel Create(string type, string name, string directory, List<string> references = null);
 }
 

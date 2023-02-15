@@ -36,7 +36,7 @@ public class UpdateCompilerOptionsToUseJestTypesRequestHandler : IRequestHandler
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(UpdateCompilerOptionsToUseJestTypesRequest request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateCompilerOptionsToUseJestTypesRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(UpdateCompilerOptionsToUseJestTypesRequestHandler));
 
@@ -44,6 +44,6 @@ public class UpdateCompilerOptionsToUseJestTypesRequestHandler : IRequestHandler
 
         _angularService.UpdateCompilerOptionsToUseJestTypes(angularProjectModel);
 
-        return new();
+
     }
 }

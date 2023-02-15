@@ -31,12 +31,12 @@ public class DefaultScssCreateRequestHandler : IRequestHandler<DefaultScssCreate
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(DefaultScssCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(DefaultScssCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(DefaultScssCreateRequestHandler));
 
         _angularService.DefaultScssCreate(request.Directory);
 
-        return new();
+
     }
 }

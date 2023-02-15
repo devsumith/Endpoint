@@ -53,7 +53,7 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
         
     }
 
-    public async Task<Unit> Handle(WorkerCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(WorkerCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(WorkerCreateRequestHandler));
 
@@ -151,6 +151,6 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
 
         _notificationListener.Broadcast(new WorkerFileCreated(model.Name, request.Directory));
 
-        return new();
+
     }
 }

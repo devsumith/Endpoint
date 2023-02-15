@@ -1,8 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Models.Artifacts.Projects;
-using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using Endpoint.Core.Models.Artifacts.Projects.Factories;
 using Endpoint.Core.Options;
 using System.IO;
@@ -41,18 +39,7 @@ public class SolutionModelFactory: ISolutionModelFactory
             srcFolder.SubFolders.Add(userDefinedFolder);
         }
         
-
-        DotNetProjectType dotNetType = dotNetProjectTypeName switch
-        {
-            "web" => DotNetProjectType.Web,
-            "webapi" => DotNetProjectType.WebApi,
-            "classlib" => DotNetProjectType.ClassLib,
-            "worker" => DotNetProjectType.Worker,
-            "xunit" => DotNetProjectType.XUnit,
-            _ => DotNetProjectType.Console
-        };
-
-        var project = new ProjectModel(dotNetType, projectName, userDefinedFolder == null ? $"{srcFolder.Directory}" : userDefinedFolder.Directory);
+        var project = _projectModelFactory.Create(dotNetProjectTypeName, projectName, userDefinedFolder == null ? $"{srcFolder.Directory}" : userDefinedFolder.Directory);
 
         (userDefinedFolder == null ? srcFolder : userDefinedFolder).Projects.Add(project);
 

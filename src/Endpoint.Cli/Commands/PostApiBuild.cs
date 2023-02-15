@@ -32,7 +32,7 @@ public class PostApiBuild
             _settingsProvider = settingsProvider ?? throw new ArgumentNullException(nameof(settingsProvider));
         }
 
-        public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+        public async Task Handle(Request request, CancellationToken cancellationToken)
         {
             Core.Models.Options.SettingsModel settings = _settingsProvider.Get(request.Directory);
 
@@ -59,7 +59,7 @@ public class PostApiBuild
                 }
             }
 
-            return Task.FromResult(new Unit());
+    
         }
     }
 }

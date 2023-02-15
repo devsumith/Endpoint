@@ -33,14 +33,14 @@ public class EntityConfiguration
             _fileSystem = fileSystem;
         }
 
-        public Task<Unit> Handle(Request request, CancellationToken cancellationToken)
+        public async Task Handle(Request request, CancellationToken cancellationToken)
         {
             var settings = _settingsProvider.Get();
 
             new EntityConfigurationBuilder(request.Entity, settings.InfrastructureNamespace, settings.DomainNamespace, request.Directory, _fileSystem)
                 .Build();
 
-            return Task.FromResult(new Unit());
+    
         }
     }
 }

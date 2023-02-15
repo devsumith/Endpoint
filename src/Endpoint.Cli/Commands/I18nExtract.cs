@@ -36,11 +36,11 @@ public class I18nExtractRequestHandler : IRequestHandler<I18nExtractRequest>
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(I18nExtractRequest request, CancellationToken cancellationToken)
+    public async Task Handle(I18nExtractRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(I18nExtractRequestHandler));
 
         _angularService.I18nExtract(new AngularProjectReferenceModel(request.Name, request.Directory));
-        return new();
+
     }
 }

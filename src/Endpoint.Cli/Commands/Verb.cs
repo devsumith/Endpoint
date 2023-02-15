@@ -44,7 +44,7 @@ public class VerbRequestHandler : IRequestHandler<VerbRequest>
         _namespaceProvider = namespaceProvider;
     }
 
-    public async Task<Unit> Handle(VerbRequest request, CancellationToken cancellationToken)
+    public async Task Handle(VerbRequest request, CancellationToken cancellationToken)
     {
         var @namespace = _namespaceProvider.Get(request.Directory);
 
@@ -57,7 +57,7 @@ public class VerbRequestHandler : IRequestHandler<VerbRequest>
 
         _artifactGenerationStrategyFactory.CreateFor(model);
 
-        return new();
+
     }
 }
 

@@ -36,12 +36,12 @@ public class ScssComponentCreateRequestHandler : IRequestHandler<ScssComponentCr
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
-    public async Task<Unit> Handle(ScssComponentCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ScssComponentCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(ScssComponentCreateRequestHandler));
 
         _angularService.ScssComponentCreate(request.Name, request.Directory);
 
-        return new();
+
     }
 }
