@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "service-bus-message-consumer-create -d C:\\projects\\Test\\src\\Worker.Console",
+      "commandLineArgs": "signalr-app-create -n Treasure -d C:\\projects",
       "environmentVariables": {
       }
     }

@@ -145,7 +145,7 @@ public class AngularService : IAngularService
         _setInitialLanguageInAppComponent(model);
     }
 
-    public void CreateWorkspace(string name, string projectName, string projectType, string prefix, string rootDirectory)
+    public void CreateWorkspace(string name, string projectName, string projectType, string prefix, string rootDirectory, bool openInVsCode = true)
     {
         var workspaceModel = new AngularWorkspaceModel(name, rootDirectory);
 
@@ -161,7 +161,8 @@ public class AngularService : IAngularService
 
         AddProject(angularProjectModel);
 
-        _commandService.Start("code .", workspaceModel.Directory);
+        if(openInVsCode)
+            _commandService.Start("code .", workspaceModel.Directory);
 
     }
 
