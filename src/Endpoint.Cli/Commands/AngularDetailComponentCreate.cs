@@ -17,7 +17,6 @@ public class AngularDetailComponentCreateRequest : IRequest {
     [Option('n',"name")]
     public string Name { get; set; }
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -34,7 +33,5 @@ public class AngularDetailComponentCreateRequestHandler : IRequestHandler<Angula
     public async Task Handle(AngularDetailComponentCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularDetailComponentCreateRequestHandler));
-
-
     }
 }

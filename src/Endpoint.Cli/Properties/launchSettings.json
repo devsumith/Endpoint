@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "test-projects-remove -d C:\\projects",
+      "commandLineArgs": "service-bus-message-consumer-create -d C:\\projects\\Test\\src\\Worker.Console",
       "environmentVariables": {
       }
     }

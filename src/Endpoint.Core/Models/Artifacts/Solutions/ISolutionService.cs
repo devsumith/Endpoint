@@ -11,5 +11,6 @@ public interface ISolutionService
     void Create(string name, string plantUmlSourcePath, string directory);
     SolutionModel CreateFromPlantUml(string plantUml, string name, string directory);
     void EventDrivenMicroservicesCreate(string name, string services, string directory);
+    void MessagingBuildingBlockAdd(string directory);
 }
 

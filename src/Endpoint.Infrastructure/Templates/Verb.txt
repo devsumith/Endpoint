@@ -28,10 +28,8 @@ public class {{ namePascalCase }}RequestHandler : IRequestHandler<{{ namePascalC
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<Unit> Handle({{ namePascalCase }}Request request, CancellationToken cancellationToken)
+    public async Task Handle({{ namePascalCase }}Request request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof({{ namePascalCase }}RequestHandler));
-
-        return new();
     }
 }

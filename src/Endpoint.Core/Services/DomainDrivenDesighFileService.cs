@@ -135,7 +135,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
         var methodModel = new MethodModel()
         {
-            ReturnType = TypeModel.TaskOf("Unit"),
+            ReturnType = TypeModel.Task,
             Async = true,
             Name = "Handle",
             AccessModifier = AccessModifier.Public,
@@ -161,6 +161,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
     public void ServiceBusMessageConsumerCreate(string name = "ServiceBusMessageConsumer", string messagesNamespace = null, string directory = null)
     {
+        
         var classModel = new ClassModel(name);
 
         if (string.IsNullOrEmpty(messagesNamespace))
@@ -186,12 +187,12 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
         var ctor = new ConstructorModel(classModel, classModel.Name);
 
-        foreach (var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new TypeModel("IMediator"), new TypeModel("IMessagingClient") })
+        foreach (var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new TypeModel("IMediator"), new TypeModel("IUdpClientFactory") })
         {
             var propName = type.Name switch
             {
                 "ILogger" => "logger",
-                "IMessagingClient" => "messagingClient",
+                "IUdpClientFactory" => "udpClientFactory",
                 "IMediator" => "mediator"
             };
 
@@ -208,57 +209,65 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
             });
         }
 
+        classModel.Fields.Add(new FieldModel()
+        {
+            Name = $"_supportedMessageTypes",
+            Type = new TypeModel("string[]"),
+            DefaultValue = "new string[] { }"
+        });
+
         var methodBody = new string[]
         {
-            "await _messagingClient.StartAsync(stoppingToken);",
+            "var client = _udpClientFactory.Create();",
 
             "",
             
             "while(!stoppingToken.IsCancellationRequested) {",
             
             "",
+
+            "var result = await client.ReceiveAsync(stoppingToken);".Indent(1),
+
+            "",
+
+            "var json = Encoding.UTF8.GetString(result.Buffer);".Indent(1),
+
+            "",
+
+            "var message = Deserialize<ServiceBusMessage>(json)!;".Indent(1),
             
-            "try".Indent(1),
+            "",
+
+            "var messageType = message.MessageAttributes[\"MessageType\"];".Indent(1),
             
+            "",
+            
+            "if(_supportedMessageTypes.Contains(messageType))".Indent(1),
+
             "{".Indent(1),
-            
-            "var message = await _messagingClient.ReceiveAsync(new ReceiveRequest());".Indent(2),
-            
-            "",
-            
-            "var messageType = message.MessageAttributes[\"MessageType\"];".Indent(2),
-            
-            "",
-            
-            ($"var type = Type.GetType($\"{messagesNamespace}." + "{messageType}\");").Indent(2),
+
+            new StringBuilder()
+            .Append("var type = Type.GetType($\"")
+            .Append(messagesNamespace)
+            .Append(".{messageType}\");")
+            .ToString()
+            .Indent(2),
             
             "",
-            
-            "var request = JsonConvert.DeserializeObject(message.Body, type!) as IRequest;".Indent(2),
-            
-            "",
-            
-            "await _mediator.Send(request!);".Indent(2),
+
+            "var request = (IRequest)Deserialize(message.Body, type!)!;".Indent(2),
             
             "",
-            
-            "await Task.Delay(100);".Indent(2),
+
+            "await _mediator.Send(request, stoppingToken);".Indent(2),
             
             "}".Indent(1),
-            
-            "catch(Exception exception)".Indent(1),
-            
-            "{".Indent(1),
-            
-            "_logger.LogError(exception.Message);".Indent(2),
-            
+
             "",
+
+            "await Task.Delay(300);".Indent(1),
             
-            "continue;".Indent(2),
-            
-            "}".Indent(1),
-            
-            "}"
+            "}",            
         };
 
         var method = new MethodModel

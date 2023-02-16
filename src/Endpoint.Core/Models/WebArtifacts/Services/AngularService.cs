@@ -176,7 +176,7 @@ public class AngularService : IAngularService
 
         var angularProjectReferenceModel = new AngularProjectReferenceModel(model.Name, model.Directory, model.ProjectType);
 
-        EnableDefaultStandaloneComponents(angularProjectReferenceModel);
+        EnableDefaultStandalone(angularProjectReferenceModel);
 
         ExportsAssetsAndStyles(angularProjectReferenceModel);
 
@@ -264,13 +264,13 @@ public class AngularService : IAngularService
         _commandService.Start($"ng add @angular/material --project {model.Name} --theme custom", rootDirectory);
     }
 
-    public void EnableDefaultStandaloneComponents(AngularProjectReferenceModel model)
+    public void EnableDefaultStandalone(AngularProjectReferenceModel model)
     {
         var angularJsonPath = _fileProvider.Get("angular.json", model.ReferencedDirectory);
 
         var angularJson = JObject.Parse(_fileSystem.ReadAllText(angularJsonPath));
 
-        angularJson.EnableDefaultStandaloneComponents(model.Name);
+        angularJson.EnableDefaultStandalone(model.Name);
 
         _fileSystem.WriteAllText(angularJsonPath, JsonConvert.SerializeObject(angularJson, Formatting.Indented));
     }

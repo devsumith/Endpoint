@@ -62,7 +62,5 @@ public class MessageCreateRequestHandler : IRequestHandler<MessageCreateRequest>
             }
 
         _domainDrivenDesignFileService.MessageCreate(request.Name, properties, request.Directory);
-
-
     }
 }

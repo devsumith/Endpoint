@@ -18,6 +18,7 @@ public class TypeModel
     public bool Nullable { get; set; }
     public bool Interface { get; set; }
 
+    public static TypeModel Task = new TypeModel("Task");
     public static TypeModel TaskOf(string typeName)
     {
         return new TypeModel("Task")

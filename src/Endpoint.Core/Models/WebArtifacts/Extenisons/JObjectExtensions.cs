@@ -8,13 +8,12 @@ namespace Newtonsoft.Json.Linq;
 
 public static class JObjectExtensions
 {
-
     public static void ExportsAssetsAndStyles(this JObject jObject)
     {
-        jObject["assets"] = new JArray("\"./scss/*.*\"", "\"./assets/**/*.*\"");
+        jObject["assets"] = new JArray("./scss/*.*", "./assets/**/*.*");
     }
 
-    public static void EnableDefaultStandaloneComponents(this JObject jObject, string projectName)
+    public static void EnableDefaultStandalone(this JObject jObject, string projectName)
     {
         jObject["projects"][projectName]["schematics"] = new JObject
         {
@@ -22,7 +21,11 @@ public static class JObjectExtensions
                 { "standalone", true },
                 { "style", "scss" }
             }
+            },
+            { "@schematics/angular:directive", new JObject() {
+                { "standalone", true }
             }
+            },
         };
 
     }

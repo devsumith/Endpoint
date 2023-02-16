@@ -5,14 +5,16 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
 using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using Endpoint.Core.Models.Artifacts.Projects.Factories;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Classes.Services;
 using Endpoint.Core.Services;
 using MediatR;
-using Octokit;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace Endpoint.Core.Models.Artifacts.Solutions;
 
@@ -24,14 +26,17 @@ public class SolutionService : ISolutionService
     private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;
     private readonly IDomainDrivenDesignService _domainDrivenDesignService;
     private readonly Observable<INotification> _notificationListener;
-
+    private readonly IFileProvider _fileProvider;
+    private readonly ICommandService _commandService;
     public SolutionService(
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         IPlantUmlParserStrategyFactory plantUmlParserStrategyFactory,
         IProjectModelFactory projectModelFactory,
         IDomainDrivenDesignFileService domainDrivenDesignFileService,
         IDomainDrivenDesignService domainDrivenDesignService,
-        Observable<INotification> notificationListener)
+        Observable<INotification> notificationListener,
+        IFileProvider fileProvider,
+        ICommandService commandService)
     {
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
         _plantUmlParserStrategyFactory = plantUmlParserStrategyFactory;
@@ -39,6 +44,8 @@ public class SolutionService : ISolutionService
         _domainDrivenDesignFileService = domainDrivenDesignFileService;
         _domainDrivenDesignService = domainDrivenDesignService;
         _notificationListener = notificationListener;
+        _fileProvider = fileProvider;
+        _commandService = commandService;
     }
 
     public void AddSolutionItem(string path)
@@ -167,5 +174,43 @@ public class SolutionService : ISolutionService
         _artifactGenerationStrategyFactory.CreateFor(model);
 
         return model;
+    }
+
+    public void MessagingBuildingBlockAdd(string directory)
+    {
+        var solutionPath = _fileProvider.Get("*.sln", directory);
+
+        var solutionName = Path.GetFileName(solutionPath);
+
+        var solutionDirectory = Path.GetDirectoryName(solutionPath);
+
+        var buildingBlocksDirectory = Path.Combine(solutionDirectory, "src", "BuildingBlocks");
+
+        var messagingDirectory = Path.Combine(buildingBlocksDirectory, "Messaging");
+
+        if (!Directory.Exists(buildingBlocksDirectory))
+        {
+            Directory.CreateDirectory(buildingBlocksDirectory);
+        }
+
+        if (!Directory.Exists(messagingDirectory))
+        {
+            Directory.CreateDirectory(messagingDirectory);
+        }
+
+
+        var messagingProjectModel = _projectModelFactory.CreateMessagingProject(messagingDirectory);
+
+        _artifactGenerationStrategyFactory.CreateFor(messagingProjectModel);
+
+        _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
+
+        var messagingUdpProjectModel = _projectModelFactory.CreateMessagingUdpProject(messagingDirectory);
+
+        _artifactGenerationStrategyFactory.CreateFor(messagingUdpProjectModel);
+
+        _commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
+
+
     }
 }

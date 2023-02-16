@@ -40,7 +40,5 @@ public class AngularComponentCreateRequestHandler : IRequestHandler<AngularCompo
         _logger.LogInformation("Handled: {0}", nameof(AngularComponentCreateRequestHandler));
 
         _angularService.ComponentCreate(request.Name, request.Directory);
-
-
     }
 }

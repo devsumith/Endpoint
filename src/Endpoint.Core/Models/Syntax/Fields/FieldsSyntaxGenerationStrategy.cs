@@ -49,8 +49,16 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
         if (model.ReadOnly)
             builder.Append(" readonly");
 
-        builder.Append($" {syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name};");
+        
 
+        if(!string.IsNullOrEmpty(model.DefaultValue))
+        {
+            builder.Append($" {syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name} = {model.DefaultValue};");
+        }
+        else
+        {
+            builder.Append($" {syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name};");
+        }
         return builder.ToString();
     }
 }

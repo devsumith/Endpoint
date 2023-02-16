@@ -36,6 +36,7 @@ public class ProjectService : IProjectService
     public void AddProject(ProjectModel model)
     {
         _artifactGenerationStrategyFactory.CreateFor(model);
+
         AddToSolution(model);
     }
 

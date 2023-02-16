@@ -3,7 +3,6 @@
 
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Types;
-using Octokit;
 
 namespace Endpoint.Core.Models.Syntax.Fields;
 
@@ -18,6 +17,7 @@ public class FieldModel
     public TypeModel Type { get; set; }
     public string Name { get; set; }
     public bool ReadOnly { get; set; }
+    public string DefaultValue { get; set; }
     public AccessModifier AccessModifier { get; set; }
 
     public static FieldModel LoggerOf(string name)

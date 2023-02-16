@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -89,57 +90,91 @@ public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<Ser
 
         classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.Extensions.Logging" });
 
+        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "System.Text" });
+
         var ctor = new ConstructorModel(classModel, classModel.Name);
 
-        foreach(var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new TypeModel("IMediator"), new TypeModel("IMessagingClient") })
+        foreach (var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new TypeModel("IMediator"), new TypeModel("IUdpClientFactory") })
         {
-            var name = type.Name switch
+            var propName = type.Name switch
             {
                 "ILogger" => "logger",
-                "IMessagingClient" => "messagingClient",
+                "IUdpClientFactory" => "udpClientFactory",
                 "IMediator" => "mediator"
             };
 
             classModel.Fields.Add(new FieldModel()
             {
-                Name = $"_{name}",
+                Name = $"_{propName}",
                 Type = type
             });
 
             ctor.Params.Add(new ParamModel()
             {
-                Name = name,
+                Name = propName,
                 Type = type
             });
         }
 
+        classModel.Fields.Add(new FieldModel()
+        {
+            Name = $"_supportedMessageTypes",
+            Type = new TypeModel("string[]"),
+            DefaultValue = "new string[] { }"
+        });
+
         var methodBody = new string[]
         {
-            "await _messagingClient.StartAsync(stoppingToken);",
+            "var client = _udpClientFactory.Create();",
+
             "",
+
             "while(!stoppingToken.IsCancellationRequested) {",
+
             "",
-            "try".Indent(1),
+
+            "var result = await client.ReceiveAsync(stoppingToken);".Indent(1),
+
+            "",
+
+            "var json = Encoding.UTF8.GetString(result.Buffer);".Indent(1),
+
+            "",
+
+            "var message = System.Text.Json.JsonSerializer.Deserialize<ServiceBusMessage>(json)!;".Indent(1),
+
+            "",
+
+            "var messageType = message.MessageAttributes[\"MessageType\"];".Indent(1),
+
+            "",
+
+            "if(_supportedMessageTypes.Contains(messageType))".Indent(1),
+
             "{".Indent(1),
-            "var message = await _messagingClient.ReceiveAsync(new ReceiveRequest());".Indent(2),
+
+            new StringBuilder()
+            .Append("var type = Type.GetType($\"")
+            .Append(request.MessagesNamespace)
+            .Append(".{messageType}\");")
+            .ToString()
+            .Indent(2),
+
             "",
-            "var messageType = message.MessageAttributes[\"MessageType\"];".Indent(2),
+
+            "var request = (IRequest)System.Text.Json.JsonSerializer.Deserialize(message.Body, type!)!;".Indent(2),
+
             "",
-            ($"var type = Type.GetType($\"{request.MessagesNamespace}." + "{messageType}\");").Indent(2),
-            "",
-            "var request = JsonConvert.DeserializeObject(message.Body, type!) as IRequest;".Indent(2),
-            "",
-            "await _mediator.Send(request!);".Indent(2),
-            "",
-            "await Task.Delay(100);".Indent(2),
+
+            "await _mediator.Send(request, stoppingToken);".Indent(2),
+
             "}".Indent(1),
-            "catch(Exception exception)".Indent(1),
-            "{".Indent(1),
-            "_logger.LogError(exception.Message);".Indent(2),
+
             "",
-            "continue;".Indent(2),
-            "}".Indent(1),
-            "}"
+
+            "await Task.Delay(300);".Indent(1),
+
+            "}",
         };
 
         var method = new MethodModel
