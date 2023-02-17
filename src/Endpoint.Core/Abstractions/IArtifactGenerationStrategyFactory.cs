@@ -28,7 +28,7 @@ public class ArtifactUpdateStrategyFactory : IArtifactUpdateStrategyFactory
     }
     public void CreateFor(dynamic context = null, params object[] args)
     {
-        var strategy = _strategies.Where(x => x.CanHandle(context,args)).OrderBy(x => x.Priority).FirstOrDefault();
+        var strategy = _strategies.Where(x => x.CanHandle(context, args)).OrderBy(x => x.Priority).FirstOrDefault();
 
 
         strategy.Update(context, args);

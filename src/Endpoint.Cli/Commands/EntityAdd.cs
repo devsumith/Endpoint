@@ -17,7 +17,7 @@ public class EntityAddRequest : IRequest
 {
     [Option('n', "name")]
     public string Name { get; set; }
-    
+
     [Option('p', "properties")]
     public string Properties { get; set; }
 
@@ -40,11 +40,11 @@ public class EntityAddRequestHandler : IRequestHandler<EntityAddRequest>
 
     public async Task Handle(EntityAddRequest request, CancellationToken cancellationToken)
     {
-/*        _logger.LogInformation($"Handled: {nameof(EntityAddRequestHandler)}");
+        /*        _logger.LogInformation($"Handled: {nameof(EntityAddRequestHandler)}");
 
-        var model = new EntityFileModelFactory().Create(request.Name, request.Properties, request.Directory, _fileNamespaceProvider.Get(request.Directory));
+                var model = new EntityFileModelFactory().Create(request.Name, request.Properties, request.Directory, _fileNamespaceProvider.Get(request.Directory));
 
-        _fileGenerationStrategyFactory.CreateFor(model);*/
+                _fileGenerationStrategyFactory.CreateFor(model);*/
 
 
     }

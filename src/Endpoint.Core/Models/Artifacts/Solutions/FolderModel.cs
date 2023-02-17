@@ -10,19 +10,19 @@ namespace Endpoint.Core.Models.Artifacts.Solutions;
 
 public class FolderModel
 {
-	public FolderModel(string name, string parentDirectory)
-	{
-		Name = name;
-		Directory = $"{parentDirectory}{Path.DirectorySeparatorChar}{name}";
-		SubFolders = new List<FolderModel>();
-		Projects = new List<ProjectModel>();
-		Files = new List<FileModel>();
-	}
+    public FolderModel(string name, string parentDirectory)
+    {
+        Name = name;
+        Directory = $"{parentDirectory}{Path.DirectorySeparatorChar}{name}";
+        SubFolders = new List<FolderModel>();
+        Projects = new List<ProjectModel>();
+        Files = new List<FileModel>();
+    }
 
-	public string Name { get; set; }
-	public string Directory { get; set; }
-	public List<ProjectModel> Projects { get; set; }
-	public List<FolderModel> SubFolders { get; set; }
-	public List<FileModel> Files { get; set; }
+    public string Name { get; set; }
+    public string Directory { get; set; }
+    public List<ProjectModel> Projects { get; set; }
+    public List<FolderModel> SubFolders { get; set; }
+    public List<FileModel> Files { get; set; }
 }
 

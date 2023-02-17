@@ -13,7 +13,7 @@ public class SyntaxService : ISyntaxService
     public SolutionModel SolutionModel { get; set; }
 
     public SyntaxService(
-        IPlantUmlParserStrategyFactory parserStrategyFactory, 
+        IPlantUmlParserStrategyFactory parserStrategyFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
         string directory)
@@ -26,7 +26,7 @@ public class SyntaxService : ISyntaxService
 
             var plantUmlPath = $"{solutionDirectory}{Path.DirectorySeparatorChar}documentation{Path.DirectorySeparatorChar}model.plantuml";
 
-            if(fileSystem.Exists(plantUmlPath))
+            if (fileSystem.Exists(plantUmlPath))
             {
                 var plantUml = fileSystem.ReadAllText(plantUmlPath);
 
@@ -38,7 +38,7 @@ public class SyntaxService : ISyntaxService
             }
         }
 
-        
+
     }
 
 }

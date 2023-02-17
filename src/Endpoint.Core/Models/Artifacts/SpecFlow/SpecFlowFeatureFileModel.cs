@@ -3,11 +3,11 @@ using Endpoint.Core.Models.Syntax.SpecFlow;
 
 namespace Endpoint.Core.Models.Artifacts.SpecFlow;
 
-public class SpecFlowFeatureFileModel: ObjectFileModel<SpecFlowFeatureModel>
+public class SpecFlowFeatureFileModel : ObjectFileModel<SpecFlowFeatureModel>
 {
     public SpecFlowFeatureFileModel(SpecFlowFeatureModel model, string directory)
-        :base(model, model.Name, directory, "feature")
+        : base(model, model.Name, directory, "feature")
     {
-        
+
     }
 }

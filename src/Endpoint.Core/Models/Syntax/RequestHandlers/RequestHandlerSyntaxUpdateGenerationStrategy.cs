@@ -15,7 +15,7 @@ public class RequestHandlerSyntaxUpdateGenerationStrategy : SyntaxGenerationStra
     public RequestHandlerSyntaxUpdateGenerationStrategy(
         IServiceProvider serviceProvider,
         ISyntaxService syntaxService,
-        ILogger<RequestHandlerSyntaxUpdateGenerationStrategy> logger) 
+        ILogger<RequestHandlerSyntaxUpdateGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

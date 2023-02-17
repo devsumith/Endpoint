@@ -8,7 +8,7 @@ public class ReactAppReferenceModel
     public ReactAppReferenceModel(string name, string referenceDirectory)
     {
         Name = name;
-		ReferenceDirectory = referenceDirectory;
+        ReferenceDirectory = referenceDirectory;
     }
 
     public string Name { get; set; }

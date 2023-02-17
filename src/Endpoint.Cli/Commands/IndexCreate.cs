@@ -17,7 +17,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb(".")]
-public class IndexCreateRequest : IRequest {
+public class IndexCreateRequest : IRequest
+{
 
     [Option('s')]
     public bool Scss { get; set; }
@@ -32,7 +33,7 @@ public class IndexCreateRequestHandler : IRequestHandler<IndexCreateRequest>
     private readonly IFileSystem _fileSystem;
     private readonly IAngularService _angularService;
     public IndexCreateRequestHandler(
-        ILogger<IndexCreateRequestHandler> logger, 
+        ILogger<IndexCreateRequestHandler> logger,
         IFileSystem fileSystem,
         IAngularService angularService)
     {

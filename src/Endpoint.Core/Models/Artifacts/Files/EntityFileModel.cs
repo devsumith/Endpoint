@@ -10,11 +10,11 @@ namespace Endpoint.Core.Models.Artifacts.Files;
 public class EntityFileModel : ObjectFileModel<EntityModel>
 {
     public EntityFileModel(EntityModel @object, string directory)
-        :base(@object, new List<UsingDirectiveModel>(),@object.Name,directory,"cs")
+        : base(@object, new List<UsingDirectiveModel>(), @object.Name, directory, "cs")
     {
-        if(@object.UsingDirectives != null)
+        if (@object.UsingDirectives != null)
         {
-            foreach(var @using in @object.UsingDirectives)
+            foreach (var @using in @object.UsingDirectives)
             {
                 Usings.Add(@using);
             }

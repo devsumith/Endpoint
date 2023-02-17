@@ -21,7 +21,7 @@ public class CopyrightAddArtifactGenerationStrategy : ArtifactGenerationStrategy
         IServiceProvider serviceProvider,
         ILogger<CopyrightAddArtifactGenerationStrategy> logger,
         IFileSystem fileSystem,
-        ITemplateLocator templateLocator) 
+        ITemplateLocator templateLocator)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -38,7 +38,7 @@ public class CopyrightAddArtifactGenerationStrategy : ArtifactGenerationStrategy
     public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, FileReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
-        
+
         var copyright = string.Join(Environment.NewLine, _templateLocator.Get("Copyright"));
 
         var ignore = model.Path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}")

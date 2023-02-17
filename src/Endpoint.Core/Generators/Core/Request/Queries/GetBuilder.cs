@@ -73,7 +73,7 @@ namespace Endpoint.Core.Builders
 
             var response = new ClassBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}Response", _context, _fileSystem)
                 .WithBase("ResponseBase")
-                .WithProperty(new PropertyBuilder().WithType(new TypeBuilder().WithGenericType("List", $"{ ((SyntaxToken)_entity).PascalCase}Dto").Build()).WithName($"{((SyntaxToken)_entity).PascalCasePlural}").WithAccessors(new AccessorsBuilder().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithType(new TypeBuilder().WithGenericType("List", $"{((SyntaxToken)_entity).PascalCase}Dto").Build()).WithName($"{((SyntaxToken)_entity).PascalCasePlural}").WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
             var handler = new ClassBuilder($"Get{((SyntaxToken)_entity).PascalCasePlural}Handler", _context, _fileSystem)

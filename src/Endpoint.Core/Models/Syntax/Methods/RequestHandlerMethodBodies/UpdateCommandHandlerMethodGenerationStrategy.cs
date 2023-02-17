@@ -24,7 +24,7 @@ public class UpdateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
 
     public override bool CanHandle(object model, dynamic context = null)
-    {        
+    {
         if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
         {
             var types = methodModel.Params.Select(x => x.Type.Name);
@@ -39,11 +39,11 @@ public class UpdateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, MethodModel model, dynamic context = null)
     {
-        var entity = context.Entity as ClassModel;  
+        var entity = context.Entity as ClassModel;
 
         var entityName = entity.Name;
 
-        var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase,entityName,pluralize: true);
+        var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
         var entityNameCamelCase = _namingConventionConverter.Convert(NamingConvention.CamelCase, entityName); ;
 

@@ -26,7 +26,7 @@ public class ServiceFileCreatedHandler : INotificationHandler<ServiceFileCreated
     {
         _logger.LogInformation("Handled: {0}", nameof(ServiceFileCreatedHandler));
 
-        _dependencyInjectionService.Add(notification.InterfaceName,notification.ClassName,notification.Directory);
+        _dependencyInjectionService.Add(notification.InterfaceName, notification.ClassName, notification.Directory);
     }
 }
 

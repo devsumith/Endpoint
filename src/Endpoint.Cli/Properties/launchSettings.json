@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "signalr-app-create -n Dip -d C:\\projects",
+      "commandLineArgs": "aggregate-create -n DashboardItem -p DashboardId:Guid,Name:string -d C:\\projects\\Gridster\\src\\Gridster.Core\\AggregateModel\\",
       "environmentVariables": {
       }
     }

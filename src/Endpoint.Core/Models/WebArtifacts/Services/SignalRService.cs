@@ -9,14 +9,14 @@ using System.IO;
 
 namespace Endpoint.Core.Models.WebArtifacts.Services;
 
-public class SignalRService: ISignalRService
+public class SignalRService : ISignalRService
 {
     private readonly ILogger<SignalRService> _logger;
     private readonly IFileProvider _fileProvider;
     private readonly ICommandService _commandService;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     public SignalRService(
-        ILogger<SignalRService> logger, 
+        ILogger<SignalRService> logger,
         IFileProvider fileProvider,
         ICommandService commandService,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
@@ -59,7 +59,7 @@ public class SignalRService: ISignalRService
 }
 
 public class SignalrHUbModel
-{    
+{
     public SignalrHUbModel(string name)
     {
         Name = name;

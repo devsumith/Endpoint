@@ -5,7 +5,8 @@ using MediatR;
 
 namespace Endpoint.Core.Messages;
 
-public class WorkerFileCreated: INotification {
+public class WorkerFileCreated : INotification
+{
     public WorkerFileCreated(string name, string directory)
     {
         Name = name;

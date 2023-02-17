@@ -12,7 +12,7 @@ namespace Endpoint.Core.Builders.Statements
         {
             var type = settings.IdDotNetType == IdPropertyType.Guid ? $"Guid" : "int";
 
-            if(forModel && type == "Guid")
+            if (forModel && type == "Guid")
             {
                 return $"{resourceName}Id";
             }

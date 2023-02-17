@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("docker-controller-hooks-create")]
-public class DockerControllerHooksCreateRequest : IRequest {
-    [Option('n',"name")]
+public class DockerControllerHooksCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

@@ -27,11 +27,11 @@ public class NamespaceProvider : INamespaceProvider
 
         var projectFile = Directory.GetFiles(path, "*.csproj").FirstOrDefault();
 
-        if(!string.IsNullOrEmpty(projectFile))
+        if (!string.IsNullOrEmpty(projectFile))
         {
             var rootNamespace = Path.GetFileNameWithoutExtension(projectFile);
 
-            if(depth > 0)
+            if (depth > 0)
             {
                 var subNamespace = string.Join('.', parts.Skip(parts.Length - depth));
 

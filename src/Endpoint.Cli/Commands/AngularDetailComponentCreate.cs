@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("angular-detail-component-create")]
-public class AngularDetailComponentCreateRequest : IRequest {
-    [Option('n',"name")]
+public class AngularDetailComponentCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('d', Required = false)]

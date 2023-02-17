@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Core.Services;
 
-public class ClipboardService: IClipboardService
+public class ClipboardService : IClipboardService
 {
     public void SetText(string value)
     {

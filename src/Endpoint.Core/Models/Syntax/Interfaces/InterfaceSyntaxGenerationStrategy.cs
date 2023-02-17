@@ -13,7 +13,7 @@ public class InterfaceSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<In
     private readonly ILogger<InterfaceSyntaxGenerationStrategy> _logger;
     public InterfaceSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<InterfaceSyntaxGenerationStrategy> logger) 
+        ILogger<InterfaceSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -28,7 +28,7 @@ public class InterfaceSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<In
         _logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
-        
+
         builder.Append($"public interface {model.Name}");
 
         if (model.Implements.Count > 0)

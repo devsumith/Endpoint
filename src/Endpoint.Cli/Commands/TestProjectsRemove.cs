@@ -14,7 +14,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("test-projects-remove")]
-public class TestProjectsRemoveRequest : IRequest {
+public class TestProjectsRemoveRequest : IRequest
+{
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -25,7 +26,7 @@ public class TestProjectsRemoveRequestHandler : IRequestHandler<TestProjectsRemo
     private readonly IFileProvider _fileProvider;
     private readonly ICommandService _commandService;
     public TestProjectsRemoveRequestHandler(
-        ILogger<TestProjectsRemoveRequestHandler> logger, 
+        ILogger<TestProjectsRemoveRequestHandler> logger,
         IFileProvider fileProvider,
         ICommandService commandService)
     {

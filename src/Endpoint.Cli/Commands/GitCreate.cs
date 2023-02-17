@@ -17,7 +17,7 @@ namespace Endpoint.Cli.Commands;
 [Verb("git-create")]
 public class GitCreateRequest : IRequest
 {
-    [Option('n',"name")]
+    [Option('n', "name")]
     public string RepositoryName { get; set; }
 
     [Option('d', Required = false)]
@@ -30,7 +30,7 @@ public class GitCreateRequestHandler : IRequestHandler<GitCreateRequest>
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
 
     public GitCreateRequestHandler(
-        ILogger<GitCreateRequestHandler> logger, 
+        ILogger<GitCreateRequestHandler> logger,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

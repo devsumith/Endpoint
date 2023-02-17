@@ -13,7 +13,7 @@ public class TypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<TypeMod
     private readonly ILogger<TypeSyntaxGenerationStrategy> _logger;
     public TypeSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<TypeSyntaxGenerationStrategy> logger) 
+        ILogger<TypeSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -27,7 +27,7 @@ public class TypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<TypeMod
 
         builder.Append(model.Name);
 
-        if(model.GenericTypeParameters.Count > 0)
+        if (model.GenericTypeParameters.Count > 0)
         {
             builder.Append('<');
 

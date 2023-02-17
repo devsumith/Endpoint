@@ -11,8 +11,8 @@ namespace Endpoint.Core.Models.Artifacts.Solutions;
 
 public class PlantUmlProjectParserStrategy : PlantUmlParserStrategyBase<ProjectModel>
 {
-    public PlantUmlProjectParserStrategy(IServiceProvider serviceProvider) 
-        :base(serviceProvider)
+    public PlantUmlProjectParserStrategy(IServiceProvider serviceProvider)
+        : base(serviceProvider)
     { }
 
     public override bool CanHandle(string plantUml) => plantUml.StartsWith("package");

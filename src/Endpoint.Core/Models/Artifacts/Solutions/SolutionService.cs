@@ -70,7 +70,7 @@ public class SolutionService : ISolutionService
 
         _artifactGenerationStrategyFactory.CreateFor(solutionModel);
 
-        foreach(var notification in notifications)
+        foreach (var notification in notifications)
         {
             _notificationListener.Broadcast(notification);
         }
@@ -160,7 +160,7 @@ public class SolutionService : ISolutionService
 
     public void Create(string name, string plantUmlSourcePath, string directory)
     {
-        
+
     }
 
     public SolutionModel CreateFromPlantUml(string plantUml, string name, string directory)

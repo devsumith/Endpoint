@@ -5,7 +5,8 @@ using System;
 
 namespace Endpoint.Core.Models.Syntax.Attributes;
 
-public class SwaggerOperationAttributeModel: AttributeModel {
+public class SwaggerOperationAttributeModel : AttributeModel
+{
     public SwaggerOperationAttributeModel(string summary, string description)
     {
         Summary = summary;

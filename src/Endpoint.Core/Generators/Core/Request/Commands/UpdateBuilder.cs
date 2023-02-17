@@ -104,7 +104,7 @@ namespace Endpoint.Core.Builders
                 .WithReturnType(new TypeBuilder().WithGenericType("Task", $"Update{((SyntaxToken)_entity).PascalCase}Response").Build())
                 .WithParameter(new ParameterBuilder($"Update{((SyntaxToken)_entity).PascalCase}Request", "request").Build())
                 .WithParameter(new ParameterBuilder("CancellationToken", "cancellationToken").Build())
-                .WithBody(UpdateCommandHandlerBodyBuilder.Build(_settings,_aggregateRoot).ToList()).Build())
+                .WithBody(UpdateCommandHandlerBodyBuilder.Build(_settings, _aggregateRoot).ToList()).Build())
                 .Class;
 
             new NamespaceBuilder($"Update{((SyntaxToken)_entity).PascalCase}", _context, _fileSystem)

@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("syntax-generation-strategy-create")]
-public class SyntaxGenerationStrategyCreateRequest : IRequest {
-    [Option('n',"name")]
+public class SyntaxGenerationStrategyCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('d', Required = false)]

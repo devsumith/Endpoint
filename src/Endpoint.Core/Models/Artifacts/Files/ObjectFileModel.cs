@@ -10,7 +10,7 @@ namespace Endpoint.Core.Models.Artifacts.Files;
 public class ObjectFileModel<T> : FileModel
 {
     public ObjectFileModel(T @object, List<UsingDirectiveModel> usings, string name, string directory, string extension)
-        :base(name.Split('.').Last(),directory, extension)
+        : base(name.Split('.').Last(), directory, extension)
     {
         Object = @object;
         Usings = usings;

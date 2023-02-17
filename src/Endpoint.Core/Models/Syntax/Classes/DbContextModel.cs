@@ -19,8 +19,8 @@ public class DbContextModel : ClassModel
     public List<EntityModel> Entities { get; private set; } = new List<EntityModel>();
 
     public DbContextModel(
-        INamingConventionConverter namingConventionConverter, 
-        string name, 
+        INamingConventionConverter namingConventionConverter,
+        string name,
         List<EntityModel> entities,
         string serviceName
         )
@@ -82,7 +82,7 @@ public class DbContextModel : ClassModel
 
         interfaceModel.UsingDirectives = this.UsingDirectives;
 
-        foreach(var prop in Properties)
+        foreach (var prop in Properties)
         {
             interfaceModel.Properties.Add(new PropertyModel(interfaceModel, prop.AccessModifier, prop.Type, prop.Name, prop.Accessors));
         }
@@ -103,7 +103,7 @@ public class DbContextModel : ClassModel
         saveChangesAsyncMethodModel.ReturnType = TypeModel.TaskOf("int");
 
         interfaceModel.Methods.Add(saveChangesAsyncMethodModel);
-        
+
         return interfaceModel;
     }
 }

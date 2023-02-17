@@ -11,13 +11,13 @@ namespace Endpoint.Core.Models.Artifacts.Solutions;
 
 public class PlantUmlClassFileParserStrategy : PlantUmlParserStrategyBase<ObjectFileModel<ClassModel>>
 {
-    public PlantUmlClassFileParserStrategy(IServiceProvider serviceProvider) 
+    public PlantUmlClassFileParserStrategy(IServiceProvider serviceProvider)
         : base(serviceProvider)
     { }
 
     public override bool CanHandle(string plantUml) => plantUml.StartsWith("class");
 
-    protected override ObjectFileModel<ClassModel> Create(IPlantUmlParserStrategyFactory factory, string plantUml, dynamic context= null)
+    protected override ObjectFileModel<ClassModel> Create(IPlantUmlParserStrategyFactory factory, string plantUml, dynamic context = null)
     {
         var plantUmlLines = plantUml.Split(Environment.NewLine);
 
@@ -29,13 +29,13 @@ public class PlantUmlClassFileParserStrategy : PlantUmlParserStrategyBase<Object
         {
             var o = factory.CreateFor(plantUmlLines[i], new { TypeDeclarationModel = classModel });
 
-            if(o is MethodModel method)
+            if (o is MethodModel method)
                 classModel.Methods.Add(method);
 
-            if(o is PropertyModel property)
+            if (o is PropertyModel property)
                 classModel.Properties.Add(property);
         }
-        
+
 
         return new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, context.Project.Directory, "cs");
     }

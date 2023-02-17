@@ -16,8 +16,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("react-app-create")]
-public class ReactAppCreateRequest : IRequest {
-    [Option('n',"name")]
+public class ReactAppCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -32,13 +33,13 @@ public class ReactAppCreateRequestHandler : IRequestHandler<ReactAppCreateReques
     private readonly ICommandService _commandService;
 
     public ReactAppCreateRequestHandler(
-        ILogger<ReactAppCreateRequestHandler> logger, 
+        ILogger<ReactAppCreateRequestHandler> logger,
         IReactService reactService,
         ICommandService commandService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _reactService = reactService ?? throw new ArgumentNullException(nameof(reactService));
-        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));    
+        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
     public async Task Handle(ReactAppCreateRequest request, CancellationToken cancellationToken)

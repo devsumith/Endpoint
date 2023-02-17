@@ -40,7 +40,7 @@ namespace Endpoint.Core.Services
 
         private void _buildEntityConfigurations(SettingsModel model)
         {
-            foreach(var resource in model.Resources)
+            foreach (var resource in model.Resources)
             {
                 _buildEntityConfiguration(model, resource.Name);
             }
@@ -99,7 +99,7 @@ namespace Endpoint.Core.Services
                 .With("DbContext", (SyntaxToken)settings.DbContextName)
                 .Build();
 
-            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
+            var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
 
             _fileSystem.WriteAllText($@"{settings.InfrastructureDirectory}{Path.DirectorySeparatorChar}Data{Path.DirectorySeparatorChar}SeedData.cs", contents);
         }

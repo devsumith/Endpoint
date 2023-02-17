@@ -10,7 +10,7 @@ namespace Endpoint.Core.Generators
     {
         public static void Generate(CreateEndpointOptions options, IEndpointGenerationStrategyFactory factory)
         {
-             factory.CreateFor(options);
+            factory.CreateFor(options);
         }
     }
 }

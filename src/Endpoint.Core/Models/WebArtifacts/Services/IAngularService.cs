@@ -10,7 +10,7 @@ public interface IAngularService
     void CreateWorkspace(string name, string projectName, string projectType, string prefix, string rootDirectory, bool openInVsCode = true);
     void AddProject(AngularProjectModel model);
     void EnableDefaultStandalone(AngularProjectReferenceModel model);
-    void KarmaRemove(string directory); 
+    void KarmaRemove(string directory);
     void UpdateCompilerOptionsToUseJestTypes(AngularProjectModel model);
     void NgxTranslateAdd(string projectName, string directory);
     void LocalizeAdd(AngularProjectReferenceModel model, List<string> locales);

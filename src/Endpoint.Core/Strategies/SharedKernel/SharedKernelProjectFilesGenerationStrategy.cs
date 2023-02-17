@@ -37,7 +37,7 @@ namespace Endpoint.Core.Services
                 .With("Namespace", (SyntaxToken)settings.DomainNamespace)
                 .Build();
 
-            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
+            var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
 
             _fileSystem.WriteAllText($@"{settings.DomainDirectory}/ResponseBase.cs", contents);
 
@@ -55,7 +55,7 @@ namespace Endpoint.Core.Services
                 .With("DomainNamespace", (SyntaxToken)settings.DomainNamespace)
                 .Build();
 
-            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
+            var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
 
             _fileSystem.WriteAllText($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Extensions{Path.DirectorySeparatorChar}QueryableExtensions.cs", contents);
         }

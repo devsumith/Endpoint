@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("bootstrap-add")]
-public class BootstrapAddRequest : IRequest {
-    [Option('n',"name")]
+public class BootstrapAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

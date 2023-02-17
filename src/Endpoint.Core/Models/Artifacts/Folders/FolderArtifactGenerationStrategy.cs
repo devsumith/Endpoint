@@ -15,7 +15,7 @@ public class FolderArtifactGenerationStrategy : ArtifactGenerationStrategyBase<F
     public FolderArtifactGenerationStrategy(
         IServiceProvider serviceProvider,
         IFileSystem fileSystem,
-        ILogger<FolderArtifactGenerationStrategy> logger) 
+        ILogger<FolderArtifactGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -28,7 +28,7 @@ public class FolderArtifactGenerationStrategy : ArtifactGenerationStrategyBase<F
 
         _fileSystem.CreateDirectory(model.Directory);
 
-        foreach(var fileModel in  model.Files)
+        foreach (var fileModel in model.Files)
         {
             artifactGenerationStrategyFactory.CreateFor(fileModel, context);
         }

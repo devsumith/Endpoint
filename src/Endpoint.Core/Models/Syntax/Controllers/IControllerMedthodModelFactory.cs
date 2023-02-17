@@ -8,7 +8,7 @@ namespace Endpoint.Core.Models.Syntax.Controllers;
 
 public interface IControllerMedthodModelFactory
 {
-    
+
     MethodModel Create(ClassModel entity, RouteType routeType);
 }
 

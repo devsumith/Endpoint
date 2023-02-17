@@ -12,7 +12,7 @@ public class SpecFlowScenarioSyntaxGenerationStrategy : SyntaxGenerationStrategy
     private readonly ILogger<SpecFlowScenarioSyntaxGenerationStrategy> _logger;
     public SpecFlowScenarioSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<SpecFlowScenarioSyntaxGenerationStrategy> logger) 
+        ILogger<SpecFlowScenarioSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

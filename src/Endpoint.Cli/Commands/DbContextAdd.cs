@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("db-context-add")]
-public class DbContextAddRequest : IRequest {
-    [Option('n',"name")]
+public class DbContextAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

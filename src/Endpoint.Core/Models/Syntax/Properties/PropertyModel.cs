@@ -21,7 +21,7 @@ public class PropertyModel
     {
         var model = TypeScriptProperty(Name, Type.Name);
 
-        switch(model.Type.Name.ToLower())
+        switch (model.Type.Name.ToLower())
         {
             case "guid":
                 model.Type.Name = "string";

@@ -11,7 +11,7 @@ namespace Endpoint.Core.Strategies.Infrastructure
     {
         string Create(DbContextModel model);
     }
-    public class DbContextGenerationStrategy: IDbContextGenerationStrategy
+    public class DbContextGenerationStrategy : IDbContextGenerationStrategy
     {
         public string Create(DbContextModel model)
         {

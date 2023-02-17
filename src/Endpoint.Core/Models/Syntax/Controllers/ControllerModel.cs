@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.Controllers;
 
-public class ControllerModel: ClassModel
+public class ControllerModel : ClassModel
 {
     public ControllerModel(INamingConventionConverter namingConventionConverter, ClassModel entity)
         : base($"{entity.Name}Controller")
@@ -65,11 +65,11 @@ public class ControllerModel: ClassModel
 
         foreach (var routeType in Enum.GetValues<RouteType>())
         {
-            switch(routeType)
+            switch (routeType)
             {
                 case RouteType.Page:
                     break;
-                
+
                 case RouteType.Get:
                     Methods.Add(new GetControllerMethodModel(namingConventionConverter, entity));
                     break;

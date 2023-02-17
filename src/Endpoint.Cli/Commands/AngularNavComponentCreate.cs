@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("angular-nav-component-create")]
-public class AngularNavComponentCreateRequest : IRequest {
-    [Option('n',"name")]
+public class AngularNavComponentCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

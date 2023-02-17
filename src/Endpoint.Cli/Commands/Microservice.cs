@@ -129,7 +129,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
 
         _artifactGenerationStrategyFactory.CreateFor(solutionModel);
 
-        
+
 
         _factory.CreateFor(default);
 

@@ -18,7 +18,7 @@ public class SyntaxReferenceSyntaxGenerationStrategy : SyntaxGenerationStrategyB
     public SyntaxReferenceSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         IFileSystem fileSystem,
-        ILogger<SyntaxReferenceSyntaxGenerationStrategy> logger) 
+        ILogger<SyntaxReferenceSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

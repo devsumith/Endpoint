@@ -5,7 +5,8 @@ using MediatR;
 
 namespace Endpoint.Core.Messages;
 
-public class ServiceFileCreated: INotification {
+public class ServiceFileCreated : INotification
+{
     public ServiceFileCreated(string interfaceName, string className, string directory)
     {
         InterfaceName = interfaceName;

@@ -37,29 +37,29 @@ public class Feature
         public async Task Handle(Request request, CancellationToken cancellationToken)
         {
             if (request.Directory.EndsWith("Features"))
-            {                    
+            {
                 _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{((SyntaxToken)request.Entity).PascalCasePlural}");
 
                 request.Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{((SyntaxToken)request.Entity).PascalCasePlural}";
             }
 
             _commandService.Start($"endpoint command Create{request.Entity} {request.Entity}", request.Directory);
-            
+
             _commandService.Start($"endpoint command Update{request.Entity} {request.Entity}", request.Directory);
-            
+
             _commandService.Start($"endpoint command Delete{request.Entity} {request.Entity}", request.Directory);
-            
+
             _commandService.Start($"endpoint query Get{((SyntaxToken)request.Entity).PascalCasePlural} {request.Entity}", request.Directory);
-            
+
             _commandService.Start($"endpoint query Get{request.Entity}ById {request.Entity}", request.Directory);
-            
+
             _commandService.Start($"endpoint dto {request.Entity}", request.Directory);
-            
+
             _commandService.Start($"endpoint validator {request.Entity}", request.Directory);
-            
+
             _commandService.Start($"endpoint extensions {request.Entity}", request.Directory);
 
-    
+
         }
     }
 }

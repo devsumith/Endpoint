@@ -11,7 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Endpoint.UnitTests.PlantUmlParserStrategy;
-public class CreateShould {
+public class CreateShould
+{
 
 
     [Fact]

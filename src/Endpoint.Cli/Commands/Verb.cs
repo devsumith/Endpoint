@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 namespace Endpoint.Cli.Commands;
 
 [Verb("verb")]
-public class VerbRequest: IRequest
+public class VerbRequest : IRequest
 {
-    [Option('n',"name")]
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -49,8 +49,8 @@ public class VerbRequestHandler : IRequestHandler<VerbRequest>
         var @namespace = _namespaceProvider.Get(request.Directory);
 
         var tokens = new TokensBuilder()
-            .With("Name",(SyntaxToken)request.Name)
-            .With("Namespace",(SyntaxToken)@namespace)
+            .With("Name", (SyntaxToken)request.Name)
+            .With("Namespace", (SyntaxToken)@namespace)
             .Build();
 
         var model = _fileFactory.CreateTemplate("Verb", request.Name, request.Directory, tokens: tokens);

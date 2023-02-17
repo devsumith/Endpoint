@@ -11,7 +11,7 @@ using System.Linq;
 namespace Endpoint.Core
 {
 
-    public class SolutionSettingsFileGenerationStrategyFactory: ISolutionSettingsFileGenerationStrategyFactory
+    public class SolutionSettingsFileGenerationStrategyFactory : ISolutionSettingsFileGenerationStrategyFactory
     {
         private readonly IEnumerable<ISolutionSettingsFileGenerationStrategy> _strategies;
         private readonly ILogger _logger;

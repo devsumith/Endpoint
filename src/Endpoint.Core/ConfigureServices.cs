@@ -56,26 +56,27 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
 {
-    public static void AddCoreServices(this IServiceCollection services) {
+    public static void AddCoreServices(this IServiceCollection services)
+    {
         services.AddSingleton<ISyntaxGenerationStrategy, TypeScriptTypeSyntaxGenerationStrategy>();
-        services.AddSingleton<ISpecFlowService,SpecFlowService>();
+        services.AddSingleton<ISpecFlowService, SpecFlowService>();
         services.AddSingleton<ISyntaxGenerationStrategy, SpecFlowFeatureSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, SpecFlowHookSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, SpecFlowStepsSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, SpecFlowScenarioSyntaxGenerationStrategy>();
-        services.AddSingleton<IFolderFactory,FolderFactory>();
-        services.AddSingleton<IFolderService,FolderService>();
-        services.AddSingleton<IDomainDrivenDesignService,DomainDrivenDesignService>();
+        services.AddSingleton<IFolderFactory, FolderFactory>();
+        services.AddSingleton<IFolderService, FolderService>();
+        services.AddSingleton<IDomainDrivenDesignService, DomainDrivenDesignService>();
         services.AddSingleton<ISyntaxGenerationStrategy, TestReferenceSyntaxGenerationStrategy>();
-        services.AddSingleton<IClassService,ClassService>();
-        services.AddSingleton<IUtlitityService,UtlitityService>();
-        services.AddSingleton<ISignalRService,SignalRService>();
-        services.AddSingleton<IReactService,ReactService>();
-        services.AddSingleton<ICoreProjectService,CoreProjectService>();
-        services.AddSingleton<ILitService,LitService>();
-        services.AddSingleton<IAngularService,AngularService>();
-        services.AddSingleton<IInfrastructureProjectService,InfrastructureProjectService>();
-        services.AddSingleton<IApiProjectService,ApiProjectService>();
+        services.AddSingleton<IClassService, ClassService>();
+        services.AddSingleton<IUtlitityService, UtlitityService>();
+        services.AddSingleton<ISignalRService, SignalRService>();
+        services.AddSingleton<IReactService, ReactService>();
+        services.AddSingleton<ICoreProjectService, CoreProjectService>();
+        services.AddSingleton<ILitService, LitService>();
+        services.AddSingleton<IAngularService, AngularService>();
+        services.AddSingleton<IInfrastructureProjectService, InfrastructureProjectService>();
+        services.AddSingleton<IApiProjectService, ApiProjectService>();
         services.AddSingleton<IAggregateService, AggregateService>();
         services.AddSingleton<ICommandService, CommandService>();
         services.AddSingleton<IFileSystem, FileSystem>();
@@ -201,7 +202,7 @@ public static class ConfigureServices
         services.AddSingleton<IArtifactUpdateStrategyFactory, ArtifactUpdateStrategyFactory>();
 
         services.AddSingleton<IClipboardService, ClipboardService>();
-        
+
         services.AddSingleton<ISyntaxService>(services =>
         {
             var factory = services.GetRequiredService<IPlantUmlParserStrategyFactory>();
@@ -210,9 +211,9 @@ public static class ConfigureServices
 
             var args = Environment.GetCommandLineArgs();
 
-            var directoryOptionIndex = Array.IndexOf(args,"-d");
+            var directoryOptionIndex = Array.IndexOf(args, "-d");
 
-            var directory = directoryOptionIndex != -1 ? args[directoryOptionIndex + 1]  : Environment.CurrentDirectory;
+            var directory = directoryOptionIndex != -1 ? args[directoryOptionIndex + 1] : Environment.CurrentDirectory;
 
             return new SyntaxService(factory, fileProvider, fileSystem, directory);
         });

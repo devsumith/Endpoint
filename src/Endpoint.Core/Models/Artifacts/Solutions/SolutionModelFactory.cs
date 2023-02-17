@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Endpoint.Core.Models.Artifacts.Solutions;
 
-public class SolutionModelFactory: ISolutionModelFactory
+public class SolutionModelFactory : ISolutionModelFactory
 {
     private readonly IProjectModelFactory _projectModelFactory;
 
@@ -38,7 +38,7 @@ public class SolutionModelFactory: ISolutionModelFactory
 
             srcFolder.SubFolders.Add(userDefinedFolder);
         }
-        
+
         var project = _projectModelFactory.Create(dotNetProjectTypeName, projectName, userDefinedFolder == null ? $"{srcFolder.Directory}" : userDefinedFolder.Directory);
 
         (userDefinedFolder == null ? srcFolder : userDefinedFolder).Projects.Add(project);

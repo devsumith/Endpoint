@@ -13,9 +13,10 @@ namespace Endpoint.Core.Models.Artifacts;
 public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBase<AggregateModel>
 {
     private readonly IFileSystem _fileSystem;
-    public AggregateArtifactsGenerationStrategy(IServiceProvider serviceProvider, IFileSystem fileSystem) 
-        :base(serviceProvider) { 
-    
+    public AggregateArtifactsGenerationStrategy(IServiceProvider serviceProvider, IFileSystem fileSystem)
+        : base(serviceProvider)
+    {
+
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 

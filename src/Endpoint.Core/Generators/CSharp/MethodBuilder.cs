@@ -159,7 +159,7 @@ namespace Endpoint.Core.Builders
 
                 if (_routeType == RouteType.GetById || _routeType == RouteType.Delete)
                 {
-                    methodBuilder.WithParameter(new ParameterBuilder(IdDotNetTypeBuilder.Build(_settings, _resource), ((SyntaxToken)$"{IdPropertyNameBuilder.Build(_settings,_resource)}").CamelCase()).WithFrom(From.Route).Build());
+                    methodBuilder.WithParameter(new ParameterBuilder(IdDotNetTypeBuilder.Build(_settings, _resource), ((SyntaxToken)$"{IdPropertyNameBuilder.Build(_settings, _resource)}").CamelCase()).WithFrom(From.Route).Build());
                 }
 
                 if (_routeType == RouteType.Page)

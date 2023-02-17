@@ -26,14 +26,14 @@ public class IdFileGenerationStrategy : IIdFileGenerationStrategy
         )
     {
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
-        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));    
+        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
     public void Create(string entityName, string @namepace, string directory)
     {
         var tokens = new TokensBuilder()
-            .With("Namespace",(SyntaxToken)@namepace)
+            .With("Namespace", (SyntaxToken)@namepace)
             .With("EntityName", (SyntaxToken)entityName)
             .Build();
 

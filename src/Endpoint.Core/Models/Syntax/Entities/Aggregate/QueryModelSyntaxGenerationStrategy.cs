@@ -8,8 +8,8 @@ namespace Endpoint.Core.Models.Syntax.Entities.Aggregate;
 
 public class QueryModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<QueryModel>
 {
-    public QueryModelSyntaxGenerationStrategy(IServiceProvider serviceProvider) 
-        :base(serviceProvider) { }
+    public QueryModelSyntaxGenerationStrategy(IServiceProvider serviceProvider)
+        : base(serviceProvider) { }
 
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, QueryModel model, dynamic context = null)
     {

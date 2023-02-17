@@ -42,7 +42,7 @@ public static class Constants
         public const string Infrastructure = nameof(Infrastructure);
         public const string Application = nameof(Application);
         public const string Api = nameof(Api);
-        public const string Cli = nameof(Cli);            
+        public const string Cli = nameof(Cli);
     }
 }
 

@@ -13,7 +13,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("karma-remove")]
-public class KarmaRemoveRequest : IRequest {
+public class KarmaRemoveRequest : IRequest
+{
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }

@@ -19,11 +19,12 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("message-create")]
-public class MessageCreateRequest : IRequest {
-    [Option('n',"name")]
+public class MessageCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
-    [Option('p',"properties")]
+    [Option('p', "properties")]
     public string Properties { get; set; }
 
 
@@ -50,8 +51,8 @@ public class MessageCreateRequestHandler : IRequestHandler<MessageCreateRequest>
 
         var properties = new List<PropertyModel>();
 
-        if(!string.IsNullOrEmpty(request.Properties))
-            foreach(var prop in request.Properties.Split(','))
+        if (!string.IsNullOrEmpty(request.Properties))
+            foreach (var prop in request.Properties.Split(','))
             {
                 var parts = prop.Split(':');
                 var name = parts[0];

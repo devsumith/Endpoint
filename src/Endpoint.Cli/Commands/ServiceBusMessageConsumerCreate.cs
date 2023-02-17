@@ -28,7 +28,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("service-bus-message-consumer-create")]
-public class ServiceBusMessageConsumerCreateRequest : IRequest {
+public class ServiceBusMessageConsumerCreateRequest : IRequest
+{
     [Option('n')]
     public string Name { get; set; } = "ServiceBusMessageConsumer";
 
@@ -69,7 +70,7 @@ public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<Ser
 
         var classModel = new ClassModel(request.Name);
 
-        if(string.IsNullOrEmpty(request.MessagesNamespace))
+        if (string.IsNullOrEmpty(request.MessagesNamespace))
         {
             var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj", request.Directory));
 

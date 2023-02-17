@@ -12,11 +12,11 @@ public interface IBicepFileGenerationStrategy
     void Generate(SettingsModel settings);
 }
 
-public class BicepFileGenerationStrategy: IBicepFileGenerationStrategy
+public class BicepFileGenerationStrategy : IBicepFileGenerationStrategy
 {
     private readonly IFileSystem _fileSystem;
     private readonly ITemplateLocator _templateLocator;
-    
+
     public BicepFileGenerationStrategy(IFileSystem fileSystem, ITemplateLocator templateLocator)
     {
         _fileSystem = fileSystem;

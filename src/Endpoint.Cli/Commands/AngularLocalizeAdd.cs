@@ -15,8 +15,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-localize-add")]
-public class AngularLocalizeAddRequest : IRequest {
-    [Option('n',"name", Required = true)]
+public class AngularLocalizeAddRequest : IRequest
+{
+    [Option('n', "name", Required = true)]
     public string Name { get; set; }
 
     [Option('l', "locales")]

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Endpoint.Core.Strategies.Api
 {
 
-    public class WebApplicationGenerationStrategy: IWebApplicationGenerationStrategy
+    public class WebApplicationGenerationStrategy : IWebApplicationGenerationStrategy
     {
         private readonly ITemplateLocator _templateLocator;
         private readonly ITemplateProcessor _templateProcessor;

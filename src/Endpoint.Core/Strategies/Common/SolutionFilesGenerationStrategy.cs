@@ -93,11 +93,11 @@ namespace Endpoint.Core.Services
 
             _fileSystem.CreateDirectory($"{directory}{Path.DirectorySeparatorChar}{name}");
 
-            var settings = new SettingsModel(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdPropertyFormat.Short: IdPropertyFormat.Long, useIntIdPropertyType ? IdPropertyType.Int : IdPropertyType.Guid, prefix);
+            var settings = new SettingsModel(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdPropertyFormat.Short : IdPropertyFormat.Long, useIntIdPropertyType ? IdPropertyType.Int : IdPropertyType.Guid, prefix);
 
             return Create(settings);
         }
-        
+
         public SettingsModel Create(SettingsModel settings)
         {
             var json = Serialize(settings, new JsonSerializerOptions
@@ -163,7 +163,7 @@ namespace Endpoint.Core.Services
 
             return settings;
         }
-        
+
         private void _createProjectAndAddToSolution(string templateType, string directory, SettingsModel settings)
         {
 

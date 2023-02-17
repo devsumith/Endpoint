@@ -30,16 +30,17 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
 
         var builder = new StringBuilder();
 
-        if(model.UsingAsDirectives.Count > 0)
+        if (model.UsingAsDirectives.Count > 0)
         {
-            foreach(var directive in model.UsingAsDirectives) { 
-                builder.AppendLine($"using {directive.Alias} = {directive.Name};");             
+            foreach (var directive in model.UsingAsDirectives)
+            {
+                builder.AppendLine($"using {directive.Alias} = {directive.Name};");
             }
 
             builder.AppendLine();
         }
 
-        foreach(var attribute in model.Attributes)
+        foreach (var attribute in model.Attributes)
         {
             builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(attribute));
         }

@@ -15,8 +15,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("project-embed")]
-public class ProjectEmbedRequest : IRequest {
-    [Option('o',"output-directory")]
+public class ProjectEmbedRequest : IRequest
+{
+    [Option('o', "output-directory")]
     public string OutputDirectory { get; set; }
 
 
@@ -62,11 +63,11 @@ public class ProjectEmbedRequestHandler : IRequestHandler<ProjectEmbedRequest>
 
             List<string> parts = new List<string>();
 
-            foreach(var part in Path.GetDirectoryName(resolvedPath).Split(Path.DirectorySeparatorChar))
+            foreach (var part in Path.GetDirectoryName(resolvedPath).Split(Path.DirectorySeparatorChar))
             {
                 parts.Add(part);
 
-                if(parts.Count > 1)
+                if (parts.Count > 1)
                 {
                     _fileSystem.CreateDirectory(string.Join(Path.DirectorySeparatorChar, parts));
                 }

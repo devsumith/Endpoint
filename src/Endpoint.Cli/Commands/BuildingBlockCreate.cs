@@ -13,7 +13,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("building-block-create")]
-public class BuildingBlockCreateRequest : IRequest {
+public class BuildingBlockCreateRequest : IRequest
+{
     [Option('n', "name")]
     public string Name { get; set; } = "Messaging";
 
@@ -39,7 +40,7 @@ public class BuildingBlockCreateRequestHandler : IRequestHandler<BuildingBlockCr
     {
         _logger.LogInformation("Handled: {0}", nameof(BuildingBlockCreateRequestHandler));
 
-        if(request.Name.ToLower() == "messaging")
+        if (request.Name.ToLower() == "messaging")
             _solutionService.MessagingBuildingBlockAdd(request.Directory);
 
     }

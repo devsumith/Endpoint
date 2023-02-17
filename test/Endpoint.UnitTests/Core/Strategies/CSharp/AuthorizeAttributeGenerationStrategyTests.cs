@@ -28,7 +28,7 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp
 
             var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(), mockLogger);
 
-            var actual = sut.Create(new AttributeModel(AttributeType.Authorize,"Authorize",new System.Collections.Generic.Dictionary<string, string>()));
+            var actual = sut.Create(new AttributeModel(AttributeType.Authorize, "Authorize", new System.Collections.Generic.Dictionary<string, string>()));
 
             Assert.Equal(expected, actual);
         }

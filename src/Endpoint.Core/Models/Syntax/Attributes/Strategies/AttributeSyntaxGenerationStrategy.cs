@@ -38,7 +38,7 @@ public class AttributeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<At
         {
             builder.Append('(');
 
-            if(model.Template != null)
+            if (model.Template != null)
             {
                 builder.Append($"{model.Template}, ");
             }

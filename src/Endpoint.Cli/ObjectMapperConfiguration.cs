@@ -12,7 +12,7 @@ namespace Endpoint.Cli;
 public static class ObjectMapperConfiguration
 {
     [ModuleInitializer]
-    public static void  Configure()
+    public static void Configure()
     {
         TinyMapper.Bind<Default.Request, CreateEndpointOptions>();
         TinyMapper.Bind<CreateEndpointOptions, CreateEndpointSolutionOptions>();

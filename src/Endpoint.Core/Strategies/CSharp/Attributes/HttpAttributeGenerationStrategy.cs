@@ -14,12 +14,12 @@ namespace Endpoint.Core.Strategies.CSharp.Attributes
         {
             var properties = new StringBuilder();
 
-            foreach(var property in model.Properties)
+            foreach (var property in model.Properties)
             {
                 properties.Append($"{property.Key} = \"{property.Value}\"");
             }
 
-            if(!string.IsNullOrEmpty(model.Template))
+            if (!string.IsNullOrEmpty(model.Template))
             {
                 return string.Join(Environment.NewLine, new string[1]
                 {

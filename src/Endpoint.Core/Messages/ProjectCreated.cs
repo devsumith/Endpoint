@@ -5,7 +5,8 @@ using MediatR;
 
 namespace Endpoint.Core.Messages;
 
-public class ProjectCreated: INotification {
+public class ProjectCreated : INotification
+{
     public string Directory { get; init; }
 
     public ProjectCreated(string directory)

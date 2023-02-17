@@ -39,7 +39,7 @@ namespace Endpoint.Core.Builders
                 .With("Namespace", (SyntaxToken)settings.DomainNamespace)
                 .Build();
 
-            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
+            var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
 
             _fileSystem.WriteAllText($@"{(SyntaxToken)settings.DomainDirectory}/ResponseBase.cs", contents);
         }

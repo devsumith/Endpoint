@@ -23,8 +23,8 @@ public class WebApplicationSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator)); 
-        _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));   
+        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
+        _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
     }
 
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, WebApplicationModel model, dynamic context = null)

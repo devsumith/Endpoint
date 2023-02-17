@@ -14,7 +14,7 @@ namespace Endpoint.Core.Strategies.Tests
 
     }
 
-    public class WebApplicationFactoryGenerationStrategy: IWebApplicationFactoryGenerationStrategy
+    public class WebApplicationFactoryGenerationStrategy : IWebApplicationFactoryGenerationStrategy
     {
     }
 }

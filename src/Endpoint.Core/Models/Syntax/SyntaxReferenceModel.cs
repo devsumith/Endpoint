@@ -3,7 +3,8 @@
 
 namespace Endpoint.Core.Models.Syntax;
 
-public class SyntaxReferenceModel {
+public class SyntaxReferenceModel
+{
 
     public SyntaxReferenceModel(string syntax)
     {

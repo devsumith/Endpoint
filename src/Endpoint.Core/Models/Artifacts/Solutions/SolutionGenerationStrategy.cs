@@ -12,11 +12,11 @@ public class SolutionGenerationStrategy : ArtifactGenerationStrategyBase<Solutio
     private readonly ICommandService _commandService;
     private readonly IFileSystem _fileSystem;
 
-    public SolutionGenerationStrategy(IServiceProvider serviceProvider, ICommandService commandService, IFileSystem fileSystem) 
+    public SolutionGenerationStrategy(IServiceProvider serviceProvider, ICommandService commandService, IFileSystem fileSystem)
         : base(serviceProvider)
     {
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));    
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
     public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, SolutionModel model, dynamic context = null)
@@ -38,7 +38,7 @@ public class SolutionGenerationStrategy : ArtifactGenerationStrategyBase<Solutio
     {
         foreach (var folder in folders)
         {
-            foreach(var project in folder.Projects)
+            foreach (var project in folder.Projects)
             {
                 _fileSystem.CreateDirectory(folder.Directory);
 

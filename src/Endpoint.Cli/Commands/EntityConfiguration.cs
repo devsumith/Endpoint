@@ -40,7 +40,7 @@ public class EntityConfiguration
             new EntityConfigurationBuilder(request.Entity, settings.InfrastructureNamespace, settings.DomainNamespace, request.Directory, _fileSystem)
                 .Build();
 
-    
+
         }
     }
 }

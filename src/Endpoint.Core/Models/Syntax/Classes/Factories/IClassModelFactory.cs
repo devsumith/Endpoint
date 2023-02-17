@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Interfaces;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.Classes.Factories;
@@ -11,7 +12,10 @@ public interface IClassModelFactory
     ClassModel CreateEntity(string name, string properties);
     ClassModel CreateController(EntityModel model, string directory);
     ClassModel CreateDbContext(string name, List<EntityModel> entities, string directory);
-
     ClassModel CreateWorker(string name, string directory);
+    ClassModel CreateMessageModel();
+    ClassModel CreateHubModel(string name);
+    InterfaceModel CreateHubInterfaceModel(string name);
+    ClassModel CreateMessageProducerWorkerModel(string name, string directory);
 }
 

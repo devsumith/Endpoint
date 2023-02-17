@@ -8,10 +8,10 @@ namespace Endpoint.Core.Models.Syntax;
 
 public class TypeDeclarationModel
 {
-	public TypeDeclarationModel(string name)
-	{
-		Name = name;
-		Properties = new List<PropertyModel>();
+    public TypeDeclarationModel(string name)
+    {
+        Name = name;
+        Properties = new List<PropertyModel>();
         UsingDirectives = new List<UsingDirectiveModel>();
         UsingAsDirectives = new List<UsingAsDirectiveModel>();
     }

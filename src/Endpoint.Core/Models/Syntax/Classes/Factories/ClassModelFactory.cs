@@ -6,14 +6,15 @@ using Endpoint.Core.Models.Syntax.Attributes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Fields;
+using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
-using Octokit.Internal;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Models.Syntax.Classes.Factories;
@@ -268,9 +269,13 @@ public class ClassModelFactory : IClassModelFactory
 
                 methodModel.Attributes.Add(new SwaggerOperationAttributeModel($"Update {entityIdNamePascalCase}", $"Update {entityIdNamePascalCase}"));
 
-                methodModel.Attributes.Add(new AttributeModel() { Name = "HttpPut", Properties = new Dictionary<string, string>() {
+                methodModel.Attributes.Add(new AttributeModel()
+                {
+                    Name = "HttpPut",
+                    Properties = new Dictionary<string, string>() {
                     { "Name", $"update{entityIdNamePascalCase}" }
-                }});
+                }
+                });
 
                 methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
 
@@ -355,7 +360,7 @@ public class ClassModelFactory : IClassModelFactory
     }
 
     public ClassModel CreateDbContext(string name, List<EntityModel> entities, string serviceName)
-    {        
+    {
         var dbContext = new DbContextModel(_namingConventionConverter, name, entities, serviceName);
 
         return dbContext;
@@ -436,6 +441,128 @@ public class ClassModelFactory : IClassModelFactory
         };
 
         model.Methods.Add(method);
+
+        return model;
+    }
+
+    public ClassModel CreateMessageModel()
+    {
+        var model = new ClassModel($"Message");
+
+        model.Properties.Add(new PropertyModel(
+            model,
+            AccessModifier.Public,
+            new TypeModel("string"),
+            "MessageType",
+            PropertyAccessorModel.GetSet
+            )
+        {
+            DefaultValue = "nameof(Message)"
+        });
+
+        model.Properties.Add(new PropertyModel(
+            model,
+            AccessModifier.Public,
+            new TypeModel("DateTimeOffset"),
+            "Created",
+            PropertyAccessorModel.GetSet
+            )
+        {
+            DefaultValue = "DateTimeOffset.Now"
+        });
+
+        return model;
+    }
+
+    public ClassModel CreateHubModel(string name)
+    {
+        var hubClassModel = new ClassModel($"{name}Hub");
+
+        hubClassModel.Implements.Add(new TypeModel("Hub")
+        {
+            GenericTypeParameters = new List<TypeModel>() {
+                new TypeModel($"I{name}Hub")
+            }
+        });
+
+        hubClassModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.AspNetCore.SignalR" });
+
+        return hubClassModel;
+    }
+
+    public InterfaceModel CreateHubInterfaceModel(string name)
+    {
+        var interfaceModel = new InterfaceModel($"I{name}Hub");
+
+        interfaceModel.Methods.Add(new MethodModel()
+        {
+            ParentType = interfaceModel,
+            Interface = true,
+            ReturnType = new TypeModel("Task"),
+            AccessModifier = AccessModifier.Public,
+            Name = "Message",
+            Params = new() { new() { Name = "message", Type = new("string") } }
+        });
+
+        return interfaceModel;
+    }
+
+    public ClassModel CreateMessageProducerWorkerModel(string name, string directory)
+    {
+        var model = CreateWorker("MessageProducer", directory);
+
+        model.UsingDirectives.Add(new UsingDirectiveModel() { Name = "System.Text.Json" });
+
+        var hubContextType = new TypeModel("IHubContext")
+        {
+            GenericTypeParameters = new List<TypeModel>()
+            {
+                new TypeModel($"{name}Hub"),
+                new TypeModel($"I{name}Hub")
+            }
+        };
+
+        model.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.AspNetCore.SignalR" });
+
+        model.Fields.Add(new FieldModel()
+        {
+
+            Type = hubContextType,
+            Name = "_hubContext"
+        });
+
+        var methodBodyBuilder = new StringBuilder();
+
+        methodBodyBuilder.AppendLine("while (!stoppingToken.IsCancellationRequested)");
+
+        methodBodyBuilder.AppendLine("{");
+
+        methodBodyBuilder.AppendLine("_logger.LogInformation(\"Worker running at: {time}\", DateTimeOffset.Now);".Indent(1));
+
+        methodBodyBuilder.AppendLine("");
+
+        methodBodyBuilder.Append(new StringBuilder()
+            .AppendLine("var message = new Message();")
+            .AppendLine("")
+            .AppendLine("var json = JsonSerializer.Serialize(message);")
+            .AppendLine("")
+            .AppendLine("await _hubContext.Clients.All.Message(json);")
+            .ToString()
+            .Indent(1));
+
+        methodBodyBuilder.AppendLine("");
+
+        methodBodyBuilder.AppendLine("await Task.Delay(1000, stoppingToken);".Indent(1));
+
+        methodBodyBuilder.AppendLine("}");
+
+        model.Methods.First().Body = methodBodyBuilder.ToString();
+
+        model.Constructors.First().Params.Add(new ParamModel()
+        {
+            Type = hubContextType,
+            Name = "hubContext"
+        });
 
         return model;
     }

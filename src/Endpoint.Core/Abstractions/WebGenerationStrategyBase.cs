@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core.Abstractions;
 
-public abstract class WebGenerationStrategyBase<T>: IWebGenerationStrategy
+public abstract class WebGenerationStrategyBase<T> : IWebGenerationStrategy
     where T : class
 {
     private readonly IServiceProvider _serviceProvider;

@@ -10,11 +10,11 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
 {
-    public static void AddCliServices(this IServiceCollection services)        
-    {        
+    public static void AddCliServices(this IServiceCollection services)
+    {
         services.AddLogging(o => o.AddConsole());
         services.AddCoreServices();
-        services.AddMediatR( configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
+        services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
         services.AddInfrastructureServices();
         services.AddSingleton(new Observable<INotification>());
         services.AddHostedService<CommandLineArgumentsProcessor>();

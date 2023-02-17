@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Models.Artifacts.Solutions;
 
-public class PlantUmlParserStrategyFactory: IPlantUmlParserStrategyFactory
+public class PlantUmlParserStrategyFactory : IPlantUmlParserStrategyFactory
 {
     private readonly IEnumerable<IPlantUmlParserStrategy> _strategies;
 
@@ -19,7 +19,7 @@ public class PlantUmlParserStrategyFactory: IPlantUmlParserStrategyFactory
     {
         var strategy = _strategies.Where(x => x.CanHandle(plantUml)).OrderBy(x => x.Priority).FirstOrDefault();
 
-        
+
         return strategy == null ? null : strategy.Create(plantUml, context);
     }
 }

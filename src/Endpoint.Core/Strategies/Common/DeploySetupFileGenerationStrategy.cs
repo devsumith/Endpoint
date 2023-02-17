@@ -24,7 +24,7 @@ public class DeploySetupFileGenerationStrategy : IDeploySetupFileGenerationStrat
     {
         var tokens = new TokensBuilder()
             .With("Name", (SyntaxToken)settings.SolutionName)
-            .With("ApiProjectName",(SyntaxToken)$"{settings.SolutionName}.Api")
+            .With("ApiProjectName", (SyntaxToken)$"{settings.SolutionName}.Api")
             .Build();
 
         var template = _templateLocator.Get("DeploySetupFile");

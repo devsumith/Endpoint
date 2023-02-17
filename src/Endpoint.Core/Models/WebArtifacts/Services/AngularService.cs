@@ -1,12 +1,14 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using DotLiquid.Tags;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.TypeScript;
 using Endpoint.Core.Services;
@@ -54,7 +56,7 @@ public class AngularService : IAngularService
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
         _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
-        _utlitityService =  utlitityService ?? throw new ArgumentNullException(nameof(utlitityService));
+        _utlitityService = utlitityService ?? throw new ArgumentNullException(nameof(utlitityService));
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
@@ -161,7 +163,7 @@ public class AngularService : IAngularService
 
         AddProject(angularProjectModel);
 
-        if(openInVsCode)
+        if (openInVsCode)
             _commandService.Start("code .", workspaceModel.Directory);
 
     }
@@ -170,7 +172,7 @@ public class AngularService : IAngularService
     {
         var stringBuilder = new StringBuilder().Append($"ng generate {model.ProjectType} {model.Name} --prefix {model.Prefix}");
 
-        if(model.ProjectType == "application")
+        if (model.ProjectType == "application")
             stringBuilder.Append(" --style=scss --strict=false --routing");
 
         _commandService.Start(stringBuilder.ToString(), model.RootDirectory);
@@ -182,12 +184,12 @@ public class AngularService : IAngularService
         ExportsAssetsAndStyles(angularProjectReferenceModel);
 
         if (model.ProjectType == "application")
-        {            
+        {
             var srcDirectory = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}";
 
             var appDirectory = $"{srcDirectory}app{Path.DirectorySeparatorChar}";
 
-            
+
             var files = new List<FileModel>
             {
                 _fileModelFactory.CreateTemplate("Angular.app.component","app.component", appDirectory, "ts"),
@@ -195,7 +197,8 @@ public class AngularService : IAngularService
                 _fileModelFactory.CreateTemplate("Angular.main","main", srcDirectory, "ts"),
             };
 
-            foreach(var file in files) {
+            foreach (var file in files)
+            {
                 _artifactGenerationStrategyFactory.CreateFor(file);
             }
 
@@ -241,7 +244,7 @@ public class AngularService : IAngularService
 
         stringBuilder.AppendLine("};");
 
-        _fileSystem.WriteAllText($"{model.Directory}{Path.DirectorySeparatorChar}jest.config.js",stringBuilder.ToString());
+        _fileSystem.WriteAllText($"{model.Directory}{Path.DirectorySeparatorChar}jest.config.js", stringBuilder.ToString());
     }
 
     public void ExportsAssetsAndStyles(AngularProjectReferenceModel model)
@@ -277,7 +280,7 @@ public class AngularService : IAngularService
     }
 
     public void UpdateCompilerOptionsToUseJestTypes(AngularProjectModel model)
-    {        
+    {
         var tsConfigSpecJsonPath = $"{model.Directory}{Path.DirectorySeparatorChar}tsconfig.spec.json";
 
         var tsConfigSpecJson = JObject.Parse(File.ReadAllText(tsConfigSpecJsonPath));
@@ -312,7 +315,7 @@ public class AngularService : IAngularService
             {
                 foreach (var importModel in _importModels)
                 {
-                    if(!content.Contains(importModel.Name))
+                    if (!content.Contains(importModel.Name))
                         newLines.Add(new StringBuilder()
                             .Append("import { ")
                             .Append(importModel.Name)
@@ -401,7 +404,7 @@ public class AngularService : IAngularService
                     "}),"
                 })
                 {
-                    newLines.Add(newLine.Indent(3,tabSize));
+                    newLines.Add(newLine.Indent(3, tabSize));
                 }
 
                 added = true;
@@ -454,7 +457,7 @@ public class AngularService : IAngularService
             {
                 foreach (var newLine in ctor)
                 {
-                    newLines.Add(newLine.Indent(1,tabSize));
+                    newLines.Add(newLine.Indent(1, tabSize));
                 }
 
                 constructorUpdated = true;
@@ -468,7 +471,7 @@ public class AngularService : IAngularService
 
                 newLines.Add(newLine);
 
-                newLines.Add($"_translateService.setDefaultLang(\"en\");".Indent(2,tabSize));
+                newLines.Add($"_translateService.setDefaultLang(\"en\");".Indent(2, tabSize));
                 newLines.Add($"_translateService.use(localStorage.getItem(\"currentLanguage\") || \"en\");".Indent(2, tabSize));
 
                 constructorUpdated = true;
@@ -506,7 +509,7 @@ public class AngularService : IAngularService
 
         _commandService.Start($"ng extract-i18n --output-path {localeDirectory}", GetProjectDirectory(model));
 
-        foreach(var locale in GetSupportedLocales(model))
+        foreach (var locale in GetSupportedLocales(model))
         {
             _fileSystem.Copy($"{localeDirectory}messages.xlf", $"{localeDirectory}messages.{locale}.xlf");
         }
@@ -549,7 +552,7 @@ public class AngularService : IAngularService
             printWidth = 120,
         }, Formatting.Indented));
 
-        packageJson.AddScripts(new Dictionary<string,string>()
+        packageJson.AddScripts(new Dictionary<string, string>()
         {
             { "format:fix", "pretty-quick --staged" },
             { "precommit", "run-s format:fix lint" },
@@ -579,17 +582,30 @@ public class AngularService : IAngularService
     {
         var serviceName = "DashboardService";
 
-        var classModel = _syntaxService.SolutionModel?.GetClass(name, serviceName);
+        ClassModel classModel = default;
+
+        try
+        {
+            classModel = _syntaxService.SolutionModel?.GetClass(name, serviceName);
+        }
+        catch (Exception ex)
+        {
+            
+        }
+        
+        if(classModel == null)
+        {
+            classModel = new ClassModel(name);
+        }
 
         var model = new TypeScriptTypeModel(name);
 
-        foreach(var property in classModel.Properties)
+        foreach (var property in classModel.Properties)
         {
-
             model.Properties.Add(property.ToTs());
         }
 
-        if(!string.IsNullOrEmpty(properties))
+        if (!string.IsNullOrEmpty(properties))
         {
             foreach (var property in properties.Split(','))
             {
@@ -666,7 +682,7 @@ public class AngularService : IAngularService
 
     public void DefaultScssCreate(string directory)
     {
-        var applicationDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.app.json",directory));
+        var applicationDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.app.json", directory));
 
         var scssDirectory = Path.Combine(applicationDirectory, "src", "scss");
 
@@ -711,7 +727,7 @@ public class AngularService : IAngularService
 
         var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
 
-        _fileSystem.WriteAllLines(Path.Combine(scssDirectory,$"_{nameSnakeCase}.scss"), new string[3] {
+        _fileSystem.WriteAllLines(Path.Combine(scssDirectory, $"_{nameSnakeCase}.scss"), new string[3] {
                     $".g-{nameSnakeCase}" + " {",
                     "",
                     "}"

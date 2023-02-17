@@ -7,11 +7,12 @@ using System;
 
 namespace Endpoint.Core.Models.Syntax.Methods.ControllerMethods;
 
-public class CreateControllerMethodModel: MethodModel {
+public class CreateControllerMethodModel : MethodModel
+{
 
     public CreateControllerMethodModel(INamingConventionConverter namingConventionConverter, ClassModel entity)
     {
-        
+
     }
 
 }

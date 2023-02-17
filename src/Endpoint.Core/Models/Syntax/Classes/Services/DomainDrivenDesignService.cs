@@ -15,11 +15,12 @@ using System.Xml.Linq;
 
 namespace Endpoint.Core.Models.Syntax.Classes.Services;
 
-public class DomainDrivenDesignService: IDomainDrivenDesignService
+public class DomainDrivenDesignService : IDomainDrivenDesignService
 {
     private readonly ILogger<DomainDrivenDesignService> _logger;
 
-    public DomainDrivenDesignService(ILogger<DomainDrivenDesignService> logger){
+    public DomainDrivenDesignService(ILogger<DomainDrivenDesignService> logger)
+    {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -109,7 +110,7 @@ public class DomainDrivenDesignService: IDomainDrivenDesignService
         });
 
         classModel.Constructors.Add(ctor);
-        
+
         classModel.Methods.Add(method);
 
         return classModel;

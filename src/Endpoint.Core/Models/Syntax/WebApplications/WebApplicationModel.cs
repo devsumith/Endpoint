@@ -7,15 +7,16 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.WebApplications;
 
-public class WebApplicationModel {
+public class WebApplicationModel
+{
 
-	public WebApplicationModel(string title, string dbContextName, List<EntityModel> entities)
-	{
+    public WebApplicationModel(string title, string dbContextName, List<EntityModel> entities)
+    {
         Title = title;
-		DbContextName = dbContextName;
+        DbContextName = dbContextName;
         Entities = entities;
         RouteHandlers = new List<RouteHandlerModel>();
-		
+
         foreach (var entity in Entities)
         {
             var resource = (SyntaxToken)entity.Name;
@@ -62,9 +63,9 @@ public class WebApplicationModel {
         }
     }
 
-	public string Title { get; set; }
-	public List<RouteHandlerModel> RouteHandlers { get; set; }
-	public List<EntityModel> Entities { get; set; }
-	public string DbContextName { get; set; }
+    public string Title { get; set; }
+    public List<RouteHandlerModel> RouteHandlers { get; set; }
+    public List<EntityModel> Entities { get; set; }
+    public string DbContextName { get; set; }
 }
 

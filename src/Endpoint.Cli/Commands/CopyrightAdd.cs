@@ -13,7 +13,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("copyright-add")]
-public class CopyrightAddRequest : IRequest {
+public class CopyrightAddRequest : IRequest
+{
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }

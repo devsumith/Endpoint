@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.SpecFlow;
 
-public class SpecFlowFeatureModel {
+public class SpecFlowFeatureModel
+{
 
     public SpecFlowFeatureModel(string name)
     {

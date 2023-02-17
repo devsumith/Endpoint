@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("package-add")]
-public class PackageAddRequest : IRequest {
-    [Option('n',"name")]
+public class PackageAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

@@ -3,5 +3,5 @@
 
 namespace Endpoint.Infrastructure;
 
-public class Marker {}
+public class Marker { }
 

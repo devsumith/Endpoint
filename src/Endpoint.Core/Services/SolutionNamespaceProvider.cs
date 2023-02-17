@@ -15,7 +15,7 @@ public class SolutionNamespaceProvider : ISolutionNamespaceProvider
     }
     public string Get(string directory)
     {
-        if(!Directory.Exists(directory))
+        if (!Directory.Exists(directory))
         {
             return "SolutionNamespaceNotFound";
         }

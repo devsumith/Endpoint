@@ -12,7 +12,7 @@ public class RequestHandlerCreateSyntaxGenerationStrategy : SyntaxGenerationStra
     private readonly ILogger<RequestHandlerCreateSyntaxGenerationStrategy> _logger;
     public RequestHandlerCreateSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<RequestHandlerCreateSyntaxGenerationStrategy> logger) 
+        ILogger<RequestHandlerCreateSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

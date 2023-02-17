@@ -15,7 +15,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("configure-services-create")]
-public class ConfigureServicesCreateRequest : IRequest {
+public class ConfigureServicesCreateRequest : IRequest
+{
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -27,11 +28,11 @@ public class ConfigureServicesCreateRequestHandler : IRequestHandler<ConfigureSe
     private readonly IFileProvider _fileProvider;
 
     public ConfigureServicesCreateRequestHandler(
-        ILogger<ConfigureServicesCreateRequestHandler> logger, 
+        ILogger<ConfigureServicesCreateRequestHandler> logger,
         IDependencyInjectionService dependencyInjectionService,
         IFileProvider fileProvider)
     {
-        _dependencyInjectionService= dependencyInjectionService ?? throw new ArgumentNullException(nameof(dependencyInjectionService));
+        _dependencyInjectionService = dependencyInjectionService ?? throw new ArgumentNullException(nameof(dependencyInjectionService));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }

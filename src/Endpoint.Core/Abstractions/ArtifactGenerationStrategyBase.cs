@@ -43,7 +43,7 @@ public abstract class ArtifactGenerationStrategyBase<T> : IArtifactGenerationStr
 
     public virtual bool CanHandle(object model, dynamic context = null) => model is T;
 
-    public  virtual void Create(object model, dynamic context = null)
+    public virtual void Create(object model, dynamic context = null)
     {
         using (IServiceScope scope = _serviceProvider.CreateScope())
         {

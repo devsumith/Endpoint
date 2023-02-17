@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("update-compiler-options-to-use-jest-types")]
-public class UpdateCompilerOptionsToUseJestTypesRequest : IRequest {
-    [Option('n',"name")]
+public class UpdateCompilerOptionsToUseJestTypesRequest : IRequest
+{
+    [Option('n', "name")]
     public string ProjectName { get; set; }
 
 
@@ -40,7 +41,7 @@ public class UpdateCompilerOptionsToUseJestTypesRequestHandler : IRequestHandler
     {
         _logger.LogInformation("Handled: {0}", nameof(UpdateCompilerOptionsToUseJestTypesRequestHandler));
 
-        var angularProjectModel = new AngularProjectModel(request.ProjectName, request.Directory, null,request.Directory);
+        var angularProjectModel = new AngularProjectModel(request.ProjectName, request.Directory, null, request.Directory);
 
         _angularService.UpdateCompilerOptionsToUseJestTypes(angularProjectModel);
 

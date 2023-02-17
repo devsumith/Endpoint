@@ -122,7 +122,7 @@ namespace Endpoint.Core.Builders
             if (routeType == RouteType.GetById)
             {
                 attributes.AddRange(new SwaggerAnnotationBuilder($"Get {((SyntaxToken)resource).PascalCase} by id.", $"Get {((SyntaxToken)resource).PascalCase} by id.", indent).Build());
-                attributes.Add(WithHttp(HttpVerbs.Get, HttpAttributeIdTemplateBuilder.Build(settings,resource), $"{((SyntaxToken)requestType).CamelCase}", indent));
+                attributes.Add(WithHttp(HttpVerbs.Get, HttpAttributeIdTemplateBuilder.Build(settings, resource), $"{((SyntaxToken)requestType).CamelCase}", indent));
                 attributes.Add(WithProducesResponseType(HttpStatusCode.NotFound, "string", indent: indent));
             }
 

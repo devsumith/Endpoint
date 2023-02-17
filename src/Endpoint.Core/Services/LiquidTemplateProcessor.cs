@@ -47,7 +47,7 @@ public class LiquidTemplateProcessor : ITemplateProcessor
         {
             Console.WriteLine(nameof(LiquidTemplateProcessor));
 
-            throw e;
+            throw;
         }
     }
 
@@ -65,7 +65,7 @@ public class LiquidTemplateProcessor : ITemplateProcessor
         {
             Console.WriteLine(nameof(LiquidTemplateProcessor));
 
-            throw e;
+            throw;
         }
     }
 
@@ -138,7 +138,7 @@ public class LiquidTemplateProcessor : ITemplateProcessor
 
             return dictionary;
         }
-        catch(TargetParameterCountException exception)
+        catch (TargetParameterCountException exception)
         {
             return new Dictionary<string, object>();
         }

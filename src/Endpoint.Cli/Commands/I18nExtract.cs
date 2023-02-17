@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("i18n-extract")]
-public class I18nExtractRequest : IRequest {
-    [Option('n',"name")]
+public class I18nExtractRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

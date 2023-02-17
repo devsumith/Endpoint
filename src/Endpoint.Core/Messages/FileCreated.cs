@@ -6,7 +6,8 @@ using System;
 
 namespace Endpoint.Core.Messages;
 
-public class FileCreated: INotification {
+public class FileCreated : INotification
+{
     public string Path { get; init; }
     public FileCreated(string path)
     {

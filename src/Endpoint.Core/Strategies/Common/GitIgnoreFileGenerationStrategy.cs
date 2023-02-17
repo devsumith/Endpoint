@@ -12,11 +12,11 @@ namespace Endpoint.Core.Strategies.Common
         void Generate(SettingsModel settings);
     }
 
-    public class GitIgnoreFileGenerationStrategy: IGitIgnoreFileGenerationStrategy
+    public class GitIgnoreFileGenerationStrategy : IGitIgnoreFileGenerationStrategy
     {
         private readonly IFileSystem _fileSystem;
         private readonly ITemplateLocator _templateLocator;
-        
+
         public GitIgnoreFileGenerationStrategy(IFileSystem fileSystem, ITemplateLocator templateLocator)
         {
             _fileSystem = fileSystem;

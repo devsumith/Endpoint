@@ -36,31 +36,31 @@ public class RouteHandlerDeleteSyntaxGenerationStrategy : SyntaxGenerationStrate
         var builder = new StringBuilder();
 
         builder.AppendLine($"app.MapDelete(\"/{resource.SnakeCasePlural}/" + "{" + "id" + "}" + $"\", async ({idPropertyType} id, {dbContext.PascalCase} context) =>");
-        
+
         builder.AppendLine("{".Indent(1));
-        
+
         builder.AppendLine($"if (await context.{resource.PascalCasePlural}.FindAsync(id) is {resource.PascalCase} {resource.CamelCase})".Indent(2));
-        
+
         builder.AppendLine("{".Indent(2));
-        
+
         builder.AppendLine($"context.{resource.PascalCasePlural}.Remove({resource.CamelCase});".Indent(3));
-        
+
         builder.AppendLine("await context.SaveChangesAsync();".Indent(3));
-        
+
         builder.AppendLine($"return Results.Ok({resource.CamelCase});".Indent(3));
-        
+
         builder.AppendLine("}".Indent(2));
-        
+
         builder.AppendLine("");
-        
+
         builder.AppendLine("return Results.NotFound();".Indent(2));
-        
+
         builder.AppendLine("})".Indent(1));
-        
+
         builder.AppendLine($".WithName(\"Delete{resource.PascalCase}\")".Indent(1));
-        
-        builder.AppendLine(".Produces(StatusCodes.Status204NoContent)".Indent(1));        
-        
+
+        builder.AppendLine(".Produces(StatusCodes.Status204NoContent)".Indent(1));
+
         builder.AppendLine(".Produces(StatusCodes.Status404NotFound);".Indent(1));
 
         return builder.ToString();

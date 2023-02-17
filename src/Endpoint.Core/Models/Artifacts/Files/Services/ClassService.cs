@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Models.Artifacts.Files.Services;
 
-public class ClassService: IClassService
+public class ClassService : IClassService
 {
     private readonly ILogger<ClassService> _logger;
     private readonly IFileSystem _fileSystem;
@@ -28,7 +28,7 @@ public class ClassService: IClassService
     private readonly INamespaceProvider _nameSpaceProvider;
 
     public ClassService(
-        ILogger<ClassService> logger, 
+        ILogger<ClassService> logger,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
@@ -81,11 +81,11 @@ public class ClassService: IClassService
 
         var classPath = Directory.GetFiles(slnDirectory, $"{name}.cs", SearchOption.AllDirectories).FirstOrDefault();
 
-        if(classPath == null)
+        if (classPath == null)
         {
-            foreach(var path in Directory.GetFiles(Path.GetDirectoryName(projectDirectory),"*.cs", SearchOption.AllDirectories))
+            foreach (var path in Directory.GetFiles(Path.GetDirectoryName(projectDirectory), "*.cs", SearchOption.AllDirectories))
             {
-                if(_fileSystem.ReadAllText(path).Contains($"class {name}"))
+                if (_fileSystem.ReadAllText(path).Contains($"class {name}"))
                 {
                     classPath = path;
                     break;
@@ -108,7 +108,7 @@ public class ClassService: IClassService
         _fileSystem.CreateDirectory($"{projectDirectory}{Path.DirectorySeparatorChar}{name}");
 
 
-        foreach(var methodModel in Parse(name, classPath))
+        foreach (var methodModel in Parse(name, classPath))
         {
             CreateMethodTestFile(methodModel.Name);
         }
@@ -163,15 +163,16 @@ public class ClassService: IClassService
 
         var insideClass = false;
 
-        foreach(var line in _fileSystem.ReadAllLines(path))
+        foreach (var line in _fileSystem.ReadAllLines(path))
         {
             if (insideClass)
             {
-                if(line.Trim().StartsWith("public") && !line.Trim().StartsWith($"public {className}"))
+                if (line.Trim().StartsWith("public") && !line.Trim().StartsWith($"public {className}"))
                 {
                     var indexOfEndOfName = line.IndexOf('(') - 1;
 
-                    for(var i = indexOfEndOfName; i > 0; i--) {
+                    for (var i = indexOfEndOfName; i > 0; i--)
+                    {
 
                         if (line.ToCharArray().ElementAt(i) == ' ')
                         {
@@ -184,12 +185,12 @@ public class ClassService: IClassService
 
                             i = -1;
                         }
-                    
+
                     }
                 }
             }
 
-            if(line.Contains("class") && insideClass)
+            if (line.Contains("class") && insideClass)
             {
                 insideClass = false;
             }

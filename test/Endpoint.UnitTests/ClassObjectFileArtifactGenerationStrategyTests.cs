@@ -14,30 +14,30 @@ namespace Endpoint.UnitTests;
 
 public class ClassObjectFileArtifactGenerationStrategyTests
 {
-	public ClassObjectFileArtifactGenerationStrategyTests()
-	{
+    public ClassObjectFileArtifactGenerationStrategyTests()
+    {
 
-	}
+    }
 
     [Fact]
-	public void Test()
-	{
+    public void Test()
+    {
         var services = new ServiceCollection();
 
         services.AddLogging();
 
         services.AddCoreServices<Marker>();
 
-        var container = services.BuildServiceProvider();    
+        var container = services.BuildServiceProvider();
 
         var sut = container.GetRequiredService<IArtifactGenerationStrategyFactory>();
-        
+
         var classModel = new ClassModel("Foo");
 
-        var objectFileModel = new ObjectFileModel<ClassModel>(classModel, new List<UsingDirectiveModel>() { 
-        
+        var objectFileModel = new ObjectFileModel<ClassModel>(classModel, new List<UsingDirectiveModel>() {
+
             new UsingDirectiveModel() { Name = "Sytem" }
-        },  "Foo","directory",  "extension");
+        }, "Foo", "directory", "extension");
 
         sut.CreateFor(objectFileModel);
     }

@@ -20,7 +20,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("db-context-create-from-aggregate-model")]
-public class DbContextCreateFromAggregateModelRequest : IRequest {
+public class DbContextCreateFromAggregateModelRequest : IRequest
+{
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -32,7 +33,7 @@ public class DbContextCreateFromAggregateModelRequestHandler : IRequestHandler<D
     private readonly IFileProvider _fileProvider;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
-    
+
     public DbContextCreateFromAggregateModelRequestHandler(
         ILogger<DbContextCreateFromAggregateModelRequestHandler> logger,
         IFileProvider fileProvider,
@@ -51,25 +52,27 @@ public class DbContextCreateFromAggregateModelRequestHandler : IRequestHandler<D
 
         var entities = new List<EntityModel>();
 
-        var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj",request.Directory));
+        var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj", request.Directory));
 
         bool isInsideCoreProject = projectDirectory.EndsWith(".Core");
 
-        var serviceName = Path.GetFileNameWithoutExtension(projectDirectory).Remove( isInsideCoreProject ? ".Core": ".Infrastructure");
+        var serviceName = Path.GetFileNameWithoutExtension(projectDirectory).Remove(isInsideCoreProject ? ".Core" : ".Infrastructure");
 
         var aggregateModelDirectory = isInsideCoreProject ? $"{projectDirectory}{Path.DirectorySeparatorChar}AggregateModel" : null;
 
-        foreach(var folder in Directory.GetDirectories(aggregateModelDirectory))
+        foreach (var folder in Directory.GetDirectories(aggregateModelDirectory))
         {
             var folderName = Path.GetFileNameWithoutExtension(folder);
 
-            if(folderName.EndsWith("Aggregate")) 
+            if (folderName.EndsWith("Aggregate"))
                 entities.Add(new EntityModel(folderName.Remove("Aggregate")));
         }
 
         var classModel = new DbContextModel(_namingConventionConverter, $"{serviceName}DbContext", entities, serviceName);
 
         var interfaceModel = classModel.ToInterface();
+
+        Directory.CreateDirectory($"{projectDirectory.Replace("Core", "Infrastructure")}{Path.DirectorySeparatorChar}Data");
 
         _artifactGenerationStrategyFactory.CreateFor(
             new ObjectFileModel<InterfaceModel>(

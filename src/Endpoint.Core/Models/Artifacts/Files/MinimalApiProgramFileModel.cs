@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Artifacts.Files;
 
-public class MinimalApiProgramFileModel: FileModel
+public class MinimalApiProgramFileModel : FileModel
 {
     public MinimalApiProgramFileModel(string title, string directory, string apiNamespace, string dbContextName, List<EntityModel> entities)
         : base("Program", directory, "cs")
@@ -31,7 +31,7 @@ public class MinimalApiProgramFileModel: FileModel
     public WebApplicationBuilderModel WebApplicationBuilder { get; set; }
     public string DbContextName { get; private set; }
     public string ApiNamespace { get; set; }
-    public List<string> Usings { get; private set; }    
-    
+    public List<string> Usings { get; private set; }
+
 }
 

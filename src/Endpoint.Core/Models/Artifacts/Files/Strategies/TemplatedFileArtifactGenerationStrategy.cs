@@ -59,7 +59,7 @@ public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrateg
 
         var parts = Path.GetDirectoryName(model.Path).Split(System.IO.Path.DirectorySeparatorChar);
 
-        for(var i = 1; i <= parts.Length; i++)
+        for (var i = 1; i <= parts.Length; i++)
         {
             var dir = string.Join(Path.DirectorySeparatorChar, parts.Take(i));
 

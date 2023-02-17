@@ -19,16 +19,17 @@ public class AggregateModel
         AggregateDto = aggregate.CreateDto();
         AggregateExtensions = new DtoExtensionsModel(namingConventionConverter, $"{aggregate.Name}Extensions", aggregate);
 
-        foreach (var routeType in Enum.GetValues<RouteType>()) { 
+        foreach (var routeType in Enum.GetValues<RouteType>())
+        {
 
-            switch(routeType)
+            switch (routeType)
             {
                 case RouteType.Page:
                     break;
 
                 case RouteType.Get:
-                case RouteType.GetById:                
-                    Queries.Add(new QueryModel(serviceName, namingConventionConverter,aggregate,routeType));
+                case RouteType.GetById:
+                    Queries.Add(new QueryModel(serviceName, namingConventionConverter, aggregate, routeType));
                     break;
 
                 case RouteType.Delete:

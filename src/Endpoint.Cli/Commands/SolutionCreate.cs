@@ -1,4 +1,4 @@
-                                                                                                                                                                                                                // Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
@@ -15,8 +15,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("solution-create")]
-public class SolutionCreateRequest : IRequest {
-    [Option('n',"name")]
+public class SolutionCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('p')]
@@ -61,7 +62,7 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
 
         var model = _solutionModelFactory.Create(request.Name, request.ProjectName, request.ProjectType, request.FolderName, request.Directory);
 
-        if(request.NoServiceCreate)
+        if (request.NoServiceCreate)
             model.RemoveAllServices();
 
         _solutionService.Create(model);

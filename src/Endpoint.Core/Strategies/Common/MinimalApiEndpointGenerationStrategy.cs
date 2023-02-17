@@ -13,8 +13,8 @@ public class MinimalApiEndpointGenerationStrategy : ArtifactGenerationStrategyBa
 {
     private readonly IFileSystem _fileSystem;
 
-    public MinimalApiEndpointGenerationStrategy(IServiceProvider serviceProvider,IFileSystem fileSystem)
-        :base(serviceProvider)
+    public MinimalApiEndpointGenerationStrategy(IServiceProvider serviceProvider, IFileSystem fileSystem)
+        : base(serviceProvider)
     {
         _fileSystem = fileSystem;
     }

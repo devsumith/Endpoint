@@ -15,7 +15,7 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
     private readonly ILogger<FieldsSyntaxGenerationStrategy> _logger;
     public FieldsSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<FieldsSyntaxGenerationStrategy> logger) 
+        ILogger<FieldsSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -27,11 +27,11 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
 
         var builder = new StringBuilder();
 
-        foreach(var field in model)
+        foreach (var field in model)
         {
             builder.AppendLine(Create(syntaxGenerationStrategyFactory, field, context));
 
-            if(field != model.Last())
+            if (field != model.Last())
                 builder.AppendLine();
         }
 
@@ -49,9 +49,9 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
         if (model.ReadOnly)
             builder.Append(" readonly");
 
-        
 
-        if(!string.IsNullOrEmpty(model.DefaultValue))
+
+        if (!string.IsNullOrEmpty(model.DefaultValue))
         {
             builder.Append($" {syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name} = {model.DefaultValue};");
         }

@@ -46,9 +46,9 @@ public static class JObjectExtensions
         scripts.AddOrUpdate(name, value);
     }
 
-    public static void AddScripts(this JObject jObject, IEnumerable<KeyValuePair<string,string>> scripts)
+    public static void AddScripts(this JObject jObject, IEnumerable<KeyValuePair<string, string>> scripts)
     {
-        foreach(var script in scripts)
+        foreach (var script in scripts)
         {
             jObject.AddScript(script.Key, script.Value);
         }
@@ -82,12 +82,13 @@ public static class JObjectExtensions
 
 
     public static void AddOrUpdate(this JObject jObject, string key, JToken value)
-    {        
-        if(jObject[key] != null)
+    {
+        if (jObject[key] != null)
         {
             jObject[key] = value;
         }
-        else {
+        else
+        {
             jObject.Add(key, value);
         }
 
@@ -98,7 +99,7 @@ public static class JObjectExtensions
 
         var root = $"{jObject["projects"][projectName]["root"]}";
 
-        foreach(var locale in locales)
+        foreach (var locale in locales)
         {
             localesObject.AddOrUpdate(locale, $"{root}/src/locale/messages.{locale}.xlf");
         }

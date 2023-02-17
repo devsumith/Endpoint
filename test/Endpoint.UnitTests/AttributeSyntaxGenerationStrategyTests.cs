@@ -8,7 +8,8 @@ using Xunit;
 
 namespace Endpoint.UnitTests;
 
-public class AttributeSyntaxGenerationStrategyTests {
+public class AttributeSyntaxGenerationStrategyTests
+{
 
     [Fact]
     public void CreateShould_ReturnAppropiateAttribute()
@@ -44,7 +45,7 @@ public class AttributeSyntaxGenerationStrategyTests {
 
         var model = new AttributeModel()
         {
-            Name  = "ApiController"
+            Name = "ApiController"
         };
 
         var result = sut.Create(model);

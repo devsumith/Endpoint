@@ -11,7 +11,7 @@ namespace Endpoint.Core.Strategies.Application;
 public class AggregateRootGenerationStrategy : SyntaxGenerationStrategyBase<LegacyAggregateModel>, IAggregateRootGenerationStrategy
 {
     public AggregateRootGenerationStrategy(IServiceProvider serviceProvider)
-        :base(serviceProvider)
+        : base(serviceProvider)
     { }
 
     public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, LegacyAggregateModel model, dynamic context = null)

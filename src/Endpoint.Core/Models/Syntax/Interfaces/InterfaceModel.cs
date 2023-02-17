@@ -10,7 +10,7 @@ namespace Endpoint.Core.Models.Syntax.Interfaces;
 public class InterfaceModel : TypeDeclarationModel
 {
     public InterfaceModel(string name)
-        :base(name)
+        : base(name)
     {
         Implements = new List<TypeModel>();
         Methods = new List<MethodModel>();

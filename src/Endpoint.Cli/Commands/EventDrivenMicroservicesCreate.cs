@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("event-driven-microservices-create")]
-public class EventDrivenMicroservicesCreateRequest : IRequest {
-    [Option('n',"name")]
+public class EventDrivenMicroservicesCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('s', "services")]
@@ -26,7 +27,7 @@ public class EventDrivenMicroservicesCreateRequest : IRequest {
 
 public class EventDrivenMicroservicesCreateRequestHandler : IRequestHandler<EventDrivenMicroservicesCreateRequest>
 {
-    private readonly ILogger<EventDrivenMicroservicesCreateRequestHandler> _logger;    
+    private readonly ILogger<EventDrivenMicroservicesCreateRequestHandler> _logger;
     private readonly ISolutionService _solutionService;
     public EventDrivenMicroservicesCreateRequestHandler(
         ILogger<EventDrivenMicroservicesCreateRequestHandler> logger,

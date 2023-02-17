@@ -14,7 +14,7 @@ public class RouteHandlerSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
     private readonly ILogger<RouteHandlerSyntaxGenerationStrategy> _logger;
     public RouteHandlerSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<RouteHandlerSyntaxGenerationStrategy> logger) 
+        ILogger<RouteHandlerSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

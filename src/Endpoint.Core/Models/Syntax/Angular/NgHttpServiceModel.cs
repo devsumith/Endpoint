@@ -5,8 +5,9 @@ using System;
 
 namespace Endpoint.Core.Models.Syntax.Angular;
 
-public class NgHttpServiceModel { 
+public class NgHttpServiceModel
+{
 
-    
+
 }
 

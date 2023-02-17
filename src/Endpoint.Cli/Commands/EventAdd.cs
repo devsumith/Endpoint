@@ -19,7 +19,7 @@ public class EventAddRequest : IRequest
 {
     [Value('a')]
     public string Aggregate { get; set; }
-        
+
     [Value('v')]
     public string Verb { get; set; }
 

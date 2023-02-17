@@ -12,7 +12,7 @@ public class TestReferenceSyntaxGenerationStrategy : SyntaxGenerationStrategyBas
     private readonly ILogger<TestReferenceSyntaxGenerationStrategy> _logger;
     public TestReferenceSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<TestReferenceSyntaxGenerationStrategy> logger) 
+        ILogger<TestReferenceSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

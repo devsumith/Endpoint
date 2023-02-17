@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Cli;
 
-public class CommandLineArgumentsProcessor: BackgroundService
+public class CommandLineArgumentsProcessor : BackgroundService
 {
     private readonly ILogger<CommandLineArgumentsProcessor> _logger;
     private readonly IMediator _mediator;
@@ -52,16 +52,17 @@ public class CommandLineArgumentsProcessor: BackgroundService
             .ToArray();
 
         _createParser().ParseArguments(args, verbs)
-            .WithParsed(async (dynamic request) => {
+            .WithParsed(async (dynamic request) =>
+            {
 
                 try
                 {
                     await _mediator.Send(request).ConfigureAwait(false);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogCritical(ex.Message);
-                }                
+                }
                 Environment.Exit(0);
             });
     }

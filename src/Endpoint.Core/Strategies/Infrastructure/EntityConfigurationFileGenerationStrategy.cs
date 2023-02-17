@@ -26,7 +26,7 @@ namespace Endpoint.Core.Strategies.Infrastructure
             )
         {
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
-            _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));    
+            _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         }
 

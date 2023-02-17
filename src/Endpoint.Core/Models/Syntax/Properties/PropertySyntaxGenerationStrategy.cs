@@ -10,7 +10,7 @@ public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Pro
     private readonly ILogger<PropertySyntaxGenerationStrategy> _logger;
     public PropertySyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<PropertySyntaxGenerationStrategy> logger) 
+        ILogger<PropertySyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -22,7 +22,7 @@ public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Pro
 
         var builder = new StringBuilder();
 
-        if(model.Parent is ClassModel)
+        if (model.Parent is ClassModel)
         {
             builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
 
@@ -35,7 +35,7 @@ public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Pro
         {
             builder.Append($" = {model.DefaultValue};");
         }
-        
+
         return builder.ToString();
     }
 }

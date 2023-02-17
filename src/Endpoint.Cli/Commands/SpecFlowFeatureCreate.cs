@@ -17,8 +17,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("spec-flow-feature-create")]
-public class SpecFlowFeatureCreateRequest : IRequest {
-    [Option('n',"name")]
+public class SpecFlowFeatureCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

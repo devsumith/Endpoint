@@ -17,8 +17,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("spec-flow-project-add")]
-public class SpecFlowProjectAddRequest : IRequest {
-    [Option('n',"name")]
+public class SpecFlowProjectAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -81,7 +82,7 @@ public class SpecFlowProjectAddRequestHandler : IRequestHandler<SpecFlowProjectA
                 done = true;
             }
 
-            
+
         }
 
 

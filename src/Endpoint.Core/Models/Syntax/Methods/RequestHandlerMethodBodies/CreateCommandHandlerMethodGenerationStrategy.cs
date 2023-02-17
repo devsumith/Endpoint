@@ -15,9 +15,9 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 {
     private readonly INamingConventionConverter _namingConventionConverter;
     public CreateCommandHandlerMethodGenerationStrategy(
-        IServiceProvider serviceProvider, 
+        IServiceProvider serviceProvider,
         INamingConventionConverter namingConventionConverter,
-        ILogger<MethodSyntaxGenerationStrategy> logger) 
+        ILogger<MethodSyntaxGenerationStrategy> logger)
         : base(serviceProvider, logger)
     {
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
@@ -54,7 +54,7 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         foreach (var property in entity.Properties.Where(x => x.Name != $"{entityName}Id"))
         {
-            builder.AppendLine($"{entityNameCamelCase}.{property.Name} = request.{ property.Name };");
+            builder.AppendLine($"{entityNameCamelCase}.{property.Name} = request.{property.Name};");
         }
 
         builder.AppendLine("");
@@ -72,7 +72,7 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
         builder.AppendLine("};");
 
         model.Body = builder.ToString();
-        
+
         return base.Create(syntaxGenerationStrategyFactory, model);
     }
 }

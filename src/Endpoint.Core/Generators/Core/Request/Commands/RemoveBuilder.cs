@@ -74,7 +74,7 @@ namespace Endpoint.Core.Builders
         {
             var request = new ClassBuilder($"Remove{((SyntaxToken)_entity).PascalCase}Request", _context, _fileSystem)
                 .WithInterface(new TypeBuilder().WithGenericType("IRequest", $"Remove{((SyntaxToken)_entity).PascalCase}Response").Build())
-                .WithProperty(new PropertyBuilder().WithType(IdDotNetTypeBuilder.Build(_settings, _entity)).WithName(IdPropertyNameBuilder.Build(_settings,_entity)).WithAccessors(new AccessorsBuilder().Build()).Build())
+                .WithProperty(new PropertyBuilder().WithType(IdDotNetTypeBuilder.Build(_settings, _entity)).WithName(IdPropertyNameBuilder.Build(_settings, _entity)).WithAccessors(new AccessorsBuilder().Build()).Build())
                 .Class;
 
             var response = new ClassBuilder($"Remove{((SyntaxToken)_entity).PascalCase}Response", _context, _fileSystem)

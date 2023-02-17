@@ -15,9 +15,10 @@ public class TemplatedFileModel : FileModel
 
         if (tokens != null)
         {
-            foreach (var token in tokens) {
+            foreach (var token in tokens)
+            {
 
-                Tokens.TryAdd(token.Key, token.Value); 
+                Tokens.TryAdd(token.Key, token.Value);
             }
         }
     }

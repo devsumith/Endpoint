@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-new")]
-internal class AngularWorkspaceCreateRequest : IRequest {
-    [Option('n',"name")]
+internal class AngularWorkspaceCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('p', "project-name")]

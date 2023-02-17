@@ -69,8 +69,8 @@ public class ApiProjectService : IApiProjectService
         var tokens = new TokensBuilder()
             .With("serviceName", serviceName)
             .With("DbContextName", $"{serviceName}DbContext")
-            .With("Port","5001")
-            .With("SslPort","5000")
+            .With("Port", "5001")
+            .With("SslPort", "5000")
             .Build();
 
         var configureServiceFile = _fileModelFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", directory, "cs", tokens: tokens);
@@ -80,7 +80,7 @@ public class ApiProjectService : IApiProjectService
         var launchSettingsFile = _fileModelFactory.CreateTemplate("Api.LaunchSettings", "launchsettings", directory, "json", tokens: tokens);
 
 
-        foreach (var file in new FileModel[] { 
+        foreach (var file in new FileModel[] {
             configureServiceFile,
             appSettingsFile,
             launchSettingsFile

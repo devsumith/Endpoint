@@ -49,7 +49,7 @@ public class AddArrangeActAssertFileCreatedHandler : INotificationHandler<FileCr
         {
             if (line.Contains("should create"))
             {
-                var testRef  = _syntaxGenerationStrategyFactory.CreateFor(new TestReferenceModel()
+                var testRef = _syntaxGenerationStrategyFactory.CreateFor(new TestReferenceModel()
                 {
                     SystemUnderTestName = sut
                 });
@@ -61,7 +61,7 @@ public class AddArrangeActAssertFileCreatedHandler : INotificationHandler<FileCr
 
             if (line.Contains("beforeEach"))
             {
-                contentBuilder.AppendLine("// ARRANGE".Indent(2,2));
+                contentBuilder.AppendLine("// ARRANGE".Indent(2, 2));
             }
 
             if (line.Contains(" fixture.componentInstance"))

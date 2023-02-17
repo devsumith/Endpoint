@@ -15,12 +15,12 @@ using System.Xml.Linq;
 
 namespace Endpoint.Core.Models.Syntax.Entities.Aggregate;
 
-public class AggregateService: IAggregateService
+public class AggregateService : IAggregateService
 {
     private readonly ILogger<AggregateService> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ISyntaxService _syntaxService;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;    
+    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly IClassModelFactory _classModelFactory;
     private readonly IProjectService _projectService;
     private readonly IFileModelFactory _fileModelFactory;
@@ -34,7 +34,8 @@ public class AggregateService: IAggregateService
         IClassModelFactory classModelFactory,
         IProjectService projectService,
         IFileModelFactory fileModelFactory,
-        IFileProvider fileProvider) {
+        IFileProvider fileProvider)
+    {
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -53,14 +54,21 @@ public class AggregateService: IAggregateService
 
         EnsureCoreFilesAreAdded(directory);
 
+        if(string.IsNullOrEmpty(serviceName))
+        {
+            var projectPath = _fileProvider.Get("*.csproj", directory);
+
+            serviceName = Path.GetFileNameWithoutExtension(projectPath).Split('.').First();
+        }
+
         var classModel = _syntaxService.SolutionModel?.GetClass(name, serviceName);
 
-        if(classModel == null)
+        if (classModel == null)
         {
             classModel = _classModelFactory.CreateEntity(name, properties);
         }
 
-        var model = new AggregateModel(_namingConventionConverter, serviceName, classModel,directory);
+        var model = new AggregateModel(_namingConventionConverter, serviceName, classModel, directory);
 
         _artifactGenerationStrategyFactory.CreateFor(model);
 
@@ -85,7 +93,7 @@ public class AggregateService: IAggregateService
 
     public void CommandCreate(string name, string aggregate, string directory)
     {
-        var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj",directory)).Split('.').First();
+        var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
 
         var classModel = _syntaxService.SolutionModel?.GetClass(aggregate, serviceName);
 

@@ -43,7 +43,7 @@ public class AddResource
 
             AdditionalResourceGenerator.Generate(options, _factory);
 
-    
+
         }
     }
 }

@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("test-header-create")]
-public class TestHeaderCreateRequest : IRequest {
-    [Option('n',"name")]
+public class TestHeaderCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -30,7 +31,7 @@ public class TestIdCreateRequestHandler : IRequestHandler<TestHeaderCreateReques
     private readonly ITemplateProcessor _templateProcessor;
 
     public TestIdCreateRequestHandler(
-        ILogger<TestIdCreateRequestHandler> logger, 
+        ILogger<TestIdCreateRequestHandler> logger,
         IClipboardService clipboardService,
         ITemplateLocator templateLocator,
         ITemplateProcessor templateProcessor)
@@ -48,7 +49,7 @@ public class TestIdCreateRequestHandler : IRequestHandler<TestHeaderCreateReques
         var template = string.Join(Environment.NewLine, _templateLocator.Get("TestHeader"));
 
         var result = _templateProcessor.Process(template, new TokensBuilder()
-            .With("SystemUnderTest",request.Name)
+            .With("SystemUnderTest", request.Name)
             .Build());
 
         _clipboardService.SetText(result);

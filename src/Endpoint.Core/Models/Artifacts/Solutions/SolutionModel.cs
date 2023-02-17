@@ -60,15 +60,15 @@ public class SolutionModel
 
     public ClassModel GetClass(string name, string serviceName)
     {
-        foreach(var folder in  Folders)
+        foreach (var folder in Folders)
         {
-            foreach(var project in string.IsNullOrEmpty(serviceName) ? folder.Projects: folder.Projects.Where(x => x.Name == serviceName))
+            foreach (var project in string.IsNullOrEmpty(serviceName) ? folder.Projects : folder.Projects.Where(x => x.Name == serviceName))
             {
-                foreach(var file in project.Files)
+                foreach (var file in project.Files)
                 {
-                    if(file is ObjectFileModel<ClassModel> classFileModel)
+                    if (file is ObjectFileModel<ClassModel> classFileModel)
                     {
-                        if (classFileModel.Object.Name.Split('.').Last() == name)                                
+                        if (classFileModel.Object.Name.Split('.').Last() == name)
                             return classFileModel.Object;
                     }
                 }

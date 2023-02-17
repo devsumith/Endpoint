@@ -16,8 +16,10 @@ public static class StringExtensions
             var result = string.Join(Environment.NewLine, values.Select(v => string.IsNullOrEmpty(v) ? v : $"{string.Join("", Range(1, spaces * indent).Select(i => ' '))}{v}"));
 
             return result;
-        } catch (Exception e){
-            throw e;
+        }
+        catch (Exception e)
+        {
+            throw;
         }
 
     }

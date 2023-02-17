@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Services;
 
-public class MinimalApiService: IMinimalApiService
+public class MinimalApiService : IMinimalApiService
 {
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
 

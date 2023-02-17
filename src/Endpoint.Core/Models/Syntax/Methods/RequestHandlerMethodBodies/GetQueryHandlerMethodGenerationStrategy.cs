@@ -24,7 +24,7 @@ public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStr
 
     public override bool CanHandle(object model, dynamic context = null)
     {
-        if(model is MethodModel methodModel && context?.Entity is ClassModel entity)
+        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
         {
             var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true);
 
@@ -41,7 +41,7 @@ public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStr
         var builder = new StringBuilder();
 
         var entityName = context.Entity.Name;
-        
+
         var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
         builder.AppendLine("return new () {");

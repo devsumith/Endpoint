@@ -12,7 +12,7 @@ public class ProducesResponseTypeAttributeSyntaxGenerationStrategy : SyntaxGener
     private readonly ILogger<ProducesResponseTypeAttributeSyntaxGenerationStrategy> _logger;
     public ProducesResponseTypeAttributeSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<ProducesResponseTypeAttributeSyntaxGenerationStrategy> logger) 
+        ILogger<ProducesResponseTypeAttributeSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -28,7 +28,7 @@ public class ProducesResponseTypeAttributeSyntaxGenerationStrategy : SyntaxGener
 
         builder.Append("ProducesResponseType(");
 
-        if(!string.IsNullOrEmpty(model.TypeName))
+        if (!string.IsNullOrEmpty(model.TypeName))
         {
             builder.Append($"typeof({model.TypeName}), ");
         }

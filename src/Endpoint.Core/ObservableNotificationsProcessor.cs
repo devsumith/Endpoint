@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Core;
 
-public class ObservableNotificationsProcessor: BackgroundService
+public class ObservableNotificationsProcessor : BackgroundService
 {
     private readonly ILogger<ObservableNotificationsProcessor> _logger;
     private readonly IMediator _mediator;

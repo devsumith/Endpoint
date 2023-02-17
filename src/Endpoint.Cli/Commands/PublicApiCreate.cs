@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("public-api-create")]
-public class PublicApiCreateRequest : IRequest {
-    [Option('n',"name")]
+public class PublicApiCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

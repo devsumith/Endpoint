@@ -19,8 +19,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("playwright-project-add")]
-public class PlaywrightProjectAddRequest : IRequest {
-    [Option('n',"name")]
+public class PlaywrightProjectAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('d', Required = false)]
@@ -53,9 +54,9 @@ public class PlaywrightProjectAddRequestHandler : IRequestHandler<PlaywrightProj
 
         var i = 1;
 
-        while(!done)
+        while (!done)
         {
-            if(Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}"))
+            if (Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}"))
             {
                 if (Directory.Exists($"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}_{i}"))
                 {
@@ -63,12 +64,12 @@ public class PlaywrightProjectAddRequestHandler : IRequestHandler<PlaywrightProj
                     break;
                 }
 
-                request.Name = $"{request.Name}_{i}";                    
-            }    
+                request.Name = $"{request.Name}_{i}";
+            }
 
             ProjectModel model = _projectModelFactory.CreatePlaywrightProject(request.Name, request.Directory);
 
-            
+
             _projectService.AddProject(model);
 
             _commandService.Start("dotnet build", model.Directory);

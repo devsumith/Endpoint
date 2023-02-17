@@ -23,7 +23,8 @@ using System.Text;
 
 namespace Endpoint.Core.Services;
 
-public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
+public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
+{
 
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly IFileProvider _fileProvider;
@@ -35,12 +36,12 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
     public DomainDrivenDesignFileService(
         INamespaceProvider namespaceProvider,
         IFileSystem fileSystem,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, 
+        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         IFileProvider fileProvider,
         Observable<INotification> notificationListener,
         INamingConventionConverter namingConventionConverter,
         ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory)
-	{
+    {
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
@@ -48,7 +49,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
         _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategyFactory));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
-	}
+    }
 
     public void MessageCreate(string name, List<PropertyModel> properties, string directory)
     {
@@ -60,7 +61,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
         var constructorModel = new ConstructorModel(classModel, classModel.Name);
 
-        foreach(var property in properties)
+        foreach (var property in properties)
         {
             classModel.Fields.Add(new FieldModel()
             {
@@ -108,7 +109,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
             }
         };
 
-        foreach (var typeModel in new List<TypeModel> () {  })
+        foreach (var typeModel in new List<TypeModel>() { })
         {
             classModel.Fields.Add(new FieldModel()
             {
@@ -161,7 +162,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
     public void ServiceBusMessageConsumerCreate(string name = "ServiceBusMessageConsumer", string messagesNamespace = null, string directory = null)
     {
-        
+
         var classModel = new ClassModel(name);
 
         if (string.IsNullOrEmpty(messagesNamespace))
@@ -221,9 +222,9 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
             "var client = _udpClientFactory.Create();",
 
             "",
-            
+
             "while(!stoppingToken.IsCancellationRequested) {",
-            
+
             "",
 
             "var result = await client.ReceiveAsync(stoppingToken);".Indent(1),
@@ -235,13 +236,13 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
             "",
 
             "var message = Deserialize<ServiceBusMessage>(json)!;".Indent(1),
-            
+
             "",
 
             "var messageType = message.MessageAttributes[\"MessageType\"];".Indent(1),
-            
+
             "",
-            
+
             "if(_supportedMessageTypes.Contains(messageType))".Indent(1),
 
             "{".Indent(1),
@@ -252,22 +253,22 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
             .Append(".{messageType}\");")
             .ToString()
             .Indent(2),
-            
+
             "",
 
             "var request = (IRequest)Deserialize(message.Body, type!)!;".Indent(2),
-            
+
             "",
 
             "await _mediator.Send(request, stoppingToken);".Indent(2),
-            
+
             "}".Indent(1),
 
             "",
 
             "await Task.Delay(300);".Indent(1),
-            
-            "}",            
+
+            "}",
         };
 
         var method = new MethodModel
@@ -297,7 +298,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
     }
 
     public void ServiceCreate(string name, string directory)
-	{
+    {
         if (_fileSystem.Exists($"{directory}{Path.DirectorySeparatorChar}{name}.cs"))
         {
             throw new Exception($"Service exists: {$"{directory}{Path.DirectorySeparatorChar}{name}.cs"}");
@@ -332,7 +333,7 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
         var @interface = createInterface(name, methods, usingDirectives, directory);
 
-        _ = createClass(@interface,name,methods,usingDirectives, directory);
+        _ = createClass(@interface, name, methods, usingDirectives, directory);
 
         InterfaceModel createInterface(string name, List<MethodModel> methods, List<UsingDirectiveModel> usings, string directory)
         {
@@ -393,8 +394,8 @@ public class DomainDrivenDesignFileService: IDomainDrivenDesignFileService {
 
             _artifactGenerationStrategyFactory.CreateFor(classFile);
 
-            _notificationListener.Broadcast(new ServiceFileCreated(@interface.Name, @class.Name,directory));
-            
+            _notificationListener.Broadcast(new ServiceFileCreated(@interface.Name, @class.Name, directory));
+
             return @class;
         }
     }

@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core.Models.Artifacts.Solutions;
 
-public abstract class PlantUmlParserStrategyBase<T>: IPlantUmlParserStrategy
+public abstract class PlantUmlParserStrategyBase<T> : IPlantUmlParserStrategy
     where T : class
 {
     protected readonly IServiceProvider _serviceProvider;
@@ -20,7 +20,7 @@ public abstract class PlantUmlParserStrategyBase<T>: IPlantUmlParserStrategy
 
     public object Create(string plantUml, dynamic context = null)
     {
-        using(var scope = _serviceProvider.CreateScope())
+        using (var scope = _serviceProvider.CreateScope())
         {
             var plantUmlParserStrategy = scope.ServiceProvider.GetRequiredService<IPlantUmlParserStrategyFactory>();
 

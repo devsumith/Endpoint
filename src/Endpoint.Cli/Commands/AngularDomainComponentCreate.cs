@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("angular-domain-component-create")]
-public class AngularDomainComponentCreateRequest : IRequest {
-    [Option('n',"name")]
+public class AngularDomainComponentCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

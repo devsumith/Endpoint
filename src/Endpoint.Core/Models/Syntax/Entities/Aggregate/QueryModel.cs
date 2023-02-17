@@ -64,16 +64,18 @@ public class QueryModel : CqrsBase
 
         var requestHandlerCtor = new ConstructorModel(RequestHandler, RequestHandler.Name);
 
-        requestHandlerCtor.Params.Add(new ParamModel() { 
+        requestHandlerCtor.Params.Add(new ParamModel()
+        {
             Type = TypeModel.LoggerOf(RequestHandler.Name),
             Name = "logger"
         });
 
-        requestHandlerCtor.Params.Add(new ParamModel() {
+        requestHandlerCtor.Params.Add(new ParamModel()
+        {
             Type = new TypeModel($"I{microserviceName}DbContext"),
             Name = "context"
         });
-        
+
         RequestHandler.Constructors.Add(requestHandlerCtor);
 
         if (routeType == RouteType.Get)
@@ -84,7 +86,7 @@ public class QueryModel : CqrsBase
                 {
                     new TypeModel($"{entity.Name}Dto")
                 }
-            }, namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true) , PropertyAccessorModel.GetSet));
+            }, namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true), PropertyAccessorModel.GetSet));
         }
 
         var methodModel = new MethodModel()

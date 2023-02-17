@@ -15,7 +15,7 @@ public class AngularWorkspaceArtifactGenerationStrategy : ArtifactGenerationStra
     public AngularWorkspaceArtifactGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<AngularWorkspaceArtifactGenerationStrategy> logger,
-        ICommandService commandService) 
+        ICommandService commandService)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-service-create")]
-public class AngularServiceCreateRequest : IRequest {
-    [Option('n',"name")]
+public class AngularServiceCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

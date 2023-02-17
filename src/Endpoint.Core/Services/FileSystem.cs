@@ -10,7 +10,7 @@ public class FileSystem : IFileSystem
 {
     public void Copy(string sourceFileName, string destFileName)
     {
-        if(File.Exists(destFileName) && File.Exists(sourceFileName)) 
+        if (File.Exists(destFileName) && File.Exists(sourceFileName))
             File.Delete(destFileName);
 
         File.Copy(sourceFileName, destFileName);
@@ -74,9 +74,9 @@ public class FileSystem : IFileSystem
 
     public void DeleteDirectory(string directory)
     {
-        if(Directory.Exists(directory))
+        if (Directory.Exists(directory))
         {
-            Directory.Delete(directory, true); 
+            Directory.Delete(directory, true);
         }
     }
 

@@ -24,7 +24,7 @@ public class ProjectModel
     public List<string> References { get; set; }
 
     public ProjectModel(string dotNetProjectType, string name, string parentDirectory, List<string> references = null)
-        :this(dotNetProjectType switch
+        : this(dotNetProjectType switch
         {
             "web" => DotNetProjectType.Web,
             "webapi" => DotNetProjectType.WebApi,
@@ -32,7 +32,7 @@ public class ProjectModel
             "worker" => DotNetProjectType.Worker,
             "xunit" => DotNetProjectType.XUnit,
             _ => DotNetProjectType.Console
-        },name,parentDirectory,references)
+        }, name, parentDirectory, references)
     {
     }
 

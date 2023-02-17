@@ -19,8 +19,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("project-add")]
-public class ProjectAddRequest : IRequest {
-    [Option('n',"name")]
+public class ProjectAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('t')]

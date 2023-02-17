@@ -7,13 +7,14 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.Microservices;
 
-public class MicroserviceModel { 
+public class MicroserviceModel
+{
 
     List<AggregateModel> AggregateModels { get; set; }
 
     public MicroserviceModel(string name)
     {
-        
+
     }
 }
 

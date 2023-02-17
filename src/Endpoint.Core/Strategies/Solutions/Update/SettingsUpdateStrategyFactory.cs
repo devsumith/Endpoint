@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Strategies.Solutions.Update
 {
-    public class SettingsUpdateStrategyFactory: ISettingsUpdateStrategyFactory
+    public class SettingsUpdateStrategyFactory : ISettingsUpdateStrategyFactory
     {
         private readonly IEnumerable<ISettingsUpdateStrategy> _strategies;
 
@@ -34,7 +34,7 @@ namespace Endpoint.Core.Strategies.Solutions.Update
                 throw new ArgumentNullException(nameof(properties));
             }
 
-            var strategy = _strategies.Where(x => x.CanHandle(model,entityName, properties)).OrderByDescending(x => x.Order).FirstOrDefault();
+            var strategy = _strategies.Where(x => x.CanHandle(model, entityName, properties)).OrderByDescending(x => x.Order).FirstOrDefault();
 
             if (strategy == null)
             {

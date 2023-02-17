@@ -5,7 +5,8 @@ using System;
 
 namespace Endpoint.Core.Models.Syntax;
 
-public class TestReferenceModel {
+public class TestReferenceModel
+{
 
     public string SystemUnderTestName { get; set; }
 }

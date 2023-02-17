@@ -21,7 +21,7 @@ public class CommandService : ICommandService
 
         _logger.LogInformation($"{arguments} in {workingDirectory}");
 
-        var process = IsUnix() ? UnixBash(arguments, workingDirectory): WindowsCmd(arguments, workingDirectory);
+        var process = IsUnix() ? UnixBash(arguments, workingDirectory) : WindowsCmd(arguments, workingDirectory);
 
         process.Start();
 

@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("aggregate-create")]
-public class AggregateCreateRequest : IRequest {
-    [Option('n',"name")]
+public class AggregateCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('p', "properties")]

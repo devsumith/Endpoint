@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("message-handler-create")]
-public class MessageHandlerCreateRequest : IRequest {
-    [Option('n',"name")]
+public class MessageHandlerCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

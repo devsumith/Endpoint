@@ -13,8 +13,9 @@ using Endpoint.Core.Models.WebArtifacts;
 namespace Endpoint.Cli.Commands;
 
 [Verb("enable-default-standalone-components")]
-public class EnableDefaultStandaloneComponentsRequest : IRequest {
-    [Option('n',"name")]
+public class EnableDefaultStandaloneComponentsRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('d', Required = false)]
@@ -38,7 +39,7 @@ public class EnableDefaultStandaloneComponentsRequestHandler : IRequestHandler<E
     {
         _logger.LogInformation("Handled: {0}", nameof(EnableDefaultStandaloneComponentsRequestHandler));
 
-        _angularService.EnableDefaultStandalone(new AngularProjectReferenceModel(request.Name,request.Directory));
+        _angularService.EnableDefaultStandalone(new AngularProjectReferenceModel(request.Name, request.Directory));
 
 
     }

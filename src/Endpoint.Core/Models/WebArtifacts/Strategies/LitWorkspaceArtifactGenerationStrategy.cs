@@ -25,7 +25,7 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
         ILogger<LitWorkspaceArtifactGenerationStrategy> logger,
         IFileSystem fileSystem,
         ICommandService commandService,
-        IFileModelFactory fileModelFactory) 
+        IFileModelFactory fileModelFactory)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -48,7 +48,7 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
 
         _commandService.Start("npm i lit", model.Directory);
 
-        
+
         _commandService.Start("npm i -D typescript jest ts-jest @types/jest", model.Directory);
 
         foreach (var npmPackage in new List<string>()
@@ -90,7 +90,7 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
             NamingStrategy = new CamelCaseNamingStrategy()
         };
 
-        _fileSystem.WriteAllText(packageJsonPath,JsonConvert.SerializeObject(packageJsonObject, new JsonSerializerSettings
+        _fileSystem.WriteAllText(packageJsonPath, JsonConvert.SerializeObject(packageJsonObject, new JsonSerializerSettings
         {
             ContractResolver = contractResolver,
             Formatting = Formatting.Indented

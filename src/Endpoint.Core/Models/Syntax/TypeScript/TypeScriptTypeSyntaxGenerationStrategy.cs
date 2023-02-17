@@ -16,7 +16,7 @@ public class TypeScriptTypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
     public TypeScriptTypeSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<TypeScriptTypeSyntaxGenerationStrategy> logger,
-        INamingConventionConverter namingConventionConverter) 
+        INamingConventionConverter namingConventionConverter)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -31,7 +31,7 @@ public class TypeScriptTypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
 
         builder.AppendLine($"export type {model.Name}" + " = {");
 
-        foreach(var property in model.Properties)
+        foreach (var property in model.Properties)
         {
             builder.AppendLine($"{_namingConventionConverter.Convert(NamingConvention.CamelCase, property.Name)}?: {_namingConventionConverter.Convert(NamingConvention.CamelCase, property.Type.Name)};".Indent(1, 2));
         }

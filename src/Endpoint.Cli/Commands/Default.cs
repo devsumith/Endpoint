@@ -42,10 +42,10 @@ public class Default
 
         [Option("db-context-name")]
         public string DbContextName { get; set; }
-        
+
         [Option("short-ids")]
         public bool? ShortIdPropertyName { get; set; }
-        
+
         [Option("numeric-ids")]
         public bool? NumericIdPropertyDataType { get; set; }
 
@@ -63,7 +63,7 @@ public class Default
         private readonly IConfiguration _configuration;
 
         public Handler(
-            IEndpointGenerationStrategyFactory endpointGenerationStrategyFactory, 
+            IEndpointGenerationStrategyFactory endpointGenerationStrategyFactory,
             ILogger logger,
             IConfiguration configuration)
         {
@@ -79,19 +79,19 @@ public class Default
             request.Name ??= _configuration["Default:Name"];
 
             request.Port ??= int.Parse(_configuration["Default:Port"]);
-            
+
             request.Properties ??= _configuration["Default:Properties"];
-            
+
             request.Resource ??= _configuration["Default:Resource"];
-            
+
             request.Monolith ??= bool.Parse(_configuration["Default:Monolith"]);
-            
+
             request.Minimal ??= bool.Parse(_configuration["Default:Minimal"]);
-            
+
             request.DbContextName ??= _configuration["Default:DbContextName"] ??= $"{((SyntaxToken)request.Name).PascalCase}DbContext";
-            
+
             request.ShortIdPropertyName ??= bool.Parse(_configuration["Default:ShortIdPropertyName"]);
-            
+
             request.NumericIdPropertyDataType ??= bool.Parse(_configuration["Default:NumericIdPropertyDataType"]);
 
             request.VsCode ??= bool.Parse(_configuration["Default:VsCode"]);
@@ -114,19 +114,19 @@ public class Default
 
                         EndpointGenerator.Generate(options, _endpointGenerationStrategyFactory);
 
-                
+
                     }
 
                     retries++;
 
                     name = $"{originalName}{retries}";
                 }
-            } 
-            catch(Exception e)
+            }
+            catch (Exception e)
             {
                 _logger.LogError(e.Message);
 
-        
+
             }
         }
     }

@@ -42,11 +42,11 @@ public class ApiTest
                 .With(nameof(request.EntityName), (SyntaxToken)request.EntityName)
                 .Build();
 
-            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
+            var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
 
             _fileSystem.WriteAllText($@"{request.Directory}/{((SyntaxToken)request.EntityName).PascalCase}ControllerTests.cs", contents);
-            
-    
+
+
         }
     }
 }

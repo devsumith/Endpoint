@@ -25,7 +25,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
         IFileProvider fileProvider,
         IServiceProvider serviceProvider,
         ICommandService commandService,
-        ILogger<ApiProjectEnsureArtifactGenerationStrategy> logger) 
+        ILogger<ApiProjectEnsureArtifactGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -52,7 +52,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
 
         EnsureProjectsReferenced(projectDirectory);
 
-        EnsureApiDefaultFilesAdd(artifactGenerationStrategyFactory, projectDirectory);        
+        EnsureApiDefaultFilesAdd(artifactGenerationStrategyFactory, projectDirectory);
     }
 
     private void EnsureDefaultFilesRemoved(string projectDirectory)
@@ -67,7 +67,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
 
         var dbContext = $"{projectName}DbContext";
 
-        if(!_fileSystem.Exists($"{projectDirectory}{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}launchSettings.json"))
+        if (!_fileSystem.Exists($"{projectDirectory}{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}launchSettings.json"))
         {
             artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.LaunchSettingsJson(projectDirectory, projectName, 5000));
         }
@@ -76,7 +76,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
         {
             artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", projectDirectory, tokens: new TokensBuilder()
                 .With("DbContext", dbContext)
-                .With("serviceName",projectName)
+                .With("serviceName", projectName)
                 .Build()));
 
             artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate("Api.Program", "Program", projectDirectory, tokens: new TokensBuilder()
@@ -99,7 +99,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
             "Swashbuckle.AspNetCore.Swagger",
             "Swashbuckle.AspNetCore.Newtonsoft"
         })
-        {            
+        {
             var projectFileContents = _fileSystem.ReadAllText(projectPath);
 
             if (!projectFileContents.Contains($"PackageReference Include=\"{package}\""))
@@ -120,7 +120,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
             solutionDirectory = solutionDirectory.Substring(0, solutionDirectory.LastIndexOf(Path.DirectorySeparatorChar));
         }
 
-        foreach(var infrastructureProjectPath in Directory.GetFiles(solutionDirectory,$"{projectName}.Infrastructure.csproj", SearchOption.AllDirectories))
+        foreach (var infrastructureProjectPath in Directory.GetFiles(solutionDirectory, $"{projectName}.Infrastructure.csproj", SearchOption.AllDirectories))
         {
             _commandService.Start($"dotnet add {projectDirectory} reference {infrastructureProjectPath}", projectDirectory);
         }

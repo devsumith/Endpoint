@@ -16,7 +16,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-project-add")]
-public class AngularAddProjectRequest : IRequest {
+public class AngularAddProjectRequest : IRequest
+{
     [Option('n', "name", Required = true)]
     public string Name { get; set; }
 

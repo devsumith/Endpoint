@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Services;
 
-public class FileNamespaceProvider: IFileNamespaceProvider
+public class FileNamespaceProvider : IFileNamespaceProvider
 {
     private readonly IFileProvider _fileProvider;
 

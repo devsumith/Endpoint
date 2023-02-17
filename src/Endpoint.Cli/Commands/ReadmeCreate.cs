@@ -15,7 +15,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("readme-create")]
-public class ReadmeCreateRequest : IRequest {
+public class ReadmeCreateRequest : IRequest
+{
     [Option('n')]
     public string ProjectName { get; set; } = "Project";
 
@@ -30,7 +31,7 @@ public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
 
     public ReadmeCreateRequestHandler(
-        ILogger<ReadmeCreateRequestHandler> logger, 
+        ILogger<ReadmeCreateRequestHandler> logger,
         IFileModelFactory fileModelFactory,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
     {
@@ -44,7 +45,7 @@ public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
         _logger.LogInformation("Handled: {0}", nameof(ReadmeCreateRequestHandler));
 
         var model = _fileModelFactory.CreateTemplate("Readme", "README", request.Directory, "md", tokens: new TokensBuilder()
-            .With(nameof(request.ProjectName),request.ProjectName)
+            .With(nameof(request.ProjectName), request.ProjectName)
             .Build());
 
         _artifactGenerationStrategyFactory.CreateFor(model);

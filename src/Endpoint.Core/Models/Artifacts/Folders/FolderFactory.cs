@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Models.Artifacts.Folders;
 
-public class FolderFactory: IFolderFactory
+public class FolderFactory : IFolderFactory
 {
     private readonly ILogger<FolderFactory> _logger;
     private readonly IFileProvider _fileProvider;

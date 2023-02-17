@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Endpoint.Core.Services;
 
-public class InMemoryFileSystem: IFileSystem
+public class InMemoryFileSystem : IFileSystem
 {
     private readonly IDictionary<string, FileSystemEntry> files = new Dictionary<string, FileSystemEntry>();
 

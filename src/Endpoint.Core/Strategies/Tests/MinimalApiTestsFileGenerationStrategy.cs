@@ -18,13 +18,13 @@ public class MinimalApiTestsFileGenerationStrategy : IMinimalApiTestsFileGenerat
     private readonly IFileSystem _fileSystem;
     public MinimalApiTestsFileGenerationStrategy(IFileSystem fileSystem)
     {
-        _fileSystem = fileSystem ?? throw new System.ArgumentNullException(nameof(fileSystem)); 
+        _fileSystem = fileSystem ?? throw new System.ArgumentNullException(nameof(fileSystem));
     }
 
     public void Create(MinimalApiProgramFileModel model, string directory)
     {
         var content = new List<string>();
-        
+
         _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}Tests.cs", string.Join(Environment.NewLine, content));
     }
 }

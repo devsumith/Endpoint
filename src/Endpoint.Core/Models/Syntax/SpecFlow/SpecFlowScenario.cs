@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.SpecFlow;
 
-public class SpecFlowScenarioModel {
+public class SpecFlowScenarioModel
+{
 
     public SpecFlowScenarioModel()
     {

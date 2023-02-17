@@ -48,7 +48,7 @@ public class GetById
                 .WithEntity(request.Entity)
                 .Build();
 
-    
+
         }
     }
 }

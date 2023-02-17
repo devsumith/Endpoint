@@ -26,7 +26,7 @@ public class EntityFileGenerationStrategy : IFileGenerationStrategy
 
     public void Create(dynamic model)
     {
-        if(model is EntityFileModel entityFileModel)
+        if (model is EntityFileModel entityFileModel)
         {
             var template = _templateLocator.Get(nameof(EntityModel));
 
@@ -35,7 +35,7 @@ public class EntityFileGenerationStrategy : IFileGenerationStrategy
 
             _fileSystem.WriteAllText(entityFileModel.Path, result);
         }
-     }
+    }
 
 }
 

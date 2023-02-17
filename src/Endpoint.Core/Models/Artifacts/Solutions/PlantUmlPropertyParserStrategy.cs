@@ -24,7 +24,7 @@ public class PlantUmlPropertyParserStrategy : PlantUmlParserStrategyBase<Propert
 
         var propertyModel = new PropertyModel(context.TypeDeclarationModel, AccessModifier.Public, new TypeModel(typeName), name, PropertyAccessorModel.GetSet);
 
-        return propertyModel;    
+        return propertyModel;
     }
 }
 

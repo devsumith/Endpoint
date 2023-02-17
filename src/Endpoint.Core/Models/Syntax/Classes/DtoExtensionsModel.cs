@@ -11,9 +11,10 @@ using System.Text;
 
 namespace Endpoint.Core.Models.Syntax.Classes;
 
-public class DtoExtensionsModel: ClassModel {
+public class DtoExtensionsModel : ClassModel
+{
     public DtoExtensionsModel(INamingConventionConverter namingConventionConverter, string name, ClassModel entity)
-        :base(name)
+        : base(name)
     {
         Static = true;
 
@@ -53,7 +54,7 @@ public class DtoExtensionsModel: ClassModel {
             Name = "ToDtosAsync",
             Async = true,
             Static = true,
-            ReturnType = new ("Task")
+            ReturnType = new("Task")
             {
                 GenericTypeParameters = new()
                 {

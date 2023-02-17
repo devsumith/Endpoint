@@ -15,8 +15,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("artifact-generation-strategy-create")]
-public class ArtifactGenerationStrategyCreateRequest : IRequest {
-    [Option('n',"name")]
+public class ArtifactGenerationStrategyCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('d', Required = false)]

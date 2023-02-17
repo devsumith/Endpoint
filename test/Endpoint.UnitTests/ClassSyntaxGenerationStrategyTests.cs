@@ -79,7 +79,7 @@ public class ClassSyntaxGenerationStrategyTests
             Name = "AddApplicationServices",
             ReturnType = new TypeModel("void"),
             Static = true,
-            Params = new List<ParamModel>() {  methodParam }
+            Params = new List<ParamModel>() { methodParam }
         };
 
         classModel.Static = true;
@@ -113,7 +113,7 @@ public class ClassSyntaxGenerationStrategyTests
 
         classModel.Fields = new List<FieldModel>()
         {
-            new FieldModel() { Name = "_logger", Type = new TypeModel() { 
+            new FieldModel() { Name = "_logger", Type = new TypeModel() {
                 Name = "ILogger",
                 GenericTypeParameters = new List<TypeModel>
                 {
@@ -131,14 +131,14 @@ public class ClassSyntaxGenerationStrategyTests
                 {
                     new ParamModel
                     {
-                        Type = new TypeModel() { 
+                        Type = new TypeModel() {
                             Name = "ILogger",
                             GenericTypeParameters = new List<TypeModel>
                             {
                                 new TypeModel() { Name = classModel.Name }
                             }
                         },
-                        Name = "logger"                       
+                        Name = "logger"
                     }
                 }
             }

@@ -12,7 +12,7 @@ public class AddAngularTranslateGenerationStrategy : ArtifactGenerationStrategyB
     private readonly ILogger<AddAngularTranslateGenerationStrategy> _logger;
     public AddAngularTranslateGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<AddAngularTranslateGenerationStrategy> logger) 
+        ILogger<AddAngularTranslateGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

@@ -112,7 +112,7 @@ public class CommandModel : CqrsBase
             },
             Params = new List<ParamModel>()
             {
-                new ParamModel() { 
+                new ParamModel() {
                     Type = new TypeModel(Request.Name),
                     Name = "request"
                 },

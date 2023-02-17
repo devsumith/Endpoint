@@ -59,7 +59,7 @@ namespace Endpoint.Core.Services
             _createFolder(queriesDirectory, settings.ApplicationDirectory);
 
 
-            if(settings.IdDotNetType == IdPropertyType.Guid)
+            if (settings.IdDotNetType == IdPropertyType.Guid)
             {
                 new IdFileGenerationStrategy(_templateProcessor, _templateLocator, _fileSystem)
                     .Create(resourceName.Value, settings.ApplicationNamespace, aggregateDirectory);
@@ -72,14 +72,14 @@ namespace Endpoint.Core.Services
 
             foreach (var property in resource.Properties)
             {
-                if(property.Id)
+                if (property.Id)
                 {
                     var syntax = new PropertyBuilder().WithName(IdPropertyNameBuilder.Build(settings, resourceName)).WithType(IdDotNetTypeBuilder.Build(settings, resource.Name, true)).WithAccessors(new AccessorsBuilder().Build()).Build(settings, resourceName);
 
-                    
+
                     aggregateBuilder.WithProperty(syntax);
 
-                    
+
                 }
                 else
                 {
@@ -117,14 +117,15 @@ namespace Endpoint.Core.Services
 
             foreach (var property in resource.Properties)
             {
-                if(property.Id && settings.IdDotNetType == IdPropertyType.Guid)
+                if (property.Id && settings.IdDotNetType == IdPropertyType.Guid)
                 {
                     extensionsBody.Add($"{property.Name} = {((SyntaxToken)resource.Name).CamelCase}.{((SyntaxToken)property.Name).PascalCase}.Value,".Indent(1));
-                } else
+                }
+                else
                 {
                     extensionsBody.Add($"{property.Name} = {((SyntaxToken)resource.Name).CamelCase}.{((SyntaxToken)property.Name).PascalCase},".Indent(1));
                 }
-                
+
             }
 
             extensionsBody.Add("};");
@@ -256,7 +257,7 @@ namespace Endpoint.Core.Services
                 .With(nameof(settings.DomainNamespace), (SyntaxToken)settings.DomainNamespace)
                 .Build();
 
-            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
+            var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
 
             _fileSystem.WriteAllText($@"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Behaviors{Path.DirectorySeparatorChar}ValidationBehavior.cs", contents);
         }
@@ -270,7 +271,7 @@ namespace Endpoint.Core.Services
                 .With(nameof(settings.DomainNamespace), (SyntaxToken)settings.DomainNamespace)
                 .Build();
 
-            var contents = string.Join(Environment.NewLine,_templateProcessor.Process(template, tokens));
+            var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
 
             _fileSystem.WriteAllText($@"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}Extensions{Path.DirectorySeparatorChar}ServiceCollectionExtensions.cs", contents);
         }

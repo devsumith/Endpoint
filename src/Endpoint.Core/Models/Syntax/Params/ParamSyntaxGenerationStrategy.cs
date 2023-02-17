@@ -12,7 +12,7 @@ public class ParamSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ParamM
     private readonly ILogger<ParamSyntaxGenerationStrategy> _logger;
     public ParamSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<ParamSyntaxGenerationStrategy> logger) 
+        ILogger<ParamSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -24,7 +24,7 @@ public class ParamSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ParamM
 
         var builder = new StringBuilder();
 
-        if(model.ExtensionMethodParam)
+        if (model.ExtensionMethodParam)
             builder.Append("this ");
 
         if (model.Attribute != null)

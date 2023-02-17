@@ -36,21 +36,21 @@ public class RouteHandlerGetByIdSyntaxGenerationStrategy : SyntaxGenerationStrat
         var builder = new StringBuilder();
 
         builder.AppendLine($"app.MapGet(\"/{resource.SnakeCasePlural}/" + "{" + "id" + "}" + $"\", async ({idPropertyType} id, {dbContext.PascalCase} context) =>");
-        
+
         builder.AppendLine($"await context.{resource.PascalCasePlural}.FindAsync(id)".Indent(1));
-        
+
         builder.AppendLine($"is {resource.PascalCase} {resource.CamelCase}".Indent(2));
-        
+
         builder.AppendLine($"? Results.Ok({resource.CamelCase})".Indent(3));
-        
+
         builder.AppendLine(": Results.NotFound())".Indent(3));
-        
+
         builder.AppendLine($".WithName(\"Get{resource.PascalCase}ById\")".Indent(1));
-        
+
         builder.AppendLine($".Produces<{resource.PascalCase}>(StatusCodes.Status200OK)".Indent(1));
-        
+
         builder.AppendLine(".Produces(StatusCodes.Status404NotFound);".Indent(1));
-        
+
         return builder.ToString();
     }
 }

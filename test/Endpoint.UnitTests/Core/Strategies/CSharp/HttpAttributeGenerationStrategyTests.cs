@@ -20,7 +20,7 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp
         {
             var expected = new string[1] { "[HttpGet(Name = \"getCharacters\")]" };
 
-            var model = new AttributeModel(AttributeType.Http, "HttpGet", new ()
+            var model = new AttributeModel(AttributeType.Http, "HttpGet", new()
             {
                 { "Name", "getCharacters" }
             });
@@ -33,7 +33,7 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp
 
             var mockLogger = new Mock<ILogger<AttributeSyntaxGenerationStrategy>>().Object;
 
-            var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(),mockLogger);
+            var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(), mockLogger);
 
             var actual = sut.Create(model);
 

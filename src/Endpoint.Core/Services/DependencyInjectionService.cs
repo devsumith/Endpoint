@@ -17,7 +17,7 @@ using System.Text;
 
 namespace Endpoint.Core.Services;
 
-public class DependencyInjectionService: IDependencyInjectionService
+public class DependencyInjectionService : IDependencyInjectionService
 {
     private readonly ILogger<DependencyInjectionService> _logger;
     private readonly IFileProvider _fileProvider;
@@ -26,7 +26,7 @@ public class DependencyInjectionService: IDependencyInjectionService
     private readonly INamespaceProvider _namespaceProvider;
 
     public DependencyInjectionService(
-        ILogger<DependencyInjectionService> logger, 
+        ILogger<DependencyInjectionService> logger,
         IFileProvider fileProvider,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         IFileSystem fileSystem,
@@ -54,9 +54,9 @@ public class DependencyInjectionService: IDependencyInjectionService
     }
 
     private void UpdateConfigureServices(string diRegistration, string projectSuffix, string configureServicesFilePath)
-    {        
-        var emptyServiceCollection = new StringBuilder().AppendJoin(Environment.NewLine, new string[] { 
-            "public static void Add" + projectSuffix + "Services(this IServiceCollection services) {", 
+    {
+        var emptyServiceCollection = new StringBuilder().AppendJoin(Environment.NewLine, new string[] {
+            "public static void Add" + projectSuffix + "Services(this IServiceCollection services) {",
             "}" }).ToString().Indent(1);
 
         var fileContent = _fileSystem.ReadAllText(configureServicesFilePath);
@@ -69,12 +69,13 @@ public class DependencyInjectionService: IDependencyInjectionService
         {
             foreach (var line in fileContent.Split(Environment.NewLine))
             {
-                if (line.Contains("this IServiceCollection services") && !registrationAdded && line.Contains("}")) {
+                if (line.Contains("this IServiceCollection services") && !registrationAdded && line.Contains("}"))
+                {
 
                     newContent.AppendLine(line.Replace("}", string.Empty));
-                    
+
                     newContent.AppendLine(diRegistration);
-                    
+
                     newContent.AppendLine("}".Indent(1));
 
                     registrationAdded = true;
@@ -83,14 +84,14 @@ public class DependencyInjectionService: IDependencyInjectionService
                 {
                     newContent.AppendLine(line);
                 }
-                
+
 
                 if (line.Contains("this IServiceCollection services") && !registrationAdded)
-                {                    
+                {
                     newContent.AppendLine(diRegistration);
                     registrationAdded = true;
                 }
-                    
+
             }
         }
 
@@ -107,7 +108,7 @@ public class DependencyInjectionService: IDependencyInjectionService
 
         _fileSystem.WriteAllText(configureServicesFilePath, newContent.ToString());
     }
-    
+
     public void AddConfigureServices(string layer, string directory)
     {
         var classModel = new ClassModel("ConfigureServices");

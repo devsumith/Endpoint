@@ -25,7 +25,7 @@ public class ClassModel : InterfaceModel
     public AccessModifier AccessModifier { get; set; }
     public List<FieldModel> Fields { get; set; }
     public List<ConstructorModel> Constructors { get; set; }
-    public List<AttributeModel> Attributes { get; set; }    
+    public List<AttributeModel> Attributes { get; set; }
     public bool Static { get; set; }
 
     public override void AddMethod(MethodModel method)

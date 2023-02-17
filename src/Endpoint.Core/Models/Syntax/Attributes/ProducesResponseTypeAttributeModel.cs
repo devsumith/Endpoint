@@ -3,7 +3,8 @@
 
 namespace Endpoint.Core.Models.Syntax.Attributes;
 
-public class ProducesResponseTypeAttributeModel: AttributeModel {
+public class ProducesResponseTypeAttributeModel : AttributeModel
+{
 
     public ProducesResponseTypeAttributeModel(string httpStatusCodeName, string typeName = null)
     {

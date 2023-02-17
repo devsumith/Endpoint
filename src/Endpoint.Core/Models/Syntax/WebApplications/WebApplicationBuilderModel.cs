@@ -3,7 +3,8 @@
 
 namespace Endpoint.Core.Models.Syntax.WebApplications;
 
-public class WebApplicationBuilderModel {
+public class WebApplicationBuilderModel
+{
     public WebApplicationBuilderModel(string title, string dbContextName)
     {
         Title = title;

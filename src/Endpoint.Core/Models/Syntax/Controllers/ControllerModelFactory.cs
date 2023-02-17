@@ -6,7 +6,7 @@ using Endpoint.Core.Services;
 
 namespace Endpoint.Core.Models.Syntax.Controllers;
 
-public class ControllerModelFactory: IControllerModelFactory
+public class ControllerModelFactory : IControllerModelFactory
 {
     private readonly INamingConventionConverter _namingConventionConverter;
 

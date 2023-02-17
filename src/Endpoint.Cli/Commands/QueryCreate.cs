@@ -13,11 +13,12 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("query-create")]
-public class QueryCreateRequest : IRequest {
-    [Option('n',"name")]
+public class QueryCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
-    [Option('a',"aggregate")]
+    [Option('a', "aggregate")]
     public string Aggregate { get; set; }
 
     [Option('d', Required = false)]

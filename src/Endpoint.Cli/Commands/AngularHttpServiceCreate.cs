@@ -15,8 +15,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-http-service-create")]
-public class AngularHttpServiceCreateRequest : IRequest {
-    [Option('n',"enity-name")]
+public class AngularHttpServiceCreateRequest : IRequest
+{
+    [Option('n', "enity-name")]
     public string EntityName { get; set; }
 
 
@@ -50,7 +51,7 @@ public class AngularHttpServiceCreateRequestHandler : IRequestHandler<AngularHtt
         var entityName = _namingConventionConverter.Convert(NamingConvention.SnakeCase, request.EntityName);
 
         var model = _fileModelFactory.CreateTemplate("http-service", $"{entityName}.service", request.Directory, "ts", tokens: new TokensBuilder()
-            .With("entityName",request.EntityName)
+            .With("entityName", request.EntityName)
             .Build());
 
         _artifactGenerationStrategyFactory.CreateFor(model);

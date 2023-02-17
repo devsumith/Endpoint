@@ -14,7 +14,7 @@ public class MethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Metho
     private readonly ILogger<MethodSyntaxGenerationStrategy> _logger;
     public MethodSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<MethodSyntaxGenerationStrategy> logger) 
+        ILogger<MethodSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -28,7 +28,7 @@ public class MethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Metho
 
         var builder = new StringBuilder();
 
-        foreach(var attribute in model.Attributes)
+        foreach (var attribute in model.Attributes)
         {
             builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(attribute));
         }

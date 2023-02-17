@@ -35,14 +35,14 @@ namespace Endpoint.Core.Strategies.Api
                 return string.Join(Environment.NewLine, content);
             }
 
-            if(model.Type == RouteType.Get)
+            if (model.Type == RouteType.Get)
             {
                 content.Add($"app.MapGet(\"/{resourceNameToken.SnakeCasePlural}\", async ({dbContextNameToken.PascalCase} context) =>");
                 content.Add($"await context.{resourceNameToken.PascalCasePlural}.ToListAsync())".Indent(1));
                 content.Add($".WithName(\"GetAll{resourceNameToken.PascalCasePlural}\");".Indent(1));
             }
 
-            if(model.Type == RouteType.GetById)
+            if (model.Type == RouteType.GetById)
             {
                 content.Add($"app.MapGet(\"/{resourceNameToken.SnakeCasePlural}/" + "{" + "id" + "}" + $"\", async ({idPropertyType} id, {dbContextNameToken.PascalCase} context) =>");
                 content.Add($"await context.{resourceNameToken.PascalCasePlural}.FindAsync(id)".Indent(1));
@@ -55,7 +55,7 @@ namespace Endpoint.Core.Strategies.Api
             }
 
 
-            if(model.Type == RouteType.Update)
+            if (model.Type == RouteType.Update)
             {
                 content.Add($"app.MapPut(\"/{resourceNameToken.SnakeCasePlural}/" + "{" + "id" + "}" + $"\", async ({idPropertyType} id, {resourceNameToken.PascalCase} input{resourceNameToken.PascalCase}, {dbContextNameToken.PascalCase} context) =>");
                 content.Add("{".Indent(1));
@@ -64,7 +64,7 @@ namespace Endpoint.Core.Strategies.Api
                 content.Add($"if ({resourceNameToken.CamelCase} is null) return Results.NotFound();".Indent(2));
                 content.Add("");
 
-                foreach(var property in model.Entity.Properties.Where(x => x.Id == false))
+                foreach (var property in model.Entity.Properties.Where(x => x.Id == false))
                 {
                     content.Add($"{resourceNameToken.CamelCase}.{((SyntaxToken)property.Name).PascalCase} = input{resourceNameToken.PascalCase}.{((SyntaxToken)property.Name).PascalCase};".Indent(2));
                 }

@@ -5,7 +5,8 @@ using System.IO;
 
 namespace Endpoint.Core.Models.WebArtifacts;
 
-public class LitProjectModel {
+public class LitProjectModel
+{
 
     public LitProjectModel(string name, string rootDirectory, string prefix = null, string kind = "library", string directory = null)
     {

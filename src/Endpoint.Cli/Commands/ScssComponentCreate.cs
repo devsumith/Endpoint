@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("scss-component-create")]
-public class ScssComponentCreateRequest : IRequest {
-    [Option('n',"name")]
+public class ScssComponentCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

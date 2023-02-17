@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Models.Artifacts.Projects.Services;
 
-public class InfrastructureProjectService: IInfrastructureProjectService
+public class InfrastructureProjectService : IInfrastructureProjectService
 {
     private readonly ILogger<InfrastructureProjectService> _logger;
     private readonly IClassModelFactory _classModelFactory;

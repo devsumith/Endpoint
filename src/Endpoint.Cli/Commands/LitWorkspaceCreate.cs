@@ -15,8 +15,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("lit-workspace-create")]
-public class LitWorkspaceCreateRequest : IRequest {
-    [Option('n',"name")]
+public class LitWorkspaceCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -30,7 +31,7 @@ public class LitWorkspaceCreateRequestHandler : IRequestHandler<LitWorkspaceCrea
     private readonly ICommandService _commandService;
     private readonly ILitService _litService;
     public LitWorkspaceCreateRequestHandler(
-        ILogger<LitWorkspaceCreateRequestHandler> logger, 
+        ILogger<LitWorkspaceCreateRequestHandler> logger,
         ICommandService commandService,
         ILitService litService)
     {

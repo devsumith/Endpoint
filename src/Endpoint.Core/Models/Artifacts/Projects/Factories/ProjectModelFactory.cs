@@ -110,12 +110,12 @@ public class ProjectModelFactory : IProjectModelFactory
 
         if (additionalMetadata != null)
         {
-            foreach(var m in additionalMetadata)
+            foreach (var m in additionalMetadata)
             {
                 project.Metadata.Add(m);
             }
         }
-        
+
 
         foreach (var metadataItem in project.Metadata)
         {
@@ -325,7 +325,8 @@ public class ProjectModelFactory : IProjectModelFactory
                 .With("Layer", layer)
                 .Build();
 
-        if (type.StartsWith("web")) {
+        if (type.StartsWith("web"))
+        {
             model.Files.Add(_fileModelFactory.CreateTemplate("DefaultProgram", "Program", model.Directory, tokens: tokens));
 
             model.Files.Add(_fileModelFactory.CreateTemplate("DefaultConfigureServices", "ConfigureServices", model.Directory, tokens: tokens));

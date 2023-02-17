@@ -33,7 +33,7 @@ public class CreateShould
 
         // ASSERT
 
-        var result = sut.Create(new AttributeModel() {  Name = "Fact" });
+        var result = sut.Create(new AttributeModel() { Name = "Fact" });
 
         Assert.Equal(expected, result);
     }

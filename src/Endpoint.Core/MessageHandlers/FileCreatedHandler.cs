@@ -20,7 +20,7 @@ public class FileCreatedHandler : INotificationHandler<FileCreated>
 
     public async Task Handle(FileCreated notification, CancellationToken cancellationToken)
     {
-        var model = new FileReferenceModel() {  Path = notification.Path };
+        var model = new FileReferenceModel() { Path = notification.Path };
 
         _artifactGenerationStrategyFactory.CreateFor(model, new Models.Artifacts.Files.Commands.CopyrightAdd());
     }

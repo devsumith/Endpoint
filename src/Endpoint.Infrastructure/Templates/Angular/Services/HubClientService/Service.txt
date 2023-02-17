@@ -27,6 +27,7 @@ export class {{ namePascalCase }}HubClientService {
   
       this._hubConnection = new HubConnectionBuilder()
       .withUrl(`${this._baseUrl}hub`, options)
+      .withAutomaticReconnect()
       .build(); 
   
       this._hubConnection.on("message", (message:string) => {

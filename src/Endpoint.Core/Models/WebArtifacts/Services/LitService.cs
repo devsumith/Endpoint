@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Core.Models.WebArtifacts.Services;
 
-public class LitService: ILitService
+public class LitService : ILitService
 {
     private readonly ILogger<LitService> _logger;
     private readonly IFileSystem fileSystem;

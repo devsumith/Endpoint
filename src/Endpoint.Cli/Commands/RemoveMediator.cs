@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("remove-mediator")]
-public class RemoveMediatorRequest : IRequest {
-    [Option('n',"name")]
+public class RemoveMediatorRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -27,7 +28,7 @@ public class RemoveMediatorRequestHandler : IRequestHandler<RemoveMediatorReques
 {
     private readonly ILogger<RemoveMediatorRequestHandler> _logger;
     private readonly ICommandService _commandService;
-    
+
     public RemoveMediatorRequestHandler(
         ILogger<RemoveMediatorRequestHandler> logger,
         ICommandService commandService)
@@ -40,7 +41,7 @@ public class RemoveMediatorRequestHandler : IRequestHandler<RemoveMediatorReques
     {
         _logger.LogInformation("Handled: {0}", nameof(RemoveMediatorRequestHandler));
 
-        foreach(var file in Directory.GetFiles(request.Directory,"*.Core.csproj", SearchOption.AllDirectories))
+        foreach (var file in Directory.GetFiles(request.Directory, "*.Core.csproj", SearchOption.AllDirectories))
         {
             _commandService.Start("dotnet remove package MediatR", Path.GetDirectoryName(file));
 

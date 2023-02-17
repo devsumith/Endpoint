@@ -8,7 +8,7 @@ using System.Text.Json;
 
 namespace Endpoint.Core.Strategies.WorkspaceSettingss.Update
 {
-    public class WorkspaceSettingsUpdateStrategy: IWorkspaceSettingsUpdateStrategy
+    public class WorkspaceSettingsUpdateStrategy : IWorkspaceSettingsUpdateStrategy
     {
         private readonly IFileSystem _fileSystem;
 

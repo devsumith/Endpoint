@@ -21,7 +21,7 @@ namespace Endpoint.Core.Builders
         private RouteType? _routeType;
         private string _resource;
         private SettingsModel _settings;
-        public MethodBodyBuilder(SettingsModel  settings, RouteType? routeType = null, int indent = 0, string resource = null)
+        public MethodBodyBuilder(SettingsModel settings, RouteType? routeType = null, int indent = 0, string resource = null)
         {
             _string = new StringBuilder();
             _indent = indent;

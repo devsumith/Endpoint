@@ -20,8 +20,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("microservice-add")]
-public class MicroserviceAddRequest : IRequest {
-    [Option('n',"name")]
+public class MicroserviceAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string Names { get; set; }
 
 
@@ -53,17 +54,17 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
         _logger.LogInformation("Handled: {0}", nameof(MicroserviceAddRequestHandler));
 
 
-        foreach(var name in request.Names.Split(','))
+        foreach (var name in request.Names.Split(','))
         {
             var microserviceRootDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{name}";
 
             _fileSystem.CreateDirectory(microserviceRootDirectory);
 
-            foreach(var layer in new List<string> { "Core", "Infrastructure", "Api" })
+            foreach (var layer in new List<string> { "Core", "Infrastructure", "Api" })
             {
                 var microserviceDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{name}{Path.DirectorySeparatorChar}{name}.{layer}";
 
-                var microservice = new ProjectModel { Name = $"{name}.{layer}", Directory = microserviceDirectory , DotNetProjectType = DotNetProjectType.ClassLib };
+                var microservice = new ProjectModel { Name = $"{name}.{layer}", Directory = microserviceDirectory, DotNetProjectType = DotNetProjectType.ClassLib };
 
                 if (layer == "Core")
                 {

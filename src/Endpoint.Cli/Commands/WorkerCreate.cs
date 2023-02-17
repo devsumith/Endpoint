@@ -26,8 +26,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("worker-create")]
-public class WorkerCreateRequest : IRequest {
-    [Option('n',"name")]
+public class WorkerCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -50,7 +51,7 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
-        
+
     }
 
     public async Task Handle(WorkerCreateRequest request, CancellationToken cancellationToken)
@@ -102,13 +103,13 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
         var methodBodyBuilder = new StringBuilder();
 
         methodBodyBuilder.AppendLine("while (!stoppingToken.IsCancellationRequested)");
-        
+
         methodBodyBuilder.AppendLine("{");
-        
+
         methodBodyBuilder.AppendLine("_logger.LogInformation(\"Worker running at: {time}\", DateTimeOffset.Now);".Indent(1));
-        
+
         methodBodyBuilder.AppendLine("await Task.Delay(1000, stoppingToken);".Indent(1));
-        
+
         methodBodyBuilder.AppendLine("}");
 
         var method = new MethodModel()

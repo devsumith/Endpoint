@@ -32,7 +32,7 @@ public class PlantUmlSolutionParserStrategy : PlantUmlParserStrategyBase<Solutio
 
         for (var i = 1; i < plantUmlLines.Length; i++)
         {
-            if(contextLevel == 0 && plantUmlLines[i].StartsWith("package"))
+            if (contextLevel == 0 && plantUmlLines[i].StartsWith("package"))
             {
                 chunk = new List<string>
                 {

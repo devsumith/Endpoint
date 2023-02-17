@@ -13,7 +13,7 @@ public class AccessModifierSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
     private readonly ILogger<AccessModifierSyntaxGenerationStrategy> _logger;
     public AccessModifierSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<AccessModifierSyntaxGenerationStrategy> logger) 
+        ILogger<AccessModifierSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("aggregate-queries-folder-create")]
-public class AggregateQueriesFolderCreateRequest : IRequest {
-    [Option('n',"name")]
+public class AggregateQueriesFolderCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string AggregateName { get; set; }
 
 

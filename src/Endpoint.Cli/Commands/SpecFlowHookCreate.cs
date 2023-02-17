@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("spec-flow-hook-create")]
-public class SpecFlowHookCreateRequest : IRequest {
-    [Option('n',"name")]
+public class SpecFlowHookCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

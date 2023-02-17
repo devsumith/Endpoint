@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("solution-create-from-plant-uml")]
-public class SolutionCreateFromPlantUmlRequest : IRequest {
-    [Option('n',"name")]
+public class SolutionCreateFromPlantUmlRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('p')]

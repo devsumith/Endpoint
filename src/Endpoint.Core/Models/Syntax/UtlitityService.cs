@@ -9,14 +9,15 @@ using System.IO;
 
 namespace Endpoint.Core.Models.Syntax;
 
-public class UtlitityService: IUtlitityService
+public class UtlitityService : IUtlitityService
 {
     private readonly ILogger<UtlitityService> _logger;
     private readonly Observable<INotification> _observableNotifications;
     public UtlitityService(
         ILogger<UtlitityService> logger,
         Observable<INotification> observableNotifications
-        ){
+        )
+    {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
     }

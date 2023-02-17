@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-material-add")]
-public class AngularMaterialAddRequest : IRequest {
-    [Option('n',"name")]
+public class AngularMaterialAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

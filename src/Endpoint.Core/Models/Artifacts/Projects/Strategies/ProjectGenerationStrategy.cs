@@ -52,6 +52,15 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
         foreach (var path in _fileSystem.GetFiles(model.Directory, "*1.cs", SearchOption.AllDirectories))
             _fileSystem.Delete(path);
 
+        if(templateType == "webapi")
+        {
+            _fileSystem.Delete($"{model.Directory}{Path.DirectorySeparatorChar}Controllers{Path.DirectorySeparatorChar}WeatherForecastController.cs");
+
+            _fileSystem.Delete($"{model.Directory}{Path.DirectorySeparatorChar}WeatherForecast.cs");
+
+            _fileSystem.DeleteDirectory($"{model.Directory}{Path.DirectorySeparatorChar}Controllers");
+        }
+
         foreach (var package in model.Packages)
         {
             var version = package.IsPreRelease ? "--prerelease" : $"--version {package.Version}";

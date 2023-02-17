@@ -14,7 +14,7 @@ public class ConstructorsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
     private readonly ILogger<ConstructorsSyntaxGenerationStrategy> _logger;
     public ConstructorsSyntaxGenerationStrategy(
         ILogger<ConstructorsSyntaxGenerationStrategy> logger,
-        IServiceProvider serviceProvider) 
+        IServiceProvider serviceProvider)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -26,11 +26,11 @@ public class ConstructorsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
 
         var builder = new StringBuilder();
 
-        foreach(var ctor in model)
+        foreach (var ctor in model)
         {
             builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(ctor));
 
-            if(ctor != model.Last())
+            if (ctor != model.Last())
             {
                 builder.AppendLine();
             }

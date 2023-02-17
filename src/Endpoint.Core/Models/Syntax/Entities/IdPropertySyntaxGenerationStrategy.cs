@@ -16,7 +16,7 @@ public class IdPropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<P
     public IdPropertySyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ISyntaxService syntaxService,
-        ILogger<IdPropertySyntaxGenerationStrategy> logger) 
+        ILogger<IdPropertySyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

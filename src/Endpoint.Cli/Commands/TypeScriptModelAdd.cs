@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ts-model-add")]
-public class TypeScriptModelAddRequest : IRequest {
-    [Option('n',"name")]
+public class TypeScriptModelAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('p', "properties")]
@@ -42,7 +43,7 @@ public class TypeScriptModelAddRequestHandler : IRequestHandler<TypeScriptModelA
     {
         _logger.LogInformation("Handled: {0}", nameof(TypeScriptModelAddRequestHandler));
 
-        _angularService.ModelCreate(request.Name,request.Directory,request.Properties);
+        _angularService.ModelCreate(request.Name, request.Directory, request.Properties);
 
 
     }

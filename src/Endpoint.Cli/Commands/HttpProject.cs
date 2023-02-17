@@ -16,7 +16,7 @@ namespace Endpoint.Cli.Commands;
 [Verb("http-project")]
 internal class HttpProjectRequest : IRequest
 {
-    [Option('n',"name")]
+    [Option('n', "name")]
     public string Name { get; set; }
     [Option('d', "directory")]
     public string Directory { get; set; } = Environment.CurrentDirectory;

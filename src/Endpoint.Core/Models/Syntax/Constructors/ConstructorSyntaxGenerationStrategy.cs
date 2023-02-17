@@ -17,7 +17,7 @@ public class ConstructorSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<
     public ConstructorSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         INamingConventionConverter namingConventionConverter,
-        ILogger<ConstructorSyntaxGenerationStrategy> logger) 
+        ILogger<ConstructorSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
@@ -40,29 +40,30 @@ public class ConstructorSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<
 
         builder.Append(')');
 
-        if(model.BaseParams.Count > 0)
+        if (model.BaseParams.Count > 0)
         {
-            builder.AppendLine($": base({ string.Join(',', model.BaseParams)})".Indent(1));
+            builder.AppendLine($": base({string.Join(',', model.BaseParams)})".Indent(1));
         }
 
         builder.AppendLine("{");
 
 
-        foreach(var param in model.Params) {
+        foreach (var param in model.Params)
+        {
 
             var field = model.Class.Fields.SingleOrDefault(x => x.Type.Name == param.Type.Name);
 
-            if(field != null)
+            if (field != null)
             {
                 var fieldName = _namingConventionConverter.Convert(NamingConvention.CamelCase, field.Name);
 
                 var paramName = _namingConventionConverter.Convert(NamingConvention.CamelCase, param.Name);
 
                 builder.AppendLine($"{fieldName} = {paramName} ?? throw new ArgumentNullException(nameof({paramName}));".Indent(1));
-            }       
+            }
         }
 
-        if(!string.IsNullOrEmpty(model.Body))
+        if (!string.IsNullOrEmpty(model.Body))
         {
             builder.AppendLine(model.Body.Indent(1));
         }

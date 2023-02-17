@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-translate-add")]
-public class AngularTranslateAddRequest : IRequest {
-    [Option('n',"name")]
+public class AngularTranslateAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string ProjectName { get; set; }
 
 
