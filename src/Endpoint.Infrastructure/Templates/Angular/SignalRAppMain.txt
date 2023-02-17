@@ -1,0 +1,16 @@
+﻿import { importProvidersFrom } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { RouterModule } from '@angular/router';
+import { {{ namePascalCase }}HubConnectionGuard } from './app/{{ nameSnakeCase }}-hub-connection.guard';
+
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    importProvidersFrom(
+      RouterModule.forRoot([
+        { path: '', loadComponent: () => import('./app/{{ nameSnakeCase }}/{{ nameSnakeCase }}.component').then(m => m.{{ namePascalCase }}Component), canActivate: [{{ namePascalCase }}HubConnectionGuard]}
+      ]),     
+    )
+  ]
+}).catch((err) => console.error(err));

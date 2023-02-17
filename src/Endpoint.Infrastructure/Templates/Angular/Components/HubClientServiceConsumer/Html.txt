@@ -1,0 +1,5 @@
+﻿<div *ngIf="vm$ | async as vm">
+    <pre>
+        {{ code }}
+    </pre>
+</div>

@@ -1,0 +1,30 @@
+﻿import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { {{ namePascalCase }}HubClientService } from '../{{ nameSnakeCase }}-hub-client.service';
+import { map, of, switchMap } from 'rxjs';
+
+@Component({
+  selector: 'app-{{ nameSnakeCase }}',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './{{ nameSnakeCase }}.component.html',
+  styleUrls: ['./{{ nameSnakeCase }}.component.scss']
+})
+export class {{ namePascalCase }}Component {
+  constructor(
+    private readonly _{{ nameCamelCase }}HubClientService: {{ namePascalCase }}HubClientService
+  ) { }
+
+  public vm$ = of([] as string[]).pipe(
+    switchMap(messages => {
+      return this._{{ nameCamelCase }}HubClientService.message$.pipe(
+        map(message => {
+          messages = [message, ...messages];
+          return {
+            messages
+          };
+        })
+      )
+    })
+  )
+}

@@ -15,6 +15,7 @@ public class PropertyModel
     public bool Id { get; private set; }
     public bool Interface { get; set; }
     public TypeDeclarationModel Parent { get; set; }
+    public string DefaultValue { get; set; }
 
     public PropertyModel ToTs()
     {

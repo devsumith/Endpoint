@@ -1,0 +1,20 @@
+﻿import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
+import { {{ namePascalCase }}HubClientService } from './{{ nameSnakeCase }}-hub-client.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class {{ namePascalCase}}HubConnectionGuard implements CanActivate {
+
+  constructor(
+    private readonly _{{ nameCamelCase }}HubClientService: {{ namePascalCase }}HubClientService
+  ) { }
+
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this._{{ nameCamelCase }}HubClientService.connect();
+  }
+}

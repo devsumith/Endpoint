@@ -23,6 +23,8 @@
     <None Remove="Templates\Angular\Components\Domain\Html.txt" />
     <None Remove="Templates\Angular\Components\Domain\Scss.txt" />
     <None Remove="Templates\Angular\Components\Domain\Spec.txt" />
+    <None Remove="Templates\Angular\Components\HubClientServiceConsumer\Component.txt" />
+    <None Remove="Templates\Angular\Components\HubClientServiceConsumer\Html.txt" />
     <None Remove="Templates\Angular\Components\ListDetail\Component.txt" />
     <None Remove="Templates\Angular\Components\ListDetail\Html.txt" />
     <None Remove="Templates\Angular\Components\ListDetail\Scss.txt" />
@@ -35,10 +37,13 @@
     <None Remove="Templates\Angular\Components\List\HTml.txt" />
     <None Remove="Templates\Angular\Components\List\Scss.txt" />
     <None Remove="Templates\Angular\Components\List\Spec.txt" />
+    <None Remove="Templates\Angular\Guards\HubClientConnection\Guard.txt" />
     <None Remove="Templates\Angular\http-service.txt" />
     <None Remove="Templates\Angular\main.txt" />
     <None Remove="Templates\Angular\Services\HttpService\Service.txt" />
     <None Remove="Templates\Angular\Services\HttpService\Spec.txt" />
+    <None Remove="Templates\Angular\Services\HubClientService\Service.txt" />
+    <None Remove="Templates\Angular\SignalRAppMain.txt" />
     <None Remove="Templates\Api\ConfigureServices.txt" />
     <None Remove="Templates\Api\DefaultConfigureServices.txt" />
     <None Remove="Templates\Api\DefaultProgram.txt" />
@@ -111,6 +116,8 @@
     <EmbeddedResource Include="Templates\Angular\Components\Domain\Html.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\Domain\Scss.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\Domain\Spec.txt" />
+    <EmbeddedResource Include="Templates\Angular\Components\HubClientServiceConsumer\Component.txt" />
+    <EmbeddedResource Include="Templates\Angular\Components\HubClientServiceConsumer\Html.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\ListDetail\Component.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\ListDetail\Html.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\ListDetail\Scss.txt" />
@@ -123,10 +130,13 @@
     <EmbeddedResource Include="Templates\Angular\Components\List\Scss.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\List\Html.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\List\Component.txt" />
+    <EmbeddedResource Include="Templates\Angular\Guards\HubClientConnection\Guard.txt" />
     <EmbeddedResource Include="Templates\Angular\http-service.txt" />
+    <EmbeddedResource Include="Templates\Angular\SignalRAppMain.txt" />
     <EmbeddedResource Include="Templates\Angular\main.txt" />
     <EmbeddedResource Include="Templates\Angular\Services\HttpService\Service.txt" />
     <EmbeddedResource Include="Templates\Angular\Services\HttpService\Spec.txt" />
+    <EmbeddedResource Include="Templates\Angular\Services\HubClientService\Service.txt" />
     <EmbeddedResource Include="Templates\Api\AppSettings.txt" />
     <EmbeddedResource Include="Templates\Api\DefaultConfigureServices.txt" />
     <EmbeddedResource Include="Templates\Api\ConfigureServices.txt" />

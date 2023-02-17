@@ -73,14 +73,7 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
             new FieldModel()
             {
                 Name = "_logger",
-                Type = new TypeModel()
-                {
-                    Name = "ILogger",
-                    GenericTypeParameters = new List<TypeModel>()
-                    {
-                        new TypeModel() { Name = request.Name }
-                    }
-                }
+                Type = TypeModel.LoggerOf(request.Name)
             }
         };
 
@@ -93,14 +86,7 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
                 {
                     new ParamModel()
                     {
-                        Type = new TypeModel()
-                        {
-                            Name = "ILogger",
-                            GenericTypeParameters = new List<TypeModel>()
-                            {
-                                new TypeModel() { Name = request.Name}
-                            }
-                        },
+                        Type = TypeModel.LoggerOf(request.Name),
                         Name = "logger"
                     }
                 }
@@ -150,7 +136,5 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
         _artifactGenerationStrategyFactory.CreateFor(fileModel);
 
         _notificationListener.Broadcast(new WorkerFileCreated(model.Name, request.Directory));
-
-
     }
 }

@@ -31,6 +31,11 @@ public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Pro
 
         builder.Append($"{syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name} {syntaxGenerationStrategyFactory.CreateFor(model.Accessors)}");
 
+        if (model.Parent is ClassModel && !string.IsNullOrEmpty(model.DefaultValue))
+        {
+            builder.Append($" = {model.DefaultValue};");
+        }
+        
         return builder.ToString();
     }
 }

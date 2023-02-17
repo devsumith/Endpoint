@@ -3,6 +3,7 @@
 
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Attributes;
+using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Methods;
@@ -10,6 +11,7 @@ using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
+using Octokit.Internal;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -357,6 +359,85 @@ public class ClassModelFactory : IClassModelFactory
         var dbContext = new DbContextModel(_namingConventionConverter, name, entities, serviceName);
 
         return dbContext;
+    }
+
+    public ClassModel CreateWorker(string name, string directory)
+    {
+        var usings = new List<UsingDirectiveModel>()
+        {
+            new UsingDirectiveModel() { Name = "Microsoft.Extensions.Hosting" },
+            new UsingDirectiveModel() { Name = "Microsoft.Extensions.Logging" },
+            new UsingDirectiveModel() { Name = "System" },
+            new UsingDirectiveModel() { Name = "System.Threading" },
+            new UsingDirectiveModel() { Name = "System.Threading.Tasks" }
+        };
+
+        var model = new ClassModel(name);
+
+        var fields = new List<FieldModel>()
+        {
+            new FieldModel()
+            {
+                Name = "_logger",
+                Type = TypeModel.LoggerOf(name)
+            }
+        };
+
+        var constructors = new List<ConstructorModel>()
+        {
+
+            new ConstructorModel(model,model.Name)
+            {
+                Params = new List<ParamModel>
+                {
+                    new ParamModel()
+                    {
+                        Type = TypeModel.LoggerOf(name),
+                        Name = "logger"
+                    }
+                }
+            }
+        };
+
+        model.Fields = fields;
+
+        model.Constructors = constructors;
+
+        model.Implements.Add(new TypeModel() { Name = "BackgroundService" });
+
+        var methodBodyBuilder = new StringBuilder();
+
+        methodBodyBuilder.AppendLine("while (!stoppingToken.IsCancellationRequested)");
+
+        methodBodyBuilder.AppendLine("{");
+
+        methodBodyBuilder.AppendLine("_logger.LogInformation(\"Worker running at: {time}\", DateTimeOffset.Now);".Indent(1));
+
+        methodBodyBuilder.AppendLine("await Task.Delay(1000, stoppingToken);".Indent(1));
+
+        methodBodyBuilder.AppendLine("}");
+
+        var method = new MethodModel()
+        {
+            Name = "ExecuteAsync",
+            Override = true,
+            AccessModifier = AccessModifier.Protected,
+            Body = methodBodyBuilder.ToString(),
+            Async = true,
+            ReturnType = new TypeModel() { Name = "Task" },
+            Params = new List<ParamModel>
+            {
+                new ParamModel()
+                {
+                    Name = "stoppingToken",
+                    Type = new TypeModel() { Name = "CancellationToken" }
+                }
+            }
+        };
+
+        model.Methods.Add(method);
+
+        return model;
     }
 }
 

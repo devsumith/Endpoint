@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "signalr-app-create -n Treasure -d C:\\projects",
+      "commandLineArgs": "signalr-app-create -n Dip -d C:\\projects",
       "environmentVariables": {
       }
     }

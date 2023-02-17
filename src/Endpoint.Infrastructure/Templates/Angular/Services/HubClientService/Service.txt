@@ -1,0 +1,44 @@
+﻿import { Injectable } from '@angular/core';
+import { HubConnection, HubConnectionBuilder, IHttpConnectionOptions } from '@microsoft/signalr';
+import { Subject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class {{ namePascalCase }}HubClientService {
+
+  private _hubConnection: HubConnection | undefined;
+
+  private _connect: Promise<boolean> | undefined;
+  
+  public message$ = new Subject<string>();
+
+  private readonly _baseUrl:string = '{{ baseUrl }}';
+
+  public connect(): Promise<boolean> {
+    
+    if(this._connect) return this._connect;
+
+    this._connect = new Promise((resolve,reject) => {
+
+      const options: IHttpConnectionOptions = {                    
+        logMessageContent: true               
+      };
+  
+      this._hubConnection = new HubConnectionBuilder()
+      .withUrl(`${this._baseUrl}hub`, options)
+      .build(); 
+  
+      this._hubConnection.on("message", (message:string) => {
+        this.message$.next(message);
+      });
+  
+      this._hubConnection.start();
+
+      resolve(true);
+
+    });
+
+    return this._connect;
+  }
+}
