@@ -19,6 +19,8 @@
     <None Remove="Templates\Angular\Components\App\Html.txt" />
     <None Remove="Templates\Angular\Components\App\Scss.txt" />
     <None Remove="Templates\Angular\Components\App\Spec.txt" />
+    <None Remove="Templates\Angular\Components\Default\Component.txt" />
+    <None Remove="Templates\Angular\Components\Default\Html.txt" />
     <None Remove="Templates\Angular\Components\Domain\Component.txt" />
     <None Remove="Templates\Angular\Components\Domain\Html.txt" />
     <None Remove="Templates\Angular\Components\Domain\Scss.txt" />
@@ -112,6 +114,8 @@
     <EmbeddedResource Include="Templates\Angular\Components\App\Html.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\App\Scss.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\App\Spec.txt" />
+    <EmbeddedResource Include="Templates\Angular\Components\Default\Component.txt" />
+    <EmbeddedResource Include="Templates\Angular\Components\Default\Html.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\Domain\Component.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\Domain\Html.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\Domain\Scss.txt" />

@@ -39,6 +39,7 @@ using Endpoint.Core.Models.Syntax.SpecFlow.strategies;
 using Endpoint.Core.Models.Syntax.SpecFlow.Strategies;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Models.Syntax.TypeScript;
+using Endpoint.Core.Models.Syntax.TypeScript.Strategies;
 using Endpoint.Core.Models.WebArtifacts.Factories;
 using Endpoint.Core.Models.WebArtifacts.Services;
 using Endpoint.Core.Models.WebArtifacts.Strategies;
@@ -59,6 +60,8 @@ public static class ConfigureServices
     public static void AddCoreServices(this IServiceCollection services)
     {
         services.AddSingleton<ISyntaxGenerationStrategy, TypeScriptTypeSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, ImportSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, FunctionSyntaxGenerationStrategy>();
         services.AddSingleton<ISpecFlowService, SpecFlowService>();
         services.AddSingleton<ISyntaxGenerationStrategy, SpecFlowFeatureSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, SpecFlowHookSyntaxGenerationStrategy>();
@@ -120,6 +123,7 @@ public static class ConfigureServices
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<SpecFlowHookModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<SpecFlowStepsModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<TypeScriptTypeModel>>();
+        services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<FunctionModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, LaunchSettingsFileGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, ConsoleMicroserviceArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, AggregateArtifactsGenerationStrategy>();

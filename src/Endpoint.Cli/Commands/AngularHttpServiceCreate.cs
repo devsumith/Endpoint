@@ -17,7 +17,7 @@ namespace Endpoint.Cli.Commands;
 [Verb("ng-http-service-create")]
 public class AngularHttpServiceCreateRequest : IRequest
 {
-    [Option('n', "enity-name")]
+    [Option('n', "entity-name")]
     public string EntityName { get; set; }
 
 
@@ -55,7 +55,5 @@ public class AngularHttpServiceCreateRequestHandler : IRequestHandler<AngularHtt
             .Build());
 
         _artifactGenerationStrategyFactory.CreateFor(model);
-
-
     }
 }

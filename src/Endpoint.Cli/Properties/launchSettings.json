@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "aggregate-create -n DashboardItem -p DashboardId:Guid,Name:string -d C:\\projects\\Gridster\\src\\Gridster.Core\\AggregateModel\\",
+      "commandLineArgs": "ng-component-create -n Foo -d C:\\projects\\Gridster\\src\\Gridster.App\\projects\\app\\src\\app",
       "environmentVariables": {
       }
     }

@@ -6,7 +6,7 @@ using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.TypeScript;
+namespace Endpoint.Core.Models.Syntax.TypeScript.Strategies;
 
 public class TypeScriptTypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<TypeScriptTypeModel>
 {

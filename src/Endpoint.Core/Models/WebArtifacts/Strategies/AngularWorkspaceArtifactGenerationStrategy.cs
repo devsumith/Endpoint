@@ -4,6 +4,7 @@
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
+using System.IO;
 
 namespace Endpoint.Core.Models.WebArtifacts.Strategies;
 
@@ -27,6 +28,10 @@ public class AngularWorkspaceArtifactGenerationStrategy : ArtifactGenerationStra
         _logger.LogInformation("Generating artifact for {0}.", model);
 
         _commandService.Start($"ng new {model.Name} --no-create-application", model.RootDirectory);
+
+        _commandService.Start($"npm install @ngrx/component-store", Path.Combine(model.RootDirectory, model.Name));
+
+        _commandService.Start($"npm install @ngrx/component", Path.Combine(model.RootDirectory,model.Name));
 
     }
 }

@@ -35,7 +35,5 @@ public class AngularDomainComponentCreateRequestHandler : IRequestHandler<Angula
     public async Task Handle(AngularDomainComponentCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularDomainComponentCreateRequestHandler));
-
-
     }
 }

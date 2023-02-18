@@ -98,9 +98,12 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
 
         var fileNamespace = string.IsNullOrEmpty(model.Namespace) ? _namespaceProvider.Get(model.Directory) : model.Namespace;
 
-        builder.AppendLine($"namespace {fileNamespace};");
+        if(fileNamespace != "NamespaceNotFound")
+        {
+            builder.AppendLine($"namespace {fileNamespace};");
 
-        builder.AppendLine();
+            builder.AppendLine();
+        }
 
         builder.AppendLine(_syntaxGenerationStrategyFactory.CreateFor(model.Object, context));
 

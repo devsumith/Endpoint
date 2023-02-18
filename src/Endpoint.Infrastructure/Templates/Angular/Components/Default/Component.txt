@@ -1,0 +1,16 @@
+﻿import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { create{{ namePascalCase }}ViewModel } from './create-{{ nameSnakeCase }}-view-model';
+import { PushModule } from '@ngrx/component';
+
+@Component({
+  selector: 'app-{{ nameSnakeCase }}',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, PushModule],
+  templateUrl: './{{ nameSnakeCase }}.component.html',
+  styleUrls: ['./{{ nameSnakeCase }}.component.scss']
+})
+export class {{ namePascalCase }}Component {
+  public vm$ = create{{ namePascalCase }}ViewModel();
+}

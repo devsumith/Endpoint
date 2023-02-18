@@ -10,6 +10,7 @@ using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Properties;
+using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Models.Syntax.TypeScript;
 using Endpoint.Core.Services;
 using MediatR;
@@ -64,10 +65,52 @@ public class AngularService : IAngularService
     public void ComponentCreate(string name, string directory)
     {
         var nameSnakeCase = ((SyntaxToken)name).SnakeCase();
+        var namePascalCase = ((SyntaxToken)name).PascalCase();
 
         _commandService.Start($"ng g c {name}", directory);
 
         var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
+
+        _artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate(
+            "Components.Default.Component",
+            $"{nameSnakeCase}.component",
+            componentDirectory,
+            "ts",
+            tokens: new TokensBuilder()
+            .With("name", name)
+            .Build()
+            ));
+
+        _artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate(
+            "Components.Default.Html",
+            $"{nameSnakeCase}.component",
+            componentDirectory,
+            "html",
+            tokens: new TokensBuilder()
+            .With("name", name)
+            .With("messageBinding", "{{ vm.message }}")
+            .Build()
+            ));
+
+        var model = new FunctionModel() { Name = $"create{namePascalCase}ViewModel" };
+
+        model.Imports.Add(new ImportModel("inject", "@angular/core"));
+
+        model.Imports.Add(new ImportModel()
+        {
+            Module = "rxjs",
+            Types = new () {  new("map"), new("of") }
+        });
+
+        model.Body = new StringBuilder()
+            .AppendLine($"return of(\"{name} works!\").pipe(")
+            .AppendLine("map(message => ({ message }))".Indent(1,2))
+            .Append($");")
+            .ToString();
+
+        var fileModel = new ObjectFileModel<FunctionModel>(model, $"create-{nameSnakeCase}-view-model", componentDirectory, "ts");
+
+        _artifactGenerationStrategyFactory.CreateFor(fileModel);
 
         IndexCreate(false, componentDirectory);
 
@@ -315,12 +358,12 @@ public class AngularService : IAngularService
             {
                 foreach (var importModel in _importModels)
                 {
-                    if (!content.Contains(importModel.Name))
+                    if (!content.Contains(importModel.Types.First().Name))
                         newLines.Add(new StringBuilder()
                             .Append("import { ")
-                            .Append(importModel.Name)
+                            .Append(importModel.Types.First().Name)
                             .Append(" }")
-                            .Append($" from '{importModel.ModuleName}';")
+                            .Append($" from '{importModel.Module}';")
                             .ToString());
                 }
 
@@ -582,16 +625,7 @@ public class AngularService : IAngularService
     {
         var serviceName = "DashboardService";
 
-        ClassModel classModel = default;
-
-        try
-        {
-            classModel = _syntaxService.SolutionModel?.GetClass(name, serviceName);
-        }
-        catch (Exception ex)
-        {
-            
-        }
+        ClassModel classModel = _syntaxService.SolutionModel?.GetClass(name, serviceName); ;
         
         if(classModel == null)
         {
