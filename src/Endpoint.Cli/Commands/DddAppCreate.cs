@@ -99,14 +99,14 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(DddAppCreateRequestHandler));
 
-        var solution = CreateDddSolution(request.Name, request.AggregateName, request.Properties, request.Directory);
+        var solution = await CreateDddSolution(request.Name, request.AggregateName, request.Properties, request.Directory);
 
-        //CreateDddApp(solution, request.ApplicationName, request.Prefix);
+        CreateDddApp(solution, request.ApplicationName, request.Prefix);
 
         _commandService.Start("code .", solution.SolutionDirectory);
     }
 
-    private SolutionModel CreateDddSolution(string name, string aggregateName, string properties, string directory)
+    private async Task<SolutionModel> CreateDddSolution(string name, string aggregateName, string properties, string directory)
     {
         var model = new SolutionModel(name, directory);
         
@@ -128,7 +128,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         Directory.CreateDirectory(aggregateModelDirectory);
 
-        _aggregateService.Add(aggregateName, properties, aggregateModelDirectory, name).ConfigureAwait(false).GetAwaiter().GetResult();
+        await _aggregateService.Add(aggregateName, properties, aggregateModelDirectory, name);
 
         return model;
     }
