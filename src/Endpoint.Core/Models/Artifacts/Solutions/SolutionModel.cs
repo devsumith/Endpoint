@@ -53,6 +53,7 @@ public class SolutionModel
     public string SolutionDirectory { get; set; }
     public string SolultionFileName => $"{Name}.sln";
 
+    public ProjectModel DefaultProject => Folders.First().Projects.First();
     public void RemoveAllServices()
     {
         Folders.Clear();

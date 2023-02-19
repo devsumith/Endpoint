@@ -2,34 +2,26 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.Artifacts.Solutions;
-using Endpoint.Core.Models.WebArtifacts.Services;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Services;
-using System.IO;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Types;
-using System.Collections.Generic;
-using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Interfaces;
-using System.Linq;
 using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax.Properties;
-using Endpoint.Core.Enums;
-using Endpoint.Core.Models.Syntax.Classes.Factories;
-using Endpoint.Core.Models.Syntax.Fields;
-using Endpoint.Core.Models.Syntax.Params;
-using Endpoint.Core.Models.Syntax.Methods;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Projects;
+using Endpoint.Core.Models.Artifacts.Solutions;
+using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Models.Syntax.Classes.Factories;
+using Endpoint.Core.Models.Syntax.Interfaces;
+using Endpoint.Core.Models.WebArtifacts.Services;
+using Endpoint.Core.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
 
@@ -143,7 +135,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var interfaceModel = _classModelFactory.CreateHubInterfaceModel(request.Name);
 
-        var projectModel = solutionModel.Folders.First().Projects.First();
+        var projectModel = solutionModel.DefaultProject;
 
         var workerModel = _classModelFactory.CreateMessageProducerWorkerModel(request.Name, projectModel.Directory);
         
