@@ -17,9 +17,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -153,14 +150,6 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         ServiceAdd(projectModel, $"services.AddHostedService<{request.Name}.Api.MessageProducer>();".Indent(2));
 
-        var launchSettingsPath = Path.Combine(projectModel.Directory, "Properties", "launchSettings.json");
-
-        var json = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText(launchSettingsPath));
-
-        var applicationUrl = $"{json["profiles"]["https"]["applicationUrl"]}".Split(";").First();
-
-        var baseUrl = $"{applicationUrl}/";
-
         var temporaryAppName = $"{_namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}_app";
 
         _angularService.CreateWorkspace(temporaryAppName, "app", "application", "app", solutionModel.SrcDirectory, false);
@@ -227,9 +216,11 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             appDirectory,
             "ts",
             tokens: new TokensBuilder()
-            .With("baseUrl", baseUrl)
+            .With("baseUrl", projectModel.GetApplicationUrl(_fileSystem))
             .With("name", request.Name)
             .Build());
+
+        var appHtmlFileModel = new ContentFileModel("<router-outlet></router-outlet>", "app.component", Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app"), "html");
 
         _artifactGenerationStrategyFactory.CreateFor(mainFileModel);
 
@@ -241,7 +232,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         _artifactGenerationStrategyFactory.CreateFor(hubServiceFileModel);
 
-        _fileSystem.WriteAllText(Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app", "app.component.html"), "<router-outlet></router-outlet>");
+        _artifactGenerationStrategyFactory.CreateFor(appHtmlFileModel);
 
         Directory.Move(Path.Combine(solutionModel.SrcDirectory, temporaryAppName), Path.Combine(solutionModel.SrcDirectory, $"{request.Name}.App"));
 

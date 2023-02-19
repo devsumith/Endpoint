@@ -7,7 +7,7 @@ namespace Endpoint.Core.Models.Artifacts.Files;
 
 public class FileModel
 {
-    public FileModel(string name, string directory, string extension, string copyright = null)
+    public FileModel(string name, string directory, string extension)
     {
         Name = name;
         Directory = directory;

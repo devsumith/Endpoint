@@ -3,7 +3,12 @@
 
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
+using Endpoint.Core.Services;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Endpoint.Core.Models.Artifacts.Projects;
 
@@ -36,6 +41,16 @@ public class ProjectModel
     {
     }
 
+    public string GetApplicationUrl(IFileSystem fileSystem)
+    {
+        var launchSettingsPath = System.IO.Path.Combine(Directory, "Properties", "launchSettings.json");
+
+        var json = JsonSerializer.Deserialize<JsonNode>(fileSystem.ReadAllText(launchSettingsPath));
+
+        var applicationUrl = $"{json["profiles"]["https"]["applicationUrl"]}".Split(";").First();
+
+        return $"{applicationUrl}/";
+    }
     public ProjectModel(DotNetProjectType dotNetProjectType, string name, string parentDirectory, List<string> references = null)
     {
         DotNetProjectType = dotNetProjectType;
