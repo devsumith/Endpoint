@@ -23,5 +23,8 @@ public interface IProjectModelFactory
     ProjectModel CreateKernelProject(string directory);
     ProjectModel CreatePlaywrightProject(string name, string directory);
     ProjectModel Create(string type, string name, string directory, List<string> references = null);
+    ProjectModel CreateCore(string name, string directory);
+    ProjectModel CreateInfrastructure(string name, string directory);
+    ProjectModel CreateApi(string name, string directory);
 }
 

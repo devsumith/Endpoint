@@ -1,0 +1,17 @@
+﻿using {{ serviceNamePascalCase }}.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+
+namespace Microsoft.Extensions.DependencyInjection;
+
+public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<{{ serviceNamePascalCase }}DbContext>
+{
+    public {{ serviceNamePascalCase }}DbContext CreateDbContext(string[] args)
+    {
+        var builder = new DbContextOptionsBuilder<{{ serviceNamePascalCase }}DbContext>();
+
+        builder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog={{ serviceNamePascalCase }};Integrated Security=SSPI;");
+
+        return new {{ serviceNamePascalCase }}DbContext(builder.Options);
+    }
+}

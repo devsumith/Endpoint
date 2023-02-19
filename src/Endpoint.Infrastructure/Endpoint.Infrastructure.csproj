@@ -82,6 +82,9 @@
     <None Remove="Templates\BuildingBlocks\Validation\ResponseBase.txt" />
     <None Remove="Templates\BuildingBlocks\Validation\ValidationBehavior.txt" />
     <None Remove="Templates\Copyright.txt" />
+    <None Remove="Templates\DddApp\Core\ConfigureServices.txt" />
+    <None Remove="Templates\DddApp\Infrastructure\DesignTimeDbContextFactory.txt" />
+    <None Remove="Templates\DddApp\Infrastructure\SeedData.txt" />
     <None Remove="Templates\README.txt" />
     <None Remove="Templates\Scss\Actions.txt" />
     <None Remove="Templates\Scss\Brand.txt" />
@@ -186,6 +189,9 @@
     <EmbeddedResource Include="Templates\Console\EmptyProgram.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientExtensions.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientFactory.txt" />
+    <EmbeddedResource Include="Templates\DddApp\Core\ConfigureServices.txt" />
+    <EmbeddedResource Include="Templates\DddApp\Infrastructure\DesignTimeDbContextFactory.txt" />
+    <EmbeddedResource Include="Templates\DddApp\Infrastructure\SeedData.txt" />
     <EmbeddedResource Include="Templates\Domain\Entity.txt" />
     <EmbeddedResource Include="Templates\Global\BicepFile.txt" />
     <EmbeddedResource Include="Templates\Global\DeploySetupFile.txt" />
@@ -225,6 +231,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Endpoint.Core\Endpoint.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Templates\DddApp\Api\" />
   </ItemGroup>
 
 </Project>

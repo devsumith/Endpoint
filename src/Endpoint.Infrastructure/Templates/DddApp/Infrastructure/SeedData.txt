@@ -1,0 +1,9 @@
+﻿namespace {{ namespace }};
+
+public static class SeedData
+{
+    public static void Seed(this {{ serviceName }}DbContext context)
+    {
+
+    }
+}

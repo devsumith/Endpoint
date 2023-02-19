@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "signalr-app-create -n WeddingBidders -d C:\\projects",
+      "commandLineArgs": "ddd-app-create -n WeddingBidders -d C:\\projects",
       "environmentVariables": {
       }
     }
