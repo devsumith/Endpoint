@@ -1,0 +1,18 @@
+﻿using {{ serviceNamePascalCase }}.Core;
+using {{ serviceNamePascalCase }}.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class ConfigureServices
+{
+    public static void AddInfrastructureServices(this IServiceCollection services, string connectionString)
+    {
+
+        services.AddScoped<I{{ serviceNamePascalCase }}DbContext, IdentityServiceDbContext>();
+        services.AddDbContext<{{ serviceNamePascalCase }}DbContext>(options =>
+        {
+            options.UseSqlServer(connectionString, builder => builder.MigrationsAssembly("{{ serviceNamePascalCase }}.Infrastructure"));
+        });
+    }
+}

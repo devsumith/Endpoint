@@ -83,6 +83,7 @@
     <None Remove="Templates\BuildingBlocks\Validation\ValidationBehavior.txt" />
     <None Remove="Templates\Copyright.txt" />
     <None Remove="Templates\DddApp\Core\ConfigureServices.txt" />
+    <None Remove="Templates\DddApp\Infrastructure\ConfigureServices.txt" />
     <None Remove="Templates\DddApp\Infrastructure\DesignTimeDbContextFactory.txt" />
     <None Remove="Templates\DddApp\Infrastructure\SeedData.txt" />
     <None Remove="Templates\README.txt" />
@@ -190,6 +191,7 @@
     <EmbeddedResource Include="Templates\Console\HttpClientExtensions.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientFactory.txt" />
     <EmbeddedResource Include="Templates\DddApp\Core\ConfigureServices.txt" />
+    <EmbeddedResource Include="Templates\DddApp\Infrastructure\ConfigureServices.txt" />
     <EmbeddedResource Include="Templates\DddApp\Infrastructure\DesignTimeDbContextFactory.txt" />
     <EmbeddedResource Include="Templates\DddApp\Infrastructure\SeedData.txt" />
     <EmbeddedResource Include="Templates\Domain\Entity.txt" />
