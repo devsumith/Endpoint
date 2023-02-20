@@ -198,6 +198,8 @@ public class AngularService : IAngularService
 
         _utlitityService.CopyrightAdd(workspaceModel.Directory);
 
+        _commandService.Start("npm install npm-run-all", workspaceModel.Directory);
+
         KarmaRemove(workspaceModel.Directory);
 
         JestInstall(workspaceModel.Directory);
@@ -261,6 +263,32 @@ public class AngularService : IAngularService
 
         _utlitityService.CopyrightAdd(model.RootDirectory);
 
+
+        //TODO: Move to JSON Extensions
+
+        if(model.ProjectType == "library")
+        {
+            var packageJsonPath = _fileProvider.Get("package.json", model.RootDirectory);
+
+            var packageJson = JObject.Parse(_fileSystem.ReadAllText(packageJsonPath));
+
+            var watchLibs = packageJson["scripts"]["watch:libs"];
+
+            var sanitizedName = model.Name.Replace("/", "-").Replace("@", string.Empty);
+
+            packageJson["scripts"][$"watch:{_namingConventionConverter.Convert(NamingConvention.SnakeCase, sanitizedName)}"] = $"ng build {model.Name} --watch";
+
+            if (string.IsNullOrEmpty($"{watchLibs}"))
+            {
+                packageJson["scripts"]["watch:libs"] = $"npm-run-all --parallel watch:{_namingConventionConverter.Convert(NamingConvention.SnakeCase, sanitizedName)}";
+            }
+            else
+            {
+                packageJson["scripts"]["watch:libs"] = $"{watchLibs} watch:{_namingConventionConverter.Convert(NamingConvention.SnakeCase, sanitizedName)}";
+            }
+
+            _fileSystem.WriteAllText(packageJsonPath, JsonConvert.SerializeObject(packageJson, Formatting.Indented));
+        }
     }
 
     public void UpdateAngularJsonToUseJest(AngularProjectModel model)

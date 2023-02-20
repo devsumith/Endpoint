@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "background-processor-create -n Foo -d C:\\projects",
+      "commandLineArgs": "ng-project-add -n foo -d C:\\projects\\mommy",
       "environmentVariables": {
       }
     }
