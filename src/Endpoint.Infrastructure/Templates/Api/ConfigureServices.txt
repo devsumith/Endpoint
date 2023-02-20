@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -7,6 +8,13 @@ public static class ConfigureServices {
     public static void AddApiServices(this IServiceCollection services) {
         
         services.AddControllers();
+
+        services.AddApiVersioning(options =>
+        {
+            options.ReportApiVersions = true;
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+        });
 
         services.AddEndpointsApiExplorer();
 

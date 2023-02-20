@@ -5,6 +5,7 @@ namespace Endpoint.Core.Models.Syntax.Attributes;
 
 public enum AttributeType
 {
+    ApiVersion,
     Authorize,
     ApiController,
     Produces,

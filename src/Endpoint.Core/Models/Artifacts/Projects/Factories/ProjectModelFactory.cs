@@ -133,6 +133,8 @@ public class ProjectModelFactory : IProjectModelFactory
 
                     project.DotNetProjectType = DotNetProjectType.ClassLib;
 
+                    project.Folders.Add(new FolderModel("AggregateModel", project.Directory));
+
                     project.Files.Add(_fileModelFactory.CreateResponseBase(project.Directory));
                     project.Files.Add(_fileModelFactory.CreateCoreUsings(project.Directory));
                     project.Files.Add(_fileModelFactory.CreateLinqExtensions(project.Directory));
@@ -204,6 +206,7 @@ public class ProjectModelFactory : IProjectModelFactory
                         .With("serviceName", serviceName)
                         .Build()));
 
+                    project.Packages.Add(new PackageModel("Microsoft.AspNetCore.Mvc.Versioning", "5.0.0"));
                     project.Packages.Add(new PackageModel() { Name = "Microsoft.AspNetCore.OpenApi", Version = "7.0.2" });
                     project.Packages.Add(new PackageModel("Serilog", "2.12.0"));
                     project.Packages.Add(new PackageModel("SerilogTimings", "3.0.1"));

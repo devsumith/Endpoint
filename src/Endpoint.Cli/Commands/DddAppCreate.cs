@@ -131,8 +131,6 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var aggregateModelDirectory = Path.Combine(core.Directory, "AggregateModel");
 
-        Directory.CreateDirectory(aggregateModelDirectory);
-
         var entity = await _aggregateService.Add(aggregateName, properties, aggregateModelDirectory, name);
 
         var dbContext = _classModelFactory.CreateDbContext($"{name}DbContext", new List<EntityModel>()
