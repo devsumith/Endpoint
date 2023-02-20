@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "ddd-app-create -n Mint -d C:\\projects",
+      "commandLineArgs": "background-processor-create -n Foo -d C:\\projects",
       "environmentVariables": {
       }
     }
