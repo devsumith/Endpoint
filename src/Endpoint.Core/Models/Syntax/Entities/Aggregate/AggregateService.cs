@@ -5,6 +5,7 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Projects.Services;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Classes.Factories;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
@@ -46,7 +47,7 @@ public class AggregateService : IAggregateService
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
-    public async Task Add(string name, string properties, string directory, string serviceName)
+    public async Task<ClassModel> Add(string name, string properties, string directory, string serviceName)
     {
         _logger.LogInformation("Add");
 
@@ -75,6 +76,8 @@ public class AggregateService : IAggregateService
         var fileModel = _fileModelFactory.CreateDbContextInterface(directory);
 
         _artifactGenerationStrategyFactory.CreateFor(fileModel);
+
+        return classModel;
     }
 
     private void EnsureCorePackagesAreInstalled(string directory)

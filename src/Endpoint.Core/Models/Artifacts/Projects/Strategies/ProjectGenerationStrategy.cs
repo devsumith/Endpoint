@@ -61,6 +61,11 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
             _fileSystem.DeleteDirectory($"{model.Directory}{Path.DirectorySeparatorChar}Controllers");
         }
 
+        foreach (var folder in model.Folders)
+        {
+            _fileSystem.CreateDirectory(folder.Directory);
+        }
+
         foreach (var package in model.Packages)
         {
             var version = package.IsPreRelease ? "--prerelease" : $"--version {package.Version}";

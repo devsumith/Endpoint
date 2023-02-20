@@ -220,6 +220,10 @@ public class AngularService : IAngularService
 
         _commandService.Start(stringBuilder.ToString(), model.RootDirectory);
 
+        var appRoutingModulePath = Path.Combine(model.Directory, "src", "app", "app-routing.module.ts");
+
+        _fileSystem.Delete(appRoutingModulePath);
+
         var angularProjectReferenceModel = new AngularProjectReferenceModel(model.Name, model.Directory, model.ProjectType);
 
         EnableDefaultStandalone(angularProjectReferenceModel);

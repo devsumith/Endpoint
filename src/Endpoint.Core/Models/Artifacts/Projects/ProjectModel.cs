@@ -3,6 +3,7 @@
 
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
+using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +28,7 @@ public class ProjectModel
     public bool GenerateDocumentationFile { get; set; }
     public List<string> Metadata { get; set; } = new List<string>();
     public List<string> References { get; set; }
+    public List<FolderModel> Folders { get; set; }
 
     public ProjectModel(string dotNetProjectType, string name, string parentDirectory, List<string> references = null)
         : this(dotNetProjectType switch
@@ -39,6 +41,7 @@ public class ProjectModel
             _ => DotNetProjectType.Console
         }, name, parentDirectory, references)
     {
+        Folders = new List<FolderModel>();
     }
 
     public string GetApplicationUrl(IFileSystem fileSystem)
@@ -57,6 +60,7 @@ public class ProjectModel
         Name = name;
         Directory = $"{parentDirectory}{System.IO.Path.DirectorySeparatorChar}{name}";
         References = references ?? new List<string>();
+        Folders = new List<FolderModel>();
     }
 
     public ProjectModel(string name, string parentDirectory)
@@ -65,11 +69,13 @@ public class ProjectModel
         Name = name;
         Directory = $"{parentDirectory}{System.IO.Path.DirectorySeparatorChar}{name}";
         References = new List<string>();
+        Folders = new List<FolderModel>();
     }
 
     public ProjectModel()
     {
         References = new List<string>();
+        Folders = new List<FolderModel>();
     }
 }
 

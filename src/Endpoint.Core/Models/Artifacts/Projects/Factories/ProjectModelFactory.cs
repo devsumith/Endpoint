@@ -6,6 +6,7 @@ using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
+using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Entities;
@@ -25,10 +26,12 @@ namespace Endpoint.Core.Models.Artifacts.Projects.Factories;
 public class ProjectModelFactory : IProjectModelFactory
 {
     private readonly IFileModelFactory _fileModelFactory;
+    private readonly INamespaceProvider _namespaceProvider;
 
-    public ProjectModelFactory(IFileModelFactory fileModelFactory)
+    public ProjectModelFactory(IFileModelFactory fileModelFactory, INamespaceProvider namespaceProvider)
     {
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
     }
 
     public ProjectModel CreateSpecFlowProject(string name, string directory)
@@ -126,12 +129,14 @@ public class ProjectModelFactory : IProjectModelFactory
             switch (metadataItem)
             {
                 case Constants.ProjectType.Core:
+
+
                     project.DotNetProjectType = DotNetProjectType.ClassLib;
 
                     project.Files.Add(_fileModelFactory.CreateResponseBase(project.Directory));
                     project.Files.Add(_fileModelFactory.CreateCoreUsings(project.Directory));
                     project.Files.Add(_fileModelFactory.CreateLinqExtensions(project.Directory));
-
+                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Core.ConfigureServices", "ConfigureServices", project.Directory, "cs", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
 
                     project.Packages.Add(new PackageModel("FluentValidation", "11.4.0"));
                     project.Packages.Add(new PackageModel("MediatR", "12.0.0"));
@@ -155,7 +160,22 @@ public class ProjectModelFactory : IProjectModelFactory
                     break;
 
                 case Constants.ProjectType.Infrastructure:
+
+                    var tokens = new TokensBuilder()
+                        .With("serviceName", serviceName)
+                        .Build();
+
                     project.DotNetProjectType = DotNetProjectType.ClassLib;
+                    project.Folders.Add(new FolderModel("Data", project.Directory));
+                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.ConfigureServices", "ConfigureServices", project.Directory, "cs", tokens: tokens));
+                    
+                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.SeedData", "SeedData", Path.Combine(project.Directory, "Data"), "cs", tokens: new TokensBuilder()
+                        .With("serviceName", serviceName)
+                        .With("namespace", $"{serviceName}.Infrastructure.Data")
+                        .Build()));
+
+                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.DesignTimeDbContextFactory", "DesignTimeDbContextFactory", project.Directory, "cs", tokens: tokens));
+
 
                     project.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Core{Path.DirectorySeparatorChar}{serviceName}.Core.csproj");
 
@@ -168,7 +188,11 @@ public class ProjectModelFactory : IProjectModelFactory
 
                     project.DotNetProjectType = DotNetProjectType.WebApi;
 
+                    project.Folders.Add(new ("Controllers", project.Directory));
+
                     project.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Infrastructure{Path.DirectorySeparatorChar}{serviceName}.Infrastructure.csproj");
+                    
+                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Api.AppSettings", "appsettings", project.Directory, "json", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
 
                     project.Files.Add(_fileModelFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", project.Directory, tokens: new TokensBuilder()
                         .With("DbContext", $"{serviceName}DbContext")
@@ -306,7 +330,7 @@ public class ProjectModelFactory : IProjectModelFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Security", directory);
 
-        model.Packages.Add(new PackageModel { Name = "MediatR", Version = "11.1.0" });
+        model.Packages.Add(new PackageModel { Name = "MediatR", Version = "12.0.0" });
 
         model.Packages.Add(new PackageModel { Name = "Microsoft.AspNetCore.Authentication.JwtBearer", Version = "7.0.2" });
 

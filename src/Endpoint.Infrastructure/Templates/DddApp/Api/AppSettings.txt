@@ -1,0 +1,12 @@
+﻿{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefualtConnection": "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog={{ serviceNamePascalCase }};Integrated Security=SSPI;"
+  }
+}

@@ -37,6 +37,8 @@ public class DbContextModel : ClassModel
 
         Implements.Add(new TypeModel("DbContext"));
 
+        Implements.Add(new TypeModel($"I{name}"));
+
         var ctor = new ConstructorModel(this, Name);
 
         ctor.Params.Add(new ParamModel()

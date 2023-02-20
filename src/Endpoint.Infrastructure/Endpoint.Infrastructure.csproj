@@ -82,6 +82,7 @@
     <None Remove="Templates\BuildingBlocks\Validation\ResponseBase.txt" />
     <None Remove="Templates\BuildingBlocks\Validation\ValidationBehavior.txt" />
     <None Remove="Templates\Copyright.txt" />
+    <None Remove="Templates\DddApp\Api\AppSettings.txt" />
     <None Remove="Templates\DddApp\Core\ConfigureServices.txt" />
     <None Remove="Templates\DddApp\Infrastructure\ConfigureServices.txt" />
     <None Remove="Templates\DddApp\Infrastructure\DesignTimeDbContextFactory.txt" />
@@ -190,6 +191,7 @@
     <EmbeddedResource Include="Templates\Console\EmptyProgram.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientExtensions.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientFactory.txt" />
+    <EmbeddedResource Include="Templates\DddApp\Api\AppSettings.txt" />
     <EmbeddedResource Include="Templates\DddApp\Core\ConfigureServices.txt" />
     <EmbeddedResource Include="Templates\DddApp\Infrastructure\ConfigureServices.txt" />
     <EmbeddedResource Include="Templates\DddApp\Infrastructure\DesignTimeDbContextFactory.txt" />
@@ -233,10 +235,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Endpoint.Core\Endpoint.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Templates\DddApp\Api\" />
   </ItemGroup>
 
 </Project>

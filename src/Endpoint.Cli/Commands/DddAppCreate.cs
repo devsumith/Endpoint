@@ -8,9 +8,11 @@ using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Folders;
 using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Projects.Factories;
+using Endpoint.Core.Models.Artifacts.Projects.Services;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Classes.Factories;
+using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Entities.Aggregate;
 using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.WebArtifacts.Services;
@@ -62,6 +64,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     private readonly IFolderFactory _folderFactory;
     private readonly IProjectModelFactory _projectModelFactory;
     private readonly IAggregateService _aggregateService;
+    private readonly IApiProjectService _apiProjectService;
 
     public DddAppCreateRequestHandler(
         ILogger<DddAppCreateRequestHandler> logger,
@@ -77,7 +80,8 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         IFileModelFactory fileModelFactory,
         IFolderFactory folderFactory,
         IProjectModelFactory projectModelFactory,
-        IAggregateService aggregateService)
+        IAggregateService aggregateService,
+        IApiProjectService apiProjectService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
@@ -93,6 +97,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         _folderFactory = folderFactory ?? throw new ArgumentNullException(nameof(folderFactory));
         _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
         _aggregateService = aggregateService ?? throw new ArgumentNullException(nameof(aggregateService));
+        _apiProjectService = apiProjectService ?? throw new ArgumentNullException(nameof(apiProjectService));
     }
 
     public async Task Handle(DddAppCreateRequest request, CancellationToken cancellationToken)
@@ -109,13 +114,13 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     private async Task<SolutionModel> CreateDddSolution(string name, string aggregateName, string properties, string directory)
     {
         var model = new SolutionModel(name, directory);
-        
+       
         var sourceFolder = new FolderModel("src", model.SolutionDirectory);
 
         var core = _projectModelFactory.CreateCore(name, sourceFolder.Directory);
 
         var infrastructure = _projectModelFactory.CreateInfrastructure(name, sourceFolder.Directory);
-        
+
         var api = _projectModelFactory.CreateApi(name, sourceFolder.Directory);
 
         sourceFolder.Projects.AddRange(new[] { core, infrastructure, api });
@@ -128,7 +133,20 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         Directory.CreateDirectory(aggregateModelDirectory);
 
-        await _aggregateService.Add(aggregateName, properties, aggregateModelDirectory, name);
+        var entity = await _aggregateService.Add(aggregateName, properties, aggregateModelDirectory, name);
+
+        var dbContext = _classModelFactory.CreateDbContext($"{name}DbContext", new List<EntityModel>()
+        {
+            new EntityModel(entity.Name) { Properties = entity.Properties}
+        }, name);
+
+        _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), "cs"));
+
+        _apiProjectService.ControllerAdd(aggregateName, Path.Combine(api.Directory, "Controllers"));
+
+        _commandService.Start("dotnet ef migrations add Initial", infrastructure.Directory);
+
+        _commandService.Start("dotnet ef database update", infrastructure.Directory);
 
         return model;
     }
