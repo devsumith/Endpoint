@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Syntax;
@@ -11,7 +10,6 @@ using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.TypeScript;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
-using Octokit.Internal;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -105,9 +103,9 @@ public class FolderFactory : IFolderFactory
             .Build()));
 
         model.Files.Add(new ContentFileModel(new StringBuilder()
-            .AppendLine($"export * from './{modelNameSnakeCase}.ts")
-            .AppendLine($"export * from './{modelNameSnakeCase}.service.ts")
-            .AppendLine($"export * from './{modelNameSnakeCase}.store.ts")
+            .AppendLine($"export * from './{modelNameSnakeCase}';")
+            .AppendLine($"export * from './{modelNameSnakeCase}.service';")
+            .AppendLine($"export * from './{modelNameSnakeCase}.store';")
             .ToString(), "index", model.Directory, "ts"));
 
 

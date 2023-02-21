@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "angular-domain-model-create -n DigitalAsset -d C:\\projects\\Huntress\\src\\Apps\\WebSpa\\ClientApp\\projects\\digital-assets\\core\\src\\lib\\models",
+      "commandLineArgs": "ng-new -n Vala -t library -d C:\\projects",
       "environmentVariables": {
       }
     }

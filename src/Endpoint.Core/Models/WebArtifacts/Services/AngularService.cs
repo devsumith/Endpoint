@@ -264,10 +264,12 @@ public class AngularService : IAngularService
         _utlitityService.CopyrightAdd(model.RootDirectory);
 
 
-        //TODO: Move to JSON Extensions
+        
 
         if(model.ProjectType == "library")
         {
+            //TODO: Move to JSON Extensions
+
             var packageJsonPath = _fileProvider.Get("package.json", model.RootDirectory);
 
             var packageJson = JObject.Parse(_fileSystem.ReadAllText(packageJsonPath));
@@ -288,6 +290,37 @@ public class AngularService : IAngularService
             }
 
             _fileSystem.WriteAllText(packageJsonPath, JsonConvert.SerializeObject(packageJson, Formatting.Indented));
+
+
+            var publicApiPath = Path.Combine(model.Directory, "src", "public-api.ts");
+
+            var publicApiContent = new List<string>();
+
+            var libFolder = Path.Combine(model.Directory, "src", "lib");
+
+            foreach (var file in Directory.GetFiles(libFolder,"*.*"))
+            {
+                _fileSystem.Delete(file);
+            }
+
+            _artifactGenerationStrategyFactory.CreateFor(new ContentFileModel($"export const BASE_URL = '{_namingConventionConverter.Convert(NamingConvention.KebobCase, model.Name).ToUpper()}:BASE_URL';", "constants", libFolder, "ts"));
+
+            IndexCreate(false, libFolder);
+
+            foreach(var line in _fileSystem.ReadAllLines(publicApiPath)) { 
+            
+                if(!line.StartsWith("export"))
+                {
+                    publicApiContent.Add(line);
+                }
+            }
+
+            publicApiContent.Add("export * from './lib';");
+
+            _artifactGenerationStrategyFactory.CreateFor(new ContentFileModel(new StringBuilder()
+                .AppendJoin(Environment.NewLine, publicApiContent)
+                .ToString(), "public-api", Path.Combine(model.Directory, "src"), "ts"));
+
         }
     }
 
