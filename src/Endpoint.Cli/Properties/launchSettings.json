@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "ng-new -n Vala -t library -d C:\\projects",
+      "commandLineArgs": "ng-constants-create -d C:\\projects",
       "environmentVariables": {
       }
     }
