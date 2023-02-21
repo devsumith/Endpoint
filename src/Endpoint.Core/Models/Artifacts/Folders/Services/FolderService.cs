@@ -3,7 +3,7 @@
 
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Enums;
-using Endpoint.Core.Models.Artifacts.Folders.Strategies;
+using Endpoint.Core.Models.Artifacts.Folders.Factories;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Properties;

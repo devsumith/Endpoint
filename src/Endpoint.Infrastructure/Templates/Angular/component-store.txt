@@ -1,0 +1,65 @@
+import { inject, Injectable } from "@angular/core";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { exhaustMap, map, noop, tap, withLatestFrom } from "rxjs";
+import { {{ entityNamePascalCase }} } from "./{{ entityNameSnakeCase }}";
+import { {{ entityNamePascalCase }}Service } from "./{{ entityNameSnakeCase }}.service";
+
+export interface {{ entityNamePascalCase }}State {
+    {{ entityNameCamelCasePlural }}: {{ entityNamePascalCase }}[]
+}
+
+const initial{{ entityNamePascalCase }}State = {
+    {{ entityNameCamelCasePlural }}: []
+};
+
+@Injectable({
+    providedIn:"root"
+})
+export class {{ entityNamePascalCase }}Store extends ComponentStore<{{ entityNamePascalCase }}State> {
+    private  readonly _{{ entityNameCamelCase }}Service = inject({{ entityNamePascalCase }}Service);
+
+    constructor() {
+        super(initial{{ entityNamePascalCase }}State);        
+    }
+
+    readonly save = ({{ entityNameCamelCase }}:{{ entityNamePascalCase }}, nextFn: {(response:any): void} | null = null, errorFn: {(response:any): void} | null = null) => {        
+        
+        const apiRequest$ = {{ entityNameCamelCase }}.{{ entityNameCamelCase }}Id ? this._{{ entityNameCamelCase }}Service.update({ {{ entityNameCamelCase }} }) : this._{{ entityNameCamelCase }}Service.create({ {{ entityNameCamelCase }} });
+        
+        const updateFn = {{ entityNameCamelCase }}?.{{ entityNameCamelCase }}Id ? ([response, {{ entityNameCamelCasePlural }}]: [any, {{ entityNamePascalCase }}[]]) => this.patchState({
+
+            {{ entityNameCamelCasePlural }}: {{ entityNameCamelCasePlural }}.map(t => response.{{ entityNameCamelCase }}.{{ entityNameCamelCase }}Id == t.{{ entityNameCamelCase }}Id ? response.{{ entityNameCamelCase }} : t)
+        })
+        :(([response, {{ entityNameCamelCasePlural }}]: [any, {{ entityNamePascalCase }}[]]) => this.patchState({ {{ entityNameCamelCasePlural }}: [...{{ entityNameCamelCasePlural }}, response.{{ entityNameCamelCase }} ]}));
+        
+        return this.effect<void>(
+            exhaustMap(()=> apiRequest$.pipe(
+                withLatestFrom(this.select(x => x.{{ entityNameCamelCasePlural }})),
+                tap(updateFn),
+                tapResponse(
+                    nextFn || noop,
+                    errorFn || noop
+                )
+            )
+        ))();
+    }
+
+    readonly delete = this.effect<{{ entityNamePascalCase }}>(
+        exhaustMap(({{ entityNameCamelCase }}) => this._{{ entityNameCamelCase }}Service.delete({ {{ entityNameCamelCase }}: {{ entityNameCamelCase }} }).pipe( 
+            withLatestFrom(this.select(x => x.{{ entityNameCamelCasePlural }} )),           
+            tapResponse(
+                ([_, {{ entityNameCamelCasePlural }}]) => this.patchState({ {{ entityNameCamelCasePlural }}: {{ entityNameCamelCasePlural }}.filter(t => t.{{ entityNameCamelCase }}Id != {{ entityNameCamelCase }}.{{ entityNameCamelCase }}Id )}),
+                noop
+            )
+        ))
+    );
+
+    readonly load = this.effect<void>(
+        exhaustMap(_ => this._{{ entityNameCamelCase }}Service.get().pipe(            
+            tapResponse(
+                {{ entityNameCamelCasePlural }} => this.patchState({ {{ entityNameCamelCasePlural }} }),
+                noop                
+            )
+        ))
+    );    
+}

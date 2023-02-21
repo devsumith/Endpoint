@@ -29,7 +29,7 @@ public class TypeScriptTypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
 
         var builder = new StringBuilder();
 
-        builder.AppendLine($"export type {model.Name}" + " = {");
+        builder.AppendLine($"export type {_namingConventionConverter.Convert(NamingConvention.PascalCase, model.Name)}" + " = {");
 
         foreach (var property in model.Properties)
         {

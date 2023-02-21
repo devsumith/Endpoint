@@ -50,7 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Architectures\Strategies\" />
     <Folder Include="Models\Artifacts\Files\Commands\" />
     <Folder Include="Models\Artifacts\Files\Services\" />
     <Folder Include="Models\Artifacts\Projects\Commands\" />

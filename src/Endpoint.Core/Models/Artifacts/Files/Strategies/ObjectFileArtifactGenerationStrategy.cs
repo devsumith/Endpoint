@@ -98,7 +98,7 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
 
         var fileNamespace = string.IsNullOrEmpty(model.Namespace) ? _namespaceProvider.Get(model.Directory) : model.Namespace;
 
-        if(fileNamespace != "NamespaceNotFound")
+        if(!string.IsNullOrEmpty(fileNamespace) && fileNamespace != "NamespaceNotFound" && !fileNamespace.Contains(".lib."))
         {
             builder.AppendLine($"namespace {fileNamespace};");
 

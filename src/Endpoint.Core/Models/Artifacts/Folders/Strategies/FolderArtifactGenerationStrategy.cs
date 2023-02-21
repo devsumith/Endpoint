@@ -5,7 +5,7 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 
-namespace Endpoint.Core.Models.Artifacts.Folders.Factories;
+namespace Endpoint.Core.Models.Artifacts.Folders.Strategies;
 
 public class FolderArtifactGenerationStrategy : ArtifactGenerationStrategyBase<FolderModel>
 {

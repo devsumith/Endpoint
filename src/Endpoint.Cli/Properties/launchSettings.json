@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "ng-project-add -n foo -d C:\\projects\\mommy",
+      "commandLineArgs": "angular-domain-model-create -n DigitalAsset -d C:\\projects\\Huntress\\src\\Apps\\WebSpa\\ClientApp\\projects\\digital-assets\\core\\src\\lib\\models",
       "environmentVariables": {
       }
     }

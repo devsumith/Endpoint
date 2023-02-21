@@ -6,7 +6,7 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Folders;
-using Endpoint.Core.Models.Artifacts.Folders.Strategies;
+using Endpoint.Core.Models.Artifacts.Folders.Factories;
 using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Projects.Factories;
 using Endpoint.Core.Models.Artifacts.Projects.Services;

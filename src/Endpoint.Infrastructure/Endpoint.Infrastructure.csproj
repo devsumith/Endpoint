@@ -15,6 +15,7 @@
   <ItemGroup>
     <None Remove="Templates\Angular\app.component.spec.txt" />
     <None Remove="Templates\Angular\app.component.txt" />
+    <None Remove="Templates\Angular\component-store.txt" />
     <None Remove="Templates\Angular\Components\App\Component.txt" />
     <None Remove="Templates\Angular\Components\App\Html.txt" />
     <None Remove="Templates\Angular\Components\App\Scss.txt" />
@@ -140,6 +141,7 @@
     <EmbeddedResource Include="Templates\Angular\Components\List\Html.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\List\Component.txt" />
     <EmbeddedResource Include="Templates\Angular\Guards\HubClientConnection\Guard.txt" />
+    <EmbeddedResource Include="Templates\Angular\component-store.txt" />
     <EmbeddedResource Include="Templates\Angular\http-service.txt" />
     <EmbeddedResource Include="Templates\Angular\SignalRAppMain.txt" />
     <EmbeddedResource Include="Templates\Angular\main.txt" />
