@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Entities.Aggregate;
@@ -11,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Linq;
 
-namespace Endpoint.Core.Models.Artifacts.Folders;
+namespace Endpoint.Core.Models.Artifacts.Folders.Strategies;
 
 public class FolderFactory : IFolderFactory
 {

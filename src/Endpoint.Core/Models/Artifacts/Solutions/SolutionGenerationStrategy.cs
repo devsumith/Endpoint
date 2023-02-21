@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts.Folders;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
 

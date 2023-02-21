@@ -5,6 +5,7 @@ using DotLiquid;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
+using Endpoint.Core.Models.Artifacts.Folders;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Syntax.Classes;

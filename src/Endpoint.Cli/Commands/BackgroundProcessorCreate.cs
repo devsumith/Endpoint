@@ -3,6 +3,7 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts.Folders;
 using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using Endpoint.Core.Models.Artifacts.Projects.Factories;
@@ -48,8 +49,6 @@ public class BackgroundProcessorCreateRequestHandler : IRequestHandler<Backgroun
         _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-
-
     }
 
     public async Task Handle(BackgroundProcessorCreateRequest request, CancellationToken cancellationToken)

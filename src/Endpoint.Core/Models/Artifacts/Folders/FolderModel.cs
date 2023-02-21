@@ -6,7 +6,7 @@ using Endpoint.Core.Models.Artifacts.Projects;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Endpoint.Core.Models.Artifacts.Solutions;
+namespace Endpoint.Core.Models.Artifacts.Folders;
 
 public class FolderModel
 {

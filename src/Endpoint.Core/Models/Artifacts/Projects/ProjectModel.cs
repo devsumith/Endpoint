@@ -2,8 +2,8 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Artifacts.Folders;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
-using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
 using System.IO;

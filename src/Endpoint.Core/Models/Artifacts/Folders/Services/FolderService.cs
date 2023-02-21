@@ -3,7 +3,7 @@
 
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Enums;
-using Endpoint.Core.Models.Artifacts.Solutions;
+using Endpoint.Core.Models.Artifacts.Folders.Strategies;
 using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Properties;
@@ -14,7 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Endpoint.Core.Models.Artifacts.Folders;
+namespace Endpoint.Core.Models.Artifacts.Folders.Services;
 
 public class FolderService : IFolderService
 {
