@@ -31,5 +31,10 @@ public class FolderArtifactGenerationStrategy : ArtifactGenerationStrategyBase<F
         {
             artifactGenerationStrategyFactory.CreateFor(fileModel, context);
         }
+
+        foreach(var folder in model.SubFolders)
+        {
+            artifactGenerationStrategyFactory.CreateFor(folder, context);
+        }
     }
 }

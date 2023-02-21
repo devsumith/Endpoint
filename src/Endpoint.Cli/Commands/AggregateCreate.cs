@@ -8,6 +8,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Models.Syntax.Entities.Aggregate;
+using Endpoint.Core.Models.Artifacts.Folders.Factories;
+using AutoMapper.Execution;
+using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Syntax.Classes;
+using System.Dynamic;
 
 namespace Endpoint.Cli.Commands;
 
@@ -33,23 +38,40 @@ public class AggregateCreateRequest : IRequest
 public class AggregateCreateRequestHandler : IRequestHandler<AggregateCreateRequest>
 {
     private readonly ILogger<AggregateCreateRequestHandler> _logger;
-    private readonly IAggregateService _aggregateService;
+    private readonly IFolderFactory _folderFactory;
+    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
 
     public AggregateCreateRequestHandler(
         ILogger<AggregateCreateRequestHandler> logger,
-        IAggregateService aggregateService
+        IFolderFactory folderFactory,
+        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _aggregateService = aggregateService ?? throw new ArgumentNullException(nameof(aggregateService));
+        _folderFactory = folderFactory ?? throw new ArgumentNullException(nameof(folderFactory));
+        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
     }
 
     public async Task Handle(AggregateCreateRequest request, CancellationToken cancellationToken)
     {
+
+        // Usings
+
+        // Update Db Context
+
         _logger.LogInformation("Handled: {0}", nameof(AggregateCreateRequestHandler));
 
-        await _aggregateService.Add(request.Name, request.Properties, request.Directory, request.MicroserviceName);
+        var model = _folderFactory.Aggregate(request.Name, request.Properties, request.Directory);
 
-
+        _artifactGenerationStrategyFactory.CreateFor(model,new AggregateCreateContext(model.Aggregate));
     }
+}
+
+public class AggregateCreateContext
+{
+    public AggregateCreateContext(ClassModel entity)
+    {
+        Entity = entity;
+    }
+    public ClassModel Entity { get; set; }
 }
