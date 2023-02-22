@@ -141,7 +141,8 @@ public class ProjectModelFactory : IProjectModelFactory
                     project.Files.Add(_fileModelFactory.CreateLinqExtensions(project.Directory));
                     project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Core.ConfigureServices", "ConfigureServices", project.Directory, "cs", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
 
-                    project.Packages.Add(new PackageModel("FluentValidation", "11.4.0"));
+                    project.Packages.Add(new PackageModel("FluentValidation", "11.5.1"));
+                    project.Packages.Add(new PackageModel("FluentValidation.DependencyInjectionExtensions", "11.5.1"));
                     project.Packages.Add(new PackageModel("MediatR", "12.0.0"));
                     project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.2"));
                     project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "7.0.2"));
