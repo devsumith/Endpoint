@@ -9,5 +9,6 @@ public static class ConfigureServices
     public static void AddCoreServices(this IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
     { 
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<I{{ serviceNamePascalCase }}DbContext>());
+        services.AddValidatorsFromAssemblyContaining<I{{ serviceNamePascalCase }}DbContext>();
     }
 }
