@@ -17,5 +17,6 @@ public interface IClassModelFactory
     ClassModel CreateHubModel(string name);
     InterfaceModel CreateHubInterfaceModel(string name);
     ClassModel CreateMessageProducerWorkerModel(string name, string directory);
+    Tuple<ClassModel, InterfaceModel> CreateClassAndInterface(string name);
 }
 

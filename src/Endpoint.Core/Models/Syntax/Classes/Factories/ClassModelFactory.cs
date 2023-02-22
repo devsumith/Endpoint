@@ -568,5 +568,16 @@ public class ClassModelFactory : IClassModelFactory
 
         return model;
     }
+
+    public Tuple<ClassModel, InterfaceModel> CreateClassAndInterface(string name)
+    {
+        var interfaceModel = new InterfaceModel($"I{name}");
+
+        var classModel = new ClassModel(name);
+
+        classModel.Implements.Add(new TypeModel(interfaceModel.Name));
+
+        return new Tuple<ClassModel, InterfaceModel>(classModel, interfaceModel);
+    }
 }
 

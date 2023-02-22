@@ -1,6 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Runtime.CompilerServices;
 using static System.Linq.Enumerable;
 
 namespace System;
@@ -30,6 +31,16 @@ public static class StringExtensions
         => collection.SingleOrDefault(x => x.EndsWith(name)) == null ?
             collection.SingleOrDefault(x => x.EndsWith($".{name}.txt"))
             : collection.SingleOrDefault(x => x.EndsWith(name));
+
+    public static Tuple<string,string> GetNameAndType(this string value)
+    {
+        var parts = value.Split(':');
+
+        if (parts.Length == 1)
+            return new Tuple<string, string>(value,string.Empty);
+
+        return new Tuple<string, string>(parts[0], parts[1]);
+    }
 
 }
 

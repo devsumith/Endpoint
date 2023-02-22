@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "aggregate-create -n User -p UserId:Guid -d C:\\projects\\WeddingBidders\\src\\WeddingBidders.Core\\AggregateModel",
+      "commandLineArgs": "class-and-interface-create -n OrderBuilder:IBuilder -d C:\\projects\\Foo",
       "environmentVariables": {
       }
     }
