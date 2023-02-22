@@ -171,7 +171,7 @@ public class ProjectModelFactory : IProjectModelFactory
                     project.DotNetProjectType = DotNetProjectType.ClassLib;
                     project.Folders.Add(new FolderModel("Data", project.Directory));
                     project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.ConfigureServices", "ConfigureServices", project.Directory, "cs", tokens: tokens));
-                    
+
                     project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.SeedData", "SeedData", Path.Combine(project.Directory, "Data"), "cs", tokens: new TokensBuilder()
                         .With("serviceName", serviceName)
                         .With("namespace", $"{serviceName}.Infrastructure.Data")
@@ -191,10 +191,10 @@ public class ProjectModelFactory : IProjectModelFactory
 
                     project.DotNetProjectType = DotNetProjectType.WebApi;
 
-                    project.Folders.Add(new ("Controllers", project.Directory));
+                    project.Folders.Add(new("Controllers", project.Directory));
 
                     project.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Infrastructure{Path.DirectorySeparatorChar}{serviceName}.Infrastructure.csproj");
-                    
+
                     project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Api.AppSettings", "appsettings", project.Directory, "json", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
 
                     project.Files.Add(_fileModelFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", project.Directory, tokens: new TokensBuilder()
@@ -404,10 +404,10 @@ public class ProjectModelFactory : IProjectModelFactory
     public ProjectModel CreateCore(string name, string directory)
         => CreateLibrary($"{name}.Core", directory, new() { Constants.ProjectType.Core });
 
-    public ProjectModel CreateInfrastructure(string name, string directory) 
+    public ProjectModel CreateInfrastructure(string name, string directory)
         => CreateLibrary($"{name}.Infrastructure", directory, new() { Constants.ProjectType.Infrastructure });
 
     public ProjectModel CreateApi(string name, string directory)
-        => CreateLibrary($"{name}.Api", directory, new() {  Constants.ProjectType.Api });
+        => CreateLibrary($"{name}.Api", directory, new() { Constants.ProjectType.Api });
 }
 

@@ -31,7 +31,7 @@ public class AngularWorkspaceArtifactGenerationStrategy : ArtifactGenerationStra
 
         _commandService.Start($"npm install @ngrx/component-store", Path.Combine(model.RootDirectory, model.Name));
 
-        _commandService.Start($"npm install @ngrx/component", Path.Combine(model.RootDirectory,model.Name));
+        _commandService.Start($"npm install @ngrx/component", Path.Combine(model.RootDirectory, model.Name));
 
     }
 }

@@ -14,7 +14,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-constants-create")]
-public class AngularConstantsCreateRequest : IRequest {
+public class AngularConstantsCreateRequest : IRequest
+{
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }

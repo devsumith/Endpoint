@@ -99,12 +99,12 @@ public class AngularService : IAngularService
         model.Imports.Add(new ImportModel()
         {
             Module = "rxjs",
-            Types = new () {  new("map"), new("of") }
+            Types = new() { new("map"), new("of") }
         });
 
         model.Body = new StringBuilder()
             .AppendLine($"return of(\"{name} works!\").pipe(")
-            .AppendLine("map(message => ({ message }))".Indent(1,2))
+            .AppendLine("map(message => ({ message }))".Indent(1, 2))
             .Append($");")
             .ToString();
 
@@ -264,9 +264,9 @@ public class AngularService : IAngularService
         _utlitityService.CopyrightAdd(model.RootDirectory);
 
 
-        
 
-        if(model.ProjectType == "library")
+
+        if (model.ProjectType == "library")
         {
             //TODO: Move to JSON Extensions
 
@@ -298,7 +298,7 @@ public class AngularService : IAngularService
 
             var libFolder = Path.Combine(model.Directory, "src", "lib");
 
-            foreach (var file in Directory.GetFiles(libFolder,"*.*"))
+            foreach (var file in Directory.GetFiles(libFolder, "*.*"))
             {
                 _fileSystem.Delete(file);
             }
@@ -307,9 +307,10 @@ public class AngularService : IAngularService
 
             IndexCreate(false, libFolder);
 
-            foreach(var line in _fileSystem.ReadAllLines(publicApiPath)) { 
-            
-                if(!line.StartsWith("export"))
+            foreach (var line in _fileSystem.ReadAllLines(publicApiPath))
+            {
+
+                if (!line.StartsWith("export"))
                 {
                     publicApiContent.Add(line);
                 }
@@ -691,8 +692,8 @@ public class AngularService : IAngularService
         var serviceName = "DashboardService";
 
         ClassModel classModel = _syntaxService.SolutionModel?.GetClass(name, serviceName); ;
-        
-        if(classModel == null)
+
+        if (classModel == null)
         {
             classModel = new ClassModel(name);
         }

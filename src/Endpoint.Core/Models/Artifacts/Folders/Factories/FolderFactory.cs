@@ -85,7 +85,7 @@ public class FolderFactory : IFolderFactory
 
         var typeScriptTypeModel = new TypeScriptTypeModel(modelNameSnakeCase);
 
-        foreach(var property in properties.Split(','))
+        foreach (var property in properties.Split(','))
         {
             var propertyName = _namingConventionConverter.Convert(NamingConvention.CamelCase, property.Split(':')[0]);
 
@@ -129,7 +129,7 @@ public class FolderFactory : IFolderFactory
 
         model.SubFolders.Add(AggregagteQueries(aggregateName, model.Directory));
 
-        
+
         var aggregateDto = aggregate.CreateDto();
 
         var extensions = new DtoExtensionsModel(_namingConventionConverter, $"{aggregate.Name}Extensions", aggregate);
@@ -144,10 +144,10 @@ public class FolderFactory : IFolderFactory
     }
 }
 
-public class AggregateFolderModel: FolderModel
+public class AggregateFolderModel : FolderModel
 {
     public AggregateFolderModel(ClassModel aggregate, string directory)
-        :base($"{aggregate.Name}Aggregate",directory)
+        : base($"{aggregate.Name}Aggregate", directory)
     {
         Aggregate = aggregate;
     }

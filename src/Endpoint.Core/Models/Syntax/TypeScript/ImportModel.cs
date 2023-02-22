@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.TypeScript;
 
-public class ImportModel {
+public class ImportModel
+{
 
     public ImportModel()
     {
@@ -19,7 +20,7 @@ public class ImportModel {
         Types = new List<TypeModel>
         {
             new TypeModel(type)
-        };            
+        };
     }
     public List<TypeModel> Types { get; set; }
     public string Module { get; set; }

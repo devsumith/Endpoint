@@ -17,7 +17,7 @@ public class FunctionSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Fun
     public FunctionSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         INamingConventionConverter namingConventionConverter,
-        ILogger<FunctionSyntaxGenerationStrategy> logger) 
+        ILogger<FunctionSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -30,11 +30,11 @@ public class FunctionSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Fun
 
         var builder = new StringBuilder();
 
-        foreach(var import in model.Imports)
+        foreach (var import in model.Imports)
         {
             builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(import));
 
-            if(import == model.Imports.Last())
+            if (import == model.Imports.Last())
             {
                 builder.AppendLine();
             }

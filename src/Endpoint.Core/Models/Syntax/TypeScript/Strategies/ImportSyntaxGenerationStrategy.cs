@@ -13,7 +13,7 @@ public class ImportSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Impor
     private readonly ILogger<ImportSyntaxGenerationStrategy> _logger;
     public ImportSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<ImportSyntaxGenerationStrategy> logger) 
+        ILogger<ImportSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

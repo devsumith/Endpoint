@@ -50,6 +50,5 @@ public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
 
         _artifactGenerationStrategyFactory.CreateFor(model);
 
-
     }
 }

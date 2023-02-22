@@ -15,8 +15,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("interface-create")]
-public class InterfaceCreateRequest : IRequest {
-    [Option('n',"name")]
+public class InterfaceCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -38,10 +39,10 @@ public class InterfaceCreateRequestHandler : IRequestHandler<InterfaceCreateRequ
     }
 
     public async Task Handle(InterfaceCreateRequest request, CancellationToken cancellationToken)
-    {        
+    {
         _logger.LogInformation("Handled: {0}", nameof(InterfaceCreateRequestHandler));
 
-        foreach(var name in request.Name.Split(','))
+        foreach (var name in request.Name.Split(','))
         {
             var model = new InterfaceModel(name);
 

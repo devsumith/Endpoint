@@ -69,6 +69,5 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
 
         _commandService.Start($"start {model.SolultionFileName}", model.SolutionDirectory);
 
-
     }
 }

@@ -47,8 +47,6 @@ public class GetById
                 .WithDomainNamespace($"{settings.DomainNamespace}")
                 .WithEntity(request.Entity)
                 .Build();
-
-
         }
     }
 }

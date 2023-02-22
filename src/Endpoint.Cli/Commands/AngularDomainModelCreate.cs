@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("angular-domain-model-create")]
-public class AngularDomainModelCreateRequest : IRequest {
-    [Option('n',"name")]
+public class AngularDomainModelCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -47,7 +48,7 @@ public class AngularDomainModelCreateRequestHandler : IRequestHandler<AngularDom
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularDomainModelCreateRequestHandler));
 
-        if(string.IsNullOrEmpty(request.Properties))
+        if (string.IsNullOrEmpty(request.Properties))
         {
             request.Properties = $"{request.Name}Id:string";
         }

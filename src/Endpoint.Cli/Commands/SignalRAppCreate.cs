@@ -135,7 +135,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         var projectModel = solutionModel.DefaultProject;
 
         var workerModel = _classModelFactory.CreateMessageProducerWorkerModel(request.Name, projectModel.Directory);
-        
+
         projectModel.Files.Add(new ObjectFileModel<ClassModel>(workerModel, workerModel.UsingDirectives, workerModel.Name, projectModel.Directory, "cs"));
 
         projectModel.Files.Add(new ObjectFileModel<ClassModel>(messageModel, messageModel.UsingDirectives, messageModel.Name, projectModel.Directory, "cs"));

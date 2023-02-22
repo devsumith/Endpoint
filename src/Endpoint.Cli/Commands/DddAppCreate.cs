@@ -29,8 +29,9 @@ using System.Threading.Tasks;
 namespace Endpoint.Cli.Commands;
 
 [Verb("ddd-app-create")]
-public class DddAppCreateRequest : IRequest {
-    [Option('n',"name")]
+public class DddAppCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('a', "aggregate")]
@@ -42,7 +43,7 @@ public class DddAppCreateRequest : IRequest {
     [Option("app-name")]
     public string ApplicationName { get; set; } = "app";
 
-    [Option('p',"prefix")]
+    [Option('p', "prefix")]
     public string Prefix { get; set; } = "app";
 
     [Option('d', Required = false)]
@@ -115,7 +116,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     private async Task<SolutionModel> CreateDddSolution(string name, string aggregateName, string properties, string directory)
     {
         var model = new SolutionModel(name, directory);
-       
+
         var sourceFolder = new FolderModel("src", model.SolutionDirectory);
 
         var core = _projectModelFactory.CreateCore(name, sourceFolder.Directory);
@@ -127,7 +128,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         sourceFolder.Projects.AddRange(new[] { core, infrastructure, api });
 
         model.Folders.Add(sourceFolder);
-        
+
         _artifactGenerationStrategyFactory.CreateFor(model);
 
         var aggregateModelDirectory = Path.Combine(core.Directory, "AggregateModel");

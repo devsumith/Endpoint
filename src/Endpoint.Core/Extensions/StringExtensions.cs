@@ -32,12 +32,12 @@ public static class StringExtensions
             collection.SingleOrDefault(x => x.EndsWith($".{name}.txt"))
             : collection.SingleOrDefault(x => x.EndsWith(name));
 
-    public static Tuple<string,string> GetNameAndType(this string value)
+    public static Tuple<string, string> GetNameAndType(this string value)
     {
         var parts = value.Split(':');
 
         if (parts.Length == 1)
-            return new Tuple<string, string>(value,string.Empty);
+            return new Tuple<string, string>(value, string.Empty);
 
         return new Tuple<string, string>(parts[0], parts[1]);
     }

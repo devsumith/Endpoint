@@ -19,8 +19,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("class-and-interface-create")]
-public class ClassAndInterfaceCreateRequest : IRequest {
-    [Option('n',"name")]
+public class ClassAndInterfaceCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -48,15 +49,15 @@ public class ClassAndInterfaceCreateRequestHandler : IRequestHandler<ClassAndInt
     {
         _logger.LogInformation("Handled: {0}", nameof(ClassAndInterfaceCreateRequestHandler));
 
-        foreach(var nameAndMaybeInterfaces in request.Name.Split(','))
+        foreach (var nameAndMaybeInterfaces in request.Name.Split(','))
         {
             var parts = nameAndMaybeInterfaces.Split(":");
             var name = parts[0];
             var interfaces = new List<TypeModel>();
 
-            if(parts.Length > 1)
+            if (parts.Length > 1)
             {
-                for(var i  = 1; i < parts.Length; i++)
+                for (var i = 1; i < parts.Length; i++)
                 {
                     interfaces.Add(new TypeModel(parts[i]));
                 }
@@ -64,7 +65,7 @@ public class ClassAndInterfaceCreateRequestHandler : IRequestHandler<ClassAndInt
 
             var (classModel, interfaceModel) = _classModelFactory.CreateClassAndInterface(name);
 
-            foreach(var @interface in interfaces)
+            foreach (var @interface in interfaces)
             {
                 interfaceModel.Implements.Add(@interface);
             }

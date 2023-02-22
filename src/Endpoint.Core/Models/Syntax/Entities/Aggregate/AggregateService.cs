@@ -55,7 +55,7 @@ public class AggregateService : IAggregateService
 
         EnsureCoreFilesAreAdded(directory);
 
-        if(string.IsNullOrEmpty(serviceName))
+        if (string.IsNullOrEmpty(serviceName))
         {
             var projectPath = _fileProvider.Get("*.csproj", directory);
 

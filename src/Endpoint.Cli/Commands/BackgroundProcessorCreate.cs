@@ -20,8 +20,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("background-processor-create")]
-public class BackgroundProcessorCreateRequest : IRequest {
-    [Option('n',"name")]
+public class BackgroundProcessorCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -63,7 +64,7 @@ public class BackgroundProcessorCreateRequestHandler : IRequestHandler<Backgroun
 
         var backgroundProcessor = new ProjectModel(DotNetProjectType.Worker, $"{request.Name}.BackgroundProcessor", src.Directory);
 
-        backgroundProcessor.References.Add(Path.Combine("..",core.Name,$"{core.Name}.csproj"));
+        backgroundProcessor.References.Add(Path.Combine("..", core.Name, $"{core.Name}.csproj"));
 
         src.Projects.Add(core);
 
