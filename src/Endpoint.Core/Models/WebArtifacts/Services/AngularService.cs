@@ -159,7 +159,7 @@ public class AngularService : IAngularService
     {
         var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", directory));
 
-        _commandService.Start("npm install -D jest jest-preset-angular @angular-builders/jest @types/jest", workspaceDirectory);
+        _commandService.Start("npm install -D jest@28.1.3 jest-preset-angular@12.2.6 @angular-builders/jest @types/jest", workspaceDirectory);
     }
 
     public void NgxTranslateAdd(string projectName, string directory)

@@ -376,9 +376,9 @@ public class ProjectModelFactory : IProjectModelFactory
         return model;
     }
 
-    public ProjectModel Create(string type, string name, string directory, List<string> references = null)
+    public ProjectModel Create(string type, string name, string directory, List<string> references = null, string metadata = null)
     {
-        var model = new ProjectModel(type, name, directory, references);
+        var model = CreateLibrary(name, directory, metadata?.Split(',').ToList());
 
         var parts = name.Split('.');
 

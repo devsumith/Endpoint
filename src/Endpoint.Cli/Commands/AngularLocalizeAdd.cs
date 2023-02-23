@@ -23,7 +23,6 @@ public class AngularLocalizeAddRequest : IRequest
     [Option('l', "locales")]
     public string Locales { get; set; } = "fr-CA";
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -46,7 +45,5 @@ public class AngularLocalizeAddRequestHandler : IRequestHandler<AngularLocalizeA
         _logger.LogInformation("Handled: {0}", nameof(AngularLocalizeAddRequestHandler));
 
         _angularService.LocalizeAdd(new AngularProjectReferenceModel(request.Name, request.Directory), request.Locales.Split(',').ToList());
-
-
     }
 }

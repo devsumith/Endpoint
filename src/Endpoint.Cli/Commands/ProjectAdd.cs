@@ -25,13 +25,16 @@ public class ProjectAddRequest : IRequest
     public string Name { get; set; }
 
     [Option('t')]
-    public string DotNetProjectType { get; set; }
+    public string DotNetProjectType { get; set; } = "classlib";
 
     [Option('f')]
     public string FolderName { get; set; }
 
     [Option('r')]
     public string References { get; set; }
+
+    [Option('m',"metadata")]
+    public string Metadata { get; set; }
 
 
     [Option('d', Required = false)]
@@ -74,7 +77,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
         var directory = string.IsNullOrEmpty(request.FolderName) ? request.Directory : $"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}";
 
-        var model = _projectModelFactory.Create(request.DotNetProjectType, request.Name, directory, request.References?.Split(',').ToList());
+        var model = _projectModelFactory.Create(request.DotNetProjectType, request.Name, directory, request.References?.Split(',').ToList(), request.Metadata);
 
         _projectService.AddProject(model);
 
