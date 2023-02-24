@@ -1,15 +1,16 @@
-﻿import { importProvidersFrom } from '@angular/core';
+﻿import { importProvidersFrom, inject } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { RouterModule } from '@angular/router';
-import { {{ namePascalCase }}HubConnectionGuard } from './app/{{ nameSnakeCase }}-hub-connection.guard';
-
+import { {{ namePascalCase }}HubClientService } from './app/{{ nameSnakeCase }}-hub-client.service';
 
 bootstrapApplication(AppComponent, {
   providers: [
+    { provide: 'BASE_URL', useValue: '{{ baseUrl }}' },
+    { provide: {{ namePascalCase }}HubClientService, useFactory: {{ namePascalCase }}HubClientService.create, deps:['BASE_URL'] },
     importProvidersFrom(
       RouterModule.forRoot([
-        { path: '', loadComponent: () => import('./app/{{ nameSnakeCase }}/{{ nameSnakeCase }}.component').then(m => m.{{ namePascalCase }}Component), canActivate: [{{ namePascalCase }}HubConnectionGuard]}
+        { path: '', loadComponent: () => import('./app/{{ nameSnakeCase }}/{{ nameSnakeCase }}.component').then(m => m.{{ namePascalCase }}Component), canActivate: [() => inject({{ namePascalCase }}HubClientService).connect$()] }
       ]),     
     )
   ]

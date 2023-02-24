@@ -164,19 +164,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         _commandService.Start($"ng g c {_namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}", appDirectory);
 
-        _commandService.Start($"ng g g {_namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}-hub-connection --interactive false", appDirectory);
-
         _commandService.Start("npm install @microsoft/signalr", Path.Combine(solutionModel.SrcDirectory, temporaryAppName));
-
-        var hubConnectionGuardFileModel = _fileModelFactory
-            .CreateTemplate(
-            "Guards.HubClientConnection.Guard",
-            $"{nameSnakeCase}-hub-connection.guard",
-            appDirectory,
-            "ts",
-            tokens: new TokensBuilder()
-            .With("name", request.Name)
-            .Build());
 
         var mainFileModel = _fileModelFactory
             .CreateTemplate(
@@ -185,6 +173,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src"),
             "ts",
             tokens: new TokensBuilder()
+            .With("baseUrl", projectModel.GetApplicationUrl(_fileSystem))
             .With("name", request.Name)
             .Build());
 
@@ -216,21 +205,30 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             appDirectory,
             "ts",
             tokens: new TokensBuilder()
-            .With("baseUrl", projectModel.GetApplicationUrl(_fileSystem))
             .With("name", request.Name)
             .Build());
 
-        var appHtmlFileModel = new ContentFileModel("<router-outlet></router-outlet>", "app.component", Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app"), "html");
+        var hubServiceSpecFileModel = _fileModelFactory
+            .CreateTemplate(
+            "Services.HubClientService.Spec",
+            $"{serviceName}.service.spec",
+            appDirectory,
+            "ts",
+            tokens: new TokensBuilder()
+            .With("name", request.Name)
+            .Build());
+
+        var appHtmlFileModel = new ContentFileModel("<router-outlet />", "app.component", Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app"), "html");
 
         _artifactGenerationStrategyFactory.CreateFor(mainFileModel);
-
-        _artifactGenerationStrategyFactory.CreateFor(hubConnectionGuardFileModel);
 
         _artifactGenerationStrategyFactory.CreateFor(componentTemplateFileModel);
 
         _artifactGenerationStrategyFactory.CreateFor(componentFileModel);
 
         _artifactGenerationStrategyFactory.CreateFor(hubServiceFileModel);
+
+        _artifactGenerationStrategyFactory.CreateFor(hubServiceSpecFileModel);
 
         _artifactGenerationStrategyFactory.CreateFor(appHtmlFileModel);
 

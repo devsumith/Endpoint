@@ -380,6 +380,16 @@ public class ProjectModelFactory : IProjectModelFactory
     {
         var model = CreateLibrary(name, directory, metadata?.Split(',').ToList());
 
+        model.DotNetProjectType = type switch
+        {
+            "web" => DotNetProjectType.Web,
+            "webapi" => DotNetProjectType.WebApi,
+            "classlib" => DotNetProjectType.ClassLib,
+            "worker" => DotNetProjectType.Worker,
+            "xunit" => DotNetProjectType.XUnit,
+            _ => DotNetProjectType.Console
+        };
+
         var parts = name.Split('.');
 
         var layer = parts.Length > 1 ? parts.Last() : name;

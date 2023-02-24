@@ -1,0 +1,50 @@
+﻿import { HubConnection } from '@microsoft/signalr';
+import { {{ namePascalCase }}HubClientService } from './{{ nameSnakeCase }}-hub-client.service';
+
+export class MockHubConnection {
+    
+  public on(methodName:string, newMethod:{(...args:any[]):void}) {
+      this.onCalled = true;
+      return Promise.resolve();
+  }
+
+  public invoke(methodName:string, newMethod:{(...args:any[]):void}) {
+    this.onCalled = true;
+    return Promise.resolve();
+  }
+
+  public start() {
+      this.startCalled = true;
+      return Promise.resolve();
+  }
+
+  public onreconnected(callback:{(connectionId:string | undefined):void }) {
+
+  }
+
+  public startCalled = false;
+  public onCalled = false;
+  public invokeCalled = false;
+  public onreconnectedCalled = false;
+  
+}
+
+describe('{{ namePascalCase }}HubClientService', () => {
+  let service: {{ namePascalCase }}HubClientService;
+  let hubConnection: MockHubConnection = new MockHubConnection();
+
+  beforeEach(() => {
+    service = new {{ namePascalCase }}HubClientService(hubConnection as unknown as HubConnection);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  it('should be call on and start', () => {
+    service.connect$().subscribe();    
+    expect(hubConnection.onCalled).toBeTruthy();
+    expect(hubConnection.startCalled).toBeTruthy();
+  });
+
+});
