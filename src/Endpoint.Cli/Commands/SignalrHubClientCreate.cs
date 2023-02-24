@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Endpoint.Core.Services;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Models.Artifacts.Files;
 
 namespace Endpoint.Cli.Commands;
 
@@ -52,11 +53,15 @@ public class SignalRHubClientCreateRequestHandler : IRequestHandler<SignalRHubCl
 
         _logger.LogInformation("Handled: {0}", nameof(SignalRHubClientCreateRequestHandler));
 
-        _commandService.Start($"ng g s {nameSnakeCase}-hub-client");
+        var tokens = new TokensBuilder().With("name", request.Name).Build();
 
-        var model = _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Service", $"{nameSnakeCase}-hub-client.service", request.Directory, "ts");
-
-        _artifactGenerationStrategyFactory.CreateFor(model);
-
+        foreach(var model in new FileModel[]
+        {
+            _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Service", $"{nameSnakeCase}-hub-client.service", request.Directory, "ts", tokens: tokens),
+            _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Spec", $"{nameSnakeCase}-hub-client.service.spec", request.Directory, "ts", tokens: tokens)
+        })
+        {
+            _artifactGenerationStrategyFactory.CreateFor(model);
+        }        
     }
 }

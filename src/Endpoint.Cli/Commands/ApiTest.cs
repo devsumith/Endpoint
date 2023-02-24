@@ -16,7 +16,7 @@ public class ApiTest
     [Verb("api-test")]
     public class Request : IRequest
     {
-        [Value(0)]
+        [Option('n',"name")]
         public string EntityName { get; set; }
 
         [Option('d', Required = false)]
