@@ -31,6 +31,11 @@ public class AddArrangeActAssertFileCreatedHandler : INotificationHandler<FileCr
 
     public async Task Handle(FileCreated notification, CancellationToken cancellationToken)
     {
+        //
+        //TODO: fix this later
+
+        return;
+
         if (!notification.Path.EndsWith("spec.ts"))
             return;
 

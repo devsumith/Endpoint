@@ -129,6 +129,8 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var security = _projectModelFactory.CreateSecurityProject(buildingBlocksFolder.Directory);
 
+        var validation = _projectModelFactory.CreateValidationProject(buildingBlocksFolder.Directory);
+
         buildingBlocksFolder.Projects.Add(messaging);
 
         buildingBlocksFolder.Projects.Add(messagingUdp);
@@ -136,6 +138,8 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         buildingBlocksFolder.Projects.Add(security);
 
         buildingBlocksFolder.Projects.Add(kernal);
+
+        buildingBlocksFolder.Projects.Add(validation);
 
         var core = _projectModelFactory.CreateCore(name, sourceFolder.Directory);
 

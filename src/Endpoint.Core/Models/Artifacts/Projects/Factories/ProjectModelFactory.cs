@@ -303,6 +303,8 @@ public class ProjectModelFactory : IProjectModelFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Validation", directory);
 
+
+
         return model;
     }
 

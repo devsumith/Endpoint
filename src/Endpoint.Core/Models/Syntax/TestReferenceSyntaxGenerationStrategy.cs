@@ -23,8 +23,9 @@ public class TestReferenceSyntaxGenerationStrategy : SyntaxGenerationStrategyBas
         _logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
-
-        builder.AppendLine("// Test ID".Indent(2, 2));
+        // TODO: Fix later
+        //builder.AppendLine("// Test ID".Indent(2, 2));
+        
         return builder.ToString();
     }
 }
