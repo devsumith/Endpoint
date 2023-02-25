@@ -121,7 +121,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder.Directory);
 
-        var kernal = _projectModelFactory.CreateKernal(buildingBlocksFolder.Directory);
+        var kernal = _projectModelFactory.CreateKernelProject(buildingBlocksFolder.Directory);
 
         var messaging = _projectModelFactory.CreateMessagingProject(buildingBlocksFolder.Directory);
 
