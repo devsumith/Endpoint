@@ -1,13 +1,11 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using DotLiquid;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Folders;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
-using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Entities;
@@ -15,12 +13,9 @@ using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
-using Newtonsoft.Json.Linq;
-using SimpleNLG.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace Endpoint.Core.Models.Artifacts.Projects.Factories;
 
@@ -343,35 +338,35 @@ public class ProjectModelFactory : IProjectModelFactory
 
         model.Packages.Add(new PackageModel { Name = "System.IdentityModel.Tokens.Jwt", Version = "6.25.1" });
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("AccessRight", "AccessRight", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.AccessRight", "AccessRight", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("Authentication", "Authentication", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Authentication", "Authentication", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("AuthorizationHeaderParameterOperationFilter", "AuthorizationHeaderParameterOperationFilter", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.AuthorizationHeaderParameterOperationFilter", "AuthorizationHeaderParameterOperationFilter", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("AuthorizeResourceOperationAttribute", "AuthorizeResourceOperationAttribute", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.AuthorizeResourceOperationAttribute", "AuthorizeResourceOperationAttribute", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("ConfigureServices", "ConfigureServices", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.ConfigureServices", "ConfigureServices", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("IPasswordHasher", "IPasswordHasher", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.IPasswordHasher", "IPasswordHasher", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("ITokenBuilder", "ITokenBuilder", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.ITokenBuilder", "ITokenBuilder", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("ITokenProvider", "ITokenProvider", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.ITokenProvider", "ITokenProvider", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("Operations", "Operations", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Operations", "Operations", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("PasswordHasher", "PasswordHasher", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.PasswordHasher", "PasswordHasher", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("ResourceOperationAuthorizationBehavior", "ResourceOperationAuthorizationBehavior", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.ResourceOperationAuthorizationBehavior", "ResourceOperationAuthorizationBehavior", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("ResourceOperationAuthorizationHandler", "ResourceOperationAuthorizationHandler", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.ResourceOperationAuthorizationHandler", "ResourceOperationAuthorizationHandler", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("SecurityConstants", "SecurityConstants", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.SecurityConstants", "SecurityConstants", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("TokenBuilder", "TokenBuilder", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.TokenBuilder", "TokenBuilder", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("TokenProvider", "TokenProvider", model.Directory));
+        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.TokenProvider", "TokenProvider", model.Directory));
 
         return model;
     }
@@ -420,5 +415,22 @@ public class ProjectModelFactory : IProjectModelFactory
 
     public ProjectModel CreateApi(string name, string directory)
         => CreateLibrary($"{name}.Api", directory, new() { Constants.ProjectType.Api });
+
+    public ProjectModel CreateKernal(string directory)
+    {
+        var model = new ProjectModel("Kernel", directory);
+
+        model.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "7.0.2"));
+
+        var responseBaseFileModel = _fileModelFactory.CreateTemplate("ResponseBase", "ResponseBase", model.Directory);
+
+        var entityFrameworFileModel = _fileModelFactory.CreateTemplate("EntityFrameworkCoreExtensions", "EntityFrameworkCoreExtensions", model.Directory);
+
+        model.Files.Add(responseBaseFileModel);
+
+        model.Files.Add(entityFrameworFileModel);
+
+        return model;
+    }
 }
 

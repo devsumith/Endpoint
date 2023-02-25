@@ -119,6 +119,24 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var sourceFolder = new FolderModel("src", model.SolutionDirectory);
 
+        var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder.Directory);
+
+        var kernal = _projectModelFactory.CreateKernal(buildingBlocksFolder.Directory);
+
+        var messaging = _projectModelFactory.CreateMessagingProject(buildingBlocksFolder.Directory);
+
+        var messagingUdp = _projectModelFactory.CreateMessagingUdpProject(buildingBlocksFolder.Directory);
+
+        var security = _projectModelFactory.CreateSecurityProject(buildingBlocksFolder.Directory);
+
+        buildingBlocksFolder.Projects.Add(messaging);
+
+        buildingBlocksFolder.Projects.Add(messagingUdp);
+
+        buildingBlocksFolder.Projects.Add(security);
+
+        buildingBlocksFolder.Projects.Add(kernal);
+
         var core = _projectModelFactory.CreateCore(name, sourceFolder.Directory);
 
         var infrastructure = _projectModelFactory.CreateInfrastructure(name, sourceFolder.Directory);
@@ -128,6 +146,8 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         sourceFolder.Projects.AddRange(new[] { core, infrastructure, api });
 
         model.Folders.Add(sourceFolder);
+
+        model.Folders.Add(buildingBlocksFolder);
 
         _artifactGenerationStrategyFactory.CreateFor(model);
 

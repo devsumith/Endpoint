@@ -51,6 +51,8 @@
     <None Remove="Templates\Api\DefaultConfigureServices.txt" />
     <None Remove="Templates\Api\DefaultProgram.txt" />
     <None Remove="Templates\ArtifactGenerationStrategy.txt" />
+    <None Remove="Templates\BuildingBlocks\Kernel\EntityFrameworkCoreExtensions.txt" />
+    <None Remove="Templates\BuildingBlocks\Kernel\ResponseBase.txt" />
     <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\ConfigureServices.txt" />
     <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\IUdpClientFactory.txt" />
     <None Remove="Templates\BuildingBlocks\Messaging\Messaging.Udp\MessagingClient.txt" />
@@ -159,6 +161,8 @@
     <EmbeddedResource Include="Templates\Api\WebApplicationBuilder.txt" />
     <EmbeddedResource Include="Templates\Api\WebApplication.txt" />
     <EmbeddedResource Include="Templates\Application\Dto.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Kernel\EntityFrameworkCoreExtensions.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\Kernel\ResponseBase.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging.Udp\ConfigureServices.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging.Udp\IUdpClientFactory.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\Messaging\Messaging.Udp\MessagingClient.txt" />

@@ -26,5 +26,7 @@ public interface IProjectModelFactory
     ProjectModel CreateCore(string name, string directory);
     ProjectModel CreateInfrastructure(string name, string directory);
     ProjectModel CreateApi(string name, string directory);
+    ProjectModel CreateKernal(string directory);
+
 }
 
