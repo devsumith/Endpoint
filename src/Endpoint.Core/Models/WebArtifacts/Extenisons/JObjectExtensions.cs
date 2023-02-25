@@ -1,13 +1,25 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Endpoint.Core.Models.Syntax.Angular;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Newtonsoft.Json.Linq;
 
 public static class JObjectExtensions
 {
+    public static void AddServeConfiguration(this JObject jObject, string projectName, List<FileReplacementModel> fileReplacements)
+    {
+
+    }
+
+    public static void AddBuildConfiguration(this JObject jObject, string projectName, List<FileReplacementModel> fileReplacements)
+    {
+
+    }
+
     public static void ExportsAssetsAndStyles(this JObject jObject)
     {
         jObject["assets"] = new JArray("./scss/*.*", "./assets/**/*.*");
@@ -80,7 +92,6 @@ public static class JObjectExtensions
         scripts.RemoveAll();
     }
 
-
     public static void AddOrUpdate(this JObject jObject, string key, JToken value)
     {
         if (jObject[key] != null)
@@ -93,6 +104,7 @@ public static class JObjectExtensions
         }
 
     }
+    
     public static void AddSupportedLocales(this JObject jObject, string projectName, List<string> locales = null)
     {
         var localesObject = new JObject();
@@ -117,7 +129,7 @@ public static class JObjectExtensions
 
         buildOptions.AddOrUpdate("localize", new JArray(locales));
     }
-
+    
     public static List<string> GetSupportedLocales(this JObject jObject, string projectName)
     {
         var jArray = jObject["projects"][projectName]["architect"]["build"]["options"]["localize"] as JArray;
