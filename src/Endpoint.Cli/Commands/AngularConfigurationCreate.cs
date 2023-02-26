@@ -7,7 +7,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-
+using Endpoint.Core.Models.WebArtifacts.Services;
+using Endpoint.Core.Models.WebArtifacts;
 
 namespace Endpoint.Cli.Commands;
 
@@ -27,14 +28,20 @@ public class AngularConfigurationCreateRequest : IRequest {
 public class AngularConfigurationCreateRequestHandler : IRequestHandler<AngularConfigurationCreateRequest>
 {
     private readonly ILogger<AngularConfigurationCreateRequestHandler> _logger;
+    private readonly IAngularService _angularService;
 
-    public AngularConfigurationCreateRequestHandler(ILogger<AngularConfigurationCreateRequestHandler> logger)
+    public AngularConfigurationCreateRequestHandler(
+        ILogger<AngularConfigurationCreateRequestHandler> logger,
+        IAngularService angularService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
     public async Task Handle(AngularConfigurationCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularConfigurationCreateRequestHandler));
+
+        _angularService.AddBuildConfiguration(request.Name, new AngularProjectReferenceModel(request.Project, request.Directory));
     }
 }

@@ -8,6 +8,7 @@ using Endpoint.Core.Messages;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Models.Syntax.Angular;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
@@ -60,6 +61,24 @@ public class AngularService : IAngularService
         _utlitityService = utlitityService ?? throw new ArgumentNullException(nameof(utlitityService));
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+    }
+
+    public void AddBuildConfiguration(string configurationName, AngularProjectReferenceModel model)
+    {
+        var fileReplacements = new List<FileReplacementModel>();
+
+        var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", model.ReferencedDirectory));
+
+        var jsonPath = $"{workspaceDirectory}{Path.DirectorySeparatorChar}angular.json";
+
+        var json = JObject.Parse(_fileSystem.ReadAllText(jsonPath));
+
+        json.AddBuildConfiguration(configurationName, model.Name, fileReplacements);
+
+        _fileSystem.WriteAllText(jsonPath, JsonConvert.SerializeObject(json, Formatting.Indented));
+
+        _commandService.Start($"ng generate environments --project {model.Name}", workspaceDirectory);
+
     }
 
     public void ComponentCreate(string name, string directory)

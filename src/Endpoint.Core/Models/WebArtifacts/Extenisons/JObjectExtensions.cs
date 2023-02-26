@@ -4,20 +4,32 @@
 using Endpoint.Core.Models.Syntax.Angular;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Newtonsoft.Json.Linq;
 
 public static class JObjectExtensions
 {
-    public static void AddServeConfiguration(this JObject jObject, string projectName, List<FileReplacementModel> fileReplacements)
+    public static void AddBuildConfiguration(this JObject jObject, string configurationName, string projectName, List<FileReplacementModel> fileReplacements)
     {
 
-    }
+        var configurationObject = new JObject();
 
-    public static void AddBuildConfiguration(this JObject jObject, string projectName, List<FileReplacementModel> fileReplacements)
-    {
+        var fileReplacementArray = new JArray();
 
+        foreach (var entry in fileReplacements)
+        {
+            var fileReplacementEntry = new JObject();
+
+            fileReplacementEntry["replace"] = entry.Replace;
+
+            fileReplacementEntry["with"] = entry.With;
+
+            fileReplacementArray.Add(fileReplacementEntry);
+        }
+
+        configurationObject["fileReplacements"] = fileReplacementArray;
+
+        jObject["projects"][projectName]["architect"]["build"]["configurations"][configurationName] = configurationObject;
     }
 
     public static void ExportsAssetsAndStyles(this JObject jObject)

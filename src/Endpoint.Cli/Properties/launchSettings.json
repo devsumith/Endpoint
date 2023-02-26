@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "project-add -n YetAnotherToDoApp.Core -m Core -d C:\\projects\\YetAnotherToDoApp\\src",
+      "commandLineArgs": "angular-configuration-create -n noir -p app -d C:\\projects\\AntMan",
       "environmentVariables": {
       }
     }
