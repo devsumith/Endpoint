@@ -1,0 +1,41 @@
+﻿.{{ prefixSnakeCase }}-body .{{ prefixSnakeCase }}-dialog-panel {
+
+  .{{ prefixSnakeCase }}-dialog-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    place-items: center start;
+    box-sizing: border-box;
+    padding: 0px 30px;
+
+    .{{ prefixSnakeCase }}-dialog-heading {
+      padding:0;
+      margin: 0;
+    }
+  }
+
+  .{{ prefixSnakeCase }}-dialog-content {
+    display: block;
+    box-sizing: border-box;
+  }
+
+  .{{ prefixSnakeCase }}-dialog-footer {
+
+  }
+
+  .mat-dialog-container {
+    margin:0;
+    padding:0;
+
+    max-height: calc(100vh - 60px);
+
+    > * {
+      display: grid;
+      max-height: calc(100vh - 60px);
+      grid-template-rows: auto 1fr minmax(0,auto);      
+      .{{ prefixSnakeCase }}-dialog-content {
+        overflow-y: auto;
+      }
+    }
+  }
+
+}

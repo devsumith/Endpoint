@@ -1,0 +1,31 @@
+﻿<ng-container *ngIf="vm$ | async as vm">
+	
+    <div class="{{ prefixSnakeCase }}-dialog-header">
+
+        <h1 class="g-dialog-heading">Dialog</h1>
+    
+        <button mat-icon-button mat-dialog-close tabindex="-1">
+          <mat-icon>
+            close
+          </mat-icon>
+        </button>
+
+    </div>
+
+    <div class="{{ prefixSnakeCase }}-dialog-content">
+
+    </div>
+
+    <div class="{{ prefixSnakeCase }}-dialog-footer">
+
+        <div class="{{ prefixSnakeCase }}-actions">
+
+            <button mat-stroked-button mat-dialog-close="" class="{{ prefixSnakeCase }}-stroked-button">Cancel</button>
+
+            <button mat-raised-button (click)="save(form.value)" class="{{ prefixSnakeCase }}-stroked-button">Save</button>
+
+        </div>
+        
+    </div>
+
+</ng-container>

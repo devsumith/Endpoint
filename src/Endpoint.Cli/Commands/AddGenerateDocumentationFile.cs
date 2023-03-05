@@ -38,8 +38,5 @@ public class GenerateDocumentationFileAddRequestHandler : IRequestHandler<Genera
         var apiCsProjPath = $"{settings.ApiDirectory}{Path.DirectorySeparatorChar}{settings.ApiNamespace}.csproj";
 
         _apiProjectFilesGenerationStrategy.AddGenerateDocumentationFile(apiCsProjPath);
-
-
     }
 }
-

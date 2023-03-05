@@ -42,9 +42,6 @@ public class AddResource
             var options = TinyMapper.Map<AddResourceOptions>(request);
 
             AdditionalResourceGenerator.Generate(options, _factory);
-
-
         }
     }
 }
-

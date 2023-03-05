@@ -57,11 +57,11 @@ public class Observable<T> : IObservable<T>
     {
         lock (_lock)
         {
-            var newList = new List<Subscription>(_subscriptions);
-            var subscr = new Subscription() { Observable = this, Observer = observer };
-            newList.Add(subscr);
-            Interlocked.Exchange(ref _subscriptions, newList);
-            return subscr;
+            var subscriptions = new List<Subscription>(_subscriptions);
+            var subscription = new Subscription() { Observable = this, Observer = observer };
+            subscriptions.Add(subscription);
+            Interlocked.Exchange(ref _subscriptions, subscriptions);
+            return subscription;
         }
     }
 
@@ -69,12 +69,12 @@ public class Observable<T> : IObservable<T>
     {
         lock (_lock)
         {
-            var newList = new List<Subscription>(_subscriptions);
-            var subscr = newList.FirstOrDefault(s => s.Observer == observer);
-            if (subscr != null)
+            var subscriptions = new List<Subscription>(_subscriptions);
+            var subscription = subscriptions.FirstOrDefault(s => s.Observer == observer);
+            if (subscription != null)
             {
-                newList.Remove(subscr);
-                Interlocked.Exchange(ref _subscriptions, newList);
+                subscriptions.Remove(subscription);
+                Interlocked.Exchange(ref _subscriptions, subscriptions);
             }
         }
     }

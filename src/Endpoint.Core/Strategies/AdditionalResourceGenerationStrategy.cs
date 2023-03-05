@@ -24,11 +24,11 @@ public class AdditionalResourceGenerationStrategy : IAdditionalResourceGeneratio
         ISettingsProvider settingsProvider,
         IFileSystem fileSystem)
     {
-        _applicationFileService = applicationFileService;
-        _infrastructureFileService = infrastructureFileService;
-        _apiFileService = apiFileService;
-        _settingsProvider = settingsProvider;
-        _fileSystem = fileSystem;
+        _applicationFileService = applicationFileService ?? throw new ArgumentNullException(nameof(applicationFileService));
+        _infrastructureFileService = infrastructureFileService ?? throw new ArgumentNullException(nameof(infrastructureFileService));
+        _apiFileService = apiFileService ?? throw new ArgumentNullException($"{nameof(apiFileService)}");
+        _settingsProvider = settingsProvider ?? throw new ArgumentNullException(nameof(settingsProvider));
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
     public int Order => 0;
