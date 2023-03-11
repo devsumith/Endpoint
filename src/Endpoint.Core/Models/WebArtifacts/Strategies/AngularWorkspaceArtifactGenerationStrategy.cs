@@ -27,7 +27,11 @@ public class AngularWorkspaceArtifactGenerationStrategy : ArtifactGenerationStra
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
-        _commandService.Start($"npx -p @angular/cli@15.0.0 ng new {model.Name} --no-create-application", model.RootDirectory);
+        _commandService.Start($"npm uninstall @angular/cli -g", model.RootDirectory);
+
+        _commandService.Start($"npm install @angular/cli -g", model.RootDirectory);
+
+        _commandService.Start($"ng new {model.Name} --no-create-application", model.RootDirectory);
 
         _commandService.Start($"npm install @ngrx/component-store --force", Path.Combine(model.RootDirectory, model.Name));
 
