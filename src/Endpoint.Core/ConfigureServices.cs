@@ -53,7 +53,6 @@ using Endpoint.Core.Strategies.Files.Create;
 using Endpoint.Core.Strategies.Solutions.Crerate;
 using Endpoint.Core.Strategies.Solutions.Update;
 using Endpoint.Core.Strategies.WorkspaceSettingss.Update;
-using MediatR;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -61,6 +60,10 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
+        services.AddSingleton<ISyntaxGenerationStrategy, RequestValidatorSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, RequestSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, ResponseSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, RuleForSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, TypeScriptTypeSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, ImportSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, FunctionSyntaxGenerationStrategy>();

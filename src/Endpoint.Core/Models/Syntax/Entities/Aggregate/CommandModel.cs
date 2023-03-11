@@ -9,13 +9,14 @@ using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Services;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.Entities.Aggregate;
 
 public class CommandModel : CqrsBase
 {
-    public CommandModel(string microserviceName, ClassModel entity, RouteType routeType = default, string name = null)
+    public CommandModel(string microserviceName, ClassModel entity, INamingConventionConverter namingConventionConverter, RouteType routeType = default, string name = null)
     {
         Name = name ?? routeType switch
         {
@@ -25,17 +26,9 @@ public class CommandModel : CqrsBase
             _ => throw new NotSupportedException()
         };
 
-        Request = new ClassModel($"{Name}Request");
+        Request = new RequestModel(entity, routeType, namingConventionConverter);
 
-        RequestValidator = new ClassModel($"{Name}RequestValidator");
-
-        RequestValidator.Implements.Add(new TypeModel("AbstractValidator")
-        {
-            GenericTypeParameters = new List<TypeModel>()
-            {
-                new TypeModel(Request.Name) {}
-            }
-        });
+        RequestValidator = new RequestValidatorModel(Request);
 
         Response = new ClassModel($"{Name}Response")
         {

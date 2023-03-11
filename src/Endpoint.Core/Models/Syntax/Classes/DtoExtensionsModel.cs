@@ -31,7 +31,6 @@ public class DtoExtensionsModel : ClassModel
 
         toDtoMethodBodyBuilder.AppendLine("};");
 
-
         Methods.Add(new MethodModel()
         {
             Name = "ToDto",

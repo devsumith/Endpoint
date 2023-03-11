@@ -13,7 +13,7 @@ public class RouteHandlerModel
     public string DbContextName { get; private set; }
     public EntityModel Entity { get; private set; }
     public RouteType Type { get; private set; }
-    public List<ProducesModel> Produces { get; private set; }
+    public List<ProducesAttributeModel> Produces { get; private set; }
 
     public RouteHandlerModel(string name, string pattern, string dbContextName, EntityModel entity, RouteType routeHandlerType)
     {
@@ -22,7 +22,7 @@ public class RouteHandlerModel
         DbContextName = dbContextName;
         Entity = entity;
         Type = routeHandlerType;
-        Produces = new List<ProducesModel>();
+        Produces = new List<ProducesAttributeModel>();
     }
 
 }

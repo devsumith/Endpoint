@@ -53,7 +53,8 @@ public class FolderFactory : IFolderFactory
 
         foreach (var routeType in new RouteType[] { RouteType.Create, RouteType.Delete, RouteType.Update })
         {
-            var command = new CommandModel(microserviceName, new ClassModel(aggregateName), routeType);
+            //TODO: build command and subclasses fully here. Class factory
+            var command = new CommandModel(microserviceName, new ClassModel(aggregateName), _namingConventionConverter, routeType);
 
             model.Files.Add(new ObjectFileModel<CommandModel>(command, command.UsingDirectives, command.Name, model.Directory, "cs"));
         }

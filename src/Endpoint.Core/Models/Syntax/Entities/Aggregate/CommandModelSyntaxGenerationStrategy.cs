@@ -15,15 +15,15 @@ public class CommandModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
     {
         var builder = new StringBuilder();
 
-        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.RequestValidator));
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.RequestValidator, context));
 
         builder.AppendLine("");
 
-        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Request));
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Request, context));
 
         builder.AppendLine("");
 
-        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Response));
+        builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(model.Response, context));
 
         builder.AppendLine("");
 

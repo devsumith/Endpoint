@@ -100,7 +100,7 @@ public class AggregateService : IAggregateService
 
         var classModel = _syntaxService.SolutionModel?.GetClass(aggregate, serviceName);
 
-        var commandModel = new CommandModel(serviceName, classModel, name: name);
+        var commandModel = new CommandModel(serviceName, classModel, _namingConventionConverter, name: name);
 
         var model = new ObjectFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, "cs");
 

@@ -42,7 +42,7 @@ public class PropertyModel
         return new PropertyModel(null, default, new TypeModel(type), name, null);
     }
 
-    public PropertyModel(TypeDeclarationModel parent, AccessModifier accessModifier, TypeModel type, string name, List<PropertyAccessorModel> accessors, bool required = true, bool key = false)
+    public PropertyModel(TypeDeclarationModel parent, AccessModifier accessModifier, TypeModel type, string name, List<PropertyAccessorModel> accessors, bool required = false, bool key = false)
     {
         AccessModifier = accessModifier;
         Type = type;

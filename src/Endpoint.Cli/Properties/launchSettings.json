@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "angular-configuration-create -n noir -p app -d C:\\projects\\AntMan",
+      "commandLineArgs": "aggregate-create -n User -p UserId:Guid,Username:string -d C:\\projects\\Contently\\src\\Services\\ContentService\\ContentService.Core\\AggregateModel",
       "environmentVariables": {
       }
     }

@@ -146,7 +146,7 @@ public class ClassModelFactory : IClassModelFactory
                     Name = "HttpGet",
                     Template = "\"{" + entityIdNameCamelCase + ":guid}\"",
                     Properties = new Dictionary<string, string>() {
-                    { "Name", $"get{entityIdNamePascalCase}ById" }
+                    { "Name", $"get{entityNamePascalCase}ById" }
                 }
                 });
 
