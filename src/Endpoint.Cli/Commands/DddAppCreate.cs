@@ -42,7 +42,7 @@ public class DddAppCreateRequest : IRequest
     public string ApplicationName { get; set; } = "app";
 
     [Option('v', "version")]
-    public string Version { get; set; } = "15.0.0";
+    public string Version { get; set; } = "latest";
 
     [Option('p', "prefix")]
     public string Prefix { get; set; } = "app";

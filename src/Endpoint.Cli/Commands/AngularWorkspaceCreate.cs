@@ -31,7 +31,7 @@ internal class AngularWorkspaceCreateRequest : IRequest
     public bool Force { get; set; }
 
     [Option('v', "version")]
-    public string Version { get; set; } = "15.0.0";
+    public string Version { get; set; } = "latest";
 
     [Option('d', "directory")]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;

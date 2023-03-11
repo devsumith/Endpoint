@@ -68,34 +68,16 @@ public class ClassModelFactory : IClassModelFactory
 
         classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.Consumes, Name = nameof(AttributeType.Consumes), Template = "MediaTypeNames.Application.Json" });
 
-        classModel.Fields.Add(new FieldModel()
-        {
-            Type = new TypeModel("IMediator"),
-            Name = "_mediator"
+        classModel.Fields.Add(FieldModel.Mediator);
 
-        });
-
-        classModel.Fields.Add(new FieldModel()
-        {
-            Type = TypeModel.LoggerOf(classModel.Name),
-            Name = "_logger"
-        });
+        classModel.Fields.Add(FieldModel.LoggerOf(classModel.Name));
 
         classModel.Constructors.Add(new Constructors.ConstructorModel(classModel, classModel.Name)
         {
-            Params = new List<ParamModel>()
+            Params = new ()
             {
-                new ParamModel()
-                {
-                    Type = new TypeModel("IMediator"),
-                    Name = "mediator"
-
-                },
-                new ParamModel()
-                {
-                    Type = TypeModel.LoggerOf(classModel.Name),
-                    Name = "logger"
-                }
+                ParamModel.Mediator,
+                ParamModel.LoggerOf(classModel.Name)
             }
         });
 
@@ -120,11 +102,7 @@ public class ClassModelFactory : IClassModelFactory
             AccessModifier = AccessModifier.Public
         };
 
-        var cancellationTokenParam = new ParamModel()
-        {
-            Type = new TypeModel("CancellationToken"),
-            Name = "cancellationToken"
-        };
+        var cancellationTokenParam = ParamModel.CancellationToken;
 
         var entityNameCamelCase = _namingConventionConverter.Convert(NamingConvention.CamelCase, model.Name);
 
@@ -161,7 +139,7 @@ public class ClassModelFactory : IClassModelFactory
         {
             case RouteType.GetById:
 
-                methodModel.Attributes.Add(new SwaggerOperationAttributeModel($"Get {entityIdNamePascalCase}  by id", $"Get {entityIdNamePascalCase} by id"));
+                methodModel.Attributes.Add(new SwaggerOperationAttributeModel($"Get {entityNamePascalCase} by id", $"Get {entityNamePascalCase} by id"));
 
                 methodModel.Attributes.Add(new AttributeModel()
                 {
@@ -269,13 +247,13 @@ public class ClassModelFactory : IClassModelFactory
 
             case RouteType.Update:
 
-                methodModel.Attributes.Add(new SwaggerOperationAttributeModel($"Update {entityIdNamePascalCase}", $"Update {entityIdNamePascalCase}"));
+                methodModel.Attributes.Add(new SwaggerOperationAttributeModel($"Update {entityNamePascalCase}", $"Update {entityNamePascalCase}"));
 
                 methodModel.Attributes.Add(new AttributeModel()
                 {
                     Name = "HttpPut",
                     Properties = new Dictionary<string, string>() {
-                    { "Name", $"update{entityIdNamePascalCase}" }
+                    { "Name", $"update{entityNamePascalCase}" }
                 }
                 });
 

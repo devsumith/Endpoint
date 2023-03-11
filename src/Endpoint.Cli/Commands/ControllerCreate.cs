@@ -38,8 +38,6 @@ public class ControllerCreateRequestHandler : IRequestHandler<ControllerCreateRe
         _logger.LogInformation("Handled: {0}", nameof(ControllerCreateRequestHandler));
 
         _apiProjectService.ControllerAdd(request.EntityName, request.Directory);
-
-
     }
 }
 

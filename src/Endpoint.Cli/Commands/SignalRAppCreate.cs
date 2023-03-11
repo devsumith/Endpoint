@@ -29,9 +29,8 @@ public class SignalRAppCreateRequest : IRequest
     [Option('n', "name")]
     public string Name { get; set; }
 
-    [Option('v',"version")]
-    public string Version { get; set; }
-
+    [Option('v', "version")]
+    public string Version { get; set; } = "latest";
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
