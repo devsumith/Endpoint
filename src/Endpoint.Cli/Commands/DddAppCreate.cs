@@ -7,7 +7,6 @@ using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Folders;
 using Endpoint.Core.Models.Artifacts.Folders.Factories;
-using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Projects.Factories;
 using Endpoint.Core.Models.Artifacts.Projects.Services;
 using Endpoint.Core.Models.Artifacts.Solutions;
@@ -15,7 +14,6 @@ using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Classes.Factories;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Entities.Aggregate;
-using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.WebArtifacts.Services;
 using Endpoint.Core.Services;
 using MediatR;
@@ -42,6 +40,9 @@ public class DddAppCreateRequest : IRequest
 
     [Option("app-name")]
     public string ApplicationName { get; set; } = "app";
+
+    [Option('v', "version")]
+    public string Version { get; set; } = "15.0.0";
 
     [Option('p', "prefix")]
     public string Prefix { get; set; } = "app";
@@ -108,7 +109,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var solution = await CreateDddSolution(request.Name, request.AggregateName, request.Properties, request.Directory);
 
-        CreateDddApp(solution, request.ApplicationName, request.Prefix);
+        CreateDddApp(solution, request.ApplicationName, request.Version, request.Prefix);
 
         _commandService.Start("code .", solution.SolutionDirectory);
     }
@@ -175,11 +176,11 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         return model;
     }
 
-    private void CreateDddApp(SolutionModel model, string applicationName, string prefix)
+    private void CreateDddApp(SolutionModel model, string applicationName, string version, string prefix)
     {
         var temporaryAppName = $"{_namingConventionConverter.Convert(NamingConvention.SnakeCase, model.Name)}-app";
 
-        _angularService.CreateWorkspace(temporaryAppName, applicationName, "application", prefix, model.SrcDirectory, false);
+        _angularService.CreateWorkspace(temporaryAppName, version, applicationName, "application", prefix, model.SrcDirectory, false);
 
         Directory.Move(Path.Combine(model.SrcDirectory, temporaryAppName), Path.Combine(model.SrcDirectory, $"{model.Name}.App"));
     }

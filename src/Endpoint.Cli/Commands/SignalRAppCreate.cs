@@ -29,6 +29,9 @@ public class SignalRAppCreateRequest : IRequest
     [Option('n', "name")]
     public string Name { get; set; }
 
+    [Option('v',"version")]
+    public string Version { get; set; }
+
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -152,7 +155,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var temporaryAppName = $"{_namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}-app";
 
-        _angularService.CreateWorkspace(temporaryAppName, "app", "application", "app", solutionModel.SrcDirectory, false);
+        _angularService.CreateWorkspace(temporaryAppName, request.Version, "app", "application", "app", solutionModel.SrcDirectory, false);
 
         var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name);
 

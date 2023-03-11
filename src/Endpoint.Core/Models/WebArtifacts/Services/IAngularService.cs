@@ -7,7 +7,7 @@ namespace Endpoint.Core.Models.WebArtifacts.Services;
 
 public interface IAngularService
 {
-    void CreateWorkspace(string name, string projectName, string projectType, string prefix, string rootDirectory, bool openInVsCode = true);
+    void CreateWorkspace(string name, string version, string projectName, string projectType, string prefix, string rootDirectory, bool openInVsCode = true);
     void AddProject(AngularProjectModel model);
     void EnableDefaultStandalone(AngularProjectReferenceModel model);
     void KarmaRemove(string directory);

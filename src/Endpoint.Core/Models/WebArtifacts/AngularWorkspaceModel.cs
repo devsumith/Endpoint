@@ -7,13 +7,14 @@ namespace Endpoint.Core.Models.WebArtifacts;
 
 public class AngularWorkspaceModel
 {
-    public AngularWorkspaceModel(string name, string rootDirectory)
+    public AngularWorkspaceModel(string name, string version, string rootDirectory)
     {
         Name = name;
+        Version = version;
         RootDirectory = rootDirectory;
         Directory = $"{RootDirectory}{Path.DirectorySeparatorChar}{name}";
     }
-
+    public string Version { get; set; }
     public string Name { get; set; }
     public string RootDirectory { get; set; }
     public string Directory { get; set; }

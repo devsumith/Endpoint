@@ -30,6 +30,9 @@ internal class AngularWorkspaceCreateRequest : IRequest
     [Option('f',"force")]
     public bool Force { get; set; }
 
+    [Option('v', "version")]
+    public string Version { get; set; } = "15.0.0";
+
     [Option('d', "directory")]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -51,7 +54,7 @@ internal class AngularWorkspaceCreateRequestHandler : IRequestHandler<AngularWor
     {
         _logger.LogInformation($"Handled: {nameof(AngularWorkspaceCreateRequestHandler)}");
 
-        _angularService.CreateWorkspace(request.Name, request.ProjectName, request.ProjectType, request.Prefix, request.Directory);
+        _angularService.CreateWorkspace(request.Name, request.Version, request.ProjectName, request.ProjectType, request.Prefix, request.Directory);
 
 
     }

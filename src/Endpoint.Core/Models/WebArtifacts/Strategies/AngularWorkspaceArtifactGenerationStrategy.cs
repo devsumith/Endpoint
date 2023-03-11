@@ -29,7 +29,7 @@ public class AngularWorkspaceArtifactGenerationStrategy : ArtifactGenerationStra
 
         _commandService.Start($"npm uninstall @angular/cli -g", model.RootDirectory);
 
-        _commandService.Start($"npm install @angular/cli -g", model.RootDirectory);
+        _commandService.Start($"npm install @angular/cli@{model.Version} -g", model.RootDirectory);
 
         _commandService.Start($"ng new {model.Name} --no-create-application", model.RootDirectory);
 

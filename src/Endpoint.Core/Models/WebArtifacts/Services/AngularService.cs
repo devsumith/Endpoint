@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using DotLiquid.Tags;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
@@ -11,14 +10,12 @@ using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Angular;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Properties;
-using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Models.Syntax.TypeScript;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Octokit.Internal;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -209,9 +206,9 @@ public class AngularService : IAngularService
         _setInitialLanguageInAppComponent(model);
     }
 
-    public void CreateWorkspace(string name, string projectName, string projectType, string prefix, string rootDirectory, bool openInVsCode = true)
+    public void CreateWorkspace(string name, string version, string projectName, string projectType, string prefix, string rootDirectory, bool openInVsCode = true)
     {
-        var workspaceModel = new AngularWorkspaceModel(name, rootDirectory);
+        var workspaceModel = new AngularWorkspaceModel(name, version, rootDirectory);
 
         _artifactGenerationStrategyFactory.CreateFor(workspaceModel);
 
