@@ -8,10 +8,6 @@ using Endpoint.Core.Models.Syntax.Methods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Types;
 using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Endpoint.Core.Models.Syntax.Classes.Services;
 
@@ -30,15 +26,15 @@ public class DomainDrivenDesignService : IDomainDrivenDesignService
 
         classModel.Implements.Add(new TypeModel("BackgroundService"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "MediatR" });
+        classModel.UsingDirectives.Add(new ("MediatR"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Messaging" });
+        classModel.UsingDirectives.Add(new ("Messaging"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Newtonsoft.Json" });
+        classModel.UsingDirectives.Add(new ("Newtonsoft.Json"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.Extensions.Hosting" });
+        classModel.UsingDirectives.Add(new ("Microsoft.Extensions.Hosting"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.Extensions.Logging" });
+        classModel.UsingDirectives.Add(new ("Microsoft.Extensions.Logging"));
 
         var ctor = new ConstructorModel(classModel, classModel.Name);
 

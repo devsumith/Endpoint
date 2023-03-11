@@ -51,7 +51,6 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
-
     }
 
     public async Task Handle(WorkerCreateRequest request, CancellationToken cancellationToken)

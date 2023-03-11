@@ -50,10 +50,8 @@ public class SolutionModel
     public string SrcDirectory => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{SrcDirectoryName}";
     public string TestDirectory => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{TestDirectoryName}";
     public string SolutionPath => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{Name}.sln";
-
     public string SolutionDirectory { get; set; }
     public string SolultionFileName => $"{Name}.sln";
-
     public ProjectModel DefaultProject => Folders.First().Projects.First();
     public void RemoveAllServices()
     {
@@ -79,6 +77,4 @@ public class SolutionModel
 
         return null;
     }
-
 }
-

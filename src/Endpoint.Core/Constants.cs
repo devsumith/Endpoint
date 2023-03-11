@@ -5,6 +5,8 @@ namespace Endpoint.Core;
 
 public static class Constants
 {
+    public static readonly string FileNotFound = nameof(FileNotFound);
+
     public static string RootNamespace = nameof(Endpoint);
     public static string SettingsFileName = "clisettings.json";
 

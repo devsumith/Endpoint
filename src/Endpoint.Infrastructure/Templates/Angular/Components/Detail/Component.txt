@@ -1,1 +1,51 @@
-﻿
+﻿import { Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { BreakpointObserver } from '@angular/cdk/layout';
+
+@Component({
+  selector: '{{ prefix}}-{{ nameSnakeCase }}-detail',
+  templateUrl: './{{ nameSnakeCase }}-detail.component.html',
+  styleUrls: ['./{{ nameSnakeCase }}-detail.component.scss']
+})
+export class {{ namePascalCase }}DetailComponent {
+  
+  readonly form: FormGroup = new FormGroup({
+    postId: new FormControl(null, []),
+    name: new FormControl(null, [Validators.required])
+  });
+
+  public get {{ nameCamelCase }}(): {{ namePascalCase }} { return this.form.value as {{ namePascalCase }}; }
+
+  @Input("post") public set post(value: {{ namePascalCase }}) {
+    if(!value?.postId) {
+      this.form.reset({
+        name: null
+      })
+    } else {
+      this.form.patchValue(value);
+    }
+  }
+
+  @Output() save: EventEmitter<{{ namePascalCase }}> = new EventEmitter();
+
+  @Output() backButtonClick: EventEmitter<void> = new EventEmitter();
+
+}
+
+@NgModule({
+  declarations: [
+    PostDetailComponent
+  ],
+  exports: [
+    PostDetailComponent
+  ],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    CKEditorModule
+  ]
+})
+export class PostDetailModule { }

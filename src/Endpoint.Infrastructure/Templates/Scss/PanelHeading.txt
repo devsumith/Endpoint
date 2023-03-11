@@ -1,0 +1,14 @@
+.g-root .g-panel-heading {
+  font-size: 16px;
+  text-transform: uppercase;
+  margin: 0;
+  padding:0;
+}
+
+
+.g-root .g-panel-heading-container {
+  display: flex;
+  flex-direction: row;
+  place-items: center;
+  gap:10px;
+}

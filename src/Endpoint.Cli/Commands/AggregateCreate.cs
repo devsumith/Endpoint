@@ -7,12 +7,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.Syntax.Entities.Aggregate;
 using Endpoint.Core.Models.Artifacts.Folders.Factories;
-using AutoMapper.Execution;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Syntax.Classes;
-using System.Dynamic;
 
 namespace Endpoint.Cli.Commands;
 

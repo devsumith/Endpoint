@@ -63,10 +63,7 @@ public class SpecFlowService : ISpecFlowService
             Name = "Binding"
         });
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel()
-        {
-            Name = "TechTalk.SpecFlow"
-        });
+        classModel.UsingDirectives.Add(new ("TechTalk.SpecFlow"));
 
         var fileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 

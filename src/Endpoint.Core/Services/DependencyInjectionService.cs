@@ -18,7 +18,7 @@ using System.Text;
 namespace Endpoint.Core.Services;
 
 public class DependencyInjectionService : IDependencyInjectionService
-{
+{    
     private readonly ILogger<DependencyInjectionService> _logger;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
@@ -36,7 +36,7 @@ public class DependencyInjectionService : IDependencyInjectionService
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
-        _namespaceProvider = namespaceProvider;
+        _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
     }
 
     public void Add(string interfaceName, string className, string directory, ServiceLifetime? serviceLifetime = null)
@@ -71,7 +71,6 @@ public class DependencyInjectionService : IDependencyInjectionService
             {
                 if (line.Contains("this IServiceCollection services") && !registrationAdded && line.Contains("}"))
                 {
-
                     newContent.AppendLine(line.Replace("}", string.Empty));
 
                     newContent.AppendLine(diRegistration);
@@ -84,7 +83,6 @@ public class DependencyInjectionService : IDependencyInjectionService
                 {
                     newContent.AppendLine(line);
                 }
-
 
                 if (line.Contains("this IServiceCollection services") && !registrationAdded)
                 {
@@ -154,14 +152,11 @@ public class DependencyInjectionService : IDependencyInjectionService
 
         var configureServicesFilePath = Path.Combine(projectDirectory, "ConfigureServices.cs");
 
-        if (path == "FileNotFound")
+        if (path == Constants.FileNotFound)
         {
-
             AddConfigureServices(projectSuffix, projectDirectory);
         }
 
         UpdateConfigureServices(diRegistration, projectSuffix, configureServicesFilePath);
     }
 }
-
-

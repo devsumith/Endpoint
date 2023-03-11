@@ -4,6 +4,7 @@
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Messages;
 using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Artifacts.Files.Commands;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,6 @@ public class FileCreatedHandler : INotificationHandler<FileCreated>
     {
         var model = new FileReferenceModel() { Path = notification.Path };
 
-        _artifactGenerationStrategyFactory.CreateFor(model, new Models.Artifacts.Files.Commands.CopyrightAdd());
+        _artifactGenerationStrategyFactory.CreateFor(model, new CopyrightAdd());
     }
 }

@@ -14,19 +14,22 @@ public class ParamModel
     public string DefaultValue { get; set; }
     public bool ExtensionMethodParam { get; set; }
 
-    public static ParamModel CancellationToken = new ParamModel()
+    public static ParamModel CancellationToken = new()
     {
         Type = new TypeModel("CancellationToken"),
         Name = "cancellationToken"
     };
 
-    public static ParamModel LoggerOf(string name)
+    public static ParamModel LoggerOf(string name) => new()
     {
-        return new ParamModel()
-        {
-            Type = TypeModel.LoggerOf(name),
-            Name = "logger"
-        };
-    }
+        Type = TypeModel.LoggerOf(name),
+        Name = "logger"
+    };
+
+    public static ParamModel Mediator => new()
+    {
+        Type = new TypeModel($"IMediator"),
+        Name = "mediator"
+    };
 }
 

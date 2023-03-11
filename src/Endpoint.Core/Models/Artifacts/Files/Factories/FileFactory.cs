@@ -193,7 +193,7 @@ public class FileModelFactory : IFileModelFactory
             {
                 entities.Add(new EntityModel(folderName.Remove("Aggregate")));
 
-                usingDirectives.Add(new UsingDirectiveModel() { Name = _namespaceProvider.Get(folder) });
+                usingDirectives.Add(new (_namespaceProvider.Get(folder)));
             }
 
         }

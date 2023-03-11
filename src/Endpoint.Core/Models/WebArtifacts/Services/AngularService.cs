@@ -178,16 +178,16 @@ public class AngularService : IAngularService
     {
         var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", directory));
 
-        _commandService.Start("npm install -D jest@28.1.3 jest-preset-angular@12.2.6 @angular-builders/jest @types/jest", workspaceDirectory);
+        _commandService.Start("npm install -D jest@28.1.3 jest-preset-angular@12.2.6 @angular-builders/jest @types/jest --force", workspaceDirectory);
     }
 
     public void NgxTranslateAdd(string projectName, string directory)
     {
         var workspaceDirectory = _fileSystem.GetDirectoryName(_fileProvider.Get("angular.json", directory));
 
-        _commandService.Start("npm install -D @ngx-translate/core", workspaceDirectory);
+        _commandService.Start("npm install -D @ngx-translate/core --force", workspaceDirectory);
 
-        _commandService.Start("npm install -D @ngx-translate/http-loader", workspaceDirectory);
+        _commandService.Start("npm install -D @ngx-translate/http-loader --force", workspaceDirectory);
 
         var model = new AngularProjectModel(projectName, "", "", directory);
 
@@ -217,7 +217,7 @@ public class AngularService : IAngularService
 
         _utlitityService.CopyrightAdd(workspaceModel.Directory);
 
-        _commandService.Start("npm install npm-run-all", workspaceModel.Directory);
+        _commandService.Start("npm install npm-run-all --force", workspaceModel.Directory);
 
         KarmaRemove(workspaceModel.Directory);
 

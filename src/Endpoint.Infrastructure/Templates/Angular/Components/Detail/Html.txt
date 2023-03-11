@@ -1,1 +1,27 @@
-﻿
+﻿<div class="g-heading-group">
+  <div  class="g-panel-heading-container">
+    <mat-icon class="g-back" (click)="backButtonClick.emit()">chevron_left</mat-icon>
+    <h1 *ngIf="!{{ nameCamelCase }}.{{ nameCamelCase }}Id" class="g-panel-heading">Create {{ nameTitleCase }}</h1>
+    <h1 *ngIf="{{ nameCamelCase }}.{{ nameCamelCase }}Id" class="g-panel-heading">Edit {{ nameTitleCase }}</h1>
+  </div>
+</div>
+
+<form [formGroup]="form" class="g-form">
+  <div class="g-field">
+    <label class="g-label">Title</label>
+    <input type="text" formControlName="title" autocomplete="off" class="g-input">
+  </div>
+
+  <div class="g-field">
+    <label class="g-label">
+      Name
+    </label>
+
+  </div>
+</form>
+
+<div class="g-actions">
+  <button class="g-button" (click)="save.emit(form.value)" [disabled]="!form.valid || form.pristine">
+    Save
+  </button>
+</div>

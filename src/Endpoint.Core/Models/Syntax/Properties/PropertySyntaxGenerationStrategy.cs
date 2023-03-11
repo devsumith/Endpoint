@@ -1,5 +1,4 @@
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Syntax.Classes;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
@@ -22,16 +21,21 @@ public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Pro
 
         var builder = new StringBuilder();
 
-        if (model.Parent is ClassModel)
+        if (model.IsClassProperty)
         {
             builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
 
             builder.Append(" ");
+
+            if (model.Required)
+            {
+                builder.Append("required ");
+            }
         }
 
         builder.Append($"{syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name} {syntaxGenerationStrategyFactory.CreateFor(model.Accessors)}");
 
-        if (model.Parent is ClassModel && !string.IsNullOrEmpty(model.DefaultValue))
+        if (model.IsClassProperty && !string.IsNullOrEmpty(model.DefaultValue))
         {
             builder.Append($" = {model.DefaultValue};");
         }

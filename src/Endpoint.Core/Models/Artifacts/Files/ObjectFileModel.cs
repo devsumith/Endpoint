@@ -24,7 +24,7 @@ public class ObjectFileModel<T> : FileModel
     }
 
     public T Object { get; init; }
-    public List<UsingDirectiveModel> Usings { get; set; } = new List<UsingDirectiveModel>();
+    public List<UsingDirectiveModel> Usings { get; set; }
 
     public string Namespace { get; set; }
 }

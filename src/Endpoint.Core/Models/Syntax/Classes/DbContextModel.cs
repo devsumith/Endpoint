@@ -29,10 +29,10 @@ public class DbContextModel : ClassModel
         Name = name;
         Entities = entities;
 
-        UsingDirectives.AddRange(new List<UsingDirectiveModel>()
+        UsingDirectives.AddRange(new UsingDirectiveModel[]
         {
-            new UsingDirectiveModel() { Name = $"{serviceName}.Core" },
-            new UsingDirectiveModel() { Name = "Microsoft.EntityFrameworkCore" }
+            new ($"{serviceName}.Core"),
+            new ("Microsoft.EntityFrameworkCore")
         });
 
         Implements.Add(new TypeModel("DbContext"));
@@ -74,7 +74,7 @@ public class DbContextModel : ClassModel
 
 
 
-            UsingDirectives.Add(new UsingDirectiveModel { Name = $"{serviceName}.Core.AggregateModel.{entity.Name}Aggregate" });
+            UsingDirectives.Add(new($"{serviceName}.Core.AggregateModel.{entity.Name}Aggregate"));
         }
     }
 

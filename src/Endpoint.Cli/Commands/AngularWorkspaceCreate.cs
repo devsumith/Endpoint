@@ -27,6 +27,9 @@ internal class AngularWorkspaceCreateRequest : IRequest
     [Option('t', "type")]
     public string ProjectType { get; set; } = "application";
 
+    [Option('f',"force")]
+    public bool Force { get; set; }
+
     [Option('d', "directory")]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }

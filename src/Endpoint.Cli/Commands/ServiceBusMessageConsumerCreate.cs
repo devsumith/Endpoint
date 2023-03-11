@@ -7,7 +7,6 @@ using Endpoint.Core.Enums;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
 using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Fields;
@@ -37,7 +36,7 @@ public class ServiceBusMessageConsumerCreateRequest : IRequest
     public string MessagesNamespace { get; set; }
 
     [Option('d', Required = false)]
-    public string Directory { get; set; } = System.Environment.CurrentDirectory;
+    public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
 public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<ServiceBusMessageConsumerCreateRequest>
@@ -81,21 +80,21 @@ public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<Ser
 
         classModel.Implements.Add(new TypeModel("BackgroundService"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "MediatR" });
+        classModel.UsingDirectives.Add(new ("MediatR"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Messaging" });
+        classModel.UsingDirectives.Add(new ("Messaging"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Newtonsoft.Json" });
+        classModel.UsingDirectives.Add(new ("Newtonsoft.Json"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.Extensions.Hosting" });
+        classModel.UsingDirectives.Add(new ("Newtonsoft.Json"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.Extensions.Logging" });
+        classModel.UsingDirectives.Add(new ("Microsoft.Extensions.Logging"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "System.Text" });
+        classModel.UsingDirectives.Add(new ("System.Text"));
 
         var ctor = new ConstructorModel(classModel, classModel.Name);
 
-        foreach (var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new TypeModel("IMediator"), new TypeModel("IUdpClientFactory") })
+        foreach (var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new ("IMediator"), new ("IUdpClientFactory") })
         {
             var propName = type.Name switch
             {

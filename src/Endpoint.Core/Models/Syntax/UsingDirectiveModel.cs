@@ -5,5 +5,15 @@ namespace Endpoint.Core.Models.Syntax;
 
 public class UsingDirectiveModel
 {
-    public string Name { get; set; }
+    public UsingDirectiveModel(string name)
+    {
+        Name = name;
+    }
+
+    public UsingDirectiveModel()
+    {
+        
+    }
+
+    public string Name { get; init; }
 }

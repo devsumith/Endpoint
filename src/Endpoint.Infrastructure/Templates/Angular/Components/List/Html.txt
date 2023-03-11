@@ -1,1 +1,25 @@
-﻿
+﻿<div class="g-heading-group">
+  <h1 class="g-panel-heading">{{ nameTitleCase }} List</h1>
+  <div class="g-heading-group__actions-container">
+    <button class="g-button" (click)="select.emit({ })">
+      Create
+    </button>
+  </div>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="g-table">
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let content" (click)="select.emit(content)" class="g-router-link-cell"> {{ {{ nameCamelCase }}.name }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let content; columns: displayedColumns;"></tr>
+
+</table>
+
+<mat-paginator class="g-paginator">
+  showFirstLastButtons
+  [pageSizeOptions]="pageSizeOptions"
+</mat-paginator>

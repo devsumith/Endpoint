@@ -19,8 +19,6 @@ public class EntityModel : ClassModel
     {
         var classModel = new ClassModel($"{Name}Dto");
 
-
-
         return classModel;
     }
 }

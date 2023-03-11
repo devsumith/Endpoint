@@ -20,7 +20,7 @@ public class SyntaxService : ISyntaxService
     {
         var solutionPath = fileProvider.Get("*.sln", directory);
 
-        if (solutionPath != "FileNotFound")
+        if (solutionPath != Constants.FileNotFound)
         {
             var solutionDirectory = Path.GetDirectoryName(solutionPath);
 
@@ -37,9 +37,5 @@ public class SyntaxService : ISyntaxService
                 });
             }
         }
-
-
     }
-
 }
-

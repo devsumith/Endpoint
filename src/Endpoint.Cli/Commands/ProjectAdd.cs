@@ -49,13 +49,15 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
     private readonly IFileSystem _fileSystem;
     private readonly IProjectService _projectService;
     private readonly IProjectModelFactory _projectModelFactory;
+    private readonly IFileProvider _fileProvider;
     public ProjectAddRequestHandler(
         ILogger<ProjectAddRequestHandler> logger,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         ICommandService commandService,
         IFileSystem fileSystem,
         IProjectService projectService,
-        IProjectModelFactory projectModelFactory
+        IProjectModelFactory projectModelFactory,
+        IFileProvider fileProvider
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -64,11 +66,18 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
         _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
+        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
     public async Task Handle(ProjectAddRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(ProjectAddRequestHandler));
+
+        var projectPath = _fileProvider.Get("*.csproj", request.Directory);
+
+        var projectDirectory = Path.GetDirectoryName(projectPath);
+
+        var projectName = Path.GetFileNameWithoutExtension(projectPath);
 
         if (string.IsNullOrEmpty(request.FolderName))
         {
@@ -77,10 +86,19 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
         var directory = string.IsNullOrEmpty(request.FolderName) ? request.Directory : $"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}";
 
-        var model = _projectModelFactory.Create(request.DotNetProjectType, request.Name, directory, request.References?.Split(',').ToList(), request.Metadata);
+        if(string.IsNullOrEmpty(request.Name))
+        {
+            _projectService.AddToSolution(new ProjectModel
+            {
+                Name = projectName,
+                Directory = projectDirectory
+            });
+
+            return;
+        }
+
+        var model = _projectModelFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);
 
         _projectService.AddProject(model);
-
-
     }
 }

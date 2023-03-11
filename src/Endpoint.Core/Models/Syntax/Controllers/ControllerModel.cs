@@ -9,7 +9,6 @@ using Endpoint.Core.Models.Syntax.Methods.ControllerMethods;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
-using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.Controllers;
 
@@ -23,43 +22,15 @@ public class ControllerModel : ClassModel
 
         Implements.Add(new TypeModel("ControllerBase"));
 
-        Fields.Add(new FieldModel()
-        {
-            Type = new TypeModel("ILogger")
-            {
-                GenericTypeParameters = new List<TypeModel>
-                {
-                    new TypeModel(Name)
-                }
-            },
-            Name = "_logger"
-        });
+        Fields.Add(FieldModel.LoggerOf(Name));
 
-        Fields.Add(new FieldModel()
-        {
-            Type = new TypeModel($"IMediator"),
-            Name = "_mediator"
-        });
+        Fields.Add(FieldModel.Mediator);
 
         var ctor = new ConstructorModel(this, Name);
 
-        ctor.Params.Add(new ParamModel()
-        {
-            Type = new TypeModel("ILogger")
-            {
-                GenericTypeParameters = new List<TypeModel>
-                {
-                    new TypeModel(Name)
-                }
-            },
-            Name = "logger"
-        });
+        ctor.Params.Add(ParamModel.LoggerOf(Name));
 
-        ctor.Params.Add(new ParamModel()
-        {
-            Type = new TypeModel($"IMediator"),
-            Name = "mediator"
-        });
+        ctor.Params.Add(ParamModel.Mediator);
 
         Constructors.Add(ctor);
 

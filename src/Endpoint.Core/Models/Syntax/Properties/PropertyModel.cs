@@ -1,4 +1,5 @@
 ﻿using Endpoint.Core.Enums;
+using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.Syntax.Types;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ public class PropertyModel
     public bool Interface { get; set; }
     public TypeDeclarationModel Parent { get; set; }
     public string DefaultValue { get; set; }
+    public bool IsClassProperty => Parent is ClassModel;
 
     public PropertyModel ToTs()
     {

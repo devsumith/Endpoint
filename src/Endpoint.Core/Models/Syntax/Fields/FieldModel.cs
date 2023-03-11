@@ -28,5 +28,11 @@ public class FieldModel
             Name = "_logger"
         };
     }
-}
 
+    public static FieldModel Mediator => new FieldModel()
+    {
+        Type = new TypeModel($"IMediator"),
+        Name = "_mediator"
+    };
+
+}

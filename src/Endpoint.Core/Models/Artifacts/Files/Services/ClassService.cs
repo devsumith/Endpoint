@@ -47,7 +47,7 @@ public class ClassService : IClassService
 
         var @class = new ClassModel(name);
 
-        @class.UsingDirectives.Add(new UsingDirectiveModel() { Name = "System" });
+        @class.UsingDirectives.Add(new ("System"));
 
         if (!string.IsNullOrEmpty(properties))
             foreach (var property in properties.Split(','))
@@ -147,9 +147,9 @@ public class ClassService : IClassService
 
             classModel.Methods.Add(fact);
 
-            classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Xunit" });
+            classModel.UsingDirectives.Add(new ("Xunit"));
 
-            classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = _nameSpaceProvider.Get(Path.GetDirectoryName(classPath)) });
+            classModel.UsingDirectives.Add(new (_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))));
 
             classModel.UsingAsDirectives.Add(new UsingAsDirectiveModel($"{_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))}.{name}", name));
 

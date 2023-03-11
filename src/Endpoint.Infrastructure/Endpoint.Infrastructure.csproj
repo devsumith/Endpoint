@@ -102,8 +102,10 @@
     <None Remove="Templates\Scss\Field.txt" />
     <None Remove="Templates\Scss\FormFields.txt" />
     <None Remove="Templates\Scss\Header.txt" />
+    <None Remove="Templates\Scss\HeadingGroup.txt" />
     <None Remove="Templates\Scss\Label.txt" />
     <None Remove="Templates\Scss\PageScss.txt" />
+    <None Remove="Templates\Scss\PanelHeading.txt" />
     <None Remove="Templates\Scss\Pills.txt" />
     <None Remove="Templates\Scss\RouterLinkActive.txt" />
     <None Remove="Templates\Scss\Table.txt" />
@@ -223,6 +225,8 @@
     <EmbeddedResource Include="Templates\Scss\Dialogs.txt" />
     <EmbeddedResource Include="Templates\Scss\Field.txt" />
     <EmbeddedResource Include="Templates\Scss\FormFields.txt" />
+    <EmbeddedResource Include="Templates\Scss\PanelHeading.txt" />
+    <EmbeddedResource Include="Templates\Scss\HeadingGroup.txt" />
     <EmbeddedResource Include="Templates\Scss\Header.txt" />
     <EmbeddedResource Include="Templates\Scss\Label.txt" />
     <EmbeddedResource Include="Templates\Scss\PageScss.txt" />
