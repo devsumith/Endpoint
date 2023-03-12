@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "cqrs-flatten -d C:\\projects\\Clarity\\src\\Services\\Clarity\\Clarity.Core\\AggregateModel\\BoardStateAggregate",
+      "commandLineArgs": "class-unnest -d C:\\projects\\Clarity\\src\\Services\\Clarity\\Clarity.Core\\AggregateModel\\DigitalAssetAggregate",
       "environmentVariables": {
       }
     }

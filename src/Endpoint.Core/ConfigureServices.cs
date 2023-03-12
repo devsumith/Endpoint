@@ -31,6 +31,7 @@ using Endpoint.Core.Models.Syntax.Entities.Legacy;
 using Endpoint.Core.Models.Syntax.Fields;
 using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.Syntax.Methods;
+using Endpoint.Core.Models.Syntax.Methods.Factories;
 using Endpoint.Core.Models.Syntax.Methods.RequestHandlerMethodBodies;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Properties;
@@ -60,6 +61,7 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
+        services.AddSingleton<IMethodModelFactory, MethodModelFactory>();
         //services.AddSingleton<ISyntaxGenerationStrategy, RequestValidatorSyntaxGenerationStrategy>();
         //services.AddSingleton<ISyntaxGenerationStrategy, RequestSyntaxGenerationStrategy>();
         //services.AddSingleton<ISyntaxGenerationStrategy, ResponseSyntaxGenerationStrategy>();
@@ -254,6 +256,7 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+
 
 
 

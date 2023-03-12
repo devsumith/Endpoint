@@ -14,25 +14,25 @@ using System.Linq;
 namespace Endpoint.Cli.Commands;
 
 
-[Verb("namespace-flatten")]
-public class NamespaceFlattenRequest : IRequest {
+[Verb("namespace-unnest")]
+public class NamespaceUnnestRequest : IRequest {
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class NamespaceFlattenRequestHandler : IRequestHandler<NamespaceFlattenRequest>
+public class NamespaceUnnestRequestHandler : IRequestHandler<NamespaceUnnestRequest>
 {
-    private readonly ILogger<NamespaceFlattenRequestHandler> _logger;
+    private readonly ILogger<NamespaceUnnestRequestHandler> _logger;
 
-    public NamespaceFlattenRequestHandler(ILogger<NamespaceFlattenRequestHandler> logger)
+    public NamespaceUnnestRequestHandler(ILogger<NamespaceUnnestRequestHandler> logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task Handle(NamespaceFlattenRequest request, CancellationToken cancellationToken)
+    public async Task Handle(NamespaceUnnestRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(NamespaceFlattenRequestHandler));
+        _logger.LogInformation("Handled: {0}", nameof(NamespaceUnnestRequestHandler));
 
         foreach(var path in Directory.GetFiles(request.Directory,"*.cs",SearchOption.AllDirectories))
         {

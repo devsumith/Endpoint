@@ -37,7 +37,5 @@ public class CopyrightAddRequestHandler : IRequestHandler<CopyrightAddRequest>
         _logger.LogInformation("Handled: {0}", nameof(CopyrightAddRequestHandler));
 
         _utlitityService.CopyrightAdd(request.Directory);
-
-
     }
 }

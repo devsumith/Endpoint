@@ -13,7 +13,7 @@ using Endpoint.Core.Abstractions;
 namespace Endpoint.Cli.Commands;
 
 
-[Verb("angular-domain-model-create")]
+[Verb("ng-domain-model-create")]
 public class AngularDomainModelCreateRequest : IRequest
 {
     [Option('n', "name")]

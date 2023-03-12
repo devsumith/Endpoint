@@ -7,6 +7,7 @@ using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Projects.Commands;
 using Endpoint.Core.Models.Syntax.Classes.Factories;
 using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Models.Syntax.Methods.Factories;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using Octokit;
@@ -22,14 +23,17 @@ public class ApiProjectService : IApiProjectService
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly IFileModelFactory _fileModelFactory;
     private readonly IClassModelFactory _classModelFactory;
-
+    private readonly ISyntaxGenerationStrategy _syntaxGenerationStrategy;
+    private readonly IMethodModelFactory _methodModelFactory;
     public ApiProjectService(
         ILogger<ApiProjectService> logger,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         IFileModelFactory fileModelFactory,
-        IClassModelFactory classModelFactory
+        IClassModelFactory classModelFactory,
+        ISyntaxGenerationStrategy syntaxGenerationStrategy,
+        IMethodModelFactory methodModelFactory
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -38,6 +42,8 @@ public class ApiProjectService : IApiProjectService
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
+        _syntaxGenerationStrategy = syntaxGenerationStrategy ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategy));
+        _methodModelFactory = methodModelFactory ?? throw new ArgumentNullException(nameof(methodModelFactory));
     }
 
     public void ControllerAdd(string entityName, bool empty, string directory)
@@ -90,6 +96,10 @@ public class ApiProjectService : IApiProjectService
         }
     }
 
+    public void ControllerMethodAdd(string name, string controller, string route, string directory)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 

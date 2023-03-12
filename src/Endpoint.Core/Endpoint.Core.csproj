@@ -55,6 +55,7 @@
     <Folder Include="Models\Artifacts\Projects\Commands\" />
     <Folder Include="Models\Syntax\Classes\Services\" />
     <Folder Include="Models\Syntax\Methods\ControllerMethods\" />
+    <Folder Include="Models\Syntax\Methods\Factories\" />
     <Folder Include="Models\Syntax\Microservices\" />
     <Folder Include="Models\Syntax\RouteHandlers\Create\" />
     <Folder Include="Messages\" />
