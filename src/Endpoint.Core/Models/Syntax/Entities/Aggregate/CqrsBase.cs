@@ -13,8 +13,8 @@ public class CqrsBase
         UsingDirectives = new List<UsingDirectiveModel>();
     }
     public string Name { get; set; }
-    public ClassModel Request { get; set; }
-    public ClassModel Response { get; set; }
+    public RequestModel Request { get; set; }
+    public ResponseModel Response { get; set; }
     public ClassModel RequestHandler { get; set; }
     public List<UsingDirectiveModel> UsingDirectives { get; set; }
 }

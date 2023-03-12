@@ -60,9 +60,9 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
-        services.AddSingleton<ISyntaxGenerationStrategy, RequestValidatorSyntaxGenerationStrategy>();
-        services.AddSingleton<ISyntaxGenerationStrategy, RequestSyntaxGenerationStrategy>();
-        services.AddSingleton<ISyntaxGenerationStrategy, ResponseSyntaxGenerationStrategy>();
+        //services.AddSingleton<ISyntaxGenerationStrategy, RequestValidatorSyntaxGenerationStrategy>();
+        //services.AddSingleton<ISyntaxGenerationStrategy, RequestSyntaxGenerationStrategy>();
+        //services.AddSingleton<ISyntaxGenerationStrategy, ResponseSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, RuleForSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, TypeScriptTypeSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, ImportSyntaxGenerationStrategy>();

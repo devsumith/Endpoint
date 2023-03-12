@@ -91,29 +91,50 @@ public class AggregateService : IAggregateService
     private void EnsureCoreFilesAreAdded(string directory)
     {
         _projectService.CoreFilesAdd(directory);
-
     }
 
-    public void CommandCreate(string name, string aggregate, string directory)
+    public void CommandCreate(string routeType, string name, string aggregate, string properties, string directory)
     {
         var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
 
         var classModel = _syntaxService.SolutionModel?.GetClass(aggregate, serviceName);
 
-        var commandModel = new CommandModel(serviceName, classModel, _namingConventionConverter, name: name);
+        if(classModel == null)
+        {
+            classModel = _classModelFactory.CreateEntity(aggregate, properties);
+        }
+
+        var commandModel = new CommandModel(serviceName, classModel, _namingConventionConverter, name: name, routeType: routeType switch
+        {
+            "create" => RouteType.Create,
+            "update" => RouteType.Update,
+            "delete" => RouteType.Delete,
+            _ => throw new NotSupportedException()
+        });
 
         var model = new ObjectFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, "cs");
 
         _artifactGenerationStrategyFactory.CreateFor(model);
     }
 
-    public void QueryCreate(string name, string aggregate, string directory)
+    public void QueryCreate(string routeType, string name, string aggregate, string properties, string directory)
     {
         var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
 
         var classModel = _syntaxService.SolutionModel?.GetClass(aggregate, serviceName);
 
-        var queryModel = new QueryModel(serviceName, _namingConventionConverter, classModel, name: name);
+        if (classModel == null)
+        {
+            classModel = _classModelFactory.CreateEntity(aggregate, properties);
+        }
+
+        var queryModel = new QueryModel(serviceName, _namingConventionConverter, classModel, name: name, routeType: routeType.ToLower() switch
+        {
+            "get" => RouteType.Get,
+            "getbyid" => RouteType.GetById,
+            "page" => RouteType.Page,
+            _ => throw new NotSupportedException()
+        });
 
         var model = new ObjectFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, "cs");
 

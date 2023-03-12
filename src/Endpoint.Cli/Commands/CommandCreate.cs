@@ -20,8 +20,14 @@ public class CommandCreateRequest : IRequest
     [Option('n')]
     public string Name { get; set; }
 
-    [Value('a')]
+    [Option('a',"aggregateName")]
     public string Aggregate { get; set; }
+
+    [Option('p',"properties")]
+    public string Properties { get; set; }
+
+    [Option('r', "route-type")]
+    public string RouteType { get; set; }
 
     [Option('d')]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -40,10 +46,7 @@ public class CommandCreateRequestHandler : IRequestHandler<CommandCreateRequest>
 
     public async Task Handle(CommandCreateRequest request, CancellationToken cancellationToken)
     {
-
-        _aggregateService.CommandCreate(request.Name, request.Aggregate, request.Directory);
-
-
+        _aggregateService.CommandCreate(request.RouteType, request.Name, request.Aggregate, request.Properties, request.Directory);
     }
 }
 

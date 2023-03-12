@@ -21,6 +21,12 @@ public class QueryCreateRequest : IRequest
     [Option('a', "aggregate")]
     public string Aggregate { get; set; }
 
+    [Option('p', "properties")]
+    public string Properties { get; set; }
+
+    [Option('r', "route-type")]
+    public string RouteType { get; set; }
+
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -42,7 +48,7 @@ public class QueryCreateRequestHandler : IRequestHandler<QueryCreateRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(QueryCreateRequestHandler));
 
-        _aggregateService.QueryCreate(request.Name, request.Aggregate, request.Directory);
+        _aggregateService.QueryCreate(request.RouteType, request.Name, request.Aggregate, request.Properties, request.Directory);
 
     }
 }

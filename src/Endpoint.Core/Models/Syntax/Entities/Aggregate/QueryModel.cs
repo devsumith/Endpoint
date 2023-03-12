@@ -1,16 +1,8 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Constructors;
-using Endpoint.Core.Models.Syntax.Fields;
-using Endpoint.Core.Models.Syntax.Methods;
-using Endpoint.Core.Models.Syntax.Params;
-using Endpoint.Core.Models.Syntax.Properties;
-using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
-using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.Entities.Aggregate;
 
@@ -28,119 +20,22 @@ public class QueryModel : CqrsBase
             _ => throw new NotSupportedException()
         };
 
-        Request = new ClassModel($"{Name}Request");
 
-        Response = new ClassModel($"{Name}Response")
+        Response = new ResponseModel(entity, routeType, namingConventionConverter);
+
+        Request = new RequestModel(Response, entity, routeType, namingConventionConverter);
+
+        RequestHandler = routeType switch
         {
-            Implements = new List<TypeModel>
-            {
-                new TypeModel("ResponseBase")
-            }
+            RouteType.Get => new GetRequestHandlerModel(entity, Request, Response, routeType, microserviceName, namingConventionConverter),
+
+            RouteType.GetById => new GetByIdRequestHandlerModel(entity, Request, Response, routeType, microserviceName, namingConventionConverter),
+
+            RouteType.Page => new PageRequestHandlerModel(entity, Request, Response, routeType, microserviceName, namingConventionConverter),
+
+            _ => throw new NotSupportedException()
         };
 
-        Request.Implements.Add(new TypeModel("IRequest")
-        {
-            GenericTypeParameters = new List<TypeModel> { new TypeModel(Response.Name) }
-        });
-
-        RequestHandler = new ClassModel($"{Request.Name}Handler");
-
-        RequestHandler.Implements.Add(new TypeModel("IRequestHandler")
-        {
-            GenericTypeParameters = new List<TypeModel> { new TypeModel(Request.Name), new TypeModel(Response.Name) }
-        });
-
-        RequestHandler.Fields.Add(new FieldModel()
-        {
-            Type = TypeModel.LoggerOf(RequestHandler.Name),
-            Name = "_logger"
-        });
-
-        RequestHandler.Fields.Add(new FieldModel()
-        {
-            Type = new TypeModel($"I{microserviceName}DbContext"),
-            Name = "_context"
-        });
-
-        var requestHandlerCtor = new ConstructorModel(RequestHandler, RequestHandler.Name);
-
-        requestHandlerCtor.Params.Add(new ParamModel()
-        {
-            Type = TypeModel.LoggerOf(RequestHandler.Name),
-            Name = "logger"
-        });
-
-        requestHandlerCtor.Params.Add(new ParamModel()
-        {
-            Type = new TypeModel($"I{microserviceName}DbContext"),
-            Name = "context"
-        });
-
-        RequestHandler.Constructors.Add(requestHandlerCtor);
-
-        if (routeType == RouteType.Get)
-        {
-            Response.Properties.Add(new PropertyModel(Response, AccessModifier.Public, new TypeModel("List")
-            {
-                GenericTypeParameters = new List<TypeModel>()
-                {
-                    new TypeModel($"{entity.Name}Dto")
-                }
-            }, namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true), PropertyAccessorModel.GetSet));
-        }
-
-        var methodModel = new MethodModel()
-        {
-            AccessModifier = AccessModifier.Public,
-            ParentType = RequestHandler,
-            Name = "Handle",
-            Async = true,
-            ReturnType = new TypeModel("Task")
-            {
-                GenericTypeParameters = new List<TypeModel>()
-                {
-                    new TypeModel(Response.Name)
-                }
-            },
-            Params = new List<ParamModel>()
-            {
-                new ParamModel() {
-                    Type = new TypeModel(Request.Name),
-                    Name = "request"
-                },
-                new ParamModel() {
-                    Type = new TypeModel("CancellationToken"),
-                    Name = "cancellationToken"
-                }
-            }
-        };
-
-        RequestHandler.Methods.Add(methodModel);
-
-        if (routeType == RouteType.GetById)
-        {
-            Request.Properties.Add(new PropertyModel(Request, AccessModifier.Public, new TypeModel("Guid"), $"{entity.Name}Id", PropertyAccessorModel.GetSet));
-
-            Response.Properties.Add(new PropertyModel(Response, AccessModifier.Public, new TypeModel($"{entity.Name}Dto"), $"{entity.Name}", PropertyAccessorModel.GetSet));
-        }
-
-
-        if (routeType == RouteType.Page)
-        {
-            Request.Properties.Add(new PropertyModel(Request, AccessModifier.Public, new TypeModel("int"), "PageSize", PropertyAccessorModel.GetSet));
-
-            Request.Properties.Add(new PropertyModel(Request, AccessModifier.Public, new TypeModel("int"), "Index", PropertyAccessorModel.GetSet));
-
-            Response.Properties.Add(new PropertyModel(Response, AccessModifier.Public, new TypeModel("int"), "Length", PropertyAccessorModel.GetSet));
-
-            Response.Properties.Add(new PropertyModel(Response, AccessModifier.Public, new TypeModel("List")
-            {
-                GenericTypeParameters = new List<TypeModel>()
-                {
-                    new TypeModel($"{entity.Name}Dto")
-                }
-            }, "Entities ", PropertyAccessorModel.GetSet));
-        }
     }
 
 }
