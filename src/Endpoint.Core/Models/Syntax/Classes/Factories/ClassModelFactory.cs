@@ -15,6 +15,7 @@ using Endpoint.Core.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Endpoint.Core.Models.Syntax.Classes.Factories;
@@ -42,21 +43,21 @@ public class ClassModelFactory : IClassModelFactory
 
         var classModel = new ClassModel($"{model.Name}Controller");
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = $"{rootNamesapce}.Core.AggregateModel.{model.Name}Aggregate.Commands" });
+        classModel.UsingDirectives.Add(new ($"{rootNamesapce}.Core.AggregateModel.{model.Name}Aggregate.Commands"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = $"{rootNamesapce}.Core.AggregateModel.{model.Name}Aggregate.Queries" });
+        classModel.UsingDirectives.Add(new ($"{rootNamesapce}.Core.AggregateModel.{model.Name}Aggregate.Queries"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "System.Net" });
+        classModel.UsingDirectives.Add(new ("System.Net"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "System.Threading.Tasks" });
+        classModel.UsingDirectives.Add(new ("System.Threading.Tasks"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "MediatR" });
+        classModel.UsingDirectives.Add(new ("MediatR"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.AspNetCore.Mvc" });
+        classModel.UsingDirectives.Add(new ("Microsoft.AspNetCore.Mvc"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel { Name = "System.Net.Mime" });
+        classModel.UsingDirectives.Add(new ("System.Net.Mime"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel { Name = "Swashbuckle.AspNetCore.Annotations" });
+        classModel.UsingDirectives.Add(new ("Swashbuckle.AspNetCore.Annotations"));
 
         classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.ApiController, Name = nameof(AttributeType.ApiController) });
 
@@ -72,7 +73,7 @@ public class ClassModelFactory : IClassModelFactory
 
         classModel.Fields.Add(FieldModel.LoggerOf(classModel.Name));
 
-        classModel.Constructors.Add(new Constructors.ConstructorModel(classModel, classModel.Name)
+        classModel.Constructors.Add(new (classModel, classModel.Name)
         {
             Params = new ()
             {
@@ -81,7 +82,6 @@ public class ClassModelFactory : IClassModelFactory
             }
         });
 
-
         foreach (var route in Enum.GetValues<RouteType>())
         {
             if (route == RouteType.Page)
@@ -89,6 +89,54 @@ public class ClassModelFactory : IClassModelFactory
 
             classModel.Methods.Add(CreateControllerMethod(classModel, model, route));
         }
+
+        return classModel;
+    }
+
+    public ClassModel CreateEmptyController(string name, string directory)
+    {
+        var csProjPath = _fileProvider.Get("*.csproj", directory);
+
+        var csProjDirectory = Path.GetDirectoryName(csProjPath);
+
+        var rootNamesapce = _namespaceProvider.Get(csProjDirectory).Split('.')[0];
+
+        var classModel = new ClassModel($"{name}Controller");
+
+        classModel.UsingDirectives.Add(new("System.Net"));
+
+        classModel.UsingDirectives.Add(new("System.Threading.Tasks"));
+
+        classModel.UsingDirectives.Add(new("MediatR"));
+
+        classModel.UsingDirectives.Add(new("Microsoft.AspNetCore.Mvc"));
+
+        classModel.UsingDirectives.Add(new("System.Net.Mime"));
+
+        classModel.UsingDirectives.Add(new("Swashbuckle.AspNetCore.Annotations"));
+
+        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.ApiController, Name = nameof(AttributeType.ApiController) });
+
+        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.ApiVersion, Name = nameof(AttributeType.ApiVersion), Template = "\"1.0\"" });
+
+        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.Route, Name = nameof(AttributeType.Route), Template = "\"api/{version:apiVersion}/[controller]\"" });
+
+        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.Produces, Name = nameof(AttributeType.Produces), Template = "MediaTypeNames.Application.Json" });
+
+        classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.Consumes, Name = nameof(AttributeType.Consumes), Template = "MediaTypeNames.Application.Json" });
+
+        classModel.Fields.Add(FieldModel.Mediator);
+
+        classModel.Fields.Add(FieldModel.LoggerOf(classModel.Name));
+
+        classModel.Constructors.Add(new(classModel, classModel.Name)
+        {
+            Params = new()
+            {
+                ParamModel.Mediator,
+                ParamModel.LoggerOf(classModel.Name)
+            }
+        });
 
         return classModel;
     }

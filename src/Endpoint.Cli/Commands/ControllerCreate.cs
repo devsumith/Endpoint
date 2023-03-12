@@ -18,6 +18,9 @@ public class ControllerCreateRequest : IRequest
     [Option('n')]
     public string EntityName { get; set; }
 
+    [Option('e',"empty")]
+    public bool Empty { get; set; }
+
     [Option('d')]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -37,7 +40,7 @@ public class ControllerCreateRequestHandler : IRequestHandler<ControllerCreateRe
     {
         _logger.LogInformation("Handled: {0}", nameof(ControllerCreateRequestHandler));
 
-        _apiProjectService.ControllerAdd(request.EntityName, request.Directory);
+        _apiProjectService.ControllerAdd(request.EntityName, request.Empty, request.Directory);
     }
 }
 

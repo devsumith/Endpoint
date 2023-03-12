@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "entity-create -n User -p UserId:Guid,Username:string -d C:\\projects\\SoftwareQuailityAssurance\\SoftwareQualityAssurance",
+      "commandLineArgs": "cqrs-flatten -d C:\\projects\\Clarity\\src\\Services\\Clarity\\Clarity.Core\\AggregateModel\\BoardStateAggregate",
       "environmentVariables": {
       }
     }

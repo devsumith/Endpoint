@@ -167,7 +167,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), "cs"));
 
-        _apiProjectService.ControllerAdd(aggregateName, Path.Combine(api.Directory, "Controllers"));
+        _apiProjectService.ControllerAdd(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
 
         _commandService.Start("dotnet ef migrations add Initial", infrastructure.Directory);
 

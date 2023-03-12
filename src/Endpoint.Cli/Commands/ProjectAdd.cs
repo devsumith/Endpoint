@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
+using Endpoint.Core;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Projects.Factories;
@@ -75,19 +76,23 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
         var projectPath = _fileProvider.Get("*.csproj", request.Directory);
 
+        if(projectPath == Constants.FileNotFound)
+        {
+            projectPath = request.Directory;
+        }
         var projectDirectory = Path.GetDirectoryName(projectPath);
-
-        var projectName = Path.GetFileNameWithoutExtension(projectPath);
 
         if (string.IsNullOrEmpty(request.FolderName))
         {
             _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}");
         }
 
-        var directory = string.IsNullOrEmpty(request.FolderName) ? request.Directory : $"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}";
-
-        if(string.IsNullOrEmpty(request.Name))
+        if (string.IsNullOrEmpty(request.Name))
         {
+            var projectName = Path.GetFileNameWithoutExtension(projectPath);
+
+            var directory = string.IsNullOrEmpty(request.FolderName) ? request.Directory : $"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}";
+
             _projectService.AddToSolution(new ProjectModel
             {
                 Name = projectName,

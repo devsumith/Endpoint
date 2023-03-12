@@ -40,7 +40,7 @@ public class ApiProjectService : IApiProjectService
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
     }
 
-    public void ControllerAdd(string entityName, string directory)
+    public void ControllerAdd(string entityName, bool empty, string directory)
     {
         _logger.LogInformation("Controller Add");
 
@@ -59,7 +59,7 @@ public class ApiProjectService : IApiProjectService
 
         _fileSystem.CreateDirectory(controllersDirectory);
 
-        var controllerClassModel = _classModelFactory.CreateController(entity, csProjDirectory);
+        var controllerClassModel = empty ? _classModelFactory.CreateEmptyController(entityName, csProjDirectory) : _classModelFactory.CreateController(entity, csProjDirectory);
 
         _artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateCSharp(controllerClassModel, controllersDirectory));
     }

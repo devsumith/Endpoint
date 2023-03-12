@@ -11,6 +11,7 @@ public interface IClassModelFactory
 {
     ClassModel CreateEntity(string name, string properties);
     ClassModel CreateController(EntityModel model, string directory);
+    ClassModel CreateEmptyController(string name, string directory);
     ClassModel CreateDbContext(string name, List<EntityModel> entities, string directory);
     ClassModel CreateWorker(string name, string directory);
     ClassModel CreateMessageModel();
