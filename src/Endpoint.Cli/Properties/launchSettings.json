@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "query-create -r getbyid -a JsonSchemaModel -p JsonSchemaModelId:Guid,Name:string -d C:\\projects\\Contently\\src\\Services\\ContentService\\ContentService.Core\\AggregateModel\\JsonSchemaModelAggregate\\Queries",
+      "commandLineArgs": "entity-create -n User -p UserId:Guid,Username:string -d C:\\projects\\SoftwareQuailityAssurance\\SoftwareQualityAssurance",
       "environmentVariables": {
       }
     }
