@@ -8,13 +8,13 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Methods.RequestHandlerMethodBodies;
+namespace Endpoint.Core.Models.Syntax.Methods.Strategies;
 
-public class GetByIdQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
+public class DeleteCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
 {
     private readonly INamingConventionConverter _namingConventionConverter;
 
-    public GetByIdQueryHandlerMethodGenerationStrategy(
+    public DeleteCommandHandlerMethodGenerationStrategy(
         IServiceProvider serviceProvider,
         INamingConventionConverter namingConventionConverter,
         ILogger<MethodSyntaxGenerationStrategy> logger)
@@ -27,7 +27,7 @@ public class GetByIdQueryHandlerMethodGenerationStrategy : MethodSyntaxGeneratio
     {
         if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
         {
-            return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.StartsWith($"Get{entity.Name}ByIdRequest");
+            return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.StartsWith($"Delete{entity.Name}Request");
         }
 
         return false;
@@ -43,11 +43,22 @@ public class GetByIdQueryHandlerMethodGenerationStrategy : MethodSyntaxGeneratio
 
         var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
-        builder.AppendLine("return new () {");
+        var entityNameCamelCase = _namingConventionConverter.Convert(NamingConvention.CamelCase, entityName); ;
 
-        builder.AppendLine($"{entityName} = (await _context.{entityNamePascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{entityName}Id == request.{entityName}Id)).ToDto()".Indent(1));
+        builder.AppendJoin(Environment.NewLine, new string[]
+        {
+            $"var {entityNameCamelCase} = await _context.{entityNamePascalCasePlural}.FindAsync(request.{entityName}Id);",
+            "",
+            $"_context.{entityNamePascalCasePlural}.Remove({entityNameCamelCase});",
+            "",
+            "await _context.SaveChangesAsync(cancellationToken);",
+            "",
+            "return new ()",
+            "{",
+            $"{entityName} = {entityNameCamelCase}.ToDto()".Indent(1),
+            "};"
 
-        builder.AppendLine("};");
+        });
 
         model.Body = builder.ToString();
 

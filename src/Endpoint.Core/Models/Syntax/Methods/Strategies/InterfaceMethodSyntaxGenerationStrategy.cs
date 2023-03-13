@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Methods;
+namespace Endpoint.Core.Models.Syntax.Methods.Strategies;
 
 public class InterfaceMethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<MethodModel>
 {

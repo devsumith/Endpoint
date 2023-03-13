@@ -5,6 +5,7 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Models.Artifacts.Projects.Commands;
+using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Models.Syntax.Classes.Factories;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Methods.Factories;
@@ -23,8 +24,9 @@ public class ApiProjectService : IApiProjectService
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
     private readonly IFileModelFactory _fileModelFactory;
     private readonly IClassModelFactory _classModelFactory;
-    private readonly ISyntaxGenerationStrategy _syntaxGenerationStrategy;
+    private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
     private readonly IMethodModelFactory _methodModelFactory;
+    private readonly IClipboardService _clipboardService;
     public ApiProjectService(
         ILogger<ApiProjectService> logger,
         IFileProvider fileProvider,
@@ -32,8 +34,9 @@ public class ApiProjectService : IApiProjectService
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
         IFileModelFactory fileModelFactory,
         IClassModelFactory classModelFactory,
-        ISyntaxGenerationStrategy syntaxGenerationStrategy,
-        IMethodModelFactory methodModelFactory
+        ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory,
+        IMethodModelFactory methodModelFactory,
+        IClipboardService clipboardService
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -42,8 +45,9 @@ public class ApiProjectService : IApiProjectService
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
-        _syntaxGenerationStrategy = syntaxGenerationStrategy ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategy));
+        _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategyFactory));
         _methodModelFactory = methodModelFactory ?? throw new ArgumentNullException(nameof(methodModelFactory));
+        _clipboardService = clipboardService ?? throw new ArgumentNullException(nameof(clipboardService));
     }
 
     public void ControllerAdd(string entityName, bool empty, string directory)
@@ -98,7 +102,26 @@ public class ApiProjectService : IApiProjectService
 
     public void ControllerMethodAdd(string name, string controller, string route, string directory)
     {
-        throw new NotImplementedException();
+        var model = _methodModelFactory.CreateControllerMethod(name, controller, route switch
+        {
+            "create" => RouteType.Create,
+            "update" => RouteType.Update,
+            "delete" => RouteType.Delete,
+            "get" => RouteType.Get,
+            "getbyid" => RouteType.GetById,
+            "page" => RouteType.Page,
+            "httpget" => RouteType.HttpGet,
+            "httpput" => RouteType.HttpPut,
+            "httpdelete" => RouteType.HttpDelete,
+            "httppost" => RouteType.HttpPost,
+            _ => throw new NotImplementedException()
+        }, directory);
+
+        var syntax = _syntaxGenerationStrategyFactory.CreateFor(model);
+
+        _clipboardService.SetText(syntax);
+
+        _logger.LogInformation(syntax);
     }
 }
 

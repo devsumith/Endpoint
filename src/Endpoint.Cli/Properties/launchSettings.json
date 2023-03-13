@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "class-unnest -d C:\\projects\\Clarity\\src\\Services\\Clarity\\Clarity.Core\\AggregateModel\\DigitalAssetAggregate",
+      "commandLineArgs": "controller-method-add -n CreateBoard -d C:\\projects\\Clarity\\src\\Services\\Clarity\\Clarity.Core\\AggregateModel\\DigitalAssetAggregate",
       "environmentVariables": {
       }
     }

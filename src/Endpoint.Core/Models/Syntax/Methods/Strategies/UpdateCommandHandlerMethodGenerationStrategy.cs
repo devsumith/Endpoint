@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Methods.RequestHandlerMethodBodies;
+namespace Endpoint.Core.Models.Syntax.Methods.Strategies;
 
 public class UpdateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
 {

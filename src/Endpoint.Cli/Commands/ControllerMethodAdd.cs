@@ -18,11 +18,10 @@ public class ControllerMethodAddRequest : IRequest {
     public string Name { get; set; }
 
     [Option('c', "controller")]
-    public string Controller { get; set; }
+    public string Controller { get; set; } = "Default";
 
     [Option('r', "route")]
-    public string Route { get; set; }
-
+    public string Route { get; set; } = "httpget";
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;

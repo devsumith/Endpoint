@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Methods;
+namespace Endpoint.Core.Models.Syntax.Methods.Strategies;
 
 public class MethodsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<MethodModel>>
 {

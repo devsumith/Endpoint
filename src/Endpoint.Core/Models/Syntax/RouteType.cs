@@ -10,6 +10,10 @@ public enum RouteType
     Get,
     GetById,
     Delete,
-    Page
+    Page,
+    HttpGet,
+    HttpPut,
+    HttpDelete,
+    HttpPost
 }
 

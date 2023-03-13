@@ -8,12 +8,12 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Methods.RequestHandlerMethodBodies;
+namespace Endpoint.Core.Models.Syntax.Methods.Strategies;
 
-public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
+public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
 {
     private readonly INamingConventionConverter _namingConventionConverter;
-    public PageQueryHandlerMethodGenerationStrategy(
+    public GetQueryHandlerMethodGenerationStrategy(
         IServiceProvider serviceProvider,
         INamingConventionConverter namingConventionConverter,
         ILogger<MethodSyntaxGenerationStrategy> logger)
@@ -26,7 +26,9 @@ public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationSt
     {
         if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
         {
-            return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.EndsWith($"PageRequest");
+            var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true);
+
+            return methodModel.Params.First().Type.Name == $"Get{entityNamePascalCasePlural}Request";
         }
 
         return false;
@@ -40,29 +42,11 @@ public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationSt
 
         var entityName = context.Entity.Name;
 
-        builder.AppendLine($"var query = from {((SyntaxToken)entityName).CamelCase()} in _context.{((SyntaxToken)entityName).PascalCasePlural()}");
+        var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
-        builder.AppendLine($"select {((SyntaxToken)entityName).CamelCase()};".Indent(1));
+        builder.AppendLine("return new () {");
 
-        builder.AppendLine("");
-
-        builder.AppendLine($"var length = await _context.{((SyntaxToken)entityName).PascalCasePlural()}.AsNoTracking().CountAsync();");
-
-        builder.AppendLine("");
-
-        builder.AppendLine($"var {((SyntaxToken)entityName).CamelCasePlural()} = await query.Page(request.Index, request.PageSize).AsNoTracking()");
-
-        builder.AppendLine(".Select(x => x.ToDto()).ToListAsync();".Indent(1));
-
-        builder.AppendLine("");
-
-        builder.AppendLine("return new ()");
-
-        builder.AppendLine("{");
-
-        builder.AppendLine("Length = length,".Indent(1));
-
-        builder.AppendLine($"Entities = {((SyntaxToken)entityName).CamelCasePlural()}".Indent(1));
+        builder.AppendLine($"{entityNamePascalCasePlural} = await _context.{entityNamePascalCasePlural}.AsNoTracking().ToDtosAsync(cancellationToken)".Indent(1));
 
         builder.AppendLine("};");
 
@@ -71,3 +55,4 @@ public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationSt
         return base.Create(syntaxGenerationStrategyFactory, model);
     }
 }
+

@@ -8,12 +8,13 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Models.Syntax.Methods.RequestHandlerMethodBodies;
+namespace Endpoint.Core.Models.Syntax.Methods.Strategies;
 
-public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
+public class GetByIdQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
 {
     private readonly INamingConventionConverter _namingConventionConverter;
-    public GetQueryHandlerMethodGenerationStrategy(
+
+    public GetByIdQueryHandlerMethodGenerationStrategy(
         IServiceProvider serviceProvider,
         INamingConventionConverter namingConventionConverter,
         ILogger<MethodSyntaxGenerationStrategy> logger)
@@ -26,9 +27,7 @@ public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStr
     {
         if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
         {
-            var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true);
-
-            return methodModel.Params.First().Type.Name == $"Get{entityNamePascalCasePlural}Request";
+            return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.StartsWith($"Get{entity.Name}ByIdRequest");
         }
 
         return false;
@@ -46,7 +45,7 @@ public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStr
 
         builder.AppendLine("return new () {");
 
-        builder.AppendLine($"{entityNamePascalCasePlural} = await _context.{entityNamePascalCasePlural}.AsNoTracking().ToDtosAsync(cancellationToken)".Indent(1));
+        builder.AppendLine($"{entityName} = (await _context.{entityNamePascalCasePlural}.AsNoTracking().SingleOrDefaultAsync(x => x.{entityName}Id == request.{entityName}Id)).ToDto()".Indent(1));
 
         builder.AppendLine("};");
 
