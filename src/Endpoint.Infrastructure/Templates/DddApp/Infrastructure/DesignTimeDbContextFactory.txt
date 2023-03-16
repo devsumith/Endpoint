@@ -10,7 +10,16 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<{{ service
     {
         var builder = new DbContextOptionsBuilder<{{ serviceNamePascalCase }}DbContext>();
 
-        builder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog={{ serviceNamePascalCase }};Integrated Security=SSPI;");
+        var basePath = Path.GetFullPath("../{{ serviceNamePascalCase }}.Api");
+
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(basePath)
+            .AddJsonFile("appsettings.json", false)
+            .Build();
+
+        var connectionString = configuration.GetConnectionString("DefualtConnection");
+
+        builder.UseSqlServer(connectionString);
 
         return new {{ serviceNamePascalCase }}DbContext(builder.Options);
     }

@@ -78,8 +78,9 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
         if(projectPath == Constants.FileNotFound)
         {
-            projectPath = request.Directory;
+            projectPath = Path.Combine(request.Directory,request.Name);
         }
+
         var projectDirectory = Path.GetDirectoryName(projectPath);
 
         if (string.IsNullOrEmpty(request.FolderName))
@@ -90,7 +91,6 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
         if (string.IsNullOrEmpty(request.Name))
         {
             var projectName = Path.GetFileNameWithoutExtension(projectPath);
-
             var directory = string.IsNullOrEmpty(request.FolderName) ? request.Directory : $"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}";
 
             _projectService.AddToSolution(new ProjectModel
