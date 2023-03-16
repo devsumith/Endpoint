@@ -1,6 +1,7 @@
 ﻿var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<{{ dbContextName }}>(optionsBuilder => optionsBuilder.UseInMemoryDatabase(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContextPool<{{ dbContextName }}>(optionsBuilder => optionsBuilder.UseInMemoryDatabase(builder.Configuration.GetConnectionString("DefaultConnection"))
+  .EnableThreadSafetyChecks(false));
 
 // Add services to the container.
 

@@ -123,6 +123,16 @@ public class ClassUnnestRequestHandler : IRequestHandler<ClassUnnestRequest>
 
                 modified = modified.Replace("new Response", $"new {suffix}Response");
 
+                modified = modified.Replace("new Response", $"new {suffix}Response");
+
+                modified = modified.Replace("<Request>", $"<{suffix}Request>");
+
+                modified = modified.Replace("<Response>", $"<{suffix}Response>");
+
+                modified = modified.Replace("class Validator", $"class {suffix}Validator");
+
+                modified = modified.Replace("public Validator", $"public {suffix}Validator");
+
                 content.Add(modified);
             }
 

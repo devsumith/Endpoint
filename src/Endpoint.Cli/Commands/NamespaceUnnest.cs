@@ -56,8 +56,12 @@ public class NamespaceUnnestRequestHandler : IRequestHandler<NamespaceUnnestRequ
                         newContent.Add(line);
                     }
 
-                    if (line.StartsWith("    "))
-                        newContent.Add(line.Substring(3));
+                    if(string.IsNullOrEmpty(line.Trim()))
+                    {
+                        newContent.Add("");
+                    }
+                    else if (line.StartsWith("    "))
+                        newContent.Add(line.Substring(4));
                 }
 
                 foreach (var line in newContent)

@@ -10,9 +10,10 @@ public static class ConfigureServices
     {
 
         services.AddScoped<I{{ serviceNamePascalCase }}DbContext, {{ serviceNamePascalCase }}DbContext>();
-        services.AddDbContext<{{ serviceNamePascalCase }}DbContext>(options =>
+        services.AddDbContextPool<{{ serviceNamePascalCase }}DbContext>(options =>
         {
-            options.UseSqlServer(connectionString, builder => builder.MigrationsAssembly("{{ serviceNamePascalCase }}.Infrastructure"));
+            options.UseSqlServer(connectionString, builder => builder.MigrationsAssembly("{{ serviceNamePascalCase }}.Infrastructure"))
+            .EnableThreadSafetyChecks(false);
         });
     }
 }

@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "controller-method-add -n CreateBoard -d C:\\projects\\Clarity\\src\\Services\\Clarity\\Clarity.Core\\AggregateModel\\DigitalAssetAggregate",
+      "commandLineArgs": "command-create -r update -a Ticket -p TicketId:Guid,Name:string -n UpdateTicket -d C:\\projects\\Clarity\\src\\Services\\Clarity\\Clarity.Core\\AggregateModel\\TicketAggregate\\Commands",
       "environmentVariables": {
       }
     }
