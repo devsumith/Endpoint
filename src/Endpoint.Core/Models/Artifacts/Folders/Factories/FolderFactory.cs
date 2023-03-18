@@ -43,8 +43,10 @@ public class FolderFactory : IFolderFactory
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
     }
 
-    public FolderModel AggregagteCommands(string aggregateName, string directory)
+    public FolderModel AggregagteCommands(ClassModel aggregate, string directory)
     {
+        var aggregateName = aggregate.Name;
+
         _fileSystem.CreateDirectory(directory);
 
         var model = new FolderModel("Commands", directory);
@@ -54,7 +56,7 @@ public class FolderFactory : IFolderFactory
         foreach (var routeType in new RouteType[] { RouteType.Create, RouteType.Delete, RouteType.Update })
         {
             //TODO: build command and subclasses fully here. Class factory
-            var command = new CommandModel(microserviceName, new ClassModel(aggregateName), _namingConventionConverter, routeType);
+            var command = new CommandModel(microserviceName, aggregate, _namingConventionConverter, routeType);
 
             model.Files.Add(new ObjectFileModel<CommandModel>(command, command.UsingDirectives, command.Name, model.Directory, "cs"));
         }
@@ -62,7 +64,7 @@ public class FolderFactory : IFolderFactory
         return model;
     }
 
-    public FolderModel AggregagteQueries(string aggregateName, string directory)
+    public FolderModel AggregagteQueries(ClassModel aggregate, string directory)
     {
         var model = new FolderModel("Queries", directory);
 
@@ -70,7 +72,7 @@ public class FolderFactory : IFolderFactory
 
         foreach (var routeType in new RouteType[] { RouteType.GetById, RouteType.Get, RouteType.Page })
         {
-            var query = new QueryModel(microserviceName, _namingConventionConverter, new ClassModel(aggregateName), routeType);
+            var query = new QueryModel(microserviceName, _namingConventionConverter, aggregate, routeType);
 
             model.Files.Add(new ObjectFileModel<QueryModel>(query, query.UsingDirectives, query.Name, model.Directory, "cs"));
         }
@@ -126,9 +128,9 @@ public class FolderFactory : IFolderFactory
 
         var model = new AggregateFolderModel(aggregate, directory);
 
-        model.SubFolders.Add(AggregagteCommands(aggregateName, model.Directory));
+        model.SubFolders.Add(AggregagteCommands(aggregate, model.Directory));
 
-        model.SubFolders.Add(AggregagteQueries(aggregateName, model.Directory));
+        model.SubFolders.Add(AggregagteQueries(aggregate, model.Directory));
 
 
         var aggregateDto = aggregate.CreateDto();

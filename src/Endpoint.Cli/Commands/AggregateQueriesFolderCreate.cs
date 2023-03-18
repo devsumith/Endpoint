@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Models.Artifacts.Folders.Services;
+using Endpoint.Core.Models.Syntax.Classes;
 
 namespace Endpoint.Cli.Commands;
 
@@ -40,7 +41,7 @@ public class AggregateQueriesFolderCreateRequestHandler : IRequestHandler<Aggreg
     {
         _logger.LogInformation("Handled: {0}", nameof(AggregateQueriesFolderCreateRequestHandler));
 
-        _folderService.AggregateQueries(request.AggregateName, request.Directory);
+        _folderService.AggregateQueries(new ClassModel(request.AggregateName), request.Directory);
 
 
     }

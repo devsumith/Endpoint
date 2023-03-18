@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "command-create -r update -a Ticket -p TicketId:Guid,Name:string -n UpdateTicket -d C:\\projects\\Clarity\\src\\Services\\Clarity\\Clarity.Core\\AggregateModel\\TicketAggregate\\Commands",
+      "commandLineArgs": "aggregate-create -n Profile -p ProfileId:Guid,Name:string,Email:string -d C:\\projects\\Commitments\\src\\Services\\Profile\\ProfileService.Core\\AggregateModel",
       "environmentVariables": {
       }
     }

@@ -74,12 +74,13 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(ProjectAddRequestHandler));
 
-        var projectPath = _fileProvider.Get("*.csproj", request.Directory);
-
-        if(projectPath == Constants.FileNotFound)
+        if(string.IsNullOrEmpty(request.Name))
         {
-            projectPath = Path.Combine(request.Directory,request.Name);
+            ProjectAdd(request.Directory);
+            return;
         }
+
+        var projectPath = Path.Combine(request.Directory, request.Name);
 
         var projectDirectory = Path.GetDirectoryName(projectPath);
 
@@ -88,22 +89,50 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
             _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}");
         }
 
-        if (string.IsNullOrEmpty(request.Name))
+        var model = _projectModelFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);
+
+        _projectService.AddProject(model);
+    }
+
+    public void ProjectAdd(string directory)
+    {
+        var projectPath = _fileProvider.Get("*.csproj", directory);
+
+        if (projectPath != Constants.FileNotFound)
         {
             var projectName = Path.GetFileNameWithoutExtension(projectPath);
-            var directory = string.IsNullOrEmpty(request.FolderName) ? request.Directory : $"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}";
+
+            var projectDirectory = Path.GetDirectoryName(projectPath);
 
             _projectService.AddToSolution(new ProjectModel
             {
                 Name = projectName,
                 Directory = projectDirectory
             });
-
-            return;
         }
 
-        var model = _projectModelFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);
+        foreach (var subDirectory in Directory.GetDirectories(directory))
+        {
+            var subDirectoryName = Path.GetFileName(subDirectory);
 
-        _projectService.AddProject(model);
+            var invalidDirectories = new[]
+            {
+                ".git",
+                "node_modules",
+                "bin",
+                "obj",
+                "Properties",
+                "nupkg",
+                "dist",
+                ".angular",
+                ".vs",
+                ".vscode"
+            };
+
+            if (!invalidDirectories.Contains(subDirectoryName))
+            {
+                ProjectAdd(subDirectory);
+            }
+        }
     }
 }

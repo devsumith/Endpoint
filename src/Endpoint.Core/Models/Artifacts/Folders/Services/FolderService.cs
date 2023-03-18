@@ -37,26 +37,26 @@ public class FolderService : IFolderService
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
-    public FolderModel AggregateQueries(string aggregateName, string directory)
+    public FolderModel AggregateQueries(ClassModel aggregate, string directory)
     {
-        var model = _folderFactory.AggregagteQueries(aggregateName, directory);
+        var model = _folderFactory.AggregagteQueries(aggregate, directory);
 
         var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory).Split('.').First());
 
-        var entity = _syntaxService.SolutionModel?.GetClass(aggregateName, serviceName);
+        var entity = _syntaxService.SolutionModel?.GetClass(aggregate.Name, serviceName);
 
         _artifactGenerationStrategyFactory.CreateFor(model, new { Entity = entity });
 
         return model;
     }
 
-    public FolderModel AggregateCommands(string aggregateName, string directory)
+    public FolderModel AggregateCommands(ClassModel aggregate, string directory)
     {
-        var model = _folderFactory.AggregagteCommands(aggregateName, directory);
+        var model = _folderFactory.AggregagteCommands(aggregate, directory);
 
         var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory).Split('.').First());
 
-        var entity = _syntaxService.SolutionModel?.GetClass(aggregateName, serviceName);
+        var entity = _syntaxService.SolutionModel?.GetClass(aggregate.Name, serviceName);
 
         _artifactGenerationStrategyFactory.CreateFor(model, new { Entity = entity });
 
