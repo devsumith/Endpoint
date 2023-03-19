@@ -15,10 +15,6 @@ namespace Endpoint.Cli.Commands;
 [Verb("db-context-add")]
 public class DbContextAddRequest : IRequest
 {
-    [Option('n', "name")]
-    public string Name { get; set; }
-
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = Environment.CurrentDirectory;
 }

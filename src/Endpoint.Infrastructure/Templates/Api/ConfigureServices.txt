@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Kernel;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices { 
     public static void AddApiServices(this IServiceCollection services) {
         
-        services.AddControllers();
+        services.AddControllers(o => o.Filters.Add(typeof(HttpGlobalExceptionFilter)));
 
         services.AddApiVersioning(options =>
         {

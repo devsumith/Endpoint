@@ -57,19 +57,19 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Properties.AddRange(properties);
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "MediatR" });
+        classModel.UsingDirectives.Add(new ("MediatR"));
 
         var constructorModel = new ConstructorModel(classModel, classModel.Name);
 
         foreach (var property in properties)
         {
-            classModel.Fields.Add(new FieldModel()
+            classModel.Fields.Add(new ()
             {
                 Name = $"_{_namingConventionConverter.Convert(NamingConvention.CamelCase, property.Name)}",
                 Type = property.Type
             });
 
-            constructorModel.Params.Add(new ParamModel()
+            constructorModel.Params.Add(new ()
             {
                 Name = $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, property.Name)}",
                 Type = property.Type
@@ -78,7 +78,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Constructors.Add(constructorModel);
 
-        classModel.Implements.Add(new TypeModel("IRequest"));
+        classModel.Implements.Add(new ("IRequest"));
 
         var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
@@ -174,46 +174,57 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             messagesNamespace = $"{projectNamespace.Split('.').First()}.Core.Messages";
         }
 
-        classModel.Implements.Add(new TypeModel("BackgroundService"));
+        classModel.Implements.Add(new ("BackgroundService"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "MediatR" });
+        classModel.UsingDirectives.Add(new ("Messaging"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Messaging" });
+        classModel.UsingDirectives.Add(new ("Messaging.Udp"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Newtonsoft.Json" });
+        classModel.UsingDirectives.Add(new ("Microsoft.Extensions.DependencyInjection"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.Extensions.Hosting" });
+        classModel.UsingDirectives.Add(new ("Microsoft.Extensions.Hosting"));
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.Extensions.Logging" });
+        classModel.UsingDirectives.Add(new ("System.Text"));
 
-        var ctor = new ConstructorModel(classModel, classModel.Name);
+        classModel.UsingDirectives.Add(new ("Microsoft.Extensions.Logging"));
 
-        foreach (var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new TypeModel("IMediator"), new TypeModel("IUdpClientFactory") })
+        classModel.UsingDirectives.Add(new("System.Threading.Tasks"));
+
+        classModel.UsingDirectives.Add(new("System.Threading"));
+
+        classModel.UsingDirectives.Add(new("MediatR"));
+
+        classModel.UsingDirectives.Add(new("System.Linq"));
+
+
+        var constructorModel = new ConstructorModel(classModel, classModel.Name);
+
+        foreach (var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new TypeModel("IServiceScopeFactory"), new TypeModel("IUdpClientFactory") })
         {
             var propName = type.Name switch
             {
                 "ILogger" => "logger",
                 "IUdpClientFactory" => "udpClientFactory",
-                "IMediator" => "mediator"
+                "IServiceScopeFactory" => "serviceScopeFactory"
             };
 
-            classModel.Fields.Add(new FieldModel()
+            classModel.Fields.Add(new ()
             {
                 Name = $"_{propName}",
                 Type = type
             });
 
-            ctor.Params.Add(new ParamModel()
+            constructorModel.Params.Add(new ()
             {
                 Name = propName,
                 Type = type
             });
         }
 
-        classModel.Fields.Add(new FieldModel()
+        classModel.Fields.Add(new ()
         {
             Name = $"_supportedMessageTypes",
-            Type = new TypeModel("string[]"),
+            Type = new ("string[]"),
             DefaultValue = "new string[] { }"
         });
 
@@ -235,7 +246,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
             "",
 
-            "var message = Deserialize<ServiceBusMessage>(json)!;".Indent(1),
+            "var message = System.Text.Json.JsonSerializer.Deserialize<ServiceBusMessage>(json)!;".Indent(1),
 
             "",
 
@@ -256,17 +267,27 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
             "",
 
-            "var request = (IRequest)Deserialize(message.Body, type!)!;".Indent(2),
+            "var request = System.Text.Json.JsonSerializer.Deserialize(message.Body, type!)!;".Indent(2),
 
             "",
 
-            "await _mediator.Send(request, stoppingToken);".Indent(2),
+            "using (var scope = _serviceScopeFactory.CreateScope())".Indent(2),
+
+            "{".Indent(2),
+
+            "var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();".Indent(3),
+
+            "",
+
+            "await mediator.Send(request, cancellationToken);".Indent(3),
+
+            "}".Indent(2),
 
             "}".Indent(1),
 
             "",
 
-            "await Task.Delay(300);".Indent(1),
+            "await Task.Delay(0);".Indent(1),
 
             "}",
         };
@@ -277,24 +298,17 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             Override = true,
             AccessModifier = AccessModifier.Protected,
             Async = true,
-            ReturnType = new TypeModel("Task"),
+            ReturnType = new ("Task"),
             Body = string.Join(Environment.NewLine, methodBody)
         };
 
-        method.Params.Add(new ParamModel()
-        {
-            Name = "stoppingToken",
-            Type = new TypeModel("CancellationToken")
-        });
+        method.Params.Add(ParamModel.CancellationToken);
 
-        classModel.Constructors.Add(ctor);
+        classModel.Constructors.Add(constructorModel);
 
         classModel.Methods.Add(method);
 
         _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs"));
-
-        _notificationListener.Broadcast(new WorkerFileCreated(classModel.Name, directory));
-
     }
 
     public void ServiceCreate(string name, string directory)

@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "aggregate-create -n Profile -p ProfileId:Guid,Name:string,Email:string -d C:\\projects\\Commitments\\src\\Services\\Profile\\ProfileService.Core\\AggregateModel",
+      "commandLineArgs": "service-bus-message-consumer-create -d C:\\projects\\Commitments\\src\\Services\\Commitments\\Commitments.Core",
       "environmentVariables": {
       }
     }
