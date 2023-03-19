@@ -27,4 +27,5 @@ public interface IAngularService
     void ScssComponentCreate(string name, string directory);
     void MaterialAdd(AngularProjectReferenceModel model);
     void AddBuildConfiguration(string configurationName, AngularProjectReferenceModel model);
+    void ControlCreate(string name, string directory);
 }

@@ -81,6 +81,7 @@ public class AngularService : IAngularService
     public void ComponentCreate(string name, string directory)
     {
         var nameSnakeCase = ((SyntaxToken)name).SnakeCase();
+
         var namePascalCase = ((SyntaxToken)name).PascalCase();
 
         _commandService.Start($"ng g c {name}", directory);
@@ -850,5 +851,47 @@ public class AngularService : IAngularService
                 });
 
         IndexCreate(true, scssDirectory);
+    }
+
+    public void ControlCreate(string name, string directory)
+    {
+        var nameSnakeCase = ((SyntaxToken)name).SnakeCase();
+
+        _commandService.Start($"ng g c {name}", directory);
+
+        var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
+
+        _artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate(
+            "Components.Control.Component",
+            $"{nameSnakeCase}.component",
+            componentDirectory,
+            "ts",
+            tokens: new TokensBuilder()
+            .With("name", name)
+            .Build()
+            ));
+
+        _artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate(
+            "Components.Control.Html",
+            $"{nameSnakeCase}.component",
+            componentDirectory,
+            "html",
+            tokens: new TokensBuilder()
+            .With("name", name)
+            .With("messageBinding", "{{ vm.message }}")
+            .Build()
+            ));
+
+        IndexCreate(false, componentDirectory);
+
+        IndexCreate(false, directory);
+
+        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.ts"));
+
+        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.scss"));
+
+        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.html"));
+
+        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.spec.ts"));
     }
 }

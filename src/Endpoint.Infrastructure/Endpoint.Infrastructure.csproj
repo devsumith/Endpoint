@@ -20,6 +20,8 @@
     <None Remove="Templates\Angular\Components\App\Html.txt" />
     <None Remove="Templates\Angular\Components\App\Scss.txt" />
     <None Remove="Templates\Angular\Components\App\Spec.txt" />
+    <None Remove="Templates\Angular\Components\Control\Component.txt" />
+    <None Remove="Templates\Angular\Components\Control\Html.txt" />
     <None Remove="Templates\Angular\Components\Default\Component.txt" />
     <None Remove="Templates\Angular\Components\Default\Html.txt" />
     <None Remove="Templates\Angular\Components\Dialog\Component.txt" />
@@ -127,6 +129,8 @@
     <EmbeddedResource Include="Templates\Angular\Components\App\Html.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\App\Scss.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\App\Spec.txt" />
+    <EmbeddedResource Include="Templates\Angular\Components\Control\Component.txt" />
+    <EmbeddedResource Include="Templates\Angular\Components\Control\Html.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\Default\Component.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\Default\Html.txt" />
     <EmbeddedResource Include="Templates\Angular\Components\Dialog\Component.txt" />
