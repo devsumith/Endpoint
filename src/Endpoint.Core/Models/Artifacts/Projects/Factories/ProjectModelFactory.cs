@@ -1,11 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using DotLiquid.Tags;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
-using Endpoint.Core.Models.Artifacts.Folders;
 using Endpoint.Core.Models.Artifacts.Projects.Enums;
 using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Constructors;
@@ -23,12 +21,11 @@ namespace Endpoint.Core.Models.Artifacts.Projects.Factories;
 public class ProjectModelFactory : IProjectModelFactory
 {
     private readonly IFileModelFactory _fileModelFactory;
-    private readonly INamespaceProvider _namespaceProvider;
 
-    public ProjectModelFactory(IFileModelFactory fileModelFactory, INamespaceProvider namespaceProvider)
+    public ProjectModelFactory(IFileModelFactory fileModelFactory)
     {
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
-        _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
+
     }
 
     public ProjectModel CreateSpecFlowProject(string name, string directory)
@@ -37,13 +34,10 @@ public class ProjectModelFactory : IProjectModelFactory
 
         model.DotNetProjectType = DotNetProjectType.XUnit;
 
-        model.Packages.Add(new PackageModel() { Name = "SpecFlow.XUnit" });
-
-        model.Packages.Add(new PackageModel() { Name = "Microsoft.Extensions.Configuration.Json" });
-
-        model.Packages.Add(new PackageModel() { Name = "FluentAssertions" });
-
-        model.Packages.Add(new PackageModel() { Name = "Ductus.FluentDocker" });
+        model.Packages.Add(new () { Name = "SpecFlow.XUnit" });
+        model.Packages.Add(new () { Name = "Microsoft.Extensions.Configuration.Json" });
+        model.Packages.Add(new () { Name = "FluentAssertions" });
+        model.Packages.Add(new () { Name = "Ductus.FluentDocker" });
 
         return model;
     }
@@ -54,9 +48,8 @@ public class ProjectModelFactory : IProjectModelFactory
 
         model.DotNetProjectType = DotNetProjectType.NUnit;
 
-        model.Packages.Add(new PackageModel() { Name = "Microsoft.Playwright.NUnit" });
-
-        model.Packages.Add(new PackageModel() { Name = "SpecFlow.NUnit" });
+        model.Packages.Add(new () { Name = "Microsoft.Playwright.NUnit" });
+        model.Packages.Add(new () { Name = "SpecFlow.NUnit" });
 
         return model;
     }
@@ -66,9 +59,7 @@ public class ProjectModelFactory : IProjectModelFactory
         var model = new ProjectModel(DotNetProjectType.Console, name, directory);
 
         model.Files.Add(_fileModelFactory.CreateCSharp("EmptyProgram", "", "Program", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateCSharp("HttpClientExtensions", "", "HttpClientExtensions", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateCSharp("HttpClientFactory", "", "HttpClientFactory", model.Directory));
 
         return model;
@@ -83,17 +74,12 @@ public class ProjectModelFactory : IProjectModelFactory
         model.GenerateDocumentationFile = true;
 
         model.Files.Add(_fileModelFactory.LaunchSettingsJson(model.Directory, model.Name, options.Port.Value));
-
         model.Files.Add(_fileModelFactory.AppSettings(model.Directory, model.Name, options.DbContextName));
-
         model.Files.Add(new MinimalApiProgramFileModel(model.Namespace, model.Directory, model.Namespace, options.DbContextName, entities));
 
         model.Packages.Add(new() { Name = "Microsoft.EntityFrameworkCore.InMemory", Version = "6.0.2" });
-
         model.Packages.Add(new() { Name = "Swashbuckle.AspNetCore.Annotations", Version = "6.2.3" });
-
         model.Packages.Add(new() { Name = "Swashbuckle.AspNetCore.Newtonsoft", Version = "6.2.3" });
-
         model.Packages.Add(new() { Name = "MinimalApis.Extensions", IsPreRelease = true });
 
         return model;
@@ -129,7 +115,7 @@ public class ProjectModelFactory : IProjectModelFactory
 
                     project.DotNetProjectType = DotNetProjectType.ClassLib;
 
-                    project.Folders.Add(new FolderModel("AggregatesModel", project.Directory));
+                    project.Folders.Add(new ("AggregatesModel", project.Directory));
 
                     project.Files.Add(_fileModelFactory.CreateResponseBase(project.Directory));
                     project.Files.Add(_fileModelFactory.CreateCoreUsings(project.Directory));
@@ -270,9 +256,9 @@ public class ProjectModelFactory : IProjectModelFactory
 
         model.Files.Add(_fileModelFactory.CreateTemplate("Observable", "Observable", $"{model.Directory}{Path.DirectorySeparatorChar}Internals"));
 
-        model.Packages.Add(new PackageModel() { Name = "MediatR.Contracts", Version = "1.0.1" });
+        model.Packages.Add(new () { Name = "MediatR.Contracts", Version = "1.0.1" });
 
-        model.Packages.Add(new PackageModel() { Name = "Newtonsoft.Json", Version = "13.0.2" });
+        model.Packages.Add(new () { Name = "Newtonsoft.Json", Version = "13.0.2" });
 
         return model;
     }
@@ -330,7 +316,7 @@ public class ProjectModelFactory : IProjectModelFactory
             Body = "Errors = new List<string>();"
         };
 
-        responseBase.Properties.Add(new PropertyModel(responseBase, AccessModifier.Public, TypeModel.ListOf("string"), "Errors", PropertyAccessorModel.GetPrivateSet));
+        responseBase.Properties.Add(new (responseBase, AccessModifier.Public, TypeModel.ListOf("string"), "Errors", PropertyAccessorModel.GetPrivateSet));
 
         responseBase.Constructors.Add(responseBaseConstructor);
 
@@ -364,41 +350,24 @@ public class ProjectModelFactory : IProjectModelFactory
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Security", directory);
 
         model.Packages.Add(new () { Name = "MediatR", Version = "12.0.0" });
-
         model.Packages.Add(new () { Name = "Microsoft.AspNetCore.Authentication.JwtBearer", Version = "7.0.2" });
-
         model.Packages.Add(new () { Name = "Swashbuckle.AspNetCore.SwaggerGen", Version = "6.5.0" });
-
-        model.Packages.Add(new PackageModel { Name = "System.IdentityModel.Tokens.Jwt", Version = "6.25.1" });
+        model.Packages.Add(new () { Name = "System.IdentityModel.Tokens.Jwt", Version = "6.25.1" });
 
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.AccessRight", "AccessRight", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.Authentication", "Authentication", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.AuthorizationHeaderParameterOperationFilter", "AuthorizationHeaderParameterOperationFilter", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.AuthorizeResourceOperationAttribute", "AuthorizeResourceOperationAttribute", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.ConfigureServices", "ConfigureServices", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.IPasswordHasher", "IPasswordHasher", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.ITokenBuilder", "ITokenBuilder", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.ITokenProvider", "ITokenProvider", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.Operations", "Operations", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.PasswordHasher", "PasswordHasher", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.ResourceOperationAuthorizationBehavior", "ResourceOperationAuthorizationBehavior", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.ResourceOperationAuthorizationHandler", "ResourceOperationAuthorizationHandler", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.SecurityConstants", "SecurityConstants", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.TokenBuilder", "TokenBuilder", model.Directory));
-
         model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.TokenProvider", "TokenProvider", model.Directory));
 
         return model;

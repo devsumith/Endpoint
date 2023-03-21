@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "ddd-app-create -n MeetupService -a Group --properties GroupId:Guid,Name:string -d C:\\projects",
+      "commandLineArgs": "ddd-app-create -n FooService -a Group --properties GroupId:Guid,Name:string -d C:\\projects",
       "environmentVariables": {
       }
     }

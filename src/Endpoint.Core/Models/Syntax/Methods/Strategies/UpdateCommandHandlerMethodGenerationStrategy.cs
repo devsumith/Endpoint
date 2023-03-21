@@ -53,7 +53,7 @@ public class UpdateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         builder.AppendLine("");
 
-        foreach (var property in entity.Properties.Where(x => x.Id == false))
+        foreach (var property in entity.Properties.Where(x => x.Id == false && x.Name != $"{model.Name}Id"))
         {
             builder.AppendLine($"{entityNameCamelCase}.{property.Name} = request.{property.Name};");
         }
