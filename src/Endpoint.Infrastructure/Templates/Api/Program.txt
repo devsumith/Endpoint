@@ -54,7 +54,9 @@ try
 
         if (args.Contains("dropdb"))
         {
-            context.Database.EnsureDeleted();
+            context.Database.ExecuteSql($"DROP SCHEMA {{ schemaPascalCase }}");
+
+            context.Database.ExecuteSql($"DELETE from __EFMigrationsHistory where MigrationId like '%_{{ schemaPascalCase }}_%';");
         }
 
         if (args.Contains("migratedb"))

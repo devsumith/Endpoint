@@ -26,12 +26,12 @@ public class FileModelFactory : IFileModelFactory
 {
     private readonly IRouteHandlerModelFactory _routeHandlerModelFactory;
     private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly ILegacyAggregateModelFactory _aggregateRootModelFactory;
+    private readonly ILegacyAggregatesModelFactory _aggregateRootModelFactory;
     private readonly IFileProvider _fileProvider;
     private readonly INamespaceProvider _namespaceProvider;
 
     public FileModelFactory(
-        ILegacyAggregateModelFactory aggregateRootModelFactory,
+        ILegacyAggregatesModelFactory aggregateRootModelFactory,
         IRouteHandlerModelFactory routeHandlerModelFactory,
         INamingConventionConverter namingConventionConverter,
         IFileProvider fileProvider,
@@ -185,7 +185,7 @@ public class FileModelFactory : IFileModelFactory
 
         var usingDirectives = new List<UsingDirectiveModel>();
 
-        foreach (var folder in Directory.GetDirectories($"{projectDirectory}{Path.DirectorySeparatorChar}AggregateModel"))
+        foreach (var folder in Directory.GetDirectories($"{projectDirectory}{Path.DirectorySeparatorChar}AggregatesModel"))
         {
             var folderName = Path.GetFileNameWithoutExtension(folder);
 

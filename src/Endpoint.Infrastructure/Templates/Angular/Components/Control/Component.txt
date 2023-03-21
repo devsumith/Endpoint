@@ -42,13 +42,13 @@ export class {{ namePascalCase }}Component implements ControlValueAccessor, Vali
   
   private readonly _elementRef = inject(ElementRef<HTMLElement>);
 
-  validate(control: AbstractControl): ValidationErrors | any {
+  validate(control: AbstractControl): ValidationErrors | null {
     return this.form.valid 
     ? null
     : Object.keys(this.form.controls).reduce((accumulatedErrors,formControlName) => { 
       const errors = {...accumulatedErrors} as any;
       
-      const controlErrors = this.form.controls[formControlName].errors;
+      const controlErrors = this.form.get(formControlName)!.errors;
 
       if (controlErrors) {
         errors[formControlName] = controlErrors;

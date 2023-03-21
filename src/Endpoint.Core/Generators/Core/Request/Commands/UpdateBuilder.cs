@@ -24,7 +24,7 @@ namespace Endpoint.Core.Builders
         private string _namespace;
         private string _domainNamespace;
         private string _applicationNamespace;
-        private LegacyAggregateModel _aggregateRoot;
+        private LegacyAggregatesModel _aggregateRoot;
         private SettingsModel _settings;
 
         public UpdateBuilder(SettingsModel settings, IContext context, IFileSystem fileSystem)
@@ -35,7 +35,7 @@ namespace Endpoint.Core.Builders
             _settings = settings;
         }
 
-        public UpdateBuilder WithAggregateRoot(LegacyAggregateModel aggregateRoot)
+        public UpdateBuilder WithAggregateRoot(LegacyAggregatesModel aggregateRoot)
         {
             _aggregateRoot = aggregateRoot;
             return this;

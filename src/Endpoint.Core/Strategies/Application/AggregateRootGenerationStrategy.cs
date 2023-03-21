@@ -8,13 +8,13 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Strategies.Application;
 
-public class AggregateRootGenerationStrategy : SyntaxGenerationStrategyBase<LegacyAggregateModel>, IAggregateRootGenerationStrategy
+public class AggregateRootGenerationStrategy : SyntaxGenerationStrategyBase<LegacyAggregatesModel>, IAggregateRootGenerationStrategy
 {
     public AggregateRootGenerationStrategy(IServiceProvider serviceProvider)
         : base(serviceProvider)
     { }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, LegacyAggregateModel model, dynamic context = null)
+    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, LegacyAggregatesModel model, dynamic context = null)
     {
         var content = new List<string>
         {

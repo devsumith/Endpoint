@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -118,9 +119,11 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     {
         var model = new SolutionModel(name, directory);
 
+        var schema = name.Remove("Service");
+
         var sourceFolder = new FolderModel("src", model.SolutionDirectory);
 
-        var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder.Directory);
+        var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder.Directory) { Priority = 1 };
 
         var kernal = _projectModelFactory.CreateKernelProject(buildingBlocksFolder.Directory);
 
@@ -154,11 +157,13 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         model.Folders.Add(buildingBlocksFolder);
 
+        model.Folders = model.Folders.OrderByDescending(x => x.Priority).ToList();
+
         _artifactGenerationStrategyFactory.CreateFor(model);
 
-        var aggregateModelDirectory = Path.Combine(core.Directory, "AggregateModel");
+        var aggregatesModelDirectory = Path.Combine(core.Directory, "AggregatesModel");
 
-        var entity = await _aggregateService.Add(aggregateName, properties, aggregateModelDirectory, name);
+        var entity = await _aggregateService.Add(aggregateName, properties, aggregatesModelDirectory, name);
 
         var dbContext = _classModelFactory.CreateDbContext($"{name}DbContext", new List<EntityModel>()
         {
@@ -169,7 +174,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         _apiProjectService.ControllerAdd(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
 
-        _commandService.Start("dotnet ef migrations add Initial", infrastructure.Directory);
+        _commandService.Start($"dotnet ef migrations add {schema}_Initial", infrastructure.Directory);
 
         _commandService.Start("dotnet ef database update", infrastructure.Directory);
 

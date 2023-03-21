@@ -12,7 +12,7 @@ namespace Endpoint.Core.Builders.Core
 {
     public class CreateCommandHandlerBodyBuilder
     {
-        public static string[] Build(LegacyAggregateModel aggregateRoot)
+        public static string[] Build(LegacyAggregatesModel aggregateRoot)
         {
             var aggregateName = aggregateRoot.Name;
 

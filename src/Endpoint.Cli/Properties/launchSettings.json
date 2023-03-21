@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "service-bus-message-consumer-create -d C:\\projects\\Commitments\\src\\Services\\Commitments\\Commitments.Core",
+      "commandLineArgs": "ddd-app-create -n MeetupService -a Group --properties GroupId:Guid,Name:string -d C:\\projects",
       "environmentVariables": {
       }
     }

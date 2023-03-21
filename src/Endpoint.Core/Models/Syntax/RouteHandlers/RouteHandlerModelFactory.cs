@@ -8,7 +8,7 @@ namespace Endpoint.Core.Models.Syntax.RouteHandlers;
 
 public class RouteHandlerModelFactory : IRouteHandlerModelFactory
 {
-    public List<RouteHandlerModel> Create(string dbContextName, LegacyAggregateModel aggregateRoot)
+    public List<RouteHandlerModel> Create(string dbContextName, LegacyAggregatesModel aggregateRoot)
     {
         var resourceNameToken = (SyntaxToken)aggregateRoot.Name;
 

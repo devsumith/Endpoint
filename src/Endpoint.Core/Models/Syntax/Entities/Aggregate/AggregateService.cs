@@ -69,7 +69,7 @@ public class AggregateService : IAggregateService
             classModel = _classModelFactory.CreateEntity(name, properties);
         }
 
-        var model = new AggregateModel(_namingConventionConverter, serviceName, classModel, directory);
+        var model = new AggregatesModel(_namingConventionConverter, serviceName, classModel, directory);
 
         _artifactGenerationStrategyFactory.CreateFor(model);
 

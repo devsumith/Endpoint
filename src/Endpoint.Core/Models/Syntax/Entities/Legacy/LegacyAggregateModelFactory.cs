@@ -9,18 +9,18 @@ using System.Linq;
 namespace Endpoint.Core.Models.Syntax.Entities.Legacy;
 
 [Obsolete]
-public class LegacyAggregateModelFactory : ILegacyAggregateModelFactory
+public class LegacyAggregatesModelFactory : ILegacyAggregatesModelFactory
 {
     private readonly ISyntaxService _syntaxService;
 
-    public LegacyAggregateModelFactory(ISyntaxService syntaxService)
+    public LegacyAggregatesModelFactory(ISyntaxService syntaxService)
     {
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
     }
 
-    public LegacyAggregateModel Create(string resource, string properties)
+    public LegacyAggregatesModel Create(string resource, string properties)
     {
-        LegacyAggregateModel model = new LegacyAggregateModel(resource);
+        LegacyAggregatesModel model = new LegacyAggregatesModel(resource);
 
         var idPropertyName = _syntaxService.SyntaxModel.IdPropertyFormat == IdPropertyFormat.Short ? "Id" : $"{((SyntaxToken)resource).PascalCase}Id";
 

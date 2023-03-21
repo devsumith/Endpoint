@@ -37,7 +37,7 @@ namespace Endpoint.Core.Services
 
         public SettingsModel Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
-            LegacyAggregateModel aggregateRoot = new LegacyAggregateModel(resource);
+            LegacyAggregatesModel aggregateRoot = new LegacyAggregatesModel(resource);
 
             aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, AccessModifier.Public, new TypeModel() { Name = "Guid" }, $"{((SyntaxToken)resource).PascalCase}Id", PropertyAccessorModel.GetPrivateSet, key: true));
 
@@ -51,16 +51,16 @@ namespace Endpoint.Core.Services
                 }
             }
 
-            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<LegacyAggregateModel>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins, prefix);
+            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<LegacyAggregatesModel>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins, prefix);
         }
 
         public SettingsModel Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
-            var aggregates = new List<LegacyAggregateModel>();
+            var aggregates = new List<LegacyAggregatesModel>();
 
             foreach (var resource in resources)
             {
-                LegacyAggregateModel aggregateRoot = new LegacyAggregateModel(resource);
+                LegacyAggregatesModel aggregateRoot = new LegacyAggregatesModel(resource);
 
                 var idPropertyName = useShortIdProperty ? "Id" : $"{((SyntaxToken)resource).PascalCase}Id";
 
@@ -86,7 +86,7 @@ namespace Endpoint.Core.Services
 
         }
 
-        public SettingsModel Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<LegacyAggregateModel> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+        public SettingsModel Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<LegacyAggregatesModel> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
         {
 
             name = name.Replace("-", "_");

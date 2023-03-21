@@ -92,7 +92,7 @@ namespace Endpoint.Core.Services
             var model = new SettingsModel(
                         request.Name,
                         request.DbContextName,
-                        new LegacyAggregateModel(request.Resource, request.NumericIdPropertyDataType.Value, request.ShortIdPropertyName.Value, request.Properties),
+                        new LegacyAggregatesModel(request.Resource, request.NumericIdPropertyDataType.Value, request.ShortIdPropertyName.Value, request.Properties),
                         request.Directory,
                         !request.Monolith.Value,
                         default,

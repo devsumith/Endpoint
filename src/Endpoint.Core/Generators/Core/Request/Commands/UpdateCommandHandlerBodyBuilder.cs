@@ -14,7 +14,7 @@ namespace Endpoint.Core.Builders.Core
 {
     public class UpdateCommandHandlerBodyBuilder
     {
-        public static string[] Build(SettingsModel settings, LegacyAggregateModel aggregateRoot)
+        public static string[] Build(SettingsModel settings, LegacyAggregatesModel aggregateRoot)
         {
             var entityName = aggregateRoot.Name;
 

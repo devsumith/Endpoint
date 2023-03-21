@@ -20,7 +20,6 @@ public class AngularHttpServiceCreateRequest : IRequest
     [Option('n', "entity-name")]
     public string EntityName { get; set; }
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }

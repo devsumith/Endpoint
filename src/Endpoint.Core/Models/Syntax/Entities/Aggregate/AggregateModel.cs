@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Models.Syntax.Entities.Aggregate;
 
-public class AggregateModel
+public class AggregatesModel
 {
-    public AggregateModel(INamingConventionConverter namingConventionConverter, string serviceName, ClassModel aggregate, string directory)
+    public AggregatesModel(INamingConventionConverter namingConventionConverter, string serviceName, ClassModel aggregate, string directory)
     {
         Queries = new List<QueryModel>();
         Commands = new List<CommandModel>();
@@ -19,7 +19,15 @@ public class AggregateModel
         AggregateDto = aggregate.CreateDto();
         AggregateExtensions = new DtoExtensionsModel(namingConventionConverter, $"{aggregate.Name}Extensions", aggregate);
 
-        foreach (var routeType in Enum.GetValues<RouteType>())
+        foreach (var routeType in new[]
+        {
+             RouteType.Page,
+             RouteType.Get,
+             RouteType.GetById,
+             RouteType.Delete,
+             RouteType.Create,
+             RouteType.Update
+        })
         {
 
             switch (routeType)
@@ -37,9 +45,6 @@ public class AggregateModel
                 case RouteType.Update:
                     Commands.Add(new CommandModel(serviceName, aggregate, namingConventionConverter, routeType));
                     break;
-
-                default:
-                    throw new NotSupportedException();
             }
         }
     }

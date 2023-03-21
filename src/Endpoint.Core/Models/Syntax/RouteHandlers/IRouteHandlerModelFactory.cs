@@ -8,5 +8,5 @@ namespace Endpoint.Core.Models.Syntax.RouteHandlers;
 
 public interface IRouteHandlerModelFactory
 {
-    List<RouteHandlerModel> Create(string dbContextName, LegacyAggregateModel aggregateRoot);
+    List<RouteHandlerModel> Create(string dbContextName, LegacyAggregatesModel aggregateRoot);
 }

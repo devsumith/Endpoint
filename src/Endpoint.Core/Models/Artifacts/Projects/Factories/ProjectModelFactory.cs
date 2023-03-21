@@ -1,6 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using DotLiquid.Tags;
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Artifacts.Files;
 using Endpoint.Core.Models.Artifacts.Files.Factories;
@@ -126,33 +127,35 @@ public class ProjectModelFactory : IProjectModelFactory
             {
                 case Constants.ProjectType.Core:
 
-
                     project.DotNetProjectType = DotNetProjectType.ClassLib;
 
-                    project.Folders.Add(new FolderModel("AggregateModel", project.Directory));
+                    project.Folders.Add(new FolderModel("AggregatesModel", project.Directory));
 
                     project.Files.Add(_fileModelFactory.CreateResponseBase(project.Directory));
                     project.Files.Add(_fileModelFactory.CreateCoreUsings(project.Directory));
                     project.Files.Add(_fileModelFactory.CreateLinqExtensions(project.Directory));
                     project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Core.ConfigureServices", "ConfigureServices", project.Directory, "cs", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
 
-                    project.Packages.Add(new PackageModel("FluentValidation", "11.5.1"));
-                    project.Packages.Add(new PackageModel("FluentValidation.DependencyInjectionExtensions", "11.5.1"));
-                    project.Packages.Add(new PackageModel("MediatR", "12.0.0"));
-                    project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.2"));
-                    project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "7.0.2"));
-                    project.Packages.Add(new PackageModel("Microsoft.Extensions.Hosting.Abstractions", "7.0.0"));
-                    project.Packages.Add(new PackageModel("Microsoft.Extensions.Logging.Abstractions", "7.0.0"));
-                    project.Packages.Add(new PackageModel("SerilogTimings", "3.0.1"));
-                    project.Packages.Add(new PackageModel("Microsoft.AspNetCore.Authentication.JwtBearer", "6.5.0"));
-                    project.Packages.Add(new PackageModel("System.IdentityModel.Tokens.Jwt", "6.25.1"));
+                    project.Packages.Add(new ("FluentValidation", "11.5.1"));
+                    project.Packages.Add(new ("FluentValidation.DependencyInjectionExtensions", "11.5.1"));
+                    project.Packages.Add(new ("MediatR", "12.0.0"));
+                    project.Packages.Add(new ("Newtonsoft.Json", "13.0.2"));
+                    project.Packages.Add(new ("Microsoft.EntityFrameworkCore", "7.0.2"));
+                    project.Packages.Add(new ("Microsoft.Extensions.Hosting.Abstractions", "7.0.0"));
+                    project.Packages.Add(new ("Microsoft.Extensions.Logging.Abstractions", "7.0.0"));
+                    project.Packages.Add(new ("SerilogTimings", "3.0.1"));
+                    project.Packages.Add(new ("Microsoft.AspNetCore.Authentication.JwtBearer", "6.5.0"));
+                    project.Packages.Add(new ("System.IdentityModel.Tokens.Jwt", "6.25.1"));
+
+                    project.References.Add(@"..\BuildingBlocks\Kernel\Kernel.csproj");
+
                     break;
 
                 case Constants.ProjectType.Domain:
-                    project.Packages.Add(new PackageModel("FluentValidation", "11.4.0"));
-                    project.Packages.Add(new PackageModel("MediatR", "12.0.0"));
-                    project.Packages.Add(new PackageModel("Newtonsoft.Json", "13.0.2"));
-                    project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "7.0.2"));
+                    project.Packages.Add(new ("FluentValidation", "11.4.0"));
+                    project.Packages.Add(new ("MediatR", "12.0.0"));
+                    project.Packages.Add(new ("Newtonsoft.Json", "13.0.2"));
+                    project.Packages.Add(new ("Microsoft.EntityFrameworkCore", "7.0.2"));
                     break;
 
                 case Constants.ProjectType.Application:
@@ -165,7 +168,7 @@ public class ProjectModelFactory : IProjectModelFactory
                         .Build();
 
                     project.DotNetProjectType = DotNetProjectType.ClassLib;
-                    project.Folders.Add(new FolderModel("Data", project.Directory));
+                    project.Folders.Add(new ("Data", project.Directory));
                     project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.ConfigureServices", "ConfigureServices", project.Directory, "cs", tokens: tokens));
 
                     project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.SeedData", "SeedData", Path.Combine(project.Directory, "Data"), "cs", tokens: new TokensBuilder()
@@ -175,15 +178,16 @@ public class ProjectModelFactory : IProjectModelFactory
 
                     project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.DesignTimeDbContextFactory", "DesignTimeDbContextFactory", project.Directory, "cs", tokens: tokens));
 
-
                     project.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Core{Path.DirectorySeparatorChar}{serviceName}.Core.csproj");
 
-                    project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore.Tools", "7.0.0"));
-                    project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore.SqlServer", "7.0.2"));
-                    project.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore.Design", "7.0.2"));
+                    project.Packages.Add(new ("Microsoft.EntityFrameworkCore.Tools", "7.0.0"));
+                    project.Packages.Add(new ("Microsoft.EntityFrameworkCore.SqlServer", "7.0.2"));
+                    project.Packages.Add(new ("Microsoft.EntityFrameworkCore.Design", "7.0.2"));
                     break;
 
                 case Constants.ProjectType.Api:
+
+                    var schema = serviceName.Remove("Service");
 
                     project.DotNetProjectType = DotNetProjectType.WebApi;
 
@@ -201,17 +205,18 @@ public class ProjectModelFactory : IProjectModelFactory
                     project.Files.Add(_fileModelFactory.CreateTemplate("Api.Program", "Program", project.Directory, tokens: new TokensBuilder()
                         .With("DbContext", $"{serviceName}DbContext")
                         .With("serviceName", serviceName)
+                        .With("schema", schema)
                         .Build()));
 
-                    project.Packages.Add(new PackageModel("Microsoft.AspNetCore.Mvc.Versioning", "5.0.0"));
-                    project.Packages.Add(new PackageModel() { Name = "Microsoft.AspNetCore.OpenApi", Version = "7.0.2" });
-                    project.Packages.Add(new PackageModel("Serilog", "2.12.0"));
-                    project.Packages.Add(new PackageModel("SerilogTimings", "3.0.1"));
-                    project.Packages.Add(new PackageModel("Serilog.AspNetCore", "6.0.1"));
-                    project.Packages.Add(new PackageModel("Swashbuckle.AspNetCore", "6.5.0"));
-                    project.Packages.Add(new PackageModel("Swashbuckle.AspNetCore.Annotations", "6.5.0"));
-                    project.Packages.Add(new PackageModel("Swashbuckle.AspNetCore.Newtonsoft", "6.5.0"));
-                    project.Packages.Add(new PackageModel("Swashbuckle.AspNetCore.Swagger", "6.5.0"));
+                    project.Packages.Add(new ("Microsoft.AspNetCore.Mvc.Versioning", "5.0.0"));
+                    project.Packages.Add(new () { Name = "Microsoft.AspNetCore.OpenApi", Version = "7.0.2" });
+                    project.Packages.Add(new ("Serilog", "2.12.0"));
+                    project.Packages.Add(new ("SerilogTimings", "3.0.1"));
+                    project.Packages.Add(new ("Serilog.AspNetCore", "6.0.1"));
+                    project.Packages.Add(new ("Swashbuckle.AspNetCore", "6.5.0"));
+                    project.Packages.Add(new ("Swashbuckle.AspNetCore.Annotations", "6.5.0"));
+                    project.Packages.Add(new ("Swashbuckle.AspNetCore.Newtonsoft", "6.5.0"));
+                    project.Packages.Add(new ("Swashbuckle.AspNetCore.Swagger", "6.5.0"));
                     break;
 
             }
@@ -278,11 +283,11 @@ public class ProjectModelFactory : IProjectModelFactory
 
         model.References.Add(@"..\Messaging\Messaging.csproj");
 
-        model.Packages.Add(new PackageModel() { Name = "Microsoft.Extensions.DependencyInjection.Abstractions", Version = "7.0.0" });
+        model.Packages.Add(new () { Name = "Microsoft.Extensions.DependencyInjection.Abstractions", Version = "7.0.0" });
 
-        model.Packages.Add(new PackageModel() { Name = "Microsoft.Extensions.Logging.Abstractions", Version = "7.0.0" });
+        model.Packages.Add(new () { Name = "Microsoft.Extensions.Logging.Abstractions", Version = "7.0.0" });
 
-        model.Packages.Add(new PackageModel() { Name = "System.Reactive.Linq", Version = "5.0.0" });
+        model.Packages.Add(new () { Name = "System.Reactive.Linq", Version = "5.0.0" });
 
         model.Files.Add(_fileModelFactory.CreateTemplate("Messaging.Udp.ConfigureServices", "ConfigureServices", model.Directory));
 
@@ -312,7 +317,11 @@ public class ProjectModelFactory : IProjectModelFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Kernel", directory);
 
-        model.Packages.Add(new PackageModel("Microsoft.EntityFrameworkCore", "7.0.2"));
+        model.Packages.Add(new("Microsoft.EntityFrameworkCore", "7.0.2"));
+        model.Packages.Add(new("Microsoft.AspNetCore.Mvc.Core", "2.2.5"));
+        model.Packages.Add(new("Microsoft.AspNetCore.SignalR.Core", "1.1.0"));
+        model.Packages.Add(new("Microsoft.EntityFrameworkCore", "7.0.2"));
+        model.Packages.Add(new("Microsoft.Extensions.Hosting.Abstractions", "7.0.0"));
 
         var responseBase = new ClassModel("ResponseBase");
 
@@ -327,8 +336,23 @@ public class ProjectModelFactory : IProjectModelFactory
 
         var entityFrameworFileModel = _fileModelFactory.CreateTemplate("BuildingBlocks.Kernel.EntityFrameworkCoreExtensions", "EntityFrameworkCoreExtensions", model.Directory);
 
+        var globalExceptionFilterFileModel = _fileModelFactory.CreateTemplate("BuildingBlocks.Kernel.HttpGlobalExceptionFilter", "HttpGlobalExceptionFilter", model.Directory);
+
+        var domainExceptionfileModel = _fileModelFactory.CreateTemplate("BuildingBlocks.Kernel.DomainException", "DomainException", model.Directory);
+
+        var internalServerfileModel = _fileModelFactory.CreateTemplate("BuildingBlocks.Kernel.InternalServerErrorObjectResult", "InternalServerErrorObjectResult", model.Directory);
+
+        var jsonResponsefileModel = _fileModelFactory.CreateTemplate("BuildingBlocks.Kernel.JsonErrorResponse", "JsonErrorResponse", model.Directory);
 
         model.Files.Add(entityFrameworFileModel);
+
+        model.Files.Add(domainExceptionfileModel);
+
+        model.Files.Add(internalServerfileModel);
+
+        model.Files.Add(globalExceptionFilterFileModel);
+
+        model.Files.Add(jsonResponsefileModel);
 
         model.Files.Add(new ObjectFileModel<ClassModel>(responseBase, responseBase.UsingDirectives, responseBase.Name, model.Directory, "cs"));
 
@@ -339,11 +363,11 @@ public class ProjectModelFactory : IProjectModelFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Security", directory);
 
-        model.Packages.Add(new PackageModel { Name = "MediatR", Version = "12.0.0" });
+        model.Packages.Add(new () { Name = "MediatR", Version = "12.0.0" });
 
-        model.Packages.Add(new PackageModel { Name = "Microsoft.AspNetCore.Authentication.JwtBearer", Version = "7.0.2" });
+        model.Packages.Add(new () { Name = "Microsoft.AspNetCore.Authentication.JwtBearer", Version = "7.0.2" });
 
-        model.Packages.Add(new PackageModel { Name = "Swashbuckle.AspNetCore.SwaggerGen", Version = "6.5.0" });
+        model.Packages.Add(new () { Name = "Swashbuckle.AspNetCore.SwaggerGen", Version = "6.5.0" });
 
         model.Packages.Add(new PackageModel { Name = "System.IdentityModel.Tokens.Jwt", Version = "6.25.1" });
 
@@ -408,9 +432,9 @@ public class ProjectModelFactory : IProjectModelFactory
 
             model.Files.Add(_fileModelFactory.CreateTemplate("DefaultConfigureServices", "ConfigureServices", model.Directory, tokens: tokens));
 
-            model.Packages.Add(new PackageModel() { Name = "Microsoft.AspNetCore.OpenApi", Version = "7.0.2" });
+            model.Packages.Add(new () { Name = "Microsoft.AspNetCore.OpenApi", Version = "7.0.2" });
 
-            model.Packages.Add(new PackageModel() { Name = "Swashbuckle.AspNetCore", Version = "6.4.0" });
+            model.Packages.Add(new () { Name = "Swashbuckle.AspNetCore", Version = "6.4.0" });
         }
 
         return model;

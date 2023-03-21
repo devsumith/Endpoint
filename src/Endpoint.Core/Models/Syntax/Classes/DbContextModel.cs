@@ -74,7 +74,7 @@ public class DbContextModel : ClassModel
 
 
 
-            UsingDirectives.Add(new($"{serviceName}.Core.AggregateModel.{entity.Name}Aggregate"));
+            UsingDirectives.Add(new($"{serviceName}.Core.AggregatesModel.{entity.Name}Aggregate"));
         }
     }
 

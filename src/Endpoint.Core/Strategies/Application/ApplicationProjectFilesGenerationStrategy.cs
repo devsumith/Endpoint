@@ -45,10 +45,10 @@ namespace Endpoint.Core.Services
 
         }
 
-        protected void _buildApplicationFilesForResource(SettingsModel settings, LegacyAggregateModel resource)
+        protected void _buildApplicationFilesForResource(SettingsModel settings, LegacyAggregatesModel resource)
         {
             SyntaxToken resourceName = ((SyntaxToken)resource.Name);
-            var aggregateDirectory = $"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}AggregateModel{Path.DirectorySeparatorChar}{resourceName.PascalCase}Aggregate";
+            var aggregateDirectory = $"{settings.ApplicationDirectory}{Path.DirectorySeparatorChar}AggregatesModel{Path.DirectorySeparatorChar}{resourceName.PascalCase}Aggregate";
             var commandsDirectory = $"{aggregateDirectory}{Path.DirectorySeparatorChar}Commands";
             var queriesDirectory = $"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries";
             var context = new Context();
@@ -241,11 +241,11 @@ namespace Endpoint.Core.Services
             _buildServiceCollectionExtensions(settings);
         }
 
-        public void BuildAdditionalResource(LegacyAggregateModel aggregateModel, SettingsModel settings)
+        public void BuildAdditionalResource(LegacyAggregatesModel aggregatesModel, SettingsModel settings)
         {
             DbContextInterfaceBuilder.Default(settings, _fileSystem);
 
-            _buildApplicationFilesForResource(settings, aggregateModel);
+            _buildApplicationFilesForResource(settings, aggregatesModel);
         }
 
         private void _buildValidationBehavior(SettingsModel settings)

@@ -100,7 +100,7 @@ public static class ConfigureServices
         services.AddSingleton<IDependencyInjectionService, DependencyInjectionService>();
 
         services.AddSingleton<IEntityModelFactory, EntityModelFactory>();
-        services.AddSingleton<ILegacyAggregateModelFactory, LegacyAggregateModelFactory>();
+        services.AddSingleton<ILegacyAggregatesModelFactory, LegacyAggregatesModelFactory>();
 
         services.AddSingleton<IFileNamespaceProvider, FileNamespaceProvider>();
         services.AddSingleton<ISolutionTemplateService, EndpointGenerationStrategy>();

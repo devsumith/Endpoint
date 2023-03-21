@@ -20,22 +20,22 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("db-context-create-from-aggregate-model")]
-public class DbContextCreateFromAggregateModelRequest : IRequest
+public class DbContextCreateFromAggregatesModelRequest : IRequest
 {
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class DbContextCreateFromAggregateModelRequestHandler : IRequestHandler<DbContextCreateFromAggregateModelRequest>
+public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<DbContextCreateFromAggregatesModelRequest>
 {
-    private readonly ILogger<DbContextCreateFromAggregateModelRequestHandler> _logger;
+    private readonly ILogger<DbContextCreateFromAggregatesModelRequestHandler> _logger;
     private readonly IFileProvider _fileProvider;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
 
-    public DbContextCreateFromAggregateModelRequestHandler(
-        ILogger<DbContextCreateFromAggregateModelRequestHandler> logger,
+    public DbContextCreateFromAggregatesModelRequestHandler(
+        ILogger<DbContextCreateFromAggregatesModelRequestHandler> logger,
         IFileProvider fileProvider,
         INamingConventionConverter namingConventionConverter,
         IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
@@ -46,9 +46,9 @@ public class DbContextCreateFromAggregateModelRequestHandler : IRequestHandler<D
         _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
     }
 
-    public async Task Handle(DbContextCreateFromAggregateModelRequest request, CancellationToken cancellationToken)
+    public async Task Handle(DbContextCreateFromAggregatesModelRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(DbContextCreateFromAggregateModelRequestHandler));
+        _logger.LogInformation("Handled: {0}", nameof(DbContextCreateFromAggregatesModelRequestHandler));
 
         var entities = new List<EntityModel>();
 
@@ -58,9 +58,9 @@ public class DbContextCreateFromAggregateModelRequestHandler : IRequestHandler<D
 
         var serviceName = Path.GetFileNameWithoutExtension(projectDirectory).Remove(isInsideCoreProject ? ".Core" : ".Infrastructure");
 
-        var aggregateModelDirectory = isInsideCoreProject ? $"{projectDirectory}{Path.DirectorySeparatorChar}AggregateModel" : null;
+        var aggregatesModelDirectory = isInsideCoreProject ? $"{projectDirectory}{Path.DirectorySeparatorChar}AggregatesModel" : null;
 
-        foreach (var folder in Directory.GetDirectories(aggregateModelDirectory))
+        foreach (var folder in Directory.GetDirectories(aggregatesModelDirectory))
         {
             var folderName = Path.GetFileNameWithoutExtension(folder);
 

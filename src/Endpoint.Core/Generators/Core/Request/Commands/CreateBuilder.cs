@@ -23,7 +23,7 @@ namespace Endpoint.Core.Builders
         private string _namespace;
         private string _domainNamespace;
         private string _applicationNamespace;
-        private LegacyAggregateModel _aggregateRoot;
+        private LegacyAggregatesModel _aggregateRoot;
 
         public CreateBuilder(IContext context, IFileSystem fileSystem)
         {
@@ -32,7 +32,7 @@ namespace Endpoint.Core.Builders
             _fileSystem = fileSystem;
         }
 
-        public CreateBuilder WithAggregateRoot(LegacyAggregateModel aggregateRoot)
+        public CreateBuilder WithAggregateRoot(LegacyAggregatesModel aggregateRoot)
         {
             _aggregateRoot = aggregateRoot;
             return this;

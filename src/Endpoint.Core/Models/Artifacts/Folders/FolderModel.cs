@@ -19,6 +19,7 @@ public class FolderModel
         Files = new List<FileModel>();
     }
 
+    public int Priority { get; set; } = 0;
     public string Name { get; set; }
     public string Directory { get; set; }
     public List<ProjectModel> Projects { get; set; }

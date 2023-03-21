@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Endpoint.Core.Models.Artifacts;
 
-public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBase<AggregateModel>
+public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBase<AggregatesModel>
 {
     private readonly IFileSystem _fileSystem;
     public AggregateArtifactsGenerationStrategy(IServiceProvider serviceProvider, IFileSystem fileSystem)
@@ -20,7 +20,7 @@ public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBa
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, AggregateModel model, dynamic context = null)
+    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, AggregatesModel model, dynamic context = null)
     {
         var aggregateDirectory = $"{model.Directory}{Path.DirectorySeparatorChar}{model.Aggregate.Name}Aggregate";
 

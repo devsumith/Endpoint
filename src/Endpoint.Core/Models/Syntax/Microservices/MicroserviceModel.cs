@@ -10,7 +10,7 @@ namespace Endpoint.Core.Models.Syntax.Microservices;
 public class MicroserviceModel
 {
 
-    List<AggregateModel> AggregateModels { get; set; }
+    List<AggregatesModel> AggregatesModels { get; set; }
 
     public MicroserviceModel(string name)
     {

@@ -43,9 +43,9 @@ public class ClassModelFactory : IClassModelFactory
 
         var classModel = new ClassModel($"{model.Name}Controller");
 
-        classModel.UsingDirectives.Add(new ($"{rootNamesapce}.Core.AggregateModel.{model.Name}Aggregate.Commands"));
+        classModel.UsingDirectives.Add(new ($"{rootNamesapce}.Core.AggregatesModel.{model.Name}Aggregate.Commands"));
 
-        classModel.UsingDirectives.Add(new ($"{rootNamesapce}.Core.AggregateModel.{model.Name}Aggregate.Queries"));
+        classModel.UsingDirectives.Add(new ($"{rootNamesapce}.Core.AggregatesModel.{model.Name}Aggregate.Queries"));
 
         classModel.UsingDirectives.Add(new ("System.Net"));
 

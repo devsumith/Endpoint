@@ -33,10 +33,10 @@ export class {{ entityNamePascalCase }}Service {
   }
 
   public create(options: { {{ entityNameCamelCase }}: {{ entityNamePascalCase }} }): Observable<{ {{ entityNameCamelCase }}Id: string  }> {    
-    return this._client.post<{ {{ entityNameCamelCase }}Id: string }>(`${this._baseUrl}api/1.0/{{ entityNameCamelCase }}`, { {{ entityNameCamelCase }}: options.{{ entityNameCamelCase }} });
+    return this._client.post<{ {{ entityNameCamelCase }}Id: string }>(`${this._baseUrl}api/1.0/{{ entityNameCamelCase }}`,  options.{{ entityNameCamelCase }});
   }
 
   public update(options: { {{ entityNameCamelCase }}: {{ entityNamePascalCase }} }): Observable<{ {{ entityNameCamelCase }}Id: string }> {    
-    return this._client.post<{ {{ entityNameCamelCase }}Id: string }>(`${this._baseUrl}api/1.0/{{ entityNameCamelCase }}`, { {{ entityNameCamelCase }}: options.{{ entityNameCamelCase }} });
+    return this._client.post<{ {{ entityNameCamelCase }}Id: string }>(`${this._baseUrl}api/1.0/{{ entityNameCamelCase }}`, options.{{ entityNameCamelCase }});
   }
 }

@@ -10,14 +10,14 @@ using Endpoint.Core.Models.Syntax.Types;
 namespace Endpoint.Core.Models.Syntax.Entities.Legacy;
 
 [Obsolete]
-public class LegacyAggregateModel : EntityModel
+public class LegacyAggregatesModel : EntityModel
 {
     public List<EntityModel> Entities { get; private set; }
 
     public string IdPropertyName { get; set; }
     public string IdPropertyType { get; set; }
 
-    public LegacyAggregateModel(string name, List<PropertyModel> classProperties)
+    public LegacyAggregatesModel(string name, List<PropertyModel> classProperties)
         : base(name)
     {
         Name = name;
@@ -25,7 +25,7 @@ public class LegacyAggregateModel : EntityModel
         Entities = new List<EntityModel>();
     }
 
-    public LegacyAggregateModel(string name, bool useIntIdPropertyType, bool useShortIdProperty, string properties)
+    public LegacyAggregatesModel(string name, bool useIntIdPropertyType, bool useShortIdProperty, string properties)
         : base(name)
     {
         Name = name;
@@ -47,7 +47,7 @@ public class LegacyAggregateModel : EntityModel
         }
     }
 
-    public LegacyAggregateModel(string name)
+    public LegacyAggregatesModel(string name)
         : base(name)
     {
         Name = name;
