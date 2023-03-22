@@ -12,7 +12,6 @@ using System.IO;
 
 namespace Endpoint.Cli.Commands;
 
-
 [Verb("test-projects-remove")]
 public class TestProjectsRemoveRequest : IRequest
 {

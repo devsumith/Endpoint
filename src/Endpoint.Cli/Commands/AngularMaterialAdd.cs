@@ -2,13 +2,12 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
+using Endpoint.Core.Models.WebArtifacts.Services;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.WebArtifacts.Services;
-using Endpoint.Core.Models.WebArtifacts;
 
 namespace Endpoint.Cli.Commands;
 
@@ -42,7 +41,5 @@ public class AngularMaterialAddRequestHandler : IRequestHandler<AngularMaterialA
         _logger.LogInformation("Handled: {0}", nameof(AngularMaterialAddRequestHandler));
 
         _angularService.MaterialAdd(new(request.Name, request.Directory));
-
-
     }
 }

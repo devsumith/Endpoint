@@ -2,16 +2,14 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
+using Endpoint.Core.Models.Artifacts.Folders.Services;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.Artifacts.Folders.Services;
-using Endpoint.Core.Models.Syntax.Classes;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("aggregate-commands-folder-create")]
 public class AggregateCommandsFolderCreateRequest : IRequest
@@ -41,8 +39,6 @@ public class AggregateCommandsFolderCreateRequestHandler : IRequestHandler<Aggre
     {
         _logger.LogInformation("Handled: {0}", nameof(AggregateCommandsFolderCreateRequestHandler));
 
-        _folderService.AggregateCommands(new ClassModel(request.AggregateName), request.Directory);
-
-
+        _folderService.AggregateCommands(new (request.AggregateName), request.Directory);
     }
 }

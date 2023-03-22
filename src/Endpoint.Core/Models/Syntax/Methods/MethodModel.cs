@@ -3,7 +3,6 @@
 
 using Endpoint.Core.Enums;
 using Endpoint.Core.Models.Syntax.Attributes;
-using Endpoint.Core.Models.Syntax.Classes;
 using Endpoint.Core.Models.Syntax.Params;
 using Endpoint.Core.Models.Syntax.Types;
 using System.Collections.Generic;
@@ -14,9 +13,9 @@ public class MethodModel
 {
     public MethodModel()
     {
-        Params = new List<ParamModel>();
-        Attributes = new List<AttributeModel>();
-        ReturnType = new TypeModel("void");
+        Params = new ();
+        Attributes = new ();
+        ReturnType = new ("void");
     }
 
     public TypeDeclarationModel ParentType { get; set; }
