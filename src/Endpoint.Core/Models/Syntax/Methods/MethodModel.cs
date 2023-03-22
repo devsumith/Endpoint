@@ -16,6 +16,7 @@ public class MethodModel
     {
         Params = new List<ParamModel>();
         Attributes = new List<AttributeModel>();
+        ReturnType = new TypeModel("void");
     }
 
     public TypeDeclarationModel ParentType { get; set; }

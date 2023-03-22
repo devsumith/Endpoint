@@ -53,4 +53,12 @@ public class PropertyModel
         Parent = parent;
         Interface = parent is InterfaceModel;
     }
+
+    public PropertyModel(TypeModel type, string name, PropertyAccessorModel accessor)
+    {
+        Type = type;
+        Accessors = new List<PropertyAccessorModel> { accessor };
+        Name = name;
+        Interface = true;
+    }
 }

@@ -30,6 +30,15 @@ public class TypeModel
         };
     }
 
+    public static TypeModel DbSetOf(string entityName)
+        => new("DbSet")
+        {
+            GenericTypeParameters = new()
+                    {
+                        new (entityName)
+                    }
+        };
+
     public static TypeModel LoggerOf(string typeName)
     {
         return new TypeModel("ILogger")

@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
 using Endpoint.Core.Models.Syntax.Constructors;
 using Endpoint.Core.Models.Syntax.Entities;
 using Endpoint.Core.Models.Syntax.Interfaces;
@@ -11,12 +10,14 @@ using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.Types;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Endpoint.Core.Models.Syntax.Classes;
 
 public class DbContextModel : ClassModel
 {
     public List<EntityModel> Entities { get; private set; } = new List<EntityModel>();
+    public string Schema { get; private set; }
 
     public DbContextModel(
         INamingConventionConverter namingConventionConverter,
@@ -28,6 +29,7 @@ public class DbContextModel : ClassModel
     {
         Name = name;
         Entities = entities;
+        Schema = serviceName.Remove("Service");
 
         UsingDirectives.AddRange(new UsingDirectiveModel[]
         {
@@ -35,20 +37,20 @@ public class DbContextModel : ClassModel
             new ("Microsoft.EntityFrameworkCore")
         });
 
-        Implements.Add(new TypeModel("DbContext"));
+        Implements.Add(new ("DbContext"));
 
-        Implements.Add(new TypeModel($"I{name}"));
+        Implements.Add(new ($"I{name}"));
 
         var ctor = new ConstructorModel(this, Name);
 
-        ctor.Params.Add(new ParamModel()
+        ctor.Params.Add(new ()
         {
             Name = "options",
-            Type = new TypeModel("DbContextOptions")
+            Type = new ("DbContextOptions")
             {
-                GenericTypeParameters = new List<TypeModel>
+                GenericTypeParameters = new ()
                     {
-                        new TypeModel(Name)
+                        new (Name)
                     }
             }
         });
@@ -59,46 +61,51 @@ public class DbContextModel : ClassModel
 
         foreach (var entity in entities)
         {
-            Properties.Add(new PropertyModel(
+            Properties.Add(new (
                 this,
                 Enums.AccessModifier.Public,
-                new TypeModel("DbSet")
-                {
-                    GenericTypeParameters = new List<TypeModel>
-                    {
-                        new TypeModel(entity.Name)
-                    }
-                },
+                TypeModel.DbSetOf(entity.Name),
                 namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true),
                 PropertyAccessorModel.GetPrivateSet));
 
-
-
-            UsingDirectives.Add(new($"{serviceName}.Core.AggregatesModel.{entity.Name}Aggregate"));
+            UsingDirectives.Add(new ($"{serviceName}.Core.AggregatesModel.{entity.Name}Aggregate"));
         }
+
+        var onModelCreatingMethodBodyBuilder = new StringBuilder();
+        onModelCreatingMethodBodyBuilder.AppendLine($"modelBuilder.HasDefaultSchema(\"{Schema}\");");
+        onModelCreatingMethodBodyBuilder.AppendLine("");
+        onModelCreatingMethodBodyBuilder.AppendLine("base.OnModelCreating(modelBuilder);");
+
+        MethodModel onModelCreatingMethod = new()
+        {
+            AccessModifier = Enums.AccessModifier.Protected,
+            Name = "OnModelCreating",
+            Override = true,
+            Params = new List<ParamModel> { 
+                new () { Type = new ("ModelBuilder"), Name = "modelBuilder" }
+            },
+            Body = onModelCreatingMethodBodyBuilder.ToString()
+        };
+
+        Methods.Add(onModelCreatingMethod);
     }
 
     public InterfaceModel ToInterface()
     {
-        InterfaceModel interfaceModel = new InterfaceModel($"I{Name}");
+        InterfaceModel interfaceModel = new ($"I{Name}");
 
-        interfaceModel.UsingDirectives = this.UsingDirectives;
+        interfaceModel.UsingDirectives = UsingDirectives;
 
         foreach (var prop in Properties)
         {
-            interfaceModel.Properties.Add(new PropertyModel(interfaceModel, prop.AccessModifier, prop.Type, prop.Name, prop.Accessors));
+            interfaceModel.Properties.Add(new (interfaceModel, prop.AccessModifier, prop.Type, prop.Name, prop.Accessors));
         }
 
         var saveChangesAsyncMethodModel = new MethodModel();
 
         saveChangesAsyncMethodModel.Interface = true;
 
-        saveChangesAsyncMethodModel.Params.Add(new ParamModel()
-        {
-            Type = new TypeModel("CancellationToken"),
-            DefaultValue = "default",
-            Name = "cancellationToken"
-        });
+        saveChangesAsyncMethodModel.Params.Add(ParamModel.CancellationToken);
 
         saveChangesAsyncMethodModel.Name = "SaveChangesAsync";
 
