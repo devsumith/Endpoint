@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "project-move --dest ..\\BuildingBlocks -d C:\\projects\\Bubble\\src\\EventSourcing",
+      "commandLineArgs": "verb -n ReferenceAdd -d C:\\projects\\Endpoint\\src\\Endpoint.Cli\\Commands",
       "environmentVariables": {
       }
     }

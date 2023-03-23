@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,24 +47,41 @@ public class CommandLineArgumentsProcessor : BackgroundService
             args = new string[1] { _configuration[Constants.EnvironmentVariables.DefaultCommand] }.Concat(args).ToArray();
         }
 
-        var verbs = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(type => type.GetCustomAttributes(typeof(VerbAttribute), true).Length > 0)
-            .ToArray();
+        try
+        {
+            var verbs = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(type => type.GetCustomAttributes(typeof(VerbAttribute), true).Length > 0)
+                .ToArray();
 
-        _createParser().ParseArguments(args, verbs)
-            .WithParsed(async (dynamic request) =>
-            {
-                try
+            var result = _createParser().ParseArguments(args, verbs)
+                .WithParsed(async (dynamic request) =>
                 {
                     await _mediator.Send(request).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogCritical(ex.Message);
-                }
-                Environment.Exit(0);
-            });
+                });
+
+            if(result.Errors.Any())
+            {
+                var errorMessage = new StringBuilder()
+                    .AppendJoin(Environment.NewLine, result.Errors.Select(x => x.GetType().Name  switch
+                    {
+                        "BadVerbSelectedError" => $"{x.Tag}:{(x as TokenError).Token}",
+
+                        _ => $"{nameof(x.Tag)}"
+
+                    }));
+
+                throw new Exception(errorMessage.ToString());
+            }
+        }
+        catch (Exception ex)
+        {            
+            _logger.LogCritical(ex.Message);
+        }
+        finally
+        {
+            Environment.Exit(0);
+        }
     }
 }
 
