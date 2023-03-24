@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Templates\Angular\Services\Default\Spec.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\Angular\Services\Default\Spec.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\Kernel\DomainException.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\Kernel\InternalServerErrorObjectResult.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\Kernel\JsonErrorResponse.txt" />

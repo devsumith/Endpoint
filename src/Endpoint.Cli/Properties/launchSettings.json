@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "verb -n ReferenceAdd -d C:\\projects\\Endpoint\\src\\Endpoint.Cli\\Commands",
+      "commandLineArgs": "spec-create -n FooService -d C:\\projects\\Racoon\\projects\\app\\src\\app",
       "environmentVariables": {
       }
     }
