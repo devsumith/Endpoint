@@ -46,7 +46,12 @@ public class SpecCreateRequestHandler : IRequestHandler<SpecCreateRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(SpecCreateRequestHandler));
 
-        var fileName = $"{_namingCoventionConverter.Convert(NamingConvention.SnakeCase, request.Name.Remove("Service"))}.service";
+        var fileName = _namingCoventionConverter.Convert(NamingConvention.SnakeCase, request.Name.Remove("Service"));
+
+        if(request.Name.EndsWith("Service"))
+        {
+            fileName = $"{fileName}.service";
+        }
 
         var model = _fileModelFactory.CreateTemplate("Angular.Services.Default.Spec", $"{fileName}.spec", request.Directory, "ts", tokens: new TokensBuilder()
             .With("name", request.Name)
