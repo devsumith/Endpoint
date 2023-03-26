@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "spec-create -n FooService -d C:\\projects\\Racoon\\projects\\app\\src\\app",
+      "commandLineArgs": "ng-test -d C:\\projects\\testing-control-value-accessors\\projects\\app\\src\\app",
       "environmentVariables": {
       }
     }

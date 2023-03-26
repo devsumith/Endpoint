@@ -28,4 +28,5 @@ public interface IAngularService
     void MaterialAdd(AngularProjectReferenceModel model);
     void AddBuildConfiguration(string configurationName, AngularProjectReferenceModel model);
     void ControlCreate(string name, string directory);
+    void Test(string directory, string searchPattern = "*.spec.ts");
 }

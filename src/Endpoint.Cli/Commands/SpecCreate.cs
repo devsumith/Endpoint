@@ -13,7 +13,6 @@ using Endpoint.Core.Abstractions;
 
 namespace Endpoint.Cli.Commands;
 
-
 [Verb("spec-create")]
 public class SpecCreateRequest : IRequest {
     [Option('n',"name")]

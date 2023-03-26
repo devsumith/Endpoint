@@ -894,4 +894,44 @@ public class AngularService : IAngularService
 
         _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.spec.ts"));
     }
+
+    public void Test(string directory, string searchPattern = "*.spec.ts")
+    {
+        var angularJsonPath = _fileProvider.Get("angular.json", directory);
+
+        var angularJson = JObject.Parse(_fileSystem.ReadAllText(angularJsonPath));
+
+        var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.app.json", directory));
+
+        string root = null!;
+
+        var rootParts = new List<string>();
+
+        var afterProjects = false;
+
+        foreach(var part in projectDirectory.Split(Path.DirectorySeparatorChar).Skip(2))
+        {
+            if(afterProjects)
+            {
+                rootParts.Add(part);
+            }
+
+            if(part == "projects")
+            {
+                afterProjects = true;
+            }
+        }
+
+        root = rootParts.Count > 1 ? $"@{string.Join("/", rootParts)}" : rootParts.First();
+
+        foreach(var path in Directory.GetFiles(directory, searchPattern))
+        {
+            var testName = string.Join(string.Empty, Path.GetFileNameWithoutExtension(path)
+                .Remove(".spec")
+                .Split('.').Select(x => _namingConventionConverter.Convert(NamingConvention.PascalCase, x)));
+
+            _commandService.Start($"ng test --test-name-pattern='{testName}' --watch --project {root}", directory);
+        }
+
+    }
 }
