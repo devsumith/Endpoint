@@ -901,7 +901,7 @@ public class AngularService : IAngularService
 
         var angularJson = JObject.Parse(_fileSystem.ReadAllText(angularJsonPath));
 
-        var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.app.json", directory));
+        var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.*", directory));
 
         string root = null!;
 
@@ -924,7 +924,9 @@ public class AngularService : IAngularService
 
         root = rootParts.Count > 1 ? $"@{string.Join("/", rootParts)}" : rootParts.First();
 
-        foreach(var path in Directory.GetFiles(directory, searchPattern))
+        foreach(var path in new DirectoryInfo(directory).GetFiles(searchPattern)
+            .OrderByDescending(fileInfo => fileInfo.LastWriteTime)
+            .Select(fileInfo => fileInfo.FullName))
         {
             var testName = string.Join(string.Empty, Path.GetFileNameWithoutExtension(path)
                 .Remove(".spec")
@@ -932,6 +934,5 @@ public class AngularService : IAngularService
 
             _commandService.Start($"ng test --test-name-pattern='{testName}' --watch --project {root}", directory);
         }
-
     }
 }

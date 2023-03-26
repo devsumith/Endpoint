@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "ng-test -d C:\\projects\\testing-control-value-accessors\\projects\\app\\src\\app",
+      "commandLineArgs": "ng-test -d C:\\projects\\Clarity\\src\\WebApps\\Clarity.App\\projects\\identity\\core\\src\\lib\\models\\user",
       "environmentVariables": {
       }
     }
