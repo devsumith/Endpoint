@@ -24,7 +24,7 @@ public class ProjectModel
     public List<PackageModel> Packages { get; init; } = new();
     public bool HasSecrets { get; init; }
     public bool IsNugetPackage { get; init; }
-    public int Order { get; init; } = 0;
+    public int Order { get; set; } = 0;
     public bool GenerateDocumentationFile { get; set; }
     public List<string> Metadata { get; set; } = new List<string>();
     public List<string> References { get; set; }

@@ -5,6 +5,7 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Models.Artifacts.Folders;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Endpoint.Core.Models.Artifacts.Solutions;
 
@@ -39,7 +40,7 @@ public class SolutionGenerationStrategy : ArtifactGenerationStrategyBase<Solutio
     {
         foreach (var folder in folders)
         {
-            foreach (var project in folder.Projects)
+            foreach (var project in folder.Projects.OrderBy(x => x.Order))
             {
                 _fileSystem.CreateDirectory(folder.Directory);
 
