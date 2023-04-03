@@ -84,7 +84,7 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         var serviceBusMessageConsumerClassModel = _classModelFactory.CreateServiceBusMessageConsumer("ServiceBusMessageConsumer", projectModel.Name);
 
-        var configureServicesClassModel = _classModelFactory.CreateConfigureServices(model.Name.Split('.').Last());
+        var configureServicesClassModel = _classModelFactory.CreateConfigureServices(projectModel.Name.Split('.').Last());
 
         var configureServicesMethodBodyBuilder = new StringBuilder();
 
@@ -111,7 +111,7 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         var configureServicesFileModel = new ObjectFileModel<ClassModel>(configureServicesClassModel, new()
         {
-            new (model.Name)
+            new (projectModel.Name)
 
         }, configureServicesClassModel.Name, projectModel.Directory, "cs");
 
