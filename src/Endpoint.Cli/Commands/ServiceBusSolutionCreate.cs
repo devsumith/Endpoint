@@ -2,21 +2,20 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
+using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Models.Artifacts.Projects.Factories;
+using Endpoint.Core.Models.Artifacts.Solutions;
+using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Models.Syntax.Classes.Factories;
+using Endpoint.Core.Services;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Services;
-using Endpoint.Core.Models.Artifacts.Solutions;
-using Endpoint.Core.Models.Artifacts.Projects.Factories;
-using System.Linq;
-using Endpoint.Core.Models.Artifacts.Folders;
-using Endpoint.Core.Models.Syntax.Classes.Factories;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax.Classes;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Endpoint.Cli.Commands;
 
@@ -30,7 +29,7 @@ public class ServiceBusSolutionCreateRequest : IRequest {
     public string ProjectName { get; set; }
 
     [Option('t')]
-    public string ProjectType { get; set; } = "worker";
+    public string ProjectType { get; set; } = "web";
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -76,28 +75,67 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         var projectModel = srcFolder.Projects.Single();
 
+        if(projectModel.Files.Any(x => x.Name == "ConfigureServices"))
+        {
+            projectModel.Files.Remove(projectModel.Files.Single(x => x.Name == "ConfigureServices"));
+        }
+
         projectModel.Order = int.MaxValue;
 
         var serviceBusMessageConsumerClassModel = _classModelFactory.CreateServiceBusMessageConsumer("ServiceBusMessageConsumer", projectModel.Name);
 
-        var configureServicesClassModel = _classModelFactory.CreateConfigureServices(projectModel.Name.Split('.').Last());
+        var configureServicesClassModel = _classModelFactory.CreateConfigureServices(model.Name.Split('.').Last());
 
-        configureServicesClassModel.Methods.First().Body = new StringBuilder()
-            .AppendLine("services.AddMessagingUdpServices();")
-            .AppendLine("services.AddHostedService<ServiceBusMessageConsumer>();")
-            .ToString();
+        var configureServicesMethodBodyBuilder = new StringBuilder();
 
-        projectModel.Files.Add(new ObjectFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.UsingDirectives, serviceBusMessageConsumerClassModel.Name, projectModel.Directory, "cs"));
-
-        var configureServicesFileModel = new ObjectFileModel<ClassModel>(configureServicesClassModel, new ()
+        if (request.ProjectType == "web")
         {
-            new (projectModel.Name)
+            configureServicesMethodBodyBuilder
+                .AppendLine("services.AddCors(options => options.AddPolicy(\"CorsPolicy\",")
+                .AppendLine("builder => builder".Indent(1))
+                .AppendLine(".WithOrigins(\"http://localhost:4200\")".Indent(1))
+                .AppendLine(".AllowAnyMethod()".Indent(1))
+                .AppendLine(".AllowAnyHeader()".Indent(1))
+                .AppendLine(".SetIsOriginAllowed(isOriginAllowed: _ => true)".Indent(1))
+                .AppendLine(".AllowCredentials()));".Indent(1))
+                .AppendLine("services.AddControllers();")
+                .AppendLine("services.AddEndpointsApiExplorer();")
+                .AppendLine("services.AddSwaggerGen();");
+        }
+
+        configureServicesMethodBodyBuilder
+            .AppendLine("services.AddMessagingUdpServices();")
+            .AppendLine("services.AddHostedService<ServiceBusMessageConsumer>();");
+
+        configureServicesClassModel.Methods.First().Body = configureServicesMethodBodyBuilder.ToString();
+
+        var configureServicesFileModel = new ObjectFileModel<ClassModel>(configureServicesClassModel, new()
+        {
+            new (model.Name)
 
         }, configureServicesClassModel.Name, projectModel.Directory, "cs");
 
         configureServicesFileModel.Namespace = "Microsoft.Extensions.DependencyInjection";
 
         projectModel.Files.Add(configureServicesFileModel);
+
+        if (request.ProjectType == "worker")
+        {
+            var programFileModel = new ContentFileModel(new StringBuilder()
+                .AppendLine("var host = Host.CreateDefaultBuilder(args)")
+                .AppendLine(".ConfigureServices(services =>".Indent(1))
+                .AppendLine("{".Indent(1))
+                .AppendLine($"services.Add{projectModel.Name.Split('.').Last()}Services();".Indent(2))
+                .AppendLine("})".Indent(1))
+                .AppendLine(".Build();".Indent(1))
+                .AppendLine(string.Empty)
+                .AppendLine("host.Run();")
+                .ToString(), "Program", projectModel.Directory, "cs");
+
+            projectModel.Files.Add(programFileModel);
+        }
+
+        projectModel.Files.Add(new ObjectFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.UsingDirectives, serviceBusMessageConsumerClassModel.Name, projectModel.Directory, "cs"));
 
         projectModel.References.Add(@"..\Messaging.Udp\Messaging.Udp.csproj");
 
@@ -106,6 +144,11 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
         srcFolder.Projects.Add(_projectModelFactory.CreateMessagingUdpProject(srcFolder.Directory));
 
         _solutionService.Create(model);
+
+        if (File.Exists(Path.Combine(projectModel.Directory, "Worker.cs")))
+        {
+            File.Delete(Path.Combine(projectModel.Directory, "Worker.cs"));
+        }
 
         _commandService.Start($"start {model.SolultionFileName}", model.SolutionDirectory);
 

@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "service-bus-solution-create -n Zonk -d C:\\projects",
+      "commandLineArgs": "service-bus-solution-create -n eShop -p OrderService -t web -d C:\\projects",
       "environmentVariables": {
       }
     }
