@@ -53,6 +53,7 @@
     <Folder Include="Models\Artifacts\Files\Commands\" />
     <Folder Include="Models\Artifacts\Files\Services\" />
     <Folder Include="Models\Artifacts\Projects\Commands\" />
+    <Folder Include="Models\Artifacts\Services\" />
     <Folder Include="Models\Syntax\Classes\Services\" />
     <Folder Include="Models\Syntax\Methods\ControllerMethods\" />
     <Folder Include="Models\Syntax\Methods\Factories\" />
