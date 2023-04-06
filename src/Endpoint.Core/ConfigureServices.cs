@@ -15,7 +15,6 @@ using Endpoint.Core.Models.Artifacts.Projects;
 using Endpoint.Core.Models.Artifacts.Projects.Factories;
 using Endpoint.Core.Models.Artifacts.Projects.Services;
 using Endpoint.Core.Models.Artifacts.Projects.Strategies;
-using Endpoint.Core.Models.Artifacts.Services;
 using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Models.Artifacts.SpecFlow;
 using Endpoint.Core.Models.Syntax;
@@ -34,6 +33,7 @@ using Endpoint.Core.Models.Syntax.Interfaces;
 using Endpoint.Core.Models.Syntax.Methods.Factories;
 using Endpoint.Core.Models.Syntax.Methods.Strategies;
 using Endpoint.Core.Models.Syntax.Params;
+using Endpoint.Core.Models.Syntax.Playwright;
 using Endpoint.Core.Models.Syntax.Properties;
 using Endpoint.Core.Models.Syntax.RequestHandlers;
 using Endpoint.Core.Models.Syntax.RouteHandlers;
@@ -61,6 +61,7 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)        
     {
+        services.AddSingleton<ISyntaxGenerationStrategy, TestSyntaxGenerationStrategy>();
         services.AddSingleton<IPlaywrightService, PlaywrightService>();
         services.AddSingleton<IMethodModelFactory, MethodModelFactory>();
         services.AddSingleton<ISyntaxGenerationStrategy, RuleForSyntaxGenerationStrategy>();

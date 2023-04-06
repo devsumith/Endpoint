@@ -58,6 +58,7 @@
     <Folder Include="Models\Syntax\Methods\ControllerMethods\" />
     <Folder Include="Models\Syntax\Methods\Factories\" />
     <Folder Include="Models\Syntax\Microservices\" />
+    <Folder Include="Models\Syntax\Playwright\" />
     <Folder Include="Models\Syntax\RouteHandlers\Create\" />
     <Folder Include="Messages\" />
     <Folder Include="Models\Syntax\SpecFlow\Services\" />
