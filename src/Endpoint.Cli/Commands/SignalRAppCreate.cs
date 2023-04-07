@@ -49,6 +49,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
     private readonly IFileModelFactory _fileModelFactory;
+    private readonly IPlaywrightService _playwrightService;
 
     public SignalRAppCreateRequestHandler(
         ILogger<SignalRAppCreateRequestHandler> logger,
@@ -61,7 +62,8 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         IClassModelFactory classModelFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileModelFactory fileModelFactory)
+        IFileModelFactory fileModelFactory,
+        IPlaywrightService playwrightService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
@@ -74,6 +76,16 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _playwrightService = playwrightService ?? throw new ArgumentNullException(nameof(playwrightService));
+    }
+
+    public void PlaywrightCreate(string name, string directory)
+    {
+        var e2eDirectory = Path.Combine(directory, $"{name}.E2e");
+
+        Directory.CreateDirectory(e2eDirectory);
+
+        _playwrightService.Create(e2eDirectory);
     }
 
     public void HubAdd(ProjectModel projectModel, string name)
@@ -235,6 +247,8 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         _artifactGenerationStrategyFactory.CreateFor(appHtmlFileModel);
 
         Directory.Move(Path.Combine(solutionModel.SrcDirectory, temporaryAppName), Path.Combine(solutionModel.SrcDirectory, $"{request.Name}.App"));
+
+        PlaywrightCreate(request.Name, solutionModel.SrcDirectory);
 
         _commandService.Start("code .", solutionModel.SolutionDirectory);
 

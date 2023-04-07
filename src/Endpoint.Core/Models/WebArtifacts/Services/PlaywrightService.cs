@@ -17,7 +17,7 @@ public class PlaywrightService : IPlaywrightService
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _commandService = _commandService ?? throw new ArgumentNullException(nameof(commandService));
+        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
     public void Create(string directory)

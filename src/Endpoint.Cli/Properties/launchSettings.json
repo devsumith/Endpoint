@@ -2,10 +2,9 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "service-bus-solution-create -n eShop -p OrderService -t web -d C:\\projects",
+      "commandLineArgs": "signalr-app-create -n Lullaboo -d C:\\projects",
       "environmentVariables": {
       }
     }
   }
-} 
-
+}
