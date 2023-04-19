@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Templates\Angular\Services\Default\Spec.txt" />
+    <None Remove="Templates\EditorConfig.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -102,6 +103,7 @@
     <EmbeddedResource Include="Templates\Console\EmptyProgram.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientExtensions.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientFactory.txt" />
+    <EmbeddedResource Include="Templates\EditorConfig.txt" />
     <EmbeddedResource Include="Templates\DddApp\Api\AppSettings.txt" />
     <EmbeddedResource Include="Templates\DddApp\Core\ConfigureServices.txt" />
     <EmbeddedResource Include="Templates\DddApp\Infrastructure\ConfigureServices.txt" />
