@@ -34,43 +34,47 @@ public class NamespaceUnnestRequestHandler : IRequestHandler<NamespaceUnnestRequ
     {
         _logger.LogInformation("Handled: {0}", nameof(NamespaceUnnestRequestHandler));
 
-        foreach(var path in Directory.GetFiles(request.Directory,"*.cs",SearchOption.AllDirectories))
+        foreach(var path in Directory.GetFiles(request.Directory,"*.*",SearchOption.AllDirectories))
         {
-            var newContent = new List<string>();
-
-            var lines = File.ReadLines(path);
-
-            if (lines.FirstOrDefault(x => x.StartsWith("namespace") && !x.Contains(";")) != null)
+            if(Path.GetExtension(path) ==".cs" || Path.GetExtension(path) == ".txt")
             {
-                foreach (var line in lines)
+                var newContent = new List<string>();
+
+                var lines = File.ReadLines(path);
+
+                if (lines.FirstOrDefault(x => x.StartsWith("namespace") && !x.Contains(";")) != null)
                 {
-                    if (line.StartsWith("namespace"))
+                    foreach (var line in lines)
                     {
-                        newContent.Add("");
-                        newContent.Add($"{line};");
-                        newContent.Add("");
+                        if (line.StartsWith("namespace"))
+                        {
+                            newContent.Add("");
+                            newContent.Add($"{line};");
+                            newContent.Add("");
+                        }
+
+                        if (line.StartsWith("using"))
+                        {
+                            newContent.Add(line);
+                        }
+
+                        if (string.IsNullOrEmpty(line.Trim()))
+                        {
+                            newContent.Add("");
+                        }
+                        else if (line.StartsWith("    "))
+                            newContent.Add(line.Substring(4));
                     }
 
-                    if (line.StartsWith("using"))
+                    foreach (var line in newContent)
                     {
-                        newContent.Add(line);
+                        Console.WriteLine(line);
                     }
 
-                    if(string.IsNullOrEmpty(line.Trim()))
-                    {
-                        newContent.Add("");
-                    }
-                    else if (line.StartsWith("    "))
-                        newContent.Add(line.Substring(4));
+                    File.WriteAllLines(path, newContent);
                 }
-
-                foreach (var line in newContent)
-                {
-                    Console.WriteLine(line);
-                }
-
-                File.WriteAllLines(path, newContent);
             }
+
         }
 
 

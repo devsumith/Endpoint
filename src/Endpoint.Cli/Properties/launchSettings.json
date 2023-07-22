@@ -2,8 +2,9 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "signalr-app-create -n Lullaboo -d C:\\projects",
+      "commandLineArgs": "namespace-unnest -d C:\\projects\\Cli\\src\\Cli\\Templates",
       "environmentVariables": {
+        "Endpoint:DefaultCommand": "namespace-unnest -d C:\\projects\\Cli\\src\\Cli\\Templates"
       }
     }
   }

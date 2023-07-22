@@ -26,13 +26,13 @@ namespace Endpoint.Cli.Commands;
 [Verb("signalr-app-create")]
 public class SignalRAppCreateRequest : IRequest
 {
-    [Option('n', "name")]
+    [Option('n', "name", HelpText = "Name of Asp.Net Core SignalR Solution and Angular App")]
     public string Name { get; set; }
 
-    [Option('v', "version")]
+    [Option('v', "version", HelpText = "Version of Angular Cli")]
     public string Version { get; set; } = "latest";
 
-    [Option('d', Required = false)]
+    [Option('d', Required = false, HelpText = "Output directory")]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 

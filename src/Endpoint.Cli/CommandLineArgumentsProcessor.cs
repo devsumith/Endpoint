@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using System.Text;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -42,7 +42,7 @@ public class CommandLineArgumentsProcessor : BackgroundService
     {
         var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
 
-        if (args.Length == 0 || args[0].StartsWith("-"))
+        if (args.Length == 0 || args[0].StartsWith('-'))
         {
             args = new string[1] { _configuration[Constants.EnvironmentVariables.DefaultCommand] }.Concat(args).ToArray();
         }
@@ -54,29 +54,27 @@ public class CommandLineArgumentsProcessor : BackgroundService
                 .Where(type => type.GetCustomAttributes(typeof(VerbAttribute), true).Length > 0)
                 .ToArray();
 
-            var result = _createParser().ParseArguments(args, verbs)
-                .WithParsed(async (dynamic request) =>
-                {
-                    await _mediator.Send(request).ConfigureAwait(false);
-                });
+            var parsedResult = _createParser().ParseArguments(args, verbs);
 
-            if(result.Errors.Any())
+            if(parsedResult.Errors.SingleOrDefault() is HelpRequestedError || parsedResult.Errors.SingleOrDefault() is HelpRequestedError)
             {
-                var errorMessage = new StringBuilder()
-                    .AppendJoin(Environment.NewLine, result.Errors.Select(x => x.GetType().Name  switch
-                    {
-                        "BadVerbSelectedError" => $"{x.Tag}:{(x as TokenError).Token}",
-
-                        _ => $"{nameof(x.Tag)}"
-
-                    }));
-
-                throw new Exception(errorMessage.ToString());
+                Environment.Exit(0);
             }
+
+            if (parsedResult.Errors.SingleOrDefault() is BadVerbSelectedError error)
+            {
+                _logger.LogError("{tag}:{token}", error.Tag, error.Token);
+
+                throw new Exception($"{error.Tag}:{error.Token}");
+            }
+
+            await parsedResult.WithParsedAsync(request => _mediator.Send(request));
+
+
         }
         catch (Exception ex)
         {            
-            _logger.LogCritical(ex.Message);
+            _logger.LogError(ex.Message);
         }
         finally
         {
@@ -84,5 +82,3 @@ public class CommandLineArgumentsProcessor : BackgroundService
         }
     }
 }
-
-
