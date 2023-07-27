@@ -67,18 +67,13 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
                 var microservice = new ProjectModel { Name = $"{name}.{layer}", Directory = microserviceDirectory, DotNetProjectType = DotNetProjectType.ClassLib };
 
                 if (layer == "Core")
-                {
-                    microservice.References = new List<string>
-                    {
-                        @"..\..\..\BuildingBlocks\Messaging\Messaging.Udp\Messaging.Udp.csproj",
-                        @"..\..\..\BuildingBlocks\Validation\Validation\Validation.csproj"
-                    };
-
+                {                    
                     microservice.Packages.AddRange(new PackageModel[]
                     {
                         new PackageModel("MediatR", "12.0.0"),
                         new PackageModel("Microsoft.EntityFrameworkCore", "7.0.2"),
-                        new PackageModel("Microsoft.Extensions.Logging.Abstractions","7.0.0")
+                        new PackageModel("Microsoft.Extensions.Logging.Abstractions","7.0.0"),
+                        new PackageModel("FluentValidation","11.6.0")
                     });
 
                     microservice.Files.Add(_fileModelFactory.CreateCoreUsings(microservice.Directory));
