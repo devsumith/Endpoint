@@ -76,8 +76,5 @@ public class WebSocketAppCreateRequestHandler : IRequestHandler<WebSocketAppCrea
         _generator.CreateFor(model);
 
         _commandService.Start($"start {model.SolultionFileName}", model.SolutionDirectory);
-
-
-
     }
 }
