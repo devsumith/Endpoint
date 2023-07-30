@@ -10,6 +10,7 @@
     <None Remove="Templates\Angular\Services\Default\Spec.txt" />
     <None Remove="Templates\EditorConfig.txt" />
     <None Remove="Templates\ValueObject.txt" />
+    <None Remove="Templates\ValueType.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -145,6 +146,7 @@
     <EmbeddedResource Include="Templates\SyntaxGenerationStrategy.txt" />
     <EmbeddedResource Include="Templates\Copyright.txt" />
     <EmbeddedResource Include="Templates\Readme.txt" />
+    <EmbeddedResource Include="Templates\ValueType.txt" />
     <EmbeddedResource Include="Templates\ValueObject.txt" />
     <EmbeddedResource Include="Templates\Webpack.Config.txt" />
     <EmbeddedResource Include="Templates\Verb.txt" />

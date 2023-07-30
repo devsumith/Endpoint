@@ -1,0 +1,35 @@
+﻿namespace {{ namespace }};
+
+
+public class {{ namePascalCase }}Type: ValueObject, IBitPackable
+{
+    public {{ namePascalCase }}Type({{ value }} value)
+    {
+        Value = value;
+    }
+
+    public {{ value }} Value { get; }
+
+    public static int SizeInBits = 0;
+
+    public (int value, int numberOfBits)[] ToDescriptors()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+    }
+
+    public static implicit operator {{ value }}({{ namePascalCase }}Type type)
+    {
+        return type.Value;
+    }
+
+    public static explicit operator {{ namePascalCase }}Type({{ value }} value)
+    {
+        return new {{ namePascalCase }}Type(value);
+    }
+
+}
