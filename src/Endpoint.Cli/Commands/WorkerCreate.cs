@@ -3,10 +3,16 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
-using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Constructors;
+using Endpoint.Core.Syntax.Fields;
 using Endpoint.Core.Syntax.Methods;
+using Endpoint.Core.Syntax.Params;
+using Endpoint.Core.Syntax.Types;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,12 +20,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Endpoint.Core.Syntax.Classes;
-using Endpoint.Core.Syntax.Constructors;
-using Endpoint.Core.Syntax.Fields;
-using Endpoint.Core.Syntax.Params;
-using Endpoint.Core.Syntax.Types;
-using Endpoint.Core.Syntax;
 
 namespace Endpoint.Cli.Commands;
 
@@ -40,7 +40,6 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
     private readonly ILogger<WorkerCreateRequestHandler> _logger;
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly Observable<INotification> _notificationListener;
-
 
     public WorkerCreateRequestHandler(
         ILogger<WorkerCreateRequestHandler> logger,

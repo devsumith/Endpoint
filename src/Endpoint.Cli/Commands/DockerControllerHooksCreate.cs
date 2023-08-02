@@ -41,7 +41,5 @@ public class DockerControllerHooksCreateRequestHandler : IRequestHandler<DockerC
         _logger.LogInformation("Handled: {0}", nameof(DockerControllerHooksCreateRequestHandler));
 
         _specFlowService.CreateDockerControllerHooks(request.Directory);
-
-
     }
 }

@@ -22,7 +22,6 @@ public class SolutionCreateFromPlantUmlRequest : IRequest
     [Option('p')]
     public string PlantUmlSourcePath { get; set; }
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }

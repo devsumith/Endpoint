@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Abstractions;
 
@@ -54,5 +55,9 @@ public abstract class ArtifactGenerationStrategyBase<T> : IArtifactGenerationStr
     }
 
     public abstract void Create(IArtifactGenerator artifactGenerator, T model, dynamic context = null);
+
+    public async Task CreateAsync(object model, dynamic context = null)
+        => Create(model, context);
+
     public virtual int Priority => 0;
 }
