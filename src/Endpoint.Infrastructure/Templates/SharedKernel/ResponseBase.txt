@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 
-namespace {{ namespace }}
+
+namespace {{ namespace }};
+
+public class ResponseBase
 {
-    public class ResponseBase
-    {
-        public List<string> ValidationErrors { get; set; }
-    }
+    public List<string> ValidationErrors { get; set; }
 }

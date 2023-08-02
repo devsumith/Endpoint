@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using {{ applicationNamespace }};
 
-namespace {{ infrastructureNamespace }}.EntityConfigurations
+
+namespace {{ infrastructureNamespace }}.EntityConfigurations;
+
+public class {{ entityNamePascalCase }}Configuration : IEntityTypeConfiguration<{{ entityNamePascalCase }}>
 {
-    public class {{ entityNamePascalCase }}Configuration : IEntityTypeConfiguration<{{ entityNamePascalCase }}>
+    public void Configure(EntityTypeBuilder<{{ entityNamePascalCase }}> builder)
     {
-        public void Configure(EntityTypeBuilder<{{ entityNamePascalCase }}> builder)
-        {
-            builder.Property(e => e.{{ idPropertyNamePascalCase }}).HasConversion(new {{ entityNamePascalCase }}Id.EfCoreValueConverter());
-        }
+        builder.Property(e => e.{{ idPropertyNamePascalCase }}).HasConversion(new {{ entityNamePascalCase }}Id.EfCoreValueConverter());
     }
 }

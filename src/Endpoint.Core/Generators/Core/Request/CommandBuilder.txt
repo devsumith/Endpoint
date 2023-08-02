@@ -9,48 +9,48 @@ using System.Threading.Tasks;
 using {{ applicationNamespace }}.Interfaces;
 using {{ domainNamespace }}.Models;
 
-namespace {{ applicationNamespace }}.Features
+
+namespace {{ applicationNamespace }}.Features;
+
+public class {{ namePascalCase }}
 {
-    public class {{ namePascalCase }}
+    public class Validator : AbstractValidator<Request>
     {
-        public class Validator : AbstractValidator<Request>
+        public Validator()
         {
-            public Validator()
-            {
-                RuleFor(request => request.{{ entityNamePascalCase }}).NotNull();
-                RuleFor(request => request.{{ entityNamePascalCase }}).SetValidator(new {{ entityNamePascalCase }}Validator());
-            }
+            RuleFor(request => request.{{ entityNamePascalCase }}).NotNull();
+            RuleFor(request => request.{{ entityNamePascalCase }}).SetValidator(new {{ entityNamePascalCase }}Validator());
+        }
+    }
+
+    public class Request : IRequest<Response> { 
+        public {{ entityNamePascalCase }}Dto {{ entityNamePascalCase }} { get; set; }        
+    }
+
+    public class Response: ResponseBase
+    {
+        public {{ entityNamePascalCase }}Dto {{ entityNamePascalCase }} { get; set; }
+    }
+
+    public class Handler : IRequestHandler<Request, Response>
+    {
+        private readonly I{{ storePascalCase }} _context;
+
+        public Handler(I{{ storePascalCase }} context){
+            _context = context;
         }
 
-        public class Request : IRequest<Response> { 
-            public {{ entityNamePascalCase }}Dto {{ entityNamePascalCase }} { get; set; }        
-        }
+        public async Task<Response> Handle(Request request, CancellationToken cancellationToken) {
 
-        public class Response: ResponseBase
-        {
-            public {{ entityNamePascalCase }}Dto {{ entityNamePascalCase }} { get; set; }
-        }
+            var {{ entityNameCamelCase }} = await _context.FindAsync<{{ entityNamePascalCase }}>(request.{{ entityNamePascalCase }}.{{ entityNamePascalCase }}Id);
 
-        public class Handler : IRequestHandler<Request, Response>
-        {
-            private readonly I{{ storePascalCase }} _context;
+            _context.Add({{ entityNameCamelCase }});
 
-            public Handler(I{{ storePascalCase }} context){
-                _context = context;
-            }
+            await _context.SaveChangesAsync(cancellationToken);
 
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken) {
-            
-                var {{ entityNameCamelCase }} = await _context.FindAsync<{{ entityNamePascalCase }}>(request.{{ entityNamePascalCase }}.{{ entityNamePascalCase }}Id);
-
-                _context.Add({{ entityNameCamelCase }});
-
-                await _context.SaveChangesAsync(cancellationToken);
-			    
-                return new () { 
-                    {{ entityNamePascalCase }} = {{ entityNameCamelCase }}.ToDto()
-                };
-            }
+            return new () { 
+                {{ entityNamePascalCase }} = {{ entityNameCamelCase }}.ToDto()
+            };
         }
     }
 }

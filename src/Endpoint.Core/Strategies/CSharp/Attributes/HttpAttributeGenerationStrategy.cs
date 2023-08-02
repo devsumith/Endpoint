@@ -1,37 +1,35 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
-// Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Syntax.Attributes;
 using System.Text;
 
-namespace Endpoint.Core.Strategies.CSharp.Attributes
+
+namespace Endpoint.Core.Strategies.CSharp.Attributes;
+
+public class HttpAttributeGenerationStrategy : IAttributeGenerationStrategy
 {
-    public class HttpAttributeGenerationStrategy : IAttributeGenerationStrategy
+    public bool CanHandle(AttributeModel model) => model.Type == AttributeType.Http;
+
+    public string Create(AttributeModel model)
     {
-        public bool CanHandle(AttributeModel model) => model.Type == AttributeType.Http;
+        var properties = new StringBuilder();
 
-        public string Create(AttributeModel model)
+        foreach (var property in model.Properties)
         {
-            var properties = new StringBuilder();
+            properties.Append($"{property.Key} = \"{property.Value}\"");
+        }
 
-            foreach (var property in model.Properties)
-            {
-                properties.Append($"{property.Key} = \"{property.Value}\"");
-            }
-
-            if (!string.IsNullOrEmpty(model.Template))
-            {
-                return string.Join(Environment.NewLine, new string[1]
-                {
-                    $"[\"{model.Template}\", {model.Name}({properties})]"
-                });
-            }
-
+        if (!string.IsNullOrEmpty(model.Template))
+        {
             return string.Join(Environment.NewLine, new string[1]
             {
-                $"[{model.Name}({properties})]"
+                $"[\"{model.Template}\", {model.Name}({properties})]"
             });
         }
+
+        return string.Join(Environment.NewLine, new string[1]
+        {
+            $"[{model.Name}({properties})]"
+        });
     }
 }
 

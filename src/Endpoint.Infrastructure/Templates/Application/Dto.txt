@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
-namespace {{ applicationNamespace }}.Features
+
+namespace {{ applicationNamespace }}.Features;
+
+public class {{ entityNamePascalCase }}Dto
 {
-    public class {{ entityNamePascalCase }}Dto
-    {
-    }
 }

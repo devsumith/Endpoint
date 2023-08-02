@@ -1,19 +1,17 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
-// Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Options;
 
-namespace Endpoint.Core.Strategies
+
+namespace Endpoint.Core.Strategies;
+
+public class MinimalApiSettingsFileGenerationStrategy : ISolutionSettingsFileGenerationStrategy
 {
-    public class MinimalApiSettingsFileGenerationStrategy : ISolutionSettingsFileGenerationStrategy
+    public bool? CanHandle(SolutionSettingsModel request) => request.Metadata.Contains(Constants.SolutionTemplates.Minimal);
+
+    public SolutionSettingsModel Create(SolutionSettingsModel request)
     {
-        public bool? CanHandle(SolutionSettingsModel request) => request.Metadata.Contains(Constants.SolutionTemplates.Minimal);
 
-        public SolutionSettingsModel Create(SolutionSettingsModel request)
-        {
-
-            return new();
-        }
+        return new();
     }
 }
 

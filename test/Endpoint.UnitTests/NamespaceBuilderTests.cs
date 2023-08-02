@@ -1,66 +1,64 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
-// Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Builders;
 using Endpoint.Core.Services;
 using System.IO;
 using Xunit;
 
-namespace Endpoint.UnitTests
+
+namespace Endpoint.UnitTests;
+
+public class NamespaceBuilderTests
 {
-    public class NamespaceBuilderTests
+    [Fact]
+    public void Constructor()
     {
-        [Fact]
-        public void Constructor()
+        var context = new Endpoint.Core.Services.Context();
+
+        var sut = new NamespaceBuilder("Avengers.Api.Features", "Test", context, default);
+
+        sut.Build();
+
+        var expected = new string[4]
         {
-            var context = new Endpoint.Core.Services.Context();
+            "namespace Avengers.Api.Features", "{","","}"
+        };
 
-            var sut = new NamespaceBuilder("Avengers.Api.Features", "Test", context, default);
+        context.TryGetValue($"{Path.DirectorySeparatorChar}Test.cs", out string[] actual);
 
-            sut.Build();
+        Assert.Equal(expected, actual);
+    }
 
-            var expected = new string[4]
-            {
-                "namespace Avengers.Api.Features", "{","","}"
-            };
+    [Fact]
+    public void AddUsings()
+    {
+        var sut = new NamespaceBuilder("Avengers.Api.Features", default, default, default)
+            .WithUsing("System")
+            .WithUsing("System.Linq");
 
-            context.TryGetValue($"{Path.DirectorySeparatorChar}Test.cs", out string[] actual);
+        sut.Build();
 
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void AddUsings()
+        var expected = new string[7]
         {
-            var sut = new NamespaceBuilder("Avengers.Api.Features", default, default, default)
-                .WithUsing("System")
-                .WithUsing("System.Linq");
+            "using System;","using System.Linq;", "", "namespace Avengers.Api.Features", "{","","}"
+        };
+    }
 
-            sut.Build();
+    [Fact]
+    public void AddClasses()
+    {
+        var sut = new NamespaceBuilder("Avengers.Api.Features", default, default, default)
+            .WithUsing("System")
+            .WithUsing("System.Linq")
+            .WithClass(new ClassBuilder("Foo", default, null).Class);
 
-            var expected = new string[7]
-            {
-                "using System;","using System.Linq;", "", "namespace Avengers.Api.Features", "{","","}"
-            };
-        }
+        sut.Build();
 
-        [Fact]
-        public void AddClasses()
+        var expected = new string[9]
         {
-            var sut = new NamespaceBuilder("Avengers.Api.Features", default, default, default)
-                .WithUsing("System")
-                .WithUsing("System.Linq")
-                .WithClass(new ClassBuilder("Foo", default, null).Class);
-
-            sut.Build();
-
-            var expected = new string[9]
-            {
-                "using System;","using System.Linq;", "", "namespace Avengers.Api.Features", "{","","    public class Foo { }", "", "}"
-            };
-
-        }
+            "using System;","using System.Linq;", "", "namespace Avengers.Api.Features", "{","","    public class Foo { }", "", "}"
+        };
 
     }
+
 }
 

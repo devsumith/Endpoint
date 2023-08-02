@@ -1,12 +1,12 @@
 using System;
 
-namespace {{ infrastructureNamespace }}.Data
-{
-    public static class SeedData
-    {
-        public static void Seed({{ dbContextPascalCase }} context)
-        {
 
-        }
+namespace {{ infrastructureNamespace }}.Data;
+
+public static class SeedData
+{
+    public static void Seed({{ dbContextPascalCase }} context)
+    {
+
     }
 }

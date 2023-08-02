@@ -1,9 +1,6 @@
-﻿{% for using in Usings %}using {{ using }};
-{% endfor %}
-namespace {{ Namespace }}
+
+namespace {{ Namespace }};
+
+public class {{ namePascalCase }}
 {
-    public class {{ namePascalCase }}
-    {
-{% for prop in Properties %}        {{ prop }}{% endfor %}
-    }
 }

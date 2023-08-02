@@ -50,7 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Artifacts\Services\" />
     <Folder Include="Syntax\RouteHandlers\Create\" />
     <Folder Include="Messages\" />
     <Folder Include="Syntax\SpecFlow\Services\" />

@@ -7,37 +7,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace {{ applicationNamespace }}.Extensions
+
+namespace {{ applicationNamespace }}.Extensions;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection AddValidation(this IServiceCollection services, Type type)
     {
-        public static IServiceCollection AddValidation(this IServiceCollection services, Type type)
-        {
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-            foreach (var requestType in GetAllTypesImplementingOpenGenericType(typeof(IRequest<>), type.Assembly))
+        foreach (var requestType in GetAllTypesImplementingOpenGenericType(typeof(IRequest<>), type.Assembly))
+        {
+            var validatorType = typeof(IValidator<>).MakeGenericType(requestType);
+
+            foreach (var validatorImpl in Assembly.GetExecutingAssembly().GetTypes().Where(v => validatorType.IsAssignableFrom(v)))
             {
-                var validatorType = typeof(IValidator<>).MakeGenericType(requestType);
-
-                foreach (var validatorImpl in Assembly.GetExecutingAssembly().GetTypes().Where(v => validatorType.IsAssignableFrom(v)))
-                {
-                    services.AddTransient(validatorType, validatorImpl);
-                }
+                services.AddTransient(validatorType, validatorImpl);
             }
-            return services;
         }
+        return services;
+    }
 
-        public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(Type openGenericType, Assembly assembly)
-        {
-            return from types in assembly.GetTypes()
-                   from interfaces in types.GetInterfaces()
-                   let baseType = types.BaseType
-                   where
-                   (baseType != null && baseType.IsGenericType &&
-                   openGenericType.IsAssignableFrom(baseType.GetGenericTypeDefinition())) ||
-                   (interfaces.IsGenericType &&
-                   openGenericType.IsAssignableFrom(interfaces.GetGenericTypeDefinition()))
-                   select types;
-        }
+    public static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(Type openGenericType, Assembly assembly)
+    {
+        return from types in assembly.GetTypes()
+               from interfaces in types.GetInterfaces()
+               let baseType = types.BaseType
+               where
+               (baseType != null && baseType.IsGenericType &&
+               openGenericType.IsAssignableFrom(baseType.GetGenericTypeDefinition())) ||
+               (interfaces.IsGenericType &&
+               openGenericType.IsAssignableFrom(interfaces.GetGenericTypeDefinition()))
+               select types;
     }
 }

@@ -1,19 +1,19 @@
-﻿using {{ domainNamespace }}.Models;
+using {{ domainNamespace }}.Models;
 using System.Collections.Generic;
 
-namespace {{ applicationNamespace }}.Features
-{
-    public static class {{ entityNamePascalCase }}Extensions
-    {
-        public static IEnumerable<{{ entityNamePascalCase }}Dto> ToDtos(this IEnumerable<{{ entityNamePascalCase }}> {{ entityNameCamelCasePlural }})
-        {
-            foreach (var {{ entityNameCamelCase }} in {{ entityNameCamelCasePlural }})
-            {
-                yield return {{ entityNameCamelCase }}.ToDto();
-            }
-        }
 
-        public static {{ entityNamePascalCase }}Dto ToDto(this {{ entityNamePascalCase }} {{ entityNameCamelCase }})
-            => new() { {{ entityNamePascalCase }}Id = {{ entityNameCamelCase }}.{{ entityNamePascalCase }}Id };
+namespace {{ applicationNamespace }}.Features;
+
+public static class {{ entityNamePascalCase }}Extensions
+{
+    public static IEnumerable<{{ entityNamePascalCase }}Dto> ToDtos(this IEnumerable<{{ entityNamePascalCase }}> {{ entityNameCamelCasePlural }})
+    {
+        foreach (var {{ entityNameCamelCase }} in {{ entityNameCamelCasePlural }})
+        {
+            yield return {{ entityNameCamelCase }}.ToDto();
+        }
     }
+
+    public static {{ entityNamePascalCase }}Dto ToDto(this {{ entityNamePascalCase }} {{ entityNameCamelCase }})
+        => new() { {{ entityNamePascalCase }}Id = {{ entityNameCamelCase }}.{{ entityNamePascalCase }}Id };
 }

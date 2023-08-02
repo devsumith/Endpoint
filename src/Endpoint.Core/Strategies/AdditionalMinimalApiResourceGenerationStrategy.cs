@@ -1,38 +1,36 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
-// Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Options;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Linq;
 
-namespace Endpoint.Core.Strategies
+
+namespace Endpoint.Core.Strategies;
+
+public class AdditionalMinimalApiResourceGenerationStrategy : IAdditionalResourceGenerationStrategy
 {
-    public class AdditionalMinimalApiResourceGenerationStrategy : IAdditionalResourceGenerationStrategy
+    private readonly ILogger _logger;
+
+    public AdditionalMinimalApiResourceGenerationStrategy(ILogger logger)
     {
-        private readonly ILogger _logger;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
 
-        public AdditionalMinimalApiResourceGenerationStrategy(ILogger logger)
-        {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
+    public int Order => 1;
 
-        public int Order => 1;
+    public bool CanHandle(AddResourceOptions options)
+    {
+        var path = Directory.GetFiles(options.Directory, "Program.cs", SearchOption.AllDirectories).Single();
+        return File.ReadAllLines(path).Where(x => x.StartsWith("app.Map")).Count() > 0;
+    }
 
-        public bool CanHandle(AddResourceOptions options)
-        {
-            var path = Directory.GetFiles(options.Directory, "Program.cs", SearchOption.AllDirectories).Single();
-            return File.ReadAllLines(path).Where(x => x.StartsWith("app.Map")).Count() > 0;
-        }
+    public void Create(AddResourceOptions options)
+    {
+        _logger.LogInformation(nameof(AdditionalMinimalApiResourceGenerationStrategy));
 
-        public void Create(AddResourceOptions options)
-        {
-            _logger.LogInformation(nameof(AdditionalMinimalApiResourceGenerationStrategy));
+        Console.WriteLine("Press any key to continue...");
 
-            Console.WriteLine("Press any key to continue...");
-
-            Console.ReadKey();
-        }
+        Console.ReadKey();
     }
 }
 

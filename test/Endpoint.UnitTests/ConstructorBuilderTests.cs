@@ -1,62 +1,60 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
-// Licensed under the MIT License. See License.txt in the project root for license information.
 
 
 using Endpoint.Core.Builders.CSharp;
 using Xunit;
 
-namespace Endpoint.UnitTests
+
+namespace Endpoint.UnitTests;
+
+public class ConstructorBuilderTests
 {
-    public class ConstructorBuilderTests
+
+    [Fact]
+    public void Constructor()
     {
+        var sut = new ConstructorBuilder("Customer");
+    }
 
-        [Fact]
-        public void Constructor()
-        {
-            var sut = new ConstructorBuilder("Customer");
-        }
+    [Fact]
+    public void Basic()
+    {
+        var expected = new string[] { "    Customer()" };
 
-        [Fact]
-        public void Basic()
-        {
-            var expected = new string[] { "    Customer()" };
+        var sut = new ConstructorBuilder("Customer");
 
-            var sut = new ConstructorBuilder("Customer");
+        var actual = sut.Build();
 
-            var actual = sut.Build();
+        Assert.Equal(expected, actual);
+    }
 
-            Assert.Equal(expected, actual);
-        }
+    [Fact]
+    public void BasicWithDependency()
+    {
+        var expected = new string[] {
+            "CustomerController(IMediator mediator)",
+            "    => _mediator = mediator;"
+        };
 
-        [Fact]
-        public void BasicWithDependency()
-        {
-            var expected = new string[] {
-                "CustomerController(IMediator mediator)",
-                "    => _mediator = mediator;"
-            };
+        var sut = new ConstructorBuilder("CustomerController")
+            .WithDependency("IMediator", "mediator");
 
-            var sut = new ConstructorBuilder("CustomerController")
-                .WithDependency("IMediator", "mediator");
+        var actual = sut.Build();
 
-            var actual = sut.Build();
+        Assert.Equal(expected, actual);
+    }
 
-            Assert.Equal(expected, actual);
-        }
+    [Fact]
+    public void BasicWithDependencies()
+    {
+        var expected = new string[] { "    CustomerController(IMediator mediator, IHttpContextAccessor httpContextAccessor)" };
 
-        [Fact]
-        public void BasicWithDependencies()
-        {
-            var expected = new string[] { "    CustomerController(IMediator mediator, IHttpContextAccessor httpContextAccessor)" };
+        var sut = new ConstructorBuilder("CustomerController")
+            .WithDependency("IMediator", "mediator")
+            .WithDependency("IHttpContextAccessor", "httpContextAccessor");
 
-            var sut = new ConstructorBuilder("CustomerController")
-                .WithDependency("IMediator", "mediator")
-                .WithDependency("IHttpContextAccessor", "httpContextAccessor");
+        var actual = sut.Build();
 
-            var actual = sut.Build();
-
-            Assert.Equal(expected, actual);
-        }
+        Assert.Equal(expected, actual);
     }
 }
 

@@ -1,5 +1,3 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
-// Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Types;
@@ -14,32 +12,60 @@ using System.Text.Json;
 using static System.Text.Json.JsonSerializer;
 using Endpoint.Core.Options;
 
-namespace Endpoint.Core.Services
-{
-    public class SolutionFilesGenerationStrategy : ISolutionFilesGenerationStrategy
-    {
-        protected readonly ICommandService _commandService;
-        protected readonly ITemplateProcessor _templateProcessor;
-        protected readonly ITemplateLocator _templateLocator;
-        protected readonly IFileSystem _fileSystem;
 
-        public SolutionFilesGenerationStrategy(
-            ICommandService commandService,
-            ITemplateProcessor templateProcessor,
-            ITemplateLocator templateLocator,
-            IFileSystem fileSystem)
+namespace Endpoint.Core.Services;
+
+public class SolutionFilesGenerationStrategy : ISolutionFilesGenerationStrategy
+{
+    protected readonly ICommandService _commandService;
+    protected readonly ITemplateProcessor _templateProcessor;
+    protected readonly ITemplateLocator _templateLocator;
+    protected readonly IFileSystem _fileSystem;
+
+    public SolutionFilesGenerationStrategy(
+        ICommandService commandService,
+        ITemplateProcessor templateProcessor,
+        ITemplateLocator templateLocator,
+        IFileSystem fileSystem)
+    {
+        _commandService = commandService;
+        _templateProcessor = templateProcessor;
+        _templateLocator = templateLocator;
+        _fileSystem = fileSystem;
+    }
+
+    public SettingsModel Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+    {
+        LegacyAggregatesModel aggregateRoot = new LegacyAggregatesModel(resource);
+
+        aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, AccessModifier.Public, new TypeModel() { Name = "Guid" }, $"{((SyntaxToken)resource).PascalCase}Id", PropertyAccessorModel.GetPrivateSet, key: true));
+
+        if (!string.IsNullOrWhiteSpace(properties))
         {
-            _commandService = commandService;
-            _templateProcessor = templateProcessor;
-            _templateLocator = templateLocator;
-            _fileSystem = fileSystem;
+            foreach (var property in properties.Split(','))
+            {
+                var nameValuePair = property.Split(':');
+
+                aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, AccessModifier.Public, new TypeModel() { Name = nameValuePair.ElementAt(1) }, nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
+            }
         }
 
-        public SettingsModel Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, string resource, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+        return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<LegacyAggregatesModel>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins, prefix);
+    }
+
+    public SettingsModel Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+    {
+        var aggregates = new List<LegacyAggregatesModel>();
+
+        foreach (var resource in resources)
         {
             LegacyAggregatesModel aggregateRoot = new LegacyAggregatesModel(resource);
 
-            aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, AccessModifier.Public, new TypeModel() { Name = "Guid" }, $"{((SyntaxToken)resource).PascalCase}Id", PropertyAccessorModel.GetPrivateSet, key: true));
+            var idPropertyName = useShortIdProperty ? "Id" : $"{((SyntaxToken)resource).PascalCase}Id";
+
+            var idDotNetType = useIntIdPropertyType ? "int" : "Guid";
+
+            aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, AccessModifier.Public, new TypeModel() { Name = idDotNetType }, idPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 
             if (!string.IsNullOrWhiteSpace(properties))
             {
@@ -51,141 +77,113 @@ namespace Endpoint.Core.Services
                 }
             }
 
-            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, new List<LegacyAggregatesModel>() { aggregateRoot }, directory, isMicroserviceArchitecture, plugins, prefix);
+            aggregates.Add(aggregateRoot);
         }
 
-        public SettingsModel Build(string name, string properties, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<string> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+
+        return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, aggregates, directory, isMicroserviceArchitecture, plugins, prefix);
+
+    }
+
+    public SettingsModel Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<LegacyAggregatesModel> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+    {
+
+        name = name.Replace("-", "_");
+
+        _fileSystem.CreateDirectory($"{directory}{Path.DirectorySeparatorChar}{name}");
+
+        var settings = new SettingsModel(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdPropertyFormat.Short : IdPropertyFormat.Long, useIntIdPropertyType ? IdPropertyType.Int : IdPropertyType.Guid, prefix);
+
+        return Create(settings);
+    }
+
+    public SettingsModel Create(SettingsModel settings)
+    {
+        var json = Serialize(settings, new JsonSerializerOptions
         {
-            var aggregates = new List<LegacyAggregatesModel>();
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        });
 
-            foreach (var resource in resources)
-            {
-                LegacyAggregatesModel aggregateRoot = new LegacyAggregatesModel(resource);
+        _fileSystem.CreateDirectory($"{settings.RootDirectory}");
 
-                var idPropertyName = useShortIdProperty ? "Id" : $"{((SyntaxToken)resource).PascalCase}Id";
+        _fileSystem.WriteAllText($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{Constants.SettingsFileName}", json);
 
-                var idDotNetType = useIntIdPropertyType ? "int" : "Guid";
+        _commandService.Start($"dotnet new sln -n {settings.SolutionName}", settings.RootDirectory);
 
-                aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, AccessModifier.Public, new TypeModel() { Name = idDotNetType }, idPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
+        _fileSystem.CreateDirectory($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{settings.SourceFolder}");
 
-                if (!string.IsNullOrWhiteSpace(properties))
-                {
-                    foreach (var property in properties.Split(','))
-                    {
-                        var nameValuePair = property.Split(':');
+        _fileSystem.CreateDirectory($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{settings.TestFolder}");
 
-                        aggregateRoot.Properties.Add(new PropertyModel(aggregateRoot, AccessModifier.Public, new TypeModel() { Name = nameValuePair.ElementAt(1) }, nameValuePair.ElementAt(0), PropertyAccessorModel.GetPrivateSet));
-                    }
-                }
+        _fileSystem.CreateDirectory($"{settings.RootDirectory}{Path.DirectorySeparatorChar}deploy");
 
-                aggregates.Add(aggregateRoot);
-            }
+        _commandService.Start("git init", settings.RootDirectory);
 
+        new GitIgnoreFileGenerationStrategy(_fileSystem, _templateLocator).Generate(settings);
 
-            return Build(name, dbContextName, useShortIdProperty, useIntIdPropertyType, aggregates, directory, isMicroserviceArchitecture, plugins, prefix);
-
-        }
-
-        public SettingsModel Build(string name, string dbContextName, bool useShortIdProperty, bool useIntIdPropertyType, List<LegacyAggregatesModel> resources, string directory, bool isMicroserviceArchitecture, List<string> plugins, string prefix)
+        if (settings.IsMicroserviceArchitecture)
         {
+            _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
 
-            name = name.Replace("-", "_");
+            _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
 
-            _fileSystem.CreateDirectory($"{directory}{Path.DirectorySeparatorChar}{name}");
+            _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
 
-            var settings = new SettingsModel(name, dbContextName, resources, directory, isMicroserviceArchitecture, plugins, useShortIdProperty ? IdPropertyFormat.Short : IdPropertyFormat.Long, useIntIdPropertyType ? IdPropertyType.Int : IdPropertyType.Guid, prefix);
+            _addReference(settings.TestingDirectory, settings.ApiDirectory);
 
-            return Create(settings);
+            _addReference(settings.UnitTestsDirectory, settings.TestingDirectory);
         }
-
-        public SettingsModel Create(SettingsModel settings)
+        else
         {
-            var json = Serialize(settings, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
-            });
+            _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
 
-            _fileSystem.CreateDirectory($"{settings.RootDirectory}");
+            _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.DomainDirectory, settings);
 
-            _fileSystem.WriteAllText($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{Constants.SettingsFileName}", json);
+            _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.ApplicationDirectory, settings);
 
-            _commandService.Start($"dotnet new sln -n {settings.SolutionName}", settings.RootDirectory);
+            _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.InfrastructureDirectory, settings);
 
-            _fileSystem.CreateDirectory($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{settings.SourceFolder}");
+            _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
 
-            _fileSystem.CreateDirectory($"{settings.RootDirectory}{Path.DirectorySeparatorChar}{settings.TestFolder}");
+            _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
 
-            _fileSystem.CreateDirectory($"{settings.RootDirectory}{Path.DirectorySeparatorChar}deploy");
+            _addReference(settings.ApplicationDirectory, settings.DomainDirectory);
 
-            _commandService.Start("git init", settings.RootDirectory);
+            _addReference(settings.InfrastructureDirectory, settings.ApplicationDirectory);
 
-            new GitIgnoreFileGenerationStrategy(_fileSystem, _templateLocator).Generate(settings);
+            _addReference(settings.ApiDirectory, settings.InfrastructureDirectory);
 
-            if (settings.IsMicroserviceArchitecture)
-            {
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
+            _addReference(settings.TestingDirectory, settings.ApiDirectory);
 
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
+            _addReference(settings.TestingDirectory, settings.ApiDirectory);
 
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
-
-                _addReference(settings.TestingDirectory, settings.ApiDirectory);
-
-                _addReference(settings.UnitTestsDirectory, settings.TestingDirectory);
-            }
-            else
-            {
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.WebApi, settings.ApiDirectory, settings);
-
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.DomainDirectory, settings);
-
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.ApplicationDirectory, settings);
-
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.InfrastructureDirectory, settings);
-
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.ClassLibrary, settings.TestingDirectory, settings);
-
-                _createProjectAndAddToSolution(Constants.DotNetTemplateTypes.XUnit, settings.UnitTestsDirectory, settings);
-
-                _addReference(settings.ApplicationDirectory, settings.DomainDirectory);
-
-                _addReference(settings.InfrastructureDirectory, settings.ApplicationDirectory);
-
-                _addReference(settings.ApiDirectory, settings.InfrastructureDirectory);
-
-                _addReference(settings.TestingDirectory, settings.ApiDirectory);
-
-                _addReference(settings.TestingDirectory, settings.ApiDirectory);
-
-                _addReference(settings.UnitTestsDirectory, settings.TestingDirectory);
-            }
-
-            return settings;
+            _addReference(settings.UnitTestsDirectory, settings.TestingDirectory);
         }
 
-        private void _createProjectAndAddToSolution(string templateType, string directory, SettingsModel settings)
-        {
+        return settings;
+    }
 
-            _fileSystem.CreateDirectory(directory);
+    private void _createProjectAndAddToSolution(string templateType, string directory, SettingsModel settings)
+    {
 
-            _commandService.Start($"dotnet new {templateType} --framework net6.0", directory);
+        _fileSystem.CreateDirectory(directory);
 
-            var parts = directory.Split(Path.DirectorySeparatorChar);
+        _commandService.Start($"dotnet new {templateType} --framework net6.0", directory);
 
-            var name = parts[parts.Length - 1];
+        var parts = directory.Split(Path.DirectorySeparatorChar);
 
-            _commandService.Start($"dotnet sln add {directory}{Path.DirectorySeparatorChar}{name}.csproj", settings.RootDirectory);
-        }
+        var name = parts[parts.Length - 1];
 
-        private void _addReference(string targetDirectory, string referencedDirectory)
-        {
-            var parts = referencedDirectory.Split(Path.DirectorySeparatorChar);
+        _commandService.Start($"dotnet sln add {directory}{Path.DirectorySeparatorChar}{name}.csproj", settings.RootDirectory);
+    }
 
-            var name = parts[parts.Length - 1];
+    private void _addReference(string targetDirectory, string referencedDirectory)
+    {
+        var parts = referencedDirectory.Split(Path.DirectorySeparatorChar);
 
-            _commandService.Start($"dotnet add {targetDirectory} reference {referencedDirectory}{Path.DirectorySeparatorChar}{name}.csproj");
-        }
+        var name = parts[parts.Length - 1];
+
+        _commandService.Start($"dotnet add {targetDirectory} reference {referencedDirectory}{Path.DirectorySeparatorChar}{name}.csproj");
     }
 }
 

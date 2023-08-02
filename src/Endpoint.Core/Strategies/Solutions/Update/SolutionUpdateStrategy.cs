@@ -1,31 +1,29 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
-// Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Services;
 using System.Linq;
 
-namespace Endpoint.Core.Strategies.Solutions.Update
+
+namespace Endpoint.Core.Strategies.Solutions.Update;
+
+public class SolutionUpdateStrategy : ISolutionUpdateStrategy
 {
-    public class SolutionUpdateStrategy : ISolutionUpdateStrategy
+    private readonly ICommandService _commandService;
+
+    public SolutionUpdateStrategy(ICommandService commandService)
     {
-        private readonly ICommandService _commandService;
+        _commandService = commandService;
+    }
 
-        public SolutionUpdateStrategy(ICommandService commandService)
+    public bool CanHandle(SolutionModel previous, SolutionModel next) => true;
+    public int Order { get; set; }
+    public void Update(SolutionModel previous, SolutionModel next)
+    {
+        foreach (var project in next.Projects.Where(np => previous.Projects.SingleOrDefault(p => p.Path == np.Path) == null))
         {
-            _commandService = commandService;
-        }
-
-        public bool CanHandle(SolutionModel previous, SolutionModel next) => true;
-        public int Order { get; set; }
-        public void Update(SolutionModel previous, SolutionModel next)
-        {
-            foreach (var project in next.Projects.Where(np => previous.Projects.SingleOrDefault(p => p.Path == np.Path) == null))
+            if (previous.Projects.SingleOrDefault(x => x.Name == project.Name) == null)
             {
-                if (previous.Projects.SingleOrDefault(x => x.Name == project.Name) == null)
-                {
-                    _commandService.Start($"dotnet sln {next.SolultionFileName} add {project.Path}", next.SolutionDirectory);
-                }
+                _commandService.Start($"dotnet sln {next.SolultionFileName} add {project.Path}", next.SolutionDirectory);
             }
         }
     }

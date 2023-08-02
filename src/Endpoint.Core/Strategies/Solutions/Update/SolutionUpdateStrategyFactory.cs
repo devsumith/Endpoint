@@ -1,45 +1,43 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
-// Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Artifacts.Solutions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Endpoint.Core.Strategies.Solutions.Update
+
+namespace Endpoint.Core.Strategies.Solutions.Update;
+
+public class SolutionUpdateStrategyFactory : ISolutionUpdateStrategyFactory
 {
-    public class SolutionUpdateStrategyFactory : ISolutionUpdateStrategyFactory
+    private readonly IEnumerable<ISolutionUpdateStrategy> _solutionUpdateStrategies;
+
+    public SolutionUpdateStrategyFactory(IEnumerable<ISolutionUpdateStrategy> solutionUpdateStrategies)
     {
-        private readonly IEnumerable<ISolutionUpdateStrategy> _solutionUpdateStrategies;
+        _solutionUpdateStrategies = solutionUpdateStrategies;
+    }
 
-        public SolutionUpdateStrategyFactory(IEnumerable<ISolutionUpdateStrategy> solutionUpdateStrategies)
+    public void UpdateFor(SolutionModel previous, SolutionModel next)
+    {
+        if (previous == null)
         {
-            _solutionUpdateStrategies = solutionUpdateStrategies;
+            throw new ArgumentNullException(nameof(previous));
         }
 
-        public void UpdateFor(SolutionModel previous, SolutionModel next)
+        if (next == null)
         {
-            if (previous == null)
-            {
-                throw new ArgumentNullException(nameof(previous));
-            }
-
-            if (next == null)
-            {
-                throw new ArgumentNullException(nameof(next));
-            }
-
-
-
-            var strategy = _solutionUpdateStrategies.Where(x => x.CanHandle(previous, next)).OrderByDescending(x => x.Order).FirstOrDefault();
-
-            if (strategy == null)
-            {
-                throw new InvalidOperationException("Cannot find a strategy for generation for the type ");
-            }
-
-            strategy.Update(previous, next);
+            throw new ArgumentNullException(nameof(next));
         }
+
+
+
+        var strategy = _solutionUpdateStrategies.Where(x => x.CanHandle(previous, next)).OrderByDescending(x => x.Order).FirstOrDefault();
+
+        if (strategy == null)
+        {
+            throw new InvalidOperationException("Cannot find a strategy for generation for the type ");
+        }
+
+        strategy.Update(previous, next);
     }
 }
 

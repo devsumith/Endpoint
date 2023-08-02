@@ -1,5 +1,3 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
-// Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Builders;
 using Endpoint.Core.Services;
@@ -7,28 +5,28 @@ using Moq;
 using System.Linq;
 using Xunit;
 
-namespace Endpoint.UnitTests
+
+namespace Endpoint.UnitTests;
+
+public class CreateBuilderTests
 {
-    public class CreateBuilderTests
+    [Fact]
+    private void ShouldWork()
     {
-        [Fact]
-        private void ShouldWork()
-        {
-            var context = new Endpoint.Core.Services.Context();
+        var context = new Endpoint.Core.Services.Context();
 
-            new CreateBuilder(context, Mock.Of<IFileSystem>())
-                .WithDirectory("")
-                .WithDbContext("CustomerServiceDbContext")
-                .WithNamespace("CustomerService.Application.Features")
-                .WithApplicationNamespace("CustomerService.Application")
-                .WithDomainNamespace("CustomerService.Domain")
-                .WithEntity("Customer")
-                .Build();
+        new CreateBuilder(context, Mock.Of<IFileSystem>())
+            .WithDirectory("")
+            .WithDbContext("CustomerServiceDbContext")
+            .WithNamespace("CustomerService.Application.Features")
+            .WithApplicationNamespace("CustomerService.Application")
+            .WithDomainNamespace("CustomerService.Domain")
+            .WithEntity("Customer")
+            .Build();
 
-            var files = context.ElementAt(0).Value;
+        var files = context.ElementAt(0).Value;
 
-            Assert.NotNull(files);
-        }
+        Assert.NotNull(files);
     }
 }
 

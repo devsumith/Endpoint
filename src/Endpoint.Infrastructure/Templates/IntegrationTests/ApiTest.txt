@@ -1,4 +1,4 @@
-﻿using Clarity.Core.Models;
+using Clarity.Core.Models;
 using Clarity.Domain.Features;
 using Clarity.Testing;
 using Clarity.Testing.Builders;
@@ -10,141 +10,141 @@ using Xunit;
 using System.Threading.Tasks;
 using static Clarity.IntegrationTests.Controllers.{{ entityNamePascalCase }}ControllerTests.Endpoints;
 
-namespace Clarity.IntegrationTests.Controllers
+
+namespace Clarity.IntegrationTests.Controllers;
+
+public class {{ entityNamePascalCase }}ControllerTests : IClassFixture<ApiFixture>
 {
-    public class {{ entityNamePascalCase }}ControllerTests : IClassFixture<ApiFixture>
+    private readonly ApiFixture _fixture;
+    public {{ entityNamePascalCase }}ControllerTests(ApiFixture fixture)
     {
-        private readonly ApiFixture _fixture;
-        public {{ entityNamePascalCase }}ControllerTests(ApiFixture fixture)
+        _fixture = fixture;
+    }
+
+
+    [Fact]
+    public async Task Should_Create{{ entityNamePascalCase }}()
+    {
+        var context = _fixture.Context;
+
+        var {{ entityNameCamelCase }} = {{ entityNamePascalCase }}DtoBuilder.WithDefaults();
+
+        StringContent stringContent = new StringContent(JsonConvert.SerializeObject(new { {{ entityNameCamelCase }} }), Encoding.UTF8, "application/json");
+
+        using var client = _fixture.CreateClient();
+
+        var httpResponseMessage = await client.PostAsync(Post.Create{{ entityNamePascalCase }}, stringContent);
+
+        var response = JsonConvert.DeserializeObject<Create{{ entityNamePascalCase }}.Response>(await httpResponseMessage.Content.ReadAsStringAsync());
+
+        var sut = context.FindAsync<{{ entityNamePascalCase }}>(response.{{ entityNamePascalCase }}.{{ entityNamePascalCase }}Id);
+
+        Assert.NotEqual(default, response.{{ entityNamePascalCase }}.{{ entityNamePascalCase }}Id);
+    }
+
+    [Fact]
+    public async Task Should_Remove{{ entityNamePascalCase }}()
+    {
+        var {{ entityNameCamelCase }} = {{ entityNamePascalCase }}Builder.WithDefaults();
+
+        var context = _fixture.Context;
+
+        var client = _fixture.CreateClient();
+
+
+        await context.SaveChangesAsync(default);
+
+        var httpResponseMessage = await client.DeleteAsync(Delete.By({{ entityNameCamelCase }}.{{ entityNamePascalCase }}Id));
+
+        httpResponseMessage.EnsureSuccessStatusCode();
+
+        var removed{{ entityNamePascalCase }} = await context.FindAsync<{{ entityNamePascalCase }}>({{ entityNameCamelCase }}.{{ entityNamePascalCase }}Id);
+
+    }
+
+    [Fact]
+    public async Task Should_Update{{ entityNamePascalCase }}()
+    {
+        var {{ entityNameCamelCase }} = {{ entityNamePascalCase }}Builder.WithDefaults();
+
+        var context = _fixture.Context;
+
+        await context.SaveChangesAsync(default);
+
+        StringContent stringContent = new StringContent(JsonConvert.SerializeObject(new { {{ entityNameCamelCase }} = {{ entityNameCamelCase }}.ToDto() }), Encoding.UTF8, "application/json");
+
+        var httpResponseMessage = await _fixture.CreateClient().PutAsync(Put.Update, stringContent);
+
+        httpResponseMessage.EnsureSuccessStatusCode();
+
+        var sut = await context.FindAsync<{{ entityNamePascalCase }}>({{ entityNameCamelCase }}.{{ entityNamePascalCase }}Id);
+
+    }
+
+    [Fact]
+    public async Task Should_Get{{ entityNamePascalCasePlural }}()
+    {
+        var {{ entityNameCamelCase }} = {{ entityNamePascalCase }}Builder.WithDefaults();
+
+        var context = _fixture.Context;
+
+
+        await context.SaveChangesAsync(default);
+
+        var httpResponseMessage = await _fixture.CreateClient().GetAsync(Get.{{ entityNamePascalCasePlural }});
+
+        httpResponseMessage.EnsureSuccessStatusCode();
+
+        var response = JsonConvert.DeserializeObject<Get{{ entityNamePascalCasePlural }}.Response>(await httpResponseMessage.Content.ReadAsStringAsync());
+
+        Assert.True(response.{{ entityNamePascalCasePlural }}.Any());
+    }
+
+    [Fact]
+    public async Task Should_Get{{ entityNamePascalCase }}ById()
+    {
+        var {{ entityNameCamelCase }} = {{ entityNamePascalCase }}Builder.WithDefaults();
+
+        var context = _fixture.Context;
+
+        await context.SaveChangesAsync(default);
+
+        var httpResponseMessage = await _fixture.CreateClient().GetAsync(Get.By({{ entityNameCamelCase }}.{{ entityNamePascalCase }}Id));
+
+        httpResponseMessage.EnsureSuccessStatusCode();
+
+        var response = JsonConvert.DeserializeObject<Get{{ entityNamePascalCase }}ById.Response>(await httpResponseMessage.Content.ReadAsStringAsync());
+
+        Assert.NotNull(response);
+
+    }
+
+    internal static class Endpoints
+    {
+        public static class Post
         {
-            _fixture = fixture;
+            public static string Create{{ entityNamePascalCase }} = "api/{{ entityNameCamelCase }}";
         }
 
-
-        [Fact]
-        public async Task Should_Create{{ entityNamePascalCase }}()
+        public static class Put
         {
-            var context = _fixture.Context;
-
-            var {{ entityNameCamelCase }} = {{ entityNamePascalCase }}DtoBuilder.WithDefaults();
-
-            StringContent stringContent = new StringContent(JsonConvert.SerializeObject(new { {{ entityNameCamelCase }} }), Encoding.UTF8, "application/json");
-
-            using var client = _fixture.CreateClient();
-
-            var httpResponseMessage = await client.PostAsync(Post.Create{{ entityNamePascalCase }}, stringContent);
-
-            var response = JsonConvert.DeserializeObject<Create{{ entityNamePascalCase }}.Response>(await httpResponseMessage.Content.ReadAsStringAsync());
-
-            var sut = context.FindAsync<{{ entityNamePascalCase }}>(response.{{ entityNamePascalCase }}.{{ entityNamePascalCase }}Id);
-
-            Assert.NotEqual(default, response.{{ entityNamePascalCase }}.{{ entityNamePascalCase }}Id);
+            public static string Update = "api/{{ entityNameCamelCase }}";
         }
 
-        [Fact]
-        public async Task Should_Remove{{ entityNamePascalCase }}()
+        public static class Delete
         {
-            var {{ entityNameCamelCase }} = {{ entityNamePascalCase }}Builder.WithDefaults();
-
-            var context = _fixture.Context;
-
-            var client = _fixture.CreateClient();
-
-
-            await context.SaveChangesAsync(default);
-
-            var httpResponseMessage = await client.DeleteAsync(Delete.By({{ entityNameCamelCase }}.{{ entityNamePascalCase }}Id));
-
-            httpResponseMessage.EnsureSuccessStatusCode();
-
-            var removed{{ entityNamePascalCase }} = await context.FindAsync<{{ entityNamePascalCase }}>({{ entityNameCamelCase }}.{{ entityNamePascalCase }}Id);
-
-        }
-
-        [Fact]
-        public async Task Should_Update{{ entityNamePascalCase }}()
-        {
-            var {{ entityNameCamelCase }} = {{ entityNamePascalCase }}Builder.WithDefaults();
-
-            var context = _fixture.Context;
-
-            await context.SaveChangesAsync(default);
-
-            StringContent stringContent = new StringContent(JsonConvert.SerializeObject(new { {{ entityNameCamelCase }} = {{ entityNameCamelCase }}.ToDto() }), Encoding.UTF8, "application/json");
-
-            var httpResponseMessage = await _fixture.CreateClient().PutAsync(Put.Update, stringContent);
-
-            httpResponseMessage.EnsureSuccessStatusCode();
-
-            var sut = await context.FindAsync<{{ entityNamePascalCase }}>({{ entityNameCamelCase }}.{{ entityNamePascalCase }}Id);
-
-        }
-
-        [Fact]
-        public async Task Should_Get{{ entityNamePascalCasePlural }}()
-        {
-            var {{ entityNameCamelCase }} = {{ entityNamePascalCase }}Builder.WithDefaults();
-
-            var context = _fixture.Context;
-
-            
-            await context.SaveChangesAsync(default);
-
-            var httpResponseMessage = await _fixture.CreateClient().GetAsync(Get.{{ entityNamePascalCasePlural }});
-
-            httpResponseMessage.EnsureSuccessStatusCode();
-
-            var response = JsonConvert.DeserializeObject<Get{{ entityNamePascalCasePlural }}.Response>(await httpResponseMessage.Content.ReadAsStringAsync());
-
-            Assert.True(response.{{ entityNamePascalCasePlural }}.Any());
-        }
-
-        [Fact]
-        public async Task Should_Get{{ entityNamePascalCase }}ById()
-        {
-            var {{ entityNameCamelCase }} = {{ entityNamePascalCase }}Builder.WithDefaults();
-
-            var context = _fixture.Context;
-
-            await context.SaveChangesAsync(default);
-
-            var httpResponseMessage = await _fixture.CreateClient().GetAsync(Get.By({{ entityNameCamelCase }}.{{ entityNamePascalCase }}Id));
-
-            httpResponseMessage.EnsureSuccessStatusCode();
-
-            var response = JsonConvert.DeserializeObject<Get{{ entityNamePascalCase }}ById.Response>(await httpResponseMessage.Content.ReadAsStringAsync());
-
-            Assert.NotNull(response);
-
-        }
-
-        internal static class Endpoints
-        {
-            public static class Post
+            public static string By(int {{ entityNameCamelCase }}Id)
             {
-                public static string Create{{ entityNamePascalCase }} = "api/{{ entityNameCamelCase }}";
+                return $"api/{{ entityNameCamelCase }}/{{{ entityNameCamelCase }}Id}";
             }
+        }
 
-            public static class Put
+        public static class Get
+        {
+            public static string {{ entityNamePascalCasePlural }} = "api/{{ entityNameCamelCase }}";
+            public static string By(int {{ entityNameCamelCase }}Id)
             {
-                public static string Update = "api/{{ entityNameCamelCase }}";
-            }
-
-            public static class Delete
-            {
-                public static string By(int {{ entityNameCamelCase }}Id)
-                {
-                    return $"api/{{ entityNameCamelCase }}/{{{ entityNameCamelCase }}Id}";
-                }
-            }
-
-            public static class Get
-            {
-                public static string {{ entityNamePascalCasePlural }} = "api/{{ entityNameCamelCase }}";
-                public static string By(int {{ entityNameCamelCase }}Id)
-                {
-                    return $"api/{{ entityNameCamelCase }}/{{{ entityNameCamelCase }}Id}";
-                }
+                return $"api/{{ entityNameCamelCase }}/{{{ entityNameCamelCase }}Id}";
             }
         }
     }
