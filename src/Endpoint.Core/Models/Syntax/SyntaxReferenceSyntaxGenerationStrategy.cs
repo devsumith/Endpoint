@@ -30,7 +30,7 @@ public class SyntaxReferenceSyntaxGenerationStrategy : SyntaxGenerationStrategyB
     public override bool CanHandle(object model, dynamic context = null)
         => model is SyntaxReferenceModel && context != null && context.Request == SetInitialLanguageInAppComponent;
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, SyntaxReferenceModel model, dynamic context = null)
+    public override string Create(ISyntaxGenerator syntaxGenerator, SyntaxReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -45,7 +45,7 @@ public class ProjectAddRequest : IRequest
 public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 {
     private readonly ILogger<ProjectAddRequestHandler> _logger;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly ICommandService _commandService;
     private readonly IFileSystem _fileSystem;
     private readonly IProjectService _projectService;
@@ -53,7 +53,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
     private readonly IFileProvider _fileProvider;
     public ProjectAddRequestHandler(
         ILogger<ProjectAddRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         ICommandService commandService,
         IFileSystem fileSystem,
         IProjectService projectService,
@@ -62,7 +62,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));

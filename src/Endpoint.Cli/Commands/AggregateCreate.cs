@@ -36,17 +36,17 @@ public class AggregateCreateRequestHandler : IRequestHandler<AggregateCreateRequ
 {
     private readonly ILogger<AggregateCreateRequestHandler> _logger;
     private readonly IFolderFactory _folderFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
 
     public AggregateCreateRequestHandler(
         ILogger<AggregateCreateRequestHandler> logger,
         IFolderFactory folderFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory
+        IArtifactGenerator artifactGenerator
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _folderFactory = folderFactory ?? throw new ArgumentNullException(nameof(folderFactory));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(AggregateCreateRequest request, CancellationToken cancellationToken)
@@ -60,7 +60,7 @@ public class AggregateCreateRequestHandler : IRequestHandler<AggregateCreateRequ
 
         var model = _folderFactory.Aggregate(request.Name, request.Properties, request.Directory);
 
-        _artifactGenerationStrategyFactory.CreateFor(model, new AggregateCreateContext(model.Aggregate));
+        _artifactGenerator.CreateFor(model, new AggregateCreateContext(model.Aggregate));
     }
 }
 

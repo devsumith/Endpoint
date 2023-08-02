@@ -18,7 +18,7 @@ public class SpecFlowFeatureSyntaxGenerationStrategy : SyntaxGenerationStrategyB
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, SpecFlowFeatureModel model, dynamic context = null)
+    public override string Create(ISyntaxGenerator syntaxGenerator, SpecFlowFeatureModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

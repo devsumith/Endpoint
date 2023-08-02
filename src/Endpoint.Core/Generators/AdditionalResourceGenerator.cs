@@ -8,7 +8,7 @@ namespace Endpoint.Core.Generators
 {
     public static class AdditionalResourceGenerator
     {
-        public static void Generate(AddResourceOptions options, IAdditionalResourceGenerationStrategyFactory factory)
+        public static void Generate(AddResourceOptions options, IAdditionalResourceGenerator factory)
         {
             factory.CreateFor(options);
         }

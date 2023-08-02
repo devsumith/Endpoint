@@ -23,16 +23,16 @@ public class EditorConfigCreateRequest : IRequest {
 public class EditorConfigCreateRequestHandler : IRequestHandler<EditorConfigCreateRequest>
 {
     private readonly ILogger<EditorConfigCreateRequestHandler> _logger;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly IFileModelFactory _fileModelFactory;
 
     public EditorConfigCreateRequestHandler(
         ILogger<EditorConfigCreateRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IFileModelFactory fileModelFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
     }
 
@@ -42,6 +42,6 @@ public class EditorConfigCreateRequestHandler : IRequestHandler<EditorConfigCrea
 
         var model = _fileModelFactory.CreateTemplate("EditorConfig", string.Empty, request.Directory, "editorconfig", string.Empty);
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
     }
 }

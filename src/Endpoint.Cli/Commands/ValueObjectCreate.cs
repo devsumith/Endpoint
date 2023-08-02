@@ -39,17 +39,17 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
 {
     private readonly ILogger<ValueObjectCreateRequestHandler> _logger;
     private readonly IFileProvider _fileProvider;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
 
     public ValueObjectCreateRequestHandler(
         ILogger<ValueObjectCreateRequestHandler> logger,
         IFileProvider fileProvider,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory
+        IArtifactGenerator artifactGenerator
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(ValueObjectCreateRequest request, CancellationToken cancellationToken)
@@ -67,7 +67,7 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
                 { "Namespace", "System" }
             });
 
-            _artifactGenerationStrategyFactory.CreateFor(templateFileModel);
+            _artifactGenerator.CreateFor(templateFileModel);
         }
 
         var @class = new ClassModel(request.Name);
@@ -95,6 +95,6 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
             "cs"
             );
 
-        _artifactGenerationStrategyFactory.CreateFor(classFile);
+        _artifactGenerator.CreateFor(classFile);
     }
 }

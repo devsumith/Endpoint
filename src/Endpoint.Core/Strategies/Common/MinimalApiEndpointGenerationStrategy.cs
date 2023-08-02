@@ -19,13 +19,13 @@ public class MinimalApiEndpointGenerationStrategy : ArtifactGenerationStrategyBa
         _fileSystem = fileSystem;
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, MinimalApiSolutionModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, MinimalApiSolutionModel model, dynamic context = null)
     {
         var workspaceDirectory = $"{model.Directory}{Path.DirectorySeparatorChar}{model.Name}";
 
         _fileSystem.CreateDirectory(workspaceDirectory);
 
-        artifactGenerationStrategyFactory.CreateFor(new GitModel(model.Name)
+        artifactGenerator.CreateFor(new GitModel(model.Name)
         {
             Directory = workspaceDirectory,
         });

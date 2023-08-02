@@ -21,20 +21,20 @@ public class ApiProjectService : IApiProjectService
     private readonly ILogger<ApiProjectService> _logger;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly IFileModelFactory _fileModelFactory;
     private readonly IClassModelFactory _classModelFactory;
-    private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
+    private readonly ISyntaxGenerator _syntaxGenerator;
     private readonly IMethodModelFactory _methodModelFactory;
     private readonly IClipboardService _clipboardService;
     public ApiProjectService(
         ILogger<ApiProjectService> logger,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IFileModelFactory fileModelFactory,
         IClassModelFactory classModelFactory,
-        ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory,
+        ISyntaxGenerator syntaxGenerator,
         IMethodModelFactory methodModelFactory,
         IClipboardService clipboardService
         )
@@ -42,10 +42,10 @@ public class ApiProjectService : IApiProjectService
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
-        _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategyFactory));
+        _syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
         _methodModelFactory = methodModelFactory ?? throw new ArgumentNullException(nameof(methodModelFactory));
         _clipboardService = clipboardService ?? throw new ArgumentNullException(nameof(clipboardService));
     }
@@ -56,7 +56,7 @@ public class ApiProjectService : IApiProjectService
 
         var entity = new EntityModel(entityName);
 
-        _artifactGenerationStrategyFactory.CreateFor(new ProjectReferenceModel()
+        _artifactGenerator.CreateFor(new ProjectReferenceModel()
         {
             ReferenceDirectory = directory
         }, new { Command = new ApiProjectEnsure() });
@@ -71,7 +71,7 @@ public class ApiProjectService : IApiProjectService
 
         var controllerClassModel = empty ? _classModelFactory.CreateEmptyController(entityName, csProjDirectory) : _classModelFactory.CreateController(entity, csProjDirectory);
 
-        _artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateCSharp(controllerClassModel, controllersDirectory));
+        _artifactGenerator.CreateFor(_fileModelFactory.CreateCSharp(controllerClassModel, controllersDirectory));
     }
 
     public void AddApiFiles(string serviceName, string directory)
@@ -96,7 +96,7 @@ public class ApiProjectService : IApiProjectService
             launchSettingsFile
         })
         {
-            _artifactGenerationStrategyFactory.CreateFor(file);
+            _artifactGenerator.CreateFor(file);
         }
     }
 
@@ -117,7 +117,7 @@ public class ApiProjectService : IApiProjectService
             _ => throw new NotImplementedException()
         }, directory);
 
-        var syntax = _syntaxGenerationStrategyFactory.CreateFor(model);
+        var syntax = _syntaxGenerator.CreateFor(model);
 
         _clipboardService.SetText(syntax);
 

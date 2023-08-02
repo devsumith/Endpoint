@@ -14,16 +14,16 @@ public class SignalRService : ISignalRService
     private readonly ILogger<SignalRService> _logger;
     private readonly IFileProvider _fileProvider;
     private readonly ICommandService _commandService;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     public SignalRService(
         ILogger<SignalRService> logger,
         IFileProvider fileProvider,
         ICommandService commandService,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+        IArtifactGenerator artifactGenerator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
@@ -38,9 +38,9 @@ public class SignalRService : ISignalRService
     {
         var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj", directory));
 
-        _artifactGenerationStrategyFactory.CreateFor(CreateSignalRHubFileModel(name, directory));
+        _artifactGenerator.CreateFor(CreateSignalRHubFileModel(name, directory));
 
-        _artifactGenerationStrategyFactory.CreateFor(CreateSignalRHubFileModel(name, directory));
+        _artifactGenerator.CreateFor(CreateSignalRHubFileModel(name, directory));
     }
 
     public FileModel CreateSignalRHubFileModel(string name, string directory)

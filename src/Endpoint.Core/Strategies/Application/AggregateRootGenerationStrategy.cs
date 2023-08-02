@@ -14,7 +14,7 @@ public class AggregateRootGenerationStrategy : SyntaxGenerationStrategyBase<Lega
         : base(serviceProvider)
     { }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, LegacyAggregatesModel model, dynamic context = null)
+    public override string Create(ISyntaxGenerator syntaxGenerator, LegacyAggregatesModel model, dynamic context = null)
     {
         var content = new List<string>
         {

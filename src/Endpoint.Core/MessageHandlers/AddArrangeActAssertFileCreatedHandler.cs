@@ -16,17 +16,17 @@ namespace Endpoint.Core.MessageHandlers;
 
 public class AddArrangeActAssertFileCreatedHandler : INotificationHandler<FileCreated>
 {
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
-    private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
+    private readonly ISyntaxGenerator _syntaxGenerator;
     private readonly IFileSystem _fileSystem;
     public AddArrangeActAssertFileCreatedHandler(
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
-        ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
+        ISyntaxGenerator syntaxGenerator,
         IFileSystem fileSystem)
     {
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
+        _artifactGenerator = artifactGenerator;
         _fileSystem = fileSystem;
-        _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory;
+        _syntaxGenerator = syntaxGenerator;
     }
 
     public async Task Handle(FileCreated notification, CancellationToken cancellationToken)
@@ -54,7 +54,7 @@ public class AddArrangeActAssertFileCreatedHandler : INotificationHandler<FileCr
         {
             if (line.Contains("should create"))
             {
-                var testRef = _syntaxGenerationStrategyFactory.CreateFor(new TestReferenceModel()
+                var testRef = _syntaxGenerator.CreateFor(new TestReferenceModel()
                 {
                     SystemUnderTestName = sut
                 });

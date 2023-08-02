@@ -24,7 +24,7 @@ public class ContentFileArtifactGenerationStrategy : ArtifactGenerationStrategyB
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ContentFileModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, ContentFileModel model, dynamic context = null)
     {
         _fileSystem.WriteAllText(model.Path, model.Content);
     }
@@ -49,7 +49,7 @@ public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : Artifact
         return false;
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, string directory, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, string directory, dynamic context = null)
     {
         throw new NotImplementedException();
     }
@@ -59,14 +59,14 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
     where T : class
 {
     private readonly ILogger<ObjectFileArtifactGenerationStrategyBase<T>> _logger;
-    private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
+    private readonly ISyntaxGenerator _syntaxGenerator;
     private readonly IFileSystem _fileSystem;
     private readonly INamespaceProvider _namespaceProvider;
     private readonly Observable<INotification> _notificationListener;
 
     public ObjectFileArtifactGenerationStrategyBase(
         IServiceProvider serviceProvider,
-        ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory,
+        ISyntaxGenerator syntaxGenerator,
         IFileSystem fileSystem,
         INamespaceProvider namespaceProvider,
         Observable<INotification> notificationListener,
@@ -74,13 +74,13 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategyFactory));
+        _syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ObjectFileModel<T> model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, ObjectFileModel<T> model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -105,7 +105,7 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
             builder.AppendLine();
         }
 
-        builder.AppendLine(_syntaxGenerationStrategyFactory.CreateFor(model.Object, context));
+        builder.AppendLine(_syntaxGenerator.CreateFor(model.Object, context));
 
         _fileSystem.WriteAllText(model.Path, builder.ToString());
 

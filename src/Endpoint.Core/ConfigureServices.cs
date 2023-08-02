@@ -109,11 +109,11 @@ public static class ConfigureServices
         services.AddSingleton<IApiProjectFilesGenerationStrategy, ApiProjectFilesGenerationStrategy>();
         services.AddSingleton<IProjectService, ProjectService>();
         services.AddSingleton<ISolutionService, SolutionService>();
-        services.AddSingleton<IEndpointGenerationStrategyFactory, EndpointGenerationStrategyFactory>();
-        services.AddSingleton<IAdditionalResourceGenerationStrategyFactory, AdditionalResourceGenerationStrategyFactory>();
+        services.AddSingleton<IEndpointGenerator, EndpointGenerator>();
+        services.AddSingleton<IAdditionalResourceGenerator, AdditionalResourceGenerator>();
         services.AddSingleton<IFileProvider, FileProvider>();
         services.AddSingleton<ISolutionNamespaceProvider, SolutionNamespaceProvider>();
-        services.AddSingleton<ISolutionSettingsFileGenerationStrategyFactory, SolutionSettingsFileGenerationStrategyFactory>();
+        services.AddSingleton<ISolutionSettingsFileGenerator, SolutionSettingsFileGenerator>();
         services.AddSingleton<ISolutionModelFactory, SolutionModelFactory>();
         services.AddSingleton<IControllerModelFactory, ControllerModelFactory>();
         services.AddSingleton<IArtifactGenerationStrategy, FolderArtifactGenerationStrategy>();
@@ -151,17 +151,17 @@ public static class ConfigureServices
         services.AddSingleton<ISolutionUpdateStrategy, SolutionUpdateStrategy>();
         services.AddSingleton<ISolutionUpdateStrategyFactory, SolutionUpdateStrategyFactory>();
         services.AddSingleton<IMinimalApiService, MinimalApiService>();
-        services.AddSingleton<IWorkspaceGenerationStrategyFactory, WorkspaceSettingsGenerationStrategyFactory>();
+        services.AddSingleton<IWorkspaceGenerator, WorkspaceSettingsGenerator>();
         services.AddSingleton<IWorkspaceSettingsUpdateStrategyFactory, WorkspaceSettingsUpdateStrategyFactory>();
         services.AddSingleton<IWorkspaceSettingsUpdateStrategy, WorkspaceSettingsUpdateStrategy>();
         services.AddSingleton<IFileModelFactory, FileModelFactory>();
-        services.AddSingleton<IFileGenerationStrategyFactory, FileGenerationStrategyFactory>();
+        services.AddSingleton<IFileGenerator, FileGenerator>();
         services.AddSingleton<IFileGenerationStrategy, EntityFileGenerationStrategy>();
         services.AddSingleton<IWebArtifactModelsFactory, WebArtifactModelsFactory>();
-        services.AddSingleton<IWebGenerationStrategyFactory, WebGenerationStrategyFactory>();
+        services.AddSingleton<IWebGenerator, WebGenerator>();
         services.AddSingleton<IWebGenerationStrategy, AngularProjectGenerationStrategy>();
-        services.AddSingleton<IArtifactGenerationStrategyFactory, ArtifactGenerationStrategyFactory>();
-        services.AddSingleton<ISyntaxGenerationStrategyFactory, SyntaxGenerationStrategyFactory>();
+        services.AddSingleton<IArtifactGenerator, ArtifactGenerator>();
+        services.AddSingleton<ISyntaxGenerator, SyntaxGenerator>();
         services.AddSingleton<ISyntaxGenerationStrategy, ClassSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, MethodsSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, MethodSyntaxGenerationStrategy>();
@@ -198,7 +198,7 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategy, QueryModelSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, CommandModelSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, ControllerSyntaxGenerationStrategy>();
-        services.AddSingleton<IArtifactUpdateStrategyFactory, ArtifactUpdateStrategyFactory>();
+        services.AddSingleton<IArtifactUpdateGenerator, ArtifactUpdateGenerator>();
         services.AddSingleton<IClipboardService, ClipboardService>();
         services.AddSingleton<ISyntaxService>(services =>
         {

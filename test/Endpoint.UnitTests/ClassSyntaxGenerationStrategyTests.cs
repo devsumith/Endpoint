@@ -31,7 +31,7 @@ public class ClassSyntaxGenerationStrategyTests
 
         var container = services.BuildServiceProvider();
 
-        var syntaxGenerationStrategyFactory = container.GetRequiredService<ISyntaxGenerationStrategyFactory>();
+        var syntaxGenerator = container.GetRequiredService<ISyntaxGenerator>();
 
         var sut = ActivatorUtilities.CreateInstance<ClassSyntaxGenerationStrategy>(container);
 
@@ -42,7 +42,7 @@ public class ClassSyntaxGenerationStrategyTests
             new ConstructorModel(classModel,classModel.Name)
         };
 
-        var result = sut.Create(syntaxGenerationStrategyFactory, classModel);
+        var result = sut.Create(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
 
@@ -61,7 +61,7 @@ public class ClassSyntaxGenerationStrategyTests
 
         var container = services.BuildServiceProvider();
 
-        var syntaxGenerationStrategyFactory = container.GetRequiredService<ISyntaxGenerationStrategyFactory>();
+        var syntaxGenerator = container.GetRequiredService<ISyntaxGenerator>();
 
         var sut = ActivatorUtilities.CreateInstance<ClassSyntaxGenerationStrategy>(container);
 
@@ -86,7 +86,7 @@ public class ClassSyntaxGenerationStrategyTests
 
         classModel.Methods.Add(method);
 
-        var result = sut.Create(syntaxGenerationStrategyFactory, classModel);
+        var result = sut.Create(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
 
@@ -105,7 +105,7 @@ public class ClassSyntaxGenerationStrategyTests
 
         var container = services.BuildServiceProvider();
 
-        var syntaxGenerationStrategyFactory = container.GetRequiredService<ISyntaxGenerationStrategyFactory>();
+        var syntaxGenerator = container.GetRequiredService<ISyntaxGenerator>();
 
         var sut = ActivatorUtilities.CreateInstance<ClassSyntaxGenerationStrategy>(container);
 
@@ -144,7 +144,7 @@ public class ClassSyntaxGenerationStrategyTests
             }
         };
 
-        var result = sut.Create(syntaxGenerationStrategyFactory, classModel);
+        var result = sut.Create(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
 

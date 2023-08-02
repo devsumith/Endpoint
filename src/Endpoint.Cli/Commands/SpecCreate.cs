@@ -28,17 +28,17 @@ public class SpecCreateRequestHandler : IRequestHandler<SpecCreateRequest>
     private readonly ILogger<SpecCreateRequestHandler> _logger;
     private readonly INamingConventionConverter _namingCoventionConverter;
     private readonly IFileModelFactory _fileModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     public SpecCreateRequestHandler(
         ILogger<SpecCreateRequestHandler> logger,
         INamingConventionConverter namingCoventionConverter,
         IFileModelFactory fileModelFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+        IArtifactGenerator artifactGenerator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _namingCoventionConverter = namingCoventionConverter ?? throw new ArgumentNullException(nameof(namingCoventionConverter));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(SpecCreateRequest request, CancellationToken cancellationToken)
@@ -57,7 +57,7 @@ public class SpecCreateRequestHandler : IRequestHandler<SpecCreateRequest>
             .With("fileName", fileName)
             .Build());
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
 
     }
 }

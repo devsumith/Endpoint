@@ -33,19 +33,19 @@ public class EntityAddRequestHandler : IRequestHandler<EntityCreateRequest>
 {
     private readonly ILogger<EntityAddRequestHandler> _logger;
     private readonly IClassService _classService;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly IClassModelFactory _classModelFactory;
     public EntityAddRequestHandler(
         ILogger<EntityAddRequestHandler> logger, 
         IClassService classService,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter,
         IClassModelFactory classModelFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _classService = classService ?? throw new ArgumentNullException(nameof(classService));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
 
@@ -61,7 +61,7 @@ public class EntityAddRequestHandler : IRequestHandler<EntityCreateRequest>
 
         var dtoExtensions = new DtoExtensionsModel(_namingConventionConverter, $"{model.Name}Extensions", model);
 
-        _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(dtoExtensions, $"{model.Name}Extensions", request.Directory, "cs"));
+        _artifactGenerator.CreateFor(new ObjectFileModel<ClassModel>(dtoExtensions, $"{model.Name}Extensions", request.Directory, "cs"));
 
     }
 }

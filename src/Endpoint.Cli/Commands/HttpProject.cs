@@ -25,13 +25,13 @@ internal class HttpProjectRequest : IRequest
 internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest>
 {
     private readonly ILogger _logger;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly ISolutionModelFactory _solutionModelFactory;
-    public HttpProjectRequestHandler(ILogger logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ISolutionModelFactory solutionModelFactory)
+    public HttpProjectRequestHandler(ILogger logger, IArtifactGenerator artifactGenerator, ISolutionModelFactory solutionModelFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _solutionModelFactory = solutionModelFactory ?? throw new ArgumentNullException(nameof(solutionModelFactory));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(HttpProjectRequest request, CancellationToken cancellationToken)
@@ -44,7 +44,7 @@ internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest>
             Directory = request.Directory,
         });
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
 
 
     }

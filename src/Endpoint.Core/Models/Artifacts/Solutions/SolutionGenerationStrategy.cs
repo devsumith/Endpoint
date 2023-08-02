@@ -21,13 +21,13 @@ public class SolutionGenerationStrategy : ArtifactGenerationStrategyBase<Solutio
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, SolutionModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, SolutionModel model, dynamic context = null)
     {
         _fileSystem.CreateDirectory(model.SolutionDirectory);
 
         _commandService.Start($"dotnet new sln -n {model.Name}", model.SolutionDirectory);
 
-        CreateProjectsAndAddToSln(artifactGenerationStrategyFactory, model, model.Folders);
+        CreateProjectsAndAddToSln(artifactGenerator, model, model.Folders);
 
         foreach (var dependOn in model.DependOns)
         {
@@ -36,7 +36,7 @@ public class SolutionGenerationStrategy : ArtifactGenerationStrategyBase<Solutio
     }
 
 
-    private void CreateProjectsAndAddToSln(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, SolutionModel model, List<FolderModel> folders)
+    private void CreateProjectsAndAddToSln(IArtifactGenerator artifactGenerator, SolutionModel model, List<FolderModel> folders)
     {
         foreach (var folder in folders)
         {
@@ -44,12 +44,12 @@ public class SolutionGenerationStrategy : ArtifactGenerationStrategyBase<Solutio
             {
                 _fileSystem.CreateDirectory(folder.Directory);
 
-                artifactGenerationStrategyFactory.CreateFor(project);
+                artifactGenerator.CreateFor(project);
 
                 _commandService.Start($"dotnet sln {model.SolultionFileName} add {project.Path}", model.SolutionDirectory);
             }
 
-            CreateProjectsAndAddToSln(artifactGenerationStrategyFactory, model, folder.SubFolders);
+            CreateProjectsAndAddToSln(artifactGenerator, model, folder.SubFolders);
         }
     }
 }

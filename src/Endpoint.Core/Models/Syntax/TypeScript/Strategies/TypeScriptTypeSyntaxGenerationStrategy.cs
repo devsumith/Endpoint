@@ -23,7 +23,7 @@ public class TypeScriptTypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, TypeScriptTypeModel model, dynamic context = null)
+    public override string Create(ISyntaxGenerator syntaxGenerator, TypeScriptTypeModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

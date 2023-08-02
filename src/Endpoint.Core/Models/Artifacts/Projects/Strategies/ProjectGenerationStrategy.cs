@@ -29,7 +29,7 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ProjectModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, ProjectModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -84,7 +84,7 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
 
         foreach (var file in model.Files)
         {
-            artifactGenerationStrategyFactory.CreateFor(file);
+            artifactGenerator.CreateFor(file);
         }
 
         if (model.GenerateDocumentationFile || templateType == "web" || templateType == "webapi" || templateType == "angular")

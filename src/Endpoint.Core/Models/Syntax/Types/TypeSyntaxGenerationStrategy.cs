@@ -19,7 +19,7 @@ public class TypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<TypeMod
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, TypeModel model, dynamic context = null)
+    public override string Create(ISyntaxGenerator syntaxGenerator, TypeModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -31,7 +31,7 @@ public class TypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<TypeMod
         {
             builder.Append('<');
 
-            builder.AppendJoin(',', model.GenericTypeParameters.Select(x => syntaxGenerationStrategyFactory.CreateFor(x)));
+            builder.AppendJoin(',', model.GenericTypeParameters.Select(x => syntaxGenerator.CreateFor(x)));
 
             builder.Append('>');
         }

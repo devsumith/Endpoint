@@ -21,7 +21,7 @@ namespace Endpoint.Core.Models.Artifacts.Solutions;
 
 public class SolutionService : ISolutionService
 {
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly IPlantUmlParserStrategyFactory _plantUmlParserStrategyFactory;
     private readonly IProjectModelFactory _projectModelFactory;
     private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;
@@ -30,7 +30,7 @@ public class SolutionService : ISolutionService
     private readonly IFileProvider _fileProvider;
     private readonly ICommandService _commandService;
     public SolutionService(
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IPlantUmlParserStrategyFactory plantUmlParserStrategyFactory,
         IProjectModelFactory projectModelFactory,
         IDomainDrivenDesignFileService domainDrivenDesignFileService,
@@ -39,7 +39,7 @@ public class SolutionService : ISolutionService
         IFileProvider fileProvider,
         ICommandService commandService)
     {
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
+        _artifactGenerator = artifactGenerator;
         _plantUmlParserStrategyFactory = plantUmlParserStrategyFactory;
         _projectModelFactory = projectModelFactory;
         _domainDrivenDesignFileService = domainDrivenDesignFileService;
@@ -56,7 +56,7 @@ public class SolutionService : ISolutionService
 
     public void Create(SolutionModel model)
     {
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
     }
 
     public void EventDrivenMicroservicesCreate(string name, string services, string directory)
@@ -69,7 +69,7 @@ public class SolutionService : ISolutionService
 
         solutionModel.Folders.Add(ServicesCreate(services, solutionModel.SolutionDirectory, notifications));
 
-        _artifactGenerationStrategyFactory.CreateFor(solutionModel);
+        _artifactGenerator.CreateFor(solutionModel);
 
         foreach (var notification in notifications)
         {
@@ -172,7 +172,7 @@ public class SolutionService : ISolutionService
             SolutionRootDirectory = directory
         });
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
 
         return model;
     }
@@ -202,13 +202,13 @@ public class SolutionService : ISolutionService
 
         var messagingProjectModel = _projectModelFactory.CreateMessagingProject(messagingDirectory);
 
-        _artifactGenerationStrategyFactory.CreateFor(messagingProjectModel);
+        _artifactGenerator.CreateFor(messagingProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
 
         var messagingUdpProjectModel = _projectModelFactory.CreateMessagingUdpProject(messagingDirectory);
 
-        _artifactGenerationStrategyFactory.CreateFor(messagingUdpProjectModel);
+        _artifactGenerator.CreateFor(messagingUdpProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
 
@@ -240,13 +240,13 @@ public class SolutionService : ISolutionService
 
         var messagingProjectModel = _projectModelFactory.CreateMessagingProject(messagingDirectory);
 
-        _artifactGenerationStrategyFactory.CreateFor(messagingProjectModel);
+        _artifactGenerator.CreateFor(messagingProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
 
         var messagingUdpProjectModel = _projectModelFactory.CreateMessagingUdpProject(messagingDirectory);
 
-        _artifactGenerationStrategyFactory.CreateFor(messagingUdpProjectModel);
+        _artifactGenerator.CreateFor(messagingUdpProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
     }

@@ -13,23 +13,23 @@ public class MinimalApiProgramFileGenerationStratey : ArtifactGenerationStrategy
     private readonly IFileSystem _fileSystem;
     private readonly IWebApplicationBuilderGenerationStrategy _webApplicationBuilderGenerationStrategy;
     private readonly IWebApplicationGenerationStrategy _webApplicationGenerationStrategy;
-    private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
+    private readonly ISyntaxGenerator _syntaxGenerator;
 
     public MinimalApiProgramFileGenerationStratey(
         IServiceProvider serviceProvider,
         IFileSystem fileSystem,
         IWebApplicationGenerationStrategy webApplicationGenerationStrategy,
         IWebApplicationBuilderGenerationStrategy webApplicationBuilderGenerationStrategy,
-        ISyntaxGenerationStrategyFactory symtaxGenerationStrategyFactory
+        ISyntaxGenerator symtaxGenerator
         ) : base(serviceProvider)
     {
         _fileSystem = fileSystem;
         _webApplicationBuilderGenerationStrategy = webApplicationBuilderGenerationStrategy;
         _webApplicationGenerationStrategy = webApplicationGenerationStrategy;
-        _syntaxGenerationStrategyFactory = symtaxGenerationStrategyFactory;
+        _syntaxGenerator = symtaxGenerator;
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, MinimalApiProgramFileModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, MinimalApiProgramFileModel model, dynamic context = null)
     {
 
         var builder = new StringBuilder();
@@ -41,11 +41,11 @@ public class MinimalApiProgramFileGenerationStratey : ArtifactGenerationStrategy
 
         builder.AppendLine();
 
-        builder.AppendLine(_syntaxGenerationStrategyFactory.CreateFor(model.WebApplicationBuilder));
+        builder.AppendLine(_syntaxGenerator.CreateFor(model.WebApplicationBuilder));
 
         builder.AppendLine();
 
-        builder.AppendLine(_syntaxGenerationStrategyFactory.CreateFor(model.WebApplication));
+        builder.AppendLine(_syntaxGenerator.CreateFor(model.WebApplication));
 
         _fileSystem.WriteAllText(model.Path, builder.ToString());
     }

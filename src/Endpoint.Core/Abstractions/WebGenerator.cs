@@ -7,10 +7,10 @@ using System.Linq;
 
 namespace Endpoint.Core.Abstractions;
 
-public class WebGenerationStrategyFactory : IWebGenerationStrategyFactory
+public class WebGenerator : IWebGenerator
 {
     private readonly IEnumerable<IWebGenerationStrategy> _strategies;
-    public WebGenerationStrategyFactory(IEnumerable<IWebGenerationStrategy> strategies)
+    public WebGenerator(IEnumerable<IWebGenerationStrategy> strategies)
     {
         _strategies = strategies;
     }

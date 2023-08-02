@@ -10,11 +10,11 @@ using System.Linq;
 
 namespace Endpoint.Core.Strategies
 {
-    public class AdditionalResourceGenerationStrategyFactory : IAdditionalResourceGenerationStrategyFactory
+    public class AdditionalResourceGenerator : IAdditionalResourceGenerator
     {
         private readonly List<IAdditionalResourceGenerationStrategy> _strategies;
 
-        public AdditionalResourceGenerationStrategyFactory(
+        public AdditionalResourceGenerator(
             ILogger logger,
             IApplicationProjectFilesGenerationStrategy applicationFileService,
             IInfrastructureProjectFilesGenerationStrategy infrastructureFileService,

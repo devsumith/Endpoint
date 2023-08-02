@@ -15,7 +15,7 @@ public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Pro
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, PropertyModel model, dynamic context = null)
+    public override string Create(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -23,7 +23,7 @@ public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Pro
 
         if (model.IsClassProperty)
         {
-            builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
+            builder.Append(syntaxGenerator.CreateFor(model.AccessModifier));
 
             builder.Append(" ");
 
@@ -33,7 +33,7 @@ public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Pro
             }
         }
 
-        builder.Append($"{syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name} {syntaxGenerationStrategyFactory.CreateFor(model.Accessors)}");
+        builder.Append($"{syntaxGenerator.CreateFor(model.Type)} {model.Name} {syntaxGenerator.CreateFor(model.Accessors)}");
 
         if (model.IsClassProperty && !string.IsNullOrEmpty(model.DefaultValue))
         {

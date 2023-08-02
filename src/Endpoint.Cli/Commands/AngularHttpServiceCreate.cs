@@ -28,18 +28,18 @@ public class AngularHttpServiceCreateRequestHandler : IRequestHandler<AngularHtt
 {
     private readonly ILogger<AngularHttpServiceCreateRequestHandler> _logger;
     private readonly IFileModelFactory _fileModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
 
     public AngularHttpServiceCreateRequestHandler(
         ILogger<AngularHttpServiceCreateRequestHandler> logger,
         IFileModelFactory fileModelFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
@@ -53,6 +53,6 @@ public class AngularHttpServiceCreateRequestHandler : IRequestHandler<AngularHtt
             .With("entityName", request.EntityName)
             .Build());
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
     }
 }

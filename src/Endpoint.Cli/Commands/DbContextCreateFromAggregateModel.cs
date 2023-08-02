@@ -32,18 +32,18 @@ public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<
     private readonly ILogger<DbContextCreateFromAggregatesModelRequestHandler> _logger;
     private readonly IFileProvider _fileProvider;
     private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
 
     public DbContextCreateFromAggregatesModelRequestHandler(
         ILogger<DbContextCreateFromAggregatesModelRequestHandler> logger,
         IFileProvider fileProvider,
         INamingConventionConverter namingConventionConverter,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+        IArtifactGenerator artifactGenerator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(DbContextCreateFromAggregatesModelRequest request, CancellationToken cancellationToken)
@@ -74,7 +74,7 @@ public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<
 
         Directory.CreateDirectory($"{projectDirectory.Replace("Core", "Infrastructure")}{Path.DirectorySeparatorChar}Data");
 
-        _artifactGenerationStrategyFactory.CreateFor(
+        _artifactGenerator.CreateFor(
             new ObjectFileModel<InterfaceModel>(
                 interfaceModel,
                 interfaceModel.UsingDirectives,
@@ -82,7 +82,7 @@ public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<
                 projectDirectory,
                 "cs"));
 
-        _artifactGenerationStrategyFactory.CreateFor(
+        _artifactGenerator.CreateFor(
             new ObjectFileModel<ClassModel>(
                 classModel,
                 classModel.UsingDirectives,

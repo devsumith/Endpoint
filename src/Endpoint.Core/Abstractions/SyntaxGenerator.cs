@@ -6,11 +6,11 @@ using System.Linq;
 
 namespace Endpoint.Core.Abstractions;
 
-public class SyntaxGenerationStrategyFactory : ISyntaxGenerationStrategyFactory
+public class SyntaxGenerator : ISyntaxGenerator
 {
     private readonly IEnumerable<ISyntaxGenerationStrategy> _strategies;
 
-    public SyntaxGenerationStrategyFactory(IEnumerable<ISyntaxGenerationStrategy> strategies)
+    public SyntaxGenerator(IEnumerable<ISyntaxGenerationStrategy> strategies)
     {
         _strategies = strategies;
     }

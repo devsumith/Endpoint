@@ -41,7 +41,7 @@ public class CoreProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStr
 
     public override int Priority => 10;
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ProjectReferenceModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -53,7 +53,7 @@ public class CoreProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStr
 
         EnsureProjectsReferenced(projectDirectory);
 
-        EnsureDefaultFilesAdd(artifactGenerationStrategyFactory, projectDirectory);
+        EnsureDefaultFilesAdd(artifactGenerator, projectDirectory);
     }
 
     private void EnsureDefaultFilesRemoved(string projectDirectory)
@@ -61,7 +61,7 @@ public class CoreProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStr
         _fileSystem.Delete($"{projectDirectory}{Path.DirectorySeparatorChar}Class1.cs");
     }
 
-    private void EnsureDefaultFilesAdd(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, string projectDirectory)
+    private void EnsureDefaultFilesAdd(IArtifactGenerator artifactGenerator, string projectDirectory)
     {
         var projectName = Path.GetFileNameWithoutExtension(projectDirectory).Split('.').First();
 

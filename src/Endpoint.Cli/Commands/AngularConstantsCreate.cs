@@ -23,14 +23,14 @@ public class AngularConstantsCreateRequest : IRequest
 public class AngularConstantsCreateRequestHandler : IRequestHandler<AngularConstantsCreateRequest>
 {
     private readonly ILogger<AngularConstantsCreateRequestHandler> _logger;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
 
     public AngularConstantsCreateRequestHandler(
         ILogger<AngularConstantsCreateRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+        IArtifactGenerator artifactGenerator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(AngularConstantsCreateRequest request, CancellationToken cancellationToken)
@@ -41,6 +41,6 @@ public class AngularConstantsCreateRequestHandler : IRequestHandler<AngularConst
 
         var model = new ContentFileModel(content, "constants", request.Directory, "ts");
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
     }
 }

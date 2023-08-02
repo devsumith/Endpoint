@@ -15,15 +15,15 @@ public class SpecFlowService : ISpecFlowService
 {
     private readonly ILogger<SpecFlowService> _logger;
     private readonly IFileModelFactory _fileModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     public SpecFlowService(
         ILogger<SpecFlowService> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IFileModelFactory fileModelFactory
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
     }
 
@@ -47,7 +47,7 @@ public class SpecFlowService : ISpecFlowService
 
         var fileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
-        _artifactGenerationStrategyFactory.CreateFor(fileModel);
+        _artifactGenerator.CreateFor(fileModel);
     }
 
     public void CreateHook(string name, string directory)
@@ -67,13 +67,13 @@ public class SpecFlowService : ISpecFlowService
 
         var fileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
-        _artifactGenerationStrategyFactory.CreateFor(fileModel);
+        _artifactGenerator.CreateFor(fileModel);
     }
 
     public void CreateDockerControllerHooks(string directory)
     {
         var model = _fileModelFactory.CreateTemplate("DockerControllerHooks", "DockerControllerHooks", directory);
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
     }
 }

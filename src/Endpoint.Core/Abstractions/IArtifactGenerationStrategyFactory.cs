@@ -6,23 +6,12 @@ using System.Linq;
 
 namespace Endpoint.Core.Abstractions;
 
-public interface IArtifactGenerationStrategyFactory
-{
-    void CreateFor(object model, dynamic context = null);
-}
 
-
-public interface IArtifactUpdateStrategyFactory
-{
-    void CreateFor(dynamic context = null, params object[] args);
-}
-
-
-public class ArtifactUpdateStrategyFactory : IArtifactUpdateStrategyFactory
+public class ArtifactUpdateGenerator : IArtifactUpdateGenerator
 {
     private readonly IEnumerable<IArtifactUpdateStrategy> _strategies;
 
-    public ArtifactUpdateStrategyFactory(IEnumerable<IArtifactUpdateStrategy> strategies)
+    public ArtifactUpdateGenerator(IEnumerable<IArtifactUpdateStrategy> strategies)
     {
         _strategies = strategies;
     }

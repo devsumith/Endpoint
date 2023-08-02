@@ -26,19 +26,19 @@ public class VerbRequest : IRequest
 
 public class VerbRequestHandler : IRequestHandler<VerbRequest>
 {
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly ILogger<VerbRequestHandler> _logger;
     private readonly IFileModelFactory _fileFactory;
     private readonly INamespaceProvider _namespaceProvider;
 
     public VerbRequestHandler(
         ILogger<VerbRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IFileModelFactory fileFactory,
         INamespaceProvider namespaceProvider
         )
     {
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
+        _artifactGenerator = artifactGenerator;
         _logger = logger;
         _fileFactory = fileFactory;
         _namespaceProvider = namespaceProvider;
@@ -55,7 +55,7 @@ public class VerbRequestHandler : IRequestHandler<VerbRequest>
 
         var model = _fileFactory.CreateTemplate("Verb", request.Name, request.Directory, tokens: tokens);
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
 
 
     }

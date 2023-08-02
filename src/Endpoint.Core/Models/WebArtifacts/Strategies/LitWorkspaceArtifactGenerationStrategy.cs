@@ -34,7 +34,7 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, LitWorkspaceModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, LitWorkspaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -68,7 +68,7 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
 
         var webPackConfig = _fileModelFactory.CreateTemplate("Webpack.Config", "webpack.config", model.Directory, "js");
 
-        artifactGenerationStrategyFactory.CreateFor(webPackConfig);
+        artifactGenerator.CreateFor(webPackConfig);
 
         var packageJsonPath = $"{model.Directory}{Path.DirectorySeparatorChar}package.json";
 

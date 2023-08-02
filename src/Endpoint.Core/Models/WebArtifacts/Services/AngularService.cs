@@ -26,7 +26,7 @@ namespace Endpoint.Core.Models.WebArtifacts.Services;
 public class AngularService : IAngularService
 {
     private readonly ILogger<AngularService> _logger;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly ICommandService _commandService;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
@@ -37,7 +37,7 @@ public class AngularService : IAngularService
     private readonly INamingConventionConverter _namingConventionConverter;
     public AngularService(
         ILogger<AngularService> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         ICommandService commandService,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
@@ -49,7 +49,7 @@ public class AngularService : IAngularService
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -88,7 +88,7 @@ public class AngularService : IAngularService
 
         var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
 
-        _artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate(
+        _artifactGenerator.CreateFor(_fileModelFactory.CreateTemplate(
             "Components.Default.Component",
             $"{nameSnakeCase}.component",
             componentDirectory,
@@ -98,7 +98,7 @@ public class AngularService : IAngularService
             .Build()
             ));
 
-        _artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate(
+        _artifactGenerator.CreateFor(_fileModelFactory.CreateTemplate(
             "Components.Default.Html",
             $"{nameSnakeCase}.component",
             componentDirectory,
@@ -127,7 +127,7 @@ public class AngularService : IAngularService
 
         var fileModel = new ObjectFileModel<FunctionModel>(model, $"create-{nameSnakeCase}-view-model", componentDirectory, "ts");
 
-        _artifactGenerationStrategyFactory.CreateFor(fileModel);
+        _artifactGenerator.CreateFor(fileModel);
 
         IndexCreate(false, componentDirectory);
 
@@ -211,7 +211,7 @@ public class AngularService : IAngularService
     {
         var workspaceModel = new AngularWorkspaceModel(name, version, rootDirectory);
 
-        _artifactGenerationStrategyFactory.CreateFor(workspaceModel);
+        _artifactGenerator.CreateFor(workspaceModel);
 
         _utlitityService.CopyrightAdd(workspaceModel.Directory);
 
@@ -265,7 +265,7 @@ public class AngularService : IAngularService
 
             foreach (var file in files)
             {
-                _artifactGenerationStrategyFactory.CreateFor(file);
+                _artifactGenerator.CreateFor(file);
             }
 
             _fileSystem.Delete($"{appDirectory}{Path.DirectorySeparatorChar}app.module.ts");
@@ -320,7 +320,7 @@ public class AngularService : IAngularService
                 _fileSystem.Delete(file);
             }
 
-            _artifactGenerationStrategyFactory.CreateFor(new ContentFileModel($"export const BASE_URL = '{_namingConventionConverter.Convert(NamingConvention.KebobCase, model.Name).ToUpper()}:BASE_URL';", "constants", libFolder, "ts"));
+            _artifactGenerator.CreateFor(new ContentFileModel($"export const BASE_URL = '{_namingConventionConverter.Convert(NamingConvention.KebobCase, model.Name).ToUpper()}:BASE_URL';", "constants", libFolder, "ts"));
 
             IndexCreate(false, libFolder);
 
@@ -335,7 +335,7 @@ public class AngularService : IAngularService
 
             publicApiContent.Add("export * from './lib';");
 
-            _artifactGenerationStrategyFactory.CreateFor(new ContentFileModel(new StringBuilder()
+            _artifactGenerator.CreateFor(new ContentFileModel(new StringBuilder()
                 .AppendJoin(Environment.NewLine, publicApiContent)
                 .ToString(), "public-api", Path.Combine(model.Directory, "src"), "ts"));
 
@@ -736,7 +736,7 @@ public class AngularService : IAngularService
 
         var fileModel = new ObjectFileModel<TypeScriptTypeModel>(model, ((SyntaxToken)model.Name).SnakeCase(), directory, "ts");
 
-        _artifactGenerationStrategyFactory.CreateFor(fileModel);
+        _artifactGenerator.CreateFor(fileModel);
     }
 
     public void ListComponentCreate(string name, string directory)
@@ -828,7 +828,7 @@ public class AngularService : IAngularService
 
             var model = _fileModelFactory.CreateTemplate(name, $"_{nameSnakeCase}", scssDirectory, "scss", tokens: new TokensBuilder().With("prefix", "g").Build());
 
-            _artifactGenerationStrategyFactory.CreateFor(model);
+            _artifactGenerator.CreateFor(model);
         }
 
         IndexCreate(true, scssDirectory);
@@ -861,7 +861,7 @@ public class AngularService : IAngularService
 
         var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
 
-        _artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate(
+        _artifactGenerator.CreateFor(_fileModelFactory.CreateTemplate(
             "Components.Control.Component",
             $"{nameSnakeCase}.component",
             componentDirectory,
@@ -871,7 +871,7 @@ public class AngularService : IAngularService
             .Build()
             ));
 
-        _artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate(
+        _artifactGenerator.CreateFor(_fileModelFactory.CreateTemplate(
             "Components.Control.Html",
             $"{nameSnakeCase}.component",
             componentDirectory,

@@ -20,7 +20,7 @@ public class LaunchSettingsFileGenerationStrategy : ArtifactGenerationStrategyBa
         _templateLocator = templateLocator;
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, LaunchSettingsFileModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, LaunchSettingsFileModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 

@@ -19,7 +19,7 @@ public class ImportSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Impor
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, ImportModel model, dynamic context = null)
+    public override string Create(ISyntaxGenerator syntaxGenerator, ImportModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

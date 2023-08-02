@@ -21,7 +21,7 @@ public class AngularProjectGenerationStrategy : WebGenerationStrategyBase<Angula
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override void Create(IWebGenerationStrategyFactory webGenerationStrategyFactory, AngularProjectModel model, dynamic context = null)
+    public override void Create(IWebGenerator webGenerator, AngularProjectModel model, dynamic context = null)
     {
         _commandService.Start($"ng new {model.Name}", model.Directory);
     }

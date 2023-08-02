@@ -31,16 +31,16 @@ public class AngularDomainModelCreateRequestHandler : IRequestHandler<AngularDom
 {
     private readonly ILogger<AngularDomainModelCreateRequestHandler> _logger;
     private readonly IFolderFactory _folderFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
 
     public AngularDomainModelCreateRequestHandler(
         ILogger<AngularDomainModelCreateRequestHandler> logger,
         IFolderFactory folderFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory
+        IArtifactGenerator artifactGenerator
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _folderFactory = folderFactory ?? throw new ArgumentNullException(nameof(folderFactory));
     }
 
@@ -55,6 +55,6 @@ public class AngularDomainModelCreateRequestHandler : IRequestHandler<AngularDom
 
         var model = _folderFactory.AngularDomainModel(request.Name, request.Properties, request.Directory);
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
     }
 }

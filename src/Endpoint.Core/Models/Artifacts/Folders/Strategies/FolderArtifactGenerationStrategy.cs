@@ -21,7 +21,7 @@ public class FolderArtifactGenerationStrategy : ArtifactGenerationStrategyBase<F
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, FolderModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, FolderModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -29,12 +29,12 @@ public class FolderArtifactGenerationStrategy : ArtifactGenerationStrategyBase<F
 
         foreach (var fileModel in model.Files)
         {
-            artifactGenerationStrategyFactory.CreateFor(fileModel, context);
+            artifactGenerator.CreateFor(fileModel, context);
         }
 
         foreach (var folder in model.SubFolders)
         {
-            artifactGenerationStrategyFactory.CreateFor(folder, context);
+            artifactGenerator.CreateFor(folder, context);
         }
     }
 }

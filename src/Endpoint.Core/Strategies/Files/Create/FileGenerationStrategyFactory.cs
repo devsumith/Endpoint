@@ -9,11 +9,11 @@ using System.Linq;
 namespace Endpoint.Core.Strategies.Files.Create
 {
 
-    public class FileGenerationStrategyFactory : IFileGenerationStrategyFactory
+    public class FileGenerator : IFileGenerator
     {
         private readonly IEnumerable<IFileGenerationStrategy> _strategies;
 
-        public FileGenerationStrategyFactory(
+        public FileGenerator(
             IEnumerable<IFileGenerationStrategy> strategies
             )
         {

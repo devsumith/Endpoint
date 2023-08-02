@@ -21,7 +21,7 @@ public class AggregateService : IAggregateService
     private readonly ILogger<AggregateService> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ISyntaxService _syntaxService;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly IClassModelFactory _classModelFactory;
     private readonly IProjectService _projectService;
     private readonly IFileModelFactory _fileModelFactory;
@@ -31,7 +31,7 @@ public class AggregateService : IAggregateService
         ILogger<AggregateService> logger,
         INamingConventionConverter namingConventionConverter,
         ISyntaxService syntaxService,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IClassModelFactory classModelFactory,
         IProjectService projectService,
         IFileModelFactory fileModelFactory,
@@ -40,7 +40,7 @@ public class AggregateService : IAggregateService
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
@@ -71,11 +71,11 @@ public class AggregateService : IAggregateService
 
         var model = new AggregatesModel(_namingConventionConverter, serviceName, classModel, directory);
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
 
         var fileModel = _fileModelFactory.CreateDbContextInterface(directory);
 
-        _artifactGenerationStrategyFactory.CreateFor(fileModel);
+        _artifactGenerator.CreateFor(fileModel);
 
         return classModel;
     }
@@ -114,7 +114,7 @@ public class AggregateService : IAggregateService
 
         var model = new ObjectFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, "cs");
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
     }
 
     public void QueryCreate(string routeType, string name, string aggregate, string properties, string directory)
@@ -138,7 +138,7 @@ public class AggregateService : IAggregateService
 
         var model = new ObjectFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, "cs");
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
     }
 }
 

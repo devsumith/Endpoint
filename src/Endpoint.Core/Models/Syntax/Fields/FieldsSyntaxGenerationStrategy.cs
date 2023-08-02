@@ -21,7 +21,7 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, List<FieldModel> model, dynamic context = null)
+    public override string Create(ISyntaxGenerator syntaxGenerator, List<FieldModel> model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -29,7 +29,7 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
 
         foreach (var field in model)
         {
-            builder.AppendLine(Create(syntaxGenerationStrategyFactory, field, context));
+            builder.AppendLine(Create(syntaxGenerator, field, context));
 
             if (field != model.Last())
                 builder.AppendLine();
@@ -38,13 +38,13 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
         return builder.ToString();
     }
 
-    private string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, FieldModel model, dynamic context = null)
+    private string Create(ISyntaxGenerator syntaxGenerator, FieldModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
-        builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
+        builder.Append(syntaxGenerator.CreateFor(model.AccessModifier));
 
         if (model.ReadOnly)
             builder.Append(" readonly");
@@ -53,11 +53,11 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
 
         if (!string.IsNullOrEmpty(model.DefaultValue))
         {
-            builder.Append($" {syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name} = {model.DefaultValue};");
+            builder.Append($" {syntaxGenerator.CreateFor(model.Type)} {model.Name} = {model.DefaultValue};");
         }
         else
         {
-            builder.Append($" {syntaxGenerationStrategyFactory.CreateFor(model.Type)} {model.Name};");
+            builder.Append($" {syntaxGenerator.CreateFor(model.Type)} {model.Name};");
         }
         return builder.ToString();
     }

@@ -27,14 +27,14 @@ public class GitCreateRequest : IRequest
 public class GitCreateRequestHandler : IRequestHandler<GitCreateRequest>
 {
     private readonly ILogger<GitCreateRequestHandler> _logger;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
 
     public GitCreateRequestHandler(
         ILogger<GitCreateRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+        IArtifactGenerator artifactGenerator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(GitCreateRequest request, CancellationToken cancellationToken)
@@ -46,7 +46,7 @@ public class GitCreateRequestHandler : IRequestHandler<GitCreateRequest>
             Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{request.RepositoryName}"
         };
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
 
 
     }

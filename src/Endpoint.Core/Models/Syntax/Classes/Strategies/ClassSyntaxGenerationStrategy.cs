@@ -24,7 +24,7 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
         return model as ClassModel != null;
     }
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, ClassModel model, dynamic context = null)
+    public override string Create(ISyntaxGenerator syntaxGenerator, ClassModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -42,10 +42,10 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
 
         foreach (var attribute in model.Attributes)
         {
-            builder.AppendLine(syntaxGenerationStrategyFactory.CreateFor(attribute));
+            builder.AppendLine(syntaxGenerator.CreateFor(attribute));
         }
 
-        builder.Append(syntaxGenerationStrategyFactory.CreateFor(model.AccessModifier));
+        builder.Append(syntaxGenerator.CreateFor(model.AccessModifier));
 
         if (model.Static)
             builder.Append(" static");
@@ -56,7 +56,7 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
         {
             builder.Append(": ");
 
-            builder.Append(string.Join(',', model.Implements.Select(x => syntaxGenerationStrategyFactory.CreateFor(x, context))));
+            builder.Append(string.Join(',', model.Implements.Select(x => syntaxGenerator.CreateFor(x, context))));
         }
 
         if (model.Properties.Count + model.Methods.Count + model.Constructors.Count + model.Fields.Count == 0)
@@ -72,16 +72,16 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
 
 
         if (model.Fields.Count > 0)
-            builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Fields, context)).Indent(1));
+            builder.AppendLine(((string)syntaxGenerator.CreateFor(model.Fields, context)).Indent(1));
 
         if (model.Constructors.Count > 0)
-            builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Constructors, context)).Indent(1));
+            builder.AppendLine(((string)syntaxGenerator.CreateFor(model.Constructors, context)).Indent(1));
 
         if (model.Properties.Count > 0)
-            builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Properties, context)).Indent(1));
+            builder.AppendLine(((string)syntaxGenerator.CreateFor(model.Properties, context)).Indent(1));
 
         if (model.Methods.Count > 0)
-            builder.AppendLine(((string)syntaxGenerationStrategyFactory.CreateFor(model.Methods, context)).Indent(1));
+            builder.AppendLine(((string)syntaxGenerator.CreateFor(model.Methods, context)).Indent(1));
 
         builder.AppendLine("}");
 

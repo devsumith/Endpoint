@@ -30,20 +30,20 @@ public class SignalRHubClientCreateRequestHandler : IRequestHandler<SignalRHubCl
     private readonly ILogger<SignalRHubClientCreateRequestHandler> _logger;
     private readonly ICommandService _commandService;
     private readonly IFileModelFactory _fileModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
 
     public SignalRHubClientCreateRequestHandler(
         ILogger<SignalRHubClientCreateRequestHandler> logger,
         IFileModelFactory fileModelFactory,
         ICommandService commandService,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
@@ -61,7 +61,7 @@ public class SignalRHubClientCreateRequestHandler : IRequestHandler<SignalRHubCl
             _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Spec", $"{nameSnakeCase}-hub-client.service.spec", request.Directory, "ts", tokens: tokens)
         })
         {
-            _artifactGenerationStrategyFactory.CreateFor(model);
+            _artifactGenerator.CreateFor(model);
         }        
     }
 }

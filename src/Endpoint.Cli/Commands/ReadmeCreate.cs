@@ -28,16 +28,16 @@ public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
 {
     private readonly ILogger<ReadmeCreateRequestHandler> _logger;
     private readonly IFileModelFactory _fileModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
 
     public ReadmeCreateRequestHandler(
         ILogger<ReadmeCreateRequestHandler> logger,
         IFileModelFactory fileModelFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+        IArtifactGenerator artifactGenerator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(ReadmeCreateRequest request, CancellationToken cancellationToken)
@@ -48,7 +48,7 @@ public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
             .With(nameof(request.ProjectName), request.ProjectName)
             .Build());
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
 
     }
 }

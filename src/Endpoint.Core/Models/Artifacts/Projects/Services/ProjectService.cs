@@ -16,11 +16,11 @@ public class ProjectService : IProjectService
 {
     private readonly ICommandService _commandService;
     private readonly IFileProvider _fileProvider;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly IFileSystem _fileSystem;
     private readonly IFileModelFactory _fileModelFactory;
     public ProjectService(
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         ICommandService commandService,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
@@ -28,14 +28,14 @@ public class ProjectService : IProjectService
     {
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
     }
 
     public void AddProject(ProjectModel model)
     {
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
 
         AddToSolution(model);
     }
@@ -122,7 +122,7 @@ public class ProjectService : IProjectService
         })
         {
             if (!_fileSystem.Exists(file.Path))
-                _artifactGenerationStrategyFactory.CreateFor(file);
+                _artifactGenerator.CreateFor(file);
         }
     }
 

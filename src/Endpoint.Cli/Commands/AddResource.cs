@@ -30,9 +30,9 @@ public class AddResource
 
     public class Handler : IRequestHandler<Request>
     {
-        private readonly IAdditionalResourceGenerationStrategyFactory _factory;
+        private readonly IAdditionalResourceGenerator _factory;
         public Handler(
-            IAdditionalResourceGenerationStrategyFactory factory)
+            IAdditionalResourceGenerator factory)
         {
             _factory = factory;
         }
@@ -41,7 +41,7 @@ public class AddResource
         {
             var options = TinyMapper.Map<AddResourceOptions>(request);
 
-            AdditionalResourceGenerator.Generate(options, _factory);
+            //AdditionalResourceGenerator.Generate(options, _factory);
         }
     }
 }

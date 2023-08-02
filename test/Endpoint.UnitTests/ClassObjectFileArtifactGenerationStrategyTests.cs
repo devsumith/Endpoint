@@ -30,7 +30,7 @@ public class ClassObjectFileArtifactGenerationStrategyTests
 
         var container = services.BuildServiceProvider();
 
-        var sut = container.GetRequiredService<IArtifactGenerationStrategyFactory>();
+        var sut = container.GetRequiredService<IArtifactGenerator>();
 
         var classModel = new ClassModel("Foo");
 

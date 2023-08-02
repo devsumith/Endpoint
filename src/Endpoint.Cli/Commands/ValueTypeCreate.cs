@@ -30,16 +30,16 @@ public class ValueTypeCreateRequest : IRequest {
 public class ValueTypeCreateRequestHandler : IRequestHandler<ValueTypeCreateRequest>
 {
     private readonly ILogger<ValueTypeCreateRequestHandler> _logger;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
 
     public ValueTypeCreateRequestHandler(
         ILogger<ValueTypeCreateRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
@@ -55,6 +55,6 @@ public class ValueTypeCreateRequestHandler : IRequestHandler<ValueTypeCreateRequ
 
         var model = new TemplatedFileModel("ValueType", $"{_namingConventionConverter.Convert(NamingConvention.PascalCase, request.Name)}Type", request.Directory, "cs", tokens);
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
     }
 }

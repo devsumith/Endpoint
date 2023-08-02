@@ -26,19 +26,19 @@ public class ArtifactGenerationStrategyCreateRequest : IRequest
 
 public class ArtifactGenerationStrategyCreateRequestHandler : IRequestHandler<ArtifactGenerationStrategyCreateRequest>
 {
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly ILogger<VerbRequestHandler> _logger;
     private readonly IFileModelFactory _fileFactory;
     private readonly INamespaceProvider _namespaceProvider;
 
     public ArtifactGenerationStrategyCreateRequestHandler(
         ILogger<VerbRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IFileModelFactory fileFactory,
         INamespaceProvider namespaceProvider
         )
     {
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
+        _artifactGenerator = artifactGenerator;
         _logger = logger;
         _fileFactory = fileFactory;
         _namespaceProvider = namespaceProvider;
@@ -57,7 +57,7 @@ public class ArtifactGenerationStrategyCreateRequestHandler : IRequestHandler<Ar
 
         var model = _fileFactory.CreateTemplate("ArtifactGenerationStrategy", $"{request.Name}ArtifactGenerationStrategy", request.Directory, tokens: tokens);
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
 
 
     }

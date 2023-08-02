@@ -18,14 +18,14 @@ public abstract class SyntaxGenerationStrategyBase<T> : ISyntaxGenerationStrateg
     {
         using (IServiceScope scope = _serviceProvider.CreateScope())
         {
-            var syntaxGenerationStrategyFactory = scope.ServiceProvider
-                .GetRequiredService<ISyntaxGenerationStrategyFactory>();
+            var syntaxGenerator = scope.ServiceProvider
+                .GetRequiredService<ISyntaxGenerator>();
 
-            return Create(syntaxGenerationStrategyFactory, model, context);
+            return Create(syntaxGenerator, model, context);
         }
     }
 
-    public abstract string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, T model, dynamic context = null);
+    public abstract string Create(ISyntaxGenerator syntaxGenerator, T model, dynamic context = null);
     public virtual int Priority => 0;
 }
 

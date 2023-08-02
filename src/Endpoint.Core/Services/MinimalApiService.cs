@@ -10,11 +10,11 @@ namespace Endpoint.Core.Services;
 
 public class MinimalApiService : IMinimalApiService
 {
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
 
-    public MinimalApiService(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+    public MinimalApiService(IArtifactGenerator artifactGenerator)
     {
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
+        _artifactGenerator = artifactGenerator;
     }
 
     public void Create(string name, string dbContextName, string entityName, string directory)
@@ -26,7 +26,7 @@ public class MinimalApiService : IMinimalApiService
 
         var model = new MinimalApiProgramFileModel(name, directory, name, dbContextName, entities);
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
     }
 }
 

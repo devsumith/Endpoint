@@ -23,7 +23,7 @@ public class AngularWorkspaceArtifactGenerationStrategy : ArtifactGenerationStra
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, AngularWorkspaceModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, AngularWorkspaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

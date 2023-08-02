@@ -39,17 +39,17 @@ public class WorkerCreateRequest : IRequest
 public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
 {
     private readonly ILogger<WorkerCreateRequestHandler> _logger;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly Observable<INotification> _notificationListener;
 
 
     public WorkerCreateRequestHandler(
         ILogger<WorkerCreateRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         Observable<INotification> notificationListener)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
     }
 
@@ -133,7 +133,7 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
 
         var fileModel = new ObjectFileModel<ClassModel>(model, usings, model.Name, request.Directory, "cs");
 
-        _artifactGenerationStrategyFactory.CreateFor(fileModel);
+        _artifactGenerator.CreateFor(fileModel);
 
         _notificationListener.Broadcast(new WorkerFileCreated(model.Name, request.Directory));
     }

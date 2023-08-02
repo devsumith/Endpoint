@@ -40,7 +40,7 @@ public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrateg
         _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
     }
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, TemplatedFileModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, TemplatedFileModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

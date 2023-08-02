@@ -24,17 +24,17 @@ public class ClassService : IClassService
     private readonly ILogger<ClassService> _logger;
     private readonly IFileSystem _fileSystem;
     private readonly IFileProvider _fileProvider;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamespaceProvider _nameSpaceProvider;
 
     public ClassService(
         ILogger<ClassService> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
         INamespaceProvider namespaceProvider)
     {
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
+        _artifactGenerator = artifactGenerator;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
@@ -67,7 +67,7 @@ public class ClassService : IClassService
             "cs"
             );
 
-        _artifactGenerationStrategyFactory.CreateFor(classFile);
+        _artifactGenerator.CreateFor(classFile);
 
     }
 
@@ -153,7 +153,7 @@ public class ClassService : IClassService
 
             classModel.UsingAsDirectives.Add(new UsingAsDirectiveModel($"{_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))}.{name}", name));
 
-            _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", "cs"));
+            _artifactGenerator.CreateFor(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", "cs"));
         }
     }
 

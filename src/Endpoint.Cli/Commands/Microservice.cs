@@ -55,21 +55,21 @@ public class MicroserviceRequest : IRequest
 public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
 {
     private readonly ILogger<MicroserviceRequestHandler> _logger;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
-    private readonly ISolutionSettingsFileGenerationStrategyFactory _factory;
-    private readonly IWorkspaceGenerationStrategyFactory _workspaceSettingsGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
+    private readonly ISolutionSettingsFileGenerator _factory;
+    private readonly IWorkspaceGenerator _workspaceSettingsGenerator;
     private readonly ISolutionUpdateStrategyFactory _solutionUpdateStrategyFactory;
     private readonly IWorkspaceSettingsUpdateStrategyFactory _workspaceSettingsUpdateStrategyFactory;
     private readonly IFileSystem _fileSystem;
     private readonly ISolutionModelFactory _solutionModelFactory;
 
-    public MicroserviceRequestHandler(ISolutionModelFactory solutionModelFactory, ILogger<MicroserviceRequestHandler> logger, IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ISolutionSettingsFileGenerationStrategyFactory factory, IWorkspaceGenerationStrategyFactory workspaceGenerationStrategyFactory, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
+    public MicroserviceRequestHandler(ISolutionModelFactory solutionModelFactory, ILogger<MicroserviceRequestHandler> logger, IArtifactGenerator artifactGenerator, ISolutionSettingsFileGenerator factory, IWorkspaceGenerator workspaceGenerator, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
     {
         _solutionModelFactory = solutionModelFactory;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _factory = factory ?? throw new ArgumentNullException(nameof(factory));
-        _workspaceSettingsGenerationStrategyFactory = workspaceGenerationStrategyFactory;
+        _workspaceSettingsGenerator = workspaceGenerator;
         _solutionUpdateStrategyFactory = solutionUpdateStrategyFactory;
         _fileSystem = fileSystem;
         _workspaceSettingsUpdateStrategyFactory = workspaceSettingsUpdateStrategyFactory;
@@ -127,7 +127,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
             _ => throw new NotImplementedException()
         };
 
-        _artifactGenerationStrategyFactory.CreateFor(solutionModel);
+        _artifactGenerator.CreateFor(solutionModel);
 
 
 
@@ -140,7 +140,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
         _workspaceSettingsUpdateStrategyFactory.UpdateFor(previousWorkspaceSettings, nextWorkspaceSettings);
 
         if (!IsExistingWorkspace(request.Directory) && request.CreateGitRepository)
-            _artifactGenerationStrategyFactory.CreateFor(new GitModel(request.WorkspaceName)
+            _artifactGenerator.CreateFor(new GitModel(request.WorkspaceName)
             {
                 Directory = solutionModel.SolutionDirectory,
             });

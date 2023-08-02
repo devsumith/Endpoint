@@ -5,7 +5,7 @@ using Endpoint.Core.Models.Options;
 
 namespace Endpoint.Core
 {
-    public interface ISolutionSettingsFileGenerationStrategyFactory
+    public interface ISolutionSettingsFileGenerator
     {
         SolutionSettingsModel CreateFor(SolutionSettingsModel model);
     }

@@ -35,7 +35,7 @@ public class GetByIdQueryHandlerMethodGenerationStrategy : MethodSyntaxGeneratio
 
     public override int Priority => int.MaxValue;
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, MethodModel model, dynamic context = null)
+    public override string Create(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
@@ -51,7 +51,7 @@ public class GetByIdQueryHandlerMethodGenerationStrategy : MethodSyntaxGeneratio
 
         model.Body = builder.ToString();
 
-        return base.Create(syntaxGenerationStrategyFactory, model);
+        return base.Create(syntaxGenerator, model);
     }
 }
 

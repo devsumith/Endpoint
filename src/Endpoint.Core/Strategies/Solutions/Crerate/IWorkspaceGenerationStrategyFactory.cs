@@ -5,7 +5,7 @@ using Endpoint.Core.Models.Options;
 
 namespace Endpoint.Core.Strategies.Solutions.Crerate
 {
-    public interface IWorkspaceGenerationStrategyFactory
+    public interface IWorkspaceGenerator
     {
         void CreateFor(WorkspaceSettingsModel model);
     }

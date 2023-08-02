@@ -30,14 +30,14 @@ public class SpecFlowFeatureCreateRequest : IRequest
 public class SpecFlowFeatureCreateRequestHandler : IRequestHandler<SpecFlowFeatureCreateRequest>
 {
     private readonly ILogger<SpecFlowFeatureCreateRequestHandler> _logger;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
 
     public SpecFlowFeatureCreateRequestHandler(
         ILogger<SpecFlowFeatureCreateRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+        IArtifactGenerator artifactGenerator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(SpecFlowFeatureCreateRequest request, CancellationToken cancellationToken)
@@ -48,7 +48,7 @@ public class SpecFlowFeatureCreateRequestHandler : IRequestHandler<SpecFlowFeatu
 
         var fileModel = new ObjectFileModel<SpecFlowFeatureModel>(model, model.Name, request.Directory, "feature");
 
-        _artifactGenerationStrategyFactory.CreateFor(fileModel);
+        _artifactGenerator.CreateFor(fileModel);
 
 
     }

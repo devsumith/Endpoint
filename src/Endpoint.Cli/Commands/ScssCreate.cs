@@ -31,21 +31,21 @@ public class ScssCreateRequestHandler : IRequestHandler<ScssCreateRequest>
 {
     private readonly ILogger<ScssCreateRequestHandler> _logger;
     private readonly IFileModelFactory _fileModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly IFileProvider _fileProvider;
     private readonly IAngularService _angularService;
     public ScssCreateRequestHandler(
         ILogger<ScssCreateRequestHandler> logger,
         IFileModelFactory fileModelFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter,
         IFileProvider fileProvider,
         IAngularService angularService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
@@ -84,7 +84,7 @@ public class ScssCreateRequestHandler : IRequestHandler<ScssCreateRequest>
             {
                 model = _fileModelFactory.CreateTemplate(name, $"_{_namingConventionConverter.Convert(NamingConvention.SnakeCase, name)}", request.Directory, "scss", tokens: tokens);
 
-                _artifactGenerationStrategyFactory.CreateFor(model);
+                _artifactGenerator.CreateFor(model);
             }
         }
         else
@@ -97,7 +97,7 @@ public class ScssCreateRequestHandler : IRequestHandler<ScssCreateRequest>
                 ? new ContentFileModel(string.Empty, $"_{nameSnakeCase}", request.Directory, "scss")
                 : _fileModelFactory.CreateTemplate(request.Name, $"_{nameSnakeCase}", request.Directory, "scss", tokens: tokens);
 
-            _artifactGenerationStrategyFactory.CreateFor(model);
+            _artifactGenerator.CreateFor(model);
         }
 
         _angularService.IndexCreate(true, request.Directory);

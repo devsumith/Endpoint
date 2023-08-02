@@ -29,7 +29,7 @@ public class WebSocketAppCreateRequestHandler : IRequestHandler<WebSocketAppCrea
     private readonly ILogger<WebSocketAppCreateRequestHandler> _logger;
     private readonly ISolutionService _solutionService;
     private readonly ISolutionModelFactory _solutionModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _generator;
+    private readonly IArtifactGenerator _generator;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ICommandService _commandService;
     private readonly IClassModelFactory _classModelFactory;
@@ -41,7 +41,7 @@ public class WebSocketAppCreateRequestHandler : IRequestHandler<WebSocketAppCrea
         ILogger<WebSocketAppCreateRequestHandler> logger,
         ISolutionService solutionService,
         ISolutionModelFactory solutionModelFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter,
         ICommandService commandService,
         IClassModelFactory classModelFactory,
@@ -52,7 +52,7 @@ public class WebSocketAppCreateRequestHandler : IRequestHandler<WebSocketAppCrea
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
         _solutionModelFactory = solutionModelFactory;
-        _generator = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _generator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter)); ;
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));

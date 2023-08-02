@@ -6,10 +6,10 @@ using System.Linq;
 
 namespace Endpoint.Core.Abstractions;
 
-public class ArtifactGenerationStrategyFactory : IArtifactGenerationStrategyFactory
+public class ArtifactGenerator : IArtifactGenerator
 {
     private readonly IEnumerable<IArtifactGenerationStrategy> _strategies;
-    public ArtifactGenerationStrategyFactory(IEnumerable<IArtifactGenerationStrategy> strategies)
+    public ArtifactGenerator(IEnumerable<IArtifactGenerationStrategy> strategies)
     {
         _strategies = strategies;
     }

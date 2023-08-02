@@ -13,11 +13,11 @@ using System.Linq;
 
 namespace Endpoint.Core.Strategies.Common;
 
-public class EndpointGenerationStrategyFactory : IEndpointGenerationStrategyFactory
+public class EndpointGenerator : IEndpointGenerator
 {
     private readonly IList<IEndpointGenerationStrategy> _strategies;
 
-    public EndpointGenerationStrategyFactory(
+    public EndpointGenerator(
         ICommandService commandService,
         ISolutionFilesGenerationStrategy solutionFilesGenerationStrategy,
         ISharedKernelProjectFilesGenerationStrategy sharedKernelProjectFilesGenerationStrategy,
@@ -27,9 +27,9 @@ public class EndpointGenerationStrategyFactory : IEndpointGenerationStrategyFact
         IFileSystem fileSystem,
         ISolutionModelFactory solutionModelFactory,
         IMediator mediator,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IServiceProvider serviceProvider,
-        ILogger<EndpointGenerationStrategyFactory> logger
+        ILogger<EndpointGenerator> logger
         )
     {
         _strategies = new List<IEndpointGenerationStrategy>()
@@ -43,7 +43,7 @@ public class EndpointGenerationStrategyFactory : IEndpointGenerationStrategyFact
                 mediator,
                 logger),
 
-            //new MinimalApiEndpointGenerationStrategy(serviceProvider, artifactGenerationStrategyFactory,commandService,fileSystem, solutionModelFactory)
+            //new MinimalApiEndpointGenerationStrategy(serviceProvider, artifactGenerator,commandService,fileSystem, solutionModelFactory)
         };
     }
 

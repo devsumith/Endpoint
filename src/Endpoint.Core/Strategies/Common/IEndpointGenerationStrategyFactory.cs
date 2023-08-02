@@ -5,7 +5,7 @@ using Endpoint.Core.Options;
 
 namespace Endpoint.Core.Strategies.Common;
 
-public interface IEndpointGenerationStrategyFactory
+public interface IEndpointGenerator
 {
     void CreateFor(CreateEndpointOptions request);
 }

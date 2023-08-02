@@ -21,13 +21,13 @@ public abstract class ArtifactUpdateStrategyBase<T> : IArtifactUpdateStrategy
     {
         using (IServiceScope scope = _serviceProvider.CreateScope())
         {
-            var artifactGenerationStrategyFactory = scope.ServiceProvider
-                .GetRequiredService<IArtifactGenerationStrategyFactory>();
-            Update(artifactGenerationStrategyFactory, args[0] as T, context);
+            var artifactGenerator = scope.ServiceProvider
+                .GetRequiredService<IArtifactGenerator>();
+            Update(artifactGenerator, args[0] as T, context);
         }
     }
 
-    public abstract void Update(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, T model, dynamic context = null);
+    public abstract void Update(IArtifactGenerator artifactGenerator, T model, dynamic context = null);
     public virtual int Priority => 0;
 }
 
@@ -47,12 +47,12 @@ public abstract class ArtifactGenerationStrategyBase<T> : IArtifactGenerationStr
     {
         using (IServiceScope scope = _serviceProvider.CreateScope())
         {
-            var artifactGenerationStrategyFactory = scope.ServiceProvider
-                .GetRequiredService<IArtifactGenerationStrategyFactory>();
-            Create(artifactGenerationStrategyFactory, model as T, context);
+            var artifactGenerator = scope.ServiceProvider
+                .GetRequiredService<IArtifactGenerator>();
+            Create(artifactGenerator, model as T, context);
         }
     }
 
-    public abstract void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, T model, dynamic context = null);
+    public abstract void Create(IArtifactGenerator artifactGenerator, T model, dynamic context = null);
     public virtual int Priority => 0;
 }

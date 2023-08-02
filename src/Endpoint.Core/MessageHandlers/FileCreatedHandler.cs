@@ -13,16 +13,16 @@ namespace Endpoint.Core.MessageHandlers;
 
 public class FileCreatedHandler : INotificationHandler<FileCreated>
 {
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
-    public FileCreatedHandler(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+    private readonly IArtifactGenerator _artifactGenerator;
+    public FileCreatedHandler(IArtifactGenerator artifactGenerator)
     {
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory;
+        _artifactGenerator = artifactGenerator;
     }
 
     public async Task Handle(FileCreated notification, CancellationToken cancellationToken)
     {
         var model = new FileReferenceModel() { Path = notification.Path };
 
-        _artifactGenerationStrategyFactory.CreateFor(model, new CopyrightAdd());
+        _artifactGenerator.CreateFor(model, new CopyrightAdd());
     }
 }

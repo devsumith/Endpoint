@@ -22,20 +22,20 @@ public class DependencyInjectionService : IDependencyInjectionService
     private readonly ILogger<DependencyInjectionService> _logger;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamespaceProvider _namespaceProvider;
 
     public DependencyInjectionService(
         ILogger<DependencyInjectionService> logger,
         IFileProvider fileProvider,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IFileSystem fileSystem,
         INamespaceProvider namespaceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
     }
 
@@ -137,7 +137,7 @@ public class DependencyInjectionService : IDependencyInjectionService
             Namespace = "Microsoft.Extensions.DependencyInjection"
         };
 
-        _artifactGenerationStrategyFactory.CreateFor(classFileModel);
+        _artifactGenerator.CreateFor(classFileModel);
     }
 
     private void AddInternal(string diRegistration, string directory)

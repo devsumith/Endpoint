@@ -28,14 +28,14 @@ public class InterfaceCreateRequest : IRequest
 public class InterfaceCreateRequestHandler : IRequestHandler<InterfaceCreateRequest>
 {
     private readonly ILogger<InterfaceCreateRequestHandler> _logger;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
 
     public InterfaceCreateRequestHandler(
         ILogger<InterfaceCreateRequestHandler> logger,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory)
+        IArtifactGenerator artifactGenerator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(InterfaceCreateRequest request, CancellationToken cancellationToken)
@@ -46,7 +46,7 @@ public class InterfaceCreateRequestHandler : IRequestHandler<InterfaceCreateRequ
         {
             var model = new InterfaceModel(name);
 
-            _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<InterfaceModel>(model, model.UsingDirectives, name, request.Directory, "cs"));
+            _artifactGenerator.CreateFor(new ObjectFileModel<InterfaceModel>(model, model.UsingDirectives, name, request.Directory, "cs"));
         }
 
     }

@@ -20,19 +20,19 @@ public class FolderService : IFolderService
 {
     private readonly ILogger<FolderService> _logger;
     private readonly IFolderFactory _folderFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly ISyntaxService _syntaxService;
     private readonly IFileProvider _fileProvider;
     public FolderService(
         ILogger<FolderService> logger,
         IFolderFactory folderFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         ISyntaxService syntaxService,
         IFileProvider fileProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _folderFactory = folderFactory ?? throw new ArgumentNullException(nameof(folderFactory));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
@@ -45,7 +45,7 @@ public class FolderService : IFolderService
 
         var entity = _syntaxService.SolutionModel?.GetClass(aggregate.Name, serviceName);
 
-        _artifactGenerationStrategyFactory.CreateFor(model, new { Entity = entity });
+        _artifactGenerator.CreateFor(model, new { Entity = entity });
 
         return model;
     }
@@ -58,7 +58,7 @@ public class FolderService : IFolderService
 
         var entity = _syntaxService.SolutionModel?.GetClass(aggregate.Name, serviceName);
 
-        _artifactGenerationStrategyFactory.CreateFor(model, new { Entity = entity });
+        _artifactGenerator.CreateFor(model, new { Entity = entity });
 
         return model;
     }

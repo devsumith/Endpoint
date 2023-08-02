@@ -40,7 +40,7 @@ public class InfrastructureProjectEnsureArtifactGenerationStrategy : ArtifactGen
         => model is ProjectReferenceModel && context != null && context.Command is InfrastructureProjectEnsure;
 
     public override int Priority => 10;
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ProjectReferenceModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -52,7 +52,7 @@ public class InfrastructureProjectEnsureArtifactGenerationStrategy : ArtifactGen
 
         EnsureProjectsReferenced(projectDirectory);
 
-        EnsureDefaultFilesAdd(artifactGenerationStrategyFactory, projectDirectory);
+        EnsureDefaultFilesAdd(artifactGenerator, projectDirectory);
 
     }
 
@@ -61,7 +61,7 @@ public class InfrastructureProjectEnsureArtifactGenerationStrategy : ArtifactGen
         _fileSystem.Delete($"{projectDirectory}{Path.DirectorySeparatorChar}Class1.cs");
     }
 
-    private void EnsureDefaultFilesAdd(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, string projectDirectory)
+    private void EnsureDefaultFilesAdd(IArtifactGenerator artifactGenerator, string projectDirectory)
     {
         var projectName = Path.GetFileNameWithoutExtension(projectDirectory).Split('.').First();
 

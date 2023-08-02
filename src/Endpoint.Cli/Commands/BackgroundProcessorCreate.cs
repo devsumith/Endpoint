@@ -35,20 +35,20 @@ public class BackgroundProcessorCreateRequestHandler : IRequestHandler<Backgroun
     private readonly ILogger<BackgroundProcessorCreateRequestHandler> _logger;
     private readonly ISolutionModelFactory _solutionModelFactory;
     private readonly IProjectModelFactory _projectModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly ICommandService _commandService;
 
     public BackgroundProcessorCreateRequestHandler(
         ILogger<BackgroundProcessorCreateRequestHandler> logger,
         ISolutionModelFactory solutionModelFactory,
         IProjectModelFactory projectModelFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         ICommandService commandService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _solutionModelFactory = solutionModelFactory ?? throw new ArgumentNullException(nameof(solutionModelFactory));
         _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
@@ -72,7 +72,7 @@ public class BackgroundProcessorCreateRequestHandler : IRequestHandler<Backgroun
 
         model.Folders.Add(src);
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
 
         _commandService.Start($"start {model.SolutionPath}");
     }

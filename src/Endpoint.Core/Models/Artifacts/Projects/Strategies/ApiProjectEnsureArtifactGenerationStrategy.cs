@@ -40,7 +40,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
 
     public override int Priority => 10;
 
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, ProjectReferenceModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -52,7 +52,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
 
         EnsureProjectsReferenced(projectDirectory);
 
-        EnsureApiDefaultFilesAdd(artifactGenerationStrategyFactory, projectDirectory);
+        EnsureApiDefaultFilesAdd(artifactGenerator, projectDirectory);
     }
 
     private void EnsureDefaultFilesRemoved(string projectDirectory)
@@ -61,7 +61,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
         _fileSystem.Delete($"{projectDirectory}{Path.DirectorySeparatorChar}WeatherForecast.cs");
     }
 
-    private void EnsureApiDefaultFilesAdd(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, string projectDirectory)
+    private void EnsureApiDefaultFilesAdd(IArtifactGenerator artifactGenerator, string projectDirectory)
     {
         var projectName = Path.GetFileNameWithoutExtension(projectDirectory).Split('.').First();
 
@@ -69,17 +69,17 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
 
         if (!_fileSystem.Exists($"{projectDirectory}{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}launchSettings.json"))
         {
-            artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.LaunchSettingsJson(projectDirectory, projectName, 5000));
+            artifactGenerator.CreateFor(_fileModelFactory.LaunchSettingsJson(projectDirectory, projectName, 5000));
         }
 
         if (!_fileSystem.Exists($"{projectDirectory}{Path.DirectorySeparatorChar}ConfigureServices.cs"))
         {
-            artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", projectDirectory, tokens: new TokensBuilder()
+            artifactGenerator.CreateFor(_fileModelFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", projectDirectory, tokens: new TokensBuilder()
                 .With("DbContext", dbContext)
                 .With("serviceName", projectName)
                 .Build()));
 
-            artifactGenerationStrategyFactory.CreateFor(_fileModelFactory.CreateTemplate("Api.Program", "Program", projectDirectory, tokens: new TokensBuilder()
+            artifactGenerator.CreateFor(_fileModelFactory.CreateTemplate("Api.Program", "Program", projectDirectory, tokens: new TokensBuilder()
                 .With("DbContext", dbContext)
                 .With("serviceName", projectName)
                 .Build()));

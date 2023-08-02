@@ -26,27 +26,27 @@ namespace Endpoint.Core.Services;
 public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 {
 
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly IFileProvider _fileProvider;
     private readonly Observable<INotification> _notificationListener;
     private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly ISyntaxGenerationStrategyFactory _syntaxGenerationStrategyFactory;
+    private readonly ISyntaxGenerator _syntaxGenerator;
     private readonly IFileSystem _fileSystem;
     private readonly INamespaceProvider _namespaceProvider;
     public DomainDrivenDesignFileService(
         INamespaceProvider namespaceProvider,
         IFileSystem fileSystem,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IFileProvider fileProvider,
         Observable<INotification> notificationListener,
         INamingConventionConverter namingConventionConverter,
-        ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory)
+        ISyntaxGenerator syntaxGenerator)
     {
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
-        _syntaxGenerationStrategyFactory = syntaxGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(syntaxGenerationStrategyFactory));
+        _syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
     }
@@ -82,7 +82,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
-        _artifactGenerationStrategyFactory.CreateFor(classFileModel);
+        _artifactGenerator.CreateFor(classFileModel);
 
     }
 
@@ -113,13 +113,13 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         {
             classModel.Fields.Add(new FieldModel()
             {
-                Name = $"_{_namingConventionConverter.Convert(NamingConvention.CamelCase, _syntaxGenerationStrategyFactory.CreateFor(typeModel))}",
+                Name = $"_{_namingConventionConverter.Convert(NamingConvention.CamelCase, _syntaxGenerator.CreateFor(typeModel))}",
                 Type = typeModel
             });
 
             constructorModel.Params.Add(new ParamModel()
             {
-                Name = $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, _syntaxGenerationStrategyFactory.CreateFor(typeModel))}",
+                Name = $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, _syntaxGenerator.CreateFor(typeModel))}",
                 Type = typeModel
             });
         }
@@ -156,7 +156,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
-        _artifactGenerationStrategyFactory.CreateFor(classFileModel);
+        _artifactGenerator.CreateFor(classFileModel);
 
     }
 
@@ -308,7 +308,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Methods.Add(method);
 
-        _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs"));
+        _artifactGenerator.CreateFor(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs"));
     }
 
     public void ServiceCreate(string name, string directory)
@@ -365,7 +365,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 "cs"
                 );
 
-            _artifactGenerationStrategyFactory.CreateFor(interfaceFile);
+            _artifactGenerator.CreateFor(interfaceFile);
 
             return @interface;
         }
@@ -406,7 +406,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 "cs"
                 );
 
-            _artifactGenerationStrategyFactory.CreateFor(classFile);
+            _artifactGenerator.CreateFor(classFile);
 
             _notificationListener.Broadcast(new ServiceFileCreated(@interface.Name, @class.Name, directory));
 

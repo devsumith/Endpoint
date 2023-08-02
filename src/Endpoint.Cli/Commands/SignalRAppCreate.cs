@@ -42,7 +42,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
     private readonly ISolutionService _solutionService;
     private readonly IAngularService _angularService;
     private readonly ISolutionModelFactory _solutionModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ICommandService _commandService;
     private readonly IClassModelFactory _classModelFactory;
@@ -56,7 +56,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         ISolutionService solutionService,
         IAngularService angularService,
         ISolutionModelFactory solutionModelFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter,
         ICommandService commandService,
         IClassModelFactory classModelFactory,
@@ -69,7 +69,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
         _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
         _solutionModelFactory = solutionModelFactory;
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter)); ;
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
@@ -158,7 +158,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         projectModel.Files.Add(new ObjectFileModel<InterfaceModel>(interfaceModel, interfaceModel.Name, projectModel.Directory, "cs"));
 
-        _artifactGenerationStrategyFactory.CreateFor(solutionModel);
+        _artifactGenerator.CreateFor(solutionModel);
 
         HubAdd(projectModel, request.Name);
 
@@ -234,17 +234,17 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var appHtmlFileModel = new ContentFileModel("<router-outlet />", "app.component", Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app"), "html");
 
-        _artifactGenerationStrategyFactory.CreateFor(mainFileModel);
+        _artifactGenerator.CreateFor(mainFileModel);
 
-        _artifactGenerationStrategyFactory.CreateFor(componentTemplateFileModel);
+        _artifactGenerator.CreateFor(componentTemplateFileModel);
 
-        _artifactGenerationStrategyFactory.CreateFor(componentFileModel);
+        _artifactGenerator.CreateFor(componentFileModel);
 
-        _artifactGenerationStrategyFactory.CreateFor(hubServiceFileModel);
+        _artifactGenerator.CreateFor(hubServiceFileModel);
 
-        _artifactGenerationStrategyFactory.CreateFor(hubServiceSpecFileModel);
+        _artifactGenerator.CreateFor(hubServiceSpecFileModel);
 
-        _artifactGenerationStrategyFactory.CreateFor(appHtmlFileModel);
+        _artifactGenerator.CreateFor(appHtmlFileModel);
 
         Directory.Move(Path.Combine(solutionModel.SrcDirectory, temporaryAppName), Path.Combine(solutionModel.SrcDirectory, $"{request.Name}.App"));
 

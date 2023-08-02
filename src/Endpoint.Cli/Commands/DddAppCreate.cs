@@ -58,7 +58,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     private readonly ISolutionService _solutionService;
     private readonly IAngularService _angularService;
     private readonly ISolutionModelFactory _solutionModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ICommandService _commandService;
     private readonly IClassModelFactory _classModelFactory;
@@ -75,7 +75,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         ISolutionService solutionService,
         IAngularService angularService,
         ISolutionModelFactory solutionModelFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter,
         ICommandService commandService,
         IClassModelFactory classModelFactory,
@@ -91,7 +91,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
         _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
         _solutionModelFactory = solutionModelFactory;
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter)); ;
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
@@ -159,7 +159,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         model.Folders = model.Folders.OrderByDescending(x => x.Priority).ToList();
 
-        _artifactGenerationStrategyFactory.CreateFor(model);
+        _artifactGenerator.CreateFor(model);
 
         var aggregatesModelDirectory = Path.Combine(core.Directory, "AggregatesModel");
 
@@ -170,7 +170,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
             new EntityModel(entity.Name) { Properties = entity.Properties}
         }, name);
 
-        _artifactGenerationStrategyFactory.CreateFor(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), "cs"));
+        _artifactGenerator.CreateFor(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), "cs"));
 
         _apiProjectService.ControllerAdd(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
 

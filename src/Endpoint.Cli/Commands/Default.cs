@@ -58,16 +58,16 @@ public class Default
 
     public class Handler : IRequestHandler<Request>
     {
-        private readonly IEndpointGenerationStrategyFactory _endpointGenerationStrategyFactory;
+        private readonly IEndpointGenerator _endpointGenerator;
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
 
         public Handler(
-            IEndpointGenerationStrategyFactory endpointGenerationStrategyFactory,
+            IEndpointGenerator endpointGenerator,
             ILogger logger,
             IConfiguration configuration)
         {
-            _endpointGenerationStrategyFactory = endpointGenerationStrategyFactory; ;
+            _endpointGenerator = endpointGenerator; ;
             _logger = logger;
             _configuration = configuration;
         }
@@ -112,7 +112,7 @@ public class Default
 
                         var options = TinyMapper.Map<CreateEndpointOptions>(request);
 
-                        EndpointGenerator.Generate(options, _endpointGenerationStrategyFactory);
+                        //EndpointGenerator.Generate(options, _endpointGenerator);
 
 
                     }

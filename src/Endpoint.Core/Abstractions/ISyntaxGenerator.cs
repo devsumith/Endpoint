@@ -1,12 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Models.WebArtifacts;
-
 namespace Endpoint.Core.Abstractions;
 
-public interface IWebGenerationStrategyFactory
+public interface ISyntaxGenerator
 {
-    void CreateFor(LitWorkspaceModel model, dynamic context = null);
+    string CreateFor(object model, dynamic context = null);
 }
 

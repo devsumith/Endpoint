@@ -35,7 +35,7 @@ public class CopyrightAddArtifactGenerationStrategy : ArtifactGenerationStrategy
     {
         return model is FileReferenceModel && context != null && context is CopyrightAdd;
     }
-    public override void Create(IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory, FileReferenceModel model, dynamic context = null)
+    public override void Create(IArtifactGenerator artifactGenerator, FileReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

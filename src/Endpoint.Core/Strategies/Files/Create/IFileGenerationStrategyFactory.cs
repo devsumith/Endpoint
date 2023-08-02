@@ -5,7 +5,7 @@ using Endpoint.Core.Models.Artifacts.Files;
 
 namespace Endpoint.Core.Strategies.Files.Create
 {
-    public interface IFileGenerationStrategyFactory
+    public interface IFileGenerator
     {
         void CreateFor(FileModel model);
     }

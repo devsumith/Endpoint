@@ -25,7 +25,7 @@ public class RequestHandlerSyntaxUpdateGenerationStrategy : SyntaxGenerationStra
     public override bool CanHandle(object model, dynamic context = null)
         => model is RequestHandlerModel requestHandlerModel && requestHandlerModel.RouteType == RouteType.Update;
 
-    public override string Create(ISyntaxGenerationStrategyFactory syntaxGenerationStrategyFactory, RequestHandlerModel model, dynamic context = null)
+    public override string Create(ISyntaxGenerator syntaxGenerator, RequestHandlerModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0} and type {1}.", model);
 

@@ -17,7 +17,7 @@ public class InfrastructureProjectService : IInfrastructureProjectService
 {
     private readonly ILogger<InfrastructureProjectService> _logger;
     private readonly IClassModelFactory _classModelFactory;
-    private readonly IArtifactGenerationStrategyFactory _artifactGenerationStrategyFactory;
+    private readonly IArtifactGenerator _artifactGenerator;
     private readonly IFileModelFactory _fileModelFactory;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
@@ -25,7 +25,7 @@ public class InfrastructureProjectService : IInfrastructureProjectService
     public InfrastructureProjectService(
         ILogger<InfrastructureProjectService> logger,
         IClassModelFactory classModelFactory,
-        IArtifactGenerationStrategyFactory artifactGenerationStrategyFactory,
+        IArtifactGenerator artifactGenerator,
         IFileModelFactory fileModelFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem)
@@ -33,7 +33,7 @@ public class InfrastructureProjectService : IInfrastructureProjectService
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
-        _artifactGenerationStrategyFactory = artifactGenerationStrategyFactory ?? throw new ArgumentNullException(nameof(artifactGenerationStrategyFactory));
+        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
@@ -54,7 +54,7 @@ public class InfrastructureProjectService : IInfrastructureProjectService
 
         var fileModel = _fileModelFactory.CreateCSharp(dbContext, dataDirectory);
 
-        _artifactGenerationStrategyFactory.CreateFor(fileModel);
+        _artifactGenerator.CreateFor(fileModel);
     }
 }
 

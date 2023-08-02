@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace Endpoint.Core.Strategies.Solutions.Crerate
 {
-    public class WorkspaceSettingsGenerationStrategyFactory : IWorkspaceGenerationStrategyFactory
+    public class WorkspaceSettingsGenerator : IWorkspaceGenerator
     {
         private readonly IEnumerable<IWorkspaceSettingsGenerationStrategy> _workspaceGenerationStrategies;
 
-        public WorkspaceSettingsGenerationStrategyFactory(IEnumerable<IWorkspaceSettingsGenerationStrategy> workspaceGenerationStrategies)
+        public WorkspaceSettingsGenerator(IEnumerable<IWorkspaceSettingsGenerationStrategy> workspaceGenerationStrategies)
         {
             _workspaceGenerationStrategies = workspaceGenerationStrategies ?? throw new System.ArgumentNullException(nameof(workspaceGenerationStrategies));
         }
