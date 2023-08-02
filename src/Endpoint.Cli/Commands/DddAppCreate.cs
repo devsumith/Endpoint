@@ -172,7 +172,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), "cs"));
 
-        _apiProjectService.ControllerAdd(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
+        await _apiProjectService.ControllerAdd(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
 
         _commandService.Start($"dotnet ef migrations add {schema}_Initial", infrastructure.Directory);
 

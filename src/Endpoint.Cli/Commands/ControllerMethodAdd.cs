@@ -45,6 +45,6 @@ public class ControllerMethodAddRequestHandler : IRequestHandler<ControllerMetho
     {
         _logger.LogInformation("Handled: {0}", nameof(ControllerMethodAddRequestHandler));
 
-        _apiProjectService.ControllerMethodAdd(request.Name, request.Controller, request.Route, request.Directory);
+        await _apiProjectService.ControllerMethodAdd(request.Name, request.Controller, request.Route, request.Directory);
     }
 }
