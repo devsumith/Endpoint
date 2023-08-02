@@ -43,5 +43,8 @@ public class BuildingBlockCreateRequestHandler : IRequestHandler<BuildingBlockCr
         if (request.Name.ToLower() == "messaging")
             _solutionService.MessagingBuildingBlockAdd(request.Directory);
 
+        if (request.Name.ToLower() == "bitpack")
+            _solutionService.IOCompressionBuildingBlockAdd(request.Directory);
+
     }
 }

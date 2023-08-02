@@ -214,4 +214,40 @@ public class SolutionService : ISolutionService
 
 
     }
+
+    public void IOCompressionBuildingBlockAdd(string directory)
+    {
+        var solutionPath = _fileProvider.Get("*.sln", directory);
+
+        var solutionName = Path.GetFileName(solutionPath);
+
+        var solutionDirectory = Path.GetDirectoryName(solutionPath);
+
+        var buildingBlocksDirectory = Path.Combine(solutionDirectory, "src", "BuildingBlocks");
+
+        var messagingDirectory = Path.Combine(buildingBlocksDirectory, "IO.Compression");
+
+        if (!Directory.Exists(buildingBlocksDirectory))
+        {
+            Directory.CreateDirectory(buildingBlocksDirectory);
+        }
+
+        if (!Directory.Exists(messagingDirectory))
+        {
+            Directory.CreateDirectory(messagingDirectory);
+        }
+
+
+        var messagingProjectModel = _projectModelFactory.CreateMessagingProject(messagingDirectory);
+
+        _artifactGenerationStrategyFactory.CreateFor(messagingProjectModel);
+
+        _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
+
+        var messagingUdpProjectModel = _projectModelFactory.CreateMessagingUdpProject(messagingDirectory);
+
+        _artifactGenerationStrategyFactory.CreateFor(messagingUdpProjectModel);
+
+        _commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
+    }
 }

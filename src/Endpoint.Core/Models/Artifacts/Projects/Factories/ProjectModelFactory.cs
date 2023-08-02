@@ -395,6 +395,12 @@ public class ProjectModelFactory : IProjectModelFactory
                 .With("Layer", layer)
                 .Build();
 
+
+        if (type.ToLower() == "benchmark")
+        {
+            model.Packages.Add(new() { Name = "BenchmarkDotNet", Version = "0.13.6" });
+        }
+
         if (type.StartsWith("web"))
         {
             model.Files.Add(_fileModelFactory.CreateTemplate("DefaultProgram", "Program", model.Directory, tokens: tokens));
@@ -418,5 +424,9 @@ public class ProjectModelFactory : IProjectModelFactory
     public ProjectModel CreateApi(string name, string directory)
         => CreateLibrary($"{name}.Api", directory, new() { Constants.ProjectType.Api });
 
+    public ProjectModel CreateIOCompression(string directory)
+    {
+        throw new NotImplementedException();
+    }
 }
 
