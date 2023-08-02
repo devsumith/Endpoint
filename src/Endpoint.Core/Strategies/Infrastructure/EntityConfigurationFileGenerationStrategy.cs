@@ -1,3 +1,6 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax;
@@ -43,4 +46,5 @@ public class EntityConfigurationFileGenerationStrategy : IEntityConfigurationFil
         _fileSystem.WriteAllText($"{directory}{Path.DirectorySeparatorChar}{((SyntaxToken)entityName).PascalCase}EntityConfiguration.cs", string.Join(Environment.NewLine, content));
     }
 }
+
 
