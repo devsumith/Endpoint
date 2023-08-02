@@ -144,7 +144,7 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         srcFolder.Projects.Add(_projectModelFactory.CreateMessagingUdpProject(srcFolder.Directory));
 
-        _solutionService.Create(model);
+        await _solutionService.Create(model);
 
         if (File.Exists(Path.Combine(projectModel.Directory, "Worker.cs")))
         {

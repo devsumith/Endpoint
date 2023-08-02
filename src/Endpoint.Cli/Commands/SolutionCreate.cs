@@ -65,7 +65,7 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
         if (request.NoServiceCreate)
             model.RemoveAllServices();
 
-        _solutionService.Create(model);
+        await _solutionService.Create(model);
 
         _commandService.Start($"start {model.SolultionFileName}", model.SolutionDirectory);
 

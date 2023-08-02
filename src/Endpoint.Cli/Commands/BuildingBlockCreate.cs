@@ -41,10 +41,10 @@ public class BuildingBlockCreateRequestHandler : IRequestHandler<BuildingBlockCr
         _logger.LogInformation("Handled: {0}", nameof(BuildingBlockCreateRequestHandler));
 
         if (request.Name.ToLower() == "messaging")
-            _solutionService.MessagingBuildingBlockAdd(request.Directory);
+            await _solutionService.MessagingBuildingBlockAdd(request.Directory);
 
         if (request.Name.ToLower() == "bitpack")
-            _solutionService.IOCompressionBuildingBlockAdd(request.Directory);
+            await _solutionService.IOCompressionBuildingBlockAdd(request.Directory);
 
     }
 }

@@ -32,6 +32,7 @@ public class SolutionCreateFromPlantUmlRequestHandler : IRequestHandler<Solution
     private readonly ISolutionService _solutionService;
     private readonly IClipboardService _clipboardService;
     private readonly ICommandService _commandService;
+
     public SolutionCreateFromPlantUmlRequestHandler(
         ILogger<SolutionCreateFromPlantUmlRequestHandler> logger,
         ISolutionService solutionService,

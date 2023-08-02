@@ -41,7 +41,7 @@ public class EventDrivenMicroservicesCreateRequestHandler : IRequestHandler<Even
     {
         _logger.LogInformation("Handled: {0}", nameof(EventDrivenMicroservicesCreateRequestHandler));
 
-        _solutionService.EventDrivenMicroservicesCreate(request.Name, request.Services, request.Directory);
+        await _solutionService.EventDrivenMicroservicesCreate(request.Name, request.Services, request.Directory);
 
 
     }
