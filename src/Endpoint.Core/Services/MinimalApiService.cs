@@ -5,6 +5,7 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Syntax.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Services;
 
@@ -17,7 +18,7 @@ public class MinimalApiService : IMinimalApiService
         _artifactGenerator = artifactGenerator;
     }
 
-    public void Create(string name, string dbContextName, string entityName, string directory)
+    public async Task Create(string name, string dbContextName, string entityName, string directory)
     {
         var entities = new List<EntityModel>()
         {
@@ -26,7 +27,7 @@ public class MinimalApiService : IMinimalApiService
 
         var model = new MinimalApiProgramFileModel(name, directory, name, dbContextName, entities);
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
     }
 }
 

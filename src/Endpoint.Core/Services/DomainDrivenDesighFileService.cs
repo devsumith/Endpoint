@@ -2,14 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
-using Endpoint.Core.Artifacts.Files;
-using MediatR;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Constructors;
 using Endpoint.Core.Syntax.Fields;
@@ -18,7 +13,12 @@ using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Types;
-using Endpoint.Core.Syntax;
+using MediatR;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Services;
 
@@ -50,7 +50,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
     }
 
-    public void MessageCreate(string name, List<PropertyModel> properties, string directory)
+    public async Task MessageCreate(string name, List<PropertyModel> properties, string directory)
     {
         var classModel = new ClassModel(name);
 
@@ -81,11 +81,11 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
-        _artifactGenerator.CreateFor(classFileModel);
+        await _artifactGenerator.CreateAsync(classFileModel);
 
     }
 
-    public void MessageHandlerCreate(string name, string directory)
+    public async Task MessageHandlerCreate(string name, string directory)
     {
         var messageName = $"{name}Message";
 
@@ -155,11 +155,11 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
-        _artifactGenerator.CreateFor(classFileModel);
+        await _artifactGenerator.CreateAsync(classFileModel);
 
     }
 
-    public void ServiceBusMessageConsumerCreate(string name = "ServiceBusMessageConsumer", string messagesNamespace = null, string directory = null)
+    public async Task ServiceBusMessageConsumerCreate(string name = "ServiceBusMessageConsumer", string messagesNamespace = null, string directory = null)
     {
 
         var classModel = new ClassModel(name);
@@ -307,10 +307,10 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Methods.Add(method);
 
-        _artifactGenerator.CreateFor(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs"));
+        await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs"));
     }
 
-    public void ServiceCreate(string name, string directory)
+    public async Task ServiceCreate(string name, string directory)
     {
         if (_fileSystem.Exists($"{directory}{Path.DirectorySeparatorChar}{name}.cs"))
         {
@@ -344,11 +344,11 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             }
         };
 
-        var @interface = createInterface(name, methods, usingDirectives, directory);
+        var @interface = await createInterface(name, methods, usingDirectives, directory);
 
-        _ = createClass(@interface, name, methods, usingDirectives, directory);
+        _ = await createClass(@interface, name, methods, usingDirectives, directory);
 
-        InterfaceModel createInterface(string name, List<MethodModel> methods, List<UsingDirectiveModel> usings, string directory)
+        async Task<InterfaceModel> createInterface(string name, List<MethodModel> methods, List<UsingDirectiveModel> usings, string directory)
         {
             var @interface = new InterfaceModel($"I{name}");
 
@@ -364,12 +364,12 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 "cs"
                 );
 
-            _artifactGenerator.CreateFor(interfaceFile);
+            await _artifactGenerator.CreateAsync(interfaceFile);
 
             return @interface;
         }
 
-        ClassModel createClass(InterfaceModel @interface, string name, List<MethodModel> methods, List<UsingDirectiveModel> usings, string directory)
+        async Task<ClassModel> createClass(InterfaceModel @interface, string name, List<MethodModel> methods, List<UsingDirectiveModel> usings, string directory)
         {
             var @class = new ClassModel(name);
 
@@ -405,7 +405,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 "cs"
                 );
 
-            _artifactGenerator.CreateFor(classFile);
+            await _artifactGenerator.CreateAsync(classFile);
 
             _notificationListener.Broadcast(new ServiceFileCreated(@interface.Name, @class.Name, directory));
 

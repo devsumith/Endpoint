@@ -4,7 +4,6 @@
 using CommandLine;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Entities;
@@ -75,7 +74,7 @@ public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<
 
         Directory.CreateDirectory($"{projectDirectory.Replace("Core", "Infrastructure")}{Path.DirectorySeparatorChar}Data");
 
-        _artifactGenerator.CreateFor(
+        await _artifactGenerator.CreateAsync(
             new ObjectFileModel<InterfaceModel>(
                 interfaceModel,
                 interfaceModel.UsingDirectives,
@@ -83,7 +82,7 @@ public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<
                 projectDirectory,
                 "cs"));
 
-        _artifactGenerator.CreateFor(
+        await _artifactGenerator.CreateAsync(
             new ObjectFileModel<ClassModel>(
                 classModel,
                 classModel.UsingDirectives,

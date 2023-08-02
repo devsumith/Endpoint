@@ -39,7 +39,7 @@ public class AngularServiceCreateRequestHandler : IRequestHandler<AngularService
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularServiceCreateRequestHandler));
 
-        _angularService.ServiceCreate(request.Name, request.Directory);
+        await _angularService.ServiceCreate(request.Name, request.Directory);
 
 
     }

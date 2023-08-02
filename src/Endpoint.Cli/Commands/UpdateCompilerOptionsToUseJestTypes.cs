@@ -43,7 +43,7 @@ public class UpdateCompilerOptionsToUseJestTypesRequestHandler : IRequestHandler
 
         var angularProjectModel = new AngularProjectModel(request.ProjectName, request.Directory, null, request.Directory);
 
-        _angularService.UpdateCompilerOptionsToUseJestTypes(angularProjectModel);
+        await _angularService.UpdateCompilerOptionsToUseJestTypes(angularProjectModel);
 
 
     }

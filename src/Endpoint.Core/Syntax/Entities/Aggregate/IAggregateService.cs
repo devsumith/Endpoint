@@ -9,8 +9,8 @@ namespace Endpoint.Core.Syntax.Entities.Aggregate;
 public interface IAggregateService
 {
     Task<ClassModel> Add(string name, string properties, string directory, string microserviceName);
-    void CommandCreate(string routeType, string name, string aggregate, string properties, string directory);
-    void QueryCreate(string routeType, string name, string aggregate, string properties, string directory);
+    Task CommandCreate(string routeType, string name, string aggregate, string properties, string directory);
+    Task QueryCreate(string routeType, string name, string aggregate, string properties, string directory);
 
 }
 

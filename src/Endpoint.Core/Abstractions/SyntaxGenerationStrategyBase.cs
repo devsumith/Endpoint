@@ -31,7 +31,7 @@ public abstract class SyntaxGenerationStrategyBase<T> : ISyntaxGenerationStrateg
 
     public async Task<string> CreateAsync(object model, dynamic context = null)
         => Create(model, context);
-    
+
     public virtual int Priority => 0;
 }
 

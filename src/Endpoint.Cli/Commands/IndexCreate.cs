@@ -46,7 +46,7 @@ public class IndexCreateRequestHandler : IRequestHandler<IndexCreateRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(IndexCreateRequestHandler));
 
-        _angularService.IndexCreate(request.Scss, request.Directory);
+        await _angularService.IndexCreate(request.Scss, request.Directory);
 
 
     }

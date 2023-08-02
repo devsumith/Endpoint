@@ -37,6 +37,6 @@ public class AngularTestRequestHandler : IRequestHandler<AngularTestRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularTestRequestHandler));
 
-        _angularService.Test(request.Directory, request.SearchPattern);
+        await _angularService.Test(request.Directory, request.SearchPattern);
     }
 }

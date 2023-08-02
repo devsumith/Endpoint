@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Projects.Services;
 
@@ -38,7 +39,7 @@ public class InfrastructureProjectService : IInfrastructureProjectService
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public void DbContextAdd(string directory)
+    public async Task DbContextAdd(string directory)
     {
         var csProjPath = _fileProvider.Get("*.csproj", directory);
 
@@ -54,7 +55,7 @@ public class InfrastructureProjectService : IInfrastructureProjectService
 
         var fileModel = _fileModelFactory.CreateCSharp(dbContext, dataDirectory);
 
-        _artifactGenerator.CreateFor(fileModel);
+        await _artifactGenerator.CreateAsync(fileModel);
     }
 }
 

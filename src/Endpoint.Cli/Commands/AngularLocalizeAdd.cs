@@ -44,6 +44,6 @@ public class AngularLocalizeAddRequestHandler : IRequestHandler<AngularLocalizeA
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularLocalizeAddRequestHandler));
 
-        _angularService.LocalizeAdd(new AngularProjectReferenceModel(request.Name, request.Directory), request.Locales.Split(',').ToList());
+        await _angularService.LocalizeAdd(new AngularProjectReferenceModel(request.Name, request.Directory), request.Locales.Split(',').ToList());
     }
 }

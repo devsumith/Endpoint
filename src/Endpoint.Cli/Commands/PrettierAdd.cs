@@ -36,7 +36,7 @@ public class PrettierAddRequestHandler : IRequestHandler<PrettierAddRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(PrettierAddRequestHandler));
 
-        _angularService.PrettierAdd(request.Directory);
+        await _angularService.PrettierAdd(request.Directory);
 
 
     }

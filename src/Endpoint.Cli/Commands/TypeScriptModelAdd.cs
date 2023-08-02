@@ -43,7 +43,7 @@ public class TypeScriptModelAddRequestHandler : IRequestHandler<TypeScriptModelA
     {
         _logger.LogInformation("Handled: {0}", nameof(TypeScriptModelAddRequestHandler));
 
-        _angularService.ModelCreate(request.Name, request.Directory, request.Properties);
+        await _angularService.ModelCreate(request.Name, request.Directory, request.Properties);
 
 
     }

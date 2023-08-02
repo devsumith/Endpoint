@@ -8,6 +8,7 @@ using Endpoint.Core.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Endpoint.Core.Artifacts.Projects.Services;
@@ -33,14 +34,14 @@ public class ProjectService : IProjectService
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
     }
 
-    public void AddProject(ProjectModel model)
+    public async Task AddProject(ProjectModel model)
     {
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
 
         AddToSolution(model);
     }
 
-    public void AddToSolution(ProjectModel model)
+    public async Task AddToSolution(ProjectModel model)
     {
         var solution = _fileProvider.Get("*.sln", model.Directory);
         var solutionName = Path.GetFileName(solution);
@@ -48,7 +49,7 @@ public class ProjectService : IProjectService
         _commandService.Start($"dotnet sln {solutionName} add {model.Path}", solutionDirectory);
     }
 
-    public void AddGenerateDocumentationFile(string csprojFilePath)
+    public async Task AddGenerateDocumentationFile(string csprojFilePath)
     {
         var doc = XDocument.Load(csprojFilePath);
         var projectNode = doc.FirstNode as XElement;
@@ -62,7 +63,7 @@ public class ProjectService : IProjectService
         doc.Save(csprojFilePath);
     }
 
-    public void AddEndpointPostBuildTargetElement(string csprojFilePath)
+    public async Task AddEndpointPostBuildTargetElement(string csprojFilePath)
     {
         var doc = XDocument.Load(csprojFilePath);
         var projectNode = doc.FirstNode as XElement;
@@ -93,7 +94,7 @@ public class ProjectService : IProjectService
         return element;
     }
 
-    public void PackageAdd(string name, string directory)
+    public async Task PackageAdd(string name, string directory)
     {
         var projectPath = _fileProvider.Get("*.csproj", directory);
 
@@ -108,7 +109,7 @@ public class ProjectService : IProjectService
 
     }
 
-    public void CoreFilesAdd(string directory)
+    public async Task CoreFilesAdd(string directory)
     {
         var projectPath = _fileProvider.Get("*.csproj", directory);
 
@@ -122,11 +123,11 @@ public class ProjectService : IProjectService
         })
         {
             if (!_fileSystem.Exists(file.Path))
-                _artifactGenerator.CreateFor(file);
+                await _artifactGenerator.CreateAsync(file);
         }
     }
 
-    public void CorePackagesAdd(string directory)
+    public async Task CorePackagesAdd(string directory)
     {
         PackageAdd("MediatR", directory);
         PackageAdd("FluentValidation", directory);
@@ -134,7 +135,7 @@ public class ProjectService : IProjectService
         PackageAdd("Microsoft.Extensions.Logging.Abstractions", directory);
     }
 
-    public void CorePackagesAndFiles(string directory)
+    public async Task CorePackagesAndFiles(string directory)
     {
         CorePackagesAdd(directory);
         CoreFilesAdd(directory);

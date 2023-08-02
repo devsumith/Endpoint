@@ -126,7 +126,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
             _ => throw new NotImplementedException()
         };
 
-        _artifactGenerator.CreateFor(solutionModel);
+        await _artifactGenerator.CreateAsync(solutionModel);
 
 
 
@@ -139,7 +139,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
         _workspaceSettingsUpdateStrategyFactory.UpdateFor(previousWorkspaceSettings, nextWorkspaceSettings);
 
         if (!IsExistingWorkspace(request.Directory) && request.CreateGitRepository)
-            _artifactGenerator.CreateFor(new GitModel(request.WorkspaceName)
+            await _artifactGenerator.CreateAsync(new GitModel(request.WorkspaceName)
             {
                 Directory = solutionModel.SolutionDirectory,
             });

@@ -30,6 +30,7 @@ public class LitWorkspaceCreateRequestHandler : IRequestHandler<LitWorkspaceCrea
     private readonly ILogger<LitWorkspaceCreateRequestHandler> _logger;
     private readonly ICommandService _commandService;
     private readonly ILitService _litService;
+
     public LitWorkspaceCreateRequestHandler(
         ILogger<LitWorkspaceCreateRequestHandler> logger,
         ICommandService commandService,
@@ -44,10 +45,8 @@ public class LitWorkspaceCreateRequestHandler : IRequestHandler<LitWorkspaceCrea
     {
         _logger.LogInformation("Handled: {0}", nameof(LitWorkspaceCreateRequestHandler));
 
-        _litService.WorkspaceCreate(request.Name, request.Directory);
+        await _litService.WorkspaceCreate(request.Name, request.Directory);
 
         _commandService.Start("code .", $"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}");
-
-
     }
 }

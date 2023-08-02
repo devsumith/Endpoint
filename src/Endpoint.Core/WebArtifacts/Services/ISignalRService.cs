@@ -1,13 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Threading.Tasks;
+
 namespace Endpoint.Core.WebArtifacts.Services;
 
 public interface ISignalRService
 {
-    void Add(string directory);
+    Task Add(string directory);
 
-    void AddHub(string name, string directory);
+    Task AddHub(string name, string directory);
 
 }
 

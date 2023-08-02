@@ -2,17 +2,17 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
+using Endpoint.Core;
+using Endpoint.Core.Artifacts.Projects;
+using Endpoint.Core.Artifacts.Projects.Services;
+using Endpoint.Core.Services;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Services;
-using System.IO;
-using Endpoint.Core.Artifacts.Projects;
-using System.Linq;
-using Endpoint.Core;
-using Endpoint.Core.Artifacts.Projects.Services;
 
 namespace Endpoint.Cli.Commands;
 

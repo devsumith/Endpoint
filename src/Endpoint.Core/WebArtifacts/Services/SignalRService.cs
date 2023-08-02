@@ -6,6 +6,7 @@ using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.WebArtifacts.Services;
 
@@ -27,20 +28,20 @@ public class SignalRService : ISignalRService
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public void Add(string directory)
+    public async Task Add(string directory)
     {
         var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("package.json", directory));
 
         _commandService.Start("npm install -D @microsoft/signalr", workspaceDirectory);
     }
 
-    public void AddHub(string name, string directory)
+    public async Task AddHub(string name, string directory)
     {
         var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj", directory));
 
-        _artifactGenerator.CreateFor(CreateSignalRHubFileModel(name, directory));
+        await _artifactGenerator.CreateAsync(CreateSignalRHubFileModel(name, directory));
 
-        _artifactGenerator.CreateFor(CreateSignalRHubFileModel(name, directory));
+        await _artifactGenerator.CreateAsync(CreateSignalRHubFileModel(name, directory));
     }
 
     public FileModel CreateSignalRHubFileModel(string name, string directory)

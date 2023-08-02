@@ -131,7 +131,7 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
 
         var fileModel = new ObjectFileModel<ClassModel>(model, usings, model.Name, request.Directory, "cs");
 
-        _artifactGenerator.CreateFor(fileModel);
+        await _artifactGenerator.CreateAsync(fileModel);
 
         _notificationListener.Broadcast(new WorkerFileCreated(model.Name, request.Directory));
     }

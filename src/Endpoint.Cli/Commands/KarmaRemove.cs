@@ -36,7 +36,7 @@ public class KarmaRemoveRequestHandler : IRequestHandler<KarmaRemoveRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(KarmaRemoveRequestHandler));
 
-        _angularService.KarmaRemove(request.Directory);
+        await _angularService.KarmaRemove(request.Directory);
 
 
     }

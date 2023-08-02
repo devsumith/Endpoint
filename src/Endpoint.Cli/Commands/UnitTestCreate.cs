@@ -39,7 +39,7 @@ public class UnitTestCreateRequestHandler : IRequestHandler<UnitTestCreateReques
     {
         _logger.LogInformation("", request.Name);
 
-        _classService.UnitTestCreateFor(request.Name, request.Methods, request.Directory);
+        await _classService.UnitTestCreateAsync(request.Name, request.Methods, request.Directory);
     }
 }
 

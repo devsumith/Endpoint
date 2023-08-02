@@ -40,6 +40,6 @@ public class AngularMaterialAddRequestHandler : IRequestHandler<AngularMaterialA
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularMaterialAddRequestHandler));
 
-        _angularService.MaterialAdd(new(request.Name, request.Directory));
+        await _angularService.MaterialAdd(new(request.Name, request.Directory));
     }
 }

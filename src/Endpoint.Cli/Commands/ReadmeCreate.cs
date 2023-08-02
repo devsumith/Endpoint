@@ -48,7 +48,7 @@ public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
             .With(nameof(request.ProjectName), request.ProjectName)
             .Build());
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
 
     }
 }

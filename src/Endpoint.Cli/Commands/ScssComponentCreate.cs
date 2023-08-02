@@ -41,7 +41,7 @@ public class ScssComponentCreateRequestHandler : IRequestHandler<ScssComponentCr
     {
         _logger.LogInformation("Handled: {0}", nameof(ScssComponentCreateRequestHandler));
 
-        _angularService.ScssComponentCreate(request.Name, request.Directory);
+        await _angularService.ScssComponentCreate(request.Name, request.Directory);
 
 
     }

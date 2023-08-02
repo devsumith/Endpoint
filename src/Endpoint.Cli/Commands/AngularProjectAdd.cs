@@ -54,6 +54,6 @@ public class AngularAddProjectRequestHandler : IRequestHandler<AngularAddProject
 
         var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", request.Directory));
 
-        _angularService.AddProject(new AngularProjectModel(request.Name, request.ProjectType, request.Prefix, workspaceDirectory));
+        await _angularService.AddProject(new AngularProjectModel(request.Name, request.ProjectType, request.Prefix, workspaceDirectory));
     }
 }

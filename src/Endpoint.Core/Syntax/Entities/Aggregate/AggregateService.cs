@@ -2,17 +2,16 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Projects.Services;
-using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Classes.Factories;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Classes;
 
 namespace Endpoint.Core.Syntax.Entities.Aggregate;
 
@@ -71,11 +70,11 @@ public class AggregateService : IAggregateService
 
         var model = new AggregatesModel(_namingConventionConverter, serviceName, classModel, directory);
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
 
         var fileModel = _fileModelFactory.CreateDbContextInterface(directory);
 
-        _artifactGenerator.CreateFor(fileModel);
+        await _artifactGenerator.CreateAsync(fileModel);
 
         return classModel;
     }
@@ -93,7 +92,7 @@ public class AggregateService : IAggregateService
         _projectService.CoreFilesAdd(directory);
     }
 
-    public void CommandCreate(string routeType, string name, string aggregate, string properties, string directory)
+    public async Task CommandCreate(string routeType, string name, string aggregate, string properties, string directory)
     {
         var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
 
@@ -114,10 +113,10 @@ public class AggregateService : IAggregateService
 
         var model = new ObjectFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, "cs");
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
     }
 
-    public void QueryCreate(string routeType, string name, string aggregate, string properties, string directory)
+    public async Task QueryCreate(string routeType, string name, string aggregate, string properties, string directory)
     {
         var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
 
@@ -138,7 +137,7 @@ public class AggregateService : IAggregateService
 
         var model = new ObjectFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, "cs");
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
     }
 }
 

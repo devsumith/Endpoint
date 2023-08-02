@@ -60,7 +60,7 @@ public class AggregateCreateRequestHandler : IRequestHandler<AggregateCreateRequ
 
         var model = _folderFactory.Aggregate(request.Name, request.Properties, request.Directory);
 
-        _artifactGenerator.CreateFor(model, new AggregateCreateContext(model.Aggregate));
+        await _artifactGenerator.CreateAsync(model, new AggregateCreateContext(model.Aggregate));
     }
 }
 

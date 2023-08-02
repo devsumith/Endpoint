@@ -2,31 +2,32 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.WebArtifacts.Services;
 
 public interface IAngularService
 {
-    void CreateWorkspace(string name, string version, string projectName, string projectType, string prefix, string rootDirectory, bool openInVsCode = true);
-    void AddProject(AngularProjectModel model);
-    void EnableDefaultStandalone(AngularProjectReferenceModel model);
-    void KarmaRemove(string directory);
-    void UpdateCompilerOptionsToUseJestTypes(AngularProjectModel model);
-    void NgxTranslateAdd(string projectName, string directory);
-    void LocalizeAdd(AngularProjectReferenceModel model, List<string> locales);
-    void I18nExtract(AngularProjectReferenceModel model);
-    void BootstrapAdd(AngularProjectReferenceModel model);
-    void PrettierAdd(string directory);
-    void ComponentCreate(string name, string directory);
-    void ServiceCreate(string name, string directory);
-    void ModelCreate(string name, string directory, string properties = null);
-    void ListComponentCreate(string name, string directory);
-    void DetailComponentCreate(string name, string directory);
-    void IndexCreate(bool scss, string directory);
-    void DefaultScssCreate(string directory);
-    void ScssComponentCreate(string name, string directory);
-    void MaterialAdd(AngularProjectReferenceModel model);
-    void AddBuildConfiguration(string configurationName, AngularProjectReferenceModel model);
-    void ControlCreate(string name, string directory);
-    void Test(string directory, string searchPattern = "*.spec.ts");
+    Task CreateWorkspace(string name, string version, string projectName, string projectType, string prefix, string rootDirectory, bool openInVsCode = true);
+    Task AddProject(AngularProjectModel model);
+    Task EnableDefaultStandalone(AngularProjectReferenceModel model);
+    Task KarmaRemove(string directory);
+    Task UpdateCompilerOptionsToUseJestTypes(AngularProjectModel model);
+    Task NgxTranslateAdd(string projectName, string directory);
+    Task LocalizeAdd(AngularProjectReferenceModel model, List<string> locales);
+    Task I18nExtract(AngularProjectReferenceModel model);
+    Task BootstrapAdd(AngularProjectReferenceModel model);
+    Task PrettierAdd(string directory);
+    Task ComponentCreate(string name, string directory);
+    Task ServiceCreate(string name, string directory);
+    Task ModelCreate(string name, string directory, string properties = null);
+    Task ListComponentCreate(string name, string directory);
+    Task DetailComponentCreate(string name, string directory);
+    Task IndexCreate(bool scss, string directory);
+    Task DefaultScssCreate(string directory);
+    Task ScssComponentCreate(string name, string directory);
+    Task MaterialAdd(AngularProjectReferenceModel model);
+    Task AddBuildConfiguration(string configurationName, AngularProjectReferenceModel model);
+    Task ControlCreate(string name, string directory);
+    Task Test(string directory, string searchPattern = "*.spec.ts");
 }

@@ -40,7 +40,7 @@ public class AngularListComponentCreateRequestHandler : IRequestHandler<AngularL
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularListComponentCreateRequestHandler));
 
-        _angularService.ListComponentCreate(request.Name, request.Directory);
+        await _angularService.ListComponentCreate(request.Name, request.Directory);
 
 
     }

@@ -5,13 +5,13 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Projects.Commands;
-using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Classes.Factories;
+using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Methods.Factories;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Projects.Services;
 
@@ -49,13 +49,13 @@ public class ApiProjectService : IApiProjectService
         _clipboardService = clipboardService ?? throw new ArgumentNullException(nameof(clipboardService));
     }
 
-    public void ControllerAdd(string entityName, bool empty, string directory)
+    public async Task ControllerAdd(string entityName, bool empty, string directory)
     {
         _logger.LogInformation("Controller Add");
 
         var entity = new EntityModel(entityName);
 
-        _artifactGenerator.CreateFor(new ProjectReferenceModel()
+        await _artifactGenerator.CreateAsync(new ProjectReferenceModel()
         {
             ReferenceDirectory = directory
         }, new { Command = new ApiProjectEnsure() });
@@ -70,10 +70,10 @@ public class ApiProjectService : IApiProjectService
 
         var controllerClassModel = empty ? _classModelFactory.CreateEmptyController(entityName, csProjDirectory) : _classModelFactory.CreateController(entity, csProjDirectory);
 
-        _artifactGenerator.CreateFor(_fileModelFactory.CreateCSharp(controllerClassModel, controllersDirectory));
+        await _artifactGenerator.CreateAsync(_fileModelFactory.CreateCSharp(controllerClassModel, controllersDirectory));
     }
 
-    public void AddApiFiles(string serviceName, string directory)
+    private async Task AddApiFiles(string serviceName, string directory)
     {
         var tokens = new TokensBuilder()
             .With("serviceName", serviceName)
@@ -95,11 +95,11 @@ public class ApiProjectService : IApiProjectService
             launchSettingsFile
         })
         {
-            _artifactGenerator.CreateFor(file);
+            await _artifactGenerator.CreateAsync(file);
         }
     }
 
-    public void ControllerMethodAdd(string name, string controller, string route, string directory)
+    public async Task ControllerMethodAdd(string name, string controller, string route, string directory)
     {
         var model = _methodModelFactory.CreateControllerMethod(name, controller, route switch
         {

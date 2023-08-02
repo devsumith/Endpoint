@@ -85,7 +85,7 @@ public class ScssCreateRequestHandler : IRequestHandler<ScssCreateRequest>
             {
                 model = _fileModelFactory.CreateTemplate(name, $"_{_namingConventionConverter.Convert(NamingConvention.SnakeCase, name)}", request.Directory, "scss", tokens: tokens);
 
-                _artifactGenerator.CreateFor(model);
+                await _artifactGenerator.CreateAsync(model);
             }
         }
         else
@@ -98,10 +98,10 @@ public class ScssCreateRequestHandler : IRequestHandler<ScssCreateRequest>
                 ? new ContentFileModel(string.Empty, $"_{nameSnakeCase}", request.Directory, "scss")
                 : _fileModelFactory.CreateTemplate(request.Name, $"_{nameSnakeCase}", request.Directory, "scss", tokens: tokens);
 
-            _artifactGenerator.CreateFor(model);
+            await _artifactGenerator.CreateAsync(model);
         }
 
-        _angularService.IndexCreate(true, request.Directory);
+        await _angularService.IndexCreate(true, request.Directory);
 
     }
 }

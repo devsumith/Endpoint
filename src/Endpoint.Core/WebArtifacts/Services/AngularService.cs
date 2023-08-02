@@ -6,8 +6,12 @@ using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
-using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Angular;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Properties;
+using Endpoint.Core.Syntax.TypeScript;
+using Endpoint.Core.WebArtifacts.Extenisons;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -16,13 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Endpoint.Core.Syntax.Angular;
-using Endpoint.Core.Syntax.Classes;
-using Endpoint.Core.Syntax.Properties;
-using Endpoint.Core.Syntax.TypeScript;
-using Endpoint.Core.Syntax;
-using Endpoint.Core.WebArtifacts.Extenisons;
-
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.WebArtifacts.Services;
 
@@ -63,7 +61,7 @@ public class AngularService : IAngularService
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    public void AddBuildConfiguration(string configurationName, AngularProjectReferenceModel model)
+    public async Task AddBuildConfiguration(string configurationName, AngularProjectReferenceModel model)
     {
         var fileReplacements = new List<FileReplacementModel>();
 
@@ -81,7 +79,7 @@ public class AngularService : IAngularService
 
     }
 
-    public void ComponentCreate(string name, string directory)
+    public async Task ComponentCreate(string name, string directory)
     {
         var nameSnakeCase = ((SyntaxToken)name).SnakeCase();
 
@@ -91,7 +89,7 @@ public class AngularService : IAngularService
 
         var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
 
-        _artifactGenerator.CreateFor(_fileModelFactory.CreateTemplate(
+        await _artifactGenerator.CreateAsync(_fileModelFactory.CreateTemplate(
             "Components.Default.Component",
             $"{nameSnakeCase}.component",
             componentDirectory,
@@ -101,7 +99,7 @@ public class AngularService : IAngularService
             .Build()
             ));
 
-        _artifactGenerator.CreateFor(_fileModelFactory.CreateTemplate(
+        await _artifactGenerator.CreateAsync(_fileModelFactory.CreateTemplate(
             "Components.Default.Html",
             $"{nameSnakeCase}.component",
             componentDirectory,
@@ -130,7 +128,7 @@ public class AngularService : IAngularService
 
         var fileModel = new ObjectFileModel<FunctionModel>(model, $"create-{nameSnakeCase}-view-model", componentDirectory, "ts");
 
-        _artifactGenerator.CreateFor(fileModel);
+        await _artifactGenerator.CreateAsync(fileModel);
 
         IndexCreate(false, componentDirectory);
 
@@ -145,7 +143,7 @@ public class AngularService : IAngularService
         _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.spec.ts"));
     }
 
-    public void ServiceCreate(string name, string directory)
+    public async Task ServiceCreate(string name, string directory)
     {
         _commandService.Start($"ng g s {name}", directory);
 
@@ -158,7 +156,7 @@ public class AngularService : IAngularService
         _observableNotifications.Broadcast(new FileCreated($"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}.service.spec.ts"));
     }
 
-    public void KarmaRemove(string directory)
+    public async Task KarmaRemove(string directory)
     {
         var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", directory));
 
@@ -175,14 +173,14 @@ public class AngularService : IAngularService
         _commandService.Start("npm uninstall karma-jasmine-html-reporter", workspaceDirectory);
     }
 
-    public void JestInstall(string directory)
+    public async Task JestInstall(string directory)
     {
         var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", directory));
 
         _commandService.Start("npm install -D jest@28.1.3 jest-preset-angular@12.2.6 @angular-builders/jest @types/jest --force", workspaceDirectory);
     }
 
-    public void NgxTranslateAdd(string projectName, string directory)
+    public async Task NgxTranslateAdd(string projectName, string directory)
     {
         var workspaceDirectory = _fileSystem.GetDirectoryName(_fileProvider.Get("angular.json", directory));
 
@@ -210,11 +208,11 @@ public class AngularService : IAngularService
         _setInitialLanguageInAppComponent(model);
     }
 
-    public void CreateWorkspace(string name, string version, string projectName, string projectType, string prefix, string rootDirectory, bool openInVsCode = true)
+    public async Task CreateWorkspace(string name, string version, string projectName, string projectType, string prefix, string rootDirectory, bool openInVsCode = true)
     {
         var workspaceModel = new AngularWorkspaceModel(name, version, rootDirectory);
 
-        _artifactGenerator.CreateFor(workspaceModel);
+        await _artifactGenerator.CreateAsync(workspaceModel);
 
         _utlitityService.CopyrightAdd(workspaceModel.Directory);
 
@@ -233,7 +231,7 @@ public class AngularService : IAngularService
 
     }
 
-    public void AddProject(AngularProjectModel model)
+    public async Task AddProject(AngularProjectModel model)
     {
         var stringBuilder = new StringBuilder().Append($"ng generate {model.ProjectType} {model.Name} --prefix {model.Prefix}");
 
@@ -268,7 +266,7 @@ public class AngularService : IAngularService
 
             foreach (var file in files)
             {
-                _artifactGenerator.CreateFor(file);
+                await _artifactGenerator.CreateAsync(file);
             }
 
             _fileSystem.Delete($"{appDirectory}{Path.DirectorySeparatorChar}app.module.ts");
@@ -323,7 +321,7 @@ public class AngularService : IAngularService
                 _fileSystem.Delete(file);
             }
 
-            _artifactGenerator.CreateFor(new ContentFileModel($"export const BASE_URL = '{_namingConventionConverter.Convert(NamingConvention.KebobCase, model.Name).ToUpper()}:BASE_URL';", "constants", libFolder, "ts"));
+            await _artifactGenerator.CreateAsync(new ContentFileModel($"export const BASE_URL = '{_namingConventionConverter.Convert(NamingConvention.KebobCase, model.Name).ToUpper()}:BASE_URL';", "constants", libFolder, "ts"));
 
             IndexCreate(false, libFolder);
 
@@ -338,14 +336,14 @@ public class AngularService : IAngularService
 
             publicApiContent.Add("export * from './lib';");
 
-            _artifactGenerator.CreateFor(new ContentFileModel(new StringBuilder()
+            await _artifactGenerator.CreateAsync(new ContentFileModel(new StringBuilder()
                 .AppendJoin(Environment.NewLine, publicApiContent)
                 .ToString(), "public-api", Path.Combine(model.Directory, "src"), "ts"));
 
         }
     }
 
-    public void UpdateAngularJsonToUseJest(AngularProjectModel model)
+    public async Task UpdateAngularJsonToUseJest(AngularProjectModel model)
     {
         var angularJsonPath = _fileProvider.Get("angular.json", model.Directory);
 
@@ -361,7 +359,7 @@ public class AngularService : IAngularService
         _fileSystem.WriteAllText(angularJsonPath, JsonConvert.SerializeObject(angularJson, Formatting.Indented));
     }
 
-    public void JestConfigCreate(AngularProjectModel model)
+    public async Task JestConfigCreate(AngularProjectModel model)
     {
         var stringBuilder = new StringBuilder();
 
@@ -376,7 +374,7 @@ public class AngularService : IAngularService
         _fileSystem.WriteAllText($"{model.Directory}{Path.DirectorySeparatorChar}jest.config.js", stringBuilder.ToString());
     }
 
-    public void ExportsAssetsAndStyles(AngularProjectReferenceModel model)
+    public async Task ExportsAssetsAndStyles(AngularProjectReferenceModel model)
     {
         if (model.ProjectType == "application")
             return;
@@ -390,14 +388,14 @@ public class AngularService : IAngularService
         _fileSystem.WriteAllText(ngPackagePath, JsonConvert.SerializeObject(ngPackageJson, Formatting.Indented));
     }
 
-    public void MaterialAdd(AngularProjectReferenceModel model)
+    public async Task MaterialAdd(AngularProjectReferenceModel model)
     {
         var rootDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", model.ReferencedDirectory));
 
         _commandService.Start($"ng add @angular/material --project {model.Name} --theme custom", rootDirectory);
     }
 
-    public void EnableDefaultStandalone(AngularProjectReferenceModel model)
+    public async Task EnableDefaultStandalone(AngularProjectReferenceModel model)
     {
         var angularJsonPath = _fileProvider.Get("angular.json", model.ReferencedDirectory);
 
@@ -408,7 +406,7 @@ public class AngularService : IAngularService
         _fileSystem.WriteAllText(angularJsonPath, JsonConvert.SerializeObject(angularJson, Formatting.Indented));
     }
 
-    public void UpdateCompilerOptionsToUseJestTypes(AngularProjectModel model)
+    public async Task UpdateCompilerOptionsToUseJestTypes(AngularProjectModel model)
     {
         var tsConfigSpecJsonPath = $"{model.Directory}{Path.DirectorySeparatorChar}tsconfig.spec.json";
 
@@ -610,7 +608,7 @@ public class AngularService : IAngularService
         _fileSystem.WriteAllLines(appComponentPath, newLines.ToArray());
     }
 
-    public void LocalizeAdd(AngularProjectReferenceModel model, List<string> locales)
+    public async Task LocalizeAdd(AngularProjectReferenceModel model, List<string> locales)
     {
         var workspaceDirectory = _fileSystem.GetDirectoryName(_fileProvider.Get("angular.json", model.ReferencedDirectory));
 
@@ -619,7 +617,7 @@ public class AngularService : IAngularService
         AddSupportedLocales(model, locales);
     }
 
-    public void AddSupportedLocales(AngularProjectReferenceModel model, List<string> locales)
+    public async Task AddSupportedLocales(AngularProjectReferenceModel model, List<string> locales)
     {
         var angularJsonPath = _fileProvider.Get("angular.json", model.ReferencedDirectory);
 
@@ -632,7 +630,7 @@ public class AngularService : IAngularService
         _fileSystem.WriteAllText(angularJsonPath, JsonConvert.SerializeObject(angularJson, Formatting.Indented));
     }
 
-    public void I18nExtract(AngularProjectReferenceModel model)
+    public async Task I18nExtract(AngularProjectReferenceModel model)
     {
         var localeDirectory = $"{GetProjectDirectory(model)}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}locale{Path.DirectorySeparatorChar}";
 
@@ -664,7 +662,7 @@ public class AngularService : IAngularService
         return angularJson.GetSupportedLocales(model.Name);
     }
 
-    public void PrettierAdd(string directory)
+    public async Task PrettierAdd(string directory)
     {
         var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", directory));
 
@@ -692,7 +690,7 @@ public class AngularService : IAngularService
         _fileSystem.WriteAllText(packageJsonPath, JsonConvert.SerializeObject(packageJson, Formatting.Indented));
     }
 
-    public void BootstrapAdd(AngularProjectReferenceModel model)
+    public async Task BootstrapAdd(AngularProjectReferenceModel model)
     {
         var workspaceDirectory = Path.GetDirectoryName(_fileProvider.Get("angular.json", model.ReferencedDirectory));
 
@@ -707,7 +705,7 @@ public class AngularService : IAngularService
         _fileSystem.WriteAllText(jsonPath, JsonConvert.SerializeObject(json, Formatting.Indented));
     }
 
-    public void ModelCreate(string name, string directory, string properties = null)
+    public async Task ModelCreate(string name, string directory, string properties = null)
     {
         var serviceName = "DashboardService";
 
@@ -739,24 +737,24 @@ public class AngularService : IAngularService
 
         var fileModel = new ObjectFileModel<TypeScriptTypeModel>(model, ((SyntaxToken)model.Name).SnakeCase(), directory, "ts");
 
-        _artifactGenerator.CreateFor(fileModel);
+        await _artifactGenerator.CreateAsync(fileModel);
     }
 
-    public void ListComponentCreate(string name, string directory)
+    public async Task ListComponentCreate(string name, string directory)
     {
         var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
 
         ComponentCreate($"{nameSnakeCase}-list", directory);
     }
 
-    public void DetailComponentCreate(string name, string directory)
+    public async Task DetailComponentCreate(string name, string directory)
     {
         var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
 
         ComponentCreate($"{nameSnakeCase}-detail", directory);
     }
 
-    public void IndexCreate(bool scss, string directory)
+    public async Task IndexCreate(bool scss, string directory)
     {
         List<string> lines = new();
 
@@ -800,7 +798,7 @@ public class AngularService : IAngularService
         }
     }
 
-    public void DefaultScssCreate(string directory)
+    public async Task DefaultScssCreate(string directory)
     {
         var applicationDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.app.json", directory));
 
@@ -831,13 +829,13 @@ public class AngularService : IAngularService
 
             var model = _fileModelFactory.CreateTemplate(name, $"_{nameSnakeCase}", scssDirectory, "scss", tokens: new TokensBuilder().With("prefix", "g").Build());
 
-            _artifactGenerator.CreateFor(model);
+            await _artifactGenerator.CreateAsync(model);
         }
 
         IndexCreate(true, scssDirectory);
     }
 
-    public void ScssComponentCreate(string name, string directory)
+    public async Task ScssComponentCreate(string name, string directory)
     {
         var applicationDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.app.json", directory));
 
@@ -856,7 +854,7 @@ public class AngularService : IAngularService
         IndexCreate(true, scssDirectory);
     }
 
-    public void ControlCreate(string name, string directory)
+    public async Task ControlCreate(string name, string directory)
     {
         var nameSnakeCase = ((SyntaxToken)name).SnakeCase();
 
@@ -864,7 +862,7 @@ public class AngularService : IAngularService
 
         var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
 
-        _artifactGenerator.CreateFor(_fileModelFactory.CreateTemplate(
+        await _artifactGenerator.CreateAsync(_fileModelFactory.CreateTemplate(
             "Components.Control.Component",
             $"{nameSnakeCase}.component",
             componentDirectory,
@@ -874,7 +872,7 @@ public class AngularService : IAngularService
             .Build()
             ));
 
-        _artifactGenerator.CreateFor(_fileModelFactory.CreateTemplate(
+        await _artifactGenerator.CreateAsync(_fileModelFactory.CreateTemplate(
             "Components.Control.Html",
             $"{nameSnakeCase}.component",
             componentDirectory,
@@ -898,7 +896,7 @@ public class AngularService : IAngularService
         _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.spec.ts"));
     }
 
-    public void Test(string directory, string searchPattern = "*.spec.ts")
+    public async Task Test(string directory, string searchPattern = "*.spec.ts")
     {
         var angularJsonPath = _fileProvider.Get("angular.json", directory);
 

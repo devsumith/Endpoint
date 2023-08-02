@@ -41,7 +41,7 @@ public class I18nExtractRequestHandler : IRequestHandler<I18nExtractRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(I18nExtractRequestHandler));
 
-        _angularService.I18nExtract(new AngularProjectReferenceModel(request.Name, request.Directory));
+        await _angularService.I18nExtract(new AngularProjectReferenceModel(request.Name, request.Directory));
 
     }
 }

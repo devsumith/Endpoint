@@ -53,6 +53,6 @@ public class AngularHttpServiceCreateRequestHandler : IRequestHandler<AngularHtt
             .With("entityName", request.EntityName)
             .Build());
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
     }
 }

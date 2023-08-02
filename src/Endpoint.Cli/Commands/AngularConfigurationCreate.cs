@@ -43,6 +43,6 @@ public class AngularConfigurationCreateRequestHandler : IRequestHandler<AngularC
     {
         _logger.LogInformation("Handled: {0}", nameof(AngularConfigurationCreateRequestHandler));
 
-        _angularService.AddBuildConfiguration(request.Name, new AngularProjectReferenceModel(request.Project, request.Directory));
+        await _angularService.AddBuildConfiguration(request.Name, new AngularProjectReferenceModel(request.Project, request.Directory));
     }
 }

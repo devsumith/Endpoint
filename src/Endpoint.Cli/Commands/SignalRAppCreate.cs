@@ -158,7 +158,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         projectModel.Files.Add(new ObjectFileModel<InterfaceModel>(interfaceModel, interfaceModel.Name, projectModel.Directory, "cs"));
 
-        _artifactGenerator.CreateFor(solutionModel);
+        await _artifactGenerator.CreateAsync(solutionModel);
 
         HubAdd(projectModel, request.Name);
 
@@ -166,7 +166,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var temporaryAppName = $"{_namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}-app";
 
-        _angularService.CreateWorkspace(temporaryAppName, request.Version, "app", "application", "app", solutionModel.SrcDirectory, false);
+        await _angularService.CreateWorkspace(temporaryAppName, request.Version, "app", "application", "app", solutionModel.SrcDirectory, false);
 
         var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name);
 
@@ -234,17 +234,17 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var appHtmlFileModel = new ContentFileModel("<router-outlet />", "app.component", Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app"), "html");
 
-        _artifactGenerator.CreateFor(mainFileModel);
+        await _artifactGenerator.CreateAsync(mainFileModel);
 
-        _artifactGenerator.CreateFor(componentTemplateFileModel);
+        await _artifactGenerator.CreateAsync(componentTemplateFileModel);
 
-        _artifactGenerator.CreateFor(componentFileModel);
+        await _artifactGenerator.CreateAsync(componentFileModel);
 
-        _artifactGenerator.CreateFor(hubServiceFileModel);
+        await _artifactGenerator.CreateAsync(hubServiceFileModel);
 
-        _artifactGenerator.CreateFor(hubServiceSpecFileModel);
+        await _artifactGenerator.CreateAsync(hubServiceSpecFileModel);
 
-        _artifactGenerator.CreateFor(appHtmlFileModel);
+        await _artifactGenerator.CreateAsync(appHtmlFileModel);
 
         Directory.Move(Path.Combine(solutionModel.SrcDirectory, temporaryAppName), Path.Combine(solutionModel.SrcDirectory, $"{request.Name}.App"));
 

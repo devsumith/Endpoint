@@ -39,7 +39,7 @@ public class EnableDefaultStandaloneComponentsRequestHandler : IRequestHandler<E
     {
         _logger.LogInformation("Handled: {0}", nameof(EnableDefaultStandaloneComponentsRequestHandler));
 
-        _angularService.EnableDefaultStandalone(new AngularProjectReferenceModel(request.Name, request.Directory));
+        await _angularService.EnableDefaultStandalone(new AngularProjectReferenceModel(request.Name, request.Directory));
 
 
     }

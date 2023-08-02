@@ -55,6 +55,6 @@ public class AngularDomainModelCreateRequestHandler : IRequestHandler<AngularDom
 
         var model = _folderFactory.AngularDomainModel(request.Name, request.Properties, request.Directory);
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
     }
 }

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Files.Services;
 
@@ -38,7 +39,7 @@ public class ClassService : IClassService
         _nameSpaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
     }
 
-    public void Create(string name, string properties, string directory)
+    public async Task CreateAsync(string name, string properties, string directory)
     {
         _logger.LogInformation("Create Class {name}", name);
 
@@ -64,11 +65,11 @@ public class ClassService : IClassService
             "cs"
             );
 
-        _artifactGenerator.CreateFor(classFile);
+        await _artifactGenerator.CreateAsync(classFile);
 
     }
 
-    public void UnitTestCreateFor(string name, string methods, string directory)
+    public async Task UnitTestCreateAsync(string name, string methods, string directory)
     {
         _logger.LogInformation("Create Unit Test for {name}", name);
 
@@ -107,7 +108,7 @@ public class ClassService : IClassService
 
         foreach (var methodModel in Parse(name, classPath))
         {
-            CreateMethodTestFile(methodModel.Name);
+            await CreateMethodTestFile(methodModel.Name);
         }
 
 
@@ -115,11 +116,11 @@ public class ClassService : IClassService
         {
             foreach (var methodName in methods.Split(','))
             {
-                CreateMethodTestFile(methodName);
+                await CreateMethodTestFile(methodName);
             }
         }
 
-        void CreateMethodTestFile(string methodName)
+        async Task CreateMethodTestFile(string methodName)
         {
             var classModel = new ClassModel($"{methodName}Should");
 
@@ -150,7 +151,7 @@ public class ClassService : IClassService
 
             classModel.UsingAsDirectives.Add(new UsingAsDirectiveModel($"{_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))}.{name}", name));
 
-            _artifactGenerator.CreateFor(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", "cs"));
+            await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", "cs"));
         }
     }
 

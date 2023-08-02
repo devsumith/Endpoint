@@ -40,6 +40,6 @@ public class ControlCreateRequestHandler : IRequestHandler<ControlCreateRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(ControlCreateRequestHandler));
 
-        _angularService.ControlCreate(request.Name, request.Directory);
+        await _angularService.ControlCreate(request.Name, request.Directory);
     }
 }

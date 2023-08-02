@@ -3,7 +3,6 @@
 
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Params;
@@ -14,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Services;
 
@@ -39,14 +39,14 @@ public class DependencyInjectionService : IDependencyInjectionService
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
     }
 
-    public void Add(string interfaceName, string className, string directory, ServiceLifetime? serviceLifetime = null)
+    public async Task Add(string interfaceName, string className, string directory, ServiceLifetime? serviceLifetime = null)
     {
         var diRegistration = $"services.AddSingleton<{interfaceName},{className}>();".Indent(2);
 
         AddInternal(diRegistration, directory);
     }
 
-    public void AddHosted(string hostedServiceName, string directory)
+    public async Task AddHosted(string hostedServiceName, string directory)
     {
         var diRegistration = $"services.AddHostedService<{hostedServiceName}>();".Indent(2);
 
@@ -107,7 +107,7 @@ public class DependencyInjectionService : IDependencyInjectionService
         _fileSystem.WriteAllText(configureServicesFilePath, newContent.ToString());
     }
 
-    public void AddConfigureServices(string layer, string directory)
+    public async Task AddConfigureServices(string layer, string directory)
     {
         var classModel = new ClassModel("ConfigureServices");
 
@@ -137,7 +137,7 @@ public class DependencyInjectionService : IDependencyInjectionService
             Namespace = "Microsoft.Extensions.DependencyInjection"
         };
 
-        _artifactGenerator.CreateFor(classFileModel);
+        await _artifactGenerator.CreateAsync(classFileModel);
     }
 
     private void AddInternal(string diRegistration, string directory)

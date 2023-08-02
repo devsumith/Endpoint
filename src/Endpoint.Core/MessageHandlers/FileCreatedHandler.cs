@@ -23,6 +23,6 @@ public class FileCreatedHandler : INotificationHandler<FileCreated>
     {
         var model = new FileReferenceModel() { Path = notification.Path };
 
-        _artifactGenerator.CreateFor(model, new CopyrightAdd());
+        await _artifactGenerator.CreateAsync(model, new CopyrightAdd());
     }
 }

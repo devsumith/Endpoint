@@ -9,6 +9,7 @@ using Endpoint.Core.Syntax.Classes;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Folders.Services;
 
@@ -33,7 +34,7 @@ public class FolderService : IFolderService
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
-    public FolderModel AggregateQueries(ClassModel aggregate, string directory)
+    public async Task<FolderModel> AggregateQueries(ClassModel aggregate, string directory)
     {
         var model = _folderFactory.AggregagteQueries(aggregate, directory);
 
@@ -41,12 +42,12 @@ public class FolderService : IFolderService
 
         var entity = _syntaxService.SolutionModel?.GetClass(aggregate.Name, serviceName);
 
-        _artifactGenerator.CreateFor(model, new { Entity = entity });
+        await _artifactGenerator.CreateAsync(model, new { Entity = entity });
 
         return model;
     }
 
-    public FolderModel AggregateCommands(ClassModel aggregate, string directory)
+    public async Task<FolderModel> AggregateCommands(ClassModel aggregate, string directory)
     {
         var model = _folderFactory.AggregagteCommands(aggregate, directory);
 
@@ -54,7 +55,7 @@ public class FolderService : IFolderService
 
         var entity = _syntaxService.SolutionModel?.GetClass(aggregate.Name, serviceName);
 
-        _artifactGenerator.CreateFor(model, new { Entity = entity });
+        await _artifactGenerator.CreateAsync(model, new { Entity = entity });
 
         return model;
     }

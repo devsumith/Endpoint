@@ -3,17 +3,16 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Artifacts.Files.Services;
 using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Artifacts.Files.Services;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Classes.Factories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Classes;
 
 namespace Endpoint.Cli.Commands;
 
@@ -56,13 +55,13 @@ public class EntityAddRequestHandler : IRequestHandler<EntityCreateRequest>
     {
         var model = _classModelFactory.CreateEntity(request.Name, request.Properties);
 
-        _classService.Create(request.Name, request.Properties, request.Directory);
+        await _classService.CreateAsync(request.Name, request.Properties, request.Directory);
 
-        _classService.Create($"{request.Name}Dto", request.Properties, request.Directory);
+        await _classService.CreateAsync($"{request.Name}Dto", request.Properties, request.Directory);
 
         var dtoExtensions = new DtoExtensionsModel(_namingConventionConverter, $"{model.Name}Extensions", model);
 
-        _artifactGenerator.CreateFor(new ObjectFileModel<ClassModel>(dtoExtensions, $"{model.Name}Extensions", request.Directory, "cs"));
+        await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(dtoExtensions, $"{model.Name}Extensions", request.Directory, "cs"));
 
     }
 }

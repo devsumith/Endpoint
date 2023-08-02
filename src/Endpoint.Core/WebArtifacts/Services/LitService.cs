@@ -28,14 +28,14 @@ public class LitService : ILitService
     {
         var model = new LitWorkspaceModel(name, rootDirectory);
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
     }
 
     public async Task ProjectCreate(string name, string rootDirectory)
     {
         var projectModel = new LitProjectModel(name, rootDirectory);
 
-        _artifactGenerator.CreateFor(projectModel);
+        await _artifactGenerator.CreateAsync(projectModel);
 
         WorkspaceAdd(projectModel);
     }

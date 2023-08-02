@@ -2,15 +2,15 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Services;
 
 public interface IDependencyInjectionService
 {
-    void Add(string interfaceName, string className, string directory, ServiceLifetime? serviceLifetime = null);
-
-    void AddHosted(string hostedServiceName, string directory);
-    void AddConfigureServices(string layer, string directory);
+    Task Add(string interfaceName, string className, string directory, ServiceLifetime? serviceLifetime = null);
+    Task AddHosted(string hostedServiceName, string directory);
+    Task AddConfigureServices(string layer, string directory);
 }
 
 

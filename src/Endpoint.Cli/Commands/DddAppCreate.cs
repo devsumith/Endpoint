@@ -110,7 +110,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var solution = await CreateDddSolution(request.Name, request.AggregateName, request.Properties, request.Directory);
 
-        CreateDddApp(solution, request.ApplicationName, request.Version, request.Prefix);
+        await CreateDddApp(solution, request.ApplicationName, request.Version, request.Prefix);
 
         _commandService.Start("code .", solution.SolutionDirectory);
     }
@@ -125,7 +125,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder.Directory) { Priority = 1 };
 
-        var kernal = _projectModelFactory.CreateKernelProject(buildingBlocksFolder.Directory);
+        var kernel = _projectModelFactory.CreateKernelProject(buildingBlocksFolder.Directory);
 
         var messaging = _projectModelFactory.CreateMessagingProject(buildingBlocksFolder.Directory);
 
@@ -141,7 +141,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         buildingBlocksFolder.Projects.Add(security);
 
-        buildingBlocksFolder.Projects.Add(kernal);
+        buildingBlocksFolder.Projects.Add(kernel);
 
         buildingBlocksFolder.Projects.Add(validation);
 
@@ -159,7 +159,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         model.Folders = model.Folders.OrderByDescending(x => x.Priority).ToList();
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
 
         var aggregatesModelDirectory = Path.Combine(core.Directory, "AggregatesModel");
 
@@ -170,7 +170,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
             new EntityModel(entity.Name) { Properties = entity.Properties}
         }, name);
 
-        _artifactGenerator.CreateFor(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), "cs"));
+        await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), "cs"));
 
         _apiProjectService.ControllerAdd(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
 
@@ -181,11 +181,11 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         return model;
     }
 
-    private void CreateDddApp(SolutionModel model, string applicationName, string version, string prefix)
+    private async Task CreateDddApp(SolutionModel model, string applicationName, string version, string prefix)
     {
         var temporaryAppName = $"{_namingConventionConverter.Convert(NamingConvention.SnakeCase, model.Name)}-app";
 
-        _angularService.CreateWorkspace(temporaryAppName, version, applicationName, "application", prefix, model.SrcDirectory, false);
+        await _angularService.CreateWorkspace(temporaryAppName, version, applicationName, "application", prefix, model.SrcDirectory, false);
 
         Directory.Move(Path.Combine(model.SrcDirectory, temporaryAppName), Path.Combine(model.SrcDirectory, $"{model.Name}.App"));
     }

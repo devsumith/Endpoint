@@ -43,6 +43,6 @@ public class EditorConfigCreateRequestHandler : IRequestHandler<EditorConfigCrea
 
         var model = _fileModelFactory.CreateTemplate("EditorConfig", string.Empty, request.Directory, "editorconfig", string.Empty);
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
     }
 }

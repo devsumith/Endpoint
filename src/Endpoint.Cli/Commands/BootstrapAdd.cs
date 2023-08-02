@@ -41,7 +41,7 @@ public class BootstrapAddRequestHandler : IRequestHandler<BootstrapAddRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(BootstrapAddRequestHandler));
 
-        _angularService.BootstrapAdd(new AngularProjectReferenceModel(request.Name, request.Directory));
+        await _angularService.BootstrapAdd(new AngularProjectReferenceModel(request.Name, request.Directory));
 
 
     }

@@ -46,7 +46,7 @@ public class GitCreateRequestHandler : IRequestHandler<GitCreateRequest>
             Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{request.RepositoryName}"
         };
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
 
 
     }

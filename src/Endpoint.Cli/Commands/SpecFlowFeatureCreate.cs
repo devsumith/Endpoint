@@ -2,16 +2,14 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
+using Endpoint.Core.Abstractions;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Syntax.SpecFlow;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Abstractions;
-using Endpoint.Core.Artifacts.Files;
-
-using System.Collections.Generic;
-using Endpoint.Core.Syntax.SpecFlow;
 
 namespace Endpoint.Cli.Commands;
 
@@ -48,8 +46,6 @@ public class SpecFlowFeatureCreateRequestHandler : IRequestHandler<SpecFlowFeatu
 
         var fileModel = new ObjectFileModel<SpecFlowFeatureModel>(model, model.Name, request.Directory, "feature");
 
-        _artifactGenerator.CreateFor(fileModel);
-
-
+        await _artifactGenerator.CreateAsync(fileModel);
     }
 }

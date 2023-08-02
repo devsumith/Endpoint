@@ -68,7 +68,7 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
                 { "Namespace", "System" }
             });
 
-            _artifactGenerator.CreateFor(templateFileModel);
+            await _artifactGenerator.CreateAsync(templateFileModel);
         }
 
         var @class = new ClassModel(request.Name);
@@ -96,6 +96,6 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
             "cs"
             );
 
-        _artifactGenerator.CreateFor(classFile);
+        await _artifactGenerator.CreateAsync(classFile);
     }
 }

@@ -8,6 +8,7 @@ using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Attributes;
 using Endpoint.Core.Syntax.Classes;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.SpecFlow;
 
@@ -27,7 +28,7 @@ public class SpecFlowService : ISpecFlowService
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
     }
 
-    public void CreatePageObject(string name, string directory)
+    public async Task CreatePageObject(string name, string directory)
     {
         _logger.LogInformation("Create Page Object: {name}", name);
 
@@ -47,10 +48,10 @@ public class SpecFlowService : ISpecFlowService
 
         var fileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
-        _artifactGenerator.CreateFor(fileModel);
+        await _artifactGenerator.CreateAsync(fileModel);
     }
 
-    public void CreateHook(string name, string directory)
+    public async Task CreateHook(string name, string directory)
     {
         _logger.LogInformation("Create Hook: {name}", name);
 
@@ -67,13 +68,13 @@ public class SpecFlowService : ISpecFlowService
 
         var fileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
-        _artifactGenerator.CreateFor(fileModel);
+        await _artifactGenerator.CreateAsync(fileModel);
     }
 
-    public void CreateDockerControllerHooks(string directory)
+    public async Task CreateDockerControllerHooks(string directory)
     {
         var model = _fileModelFactory.CreateTemplate("DockerControllerHooks", "DockerControllerHooks", directory);
 
-        _artifactGenerator.CreateFor(model);
+        await _artifactGenerator.CreateAsync(model);
     }
 }
