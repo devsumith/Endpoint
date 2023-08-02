@@ -2,14 +2,14 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Enums;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Classes.Strategies;
-using Endpoint.Core.Models.Syntax.Constructors;
-using Endpoint.Core.Models.Syntax.Fields;
-using Endpoint.Core.Models.Syntax.Methods;
-using Endpoint.Core.Models.Syntax.Params;
-using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Methods;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Syntax.Classes.Strategies;
+using Endpoint.Core.Syntax.Constructors;
+using Endpoint.Core.Syntax.Fields;
+using Endpoint.Core.Syntax.Params;
+using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using Xunit;

@@ -9,16 +9,17 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Services;
 using System.IO;
-using Endpoint.Core.Models.Artifacts.Projects;
+using Endpoint.Core.Artifacts.Projects;
 using System.Linq;
 using Endpoint.Core;
-using Endpoint.Core.Models.Artifacts.Projects.Services;
+using Endpoint.Core.Artifacts.Projects.Services;
 
 namespace Endpoint.Cli.Commands;
 
 
 [Verb("project-move")]
-public class ProjectMoveRequest : IRequest {
+public class ProjectMoveRequest : IRequest
+{
     [Option("dest", Required = true)]
     public string DestinationRelativePath { get; set; }
 

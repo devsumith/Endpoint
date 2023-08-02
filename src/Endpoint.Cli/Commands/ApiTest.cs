@@ -2,8 +2,8 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax;
 using MediatR;
 using System;
 using System.Threading;
@@ -16,7 +16,7 @@ public class ApiTest
     [Verb("api-test")]
     public class Request : IRequest
     {
-        [Option('n',"name")]
+        [Option('n', "name")]
         public string EntityName { get; set; }
 
         [Option('d', Required = false)]

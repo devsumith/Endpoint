@@ -5,7 +5,7 @@
 using Endpoint.Core.Services;
 using System.Collections.Generic;
 using Endpoint.Core;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Syntax;
 
 namespace Endpoint.Core.Builders
 {

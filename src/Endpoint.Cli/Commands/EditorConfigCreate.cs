@@ -8,13 +8,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files.Factories;
+using Endpoint.Core.Artifacts.Files.Factories;
 
 namespace Endpoint.Cli.Commands;
 
 
 [Verb("editor-config-create")]
-public class EditorConfigCreateRequest : IRequest {
+public class EditorConfigCreateRequest : IRequest
+{
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;

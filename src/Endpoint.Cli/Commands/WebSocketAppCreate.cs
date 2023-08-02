@@ -7,16 +7,17 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.Artifacts.Solutions;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
-using Endpoint.Core.Models.Syntax.Classes.Factories;
-using Endpoint.Core.Models.Artifacts.Files.Factories;
+using Endpoint.Core.Artifacts.Files.Factories;
+using Endpoint.Core.Artifacts.Solutions;
+using Endpoint.Core.Syntax.Classes.Factories;
 
 namespace Endpoint.Cli.Commands;
 [Verb("ws-app-create")]
-public class WebSocketAppCreateRequest : IRequest {
-    [Option('n',"name")]
+public class WebSocketAppCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -68,7 +69,7 @@ public class WebSocketAppCreateRequestHandler : IRequestHandler<WebSocketAppCrea
         var model = _solutionModelFactory.Create(request.Name, request.Name, "web", string.Empty, request.Directory);
 
 
-        if(System.IO.Directory.Exists(model.SolutionDirectory))
+        if (System.IO.Directory.Exists(model.SolutionDirectory))
         {
             _fileSystem.DeleteDirectory(model.SolutionDirectory);
         }

@@ -7,14 +7,15 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.Artifacts.Projects.Services;
+using Endpoint.Core.Artifacts.Projects.Services;
 
 namespace Endpoint.Cli.Commands;
 
 
 [Verb("controller-method-add")]
-public class ControllerMethodAddRequest : IRequest {
-    [Option('n',"name")]
+public class ControllerMethodAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('c', "controller")]
@@ -44,6 +45,6 @@ public class ControllerMethodAddRequestHandler : IRequestHandler<ControllerMetho
     {
         _logger.LogInformation("Handled: {0}", nameof(ControllerMethodAddRequestHandler));
 
-        _apiProjectService.ControllerMethodAdd(request.Name,request.Controller,request.Route,request.Directory);
+        _apiProjectService.ControllerMethodAdd(request.Name, request.Controller, request.Route, request.Directory);
     }
 }

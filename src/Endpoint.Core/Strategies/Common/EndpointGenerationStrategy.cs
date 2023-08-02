@@ -1,13 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Models.Artifacts.Projects.Strategies;
-using Endpoint.Core.Models.Options;
-using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Entities;
-using Endpoint.Core.Models.Syntax.Entities.Legacy;
+using Endpoint.Core.Artifacts.Projects.Strategies;
 using Endpoint.Core.Options;
 using Endpoint.Core.Strategies.Common;
+using Endpoint.Core.Syntax.Entities.Legacy;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;

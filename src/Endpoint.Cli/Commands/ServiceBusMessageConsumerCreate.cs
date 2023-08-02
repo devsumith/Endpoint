@@ -41,6 +41,6 @@ public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<Ser
     {
         _logger.LogInformation("Handled: {0}", nameof(ServiceBusMessageConsumerCreateRequestHandler));
 
-        _domainDrivenDesignFileService.ServiceBusMessageConsumerCreate(request.Name, request.MessagesNamespace, request.Directory);        
+        _domainDrivenDesignFileService.ServiceBusMessageConsumerCreate(request.Name, request.MessagesNamespace, request.Directory);
     }
 }

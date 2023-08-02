@@ -3,18 +3,13 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Artifacts.Files.Factories;
-using Endpoint.Core.Models.Artifacts.Folders;
-using Endpoint.Core.Models.Artifacts.Folders.Factories;
-using Endpoint.Core.Models.Artifacts.Projects.Factories;
-using Endpoint.Core.Models.Artifacts.Projects.Services;
-using Endpoint.Core.Models.Artifacts.Solutions;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Classes.Factories;
-using Endpoint.Core.Models.Syntax.Entities;
-using Endpoint.Core.Models.Syntax.Entities.Aggregate;
-using Endpoint.Core.Models.WebArtifacts.Services;
+using Endpoint.Core.Artifacts.Files.Factories;
+using Endpoint.Core.Artifacts.Folders.Factories;
+using Endpoint.Core.Artifacts.Projects.Factories;
+using Endpoint.Core.Artifacts.Projects.Services;
+using Endpoint.Core.Artifacts.Solutions;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -24,6 +19,11 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Endpoint.Core.Syntax.Classes.Factories;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Entities.Aggregate;
+using Endpoint.Core.Syntax.Entities;
+using Endpoint.Core.WebArtifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 

@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Models.Artifacts.Files.Services;
+using Endpoint.Core.Artifacts.Files.Services;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;

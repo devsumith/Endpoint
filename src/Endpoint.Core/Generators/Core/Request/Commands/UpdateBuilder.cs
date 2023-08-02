@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using Endpoint.Core;
 using Endpoint.Core.Builders.Core;
 using System.Linq;
-using Endpoint.Core.Models.Options;
-using Endpoint.Core.Models.Syntax.Entities.Legacy;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Syntax.Entities.Legacy;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Options;
 
 namespace Endpoint.Core.Builders
 {

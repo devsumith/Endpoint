@@ -15,7 +15,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("migration-add")]
-public class MigrationAddRequest : IRequest {
+public class MigrationAddRequest : IRequest
+{
     [Option('n')]
     public string Name { get; set; }
 

@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("replace")]
-public class ReplaceRequest : IRequest {
-    [Option('s',"search")]
+public class ReplaceRequest : IRequest
+{
+    [Option('s', "search")]
     public string Old { get; set; }
 
     [Option('r', "replace")]
@@ -48,9 +49,9 @@ public class ReplaceRequestHandler : IRequestHandler<ReplaceRequest>
 
             var containsOldValue = false;
 
-            foreach(var line in File.ReadLines(path))
+            foreach (var line in File.ReadLines(path))
             {
-                if(line.Contains(request.Old))
+                if (line.Contains(request.Old))
                 {
                     containsOldValue = true;
                 }
@@ -58,11 +59,11 @@ public class ReplaceRequestHandler : IRequestHandler<ReplaceRequest>
                 modified.Add(line.Replace(request.Old, request.New));
             }
 
-            if(containsOldValue)
+            if (containsOldValue)
             {
                 File.WriteAllLines(path, modified);
             }
-            
+
         }
     }
 }

@@ -3,7 +3,7 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Git;
+using Endpoint.Core.Artifacts.Git;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;

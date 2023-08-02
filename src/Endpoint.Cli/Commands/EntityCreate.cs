@@ -3,16 +3,17 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Artifacts.Files.Services;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Classes.Factories;
+using Endpoint.Core.Artifacts.Files.Services;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Endpoint.Core.Syntax.Classes.Factories;
+using Endpoint.Core.Syntax.Classes;
 
 namespace Endpoint.Cli.Commands;
 
@@ -37,7 +38,7 @@ public class EntityAddRequestHandler : IRequestHandler<EntityCreateRequest>
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly IClassModelFactory _classModelFactory;
     public EntityAddRequestHandler(
-        ILogger<EntityAddRequestHandler> logger, 
+        ILogger<EntityAddRequestHandler> logger,
         IClassService classService,
         IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter,

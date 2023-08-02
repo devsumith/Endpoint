@@ -3,17 +3,10 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Enums;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Constructors;
-using Endpoint.Core.Models.Syntax.Fields;
-using Endpoint.Core.Models.Syntax.Methods;
-using Endpoint.Core.Models.Syntax.Params;
-using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Syntax.Methods;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,6 +14,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Constructors;
+using Endpoint.Core.Syntax.Fields;
+using Endpoint.Core.Syntax.Params;
+using Endpoint.Core.Syntax.Types;
+using Endpoint.Core.Syntax;
 
 namespace Endpoint.Cli.Commands;
 

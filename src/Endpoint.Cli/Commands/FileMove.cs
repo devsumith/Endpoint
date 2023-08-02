@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("file-move")]
-public class FileMoveRequest : IRequest {
-    [Option('s',"searchPattern")]
+public class FileMoveRequest : IRequest
+{
+    [Option('s', "searchPattern")]
     public string SearchPattern { get; set; }
 
 
@@ -39,8 +40,8 @@ public class FileMoveRequestHandler : IRequestHandler<FileMoveRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(FileMoveRequestHandler));
 
-        foreach(var path in Directory.GetFiles(request.Directory, request.SearchPattern, SearchOption.AllDirectories))
-        {            
+        foreach (var path in Directory.GetFiles(request.Directory, request.SearchPattern, SearchOption.AllDirectories))
+        {
             var destination = Path.Combine(request.Destination, Path.GetFileName(path));
 
             File.Move(path, destination);

@@ -1,14 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Enums;
 using Endpoint.Core;
 using System.Collections.Generic;
 using System.Linq;
 using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Builders.Statements;
-using Endpoint.Core.Models.Options;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Options;
 
 namespace Endpoint.Core.Builders
 {

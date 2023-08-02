@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Endpoint.Core.Services;
-using Endpoint.Core.Models.WebArtifacts.Services;
+using Endpoint.Core.WebArtifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 

@@ -50,18 +50,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Artifacts\Files\Commands\" />
-    <Folder Include="Models\Artifacts\Files\Services\" />
-    <Folder Include="Models\Artifacts\Projects\Commands\" />
-    <Folder Include="Models\Artifacts\Services\" />
-    <Folder Include="Models\Syntax\Classes\Services\" />
-    <Folder Include="Models\Syntax\Methods\ControllerMethods\" />
-    <Folder Include="Models\Syntax\Methods\Factories\" />
-    <Folder Include="Models\Syntax\Microservices\" />
-    <Folder Include="Models\Syntax\Playwright\" />
-    <Folder Include="Models\Syntax\RouteHandlers\Create\" />
+    <Folder Include="Artifacts\Services\" />
+    <Folder Include="Syntax\RouteHandlers\Create\" />
     <Folder Include="Messages\" />
-    <Folder Include="Models\Syntax\SpecFlow\Services\" />
-    <Folder Include="Models\WebArtifacts\Commands\" />
+    <Folder Include="Syntax\SpecFlow\Services\" />
   </ItemGroup>
 </Project>

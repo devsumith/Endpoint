@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Models.WebArtifacts.Services;
+using Endpoint.Core.WebArtifacts.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -27,7 +27,7 @@ internal class AngularWorkspaceCreateRequest : IRequest
     [Option('t', "type")]
     public string ProjectType { get; set; } = "application";
 
-    [Option('f',"force")]
+    [Option('f', "force")]
     public bool Force { get; set; }
 
     [Option('v', "version")]

@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Models.Syntax.Entities.Aggregate;
+using Endpoint.Core.Syntax.Entities.Aggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,10 +20,10 @@ public class CommandCreateRequest : IRequest
     [Option('n')]
     public string Name { get; set; }
 
-    [Option('a',"aggregateName")]
+    [Option('a', "aggregateName")]
     public string Aggregate { get; set; }
 
-    [Option('p',"properties")]
+    [Option('p', "properties")]
     public string Properties { get; set; }
 
     [Option('r', "route-type")]

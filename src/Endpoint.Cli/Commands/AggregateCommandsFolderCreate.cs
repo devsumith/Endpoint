@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Models.Artifacts.Folders.Services;
+using Endpoint.Core.Artifacts.Folders.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -39,6 +39,6 @@ public class AggregateCommandsFolderCreateRequestHandler : IRequestHandler<Aggre
     {
         _logger.LogInformation("Handled: {0}", nameof(AggregateCommandsFolderCreateRequestHandler));
 
-        _folderService.AggregateCommands(new (request.AggregateName), request.Directory);
+        _folderService.AggregateCommands(new(request.AggregateName), request.Directory);
     }
 }

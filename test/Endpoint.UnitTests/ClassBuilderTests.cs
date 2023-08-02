@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Builders;
-using Endpoint.Core.Enums;
 using Endpoint.Core;
 using Endpoint.Core.Services;
 using Moq;
@@ -10,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using System;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Syntax;
 
 namespace Endpoint.UnitTests
 {

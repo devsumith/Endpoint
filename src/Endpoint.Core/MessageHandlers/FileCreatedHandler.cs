@@ -3,8 +3,8 @@
 
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Messages;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Artifacts.Files.Commands;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Artifacts.Files.Commands;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;

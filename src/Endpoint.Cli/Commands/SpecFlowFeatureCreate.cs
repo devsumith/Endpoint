@@ -8,10 +8,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Syntax.SpecFlow;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Artifacts.Files;
+
 using System.Collections.Generic;
+using Endpoint.Core.Syntax.SpecFlow;
 
 namespace Endpoint.Cli.Commands;
 

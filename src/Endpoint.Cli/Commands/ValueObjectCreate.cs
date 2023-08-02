@@ -10,24 +10,25 @@ using Microsoft.Extensions.Logging;
 using Endpoint.Core.Services;
 using System.IO;
 using System.Linq;
-using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Enums;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Properties;
-using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Syntax.Properties;
+using Endpoint.Core.Syntax.Types;
 using static SerilogTimings.Operation;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using Endpoint.Core.Models.Syntax.Methods;
+using Endpoint.Core.Syntax.Methods;
 using SimpleNLG.Extensions;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax;
 
 namespace Endpoint.Cli.Commands;
 
 
 [Verb("value-object-create")]
-public class ValueObjectCreateRequest : IRequest {
-    [Option('n',"name")]
+public class ValueObjectCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -60,7 +61,7 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
 
         var valueObjectDefinitionPath = Directory.GetFiles(solutionDirectory, "ValueObject.cs", SearchOption.AllDirectories).FirstOrDefault();
 
-        if(string.IsNullOrEmpty(valueObjectDefinitionPath))
+        if (string.IsNullOrEmpty(valueObjectDefinitionPath))
         {
             var templateFileModel = new TemplatedFileModel("ValueObject", "ValueObject", request.Directory, "cs", new()
             {

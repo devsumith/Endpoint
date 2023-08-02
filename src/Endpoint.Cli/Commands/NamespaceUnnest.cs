@@ -15,7 +15,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("namespace-unnest")]
-public class NamespaceUnnestRequest : IRequest {
+public class NamespaceUnnestRequest : IRequest
+{
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -34,9 +35,9 @@ public class NamespaceUnnestRequestHandler : IRequestHandler<NamespaceUnnestRequ
     {
         _logger.LogInformation("Handled: {0}", nameof(NamespaceUnnestRequestHandler));
 
-        foreach(var path in Directory.GetFiles(request.Directory,"*.*",SearchOption.AllDirectories))
+        foreach (var path in Directory.GetFiles(request.Directory, "*.*", SearchOption.AllDirectories))
         {
-            if(Path.GetExtension(path) ==".cs" || Path.GetExtension(path) == ".txt")
+            if (Path.GetExtension(path) == ".cs" || Path.GetExtension(path) == ".txt")
             {
                 var newContent = new List<string>();
 

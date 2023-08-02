@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using static Endpoint.Core.Enums.AccessModifier;
+using static Endpoint.Core.Syntax.AccessModifier;
 using Endpoint.Core;
 
 namespace Endpoint.Core.Builders

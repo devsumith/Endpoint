@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ng-dialog-create")]
-public class AngularDialogCreateRequest : IRequest {
-    [Option('n',"name")]
+public class AngularDialogCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

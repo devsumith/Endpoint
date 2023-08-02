@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("usings-create")]
-public class UsingsCreateRequest : IRequest {
-    [Option('n',"name")]
+public class UsingsCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

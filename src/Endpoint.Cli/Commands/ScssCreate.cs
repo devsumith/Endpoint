@@ -3,10 +3,10 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Artifacts.Files.Factories;
-using Endpoint.Core.Models.WebArtifacts.Services;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Services;
+using Endpoint.Core.WebArtifacts.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -18,8 +18,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("scss-create")]
-public class ScssCreateRequest : IRequest {
-    [Option('n',"name")]
+public class ScssCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -78,9 +79,9 @@ public class ScssCreateRequestHandler : IRequestHandler<ScssCreateRequest>
             "Variables"
         };
 
-        if(string.IsNullOrEmpty(request.Name))
+        if (string.IsNullOrEmpty(request.Name))
         {
-            foreach(var name in scssTemplates)
+            foreach (var name in scssTemplates)
             {
                 model = _fileModelFactory.CreateTemplate(name, $"_{_namingConventionConverter.Convert(NamingConvention.SnakeCase, name)}", request.Directory, "scss", tokens: tokens);
 

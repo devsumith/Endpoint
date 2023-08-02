@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Endpoint.Core.Enums;
 using Endpoint.Core;
+using Endpoint.Core.Syntax;
 
 namespace Endpoint.Core.Builders.CSharp
 {

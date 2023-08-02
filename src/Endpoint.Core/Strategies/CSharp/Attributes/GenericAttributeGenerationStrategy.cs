@@ -2,10 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Builders.Statements;
-using Endpoint.Core.Enums;
-using Endpoint.Core.Models.Options;
-using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Attributes;
+using Endpoint.Core.Options;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Syntax.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;

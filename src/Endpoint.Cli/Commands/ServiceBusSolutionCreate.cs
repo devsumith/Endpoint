@@ -2,11 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Artifacts.Projects.Factories;
-using Endpoint.Core.Models.Artifacts.Solutions;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Classes.Factories;
+using Endpoint.Core.Artifacts.Projects.Factories;
+using Endpoint.Core.Artifacts.Solutions;
+using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -16,13 +14,16 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Endpoint.Core.Syntax.Classes.Factories;
+using Endpoint.Core.Syntax.Classes;
 
 namespace Endpoint.Cli.Commands;
 
 
 [Verb("service-bus-solution-create")]
-public class ServiceBusSolutionCreateRequest : IRequest {
-    [Option('n',"name")]
+public class ServiceBusSolutionCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('p')]
@@ -64,18 +65,18 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
     {
         _logger.LogInformation("Handled: {0}", nameof(SolutionCreateRequestHandler));
 
-        if(string.IsNullOrEmpty(request.ProjectName))
+        if (string.IsNullOrEmpty(request.ProjectName))
         {
             request.ProjectName = $"{request.Name}";
         }
 
         var model = _solutionModelFactory.Create(request.Name, request.ProjectName, request.ProjectType, string.Empty, request.Directory);
-        
+
         var srcFolder = model.Folders.Single();
 
         var projectModel = srcFolder.Projects.Single();
 
-        if(projectModel.Files.Any(x => x.Name == "ConfigureServices"))
+        if (projectModel.Files.Any(x => x.Name == "ConfigureServices"))
         {
             projectModel.Files.Remove(projectModel.Files.Single(x => x.Name == "ConfigureServices"));
         }

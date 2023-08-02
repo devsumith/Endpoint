@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
+using Endpoint.Core.Options;
 using Endpoint.Core.Services;
 using MediatR;
 using System;
@@ -34,7 +35,7 @@ public class PostApiBuild
 
         public async Task Handle(Request request, CancellationToken cancellationToken)
         {
-            Core.Models.Options.SettingsModel settings = _settingsProvider.Get(request.Directory);
+            SettingsModel settings = _settingsProvider.Get(request.Directory);
 
             var solutionName = settings.ApiNamespace.Replace(".Api", "");
 

@@ -1,18 +1,18 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Enums;
-using Endpoint.Core.Models.Options;
-using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Entities.Legacy;
-using Endpoint.Core.Models.Syntax.Properties;
-using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Syntax.Properties;
+using Endpoint.Core.Syntax.Types;
 using Endpoint.Core.Strategies.Common;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Syntax.Entities.Legacy;
+using Endpoint.Core.Syntax.Properties;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using static System.Text.Json.JsonSerializer;
+using Endpoint.Core.Options;
 
 namespace Endpoint.Core.Services
 {

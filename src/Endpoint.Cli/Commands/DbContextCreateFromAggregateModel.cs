@@ -3,11 +3,12 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Entities;
-using Endpoint.Core.Models.Syntax.Interfaces;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Entities;
+using Endpoint.Core.Syntax.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;

@@ -1,11 +1,11 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Enums;
-using Endpoint.Core.Models.Syntax.Entities;
-using Endpoint.Core.Models.Syntax.Properties;
-using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Syntax.Entities;
+using Endpoint.Core.Syntax.Types;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Syntax.Properties;
 using System.Collections.Generic;
 using Xunit;
 

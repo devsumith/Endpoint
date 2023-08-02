@@ -8,14 +8,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Services;
-using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Artifacts.Files.Factories;
 
 namespace Endpoint.Cli.Commands;
 
 [Verb("spec-create")]
-public class SpecCreateRequest : IRequest {
-    [Option('n',"name")]
+public class SpecCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -47,7 +48,7 @@ public class SpecCreateRequestHandler : IRequestHandler<SpecCreateRequest>
 
         var fileName = _namingCoventionConverter.Convert(NamingConvention.SnakeCase, request.Name.Remove("Service"));
 
-        if(request.Name.EndsWith("Service"))
+        if (request.Name.EndsWith("Service"))
         {
             fileName = $"{fileName}.service";
         }

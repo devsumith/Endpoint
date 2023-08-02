@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Models.Artifacts.Projects.Strategies;
+using Endpoint.Core.Artifacts.Projects.Strategies;
 using Endpoint.Core.Services;
 using MediatR;
 using System;

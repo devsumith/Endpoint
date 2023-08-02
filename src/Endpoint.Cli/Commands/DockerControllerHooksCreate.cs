@@ -7,7 +7,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.Artifacts.SpecFlow;
+using Endpoint.Core.Artifacts.SpecFlow;
 
 namespace Endpoint.Cli.Commands;
 

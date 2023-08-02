@@ -1,9 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Models.Syntax.Attributes;
-using Endpoint.Core.Models.Syntax.Attributes.Strategies;
 using Endpoint.Core.Strategies.CSharp.Attributes;
+using Endpoint.Core.Syntax.Attributes;
+using Endpoint.Core.Syntax.Attributes.Strategies;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;

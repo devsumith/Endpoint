@@ -2,9 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Syntax.Classes;
 using Endpoint.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;

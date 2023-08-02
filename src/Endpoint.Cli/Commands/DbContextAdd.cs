@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Models.Artifacts.Projects.Services;
+using Endpoint.Core.Artifacts.Projects.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;

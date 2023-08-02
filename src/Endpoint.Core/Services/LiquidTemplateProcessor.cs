@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using DotLiquid;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;

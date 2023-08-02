@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("file-rename")]
-public class FileRenameRequest : IRequest {
-    [Option('o',"old")]
+public class FileRenameRequest : IRequest
+{
+    [Option('o', "old")]
     public string OldEndsWith { get; set; }
 
     [Option('n', "mew")]
@@ -38,11 +39,11 @@ public class FileRenameRequestHandler : IRequestHandler<FileRenameRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(FileRenameRequestHandler));
 
-        foreach(var path in Directory.GetFiles(request.Directory, $"*{request.OldEndsWith}",SearchOption.AllDirectories))
+        foreach (var path in Directory.GetFiles(request.Directory, $"*{request.OldEndsWith}", SearchOption.AllDirectories))
         {
             var destinationPath = path.Replace(request.OldEndsWith, request.NewEndsWith);
 
-            File.Move(path,destinationPath);
+            File.Move(path, destinationPath);
         }
     }
 }

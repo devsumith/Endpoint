@@ -3,9 +3,9 @@
 
 using CommandLine;
 using Endpoint.Core.Generators;
-using Endpoint.Core.Models.Syntax;
 using Endpoint.Core.Options;
 using Endpoint.Core.Strategies.Common;
+using Endpoint.Core.Syntax;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

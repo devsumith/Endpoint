@@ -3,11 +3,12 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Folders;
-using Endpoint.Core.Models.Artifacts.Projects;
-using Endpoint.Core.Models.Artifacts.Projects.Enums;
-using Endpoint.Core.Models.Artifacts.Projects.Factories;
-using Endpoint.Core.Models.Artifacts.Solutions;
+using Endpoint.Core.Artifacts.Projects.Enums;
+using Endpoint.Core.Artifacts.Projects.Factories;
+using Endpoint.Core.Artifacts.Solutions;
+using Endpoint.Core.Artifacts.Folders;
+using Endpoint.Core.Artifacts.Projects;
+using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;

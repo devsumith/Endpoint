@@ -3,9 +3,9 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files.Factories;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;

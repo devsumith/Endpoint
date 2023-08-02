@@ -2,12 +2,12 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Methods;
-using Endpoint.Core.Models.Syntax.Params;
-using Endpoint.Core.Models.Syntax.Types;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Methods;
+using Endpoint.Core.Syntax.Params;
+using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ using System.Text;
 namespace Endpoint.Core.Services;
 
 public class DependencyInjectionService : IDependencyInjectionService
-{    
+{
     private readonly ILogger<DependencyInjectionService> _logger;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;

@@ -2,24 +2,23 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Enums;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Constructors;
-using Endpoint.Core.Models.Syntax.Fields;
-using Endpoint.Core.Models.Syntax.Interfaces;
-using Endpoint.Core.Models.Syntax.Methods;
-using Endpoint.Core.Models.Syntax.Params;
-using Endpoint.Core.Models.Syntax.Properties;
-using Endpoint.Core.Models.Syntax.Types;
+using Endpoint.Core.Artifacts.Files;
 using MediatR;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Constructors;
+using Endpoint.Core.Syntax.Fields;
+using Endpoint.Core.Syntax.Interfaces;
+using Endpoint.Core.Syntax.Methods;
+using Endpoint.Core.Syntax.Params;
+using Endpoint.Core.Syntax.Properties;
+using Endpoint.Core.Syntax.Types;
+using Endpoint.Core.Syntax;
 
 namespace Endpoint.Core.Services;
 
@@ -57,19 +56,19 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Properties.AddRange(properties);
 
-        classModel.UsingDirectives.Add(new ("MediatR"));
+        classModel.UsingDirectives.Add(new("MediatR"));
 
         var constructorModel = new ConstructorModel(classModel, classModel.Name);
 
         foreach (var property in properties)
         {
-            classModel.Fields.Add(new ()
+            classModel.Fields.Add(new()
             {
                 Name = $"_{_namingConventionConverter.Convert(NamingConvention.CamelCase, property.Name)}",
                 Type = property.Type
             });
 
-            constructorModel.Params.Add(new ()
+            constructorModel.Params.Add(new()
             {
                 Name = $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, property.Name)}",
                 Type = property.Type
@@ -78,7 +77,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Constructors.Add(constructorModel);
 
-        classModel.Implements.Add(new ("IRequest"));
+        classModel.Implements.Add(new("IRequest"));
 
         var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
 
@@ -174,19 +173,19 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             messagesNamespace = $"{projectNamespace.Split('.').First()}.Core.Messages";
         }
 
-        classModel.Implements.Add(new ("BackgroundService"));
+        classModel.Implements.Add(new("BackgroundService"));
 
-        classModel.UsingDirectives.Add(new ("Messaging"));
+        classModel.UsingDirectives.Add(new("Messaging"));
 
-        classModel.UsingDirectives.Add(new ("Messaging.Udp"));
+        classModel.UsingDirectives.Add(new("Messaging.Udp"));
 
-        classModel.UsingDirectives.Add(new ("Microsoft.Extensions.DependencyInjection"));
+        classModel.UsingDirectives.Add(new("Microsoft.Extensions.DependencyInjection"));
 
-        classModel.UsingDirectives.Add(new ("Microsoft.Extensions.Hosting"));
+        classModel.UsingDirectives.Add(new("Microsoft.Extensions.Hosting"));
 
-        classModel.UsingDirectives.Add(new ("System.Text"));
+        classModel.UsingDirectives.Add(new("System.Text"));
 
-        classModel.UsingDirectives.Add(new ("Microsoft.Extensions.Logging"));
+        classModel.UsingDirectives.Add(new("Microsoft.Extensions.Logging"));
 
         classModel.UsingDirectives.Add(new("System.Threading.Tasks"));
 
@@ -208,23 +207,23 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 "IServiceScopeFactory" => "serviceScopeFactory"
             };
 
-            classModel.Fields.Add(new ()
+            classModel.Fields.Add(new()
             {
                 Name = $"_{propName}",
                 Type = type
             });
 
-            constructorModel.Params.Add(new ()
+            constructorModel.Params.Add(new()
             {
                 Name = propName,
                 Type = type
             });
         }
 
-        classModel.Fields.Add(new ()
+        classModel.Fields.Add(new()
         {
             Name = $"_supportedMessageTypes",
-            Type = new ("string[]"),
+            Type = new("string[]"),
             DefaultValue = "new string[] { }"
         });
 
@@ -298,7 +297,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             Override = true,
             AccessModifier = AccessModifier.Protected,
             Async = true,
-            ReturnType = new ("Task"),
+            ReturnType = new("Task"),
             Body = string.Join(Environment.NewLine, methodBody)
         };
 

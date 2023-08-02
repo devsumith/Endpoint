@@ -8,10 +8,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.IO;
-using Endpoint.Core.Models.Artifacts.Projects;
-using Endpoint.Core.Models.Artifacts.Projects.Factories;
-using Endpoint.Core.Models.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
+using Endpoint.Core.Artifacts.Projects.Factories;
+using Endpoint.Core.Artifacts.Projects.Services;
+using Endpoint.Core.Artifacts.Projects;
 
 namespace Endpoint.Cli.Commands;
 

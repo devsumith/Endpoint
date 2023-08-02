@@ -7,14 +7,15 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.WebArtifacts.Services;
+using Endpoint.Core.WebArtifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 
 
 [Verb("ctrl-create")]
-public class ControlCreateRequest : IRequest {
-    [Option('n',"name")]
+public class ControlCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

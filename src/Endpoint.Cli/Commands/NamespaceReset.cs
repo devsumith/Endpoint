@@ -15,7 +15,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("namespace-reset")]
-public class NamespaceResetRequest : IRequest {
+public class NamespaceResetRequest : IRequest
+{
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -37,7 +38,7 @@ public class NamespaceResetRequestHandler : IRequestHandler<NamespaceResetReques
     {
         _logger.LogInformation("Handled: {0}", nameof(NamespaceResetRequestHandler));
 
-        foreach(var path in Directory.GetFiles(request.Directory, "*.cs",SearchOption.AllDirectories))
+        foreach (var path in Directory.GetFiles(request.Directory, "*.cs", SearchOption.AllDirectories))
         {
             var @namespace = _namespaceProvider.Get(Path.GetDirectoryName(path));
 
@@ -51,7 +52,7 @@ public class NamespaceResetRequestHandler : IRequestHandler<NamespaceResetReques
             {
                 var modified = line;
 
-                if(modified.Trim().StartsWith("namespace") && modified != namespaceSyntax)
+                if (modified.Trim().StartsWith("namespace") && modified != namespaceSyntax)
                 {
                     writeRequired = true;
 
@@ -61,7 +62,7 @@ public class NamespaceResetRequestHandler : IRequestHandler<NamespaceResetReques
                 contents.Add(modified);
             }
 
-            if(writeRequired)
+            if (writeRequired)
             {
                 File.WriteAllLines(path, contents);
             }

@@ -14,7 +14,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("class-unnest")]
-public class ClassUnnestRequest : IRequest {
+public class ClassUnnestRequest : IRequest
+{
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -42,19 +43,19 @@ public class ClassUnnestRequestHandler : IRequestHandler<ClassUnnestRequest>
     {
         foreach (var path in Directory.GetFiles(request.Directory, "*.cs", SearchOption.AllDirectories))
         {
-            if(nestedClasses(path))
+            if (nestedClasses(path))
             {
                 Console.WriteLine(path);
 
                 var modifiedContent = new List<string>();
 
                 foreach (var line in File.ReadLines(path))
-                {             
+                {
                     var classOpenOrCloseBracket = line.StartsWith("{") || line.StartsWith("}") || line.StartsWith(" {") || line.StartsWith(" }");
 
-                    if(!classOpenOrCloseBracket && !line.StartsWith("public class") && !line.StartsWith(" public class"))
+                    if (!classOpenOrCloseBracket && !line.StartsWith("public class") && !line.StartsWith(" public class"))
                     {
-                        if(line.StartsWith("    "))
+                        if (line.StartsWith("    "))
                         {
                             modifiedContent.Add(line.Substring(3));
                         }
@@ -75,14 +76,14 @@ public class ClassUnnestRequestHandler : IRequestHandler<ClassUnnestRequest>
 
             var classContext = false;
 
-            foreach(var line in File.ReadLines(path))
+            foreach (var line in File.ReadLines(path))
             {
-                if(classContext && line.Contains("public class") && line.StartsWith("    "))
+                if (classContext && line.Contains("public class") && line.StartsWith("    "))
                 {
                     nestedClasses = true;
                 }
 
-                if(line.StartsWith("public class") || line.StartsWith(" public class"))
+                if (line.StartsWith("public class") || line.StartsWith(" public class"))
                 {
                     classContext = true;
                 }
@@ -101,7 +102,7 @@ public class ClassUnnestRequestHandler : IRequestHandler<ClassUnnestRequest>
 
             var content = new List<string>();
 
-            foreach(var line in File.ReadLines(path))
+            foreach (var line in File.ReadLines(path))
             {
                 var modified = line;
 

@@ -2,11 +2,12 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Models.Artifacts.Files.Factories;
-using Endpoint.Core.Models.Artifacts.Projects;
-using Endpoint.Core.Models.Artifacts.Projects.Enums;
-using Endpoint.Core.Models.Artifacts.Projects.Services;
-using Endpoint.Core.Models.Syntax.Classes;
+using Endpoint.Core.Artifacts.Files.Factories;
+using Endpoint.Core.Artifacts.Projects;
+using Endpoint.Core.Artifacts.Projects.Enums;
+using Endpoint.Core.Artifacts.Projects.Services;
+using Endpoint.Core.Artifacts.Projects;
+using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -67,7 +68,7 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
                 var microservice = new ProjectModel { Name = $"{name}.{layer}", Directory = microserviceDirectory, DotNetProjectType = DotNetProjectType.ClassLib };
 
                 if (layer == "Core")
-                {                    
+                {
                     microservice.Packages.AddRange(new PackageModel[]
                     {
                         new PackageModel("MediatR", "12.0.0"),

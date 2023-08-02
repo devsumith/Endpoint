@@ -1,12 +1,12 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Models.Syntax.Attributes;
+using Endpoint.Core.Syntax.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core.UnitTests.AttributeSyntaxGenerationStrategy;
 
-using AttributeSyntaxGenerationStrategy = Models.Syntax.Attributes.Strategies.AttributeSyntaxGenerationStrategy;
+using AttributeSyntaxGenerationStrategy = Syntax.Attributes.Strategies.AttributeSyntaxGenerationStrategy;
 
 public class CreateShould
 {

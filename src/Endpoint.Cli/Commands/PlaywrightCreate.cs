@@ -7,13 +7,14 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.WebArtifacts.Services;
+using Endpoint.Core.WebArtifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 
 
 [Verb("playwright-create")]
-public class PlaywrightCreateRequest : IRequest {
+public class PlaywrightCreateRequest : IRequest
+{
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }

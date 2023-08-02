@@ -8,16 +8,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Services;
-using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Artifacts.Files.Factories;
+using Endpoint.Core.Artifacts.Files;
 
 namespace Endpoint.Cli.Commands;
 
 
 [Verb("signalr-hub-client-create")]
-public class SignalRHubClientCreateRequest : IRequest {
-    [Option('n',"name")]
+public class SignalRHubClientCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -55,13 +56,13 @@ public class SignalRHubClientCreateRequestHandler : IRequestHandler<SignalRHubCl
 
         var tokens = new TokensBuilder().With("name", request.Name).Build();
 
-        foreach(var model in new FileModel[]
+        foreach (var model in new FileModel[]
         {
             _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Service", $"{nameSnakeCase}-hub-client.service", request.Directory, "ts", tokens: tokens),
             _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Spec", $"{nameSnakeCase}-hub-client.service.spec", request.Directory, "ts", tokens: tokens)
         })
         {
             _artifactGenerator.CreateFor(model);
-        }        
+        }
     }
 }

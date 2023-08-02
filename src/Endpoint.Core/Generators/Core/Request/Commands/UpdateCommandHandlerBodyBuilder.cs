@@ -2,9 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Builders.Common;
-using Endpoint.Core.Models.Options;
-using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Entities.Legacy;
+using Endpoint.Core.Options;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Syntax.Entities.Legacy;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;

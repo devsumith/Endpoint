@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using Endpoint.Core;
 using Endpoint.Core.Builders.Statements;
 using Endpoint.Core.Builders.Common;
-using Endpoint.Core.Models.Options;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Options;
 
 namespace Endpoint.Core.Builders
 {

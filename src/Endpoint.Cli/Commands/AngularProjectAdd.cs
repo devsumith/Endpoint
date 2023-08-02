@@ -2,15 +2,15 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
+using Endpoint.Core.Services;
+using Endpoint.Core.WebArtifacts;
+using Endpoint.Core.WebArtifacts.Services;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.WebArtifacts.Services;
-using Endpoint.Core.Services;
-using System.IO;
-using Endpoint.Core.Models.WebArtifacts;
 
 namespace Endpoint.Cli.Commands;
 

@@ -3,7 +3,7 @@
 
 using CommandLine;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Artifacts.Files;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;

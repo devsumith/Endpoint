@@ -4,9 +4,9 @@
 using CommandLine;
 using Endpoint.Core;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Projects;
-using Endpoint.Core.Models.Artifacts.Projects.Factories;
-using Endpoint.Core.Models.Artifacts.Projects.Services;
+using Endpoint.Core.Artifacts.Projects.Factories;
+using Endpoint.Core.Artifacts.Projects.Services;
+using Endpoint.Core.Artifacts.Projects;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -34,7 +34,7 @@ public class ProjectAddRequest : IRequest
     [Option('r')]
     public string References { get; set; }
 
-    [Option('m',"metadata")]
+    [Option('m', "metadata")]
     public string Metadata { get; set; }
 
 
@@ -74,7 +74,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(ProjectAddRequestHandler));
 
-        if(string.IsNullOrEmpty(request.Name))
+        if (string.IsNullOrEmpty(request.Name))
         {
             ProjectAdd(request.Directory);
             return;

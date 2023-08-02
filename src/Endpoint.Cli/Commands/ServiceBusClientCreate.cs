@@ -2,12 +2,10 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Artifacts.Projects.Factories;
-using Endpoint.Core.Models.Artifacts.Projects.Services;
-using Endpoint.Core.Models.Artifacts.Solutions;
-using Endpoint.Core.Models.Syntax.Classes;
-using Endpoint.Core.Models.Syntax.Classes.Factories;
+using Endpoint.Core.Artifacts.Projects.Factories;
+using Endpoint.Core.Artifacts.Projects.Services;
+using Endpoint.Core.Artifacts.Solutions;
+using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -17,11 +15,14 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Endpoint.Core.Syntax.Classes.Factories;
+using Endpoint.Core.Syntax.Classes;
 
 namespace Endpoint.Cli.Commands;
 [Verb("service-bus-client-create")]
-public class ServiceBusClientCreateRequest : IRequest {
-    [Option('n',"name")]
+public class ServiceBusClientCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('t', "project-type")]
@@ -68,7 +69,7 @@ public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusCl
 
         var serviceBusMessageConsumerClassModel = _classModelFactory.CreateServiceBusMessageConsumer("ServiceBusMessageConsumer", model.Name);
 
-        if(request.ProjectType == "worker")
+        if (request.ProjectType == "worker")
         {
             var programFileModel = new ContentFileModel(new StringBuilder()
                 .AppendLine("var host = Host.CreateDefaultBuilder(args)")
@@ -124,9 +125,9 @@ public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusCl
 
         _projectService.AddProject(model);
 
-        if(File.Exists(Path.Combine(model.Directory, "Worker.cs")))
+        if (File.Exists(Path.Combine(model.Directory, "Worker.cs")))
         {
             File.Delete(Path.Combine(model.Directory, "Worker.cs"));
-        }        
+        }
     }
 }

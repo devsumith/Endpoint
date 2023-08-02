@@ -13,7 +13,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("component-nest")]
-public class ComponentNestRequest : IRequest {
+public class ComponentNestRequest : IRequest
+{
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -31,7 +32,7 @@ public class ComponentNestRequestHandler : IRequestHandler<ComponentNestRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(ComponentNestRequestHandler));
 
-        foreach(var file in Directory.GetFiles(request.Directory,"*component.ts",SearchOption.AllDirectories))
+        foreach (var file in Directory.GetFiles(request.Directory, "*component.ts", SearchOption.AllDirectories))
         {
             var componentName = Path.GetFileNameWithoutExtension(file).Split('.')[0];
 

@@ -8,12 +8,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Projects.Factories;
-using Endpoint.Core.Models.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
 using System.IO;
 using SimpleNLG.Extensions;
-using Endpoint.Core.Models.Artifacts.Projects;
+using Endpoint.Core.Artifacts.Projects.Factories;
+using Endpoint.Core.Artifacts.Projects.Services;
+using Endpoint.Core.Artifacts.Projects;
 
 namespace Endpoint.Cli.Commands;
 

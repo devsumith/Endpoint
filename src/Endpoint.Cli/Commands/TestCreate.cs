@@ -7,14 +7,15 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.WebArtifacts.Services;
+using Endpoint.Core.WebArtifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 
 
 [Verb("test-create")]
-public class TestCreateRequest : IRequest {
-    [Option('n',"name")]
+public class TestCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -32,7 +33,7 @@ public class TestCreateRequestHandler : IRequestHandler<TestCreateRequest>
         PlaywrightService playwrightService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _playwrightService = playwrightService ?? throw new ArgumentNullException(nameof(playwrightService));  
+        _playwrightService = playwrightService ?? throw new ArgumentNullException(nameof(playwrightService));
     }
 
     public async Task Handle(TestCreateRequest request, CancellationToken cancellationToken)

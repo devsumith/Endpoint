@@ -13,8 +13,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("reference-add")]
-public class ReferenceAddRequest : IRequest {
-    [Option('n',"name")]
+public class ReferenceAddRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

@@ -7,9 +7,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.Artifacts.Files.Factories;
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
+using Endpoint.Core.Artifacts.Files.Factories;
 
 namespace Endpoint.Cli.Commands;
 

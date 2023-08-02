@@ -10,10 +10,10 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics.CodeAnalysis;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
-using Endpoint.Core.Models.Syntax.Properties;
-using Endpoint.Core.Enums;
-using Endpoint.Core.Models.Syntax.Types;
-using Endpoint.Core.Models.Syntax;
+using Endpoint.Core.Syntax.Types;
+
+using Endpoint.Core.Syntax.Properties;
+using Endpoint.Core.Syntax;
 
 namespace Endpoint.Cli.Commands;
 

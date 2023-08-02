@@ -1,9 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Models.Artifacts.Files;
-using Endpoint.Core.Models.Syntax.Entities;
+using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Entities;
 
 namespace Endpoint.Core.Strategies.Files.Create;
 

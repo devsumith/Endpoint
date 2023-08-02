@@ -7,10 +7,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Endpoint.Core.Models.WebArtifacts.Services;
-using Endpoint.Core.Models.WebArtifacts;
+
 using Endpoint.Core.Services;
 using System.IO;
+using Endpoint.Core.WebArtifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 

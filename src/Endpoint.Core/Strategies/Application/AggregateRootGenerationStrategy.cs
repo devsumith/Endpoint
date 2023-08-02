@@ -2,8 +2,8 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Syntax;
-using Endpoint.Core.Models.Syntax.Entities.Legacy;
+using Endpoint.Core.Syntax;
+using Endpoint.Core.Syntax.Entities.Legacy;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Strategies.Application;

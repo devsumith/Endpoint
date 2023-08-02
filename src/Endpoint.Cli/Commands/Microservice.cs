@@ -4,9 +4,8 @@
 using CommandLine;
 using Endpoint.Core;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Git;
-using Endpoint.Core.Models.Artifacts.Solutions;
-using Endpoint.Core.Models.Options;
+using Endpoint.Core.Artifacts.Solutions;
+using Endpoint.Core.Artifacts.Git;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
 using Endpoint.Core.Strategies.Solutions.Crerate;

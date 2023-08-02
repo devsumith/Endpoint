@@ -13,7 +13,8 @@ using Endpoint.Core.Services;
 namespace Endpoint.Cli.Commands;
 
 [Verb("project-remove")]
-public class ProjectRemoveRequest : IRequest {
+public class ProjectRemoveRequest : IRequest
+{
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -39,12 +40,12 @@ public class ProjectRemoveRequestHandler : IRequestHandler<ProjectRemoveRequest>
         _logger.LogInformation("Handled: {0}", nameof(ProjectRemoveRequestHandler));
 
         var solutionPath = _fileProvider.Get("*.sln", request.Directory);
-        
+
         var solutionDirectory = Path.GetDirectoryName(solutionPath);
 
         var solutionFileName = Path.GetFileNameWithoutExtension(solutionPath);
 
-        foreach(var path in Directory.GetFiles(request.Directory,"*.csproj",SearchOption.AllDirectories))
+        foreach (var path in Directory.GetFiles(request.Directory, "*.csproj", SearchOption.AllDirectories))
         {
             _commandService.Start($"dotnet sln {solutionFileName} remove {path}", solutionDirectory);
         }

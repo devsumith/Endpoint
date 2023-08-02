@@ -56,7 +56,7 @@ public class CommandLineArgumentsProcessor : BackgroundService
 
             var parsedResult = _createParser().ParseArguments(args, verbs);
 
-            if(parsedResult.Errors.SingleOrDefault() is HelpRequestedError || parsedResult.Errors.SingleOrDefault() is HelpRequestedError)
+            if (parsedResult.Errors.SingleOrDefault() is HelpRequestedError || parsedResult.Errors.SingleOrDefault() is HelpRequestedError)
             {
                 Environment.Exit(0);
             }
@@ -73,7 +73,7 @@ public class CommandLineArgumentsProcessor : BackgroundService
 
         }
         catch (Exception ex)
-        {            
+        {
             _logger.LogError(ex.Message);
         }
         finally

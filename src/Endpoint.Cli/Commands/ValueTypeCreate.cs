@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Models.Artifacts.Files;
+using Endpoint.Core.Artifacts.Files;
 using System.Collections.Generic;
 using Endpoint.Core.Services;
 
@@ -16,8 +16,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("value-type-create")]
-public class ValueTypeCreateRequest : IRequest {
-    [Option('n',"name")]
+public class ValueTypeCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('v', "value")]
