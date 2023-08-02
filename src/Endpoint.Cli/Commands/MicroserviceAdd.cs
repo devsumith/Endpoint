@@ -96,9 +96,9 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
                     microservice.DotNetProjectType = DotNetProjectType.Web;
                 }
 
-                _projectService.AddProject(microservice);
+                _projectService.AddProjectAsync(microservice);
 
-                _projectService.AddProject(new ProjectModel
+                _projectService.AddProjectAsync(new ProjectModel
                 {
                     Name = $"{name}.{layer}.Tests",
                     Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{name}{Path.DirectorySeparatorChar}{name}.{layer}.Tests",

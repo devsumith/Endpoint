@@ -7,7 +7,7 @@ namespace Endpoint.Core.Artifacts.Projects.Services;
 
 public interface IProjectService
 {
-    Task AddProject(ProjectModel model);
+    Task AddProjectAsync(ProjectModel model);
     Task AddToSolution(ProjectModel model);
     Task AddGenerateDocumentationFile(string csprojFilePath);
     Task AddEndpointPostBuildTargetElement(string csprojFilePath);

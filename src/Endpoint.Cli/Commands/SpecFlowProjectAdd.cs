@@ -77,7 +77,7 @@ public class SpecFlowProjectAddRequestHandler : IRequestHandler<SpecFlowProjectA
             {
                 ProjectModel model = _projectModelFactory.CreateSpecFlowProject(request.Name, request.Directory);
 
-                _projectService.AddProject(model);
+                _projectService.AddProjectAsync(model);
 
                 done = true;
             }

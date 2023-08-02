@@ -34,7 +34,7 @@ public class ProjectService : IProjectService
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
     }
 
-    public async Task AddProject(ProjectModel model)
+    public async Task AddProjectAsync(ProjectModel model)
     {
         await _artifactGenerator.CreateAsync(model);
 

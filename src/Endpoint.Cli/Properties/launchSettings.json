@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "ws-app-create -n Spidey -d C:\\temp",
+      "commandLineArgs": "class-create -n MyType -d C:\\temp\\Foo\\IO.Compression",
       "environmentVariables": {
         "Endpoint:DefaultCommand": "namespace-unnest -d C:\\projects\\Cli\\src\\Cli\\Templates"
       }

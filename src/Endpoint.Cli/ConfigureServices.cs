@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Cli;
 using Endpoint.Core.Internals;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -17,7 +16,6 @@ public static class ConfigureServices
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
         services.AddInfrastructureServices();
         services.AddSingleton(new Observable<INotification>());
-        services.AddHostedService<CommandLineArgumentsProcessor>();
     }
 }
 

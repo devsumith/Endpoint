@@ -70,7 +70,7 @@ public class PlaywrightProjectAddRequestHandler : IRequestHandler<PlaywrightProj
             ProjectModel model = _projectModelFactory.CreatePlaywrightProject(request.Name, request.Directory);
 
 
-            _projectService.AddProject(model);
+            _projectService.AddProjectAsync(model);
 
             _commandService.Start("dotnet build", model.Directory);
 

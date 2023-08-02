@@ -91,7 +91,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
         var model = _projectModelFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);
 
-        _projectService.AddProject(model);
+        await _projectService.AddProjectAsync(model);
     }
 
     public void ProjectAdd(string directory)

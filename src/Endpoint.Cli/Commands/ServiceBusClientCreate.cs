@@ -123,7 +123,7 @@ public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusCl
 
         model.References.Add(@"..\Messaging.Udp\Messaging.Udp.csproj");
 
-        _projectService.AddProject(model);
+        _projectService.AddProjectAsync(model);
 
         if (File.Exists(Path.Combine(model.Directory, "Worker.cs")))
         {

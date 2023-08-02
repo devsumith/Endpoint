@@ -3,7 +3,6 @@
 
 using Endpoint.Core.Builders.Common;
 using Endpoint.Core.Options;
-using Endpoint.Core.Syntax;
 
 namespace Endpoint.Core.Builders;
 
