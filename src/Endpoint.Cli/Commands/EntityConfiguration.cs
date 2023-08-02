@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Builders;
 using Endpoint.Core.Services;
 using MediatR;
 using System.Threading;
@@ -35,12 +34,8 @@ public class EntityConfiguration
 
         public async Task Handle(Request request, CancellationToken cancellationToken)
         {
-            var settings = _settingsProvider.Get();
-
-            new EntityConfigurationBuilder(request.Entity, settings.InfrastructureNamespace, settings.DomainNamespace, request.Directory, _fileSystem)
-                .Build();
-
-
+            // Create Entity Type Converter 
+            // EF
         }
     }
 }
