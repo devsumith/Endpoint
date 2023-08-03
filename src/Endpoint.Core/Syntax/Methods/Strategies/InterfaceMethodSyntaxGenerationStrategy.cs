@@ -24,19 +24,19 @@ public class InterfaceMethodSyntaxGenerationStrategy : SyntaxGenerationStrategyB
         return model is MethodModel methodModel && methodModel.Interface;
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
-        builder.Append($"{syntaxGenerator.CreateFor(model.ReturnType)}");
+        builder.Append($"{await syntaxGenerator.CreateAsync(model.ReturnType)}");
 
         builder.Append($" {model.Name}");
 
         builder.Append('(');
 
-        builder.Append(string.Join(',', model.Params.Select(x => syntaxGenerator.CreateFor(x))));
+        builder.Append(string.Join(',', model.Params.Select(async x => await syntaxGenerator.CreateAsync(x))));
 
         builder.Append(");");
 

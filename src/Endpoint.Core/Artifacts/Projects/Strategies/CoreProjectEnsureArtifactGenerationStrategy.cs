@@ -41,7 +41,7 @@ public class CoreProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStr
 
     public override int Priority => 10;
 
-    public override void Create(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
+    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

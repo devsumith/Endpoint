@@ -14,7 +14,7 @@ public class {{ modelNamePascalCase }}ArtifactGenerationStrategy : ArtifactGener
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override void Create(IArtifactGenerator artifactGenerator, {{ modelNamePascalCase }}Model model, dynamic context = null)
+    public override async Task Create(IArtifactGenerator artifactGenerator, {{ modelNamePascalCase }}Model model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

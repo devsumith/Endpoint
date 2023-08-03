@@ -16,21 +16,18 @@ public abstract class SyntaxGenerationStrategyBase<T> : ISyntaxGenerationStrateg
     }
 
     public virtual bool CanHandle(object model, dynamic context = null) => model.GetType() == typeof(T);
-    public string Create(dynamic model, dynamic context = null)
+    public async Task<string> CreateAsync(dynamic model, dynamic context = null)
     {
         using (IServiceScope scope = _serviceProvider.CreateScope())
         {
             var syntaxGenerator = scope.ServiceProvider
                 .GetRequiredService<ISyntaxGenerator>();
 
-            return Create(syntaxGenerator, model, context);
+            return await CreateAsync(syntaxGenerator, model, context);
         }
     }
 
-    public abstract string Create(ISyntaxGenerator syntaxGenerator, T model, dynamic context = null);
-
-    public async Task<string> CreateAsync(object model, dynamic context = null)
-        => Create(model, context);
+    public abstract Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, T model, dynamic context = null);
 
     public virtual int Priority => 0;
 }

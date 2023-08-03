@@ -2,8 +2,8 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files.Factories;
+using Endpoint.Core.Artifacts.Lit;
 using Endpoint.Core.Extensions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
@@ -35,7 +35,7 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
     }
 
-    public override void Create(IArtifactGenerator artifactGenerator, LitWorkspaceModel model, dynamic context = null)
+    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, LitWorkspaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -68,7 +68,7 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
 
         var webPackConfig = _fileModelFactory.CreateTemplate("Webpack.Config", "webpack.config", model.Directory, "js");
 
-        artifactGenerator.CreateFor(webPackConfig);
+        await artifactGenerator.CreateAsync(webPackConfig);
 
         var packageJsonPath = $"{model.Directory}{Path.DirectorySeparatorChar}package.json";
 

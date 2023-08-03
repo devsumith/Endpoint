@@ -36,7 +36,7 @@ public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStr
 
     public override int Priority => int.MaxValue;
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
@@ -52,7 +52,7 @@ public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStr
 
         model.Body = builder.ToString();
 
-        return base.Create(syntaxGenerator, model);
+        return await base.CreateAsync(syntaxGenerator, model);
     }
 }
 

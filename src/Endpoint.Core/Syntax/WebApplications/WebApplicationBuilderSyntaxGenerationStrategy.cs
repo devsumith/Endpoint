@@ -25,7 +25,7 @@ public class WebApplicationBuilderSyntaxGenerationStrategy : SyntaxGenerationStr
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, WebApplicationBuilderModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationBuilderModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -11,23 +11,23 @@ public class CommandModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
     public CommandModelSyntaxGenerationStrategy(IServiceProvider serviceProvider)
         : base(serviceProvider) { }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, CommandModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, CommandModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
-        builder.AppendLine(syntaxGenerator.CreateFor(model.RequestValidator, context));
+        builder.AppendLine(await syntaxGenerator.CreateAsync(model.RequestValidator, context));
 
         builder.AppendLine("");
 
-        builder.AppendLine(syntaxGenerator.CreateFor(model.Request, context));
+        builder.AppendLine(await syntaxGenerator.CreateAsync(model.Request, context));
 
         builder.AppendLine("");
 
-        builder.AppendLine(syntaxGenerator.CreateFor(model.Response, context));
+        builder.AppendLine(await syntaxGenerator.CreateAsync(model.Response, context));
 
         builder.AppendLine("");
 
-        builder.AppendLine(syntaxGenerator.CreateFor(model.RequestHandler, context));
+        builder.AppendLine(await syntaxGenerator.CreateAsync(model.RequestHandler, context));
 
         return builder.ToString();
     }

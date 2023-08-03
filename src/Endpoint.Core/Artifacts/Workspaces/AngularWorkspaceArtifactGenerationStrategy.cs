@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Artifacts;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.IO;
@@ -24,7 +23,7 @@ public class AngularWorkspaceArtifactGenerationStrategy : ArtifactGenerationStra
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public override void Create(IArtifactGenerator artifactGenerator, AngularWorkspaceModel model, dynamic context = null)
+    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, AngularWorkspaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

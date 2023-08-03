@@ -3,7 +3,7 @@
 
 using System.IO;
 
-namespace Endpoint.Core.Artifacts;
+namespace Endpoint.Core.Artifacts.Lit;
 
 public class LitWorkspaceModel
 {

@@ -11,19 +11,19 @@ public class QueryModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Q
     public QueryModelSyntaxGenerationStrategy(IServiceProvider serviceProvider)
         : base(serviceProvider) { }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, QueryModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, QueryModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
-        builder.AppendLine(syntaxGenerator.CreateFor(model.Request));
+        builder.AppendLine(await syntaxGenerator.CreateAsync(model.Request));
 
         builder.AppendLine("");
 
-        builder.AppendLine(syntaxGenerator.CreateFor(model.Response));
+        builder.AppendLine(await syntaxGenerator.CreateAsync(model.Response));
 
         builder.AppendLine("");
 
-        builder.AppendLine(syntaxGenerator.CreateFor(model.RequestHandler, context));
+        builder.AppendLine(await syntaxGenerator.CreateAsync(model.RequestHandler, context));
 
         return builder.ToString();
     }

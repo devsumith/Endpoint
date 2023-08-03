@@ -24,7 +24,7 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
         return model as ClassModel != null;
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, ClassModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, ClassModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -42,10 +42,10 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
 
         foreach (var attribute in model.Attributes)
         {
-            builder.AppendLine(syntaxGenerator.CreateFor(attribute));
+            builder.AppendLine(await syntaxGenerator.CreateAsync(attribute));
         }
 
-        builder.Append(syntaxGenerator.CreateFor(model.AccessModifier));
+        builder.Append(await syntaxGenerator.CreateAsync(model.AccessModifier));
 
         if (model.Static)
             builder.Append(" static");
@@ -56,7 +56,7 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
         {
             builder.Append(": ");
 
-            builder.Append(string.Join(',', model.Implements.Select(x => syntaxGenerator.CreateFor(x, context))));
+            builder.Append(string.Join(',', model.Implements.Select(async x => await syntaxGenerator.CreateAsync(x, context))));
         }
 
         if (model.Properties.Count + model.Methods.Count + model.Constructors.Count + model.Fields.Count == 0)
@@ -72,16 +72,16 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
 
 
         if (model.Fields.Count > 0)
-            builder.AppendLine(((string)syntaxGenerator.CreateFor(model.Fields, context)).Indent(1));
+            builder.AppendLine(((string)await syntaxGenerator.CreateAsync(model.Fields, context)).Indent(1));
 
         if (model.Constructors.Count > 0)
-            builder.AppendLine(((string)syntaxGenerator.CreateFor(model.Constructors, context)).Indent(1));
+            builder.AppendLine(((string)await syntaxGenerator.CreateAsync(model.Constructors, context)).Indent(1));
 
         if (model.Properties.Count > 0)
-            builder.AppendLine(((string)syntaxGenerator.CreateFor(model.Properties, context)).Indent(1));
+            builder.AppendLine(((string)await syntaxGenerator.CreateAsync(model.Properties, context)).Indent(1));
 
         if (model.Methods.Count > 0)
-            builder.AppendLine(((string)syntaxGenerator.CreateFor(model.Methods, context)).Indent(1));
+            builder.AppendLine(((string)await syntaxGenerator.CreateAsync(model.Methods, context)).Indent(1));
 
         builder.AppendLine("}");
 

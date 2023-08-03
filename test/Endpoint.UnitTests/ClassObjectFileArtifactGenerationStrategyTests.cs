@@ -8,6 +8,7 @@ using Endpoint.Core.Syntax.Classes;
 using Endpoint.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Endpoint.UnitTests;
@@ -20,7 +21,7 @@ public class ClassObjectFileArtifactGenerationStrategyTests
     }
 
     [Fact]
-    public void Test()
+    public async Task Test()
     {
         var services = new ServiceCollection();
 
@@ -39,7 +40,7 @@ public class ClassObjectFileArtifactGenerationStrategyTests
             new UsingDirectiveModel() { Name = "Sytem" }
         }, "Foo", "directory", "extension");
 
-        sut.CreateFor(objectFileModel);
+        await sut.CreateAsync(objectFileModel);
     }
 }
 

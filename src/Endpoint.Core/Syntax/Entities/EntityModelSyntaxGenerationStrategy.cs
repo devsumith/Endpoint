@@ -13,7 +13,7 @@ public class EntityModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<
 
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, EntityModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, EntityModel model, dynamic context = null)
     {
         throw new NotImplementedException();
     }

@@ -5,6 +5,7 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.AngularProjects;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
+using Endpoint.Core.Artifacts.Workspaces;
 using Endpoint.Core.Extensions;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Messages;
@@ -131,9 +132,9 @@ public class AngularService : IAngularService
 
         await _artifactGenerator.CreateAsync(fileModel);
 
-        IndexCreate(false, componentDirectory);
+        await IndexCreate(false, componentDirectory);
 
-        IndexCreate(false, directory);
+        await IndexCreate(false, directory);
 
         _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.ts"));
 
@@ -150,7 +151,7 @@ public class AngularService : IAngularService
 
         var nameSnakeCase = ((SyntaxToken)name).SnakeCase();
 
-        IndexCreate(false, directory);
+        await IndexCreate(false, directory);
 
         _observableNotifications.Broadcast(new FileCreated($"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}.service.ts"));
 
@@ -219,13 +220,13 @@ public class AngularService : IAngularService
 
         _commandService.Start("npm install npm-run-all --force", workspaceModel.Directory);
 
-        KarmaRemove(workspaceModel.Directory);
+        await KarmaRemove(workspaceModel.Directory);
 
-        JestInstall(workspaceModel.Directory);
+        await JestInstall(workspaceModel.Directory);
 
         var angularProjectModel = new AngularProjectModel(projectName, projectType, prefix, workspaceModel.Directory);
 
-        AddProject(angularProjectModel);
+        await AddProject(angularProjectModel);
 
         if (openInVsCode)
             _commandService.Start("code .", workspaceModel.Directory);
@@ -247,9 +248,9 @@ public class AngularService : IAngularService
 
         var angularProjectReferenceModel = new AngularProjectReferenceModel(model.Name, model.Directory, model.ProjectType);
 
-        EnableDefaultStandalone(angularProjectReferenceModel);
+        await EnableDefaultStandalone(angularProjectReferenceModel);
 
-        ExportsAssetsAndStyles(angularProjectReferenceModel);
+        await ExportsAssetsAndStyles(angularProjectReferenceModel);
 
         if (model.ProjectType == "application")
         {
@@ -274,15 +275,13 @@ public class AngularService : IAngularService
 
         }
 
-        UpdateCompilerOptionsToUseJestTypes(model);
+        await UpdateCompilerOptionsToUseJestTypes(model);
 
-        JestConfigCreate(model);
+        await JestConfigCreate(model);
 
-        UpdateAngularJsonToUseJest(model);
+        await UpdateAngularJsonToUseJest(model);
 
         _utlitityService.CopyrightAdd(model.RootDirectory);
-
-
 
 
         if (model.ProjectType == "library")
@@ -324,7 +323,7 @@ public class AngularService : IAngularService
 
             await _artifactGenerator.CreateAsync(new ContentFileModel($"export const BASE_URL = '{_namingConventionConverter.Convert(NamingConvention.KebobCase, model.Name).ToUpper()}:BASE_URL';", "constants", libFolder, "ts"));
 
-            IndexCreate(false, libFolder);
+            await IndexCreate(false, libFolder);
 
             foreach (var line in _fileSystem.ReadAllLines(publicApiPath))
             {
@@ -615,7 +614,7 @@ public class AngularService : IAngularService
 
         _commandService.Start("ng add @angular/localize --force", workspaceDirectory);
 
-        AddSupportedLocales(model, locales);
+        await AddSupportedLocales(model, locales);
     }
 
     public async Task AddSupportedLocales(AngularProjectReferenceModel model, List<string> locales)
@@ -745,14 +744,14 @@ public class AngularService : IAngularService
     {
         var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
 
-        ComponentCreate($"{nameSnakeCase}-list", directory);
+        await ComponentCreate($"{nameSnakeCase}-list", directory);
     }
 
     public async Task DetailComponentCreate(string name, string directory)
     {
         var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
 
-        ComponentCreate($"{nameSnakeCase}-detail", directory);
+        await ComponentCreate($"{nameSnakeCase}-detail", directory);
     }
 
     public async Task IndexCreate(bool scss, string directory)
@@ -833,7 +832,7 @@ public class AngularService : IAngularService
             await _artifactGenerator.CreateAsync(model);
         }
 
-        IndexCreate(true, scssDirectory);
+        await IndexCreate(true, scssDirectory);
     }
 
     public async Task ScssComponentCreate(string name, string directory)
@@ -852,7 +851,7 @@ public class AngularService : IAngularService
                     "}"
                 });
 
-        IndexCreate(true, scssDirectory);
+        await IndexCreate(true, scssDirectory);
     }
 
     public async Task ControlCreate(string name, string directory)
@@ -884,9 +883,9 @@ public class AngularService : IAngularService
             .Build()
             ));
 
-        IndexCreate(false, componentDirectory);
+        await IndexCreate(false, componentDirectory);
 
-        IndexCreate(false, directory);
+        await IndexCreate(false, directory);
 
         _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.ts"));
 

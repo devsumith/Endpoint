@@ -4,7 +4,6 @@
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Abstractions;
 
@@ -27,18 +26,7 @@ public class SyntaxGenerator : ISyntaxGenerator
 
         var strategy = strategies.FirstOrDefault();
 
-        return strategy.Create(model, context);
-    }
-
-    public string CreateFor(object model, dynamic context = null)
-    {
-        var orderedStrategies = _strategies.OrderByDescending(x => x.Priority);
-
-        var strategies = orderedStrategies.Where(x => x.CanHandle(model, context));
-
-        var strategy = strategies.FirstOrDefault();
-
-        return strategy.Create(model, context);
+        return await strategy.CreateAsync(model, context);
     }
 }
 

@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
@@ -24,7 +25,7 @@ public class ContentFileArtifactGenerationStrategy : ArtifactGenerationStrategyB
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override void Create(IArtifactGenerator artifactGenerator, ContentFileModel model, dynamic context = null)
+    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, ContentFileModel model, dynamic context = null)
     {
         _fileSystem.WriteAllText(model.Path, model.Content);
     }
@@ -49,7 +50,7 @@ public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : Artifact
         return false;
     }
 
-    public override void Create(IArtifactGenerator artifactGenerator, string directory, dynamic context = null)
+    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, string directory, dynamic context = null)
     {
         throw new NotImplementedException();
     }
@@ -80,7 +81,7 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
     }
 
-    public override void Create(IArtifactGenerator artifactGenerator, ObjectFileModel<T> model, dynamic context = null)
+    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, ObjectFileModel<T> model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -105,7 +106,7 @@ public class ObjectFileArtifactGenerationStrategyBase<T> : ArtifactGenerationStr
             builder.AppendLine();
         }
 
-        builder.AppendLine(_syntaxGenerator.CreateFor(model.Object, context));
+        builder.AppendLine(await _syntaxGenerator.CreateAsync(model.Object, context));
 
         _fileSystem.WriteAllText(model.Path, builder.ToString());
 

@@ -4,6 +4,7 @@
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Folders.Strategies;
 
@@ -21,7 +22,7 @@ public class FolderArtifactGenerationStrategy : ArtifactGenerationStrategyBase<F
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override void Create(IArtifactGenerator artifactGenerator, FolderModel model, dynamic context = null)
+    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, FolderModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -29,12 +30,12 @@ public class FolderArtifactGenerationStrategy : ArtifactGenerationStrategyBase<F
 
         foreach (var fileModel in model.Files)
         {
-            artifactGenerator.CreateFor(fileModel, context);
+            await artifactGenerator.CreateAsync(fileModel, context);
         }
 
         foreach (var folder in model.SubFolders)
         {
-            artifactGenerator.CreateFor(folder, context);
+            await artifactGenerator.CreateAsync(folder, context);
         }
     }
 }

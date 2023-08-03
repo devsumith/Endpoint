@@ -28,7 +28,7 @@ public class IdPropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<P
     public override bool CanHandle(object model, dynamic context = null)
         => model is PropertyModel propertyModel && propertyModel.Id;
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -37,7 +37,7 @@ public class UpdateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
     public override int Priority => int.MaxValue;
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         var entity = context.Entity as ClassModel;
 
@@ -74,7 +74,7 @@ public class UpdateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         model.Body = builder.ToString();
 
-        return base.Create(syntaxGenerator, model);
+        return await base.CreateAsync(syntaxGenerator, model);
     }
 }
 

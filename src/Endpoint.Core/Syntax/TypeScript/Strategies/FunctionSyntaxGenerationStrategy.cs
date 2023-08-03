@@ -24,7 +24,7 @@ public class FunctionSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Fun
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, FunctionModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, FunctionModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -32,7 +32,7 @@ public class FunctionSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Fun
 
         foreach (var import in model.Imports)
         {
-            builder.AppendLine(syntaxGenerator.CreateFor(import));
+            builder.AppendLine(await syntaxGenerator.CreateAsync(import));
 
             if (import == model.Imports.Last())
             {

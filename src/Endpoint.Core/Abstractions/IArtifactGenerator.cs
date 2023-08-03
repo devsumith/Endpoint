@@ -7,6 +7,5 @@ namespace Endpoint.Core.Abstractions;
 
 public interface IArtifactGenerator
 {
-    void CreateFor(object model, dynamic context = null);
     Task CreateAsync(object model, dynamic context = null);
 }

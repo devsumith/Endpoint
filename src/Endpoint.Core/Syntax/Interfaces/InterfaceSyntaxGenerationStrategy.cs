@@ -23,7 +23,7 @@ public class InterfaceSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<In
     {
         return model as InterfaceModel != null;
     }
-    public override string Create(ISyntaxGenerator syntaxGenerator, InterfaceModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, InterfaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -35,7 +35,7 @@ public class InterfaceSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<In
         {
             builder.Append(": ");
 
-            builder.Append(string.Join(',', model.Implements.Select(x => syntaxGenerator.CreateFor(x, context))));
+            builder.Append(string.Join(',', model.Implements.Select(async x => await syntaxGenerator.CreateAsync(x, context))));
         }
 
         if (model.Properties.Count + model.Methods.Count == 0)
@@ -50,10 +50,10 @@ public class InterfaceSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<In
         builder.AppendLine("{");
 
         if (model.Properties.Count > 0)
-            builder.AppendLine(((string)syntaxGenerator.CreateFor(model.Properties, context)).Indent(1));
+            builder.AppendLine(((string)await syntaxGenerator.CreateAsync(model.Properties, context)).Indent(1));
 
         if (model.Methods.Count > 0)
-            builder.AppendLine(((string)syntaxGenerator.CreateFor(model.Methods, context)).Indent(1));
+            builder.AppendLine(((string)await syntaxGenerator.CreateAsync(model.Methods, context)).Indent(1));
 
         builder.AppendLine("}");
 

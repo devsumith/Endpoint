@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Abstractions;
 
@@ -44,20 +43,17 @@ public abstract class ArtifactGenerationStrategyBase<T> : IArtifactGenerationStr
 
     public virtual bool CanHandle(object model, dynamic context = null) => model is T;
 
-    public virtual void Create(object model, dynamic context = null)
+    public virtual async Task CreateAsync(object model, dynamic context = null)
     {
         using (IServiceScope scope = _serviceProvider.CreateScope())
         {
             var artifactGenerator = scope.ServiceProvider
                 .GetRequiredService<IArtifactGenerator>();
-            Create(artifactGenerator, model as T, context);
+            await CreateAsync(artifactGenerator, model as T, context);
         }
     }
 
-    public abstract void Create(IArtifactGenerator artifactGenerator, T model, dynamic context = null);
-
-    public async Task CreateAsync(object model, dynamic context = null)
-        => Create(model, context);
+    public abstract Task CreateAsync(IArtifactGenerator artifactGenerator, T model, dynamic context = null);
 
     public virtual int Priority => 0;
 }

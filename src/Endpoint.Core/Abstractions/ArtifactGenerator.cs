@@ -4,7 +4,6 @@
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Abstractions;
 
@@ -28,16 +27,7 @@ public class ArtifactGenerator : IArtifactGenerator
         .OrderBy(x => x.Priority)
         .FirstOrDefault();
 
-        strategy.Create(model, context);
-    }
-
-    public void CreateFor(object model, dynamic context = null)
-    {
-        var strategy = _strategies.Where(x => x.CanHandle(model, context))
-            .OrderBy(x => x.Priority)
-            .FirstOrDefault();
-
-        strategy.Create(model, context);
+        await strategy.CreateAsync(model, context);
     }
 }
 

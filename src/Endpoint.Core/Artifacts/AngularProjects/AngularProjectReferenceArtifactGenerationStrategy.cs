@@ -20,7 +20,7 @@ public class AddAngularTranslateGenerationStrategy : ArtifactGenerationStrategyB
     public override bool CanHandle(object model, dynamic context = null)
         => model is AngularProjectReferenceModel && context is AngularTranslateAdd;
 
-    public override void Create(IArtifactGenerator artifactGenerator, AngularProjectReferenceModel model, dynamic context = null)
+    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, AngularProjectReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

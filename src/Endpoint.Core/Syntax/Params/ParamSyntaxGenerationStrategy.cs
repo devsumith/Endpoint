@@ -18,7 +18,7 @@ public class ParamSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ParamM
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, ParamModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, ParamModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -28,9 +28,9 @@ public class ParamSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ParamM
             builder.Append("this ");
 
         if (model.Attribute != null)
-            builder.Append(syntaxGenerator.CreateFor(model.Attribute));
+            builder.Append(await syntaxGenerator.CreateAsync(model.Attribute));
 
-        builder.Append($"{syntaxGenerator.CreateFor(model.Type)} {model.Name}");
+        builder.Append($"{await syntaxGenerator.CreateAsync(model.Type)} {model.Name}");
 
         return builder.ToString();
     }

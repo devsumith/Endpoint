@@ -112,13 +112,13 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         {
             classModel.Fields.Add(new FieldModel()
             {
-                Name = $"_{_namingConventionConverter.Convert(NamingConvention.CamelCase, _syntaxGenerator.CreateFor(typeModel))}",
+                Name = $"_{_namingConventionConverter.Convert(NamingConvention.CamelCase, await _syntaxGenerator.CreateAsync(typeModel))}",
                 Type = typeModel
             });
 
             constructorModel.Params.Add(new ParamModel()
             {
-                Name = $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, _syntaxGenerator.CreateFor(typeModel))}",
+                Name = $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, await _syntaxGenerator.CreateAsync(typeModel))}",
                 Type = typeModel
             });
         }

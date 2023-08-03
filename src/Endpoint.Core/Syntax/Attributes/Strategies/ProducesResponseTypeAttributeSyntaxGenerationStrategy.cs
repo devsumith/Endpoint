@@ -18,7 +18,7 @@ public class ProducesResponseTypeAttributeSyntaxGenerationStrategy : SyntaxGener
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, ProducesResponseTypeAttributeModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, ProducesResponseTypeAttributeModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

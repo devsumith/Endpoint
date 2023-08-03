@@ -7,6 +7,7 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Entities.Aggregate;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts;
 
@@ -20,7 +21,7 @@ public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBa
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override void Create(IArtifactGenerator artifactGenerator, AggregatesModel model, dynamic context = null)
+    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, AggregatesModel model, dynamic context = null)
     {
         var aggregateDirectory = $"{model.Directory}{Path.DirectorySeparatorChar}{model.Aggregate.Name}Aggregate";
 
@@ -30,20 +31,20 @@ public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBa
 
         _fileSystem.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries");
 
-        artifactGenerator
-            .CreateFor(new ObjectFileModel<ClassModel>(model.Aggregate, model.Aggregate.UsingDirectives, model.Aggregate.Name, aggregateDirectory, "cs"));
+        await artifactGenerator
+            .CreateAsync(new ObjectFileModel<ClassModel>(model.Aggregate, model.Aggregate.UsingDirectives, model.Aggregate.Name, aggregateDirectory, "cs"));
 
-        artifactGenerator
-            .CreateFor(new ObjectFileModel<ClassModel>(model.AggregateDto, model.AggregateDto.UsingDirectives, model.AggregateDto.Name, aggregateDirectory, "cs"));
+        await artifactGenerator
+            .CreateAsync(new ObjectFileModel<ClassModel>(model.AggregateDto, model.AggregateDto.UsingDirectives, model.AggregateDto.Name, aggregateDirectory, "cs"));
 
-        artifactGenerator
-            .CreateFor(new ObjectFileModel<ClassModel>(model.AggregateExtensions, model.AggregateExtensions.UsingDirectives, model.AggregateExtensions.Name, aggregateDirectory, "cs"));
+        await artifactGenerator
+            .CreateAsync(new ObjectFileModel<ClassModel>(model.AggregateExtensions, model.AggregateExtensions.UsingDirectives, model.AggregateExtensions.Name, aggregateDirectory, "cs"));
 
 
         foreach (var query in model.Queries)
         {
-            artifactGenerator
-                .CreateFor(
+            await artifactGenerator
+                .CreateAsync(
                 new ObjectFileModel<QueryModel>(
                     query,
                     query.UsingDirectives,
@@ -54,8 +55,8 @@ public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBa
 
         foreach (var command in model.Commands)
         {
-            artifactGenerator
-                .CreateFor(
+            await artifactGenerator
+                .CreateAsync(
                 new ObjectFileModel<CommandModel>(
                     command,
                     command.UsingDirectives,
@@ -63,7 +64,6 @@ public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBa
                     $"{aggregateDirectory}{Path.DirectorySeparatorChar}Commands",
                     "cs"), new { Entity = model.Aggregate });
         }
-
     }
 }
 

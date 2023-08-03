@@ -116,7 +116,7 @@ public class ApiProjectService : IApiProjectService
             _ => throw new NotImplementedException()
         }, directory);
 
-        var syntax = _syntaxGenerator.CreateFor(model);
+        var syntax = await _syntaxGenerator.CreateAsync(model);
 
         _clipboardService.SetText(syntax);
 

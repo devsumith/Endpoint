@@ -27,7 +27,7 @@ public class WebApplicationSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, WebApplicationModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -41,12 +41,12 @@ public class WebApplicationSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
 
         foreach (var entity in model.Entities)
         {
-            builder.AppendLine(syntaxGenerator.CreateFor(entity));
+            builder.AppendLine(await syntaxGenerator.CreateAsync(entity));
 
             builder.AppendLine();
         }
 
-        builder.AppendLine(syntaxGenerator.CreateFor(new DbContextModel(_namingConventionConverter, model.DbContextName, model.Entities, "")));
+        builder.AppendLine(await syntaxGenerator.CreateAsync(new DbContextModel(_namingConventionConverter, model.DbContextName, model.Entities, "")));
 
         return builder.ToString();
     }

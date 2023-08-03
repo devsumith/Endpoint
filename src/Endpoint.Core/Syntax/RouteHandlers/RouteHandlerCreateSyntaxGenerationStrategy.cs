@@ -22,7 +22,7 @@ public class RouteHandlerCreateSyntaxGenerationStrategy : SyntaxGenerationStrate
     public override bool CanHandle(object model, dynamic context = null)
         => model is RouteHandlerModel routeHandlerModel && routeHandlerModel.Type == RouteType.Create;
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0} and type {1}.", model, model.Type);
 

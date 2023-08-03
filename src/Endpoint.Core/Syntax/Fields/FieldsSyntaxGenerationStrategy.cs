@@ -21,7 +21,7 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, List<FieldModel> model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, List<FieldModel> model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -29,7 +29,7 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
 
         foreach (var field in model)
         {
-            builder.AppendLine(Create(syntaxGenerator, field, context));
+            builder.AppendLine(await CreateAsync(syntaxGenerator, field, context));
 
             if (field != model.Last())
                 builder.AppendLine();
@@ -38,26 +38,24 @@ public class FieldsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<
         return builder.ToString();
     }
 
-    private string Create(ISyntaxGenerator syntaxGenerator, FieldModel model, dynamic context = null)
+    private async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, FieldModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
-        builder.Append(syntaxGenerator.CreateFor(model.AccessModifier));
+        builder.Append(await syntaxGenerator.CreateAsync(model.AccessModifier));
 
         if (model.ReadOnly)
             builder.Append(" readonly");
 
-
-
         if (!string.IsNullOrEmpty(model.DefaultValue))
         {
-            builder.Append($" {syntaxGenerator.CreateFor(model.Type)} {model.Name} = {model.DefaultValue};");
+            builder.Append($" {await syntaxGenerator.CreateAsync(model.Type)} {model.Name} = {model.DefaultValue};");
         }
         else
         {
-            builder.Append($" {syntaxGenerator.CreateFor(model.Type)} {model.Name};");
+            builder.Append($" {await syntaxGenerator.CreateAsync(model.Type)} {model.Name};");
         }
         return builder.ToString();
     }

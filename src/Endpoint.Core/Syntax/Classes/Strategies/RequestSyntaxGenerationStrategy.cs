@@ -18,7 +18,7 @@ public class RequestSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Requ
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, RequestModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, RequestModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -22,7 +22,7 @@ public class MethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Metho
 
     public override bool CanHandle(object model, dynamic context = null)
         => model is MethodModel methodModel && !methodModel.Interface;
-    public override string Create(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -30,10 +30,10 @@ public class MethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Metho
 
         foreach (var attribute in model.Attributes)
         {
-            builder.AppendLine(syntaxGenerator.CreateFor(attribute));
+            builder.AppendLine(await syntaxGenerator.CreateAsync(attribute));
         }
 
-        builder.Append(syntaxGenerator.CreateFor(model.AccessModifier));
+        builder.Append(await syntaxGenerator.CreateAsync(model.AccessModifier));
 
         if (model.Override)
             builder.Append(" override");
@@ -44,13 +44,13 @@ public class MethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Metho
         if (model.Params.SingleOrDefault(x => x.ExtensionMethodParam) != null || model.Static)
             builder.Append(" static");
 
-        builder.Append($" {syntaxGenerator.CreateFor(model.ReturnType)}");
+        builder.Append($" {await syntaxGenerator.CreateAsync(model.ReturnType)}");
 
         builder.Append($" {model.Name}");
 
         builder.Append('(');
 
-        builder.Append(string.Join(',', model.Params.Select(x => syntaxGenerator.CreateFor(x))));
+        builder.Append(string.Join(',', model.Params.Select(async x => await syntaxGenerator.CreateAsync(x))));
 
         builder.Append(')');
 

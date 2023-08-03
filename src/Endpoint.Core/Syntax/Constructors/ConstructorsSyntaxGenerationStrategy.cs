@@ -20,7 +20,7 @@ public class ConstructorsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, List<ConstructorModel> model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, List<ConstructorModel> model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -28,7 +28,7 @@ public class ConstructorsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
 
         foreach (var ctor in model)
         {
-            builder.AppendLine(syntaxGenerator.CreateFor(ctor));
+            builder.AppendLine(await syntaxGenerator.CreateAsync(ctor));
 
             if (ctor != model.Last())
             {

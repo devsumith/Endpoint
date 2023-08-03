@@ -24,19 +24,19 @@ public class ConstructorSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override string Create(ISyntaxGenerator syntaxGenerator, ConstructorModel model, dynamic context = null)
+    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, ConstructorModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
-        builder.Append(syntaxGenerator.CreateFor(model.AccessModifier));
+        builder.Append(await syntaxGenerator.CreateAsync(model.AccessModifier));
 
         builder.Append($" {model.Name}");
 
         builder.Append('(');
 
-        builder.Append(string.Join(',', model.Params.Select(x => syntaxGenerator.CreateFor(x))));
+        builder.Append(string.Join(',', model.Params.Select(async x => await syntaxGenerator.CreateAsync(x))));
 
         builder.Append(')');
 
