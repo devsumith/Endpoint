@@ -1,10 +1,8 @@
-/*// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Options;
 using MediatR;
-using Nelibur.ObjectMapper;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +14,7 @@ public class AddResource
     [Verb("add-resource")]
     public class Request : IRequest
     {
-        [Value(0)]
+        [Option('r', "resource")]
         public string Resource { get; set; }
 
         [Option("properties")]
@@ -28,18 +26,11 @@ public class AddResource
 
     public class Handler : IRequestHandler<Request>
     {
-        private readonly IAdditionalResourceGenerator _factory;
-        public Handler(
-            IAdditionalResourceGenerator factory)
-        {
-            _factory = factory;
-        }
-
         public async Task Handle(Request request, CancellationToken cancellationToken)
         {
-            var options = TinyMapper.Map<AddResourceOptions>(request);
+            //var options = TinyMapper.Map<AddResourceOptions>(request);
 
             //AdditionalResourceGenerator.Generate(options, _factory);
         }
     }
-}*/
+}

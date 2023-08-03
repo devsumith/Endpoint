@@ -49,7 +49,7 @@ public class ConfigureServicesCreateRequestHandler : IRequestHandler<ConfigureSe
 
         var layer = parts.Count() > 0 ? parts.Last() : string.Empty;
 
-        _dependencyInjectionService.AddConfigureServices(layer, request.Directory);
+        await _dependencyInjectionService.AddConfigureServices(layer, request.Directory);
 
 
     }

@@ -39,6 +39,6 @@ public class AggregateCommandsFolderCreateRequestHandler : IRequestHandler<Aggre
     {
         _logger.LogInformation("Handled: {0}", nameof(AggregateCommandsFolderCreateRequestHandler));
 
-        _folderService.AggregateCommands(new(request.AggregateName), request.Directory);
+        await _folderService.AggregateCommands(new(request.AggregateName), request.Directory);
     }
 }

@@ -2,16 +2,13 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
+using Endpoint.Core.Artifacts.Services;
+using Endpoint.Core.Services;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Endpoint.Core.Services;
-using Endpoint.Core.Artifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 
@@ -20,7 +17,7 @@ namespace Endpoint.Cli.Commands;
 public class IndexCreateRequest : IRequest
 {
 
-    [Option('s', ".scss")]
+    [Option('s', "scss")]
     public bool Scss { get; set; }
 
     [Option('d', Required = false)]
@@ -47,7 +44,5 @@ public class IndexCreateRequestHandler : IRequestHandler<IndexCreateRequest>
         _logger.LogInformation("Handled: {0}", nameof(IndexCreateRequestHandler));
 
         await _angularService.IndexCreate(request.Scss, request.Directory);
-
-
     }
 }
