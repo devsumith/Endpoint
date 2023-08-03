@@ -184,7 +184,7 @@ public class MethodBuilder
 
             _contents.Add(methodBuilder.Build());
 
-            _contents = _contents.Concat(new MethodBodyBuilder(_settings, _routeType, _indent, _resource).Build()).ToList();
+            //_contents = _contents.Concat(new MethodBodyBuilder(_settings, _routeType, _indent, _resource).Build()).ToList();
 
             return _contents.ToArray();
         }

@@ -6,8 +6,6 @@ using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Projects;
 using Endpoint.Core.Artifacts.Projects.Enums;
 using Endpoint.Core.Artifacts.Projects.Services;
-using Endpoint.Core.Artifacts.Projects;
-using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -28,7 +26,7 @@ public class MicroserviceAddRequest : IRequest
 
 
     [Option('d', Required = false)]
-    public string Directory { get; set; } = System.Environment.CurrentDirectory;
+    public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
 public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequest>
@@ -71,10 +69,10 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
                 {
                     microservice.Packages.AddRange(new PackageModel[]
                     {
-                        new PackageModel("MediatR", "12.0.0"),
-                        new PackageModel("Microsoft.EntityFrameworkCore", "7.0.2"),
-                        new PackageModel("Microsoft.Extensions.Logging.Abstractions","7.0.0"),
-                        new PackageModel("FluentValidation","11.6.0")
+                        new ("MediatR", "12.0.0"),
+                        new ("Microsoft.EntityFrameworkCore", "7.0.2"),
+                        new ("Microsoft.Extensions.Logging.Abstractions","7.0.0"),
+                        new ("FluentValidation","11.6.0")
                     });
 
                     microservice.Files.Add(_fileModelFactory.CreateCoreUsings(microservice.Directory));
@@ -96,9 +94,9 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
                     microservice.DotNetProjectType = DotNetProjectType.Web;
                 }
 
-                _projectService.AddProjectAsync(microservice);
+                await _projectService.AddProjectAsync(microservice);
 
-                _projectService.AddProjectAsync(new ProjectModel
+                await _projectService.AddProjectAsync(new ProjectModel
                 {
                     Name = $"{name}.{layer}.Tests",
                     Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{name}{Path.DirectorySeparatorChar}{name}.{layer}.Tests",

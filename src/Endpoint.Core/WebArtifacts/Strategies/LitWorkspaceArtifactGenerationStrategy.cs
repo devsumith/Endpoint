@@ -49,7 +49,6 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
 
         _commandService.Start("npm i lit", model.Directory);
 
-
         _commandService.Start("npm i -D typescript jest ts-jest @types/jest", model.Directory);
 
         foreach (var npmPackage in new List<string>()

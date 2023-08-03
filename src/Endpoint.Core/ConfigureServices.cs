@@ -47,6 +47,7 @@ using Endpoint.Core.Syntax.RequestHandlers;
 using Endpoint.Core.Syntax.RouteHandlers;
 using Endpoint.Core.Syntax.SpecFlow;
 using Endpoint.Core.Syntax.SpecFlow.Strategies;
+using Endpoint.Core.Syntax.Statements;
 using Endpoint.Core.Syntax.Types;
 using Endpoint.Core.Syntax.TypeScript;
 using Endpoint.Core.Syntax.TypeScript.Strategies;
@@ -197,6 +198,7 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerationStrategy, QueryModelSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, CommandModelSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, ControllerSyntaxGenerationStrategy>();
+        services.AddSingleton<ISyntaxGenerationStrategy, LogStatementSyntaxGenerationStrategy>();
         services.AddSingleton<IArtifactUpdateGenerator, ArtifactUpdateGenerator>();
         services.AddSingleton<IClipboardService, ClipboardService>();
         services.AddSingleton<ISyntaxService>(services =>
