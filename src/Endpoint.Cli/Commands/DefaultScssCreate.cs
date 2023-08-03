@@ -37,7 +37,5 @@ public class DefaultScssCreateRequestHandler : IRequestHandler<DefaultScssCreate
         _logger.LogInformation("Handled: {0}", nameof(DefaultScssCreateRequestHandler));
 
         await _angularService.DefaultScssCreate(request.Directory);
-
-
     }
 }
