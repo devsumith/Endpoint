@@ -23,7 +23,7 @@ using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Entities.Aggregate;
 using Endpoint.Core.Syntax.Entities;
-using Endpoint.Core.WebArtifacts.Services;
+using Endpoint.Core.Artifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 

@@ -2,9 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
+using Endpoint.Core.Artifacts.AngularProjects;
+using Endpoint.Core.Artifacts.Services;
 using Endpoint.Core.Services;
-using Endpoint.Core.WebArtifacts;
-using Endpoint.Core.WebArtifacts.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;

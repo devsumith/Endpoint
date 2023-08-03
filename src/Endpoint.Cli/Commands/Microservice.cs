@@ -1,16 +1,12 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
+/*// Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Artifacts.Git;
+using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
-using Endpoint.Core.Strategies.Solutions.Crerate;
-using Endpoint.Core.Strategies.Solutions.Update;
-using Endpoint.Core.Strategies.WorkspaceSettingss.Update;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Nelibur.ObjectMapper;
@@ -156,3 +152,4 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
 
     public bool IsExistingWorkspace(string directory) => _fileSystem.Exists($"{directory}{Path.DirectorySeparatorChar}Workspace.json");
 }
+*/

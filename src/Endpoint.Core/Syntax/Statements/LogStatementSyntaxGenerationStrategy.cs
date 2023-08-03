@@ -1,5 +1,4 @@
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Builders.Common;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
@@ -45,24 +44,24 @@ public class LogStatementSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
     };
 
     public string[] BuildForUpdateCommand(LogStatementModel model)
-        => new string[6]
+        => new string[]
         {
             "_logger.LogInformation(",
             "\"----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})\",".Indent(1),
             $"nameof(Update{((SyntaxToken)model.Resource).PascalCase}Request),".Indent(1),
-            $"nameof(request.{((SyntaxToken)model.Resource).PascalCase}.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)}),".Indent(1),
-            $"request.{((SyntaxToken)model.Resource).PascalCase}.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)},".Indent(1),
+            //$"nameof(request.{((SyntaxToken)model.Resource).PascalCase}.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)}),".Indent(1),
+            //$"request.{((SyntaxToken)model.Resource).PascalCase}.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)},".Indent(1),
             "request);".Indent(1)
         };
 
     public string[] BuildForDeleteCommand(LogStatementModel model)
-        => new string[6]
+        => new string[]
         {
             "_logger.LogInformation(",
             "\"----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})\",".Indent(1),
             $"nameof(Remove{((SyntaxToken)model.Resource).PascalCase}Request),".Indent(1),
-            $"nameof(request.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)}),".Indent(1),
-            $"request.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)},".Indent(1),
+            //$"nameof(request.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)}),".Indent(1),
+            //$"request.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)},".Indent(1),
             "request);".Indent(1)
         };
 

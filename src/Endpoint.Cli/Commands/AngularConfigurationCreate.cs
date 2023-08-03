@@ -7,8 +7,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-
-using Endpoint.Core.WebArtifacts.Services;
+using Endpoint.Core.Artifacts.AngularProjects;
+using Endpoint.Core.Artifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 

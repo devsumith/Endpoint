@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Interfaces;
-using Endpoint.Core.WebArtifacts.Services;
+using Endpoint.Core.Artifacts.Services;
 
 namespace Endpoint.Cli.Commands;
 

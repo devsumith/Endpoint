@@ -1,10 +1,8 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
+/*// Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Generators;
 using Endpoint.Core.Options;
-using Endpoint.Core.Strategies.Common;
 using Endpoint.Core.Syntax;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -132,3 +130,4 @@ public class Default
     }
 }
 
+*/
