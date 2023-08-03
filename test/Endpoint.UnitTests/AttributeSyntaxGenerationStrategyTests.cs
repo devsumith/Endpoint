@@ -4,6 +4,7 @@
 using Endpoint.Core.Syntax.Attributes;
 using Endpoint.Core.Syntax.Attributes.Strategies;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Endpoint.UnitTests;
@@ -30,7 +31,7 @@ public class AttributeSyntaxGenerationStrategyTests
     }
 
     [Fact]
-    public void CreateShould_ReturnApiControllerAttribute()
+    public async Task CreateShould_ReturnApiControllerAttribute()
     {
         var services = new ServiceCollection();
 
@@ -48,7 +49,7 @@ public class AttributeSyntaxGenerationStrategyTests
             Name = "ApiController"
         };
 
-        var result = sut.Create(model);
+        var result = await sut.CreateAsync(model);
 
         Assert.Equal("[ApiController]", result);
 

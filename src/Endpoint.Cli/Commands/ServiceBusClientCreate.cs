@@ -80,7 +80,7 @@ public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusCl
                 .AppendLine(".Build();".Indent(1))
                 .AppendLine(string.Empty)
                 .AppendLine("host.Run();")
-                .ToString(), "Program", model.Directory, "cs");
+                .ToString(), "Program", model.Directory, ".cs");
 
             model.Files.Add(programFileModel);
         }
@@ -113,13 +113,13 @@ public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusCl
         {
             new (model.Name)
 
-        }, configureServicesClassModel.Name, model.Directory, "cs");
+        }, configureServicesClassModel.Name, model.Directory, ".cs");
 
         configureServicesFileModel.Namespace = "Microsoft.Extensions.DependencyInjection";
 
         model.Files.Add(configureServicesFileModel);
 
-        model.Files.Add(new ObjectFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.UsingDirectives, serviceBusMessageConsumerClassModel.Name, model.Directory, "cs"));
+        model.Files.Add(new ObjectFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.UsingDirectives, serviceBusMessageConsumerClassModel.Name, model.Directory, ".cs"));
 
         model.References.Add(@"..\Messaging.Udp\Messaging.Udp.csproj");
 

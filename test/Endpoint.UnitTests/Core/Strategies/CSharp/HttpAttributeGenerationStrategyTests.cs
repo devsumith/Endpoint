@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 
@@ -16,7 +17,7 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp;
 public class HttpAttributeGenerationStrategyTests
 {
     [Fact]
-    public void ShouldCreateAttribute()
+    public async Task ShouldCreateAttribute()
     {
         var expected = new string[1] { "[HttpGet(Name = \"getCharacters\")]" };
 
@@ -35,7 +36,7 @@ public class HttpAttributeGenerationStrategyTests
 
         var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(), mockLogger);
 
-        var actual = sut.Create(model);
+        var actual = await sut.CreateAsync(model);
 
         Assert.Equal(string.Join(Environment.NewLine, expected), actual);
     }

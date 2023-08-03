@@ -48,7 +48,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
     private readonly IClassModelFactory _classModelFactory;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IPlaywrightService _playwrightService;
 
     public SignalRAppCreateRequestHandler(
@@ -62,7 +62,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         IClassModelFactory classModelFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileModelFactory fileModelFactory,
+        IFileFactory fileModelFactory,
         IPlaywrightService playwrightService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -150,13 +150,13 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var workerModel = _classModelFactory.CreateMessageProducerWorkerModel(request.Name, projectModel.Directory);
 
-        projectModel.Files.Add(new ObjectFileModel<ClassModel>(workerModel, workerModel.UsingDirectives, workerModel.Name, projectModel.Directory, "cs"));
+        projectModel.Files.Add(new ObjectFileModel<ClassModel>(workerModel, workerModel.UsingDirectives, workerModel.Name, projectModel.Directory, ".cs"));
 
-        projectModel.Files.Add(new ObjectFileModel<ClassModel>(messageModel, messageModel.UsingDirectives, messageModel.Name, projectModel.Directory, "cs"));
+        projectModel.Files.Add(new ObjectFileModel<ClassModel>(messageModel, messageModel.UsingDirectives, messageModel.Name, projectModel.Directory, ".cs"));
 
-        projectModel.Files.Add(new ObjectFileModel<ClassModel>(hubClassModel, hubClassModel.UsingDirectives, hubClassModel.Name, projectModel.Directory, "cs"));
+        projectModel.Files.Add(new ObjectFileModel<ClassModel>(hubClassModel, hubClassModel.UsingDirectives, hubClassModel.Name, projectModel.Directory, ".cs"));
 
-        projectModel.Files.Add(new ObjectFileModel<InterfaceModel>(interfaceModel, interfaceModel.Name, projectModel.Directory, "cs"));
+        projectModel.Files.Add(new ObjectFileModel<InterfaceModel>(interfaceModel, interfaceModel.Name, projectModel.Directory, ".cs"));
 
         await _artifactGenerator.CreateAsync(solutionModel);
 
@@ -185,7 +185,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             "SignalRAppMain",
             "main",
             Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src"),
-            "ts",
+            ".ts",
             tokens: new TokensBuilder()
             .With("baseUrl", projectModel.GetApplicationUrl(_fileSystem))
             .With("name", request.Name)
@@ -196,7 +196,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             "Components.HubClientServiceConsumer.Component",
             $"{nameSnakeCase}{Path.DirectorySeparatorChar}{nameSnakeCase}.component",
             appDirectory,
-            "ts",
+            ".ts",
             tokens: new TokensBuilder()
             .With("name", request.Name)
             .Build());
@@ -206,7 +206,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             "Components.HubClientServiceConsumer.Html",
             $"{nameSnakeCase}{Path.DirectorySeparatorChar}{nameSnakeCase}.component",
             appDirectory,
-            "html",
+            ".html",
             tokens: new TokensBuilder()
             .With("name", request.Name)
             .With("code", "{{ vm.messages | json }}")
@@ -217,7 +217,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             "Services.HubClientService.Service",
             $"{serviceName}.service",
             appDirectory,
-            "ts",
+            ".ts",
             tokens: new TokensBuilder()
             .With("name", request.Name)
             .Build());
@@ -227,12 +227,12 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             "Services.HubClientService.Spec",
             $"{serviceName}.service.spec",
             appDirectory,
-            "ts",
+            ".ts",
             tokens: new TokensBuilder()
             .With("name", request.Name)
             .Build());
 
-        var appHtmlFileModel = new ContentFileModel("<router-outlet />", "app.component", Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app"), "html");
+        var appHtmlFileModel = new ContentFileModel("<router-outlet />", "app.component", Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app"), ".html");
 
         await _artifactGenerator.CreateAsync(mainFileModel);
 

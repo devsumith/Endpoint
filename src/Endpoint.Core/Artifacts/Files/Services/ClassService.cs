@@ -62,7 +62,7 @@ public class ClassService : IClassService
             @class.UsingDirectives,
             @class.Name,
             directory,
-            "cs"
+            ".cs"
             );
 
         await _artifactGenerator.CreateAsync(classFile);
@@ -151,7 +151,7 @@ public class ClassService : IClassService
 
             classModel.UsingAsDirectives.Add(new UsingAsDirectiveModel($"{_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))}.{name}", name));
 
-            await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", "cs"));
+            await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", ".cs"));
         }
     }
 

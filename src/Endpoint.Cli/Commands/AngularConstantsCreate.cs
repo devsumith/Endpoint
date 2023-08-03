@@ -39,7 +39,7 @@ public class AngularConstantsCreateRequestHandler : IRequestHandler<AngularConst
 
         var content = "export const BASE_URL = 'BASE_URL';";
 
-        var model = new ContentFileModel(content, "constants", request.Directory, "ts");
+        var model = new ContentFileModel(content, "constants", request.Directory, ".ts");
 
         await _artifactGenerator.CreateAsync(model);
     }

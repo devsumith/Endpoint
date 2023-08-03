@@ -10,7 +10,7 @@ namespace Endpoint.Core.Artifacts.Files;
 public class MinimalApiProgramFileModel : FileModel
 {
     public MinimalApiProgramFileModel(string title, string directory, string apiNamespace, string dbContextName, List<EntityModel> entities)
-        : base("Program", directory, "cs")
+        : base("Program", directory, ".cs")
     {
         WebApplicationBuilder = new WebApplicationBuilderModel(title, dbContextName);
 

@@ -21,7 +21,7 @@ public class ApiProjectService : IApiProjectService
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
     private readonly IArtifactGenerator _artifactGenerator;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IClassModelFactory _classModelFactory;
     private readonly ISyntaxGenerator _syntaxGenerator;
     private readonly IMethodModelFactory _methodModelFactory;
@@ -31,7 +31,7 @@ public class ApiProjectService : IApiProjectService
         IFileProvider fileProvider,
         IFileSystem fileSystem,
         IArtifactGenerator artifactGenerator,
-        IFileModelFactory fileModelFactory,
+        IFileFactory fileModelFactory,
         IClassModelFactory classModelFactory,
         ISyntaxGenerator syntaxGenerator,
         IMethodModelFactory methodModelFactory,
@@ -82,7 +82,7 @@ public class ApiProjectService : IApiProjectService
             .With("SslPort", "5000")
             .Build();
 
-        var configureServiceFile = _fileModelFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", directory, "cs", tokens: tokens);
+        var configureServiceFile = _fileModelFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", directory, ".cs", tokens: tokens);
 
         var appSettingsFile = _fileModelFactory.CreateTemplate("Api.AppSettings", "appsettings", directory, "json", tokens: tokens);
 

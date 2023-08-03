@@ -15,12 +15,12 @@ namespace Endpoint.Core.Artifacts.SpecFlow;
 public class SpecFlowService : ISpecFlowService
 {
     private readonly ILogger<SpecFlowService> _logger;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IArtifactGenerator _artifactGenerator;
     public SpecFlowService(
         ILogger<SpecFlowService> logger,
         IArtifactGenerator artifactGenerator,
-        IFileModelFactory fileModelFactory
+        IFileFactory fileModelFactory
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -46,7 +46,7 @@ public class SpecFlowService : ISpecFlowService
             Name = "TechTalk.SpecFlow"
         });
 
-        var fileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
+        var fileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
         await _artifactGenerator.CreateAsync(fileModel);
     }
@@ -66,7 +66,7 @@ public class SpecFlowService : ISpecFlowService
 
         classModel.UsingDirectives.Add(new("TechTalk.SpecFlow"));
 
-        var fileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
+        var fileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
         await _artifactGenerator.CreateAsync(fileModel);
     }

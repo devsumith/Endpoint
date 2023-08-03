@@ -23,7 +23,7 @@ public class AggregateService : IAggregateService
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly IClassModelFactory _classModelFactory;
     private readonly IProjectService _projectService;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IFileProvider _fileProvider;
 
     public AggregateService(
@@ -33,7 +33,7 @@ public class AggregateService : IAggregateService
         IArtifactGenerator artifactGenerator,
         IClassModelFactory classModelFactory,
         IProjectService projectService,
-        IFileModelFactory fileModelFactory,
+        IFileFactory fileModelFactory,
         IFileProvider fileProvider)
     {
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
@@ -111,7 +111,7 @@ public class AggregateService : IAggregateService
             _ => throw new NotSupportedException()
         });
 
-        var model = new ObjectFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, "cs");
+        var model = new ObjectFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, ".cs");
 
         await _artifactGenerator.CreateAsync(model);
     }
@@ -135,7 +135,7 @@ public class AggregateService : IAggregateService
             _ => throw new NotSupportedException()
         });
 
-        var model = new ObjectFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, "cs");
+        var model = new ObjectFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, ".cs");
 
         await _artifactGenerator.CreateAsync(model);
     }

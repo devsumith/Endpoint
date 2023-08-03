@@ -33,7 +33,7 @@ public class AngularService : IAngularService
     private readonly ICommandService _commandService;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly Observable<INotification> _observableNotifications;
     private readonly IUtlitityService _utlitityService;
     private readonly ISyntaxService _syntaxService;
@@ -44,7 +44,7 @@ public class AngularService : IAngularService
         ICommandService commandService,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileModelFactory fileModelFactory,
+        IFileFactory fileModelFactory,
         Observable<INotification> observableNotifications,
         IUtlitityService utlitityService,
         ISyntaxService syntaxService,
@@ -95,7 +95,7 @@ public class AngularService : IAngularService
             "Components.Default.Component",
             $"{nameSnakeCase}.component",
             componentDirectory,
-            "ts",
+            ".ts",
             tokens: new TokensBuilder()
             .With("name", name)
             .Build()
@@ -105,7 +105,7 @@ public class AngularService : IAngularService
             "Components.Default.Html",
             $"{nameSnakeCase}.component",
             componentDirectory,
-            "html",
+            ".html",
             tokens: new TokensBuilder()
             .With("name", name)
             .With("messageBinding", "{{ vm.message }}")
@@ -128,7 +128,7 @@ public class AngularService : IAngularService
             .Append($");")
             .ToString();
 
-        var fileModel = new ObjectFileModel<FunctionModel>(model, $"create-{nameSnakeCase}-view-model", componentDirectory, "ts");
+        var fileModel = new ObjectFileModel<FunctionModel>(model, $"create-{nameSnakeCase}-view-model", componentDirectory, ".ts");
 
         await _artifactGenerator.CreateAsync(fileModel);
 
@@ -261,9 +261,9 @@ public class AngularService : IAngularService
 
             var files = new List<FileModel>
             {
-                _fileModelFactory.CreateTemplate("Angular.app.component","app.component", appDirectory, "ts"),
-                _fileModelFactory.CreateTemplate("Angular.app.component.spec","app.component.spec", appDirectory, "ts"),
-                _fileModelFactory.CreateTemplate("Angular.main","main", srcDirectory, "ts"),
+                _fileModelFactory.CreateTemplate("Angular.app.component","app.component", appDirectory, ".ts"),
+                _fileModelFactory.CreateTemplate("Angular.app.component.spec","app.component.spec", appDirectory, ".ts"),
+                _fileModelFactory.CreateTemplate("Angular.main","main", srcDirectory, ".ts"),
             };
 
             foreach (var file in files)
@@ -321,7 +321,7 @@ public class AngularService : IAngularService
                 _fileSystem.Delete(file);
             }
 
-            await _artifactGenerator.CreateAsync(new ContentFileModel($"export const BASE_URL = '{_namingConventionConverter.Convert(NamingConvention.KebobCase, model.Name).ToUpper()}:BASE_URL';", "constants", libFolder, "ts"));
+            await _artifactGenerator.CreateAsync(new ContentFileModel($"export const BASE_URL = '{_namingConventionConverter.Convert(NamingConvention.KebobCase, model.Name).ToUpper()}:BASE_URL';", "constants", libFolder, ".ts"));
 
             await IndexCreate(false, libFolder);
 
@@ -338,7 +338,7 @@ public class AngularService : IAngularService
 
             await _artifactGenerator.CreateAsync(new ContentFileModel(new StringBuilder()
                 .AppendJoin(Environment.NewLine, publicApiContent)
-                .ToString(), "public-api", Path.Combine(model.Directory, "src"), "ts"));
+                .ToString(), "public-api", Path.Combine(model.Directory, "src"), ".ts"));
 
         }
     }
@@ -735,7 +735,7 @@ public class AngularService : IAngularService
             }
         }
 
-        var fileModel = new ObjectFileModel<TypeScriptTypeModel>(model, ((SyntaxToken)model.Name).SnakeCase(), directory, "ts");
+        var fileModel = new ObjectFileModel<TypeScriptTypeModel>(model, ((SyntaxToken)model.Name).SnakeCase(), directory, ".ts");
 
         await _artifactGenerator.CreateAsync(fileModel);
     }
@@ -802,7 +802,7 @@ public class AngularService : IAngularService
     {
         var applicationDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.app.json", directory));
 
-        var scssDirectory = Path.Combine(applicationDirectory, "src", "scss");
+        var scssDirectory = Path.Combine(applicationDirectory, "src", ".scss");
 
         _fileSystem.CreateDirectory(scssDirectory);
 
@@ -827,7 +827,7 @@ public class AngularService : IAngularService
         {
             var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
 
-            var model = _fileModelFactory.CreateTemplate(name, $"_{nameSnakeCase}", scssDirectory, "scss", tokens: new TokensBuilder().With("prefix", "g").Build());
+            var model = _fileModelFactory.CreateTemplate(name, $"_{nameSnakeCase}", scssDirectory, ".scss", tokens: new TokensBuilder().With("prefix", "g").Build());
 
             await _artifactGenerator.CreateAsync(model);
         }
@@ -839,7 +839,7 @@ public class AngularService : IAngularService
     {
         var applicationDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.app.json", directory));
 
-        var scssDirectory = Path.Combine(applicationDirectory, "src", "scss");
+        var scssDirectory = Path.Combine(applicationDirectory, "src", ".scss");
 
         _fileSystem.CreateDirectory(scssDirectory);
 
@@ -866,7 +866,7 @@ public class AngularService : IAngularService
             "Components.Control.Component",
             $"{nameSnakeCase}.component",
             componentDirectory,
-            "ts",
+            ".ts",
             tokens: new TokensBuilder()
             .With("name", name)
             .Build()
@@ -876,7 +876,7 @@ public class AngularService : IAngularService
             "Components.Control.Html",
             $"{nameSnakeCase}.component",
             componentDirectory,
-            "html",
+            ".html",
             tokens: new TokensBuilder()
             .With("name", name)
             .With("messageBinding", "{{ vm.message }}")

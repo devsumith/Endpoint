@@ -20,7 +20,7 @@ namespace Endpoint.Cli.Commands;
 public class IndexCreateRequest : IRequest
 {
 
-    [Option('s', "scss")]
+    [Option('s', ".scss")]
     public bool Scss { get; set; }
 
     [Option('d', Required = false)]

@@ -19,7 +19,7 @@ public class InfrastructureProjectService : IInfrastructureProjectService
     private readonly ILogger<InfrastructureProjectService> _logger;
     private readonly IClassModelFactory _classModelFactory;
     private readonly IArtifactGenerator _artifactGenerator;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
 
@@ -27,7 +27,7 @@ public class InfrastructureProjectService : IInfrastructureProjectService
         ILogger<InfrastructureProjectService> logger,
         IClassModelFactory classModelFactory,
         IArtifactGenerator artifactGenerator,
-        IFileModelFactory fileModelFactory,
+        IFileFactory fileModelFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem)
     {

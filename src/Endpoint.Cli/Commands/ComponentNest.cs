@@ -44,7 +44,7 @@ public class ComponentNestRequestHandler : IRequestHandler<ComponentNestRequest>
 
                 Directory.CreateDirectory(destinationDirectory);
 
-                foreach (var fileExtension in new[] { "ts", "scss", "html" })
+                foreach (var fileExtension in new[] { ".ts", ".scss", ".html" })
                 {
                     var source = Path.Combine(directory, $"{componentName}.component.{fileExtension}");
 

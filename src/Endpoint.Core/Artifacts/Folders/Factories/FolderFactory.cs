@@ -25,7 +25,7 @@ public class FolderFactory : IFolderFactory
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
     private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IClassModelFactory _classModelFactory;
 
     public FolderFactory(
@@ -33,7 +33,7 @@ public class FolderFactory : IFolderFactory
         IFileProvider fileProvider,
         IFileSystem fileSystem,
         INamingConventionConverter namingConventionConverter,
-        IFileModelFactory fileModelFactory,
+        IFileFactory fileModelFactory,
         IClassModelFactory classModelFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -59,7 +59,7 @@ public class FolderFactory : IFolderFactory
             //TODO: build command and subclasses fully here. Class factory
             var command = new CommandModel(microserviceName, aggregate, _namingConventionConverter, routeType);
 
-            model.Files.Add(new ObjectFileModel<CommandModel>(command, command.UsingDirectives, command.Name, model.Directory, "cs"));
+            model.Files.Add(new ObjectFileModel<CommandModel>(command, command.UsingDirectives, command.Name, model.Directory, ".cs"));
         }
 
         return model;
@@ -75,7 +75,7 @@ public class FolderFactory : IFolderFactory
         {
             var query = new QueryModel(microserviceName, _namingConventionConverter, aggregate, routeType);
 
-            model.Files.Add(new ObjectFileModel<QueryModel>(query, query.UsingDirectives, query.Name, model.Directory, "cs"));
+            model.Files.Add(new ObjectFileModel<QueryModel>(query, query.UsingDirectives, query.Name, model.Directory, ".cs"));
         }
 
         return model;
@@ -103,13 +103,13 @@ public class FolderFactory : IFolderFactory
             typeScriptTypeModel.Properties.Add(PropertyModel.TypeScriptProperty(propertyName, propertyType));
         }
 
-        model.Files.Add(new ObjectFileModel<TypeScriptTypeModel>(typeScriptTypeModel, typeScriptTypeModel.Name, model.Directory, "ts"));
+        model.Files.Add(new ObjectFileModel<TypeScriptTypeModel>(typeScriptTypeModel, typeScriptTypeModel.Name, model.Directory, ".ts"));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("http-service", $"{modelNameSnakeCase}.service", model.Directory, "ts", tokens: new TokensBuilder()
+        model.Files.Add(_fileModelFactory.CreateTemplate("http-service", $"{modelNameSnakeCase}.service", model.Directory, ".ts", tokens: new TokensBuilder()
             .With("entityName", modelNameSnakeCase)
             .Build()));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("component-store", $"{modelNameSnakeCase}.store", model.Directory, "ts", tokens: new TokensBuilder()
+        model.Files.Add(_fileModelFactory.CreateTemplate("component-store", $"{modelNameSnakeCase}.store", model.Directory, ".ts", tokens: new TokensBuilder()
             .With("entityName", modelNameSnakeCase)
             .Build()));
 
@@ -117,7 +117,7 @@ public class FolderFactory : IFolderFactory
             .AppendLine($"export * from './{modelNameSnakeCase}';")
             .AppendLine($"export * from './{modelNameSnakeCase}.service';")
             .AppendLine($"export * from './{modelNameSnakeCase}.store';")
-            .ToString(), "index", model.Directory, "ts"));
+            .ToString(), "index", model.Directory, ".ts"));
 
 
         return model;
@@ -138,11 +138,11 @@ public class FolderFactory : IFolderFactory
 
         var extensions = new DtoExtensionsModel(_namingConventionConverter, $"{aggregate.Name}Extensions", aggregate);
 
-        model.Files.Add(new ObjectFileModel<ClassModel>(aggregate, aggregate.UsingDirectives, aggregate.Name, model.Directory, "cs"));
+        model.Files.Add(new ObjectFileModel<ClassModel>(aggregate, aggregate.UsingDirectives, aggregate.Name, model.Directory, ".cs"));
 
-        model.Files.Add(new ObjectFileModel<ClassModel>(aggregateDto, aggregateDto.UsingDirectives, aggregateDto.Name, model.Directory, "cs"));
+        model.Files.Add(new ObjectFileModel<ClassModel>(aggregateDto, aggregateDto.UsingDirectives, aggregateDto.Name, model.Directory, ".cs"));
 
-        model.Files.Add(new ObjectFileModel<ClassModel>(extensions, extensions.UsingDirectives, extensions.Name, model.Directory, "cs"));
+        model.Files.Add(new ObjectFileModel<ClassModel>(extensions, extensions.UsingDirectives, extensions.Name, model.Directory, ".cs"));
 
         return model;
     }

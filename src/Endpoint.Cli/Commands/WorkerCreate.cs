@@ -129,7 +129,7 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
 
         model.Methods.Add(method);
 
-        var fileModel = new ObjectFileModel<ClassModel>(model, usings, model.Name, request.Directory, "cs");
+        var fileModel = new ObjectFileModel<ClassModel>(model, usings, model.Name, request.Directory, ".cs");
 
         await _artifactGenerator.CreateAsync(fileModel);
 

@@ -35,7 +35,7 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
     private readonly ILogger<MicroserviceAddRequestHandler> _logger;
     private readonly IProjectService _projectService;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IProjectFactory _projectModelFactory;
 
     public MicroserviceAddRequestHandler(
@@ -43,7 +43,7 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
         IProjectFactory projectModelFactory,
         IProjectService projectService,
         IFileSystem fileSystem,
-        IFileModelFactory fileModelFactory)
+        IFileFactory fileModelFactory)
     {
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

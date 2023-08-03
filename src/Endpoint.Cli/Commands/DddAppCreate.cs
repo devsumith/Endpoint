@@ -64,7 +64,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     private readonly IClassModelFactory _classModelFactory;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IFolderFactory _folderFactory;
     private readonly IProjectFactory _projectModelFactory;
     private readonly IAggregateService _aggregateService;
@@ -81,7 +81,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         IClassModelFactory classModelFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileModelFactory fileModelFactory,
+        IFileFactory fileModelFactory,
         IFolderFactory folderFactory,
         IProjectFactory projectModelFactory,
         IAggregateService aggregateService,
@@ -170,7 +170,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
             new EntityModel(entity.Name) { Properties = entity.Properties}
         }, name);
 
-        await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), "cs"));
+        await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), ".cs"));
 
         await _apiProjectService.ControllerAdd(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
 

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 
@@ -16,7 +17,7 @@ namespace Endpoint.UnitTests.Core.Strategies.CSharp;
 public class SwaggerOperationAttributeGenerationStrategyTests
 {
     [Fact]
-    public void ShouldCreateAttribute()
+    public async Task ShouldCreateAttribute()
     {
         var expected = new string[4] {
             "[SwaggerOperation(",
@@ -40,7 +41,7 @@ public class SwaggerOperationAttributeGenerationStrategyTests
             { "Description", "Get Show By Id." },
         });
 
-        var actual = sut.Create(model);
+        var actual = await sut.CreateAsync(model);
 
         Assert.Equal(string.Join(Environment.NewLine, expected), actual);
     }

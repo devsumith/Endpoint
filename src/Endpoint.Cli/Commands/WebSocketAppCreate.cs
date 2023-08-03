@@ -36,7 +36,7 @@ public class WebSocketAppCreateRequestHandler : IRequestHandler<WebSocketAppCrea
     private readonly IClassModelFactory _classModelFactory;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
 
     public WebSocketAppCreateRequestHandler(
         ILogger<WebSocketAppCreateRequestHandler> logger,
@@ -48,7 +48,7 @@ public class WebSocketAppCreateRequestHandler : IRequestHandler<WebSocketAppCrea
         IClassModelFactory classModelFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileModelFactory fileModelFactory)
+        IFileFactory fileModelFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));

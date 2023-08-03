@@ -28,13 +28,13 @@ public class ArtifactGenerationStrategyCreateRequestHandler : IRequestHandler<Ar
 {
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly ILogger<VerbRequestHandler> _logger;
-    private readonly IFileModelFactory _fileFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly INamespaceProvider _namespaceProvider;
 
     public ArtifactGenerationStrategyCreateRequestHandler(
         ILogger<VerbRequestHandler> logger,
         IArtifactGenerator artifactGenerator,
-        IFileModelFactory fileFactory,
+        IFileFactory fileFactory,
         INamespaceProvider namespaceProvider
         )
     {

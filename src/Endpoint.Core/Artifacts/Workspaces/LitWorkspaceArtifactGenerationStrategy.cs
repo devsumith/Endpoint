@@ -20,13 +20,13 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
     private readonly ILogger<LitWorkspaceArtifactGenerationStrategy> _logger;
     private readonly ICommandService _commandService;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     public LitWorkspaceArtifactGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<LitWorkspaceArtifactGenerationStrategy> logger,
         IFileSystem fileSystem,
         ICommandService commandService,
-        IFileModelFactory fileModelFactory)
+        IFileFactory fileModelFactory)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

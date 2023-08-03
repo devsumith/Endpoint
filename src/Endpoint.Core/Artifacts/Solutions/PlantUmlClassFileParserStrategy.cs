@@ -37,7 +37,7 @@ public class PlantUmlClassFileParserStrategy : PlantUmlParserStrategyBase<Object
         }
 
 
-        return new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, context.Project.Directory, "cs");
+        return new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, context.Project.Directory, ".cs");
     }
 }
 

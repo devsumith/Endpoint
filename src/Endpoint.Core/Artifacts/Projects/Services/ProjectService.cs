@@ -19,13 +19,13 @@ public class ProjectService : IProjectService
     private readonly IFileProvider _fileProvider;
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     public ProjectService(
         IArtifactGenerator artifactGenerator,
         ICommandService commandService,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileModelFactory fileModelFactory)
+        IFileFactory fileModelFactory)
     {
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));

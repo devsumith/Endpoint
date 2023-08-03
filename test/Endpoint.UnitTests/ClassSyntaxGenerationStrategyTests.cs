@@ -13,13 +13,14 @@ using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using Xunit;
+using System.Threading.Tasks;
 
 namespace Endpoint.UnitTests;
 
 public class ClassSyntaxGenerationStrategyTests
 {
     [Fact]
-    public void CreateShouldSerializeToExpectedString()
+    public async Task CreateShouldSerializeToExpectedString()
     {
         var expected = "public class Foo { }";
 
@@ -42,14 +43,14 @@ public class ClassSyntaxGenerationStrategyTests
             new ConstructorModel(classModel,classModel.Name)
         };
 
-        var result = sut.Create(syntaxGenerator, classModel);
+        var result = await sut.CreateAsync(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
 
     }
 
     [Fact]
-    public void CreateConfigureServicesClass()
+    public async Task CreateConfigureServicesClass()
     {
         var expected = "public class Foo { }";
 
@@ -86,14 +87,14 @@ public class ClassSyntaxGenerationStrategyTests
 
         classModel.Methods.Add(method);
 
-        var result = sut.Create(syntaxGenerator, classModel);
+        var result = await sut.CreateAsync(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
 
     }
 
     [Fact]
-    public void CreateShouldSerializeToExpectedString_GivenAField()
+    public async Task CreateShouldSerializeToExpectedString_GivenAField()
     {
         var expected = "public class Foo { }";
 
@@ -144,7 +145,7 @@ public class ClassSyntaxGenerationStrategyTests
             }
         };
 
-        var result = sut.Create(syntaxGenerator, classModel);
+        var result = await sut.CreateAsync(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
 

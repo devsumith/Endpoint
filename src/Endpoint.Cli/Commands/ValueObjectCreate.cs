@@ -63,7 +63,7 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
 
         if (string.IsNullOrEmpty(valueObjectDefinitionPath))
         {
-            var templateFileModel = new TemplatedFileModel("ValueObject", "ValueObject", request.Directory, "cs", new()
+            var templateFileModel = new TemplatedFileModel("ValueObject", "ValueObject", request.Directory, ".cs", new()
             {
                 { "Namespace", "System" }
             });
@@ -93,7 +93,7 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
             @class.UsingDirectives,
             @class.Name,
             request.Directory,
-            "cs"
+            ".cs"
             );
 
         await _artifactGenerator.CreateAsync(classFile);

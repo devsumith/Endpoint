@@ -86,7 +86,7 @@ public static class ConfigureServices
         services.AddSingleton<ISettingsProvider, SettingsProvider>();
         services.AddSingleton<ITenseConverter, TenseConverter>();
         services.AddSingleton<IContext, Context>();
-        services.AddSingleton<IFileModelFactory, FileModelFactory>();
+        services.AddSingleton<IFileFactory, FileFactory>();
         services.AddSingleton<INamespaceProvider, NamespaceProvider>();
         services.AddSingleton<IDomainDrivenDesignFileService, DomainDrivenDesignFileService>();
         services.AddSingleton<IDependencyInjectionService, DependencyInjectionService>();
@@ -125,7 +125,7 @@ public static class ConfigureServices
         services.AddSingleton<IArtifactGenerationStrategy, ContentFileArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, GitGenerationStrategy>();
         services.AddSingleton<IMinimalApiService, MinimalApiService>();
-        services.AddSingleton<IFileModelFactory, FileModelFactory>();
+        services.AddSingleton<IFileFactory, FileFactory>();
         services.AddSingleton<IAngularProjectFactory, AngularProjectFactory>();
         services.AddSingleton<IWebGenerator, WebGenerator>();
         services.AddSingleton<IWebGenerationStrategy, AngularProjectGenerationStrategy>();

@@ -27,13 +27,13 @@ public class SyntaxGenerationStrategyCreateRequestHandler : IRequestHandler<Synt
 {
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly ILogger<VerbRequestHandler> _logger;
-    private readonly IFileModelFactory _fileFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly INamespaceProvider _namespaceProvider;
 
     public SyntaxGenerationStrategyCreateRequestHandler(
         ILogger<VerbRequestHandler> logger,
         IArtifactGenerator artifactGenerator,
-        IFileModelFactory fileFactory,
+        IFileFactory fileFactory,
         INamespaceProvider namespaceProvider
         )
     {

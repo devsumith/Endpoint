@@ -132,7 +132,7 @@ public class DependencyInjectionService : IDependencyInjectionService
 
         classModel.Methods.Add(method);
 
-        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs")
+        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs")
         {
             Namespace = "Microsoft.Extensions.DependencyInjection"
         };

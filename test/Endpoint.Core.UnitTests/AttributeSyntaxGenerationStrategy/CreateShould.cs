@@ -11,7 +11,7 @@ using AttributeSyntaxGenerationStrategy = Syntax.Attributes.Strategies.Attribute
 public class CreateShould
 {
     [Fact]
-    public void CreateExpectedSyntax_GivenValidModel()
+    public async Task CreateExpectedSyntax_GivenValidModel()
     {
         // ARRANGE
 
@@ -33,7 +33,7 @@ public class CreateShould
 
         // ASSERT
 
-        var result = sut.Create(new AttributeModel() { Name = "Fact" });
+        var result = await sut.CreateAsync(new AttributeModel() { Name = "Fact" });
 
         Assert.Equal(expected, result);
     }

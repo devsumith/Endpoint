@@ -21,10 +21,10 @@ namespace Endpoint.Core.Artifacts.Projects.Factories;
 
 public class ProjectFactory : IProjectFactory
 {
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly ILogger<ProjectFactory> _logger;
 
-    public ProjectFactory(IFileModelFactory fileModelFactory, ILogger<ProjectFactory> logger)
+    public ProjectFactory(IFileFactory fileModelFactory, ILogger<ProjectFactory> logger)
     {
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -122,7 +122,7 @@ public class ProjectFactory : IProjectFactory
                     project.Files.Add(_fileModelFactory.CreateResponseBase(project.Directory));
                     project.Files.Add(_fileModelFactory.CreateCoreUsings(project.Directory));
                     project.Files.Add(_fileModelFactory.CreateLinqExtensions(project.Directory));
-                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Core.ConfigureServices", "ConfigureServices", project.Directory, "cs", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
+                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Core.ConfigureServices", "ConfigureServices", project.Directory, ".cs", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
 
                     project.Packages.Add(new("FluentValidation", "11.5.1"));
                     project.Packages.Add(new("FluentValidation.DependencyInjectionExtensions", "11.5.1"));
@@ -157,14 +157,14 @@ public class ProjectFactory : IProjectFactory
 
                     project.DotNetProjectType = DotNetProjectType.ClassLib;
                     project.Folders.Add(new("Data", project.Directory));
-                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.ConfigureServices", "ConfigureServices", project.Directory, "cs", tokens: tokens));
+                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.ConfigureServices", "ConfigureServices", project.Directory, ".cs", tokens: tokens));
 
-                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.SeedData", "SeedData", Path.Combine(project.Directory, "Data"), "cs", tokens: new TokensBuilder()
+                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.SeedData", "SeedData", Path.Combine(project.Directory, "Data"), ".cs", tokens: new TokensBuilder()
                         .With("serviceName", serviceName)
                         .With("namespace", $"{serviceName}.Infrastructure.Data")
                         .Build()));
 
-                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.DesignTimeDbContextFactory", "DesignTimeDbContextFactory", project.Directory, "cs", tokens: tokens));
+                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.DesignTimeDbContextFactory", "DesignTimeDbContextFactory", project.Directory, ".cs", tokens: tokens));
 
                     project.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Core{Path.DirectorySeparatorChar}{serviceName}.Core.csproj");
 
@@ -342,7 +342,7 @@ public class ProjectFactory : IProjectFactory
 
         model.Files.Add(jsonResponsefileModel);
 
-        model.Files.Add(new ObjectFileModel<ClassModel>(responseBase, responseBase.UsingDirectives, responseBase.Name, model.Directory, "cs"));
+        model.Files.Add(new ObjectFileModel<ClassModel>(responseBase, responseBase.UsingDirectives, responseBase.Name, model.Directory, ".cs"));
 
         return model;
     }

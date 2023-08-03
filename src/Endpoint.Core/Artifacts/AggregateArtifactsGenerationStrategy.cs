@@ -32,13 +32,13 @@ public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBa
         _fileSystem.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries");
 
         await artifactGenerator
-            .CreateAsync(new ObjectFileModel<ClassModel>(model.Aggregate, model.Aggregate.UsingDirectives, model.Aggregate.Name, aggregateDirectory, "cs"));
+            .CreateAsync(new ObjectFileModel<ClassModel>(model.Aggregate, model.Aggregate.UsingDirectives, model.Aggregate.Name, aggregateDirectory, ".cs"));
 
         await artifactGenerator
-            .CreateAsync(new ObjectFileModel<ClassModel>(model.AggregateDto, model.AggregateDto.UsingDirectives, model.AggregateDto.Name, aggregateDirectory, "cs"));
+            .CreateAsync(new ObjectFileModel<ClassModel>(model.AggregateDto, model.AggregateDto.UsingDirectives, model.AggregateDto.Name, aggregateDirectory, ".cs"));
 
         await artifactGenerator
-            .CreateAsync(new ObjectFileModel<ClassModel>(model.AggregateExtensions, model.AggregateExtensions.UsingDirectives, model.AggregateExtensions.Name, aggregateDirectory, "cs"));
+            .CreateAsync(new ObjectFileModel<ClassModel>(model.AggregateExtensions, model.AggregateExtensions.UsingDirectives, model.AggregateExtensions.Name, aggregateDirectory, ".cs"));
 
 
         foreach (var query in model.Queries)
@@ -50,7 +50,7 @@ public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBa
                     query.UsingDirectives,
                     query.Name,
                     $"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries",
-                    "cs"), new { Entity = model.Aggregate });
+                    ".cs"), new { Entity = model.Aggregate });
         }
 
         foreach (var command in model.Commands)
@@ -62,7 +62,7 @@ public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBa
                     command.UsingDirectives,
                     command.Name,
                     $"{aggregateDirectory}{Path.DirectorySeparatorChar}Commands",
-                    "cs"), new { Entity = model.Aggregate });
+                    ".cs"), new { Entity = model.Aggregate });
         }
     }
 }

@@ -14,13 +14,13 @@ namespace Endpoint.Core.Artifacts.Projects.Strategies;
 public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStrategyBase<ProjectReferenceModel>
 {
     private readonly ILogger<ApiProjectEnsureArtifactGenerationStrategy> _logger;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IFileSystem _fileSystem;
     private readonly IFileProvider _fileProvider;
     private readonly ICommandService _commandService;
 
     public ApiProjectEnsureArtifactGenerationStrategy(
-        IFileModelFactory fileModelFactory,
+        IFileFactory fileModelFactory,
         IFileSystem fileSystem,
         IFileProvider fileProvider,
         IServiceProvider serviceProvider,

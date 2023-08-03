@@ -27,13 +27,13 @@ public class AngularHttpServiceCreateRequest : IRequest
 public class AngularHttpServiceCreateRequestHandler : IRequestHandler<AngularHttpServiceCreateRequest>
 {
     private readonly ILogger<AngularHttpServiceCreateRequestHandler> _logger;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
 
     public AngularHttpServiceCreateRequestHandler(
         ILogger<AngularHttpServiceCreateRequestHandler> logger,
-        IFileModelFactory fileModelFactory,
+        IFileFactory fileModelFactory,
         IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter)
     {
@@ -49,7 +49,7 @@ public class AngularHttpServiceCreateRequestHandler : IRequestHandler<AngularHtt
 
         var entityName = _namingConventionConverter.Convert(NamingConvention.SnakeCase, request.EntityName);
 
-        var model = _fileModelFactory.CreateTemplate("http-service", $"{entityName}.service", request.Directory, "ts", tokens: new TokensBuilder()
+        var model = _fileModelFactory.CreateTemplate("http-service", $"{entityName}.service", request.Directory, ".ts", tokens: new TokensBuilder()
             .With("entityName", request.EntityName)
             .Build());
 

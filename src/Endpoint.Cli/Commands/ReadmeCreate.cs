@@ -27,12 +27,12 @@ public class ReadmeCreateRequest : IRequest
 public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
 {
     private readonly ILogger<ReadmeCreateRequestHandler> _logger;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IArtifactGenerator _artifactGenerator;
 
     public ReadmeCreateRequestHandler(
         ILogger<ReadmeCreateRequestHandler> logger,
-        IFileModelFactory fileModelFactory,
+        IFileFactory fileModelFactory,
         IArtifactGenerator artifactGenerator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

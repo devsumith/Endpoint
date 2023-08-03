@@ -79,7 +79,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Implements.Add(new("IRequest"));
 
-        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
+        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
         await _artifactGenerator.CreateAsync(classFileModel);
 
@@ -153,7 +153,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Methods.Add(methodModel);
 
-        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
+        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
         await _artifactGenerator.CreateAsync(classFileModel);
 
@@ -307,7 +307,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Methods.Add(method);
 
-        await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs"));
+        await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs"));
     }
 
     public async Task ServiceCreate(string name, string directory)
@@ -361,7 +361,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 @interface.UsingDirectives,
                 @interface.Name,
                 directory,
-                "cs"
+                ".cs"
                 );
 
             await _artifactGenerator.CreateAsync(interfaceFile);
@@ -402,7 +402,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 @class.UsingDirectives,
                 @class.Name,
                 directory,
-                "cs"
+                ".cs"
                 );
 
             await _artifactGenerator.CreateAsync(classFile);

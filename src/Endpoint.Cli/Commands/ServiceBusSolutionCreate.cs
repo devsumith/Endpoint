@@ -114,7 +114,7 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
         {
             new (projectModel.Name)
 
-        }, configureServicesClassModel.Name, projectModel.Directory, "cs");
+        }, configureServicesClassModel.Name, projectModel.Directory, ".cs");
 
         configureServicesFileModel.Namespace = "Microsoft.Extensions.DependencyInjection";
 
@@ -131,12 +131,12 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
                 .AppendLine(".Build();".Indent(1))
                 .AppendLine(string.Empty)
                 .AppendLine("host.Run();")
-                .ToString(), "Program", projectModel.Directory, "cs");
+                .ToString(), "Program", projectModel.Directory, ".cs");
 
             projectModel.Files.Add(programFileModel);
         }
 
-        projectModel.Files.Add(new ObjectFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.UsingDirectives, serviceBusMessageConsumerClassModel.Name, projectModel.Directory, "cs"));
+        projectModel.Files.Add(new ObjectFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.UsingDirectives, serviceBusMessageConsumerClassModel.Name, projectModel.Directory, ".cs"));
 
         projectModel.References.Add(@"..\Messaging.Udp\Messaging.Udp.csproj");
 

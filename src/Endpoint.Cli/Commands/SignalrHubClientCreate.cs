@@ -30,13 +30,13 @@ public class SignalRHubClientCreateRequestHandler : IRequestHandler<SignalRHubCl
 {
     private readonly ILogger<SignalRHubClientCreateRequestHandler> _logger;
     private readonly ICommandService _commandService;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
 
     public SignalRHubClientCreateRequestHandler(
         ILogger<SignalRHubClientCreateRequestHandler> logger,
-        IFileModelFactory fileModelFactory,
+        IFileFactory fileModelFactory,
         ICommandService commandService,
         IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter)
@@ -58,8 +58,8 @@ public class SignalRHubClientCreateRequestHandler : IRequestHandler<SignalRHubCl
 
         foreach (var model in new FileModel[]
         {
-            _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Service", $"{nameSnakeCase}-hub-client.service", request.Directory, "ts", tokens: tokens),
-            _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Spec", $"{nameSnakeCase}-hub-client.service.spec", request.Directory, "ts", tokens: tokens)
+            _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Service", $"{nameSnakeCase}-hub-client.service", request.Directory, ".ts", tokens: tokens),
+            _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Spec", $"{nameSnakeCase}-hub-client.service.spec", request.Directory, ".ts", tokens: tokens)
         })
         {
             await _artifactGenerator.CreateAsync(model);

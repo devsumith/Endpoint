@@ -1,15 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Constructors;
-using Endpoint.Core.Syntax.Methods;
-using Endpoint.Core.Syntax.Properties;
-using Endpoint.Core.Services;
-using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Entities.Legacy;
 using Endpoint.Core.Syntax.Interfaces;
+using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.RouteHandlers;
@@ -22,7 +20,7 @@ using System.Text;
 namespace Endpoint.Core.Artifacts.Files.Factories;
 
 using IFileProvider = IFileProvider;
-public class FileModelFactory : IFileModelFactory
+public class FileFactory : IFileFactory
 {
     private readonly IRouteHandlerModelFactory _routeHandlerModelFactory;
     private readonly INamingConventionConverter _namingConventionConverter;
@@ -30,7 +28,7 @@ public class FileModelFactory : IFileModelFactory
     private readonly IFileProvider _fileProvider;
     private readonly INamespaceProvider _namespaceProvider;
 
-    public FileModelFactory(
+    public FileFactory(
         ILegacyAggregatesModelFactory aggregateRootModelFactory,
         IRouteHandlerModelFactory routeHandlerModelFactory,
         INamingConventionConverter namingConventionConverter,
@@ -44,7 +42,7 @@ public class FileModelFactory : IFileModelFactory
         _namespaceProvider = namespaceProvider;
     }
 
-    public TemplatedFileModel CreateTemplate(string template, string name, string directory, string extension = "cs", string filename = null, Dictionary<string, object> tokens = null)
+    public TemplatedFileModel CreateTemplate(string template, string name, string directory, string extension = ".cs", string filename = null, Dictionary<string, object> tokens = null)
     {
         return new TemplatedFileModel(template, name, directory, extension, tokens);
     }
@@ -81,7 +79,7 @@ public class FileModelFactory : IFileModelFactory
 
     public FileModel CreateCSharp<T>(T classModel, string directory)
         where T : TypeDeclarationModel
-        => new ObjectFileModel<T>(classModel, classModel.UsingDirectives, classModel.Name, directory, "cs");
+        => new ObjectFileModel<T>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
     public FileModel CreateResponseBase(string directory)
     {
@@ -169,7 +167,7 @@ public class FileModelFactory : IFileModelFactory
 
         return new ContentFileModel(new StringBuilder()
             .AppendJoin(Environment.NewLine, usings)
-            .ToString(), "Usings", directory, "cs");
+            .ToString(), "Usings", directory, ".cs");
     }
     public FileModel CreateDbContextInterface(string diretory)
     {
@@ -203,7 +201,7 @@ public class FileModelFactory : IFileModelFactory
         }.ToInterface();
 
 
-        return new ObjectFileModel<InterfaceModel>(interfaceModel, interfaceModel.UsingDirectives, interfaceModel.Name, projectDirectory, "cs");
+        return new ObjectFileModel<InterfaceModel>(interfaceModel, interfaceModel.UsingDirectives, interfaceModel.Name, projectDirectory, ".cs");
 
     }
 }

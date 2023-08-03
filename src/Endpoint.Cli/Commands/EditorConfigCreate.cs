@@ -25,12 +25,12 @@ public class EditorConfigCreateRequestHandler : IRequestHandler<EditorConfigCrea
 {
     private readonly ILogger<EditorConfigCreateRequestHandler> _logger;
     private readonly IArtifactGenerator _artifactGenerator;
-    private readonly IFileModelFactory _fileModelFactory;
+    private readonly IFileFactory _fileModelFactory;
 
     public EditorConfigCreateRequestHandler(
         ILogger<EditorConfigCreateRequestHandler> logger,
         IArtifactGenerator artifactGenerator,
-        IFileModelFactory fileModelFactory)
+        IFileFactory fileModelFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
