@@ -5,25 +5,26 @@ using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Options;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Solutions;
 
 public class SolutionModelFactory : ISolutionModelFactory
 {
-    private readonly IProjectModelFactory _projectModelFactory;
+    private readonly IProjectFactory _projectModelFactory;
 
-    public SolutionModelFactory(IProjectModelFactory projectModelFactory)
+    public SolutionModelFactory(IProjectFactory projectModelFactory)
     {
         _projectModelFactory = projectModelFactory;
     }
-    public SolutionModel Create(string name)
+    public async Task<SolutionModel> Create(string name)
     {
         var model = new SolutionModel() { Name = name };
 
         return model;
     }
 
-    public SolutionModel Create(string name, string projectName, string dotNetProjectTypeName, string folderName, string directory)
+    public async Task<SolutionModel> Create(string name, string projectName, string dotNetProjectTypeName, string folderName, string directory)
     {
         var model = new SolutionModel(name, directory);
 
@@ -40,27 +41,27 @@ public class SolutionModelFactory : ISolutionModelFactory
             srcFolder.SubFolders.Add(userDefinedFolder);
         }
 
-        var project = _projectModelFactory.Create(dotNetProjectTypeName, projectName, userDefinedFolder == null ? $"{srcFolder.Directory}" : userDefinedFolder.Directory);
+        var project = await _projectModelFactory.Create(dotNetProjectTypeName, projectName, userDefinedFolder == null ? $"{srcFolder.Directory}" : userDefinedFolder.Directory);
 
         (userDefinedFolder == null ? srcFolder : userDefinedFolder).Projects.Add(project);
 
         return model;
     }
 
-    public SolutionModel CreateHttpSolution(CreateEndpointSolutionOptions options)
+    public async Task<SolutionModel> CreateHttpSolution(CreateEndpointSolutionOptions options)
     {
         var solutionModel = new SolutionModel(options.Name, options.Directory);
 
-        solutionModel.Projects.Add(_projectModelFactory.CreateHttpProject(options.Name, solutionModel.SrcDirectory));
+        solutionModel.Projects.Add(await _projectModelFactory.CreateHttpProject(options.Name, solutionModel.SrcDirectory));
 
         return solutionModel;
     }
 
-    public SolutionModel Minimal(CreateEndpointSolutionOptions options)
+    public async Task<SolutionModel> Minimal(CreateEndpointSolutionOptions options)
     {
         var model = string.IsNullOrEmpty(options.SolutionDirectory) ? new SolutionModel(options.Name, options.Directory) : new SolutionModel(options.Name, options.Directory, options.SolutionDirectory);
 
-        var minimalApiProject = _projectModelFactory.CreateMinimalApiProject(new CreateMinimalApiProjectOptions
+        var minimalApiProject = await _projectModelFactory.CreateMinimalApiProject(new CreateMinimalApiProjectOptions
         {
             Name = $"{options.Name}.Api",
             ShortIdPropertyName = false,
@@ -72,7 +73,7 @@ public class SolutionModelFactory : ISolutionModelFactory
             DbContextName = options.DbContextName
         });
 
-        var unitTestProject = _projectModelFactory.CreateMinimalApiUnitTestsProject(options.Name, model.TestDirectory, options.Resource);
+        var unitTestProject = await _projectModelFactory.CreateMinimalApiUnitTestsProject(options.Name, model.TestDirectory, options.Resource);
 
         model.Projects.Add(minimalApiProject);
 
@@ -83,23 +84,23 @@ public class SolutionModelFactory : ISolutionModelFactory
         return model;
     }
 
-    public SolutionModel CleanArchitectureMicroservice(CreateCleanArchitectureMicroserviceOptions options)
+    public async Task<SolutionModel> CleanArchitectureMicroservice(CreateCleanArchitectureMicroserviceOptions options)
     {
         var model = string.IsNullOrEmpty(options.SolutionDirectory) ? new SolutionModel(options.Name, options.Directory) : new SolutionModel(options.Name, options.Directory, options.SolutionDirectory);
 
-        var domain = _projectModelFactory.CreateLibrary($"{options.Name}.Domain", model.SrcDirectory);
+        var domain = await _projectModelFactory.CreateLibrary($"{options.Name}.Domain", model.SrcDirectory);
 
         domain.Metadata.Add(Constants.ProjectType.Domain);
 
-        var infrastructure = _projectModelFactory.CreateLibrary($"{options.Name}.Infrastructure", model.SrcDirectory);
+        var infrastructure = await _projectModelFactory.CreateLibrary($"{options.Name}.Infrastructure", model.SrcDirectory);
 
         infrastructure.Metadata.Add(Constants.ProjectType.Infrastructure);
 
-        var application = _projectModelFactory.CreateLibrary($"{options.Name}.Application", model.SrcDirectory);
+        var application = await _projectModelFactory.CreateLibrary($"{options.Name}.Application", model.SrcDirectory);
 
         application.Metadata.Add(Constants.ProjectType.Application);
 
-        var api = _projectModelFactory.CreateWebApi($"{options.Name}.Api", model.SrcDirectory);
+        var api = await _projectModelFactory.CreateWebApi($"{options.Name}.Api", model.SrcDirectory);
 
         api.Metadata.Add(Constants.ProjectType.Api);
 
@@ -122,21 +123,21 @@ public class SolutionModelFactory : ISolutionModelFactory
         return model;
     }
 
-    public SolutionModel Workspace(ResolveOrCreateWorkspaceOptions options)
+    public async Task<SolutionModel> Workspace(ResolveOrCreateWorkspaceOptions options)
     {
         var model = new SolutionModel(nameof(Workspace), options.Directory, $"{options.Directory}{Path.DirectorySeparatorChar}{options.Name}");
 
         return model;
     }
 
-    public SolutionModel Resolve(ResolveOrCreateWorkspaceOptions options)
+    public async Task<SolutionModel> Resolve(ResolveOrCreateWorkspaceOptions options)
     {
         var model = new SolutionModel(nameof(Workspace), options.Directory, $"{options.Directory}{Path.DirectorySeparatorChar}{options.Name}");
 
         return model;
     }
 
-    public SolutionModel ResolveCleanArchitectureMicroservice(UpdateCleanArchitectureMicroserviceOptions options)
+    public async Task<SolutionModel> ResolveCleanArchitectureMicroservice(UpdateCleanArchitectureMicroserviceOptions options)
     {
         return new SolutionModel
         {

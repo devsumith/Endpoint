@@ -66,7 +66,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     private readonly IFileSystem _fileSystem;
     private readonly IFileModelFactory _fileModelFactory;
     private readonly IFolderFactory _folderFactory;
-    private readonly IProjectModelFactory _projectModelFactory;
+    private readonly IProjectFactory _projectModelFactory;
     private readonly IAggregateService _aggregateService;
     private readonly IApiProjectService _apiProjectService;
 
@@ -83,7 +83,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         IFileSystem fileSystem,
         IFileModelFactory fileModelFactory,
         IFolderFactory folderFactory,
-        IProjectModelFactory projectModelFactory,
+        IProjectFactory projectModelFactory,
         IAggregateService aggregateService,
         IApiProjectService apiProjectService)
     {
@@ -125,15 +125,15 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder.Directory) { Priority = 1 };
 
-        var kernel = _projectModelFactory.CreateKernelProject(buildingBlocksFolder.Directory);
+        var kernel = await _projectModelFactory.CreateKernelProject(buildingBlocksFolder.Directory);
 
-        var messaging = _projectModelFactory.CreateMessagingProject(buildingBlocksFolder.Directory);
+        var messaging = await _projectModelFactory.CreateMessagingProject(buildingBlocksFolder.Directory);
 
-        var messagingUdp = _projectModelFactory.CreateMessagingUdpProject(buildingBlocksFolder.Directory);
+        var messagingUdp = await _projectModelFactory.CreateMessagingUdpProject(buildingBlocksFolder.Directory);
 
-        var security = _projectModelFactory.CreateSecurityProject(buildingBlocksFolder.Directory);
+        var security = await _projectModelFactory.CreateSecurityProject(buildingBlocksFolder.Directory);
 
-        var validation = _projectModelFactory.CreateValidationProject(buildingBlocksFolder.Directory);
+        var validation = await _projectModelFactory.CreateValidationProject(buildingBlocksFolder.Directory);
 
         buildingBlocksFolder.Projects.Add(messaging);
 
@@ -145,11 +145,11 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         buildingBlocksFolder.Projects.Add(validation);
 
-        var core = _projectModelFactory.CreateCore(name, sourceFolder.Directory);
+        var core = await _projectModelFactory.CreateCore(name, sourceFolder.Directory);
 
-        var infrastructure = _projectModelFactory.CreateInfrastructure(name, sourceFolder.Directory);
+        var infrastructure = await _projectModelFactory.CreateInfrastructure(name, sourceFolder.Directory);
 
-        var api = _projectModelFactory.CreateApi(name, sourceFolder.Directory);
+        var api = await _projectModelFactory.CreateApi(name, sourceFolder.Directory);
 
         sourceFolder.Projects.AddRange(new[] { core, infrastructure, api });
 

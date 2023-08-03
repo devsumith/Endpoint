@@ -31,12 +31,12 @@ public class PlaywrightProjectAddRequest : IRequest
 public class PlaywrightProjectAddRequestHandler : IRequestHandler<PlaywrightProjectAddRequest>
 {
     private readonly ILogger<PlaywrightProjectAddRequestHandler> _logger;
-    private readonly IProjectModelFactory _projectModelFactory;
+    private readonly IProjectFactory _projectModelFactory;
     private readonly IProjectService _projectService;
     private readonly ICommandService _commandService;
     public PlaywrightProjectAddRequestHandler(
         ILogger<PlaywrightProjectAddRequestHandler> logger,
-        IProjectModelFactory projectModelFactory,
+        IProjectFactory projectModelFactory,
         IProjectService projectService,
         ICommandService commandService)
     {
@@ -67,7 +67,7 @@ public class PlaywrightProjectAddRequestHandler : IRequestHandler<PlaywrightProj
                 request.Name = $"{request.Name}_{i}";
             }
 
-            ProjectModel model = _projectModelFactory.CreatePlaywrightProject(request.Name, request.Directory);
+            ProjectModel model = await _projectModelFactory.CreatePlaywrightProject(request.Name, request.Directory);
 
 
             _projectService.AddProjectAsync(model);

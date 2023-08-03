@@ -66,7 +66,7 @@ public class WebSocketAppCreateRequestHandler : IRequestHandler<WebSocketAppCrea
     {
         _logger.LogInformation("Handled: {0}", nameof(WebSocketAppCreateRequestHandler));
 
-        var model = _solutionModelFactory.Create(request.Name, request.Name, "web", string.Empty, request.Directory);
+        var model = await _solutionModelFactory.Create(request.Name, request.Name, "web", string.Empty, request.Directory);
 
 
         if (System.IO.Directory.Exists(model.SolutionDirectory))

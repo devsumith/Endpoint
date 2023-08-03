@@ -138,7 +138,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
     {
         _logger.LogInformation("Handled: {0}", nameof(SignalRAppCreateRequestHandler));
 
-        var solutionModel = _solutionModelFactory.Create(request.Name, $"{request.Name}.Api", "webapi", string.Empty, request.Directory);
+        var solutionModel = await _solutionModelFactory.Create(request.Name, $"{request.Name}.Api", "webapi", string.Empty, request.Directory);
 
         var messageModel = _classModelFactory.CreateMessageModel();
 

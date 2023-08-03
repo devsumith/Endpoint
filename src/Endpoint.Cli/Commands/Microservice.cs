@@ -74,11 +74,11 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
         _workspaceSettingsUpdateStrategyFactory = workspaceSettingsUpdateStrategyFactory;
     }
 
-    public SolutionModel CreateMinimalSolutionModel(CreateCleanArchitectureMicroserviceOptions createMicroserviceOptions, MicroserviceRequest request)
+    public async Task<SolutionModel> CreateMinimalSolutionModel(CreateCleanArchitectureMicroserviceOptions createMicroserviceOptions, MicroserviceRequest request)
     {
         if (IsExistingWorkspace(request.Directory))
         {
-            return _solutionModelFactory.Minimal(new CreateEndpointSolutionOptions
+            return await _solutionModelFactory.Minimal(new CreateEndpointSolutionOptions
             {
                 Name = createMicroserviceOptions.Name,
                 Directory = createMicroserviceOptions.Directory,
@@ -89,7 +89,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
             });
         }
 
-        return _solutionModelFactory.Minimal(new CreateEndpointSolutionOptions
+        return await _solutionModelFactory.Minimal(new CreateEndpointSolutionOptions
         {
             Name = createMicroserviceOptions.Name,
             Directory = $"{createMicroserviceOptions.Directory}",
@@ -121,8 +121,8 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
 
         SolutionModel solutionModel = request.TemplateType switch
         {
-            CleanArchitectureByJasonTalyor => _solutionModelFactory.CleanArchitectureMicroservice(createMicroserviceOptions),
-            Minimal => CreateMinimalSolutionModel(createMicroserviceOptions, request),
+            CleanArchitectureByJasonTalyor => await _solutionModelFactory.CleanArchitectureMicroservice(createMicroserviceOptions),
+            Minimal => await CreateMinimalSolutionModel(createMicroserviceOptions, request),
             _ => throw new NotImplementedException()
         };
 

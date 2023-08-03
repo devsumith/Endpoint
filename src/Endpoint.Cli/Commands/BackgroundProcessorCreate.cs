@@ -35,14 +35,14 @@ public class BackgroundProcessorCreateRequestHandler : IRequestHandler<Backgroun
 {
     private readonly ILogger<BackgroundProcessorCreateRequestHandler> _logger;
     private readonly ISolutionModelFactory _solutionModelFactory;
-    private readonly IProjectModelFactory _projectModelFactory;
+    private readonly IProjectFactory _projectModelFactory;
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly ICommandService _commandService;
 
     public BackgroundProcessorCreateRequestHandler(
         ILogger<BackgroundProcessorCreateRequestHandler> logger,
         ISolutionModelFactory solutionModelFactory,
-        IProjectModelFactory projectModelFactory,
+        IProjectFactory projectModelFactory,
         IArtifactGenerator artifactGenerator,
         ICommandService commandService)
     {

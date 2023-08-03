@@ -22,7 +22,7 @@ public class SolutionService : ISolutionService
 {
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly IPlantUmlParserStrategyFactory _plantUmlParserStrategyFactory;
-    private readonly IProjectModelFactory _projectModelFactory;
+    private readonly IProjectFactory _projectModelFactory;
     private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;
     private readonly IDomainDrivenDesignService _domainDrivenDesignService;
     private readonly Observable<INotification> _notificationListener;
@@ -32,7 +32,7 @@ public class SolutionService : ISolutionService
     public SolutionService(
         IArtifactGenerator artifactGenerator,
         IPlantUmlParserStrategyFactory plantUmlParserStrategyFactory,
-        IProjectModelFactory projectModelFactory,
+        IProjectFactory projectModelFactory,
         IDomainDrivenDesignFileService domainDrivenDesignFileService,
         IDomainDrivenDesignService domainDrivenDesignService,
         Observable<INotification> notificationListener,
@@ -65,9 +65,9 @@ public class SolutionService : ISolutionService
 
         var solutionModel = new SolutionModel(name, directory);
 
-        solutionModel.Folders.Add(BuildingBlocksCreate(solutionModel.SolutionDirectory));
+        solutionModel.Folders.Add(await BuildingBlocksCreate(solutionModel.SolutionDirectory));
 
-        solutionModel.Folders.Add(ServicesCreate(services, solutionModel.SolutionDirectory, notifications));
+        solutionModel.Folders.Add(await ServicesCreate(services, solutionModel.SolutionDirectory, notifications));
 
         await _artifactGenerator.CreateAsync(solutionModel);
 
@@ -77,24 +77,24 @@ public class SolutionService : ISolutionService
         }
     }
 
-    private FolderModel BuildingBlocksCreate(string directory)
+    private async Task<FolderModel> BuildingBlocksCreate(string directory)
     {
         var model = new FolderModel("BuildingBlocks", directory);
 
         var messagingFolder = new FolderModel("Messaging", model.Directory);
 
-        model.Projects.Add(_projectModelFactory.CreateKernelProject(model.Directory));
+        model.Projects.Add(await _projectModelFactory.CreateKernelProject(model.Directory));
 
-        messagingFolder.Projects.Add(_projectModelFactory.CreateMessagingProject(messagingFolder.Directory));
+        messagingFolder.Projects.Add(await _projectModelFactory.CreateMessagingProject(messagingFolder.Directory));
 
-        messagingFolder.Projects.Add(_projectModelFactory.CreateMessagingUdpProject(messagingFolder.Directory));
+        messagingFolder.Projects.Add(await _projectModelFactory.CreateMessagingUdpProject(messagingFolder.Directory));
 
         model.SubFolders.Add(messagingFolder);
 
         return model;
     }
 
-    private FolderModel ServicesCreate(string services, string directory, List<INotification> notifications)
+    private async Task<FolderModel> ServicesCreate(string services, string directory, List<INotification> notifications)
     {
         var model = new FolderModel("Services", directory);
 
@@ -106,7 +106,7 @@ public class SolutionService : ISolutionService
         {
             var serviceFolder = new FolderModel(service, model.Directory);
 
-            var coreModel = _projectModelFactory.CreateLibrary($"{service}.Core", serviceFolder.Directory, new List<string>()
+            var coreModel = await _projectModelFactory.CreateLibrary($"{service}.Core", serviceFolder.Directory, new List<string>()
             {
                 Constants.ProjectType.Core
             });
@@ -123,7 +123,7 @@ public class SolutionService : ISolutionService
 
             serviceFolder.Projects.Add(coreModel);
 
-            var infrastructureModel = _projectModelFactory.CreateLibrary($"{service}.Infrastructure", serviceFolder.Directory, new List<string>()
+            var infrastructureModel = await _projectModelFactory.CreateLibrary($"{service}.Infrastructure", serviceFolder.Directory, new List<string>()
             {
                 Constants.ProjectType.Infrastructure
             });
@@ -132,7 +132,7 @@ public class SolutionService : ISolutionService
 
             serviceFolder.Projects.Add(infrastructureModel);
 
-            var apiProjectModel = _projectModelFactory.CreateLibrary($"{service}.Api", serviceFolder.Directory, new List<string>()
+            var apiProjectModel = await _projectModelFactory.CreateLibrary($"{service}.Api", serviceFolder.Directory, new List<string>()
             {
                 Constants.ProjectType.Api
             });
@@ -200,13 +200,13 @@ public class SolutionService : ISolutionService
         }
 
 
-        var messagingProjectModel = _projectModelFactory.CreateMessagingProject(messagingDirectory);
+        var messagingProjectModel = await _projectModelFactory.CreateMessagingProject(messagingDirectory);
 
         await _artifactGenerator.CreateAsync(messagingProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
 
-        var messagingUdpProjectModel = _projectModelFactory.CreateMessagingUdpProject(messagingDirectory);
+        var messagingUdpProjectModel = await _projectModelFactory.CreateMessagingUdpProject(messagingDirectory);
 
         await _artifactGenerator.CreateAsync(messagingUdpProjectModel);
 
@@ -238,13 +238,13 @@ public class SolutionService : ISolutionService
         }
 
 
-        var messagingProjectModel = _projectModelFactory.CreateMessagingProject(messagingDirectory);
+        var messagingProjectModel = await _projectModelFactory.CreateMessagingProject(messagingDirectory);
 
         await _artifactGenerator.CreateAsync(messagingProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
 
-        var messagingUdpProjectModel = _projectModelFactory.CreateMessagingUdpProject(messagingDirectory);
+        var messagingUdpProjectModel = await _projectModelFactory.CreateMessagingUdpProject(messagingDirectory);
 
         await _artifactGenerator.CreateAsync(messagingUdpProjectModel);
 

@@ -49,7 +49,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
     private readonly ICommandService _commandService;
     private readonly IFileSystem _fileSystem;
     private readonly IProjectService _projectService;
-    private readonly IProjectModelFactory _projectModelFactory;
+    private readonly IProjectFactory _projectModelFactory;
     private readonly IFileProvider _fileProvider;
     public ProjectAddRequestHandler(
         ILogger<ProjectAddRequestHandler> logger,
@@ -57,7 +57,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
         ICommandService commandService,
         IFileSystem fileSystem,
         IProjectService projectService,
-        IProjectModelFactory projectModelFactory,
+        IProjectFactory projectModelFactory,
         IFileProvider fileProvider
         )
     {
@@ -89,7 +89,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
             _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}");
         }
 
-        var model = _projectModelFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);
+        var model = await _projectModelFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);
 
         await _projectService.AddProjectAsync(model);
     }

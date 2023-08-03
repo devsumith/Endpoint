@@ -54,7 +54,7 @@ public class BenchmarkCreateRequestHandler : IRequestHandler<BenchmarkCreateRequ
     {
         _logger.LogInformation("Handled: {0}", nameof(BenchmarkCreateRequestHandler));
 
-        var model = _solutionModelFactory.Create(request.Name, request.ProjectName, "benchmark", request.FolderName, request.Directory);
+        var model = await _solutionModelFactory.Create(request.Name, request.ProjectName, "benchmark", request.FolderName, request.Directory);
 
         await _solutionService.Create(model);
 

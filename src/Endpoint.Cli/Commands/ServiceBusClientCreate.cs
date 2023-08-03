@@ -38,7 +38,7 @@ public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusCl
     private readonly ISolutionModelFactory _solutionModelFactory;
     private readonly ISolutionService _solutionService;
     private readonly ICommandService _commandService;
-    private readonly IProjectModelFactory _projectModelFactory;
+    private readonly IProjectFactory _projectModelFactory;
     private readonly IClassModelFactory _classModelFactory;
     private readonly IProjectService _projectService;
 
@@ -47,7 +47,7 @@ public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusCl
         ISolutionService solutionService,
         ISolutionModelFactory solutionModelFactory,
         ICommandService commandService,
-        IProjectModelFactory projectModelFactory,
+        IProjectFactory projectModelFactory,
         IClassModelFactory classModelFactory,
         IProjectService projectService
         )
@@ -65,7 +65,7 @@ public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusCl
     {
         _logger.LogInformation("Handled: {0}", nameof(SolutionCreateRequestHandler));
 
-        var model = _projectModelFactory.Create(request.ProjectType, request.Name, request.Directory);
+        var model = await _projectModelFactory.Create(request.ProjectType, request.Name, request.Directory);
 
         var serviceBusMessageConsumerClassModel = _classModelFactory.CreateServiceBusMessageConsumer("ServiceBusMessageConsumer", model.Name);
 

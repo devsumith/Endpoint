@@ -38,7 +38,7 @@ internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest>
     {
         _logger.LogInformation($"Handled: {nameof(HttpProjectRequestHandler)}");
 
-        var model = _solutionModelFactory.CreateHttpSolution(new CreateEndpointSolutionOptions
+        var model = await _solutionModelFactory.CreateHttpSolution(new CreateEndpointSolutionOptions
         {
             Name = request.Name,
             Directory = request.Directory,

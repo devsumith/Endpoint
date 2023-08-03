@@ -5,6 +5,7 @@ using CommandLine;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Projects;
 using Endpoint.Core.Artifacts.Projects.Enums;
+using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
 using MediatR;
@@ -35,9 +36,11 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
     private readonly IProjectService _projectService;
     private readonly IFileSystem _fileSystem;
     private readonly IFileModelFactory _fileModelFactory;
+    private readonly IProjectFactory _projectModelFactory;
 
     public MicroserviceAddRequestHandler(
         ILogger<MicroserviceAddRequestHandler> logger,
+        IProjectFactory projectModelFactory,
         IProjectService projectService,
         IFileSystem fileSystem,
         IFileModelFactory fileModelFactory)
@@ -46,6 +49,7 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
     }
 
     public async Task Handle(MicroserviceAddRequest request, CancellationToken cancellationToken)

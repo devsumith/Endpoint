@@ -2,14 +2,15 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Options;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Solutions;
 
 public interface ISolutionModelFactory
 {
-    SolutionModel Create(string name);
-    SolutionModel Create(string name, string projectName, string dotNetProjectTypeName, string folderName, string directory);
-    SolutionModel Minimal(CreateEndpointSolutionOptions options);
-    SolutionModel CreateHttpSolution(CreateEndpointSolutionOptions options);
-    SolutionModel CleanArchitectureMicroservice(CreateCleanArchitectureMicroserviceOptions options);
+    Task<SolutionModel> Create(string name);
+    Task<SolutionModel> Create(string name, string projectName, string dotNetProjectTypeName, string folderName, string directory);
+    Task<SolutionModel> Minimal(CreateEndpointSolutionOptions options);
+    Task<SolutionModel> CreateHttpSolution(CreateEndpointSolutionOptions options);
+    Task<SolutionModel> CleanArchitectureMicroservice(CreateCleanArchitectureMicroserviceOptions options);
 }

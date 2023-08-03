@@ -1,36 +1,38 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Projects.Enums;
-using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Syntax.Constructors;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Constructors;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Types;
-using Endpoint.Core.Syntax;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Projects.Factories;
 
-public class ProjectModelFactory : IProjectModelFactory
+public class ProjectFactory : IProjectFactory
 {
     private readonly IFileModelFactory _fileModelFactory;
+    private readonly ILogger<ProjectFactory> _logger;
 
-    public ProjectModelFactory(IFileModelFactory fileModelFactory)
+    public ProjectFactory(IFileModelFactory fileModelFactory, ILogger<ProjectFactory> logger)
     {
         _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
-
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public ProjectModel CreateSpecFlowProject(string name, string directory)
+    public async Task<ProjectModel> CreateSpecFlowProject(string name, string directory)
     {
-        var model = CreateLibrary(name, directory);
+        var model = await CreateLibrary(name, directory);
 
         model.DotNetProjectType = DotNetProjectType.XUnit;
 
@@ -42,9 +44,9 @@ public class ProjectModelFactory : IProjectModelFactory
         return model;
     }
 
-    public ProjectModel CreatePlaywrightProject(string name, string directory)
+    public async Task<ProjectModel> CreatePlaywrightProject(string name, string directory)
     {
-        var model = CreateLibrary(name, directory);
+        var model = await CreateLibrary(name, directory);
 
         model.DotNetProjectType = DotNetProjectType.NUnit;
 
@@ -54,7 +56,7 @@ public class ProjectModelFactory : IProjectModelFactory
         return model;
     }
 
-    public ProjectModel CreateHttpProject(string name, string directory)
+    public async Task<ProjectModel> CreateHttpProject(string name, string directory)
     {
         var model = new ProjectModel(DotNetProjectType.Console, name, directory);
 
@@ -65,7 +67,7 @@ public class ProjectModelFactory : IProjectModelFactory
         return model;
     }
 
-    public ProjectModel CreateMinimalApiProject(CreateMinimalApiProjectOptions options)
+    public async Task<ProjectModel> CreateMinimalApiProject(CreateMinimalApiProjectOptions options)
     {
         var model = new ProjectModel(DotNetProjectType.MinimalWebApi, options.Name, options.Directory);
 
@@ -85,14 +87,14 @@ public class ProjectModelFactory : IProjectModelFactory
         return model;
     }
 
-    public ProjectModel CreateMinimalApiUnitTestsProject(string name, string directory, string resource)
+    public async Task<ProjectModel> CreateMinimalApiUnitTestsProject(string name, string directory, string resource)
     {
         var model = new ProjectModel(DotNetProjectType.XUnit, $"{name}.Tests", directory);
 
         return model;
     }
 
-    public ProjectModel CreateLibrary(string name, string parentDirectory, List<string> additionalMetadata = null)
+    public async Task<ProjectModel> CreateLibrary(string name, string parentDirectory, List<string> additionalMetadata = null)
     {
         var project = new ProjectModel(name, parentDirectory);
 
@@ -210,7 +212,7 @@ public class ProjectModelFactory : IProjectModelFactory
         return project;
     }
 
-    public ProjectModel CreateWebApi(string name, string parentDirectory, List<string> additionalMetadata = null)
+    public async Task<ProjectModel> CreateWebApi(string name, string parentDirectory, List<string> additionalMetadata = null)
     {
         var project = new ProjectModel(name, parentDirectory)
         {
@@ -223,22 +225,22 @@ public class ProjectModelFactory : IProjectModelFactory
         return project;
     }
 
-    public ProjectModel CreateTestingProject()
+    public async Task<ProjectModel> CreateTestingProject()
     {
         throw new NotImplementedException();
     }
 
-    public ProjectModel CreateUnitTestsProject()
+    public async Task<ProjectModel> CreateUnitTestsProject()
     {
         throw new NotImplementedException();
     }
 
-    public ProjectModel CreateIntegrationTestsProject()
+    public async Task<ProjectModel> CreateIntegrationTestsProject()
     {
         throw new NotImplementedException();
     }
 
-    public ProjectModel CreateMessagingProject(string directory)
+    public async Task<ProjectModel> CreateMessagingProject(string directory)
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Messaging", directory);
 
@@ -263,7 +265,7 @@ public class ProjectModelFactory : IProjectModelFactory
         return model;
     }
 
-    public ProjectModel CreateMessagingUdpProject(string directory)
+    public async Task<ProjectModel> CreateMessagingUdpProject(string directory)
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Messaging.Udp", directory);
 
@@ -290,7 +292,7 @@ public class ProjectModelFactory : IProjectModelFactory
         return model;
     }
 
-    public ProjectModel CreateValidationProject(string directory)
+    public async Task<ProjectModel> CreateValidationProject(string directory)
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Validation", directory);
 
@@ -299,7 +301,7 @@ public class ProjectModelFactory : IProjectModelFactory
         return model;
     }
 
-    public ProjectModel CreateKernelProject(string directory)
+    public async Task<ProjectModel> CreateKernelProject(string directory)
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Kernel", directory);
 
@@ -345,7 +347,7 @@ public class ProjectModelFactory : IProjectModelFactory
         return model;
     }
 
-    public ProjectModel CreateSecurityProject(string directory)
+    public async Task<ProjectModel> CreateSecurityProject(string directory)
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Security", directory);
 
@@ -373,9 +375,9 @@ public class ProjectModelFactory : IProjectModelFactory
         return model;
     }
 
-    public ProjectModel Create(string type, string name, string directory, List<string> references = null, string metadata = null)
+    public async Task<ProjectModel> Create(string type, string name, string directory, List<string> references = null, string metadata = null)
     {
-        var model = CreateLibrary(name, directory, metadata?.Split(',').ToList());
+        var model = await CreateLibrary(name, directory, metadata?.Split(',').ToList());
 
         model.DotNetProjectType = type switch
         {
@@ -415,18 +417,17 @@ public class ProjectModelFactory : IProjectModelFactory
         return model;
     }
 
-    public ProjectModel CreateCore(string name, string directory)
-        => CreateLibrary($"{name}.Core", directory, new() { Constants.ProjectType.Core });
+    public async Task<ProjectModel> CreateCore(string name, string directory)
+        => await CreateLibrary($"{name}.Core", directory, new() { Constants.ProjectType.Core });
 
-    public ProjectModel CreateInfrastructure(string name, string directory)
-        => CreateLibrary($"{name}.Infrastructure", directory, new() { Constants.ProjectType.Infrastructure });
+    public async Task<ProjectModel> CreateInfrastructure(string name, string directory)
+        => await CreateLibrary($"{name}.Infrastructure", directory, new() { Constants.ProjectType.Infrastructure });
 
-    public ProjectModel CreateApi(string name, string directory)
-        => CreateLibrary($"{name}.Api", directory, new() { Constants.ProjectType.Api });
+    public async Task<ProjectModel> CreateApi(string name, string directory)
+        => await CreateLibrary($"{name}.Api", directory, new() { Constants.ProjectType.Api });
 
-    public ProjectModel CreateIOCompression(string directory)
+    public Task<ProjectModel> CreateIOCompression(string directory)
     {
         throw new NotImplementedException();
     }
 }
-

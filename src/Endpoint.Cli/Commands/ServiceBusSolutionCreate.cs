@@ -42,14 +42,14 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
     private readonly ISolutionModelFactory _solutionModelFactory;
     private readonly ISolutionService _solutionService;
     private readonly ICommandService _commandService;
-    private readonly IProjectModelFactory _projectModelFactory;
+    private readonly IProjectFactory _projectModelFactory;
     private readonly IClassModelFactory _classModelFactory;
     public ServiceBusSolutionCreateRequestHandler(
         ILogger<ServiceBusSolutionCreateRequestHandler> logger,
         ISolutionService solutionService,
         ISolutionModelFactory solutionModelFactory,
         ICommandService commandService,
-        IProjectModelFactory projectModelFactory,
+        IProjectFactory projectModelFactory,
         IClassModelFactory classModelFactory
         )
     {
@@ -70,7 +70,7 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
             request.ProjectName = $"{request.Name}";
         }
 
-        var model = _solutionModelFactory.Create(request.Name, request.ProjectName, request.ProjectType, string.Empty, request.Directory);
+        var model = await _solutionModelFactory.Create(request.Name, request.ProjectName, request.ProjectType, string.Empty, request.Directory);
 
         var srcFolder = model.Folders.Single();
 
@@ -140,9 +140,9 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         projectModel.References.Add(@"..\Messaging.Udp\Messaging.Udp.csproj");
 
-        srcFolder.Projects.Add(_projectModelFactory.CreateMessagingProject(srcFolder.Directory));
+        srcFolder.Projects.Add(await _projectModelFactory.CreateMessagingProject(srcFolder.Directory));
 
-        srcFolder.Projects.Add(_projectModelFactory.CreateMessagingUdpProject(srcFolder.Directory));
+        srcFolder.Projects.Add(await _projectModelFactory.CreateMessagingUdpProject(srcFolder.Directory));
 
         await _solutionService.Create(model);
 

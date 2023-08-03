@@ -60,7 +60,7 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
     {
         _logger.LogInformation("Handled: {0}", nameof(SolutionCreateRequestHandler));
 
-        var model = _solutionModelFactory.Create(request.Name, request.ProjectName, request.ProjectType, request.FolderName, request.Directory);
+        var model = await _solutionModelFactory.Create(request.Name, request.ProjectName, request.ProjectType, request.FolderName, request.Directory);
 
         if (request.NoServiceCreate)
             model.RemoveAllServices();
