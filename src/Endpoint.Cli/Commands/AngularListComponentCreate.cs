@@ -41,7 +41,5 @@ public class AngularListComponentCreateRequestHandler : IRequestHandler<AngularL
         _logger.LogInformation("Handled: {0}", nameof(AngularListComponentCreateRequestHandler));
 
         await _angularService.ListComponentCreate(request.Name, request.Directory);
-
-
     }
 }

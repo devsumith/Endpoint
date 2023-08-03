@@ -13,8 +13,6 @@ using Xunit;
 namespace Endpoint.UnitTests.PlantUmlParserStrategy;
 public class CreateShould
 {
-
-
     [Fact]
     public void CreateSolution_GivenAPackageInPlantUml()
     {

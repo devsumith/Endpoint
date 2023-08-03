@@ -55,8 +55,6 @@ internal class AngularWorkspaceCreateRequestHandler : IRequestHandler<AngularWor
         _logger.LogInformation($"Handled: {nameof(AngularWorkspaceCreateRequestHandler)}");
 
         await _angularService.CreateWorkspace(request.Name, request.Version, request.ProjectName, request.ProjectType, request.Prefix, request.Directory);
-
-
     }
 }
 

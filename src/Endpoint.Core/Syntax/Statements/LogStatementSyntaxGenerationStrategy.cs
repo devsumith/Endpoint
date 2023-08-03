@@ -9,7 +9,7 @@ public class LogStatementSyntaxGenerationStrategy : SyntaxGenerationStrategyBase
     private readonly ILogger<LogStatementSyntaxGenerationStrategy> _logger;
     public LogStatementSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
-        ILogger<LogStatementSyntaxGenerationStrategy> logger) 
+        ILogger<LogStatementSyntaxGenerationStrategy> logger)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
