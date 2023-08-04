@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace Endpoint.Core.Artifacts.Projects.Factories;
 
@@ -425,8 +426,24 @@ public class ProjectFactory : IProjectFactory
     public async Task<ProjectModel> CreateApi(string name, string directory)
         => await CreateLibrary($"{name}.Api", directory, new() { Constants.ProjectType.Api });
 
-    public Task<ProjectModel> CreateIOCompression(string directory)
+    public async Task<ProjectModel> CreateIOCompression(string directory)
     {
-        throw new NotImplementedException();
+        var model = new ProjectModel("IO.Compression", directory);
+
+        model.Files.Add(_fileFactory.CreateTemplate("IPackable", "IPackable", model.Directory));
+
+        model.Files.Add(_fileFactory.CreateTemplate("BitVector8", "BitVector8", model.Directory));
+
+        model.Files.Add(_fileFactory.CreateTemplate("String255Type", "String255Type", Path.Combine(model.Directory,"Primitives")));
+
+        model.Files.Add(_fileFactory.CreateTemplate("Int32Type", "Int32Type", Path.Combine(model.Directory, "Primitives")));
+
+        model.Files.Add(_fileFactory.CreateTemplate("Int16Type", "Int16Type", Path.Combine(model.Directory, "Primitives")));
+
+        model.Files.Add(_fileFactory.CreateTemplate("GuidType", "GuidType", Path.Combine(model.Directory, "Primitives")));
+
+        model.Files.Add(_fileFactory.CreateTemplate("BoolType", "BoolType", Path.Combine(model.Directory, "Primitives")));
+
+        return model;
     }
 }

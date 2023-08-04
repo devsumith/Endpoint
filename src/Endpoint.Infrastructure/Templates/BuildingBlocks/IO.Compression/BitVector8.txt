@@ -1,4 +1,8 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 namespace IO.Compression;
+
 
 public static class BitVector8
 {
@@ -43,8 +47,6 @@ public static class BitVector8
                     numberOfBits -= +numberOfBitsThatCanBePacked;
                 }
             }
-
-            
         }
     }
 
@@ -64,7 +66,7 @@ public static class BitVector8
 
         while (sourceIndex < source.Length && destinationIndex < destination.Length && take - unpackedBits > 0)
         {
-            if(take - unpackedBits > 8)
+            if (take - unpackedBits > 8)
             {
                 destination[destinationIndex] = source[sourceIndex];
                 unpackedBits += 8;
@@ -77,7 +79,6 @@ public static class BitVector8
 
                 unpackedBits += take;
             }
-
 
             destinationIndex++;
 
@@ -96,7 +97,7 @@ public static class BitVector8
             return new Span<byte>(new byte[1]
             {
                 (byte)(buffer[index] << offset)
-            }, index, size);
+            }, 0, 1);
         }
 
         Span<byte> destinantion = new byte[size];

@@ -31,7 +31,7 @@ namespace Endpoint.Cli.Commands;
 public class DddAppCreateRequest : IRequest
 {
     [Option('n', "name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = "Microservices";
 
     [Option('a', "aggregate")]
     public string AggregateName { get; set; } = "ToDo";
@@ -123,6 +123,8 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var sourceFolder = new FolderModel("src", model.SolutionDirectory);
 
+        var servicesFolder = new FolderModel("Services", sourceFolder.Directory);
+
         var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder.Directory) { Priority = 1 };
 
         var kernel = await _projectFactory.CreateKernelProject(buildingBlocksFolder.Directory);
@@ -135,6 +137,8 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var validation = await _projectFactory.CreateValidationProject(buildingBlocksFolder.Directory);
 
+        var compression = await _projectFactory.CreateIOCompression(buildingBlocksFolder.Directory);
+
         buildingBlocksFolder.Projects.Add(messaging);
 
         buildingBlocksFolder.Projects.Add(messagingUdp);
@@ -145,11 +149,13 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         buildingBlocksFolder.Projects.Add(validation);
 
-        var core = await _projectFactory.CreateCore(name, sourceFolder.Directory);
+        buildingBlocksFolder.Projects.Add(compression);
 
-        var infrastructure = await _projectFactory.CreateInfrastructure(name, sourceFolder.Directory);
+        var core = await _projectFactory.CreateCore(name, servicesFolder.Directory);
 
-        var api = await _projectFactory.CreateApi(name, sourceFolder.Directory);
+        var infrastructure = await _projectFactory.CreateInfrastructure(name, servicesFolder.Directory);
+
+        var api = await _projectFactory.CreateApi(name, servicesFolder.Directory);
 
         sourceFolder.Projects.AddRange(new[] { core, infrastructure, api });
 

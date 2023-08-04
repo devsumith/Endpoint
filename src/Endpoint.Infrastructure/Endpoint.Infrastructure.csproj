@@ -9,6 +9,12 @@
   <ItemGroup>
     <None Remove="Templates\Angular\Services\Default\Spec.txt" />
     <None Remove="Templates\BuildingBlocks\IO.Compression\BitVector8.txt" />
+    <None Remove="Templates\BuildingBlocks\IO.Compression\BoolType.txt" />
+    <None Remove="Templates\BuildingBlocks\IO.Compression\GuidType.txt" />
+    <None Remove="Templates\BuildingBlocks\IO.Compression\Int16Type.txt" />
+    <None Remove="Templates\BuildingBlocks\IO.Compression\Int32Type.txt" />
+    <None Remove="Templates\BuildingBlocks\IO.Compression\IPackable.txt" />
+    <None Remove="Templates\BuildingBlocks\IO.Compression\String255Type.txt" />
     <None Remove="Templates\EditorConfig.txt" />
     <None Remove="Templates\ValueObject.txt" />
     <None Remove="Templates\ValueType.txt" />
@@ -17,6 +23,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Templates\Angular\Services\Default\Spec.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\IO.Compression\BitVector8.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\IO.Compression\BoolType.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\IO.Compression\GuidType.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\IO.Compression\Int16Type.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\IO.Compression\Int32Type.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\IO.Compression\IPackable.txt" />
+    <EmbeddedResource Include="Templates\BuildingBlocks\IO.Compression\String255Type.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\Kernel\DomainException.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\Kernel\InternalServerErrorObjectResult.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\Kernel\JsonErrorResponse.txt" />

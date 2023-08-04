@@ -1,0 +1,9 @@
+using IO.Compression.Primitives;
+
+namespace IO.Compression;
+
+public interface IPackable
+{
+    void Pack(Span<byte> buffer, int index= 0, int bitIndex = 7);
+    Int16Type SizeInBits { get; }
+}
