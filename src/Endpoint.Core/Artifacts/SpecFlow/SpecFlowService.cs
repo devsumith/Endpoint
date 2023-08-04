@@ -15,17 +15,17 @@ namespace Endpoint.Core.Artifacts.SpecFlow;
 public class SpecFlowService : ISpecFlowService
 {
     private readonly ILogger<SpecFlowService> _logger;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly IArtifactGenerator _artifactGenerator;
     public SpecFlowService(
         ILogger<SpecFlowService> logger,
         IArtifactGenerator artifactGenerator,
-        IFileFactory fileModelFactory
+        IFileFactory fileFactory
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
     public async Task CreatePageObject(string name, string directory)
@@ -73,7 +73,7 @@ public class SpecFlowService : ISpecFlowService
 
     public async Task CreateDockerControllerHooks(string directory)
     {
-        var model = _fileModelFactory.CreateTemplate("DockerControllerHooks", "DockerControllerHooks", directory);
+        var model = _fileFactory.CreateTemplate("DockerControllerHooks", "DockerControllerHooks", directory);
 
         await _artifactGenerator.CreateAsync(model);
     }

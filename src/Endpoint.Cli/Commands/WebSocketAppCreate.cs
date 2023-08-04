@@ -29,44 +29,44 @@ public class WebSocketAppCreateRequestHandler : IRequestHandler<WebSocketAppCrea
 {
     private readonly ILogger<WebSocketAppCreateRequestHandler> _logger;
     private readonly ISolutionService _solutionService;
-    private readonly ISolutionModelFactory _solutionModelFactory;
+    private readonly ISolutionFactory _solutionFactory;
     private readonly IArtifactGenerator _generator;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ICommandService _commandService;
-    private readonly IClassModelFactory _classModelFactory;
+    private readonly IClassFactory _classFactory;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
 
     public WebSocketAppCreateRequestHandler(
         ILogger<WebSocketAppCreateRequestHandler> logger,
         ISolutionService solutionService,
-        ISolutionModelFactory solutionModelFactory,
+        ISolutionFactory solutionFactory,
         IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter,
         ICommandService commandService,
-        IClassModelFactory classModelFactory,
+        IClassFactory classFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileFactory fileModelFactory)
+        IFileFactory fileFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
-        _solutionModelFactory = solutionModelFactory;
+        _solutionFactory = solutionFactory;
         _generator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter)); ;
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
+        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
     public async Task Handle(WebSocketAppCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(WebSocketAppCreateRequestHandler));
 
-        var model = await _solutionModelFactory.Create(request.Name, request.Name, "web", string.Empty, request.Directory);
+        var model = await _solutionFactory.Create(request.Name, request.Name, "web", string.Empty, request.Directory);
 
 
         if (System.IO.Directory.Exists(model.SolutionDirectory))

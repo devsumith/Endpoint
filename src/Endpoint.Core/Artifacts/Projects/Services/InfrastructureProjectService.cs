@@ -17,23 +17,23 @@ namespace Endpoint.Core.Artifacts.Projects.Services;
 public class InfrastructureProjectService : IInfrastructureProjectService
 {
     private readonly ILogger<InfrastructureProjectService> _logger;
-    private readonly IClassModelFactory _classModelFactory;
+    private readonly IClassFactory _classFactory;
     private readonly IArtifactGenerator _artifactGenerator;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
 
     public InfrastructureProjectService(
         ILogger<InfrastructureProjectService> logger,
-        IClassModelFactory classModelFactory,
+        IClassFactory classFactory,
         IArtifactGenerator artifactGenerator,
-        IFileFactory fileModelFactory,
+        IFileFactory fileFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -51,9 +51,9 @@ public class InfrastructureProjectService : IInfrastructureProjectService
 
         var serviceName = Path.GetFileNameWithoutExtension(csProjPath).Split('.').First();
 
-        var dbContext = _classModelFactory.CreateDbContext($"{serviceName}DbContext", new List<EntityModel>(), serviceName);
+        var dbContext = _classFactory.CreateDbContext($"{serviceName}DbContext", new List<EntityModel>(), serviceName);
 
-        var fileModel = _fileModelFactory.CreateCSharp(dbContext, dataDirectory);
+        var fileModel = _fileFactory.CreateCSharp(dbContext, dataDirectory);
 
         await _artifactGenerator.CreateAsync(fileModel);
     }

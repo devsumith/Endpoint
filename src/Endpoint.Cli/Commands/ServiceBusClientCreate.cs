@@ -35,29 +35,29 @@ public class ServiceBusClientCreateRequest : IRequest
 public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusClientCreateRequest>
 {
     private readonly ILogger<ServiceBusClientCreateRequestHandler> _logger;
-    private readonly ISolutionModelFactory _solutionModelFactory;
+    private readonly ISolutionFactory _solutionFactory;
     private readonly ISolutionService _solutionService;
     private readonly ICommandService _commandService;
-    private readonly IProjectFactory _projectModelFactory;
-    private readonly IClassModelFactory _classModelFactory;
+    private readonly IProjectFactory _projectFactory;
+    private readonly IClassFactory _classFactory;
     private readonly IProjectService _projectService;
 
     public ServiceBusClientCreateRequestHandler(
         ILogger<ServiceBusClientCreateRequestHandler> logger,
         ISolutionService solutionService,
-        ISolutionModelFactory solutionModelFactory,
+        ISolutionFactory solutionFactory,
         ICommandService commandService,
-        IProjectFactory projectModelFactory,
-        IClassModelFactory classModelFactory,
+        IProjectFactory projectFactory,
+        IClassFactory classFactory,
         IProjectService projectService
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
-        _solutionModelFactory = solutionModelFactory ?? throw new ArgumentNullException(nameof(solutionModelFactory));
+        _solutionFactory = solutionFactory ?? throw new ArgumentNullException(nameof(solutionFactory));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
-        _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
+        _projectFactory = projectFactory ?? throw new ArgumentNullException(nameof(projectFactory));
+        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
     }
 
@@ -65,9 +65,9 @@ public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusCl
     {
         _logger.LogInformation("Handled: {0}", nameof(SolutionCreateRequestHandler));
 
-        var model = await _projectModelFactory.Create(request.ProjectType, request.Name, request.Directory);
+        var model = await _projectFactory.Create(request.ProjectType, request.Name, request.Directory);
 
-        var serviceBusMessageConsumerClassModel = _classModelFactory.CreateServiceBusMessageConsumer("ServiceBusMessageConsumer", model.Name);
+        var serviceBusMessageConsumerClassModel = _classFactory.CreateServiceBusMessageConsumer("ServiceBusMessageConsumer", model.Name);
 
         if (request.ProjectType == "worker")
         {
@@ -85,7 +85,7 @@ public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusCl
             model.Files.Add(programFileModel);
         }
 
-        var configureServicesClassModel = _classModelFactory.CreateConfigureServices(model.Name.Split('.').Last());
+        var configureServicesClassModel = _classFactory.CreateConfigureServices(model.Name.Split('.').Last());
 
         var configureServicesMethodBodyBuilder = new StringBuilder();
 

@@ -28,17 +28,17 @@ public class SpecCreateRequestHandler : IRequestHandler<SpecCreateRequest>
 {
     private readonly ILogger<SpecCreateRequestHandler> _logger;
     private readonly INamingConventionConverter _namingCoventionConverter;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly IArtifactGenerator _artifactGenerator;
     public SpecCreateRequestHandler(
         ILogger<SpecCreateRequestHandler> logger,
         INamingConventionConverter namingCoventionConverter,
-        IFileFactory fileModelFactory,
+        IFileFactory fileFactory,
         IArtifactGenerator artifactGenerator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _namingCoventionConverter = namingCoventionConverter ?? throw new ArgumentNullException(nameof(namingCoventionConverter));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
@@ -53,7 +53,7 @@ public class SpecCreateRequestHandler : IRequestHandler<SpecCreateRequest>
             fileName = $"{fileName}.service";
         }
 
-        var model = _fileModelFactory.CreateTemplate("Angular.Services.Default.Spec", $"{fileName}.spec", request.Directory, ".ts", tokens: new TokensBuilder()
+        var model = _fileFactory.CreateTemplate("Angular.Services.Default.Spec", $"{fileName}.spec", request.Directory, ".ts", tokens: new TokensBuilder()
             .With("name", request.Name)
             .With("fileName", fileName)
             .Build());

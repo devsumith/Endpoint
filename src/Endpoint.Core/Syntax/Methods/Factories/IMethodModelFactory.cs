@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Syntax.Methods.Factories;
 
-public interface IMethodModelFactory
+public interface IMethodFactory
 {
     MethodModel CreateControllerMethod(string name, string controller, RouteType routeType, string directory);
 

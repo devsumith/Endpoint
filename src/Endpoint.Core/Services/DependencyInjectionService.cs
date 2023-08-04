@@ -42,14 +42,14 @@ public class DependencyInjectionService : IDependencyInjectionService
     {
         var diRegistration = $"services.AddSingleton<{interfaceName},{className}>();".Indent(2);
 
-        AddInternal(diRegistration, directory);
+        await AddInternal(diRegistration, directory);
     }
 
     public async Task AddHosted(string hostedServiceName, string directory)
     {
         var diRegistration = $"services.AddHostedService<{hostedServiceName}>();".Indent(2);
 
-        AddInternal(diRegistration, directory);
+        await AddInternal(diRegistration, directory);
     }
 
     private void UpdateConfigureServices(string diRegistration, string projectSuffix, string configureServicesFilePath)
@@ -139,7 +139,7 @@ public class DependencyInjectionService : IDependencyInjectionService
         await _artifactGenerator.CreateAsync(classFileModel);
     }
 
-    private void AddInternal(string diRegistration, string directory)
+    private async Task AddInternal(string diRegistration, string directory)
     {
         var path = _fileProvider.Get("ConfigureServices.cs", directory);
 
@@ -153,7 +153,7 @@ public class DependencyInjectionService : IDependencyInjectionService
 
         if (path == Constants.FileNotFound)
         {
-            AddConfigureServices(projectSuffix, projectDirectory);
+            await AddConfigureServices(projectSuffix, projectDirectory);
         }
 
         UpdateConfigureServices(diRegistration, projectSuffix, configureServicesFilePath);

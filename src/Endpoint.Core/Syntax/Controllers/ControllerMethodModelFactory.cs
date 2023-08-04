@@ -7,11 +7,11 @@ using Endpoint.Core.Syntax.Methods;
 
 namespace Endpoint.Core.Syntax.Controllers;
 
-public class ControllerMethodModelFactory : IControllerMedthodModelFactory
+public class ControllerMethodFactory : IControllerMedthodFactory
 {
     private readonly INamingConventionConverter _namingConventionConverter;
 
-    public ControllerMethodModelFactory(INamingConventionConverter namingConventionConverter)
+    public ControllerMethodFactory(INamingConventionConverter namingConventionConverter)
     {
         _namingConventionConverter = namingConventionConverter;
     }

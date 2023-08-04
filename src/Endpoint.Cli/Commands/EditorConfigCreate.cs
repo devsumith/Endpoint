@@ -25,23 +25,23 @@ public class EditorConfigCreateRequestHandler : IRequestHandler<EditorConfigCrea
 {
     private readonly ILogger<EditorConfigCreateRequestHandler> _logger;
     private readonly IArtifactGenerator _artifactGenerator;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
 
     public EditorConfigCreateRequestHandler(
         ILogger<EditorConfigCreateRequestHandler> logger,
         IArtifactGenerator artifactGenerator,
-        IFileFactory fileModelFactory)
+        IFileFactory fileFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
     public async Task Handle(EditorConfigCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(EditorConfigCreateRequestHandler));
 
-        var model = _fileModelFactory.CreateTemplate("EditorConfig", string.Empty, request.Directory, "editorconfig", string.Empty);
+        var model = _fileFactory.CreateTemplate("EditorConfig", string.Empty, request.Directory, "editorconfig", string.Empty);
 
         await _artifactGenerator.CreateAsync(model);
     }

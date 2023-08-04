@@ -22,7 +22,7 @@ public class SolutionService : ISolutionService
 {
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly IPlantUmlParserStrategyFactory _plantUmlParserStrategyFactory;
-    private readonly IProjectFactory _projectModelFactory;
+    private readonly IProjectFactory _projectFactory;
     private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;
     private readonly IDomainDrivenDesignService _domainDrivenDesignService;
     private readonly Observable<INotification> _notificationListener;
@@ -32,7 +32,7 @@ public class SolutionService : ISolutionService
     public SolutionService(
         IArtifactGenerator artifactGenerator,
         IPlantUmlParserStrategyFactory plantUmlParserStrategyFactory,
-        IProjectFactory projectModelFactory,
+        IProjectFactory projectFactory,
         IDomainDrivenDesignFileService domainDrivenDesignFileService,
         IDomainDrivenDesignService domainDrivenDesignService,
         Observable<INotification> notificationListener,
@@ -41,7 +41,7 @@ public class SolutionService : ISolutionService
     {
         _artifactGenerator = artifactGenerator;
         _plantUmlParserStrategyFactory = plantUmlParserStrategyFactory;
-        _projectModelFactory = projectModelFactory;
+        _projectFactory = projectFactory;
         _domainDrivenDesignFileService = domainDrivenDesignFileService;
         _domainDrivenDesignService = domainDrivenDesignService;
         _notificationListener = notificationListener;
@@ -83,11 +83,11 @@ public class SolutionService : ISolutionService
 
         var messagingFolder = new FolderModel("Messaging", model.Directory);
 
-        model.Projects.Add(await _projectModelFactory.CreateKernelProject(model.Directory));
+        model.Projects.Add(await _projectFactory.CreateKernelProject(model.Directory));
 
-        messagingFolder.Projects.Add(await _projectModelFactory.CreateMessagingProject(messagingFolder.Directory));
+        messagingFolder.Projects.Add(await _projectFactory.CreateMessagingProject(messagingFolder.Directory));
 
-        messagingFolder.Projects.Add(await _projectModelFactory.CreateMessagingUdpProject(messagingFolder.Directory));
+        messagingFolder.Projects.Add(await _projectFactory.CreateMessagingUdpProject(messagingFolder.Directory));
 
         model.SubFolders.Add(messagingFolder);
 
@@ -106,7 +106,7 @@ public class SolutionService : ISolutionService
         {
             var serviceFolder = new FolderModel(service, model.Directory);
 
-            var coreModel = await _projectModelFactory.CreateLibrary($"{service}.Core", serviceFolder.Directory, new List<string>()
+            var coreModel = await _projectFactory.CreateLibrary($"{service}.Core", serviceFolder.Directory, new List<string>()
             {
                 Constants.ProjectType.Core
             });
@@ -123,7 +123,7 @@ public class SolutionService : ISolutionService
 
             serviceFolder.Projects.Add(coreModel);
 
-            var infrastructureModel = await _projectModelFactory.CreateLibrary($"{service}.Infrastructure", serviceFolder.Directory, new List<string>()
+            var infrastructureModel = await _projectFactory.CreateLibrary($"{service}.Infrastructure", serviceFolder.Directory, new List<string>()
             {
                 Constants.ProjectType.Infrastructure
             });
@@ -132,7 +132,7 @@ public class SolutionService : ISolutionService
 
             serviceFolder.Projects.Add(infrastructureModel);
 
-            var apiProjectModel = await _projectModelFactory.CreateLibrary($"{service}.Api", serviceFolder.Directory, new List<string>()
+            var apiProjectModel = await _projectFactory.CreateLibrary($"{service}.Api", serviceFolder.Directory, new List<string>()
             {
                 Constants.ProjectType.Api
             });
@@ -200,13 +200,13 @@ public class SolutionService : ISolutionService
         }
 
 
-        var messagingProjectModel = await _projectModelFactory.CreateMessagingProject(messagingDirectory);
+        var messagingProjectModel = await _projectFactory.CreateMessagingProject(messagingDirectory);
 
         await _artifactGenerator.CreateAsync(messagingProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
 
-        var messagingUdpProjectModel = await _projectModelFactory.CreateMessagingUdpProject(messagingDirectory);
+        var messagingUdpProjectModel = await _projectFactory.CreateMessagingUdpProject(messagingDirectory);
 
         await _artifactGenerator.CreateAsync(messagingUdpProjectModel);
 
@@ -238,13 +238,13 @@ public class SolutionService : ISolutionService
         }
 
 
-        var messagingProjectModel = await _projectModelFactory.CreateMessagingProject(messagingDirectory);
+        var messagingProjectModel = await _projectFactory.CreateMessagingProject(messagingDirectory);
 
         await _artifactGenerator.CreateAsync(messagingProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
 
-        var messagingUdpProjectModel = await _projectModelFactory.CreateMessagingUdpProject(messagingDirectory);
+        var messagingUdpProjectModel = await _projectFactory.CreateMessagingUdpProject(messagingDirectory);
 
         await _artifactGenerator.CreateAsync(messagingUdpProjectModel);
 

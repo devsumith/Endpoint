@@ -19,19 +19,19 @@ public class ProjectService : IProjectService
     private readonly IFileProvider _fileProvider;
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     public ProjectService(
         IArtifactGenerator artifactGenerator,
         ICommandService commandService,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileFactory fileModelFactory)
+        IFileFactory fileFactory)
     {
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
     public async Task AddProjectAsync(ProjectModel model)
@@ -117,9 +117,9 @@ public class ProjectService : IProjectService
 
         foreach (var file in new List<FileModel>()
         {
-            _fileModelFactory.CreateResponseBase(projectDirectory),
-            _fileModelFactory.CreateCoreUsings(projectDirectory),
-            _fileModelFactory.CreateLinqExtensions(projectDirectory)
+            _fileFactory.CreateResponseBase(projectDirectory),
+            _fileFactory.CreateCoreUsings(projectDirectory),
+            _fileFactory.CreateLinqExtensions(projectDirectory)
         })
         {
             if (!_fileSystem.Exists(file.Path))

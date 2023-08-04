@@ -34,21 +34,21 @@ public class BackgroundProcessorCreateRequest : IRequest
 public class BackgroundProcessorCreateRequestHandler : IRequestHandler<BackgroundProcessorCreateRequest>
 {
     private readonly ILogger<BackgroundProcessorCreateRequestHandler> _logger;
-    private readonly ISolutionModelFactory _solutionModelFactory;
-    private readonly IProjectFactory _projectModelFactory;
+    private readonly ISolutionFactory _solutionFactory;
+    private readonly IProjectFactory _projectFactory;
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly ICommandService _commandService;
 
     public BackgroundProcessorCreateRequestHandler(
         ILogger<BackgroundProcessorCreateRequestHandler> logger,
-        ISolutionModelFactory solutionModelFactory,
-        IProjectFactory projectModelFactory,
+        ISolutionFactory solutionFactory,
+        IProjectFactory projectFactory,
         IArtifactGenerator artifactGenerator,
         ICommandService commandService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _solutionModelFactory = solutionModelFactory ?? throw new ArgumentNullException(nameof(solutionModelFactory));
-        _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
+        _solutionFactory = solutionFactory ?? throw new ArgumentNullException(nameof(solutionFactory));
+        _projectFactory = projectFactory ?? throw new ArgumentNullException(nameof(projectFactory));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }

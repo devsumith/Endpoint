@@ -22,21 +22,21 @@ namespace Endpoint.Core.Artifacts.Files.Factories;
 using IFileProvider = IFileProvider;
 public class FileFactory : IFileFactory
 {
-    private readonly IRouteHandlerModelFactory _routeHandlerModelFactory;
+    private readonly IRouteHandlerFactory _routeHandlerFactory;
     private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly ILegacyAggregatesModelFactory _aggregateRootModelFactory;
+    private readonly ILegacyAggregatesFactory _aggregateRootFactory;
     private readonly IFileProvider _fileProvider;
     private readonly INamespaceProvider _namespaceProvider;
 
     public FileFactory(
-        ILegacyAggregatesModelFactory aggregateRootModelFactory,
-        IRouteHandlerModelFactory routeHandlerModelFactory,
+        ILegacyAggregatesFactory aggregateRootFactory,
+        IRouteHandlerFactory routeHandlerFactory,
         INamingConventionConverter namingConventionConverter,
         IFileProvider fileProvider,
         INamespaceProvider namespaceProvider)
     {
-        _aggregateRootModelFactory = aggregateRootModelFactory;
-        _routeHandlerModelFactory = routeHandlerModelFactory;
+        _aggregateRootFactory = aggregateRootFactory;
+        _routeHandlerFactory = routeHandlerFactory;
         _namingConventionConverter = namingConventionConverter;
         _fileProvider = fileProvider;
         _namespaceProvider = namespaceProvider;

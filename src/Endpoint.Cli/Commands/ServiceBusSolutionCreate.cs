@@ -39,26 +39,26 @@ public class ServiceBusSolutionCreateRequest : IRequest
 public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBusSolutionCreateRequest>
 {
     private readonly ILogger<ServiceBusSolutionCreateRequestHandler> _logger;
-    private readonly ISolutionModelFactory _solutionModelFactory;
+    private readonly ISolutionFactory _solutionFactory;
     private readonly ISolutionService _solutionService;
     private readonly ICommandService _commandService;
-    private readonly IProjectFactory _projectModelFactory;
-    private readonly IClassModelFactory _classModelFactory;
+    private readonly IProjectFactory _projectFactory;
+    private readonly IClassFactory _classFactory;
     public ServiceBusSolutionCreateRequestHandler(
         ILogger<ServiceBusSolutionCreateRequestHandler> logger,
         ISolutionService solutionService,
-        ISolutionModelFactory solutionModelFactory,
+        ISolutionFactory solutionFactory,
         ICommandService commandService,
-        IProjectFactory projectModelFactory,
-        IClassModelFactory classModelFactory
+        IProjectFactory projectFactory,
+        IClassFactory classFactory
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
-        _solutionModelFactory = solutionModelFactory ?? throw new ArgumentNullException(nameof(solutionModelFactory));
+        _solutionFactory = solutionFactory ?? throw new ArgumentNullException(nameof(solutionFactory));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
-        _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
+        _projectFactory = projectFactory ?? throw new ArgumentNullException(nameof(projectFactory));
+        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
     }
 
     public async Task Handle(ServiceBusSolutionCreateRequest request, CancellationToken cancellationToken)
@@ -70,7 +70,7 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
             request.ProjectName = $"{request.Name}";
         }
 
-        var model = await _solutionModelFactory.Create(request.Name, request.ProjectName, request.ProjectType, string.Empty, request.Directory);
+        var model = await _solutionFactory.Create(request.Name, request.ProjectName, request.ProjectType, string.Empty, request.Directory);
 
         var srcFolder = model.Folders.Single();
 
@@ -83,9 +83,9 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         projectModel.Order = int.MaxValue;
 
-        var serviceBusMessageConsumerClassModel = _classModelFactory.CreateServiceBusMessageConsumer("ServiceBusMessageConsumer", projectModel.Name);
+        var serviceBusMessageConsumerClassModel = _classFactory.CreateServiceBusMessageConsumer("ServiceBusMessageConsumer", projectModel.Name);
 
-        var configureServicesClassModel = _classModelFactory.CreateConfigureServices(projectModel.Name.Split('.').Last());
+        var configureServicesClassModel = _classFactory.CreateConfigureServices(projectModel.Name.Split('.').Last());
 
         var configureServicesMethodBodyBuilder = new StringBuilder();
 
@@ -140,9 +140,9 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         projectModel.References.Add(@"..\Messaging.Udp\Messaging.Udp.csproj");
 
-        srcFolder.Projects.Add(await _projectModelFactory.CreateMessagingProject(srcFolder.Directory));
+        srcFolder.Projects.Add(await _projectFactory.CreateMessagingProject(srcFolder.Directory));
 
-        srcFolder.Projects.Add(await _projectModelFactory.CreateMessagingUdpProject(srcFolder.Directory));
+        srcFolder.Projects.Add(await _projectFactory.CreateMessagingUdpProject(srcFolder.Directory));
 
         await _solutionService.Create(model);
 

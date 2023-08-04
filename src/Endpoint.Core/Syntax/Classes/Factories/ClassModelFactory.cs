@@ -23,13 +23,13 @@ using Endpoint.Core.Syntax.Types;
 
 namespace Endpoint.Core.Syntax.Classes.Factories;
 
-public class ClassModelFactory : IClassModelFactory
+public class ClassFactory : IClassFactory
 {
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly INamespaceProvider _namespaceProvider;
     private readonly IFileProvider _fileProvider;
 
-    public ClassModelFactory(INamingConventionConverter namingConventionConverter, INamespaceProvider namespaceProvider, IFileProvider fileProvider)
+    public ClassFactory(INamingConventionConverter namingConventionConverter, INamespaceProvider namespaceProvider, IFileProvider fileProvider)
     {
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));

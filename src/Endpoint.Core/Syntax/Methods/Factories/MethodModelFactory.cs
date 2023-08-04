@@ -11,13 +11,13 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Methods.Factories;
 
-public class MethodModelFactory : IMethodModelFactory
+public class MethodFactory : IMethodFactory
 {
-    private readonly ILogger<MethodModelFactory> _logger;
+    private readonly ILogger<MethodFactory> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;
 
-    public MethodModelFactory(
-        ILogger<MethodModelFactory> logger,
+    public MethodFactory(
+        ILogger<MethodFactory> logger,
         INamingConventionConverter namingConventionConverter)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

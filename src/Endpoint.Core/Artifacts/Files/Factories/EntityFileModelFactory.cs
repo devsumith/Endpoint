@@ -11,11 +11,11 @@ using System.Text;
 
 namespace Endpoint.Core.Artifacts.Files.Factories;
 
-public class EntityFileModelFactory : IEntityFileModelFactory
+public class EntityFileFactory : IEntityFileFactory
 {
     private readonly ISyntaxService _syntaxService;
 
-    public EntityFileModelFactory(ISyntaxService syntaxService)
+    public EntityFileFactory(ISyntaxService syntaxService)
     {
         _syntaxService = syntaxService;
     }

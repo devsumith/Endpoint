@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Classes.Factories;
 
-public interface IClassModelFactory
+public interface IClassFactory
 {
     ClassModel CreateEntity(string name, string properties);
     ClassModel CreateController(EntityModel model, string directory);

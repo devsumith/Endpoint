@@ -49,7 +49,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
     private readonly ICommandService _commandService;
     private readonly IFileSystem _fileSystem;
     private readonly IProjectService _projectService;
-    private readonly IProjectFactory _projectModelFactory;
+    private readonly IProjectFactory _projectFactory;
     private readonly IFileProvider _fileProvider;
     public ProjectAddRequestHandler(
         ILogger<ProjectAddRequestHandler> logger,
@@ -57,7 +57,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
         ICommandService commandService,
         IFileSystem fileSystem,
         IProjectService projectService,
-        IProjectFactory projectModelFactory,
+        IProjectFactory projectFactory,
         IFileProvider fileProvider
         )
     {
@@ -66,7 +66,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
-        _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
+        _projectFactory = projectFactory ?? throw new ArgumentNullException(nameof(projectFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
@@ -89,7 +89,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
             _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}");
         }
 
-        var model = await _projectModelFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);
+        var model = await _projectFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);
 
         await _projectService.AddProjectAsync(model);
     }

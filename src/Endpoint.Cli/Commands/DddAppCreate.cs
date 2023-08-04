@@ -57,16 +57,16 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     private readonly ILogger<DddAppCreateRequestHandler> _logger;
     private readonly ISolutionService _solutionService;
     private readonly IAngularService _angularService;
-    private readonly ISolutionModelFactory _solutionModelFactory;
+    private readonly ISolutionFactory _solutionFactory;
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ICommandService _commandService;
-    private readonly IClassModelFactory _classModelFactory;
+    private readonly IClassFactory _classFactory;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly IFolderFactory _folderFactory;
-    private readonly IProjectFactory _projectModelFactory;
+    private readonly IProjectFactory _projectFactory;
     private readonly IAggregateService _aggregateService;
     private readonly IApiProjectService _apiProjectService;
 
@@ -74,32 +74,32 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         ILogger<DddAppCreateRequestHandler> logger,
         ISolutionService solutionService,
         IAngularService angularService,
-        ISolutionModelFactory solutionModelFactory,
+        ISolutionFactory solutionFactory,
         IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter,
         ICommandService commandService,
-        IClassModelFactory classModelFactory,
+        IClassFactory classFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileFactory fileModelFactory,
+        IFileFactory fileFactory,
         IFolderFactory folderFactory,
-        IProjectFactory projectModelFactory,
+        IProjectFactory projectFactory,
         IAggregateService aggregateService,
         IApiProjectService apiProjectService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
         _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
-        _solutionModelFactory = solutionModelFactory;
+        _solutionFactory = solutionFactory;
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter)); ;
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
+        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         _folderFactory = folderFactory ?? throw new ArgumentNullException(nameof(folderFactory));
-        _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
+        _projectFactory = projectFactory ?? throw new ArgumentNullException(nameof(projectFactory));
         _aggregateService = aggregateService ?? throw new ArgumentNullException(nameof(aggregateService));
         _apiProjectService = apiProjectService ?? throw new ArgumentNullException(nameof(apiProjectService));
     }
@@ -125,15 +125,15 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder.Directory) { Priority = 1 };
 
-        var kernel = await _projectModelFactory.CreateKernelProject(buildingBlocksFolder.Directory);
+        var kernel = await _projectFactory.CreateKernelProject(buildingBlocksFolder.Directory);
 
-        var messaging = await _projectModelFactory.CreateMessagingProject(buildingBlocksFolder.Directory);
+        var messaging = await _projectFactory.CreateMessagingProject(buildingBlocksFolder.Directory);
 
-        var messagingUdp = await _projectModelFactory.CreateMessagingUdpProject(buildingBlocksFolder.Directory);
+        var messagingUdp = await _projectFactory.CreateMessagingUdpProject(buildingBlocksFolder.Directory);
 
-        var security = await _projectModelFactory.CreateSecurityProject(buildingBlocksFolder.Directory);
+        var security = await _projectFactory.CreateSecurityProject(buildingBlocksFolder.Directory);
 
-        var validation = await _projectModelFactory.CreateValidationProject(buildingBlocksFolder.Directory);
+        var validation = await _projectFactory.CreateValidationProject(buildingBlocksFolder.Directory);
 
         buildingBlocksFolder.Projects.Add(messaging);
 
@@ -145,11 +145,11 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         buildingBlocksFolder.Projects.Add(validation);
 
-        var core = await _projectModelFactory.CreateCore(name, sourceFolder.Directory);
+        var core = await _projectFactory.CreateCore(name, sourceFolder.Directory);
 
-        var infrastructure = await _projectModelFactory.CreateInfrastructure(name, sourceFolder.Directory);
+        var infrastructure = await _projectFactory.CreateInfrastructure(name, sourceFolder.Directory);
 
-        var api = await _projectModelFactory.CreateApi(name, sourceFolder.Directory);
+        var api = await _projectFactory.CreateApi(name, sourceFolder.Directory);
 
         sourceFolder.Projects.AddRange(new[] { core, infrastructure, api });
 
@@ -165,7 +165,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var entity = await _aggregateService.Add(aggregateName, properties, aggregatesModelDirectory, name);
 
-        var dbContext = _classModelFactory.CreateDbContext($"{name}DbContext", new List<EntityModel>()
+        var dbContext = _classFactory.CreateDbContext($"{name}DbContext", new List<EntityModel>()
         {
             new EntityModel(entity.Name) { Properties = entity.Properties}
         }, name);

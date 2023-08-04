@@ -5,7 +5,7 @@ using Endpoint.Core.Syntax.Classes;
 
 namespace Endpoint.Core.Syntax.Controllers;
 
-public interface IControllerModelFactory
+public interface IControllerFactory
 {
     ClassModel Create(ClassModel entity);
 }

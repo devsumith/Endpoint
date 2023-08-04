@@ -27,16 +27,16 @@ public class ReadmeCreateRequest : IRequest
 public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
 {
     private readonly ILogger<ReadmeCreateRequestHandler> _logger;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly IArtifactGenerator _artifactGenerator;
 
     public ReadmeCreateRequestHandler(
         ILogger<ReadmeCreateRequestHandler> logger,
-        IFileFactory fileModelFactory,
+        IFileFactory fileFactory,
         IArtifactGenerator artifactGenerator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
@@ -44,7 +44,7 @@ public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(ReadmeCreateRequestHandler));
 
-        var model = _fileModelFactory.CreateTemplate("Readme", "README", request.Directory, "md", tokens: new TokensBuilder()
+        var model = _fileFactory.CreateTemplate("Readme", "README", request.Directory, "md", tokens: new TokensBuilder()
             .With(nameof(request.ProjectName), request.ProjectName)
             .Build());
 

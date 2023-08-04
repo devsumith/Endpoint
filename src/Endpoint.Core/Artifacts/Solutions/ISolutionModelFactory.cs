@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Solutions;
 
-public interface ISolutionModelFactory
+public interface ISolutionFactory
 {
     Task<SolutionModel> Create(string name);
     Task<SolutionModel> Create(string name, string projectName, string dotNetProjectTypeName, string folderName, string directory);

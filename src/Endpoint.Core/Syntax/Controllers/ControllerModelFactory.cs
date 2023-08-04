@@ -6,11 +6,11 @@ using Endpoint.Core.Syntax.Classes;
 
 namespace Endpoint.Core.Syntax.Controllers;
 
-public class ControllerModelFactory : IControllerModelFactory
+public class ControllerFactory : IControllerFactory
 {
     private readonly INamingConventionConverter _namingConventionConverter;
 
-    public ControllerModelFactory(INamingConventionConverter namingConventionConverter)
+    public ControllerFactory(INamingConventionConverter namingConventionConverter)
     {
         _namingConventionConverter = namingConventionConverter;
     }

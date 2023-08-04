@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Syntax.Entities;
 
-public interface IEntityModelFactory
+public interface IEntityFactory
 {
     EntityModel Create(string name, string properties);
 }

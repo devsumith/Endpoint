@@ -14,13 +14,13 @@ namespace Endpoint.Core.Artifacts.Projects.Strategies;
 public class CoreProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStrategyBase<ProjectReferenceModel>
 {
     private readonly ILogger<ApiProjectEnsureArtifactGenerationStrategy> _logger;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly IFileSystem _fileSystem;
     private readonly IFileProvider _fileProvider;
     private readonly ICommandService _commandService;
 
     public CoreProjectEnsureArtifactGenerationStrategy(
-        IFileFactory fileModelFactory,
+        IFileFactory fileFactory,
         IFileSystem fileSystem,
         IFileProvider fileProvider,
         IServiceProvider serviceProvider,
@@ -32,7 +32,7 @@ public class CoreProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStr
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
 

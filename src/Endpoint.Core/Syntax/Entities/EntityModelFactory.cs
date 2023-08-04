@@ -9,11 +9,11 @@ using System.Linq;
 
 namespace Endpoint.Core.Syntax.Entities;
 
-public class EntityModelFactory : IEntityModelFactory
+public class EntityFactory : IEntityFactory
 {
     private readonly ISyntaxService _syntaxService;
 
-    public EntityModelFactory(ISyntaxService syntaxService)
+    public EntityFactory(ISyntaxService syntaxService)
     {
         _syntaxService = syntaxService;
     }

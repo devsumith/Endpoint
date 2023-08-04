@@ -30,17 +30,17 @@ public class SpecFlowProjectAddRequest : IRequest
 public class SpecFlowProjectAddRequestHandler : IRequestHandler<SpecFlowProjectAddRequest>
 {
     private readonly ILogger<SpecFlowProjectAddRequestHandler> _logger;
-    private readonly IProjectFactory _projectModelFactory;
+    private readonly IProjectFactory _projectFactory;
     private readonly IProjectService _projectService;
     private readonly ICommandService _commandService;
     public SpecFlowProjectAddRequestHandler(
         ILogger<SpecFlowProjectAddRequestHandler> logger,
-        IProjectFactory projectModelFactory,
+        IProjectFactory projectFactory,
         IProjectService projectService,
         ICommandService commandService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _projectModelFactory = projectModelFactory ?? throw new ArgumentNullException(nameof(projectModelFactory));
+        _projectFactory = projectFactory ?? throw new ArgumentNullException(nameof(projectFactory));
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
@@ -75,7 +75,7 @@ public class SpecFlowProjectAddRequestHandler : IRequestHandler<SpecFlowProjectA
 
             async void SpecFlowProjectAdd()
             {
-                ProjectModel model = await _projectModelFactory.CreateSpecFlowProject(request.Name, request.Directory);
+                ProjectModel model = await _projectFactory.CreateSpecFlowProject(request.Name, request.Directory);
 
                 await _projectService.AddProjectAsync(model);
 

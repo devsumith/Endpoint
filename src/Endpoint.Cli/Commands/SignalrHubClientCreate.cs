@@ -30,20 +30,20 @@ public class SignalRHubClientCreateRequestHandler : IRequestHandler<SignalRHubCl
 {
     private readonly ILogger<SignalRHubClientCreateRequestHandler> _logger;
     private readonly ICommandService _commandService;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
 
     public SignalRHubClientCreateRequestHandler(
         ILogger<SignalRHubClientCreateRequestHandler> logger,
-        IFileFactory fileModelFactory,
+        IFileFactory fileFactory,
         ICommandService commandService,
         IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
@@ -58,8 +58,8 @@ public class SignalRHubClientCreateRequestHandler : IRequestHandler<SignalRHubCl
 
         foreach (var model in new FileModel[]
         {
-            _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Service", $"{nameSnakeCase}-hub-client.service", request.Directory, ".ts", tokens: tokens),
-            _fileModelFactory.CreateTemplate("Angular.Services.HubClientService.Spec", $"{nameSnakeCase}-hub-client.service.spec", request.Directory, ".ts", tokens: tokens)
+            _fileFactory.CreateTemplate("Angular.Services.HubClientService.Service", $"{nameSnakeCase}-hub-client.service", request.Directory, ".ts", tokens: tokens),
+            _fileFactory.CreateTemplate("Angular.Services.HubClientService.Spec", $"{nameSnakeCase}-hub-client.service.spec", request.Directory, ".ts", tokens: tokens)
         })
         {
             await _artifactGenerator.CreateAsync(model);

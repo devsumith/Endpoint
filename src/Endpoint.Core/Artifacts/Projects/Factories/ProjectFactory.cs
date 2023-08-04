@@ -21,12 +21,12 @@ namespace Endpoint.Core.Artifacts.Projects.Factories;
 
 public class ProjectFactory : IProjectFactory
 {
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly ILogger<ProjectFactory> _logger;
 
-    public ProjectFactory(IFileFactory fileModelFactory, ILogger<ProjectFactory> logger)
+    public ProjectFactory(IFileFactory fileFactory, ILogger<ProjectFactory> logger)
     {
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -60,9 +60,9 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.Console, name, directory);
 
-        model.Files.Add(_fileModelFactory.CreateCSharp("EmptyProgram", "", "Program", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateCSharp("HttpClientExtensions", "", "HttpClientExtensions", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateCSharp("HttpClientFactory", "", "HttpClientFactory", model.Directory));
+        model.Files.Add(_fileFactory.CreateCSharp("EmptyProgram", "", "Program", model.Directory));
+        model.Files.Add(_fileFactory.CreateCSharp("HttpClientExtensions", "", "HttpClientExtensions", model.Directory));
+        model.Files.Add(_fileFactory.CreateCSharp("HttpClientFactory", "", "HttpClientFactory", model.Directory));
 
         return model;
     }
@@ -75,8 +75,8 @@ public class ProjectFactory : IProjectFactory
 
         model.GenerateDocumentationFile = true;
 
-        model.Files.Add(_fileModelFactory.LaunchSettingsJson(model.Directory, model.Name, options.Port.Value));
-        model.Files.Add(_fileModelFactory.AppSettings(model.Directory, model.Name, options.DbContextName));
+        model.Files.Add(_fileFactory.LaunchSettingsJson(model.Directory, model.Name, options.Port.Value));
+        model.Files.Add(_fileFactory.AppSettings(model.Directory, model.Name, options.DbContextName));
         model.Files.Add(new MinimalApiProgramFileModel(model.Namespace, model.Directory, model.Namespace, options.DbContextName, entities));
 
         model.Packages.Add(new() { Name = "Microsoft.EntityFrameworkCore.InMemory", Version = "6.0.2" });
@@ -119,10 +119,10 @@ public class ProjectFactory : IProjectFactory
 
                     project.Folders.Add(new("AggregatesModel", project.Directory));
 
-                    project.Files.Add(_fileModelFactory.CreateResponseBase(project.Directory));
-                    project.Files.Add(_fileModelFactory.CreateCoreUsings(project.Directory));
-                    project.Files.Add(_fileModelFactory.CreateLinqExtensions(project.Directory));
-                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Core.ConfigureServices", "ConfigureServices", project.Directory, ".cs", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
+                    project.Files.Add(_fileFactory.CreateResponseBase(project.Directory));
+                    project.Files.Add(_fileFactory.CreateCoreUsings(project.Directory));
+                    project.Files.Add(_fileFactory.CreateLinqExtensions(project.Directory));
+                    project.Files.Add(_fileFactory.CreateTemplate("DddApp.Core.ConfigureServices", "ConfigureServices", project.Directory, ".cs", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
 
                     project.Packages.Add(new("FluentValidation", "11.5.1"));
                     project.Packages.Add(new("FluentValidation.DependencyInjectionExtensions", "11.5.1"));
@@ -157,14 +157,14 @@ public class ProjectFactory : IProjectFactory
 
                     project.DotNetProjectType = DotNetProjectType.ClassLib;
                     project.Folders.Add(new("Data", project.Directory));
-                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.ConfigureServices", "ConfigureServices", project.Directory, ".cs", tokens: tokens));
+                    project.Files.Add(_fileFactory.CreateTemplate("DddApp.Infrastructure.ConfigureServices", "ConfigureServices", project.Directory, ".cs", tokens: tokens));
 
-                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.SeedData", "SeedData", Path.Combine(project.Directory, "Data"), ".cs", tokens: new TokensBuilder()
+                    project.Files.Add(_fileFactory.CreateTemplate("DddApp.Infrastructure.SeedData", "SeedData", Path.Combine(project.Directory, "Data"), ".cs", tokens: new TokensBuilder()
                         .With("serviceName", serviceName)
                         .With("namespace", $"{serviceName}.Infrastructure.Data")
                         .Build()));
 
-                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Infrastructure.DesignTimeDbContextFactory", "DesignTimeDbContextFactory", project.Directory, ".cs", tokens: tokens));
+                    project.Files.Add(_fileFactory.CreateTemplate("DddApp.Infrastructure.DesignTimeDbContextFactory", "DesignTimeDbContextFactory", project.Directory, ".cs", tokens: tokens));
 
                     project.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Core{Path.DirectorySeparatorChar}{serviceName}.Core.csproj");
 
@@ -183,14 +183,14 @@ public class ProjectFactory : IProjectFactory
 
                     project.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Infrastructure{Path.DirectorySeparatorChar}{serviceName}.Infrastructure.csproj");
 
-                    project.Files.Add(_fileModelFactory.CreateTemplate("DddApp.Api.AppSettings", "appsettings", project.Directory, "json", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
+                    project.Files.Add(_fileFactory.CreateTemplate("DddApp.Api.AppSettings", "appsettings", project.Directory, "json", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
 
-                    project.Files.Add(_fileModelFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", project.Directory, tokens: new TokensBuilder()
+                    project.Files.Add(_fileFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", project.Directory, tokens: new TokensBuilder()
                         .With("DbContext", $"{serviceName}DbContext")
                         .With("serviceName", serviceName)
                         .Build()));
 
-                    project.Files.Add(_fileModelFactory.CreateTemplate("Api.Program", "Program", project.Directory, tokens: new TokensBuilder()
+                    project.Files.Add(_fileFactory.CreateTemplate("Api.Program", "Program", project.Directory, tokens: new TokensBuilder()
                         .With("DbContext", $"{serviceName}DbContext")
                         .With("serviceName", serviceName)
                         .With("schema", schema)
@@ -244,19 +244,19 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Messaging", directory);
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("IMessagingClient", "IMessagingClient", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("IMessagingClient", "IMessagingClient", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("IServiceBusMessage", "IServiceBusMessage", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("IServiceBusMessage", "IServiceBusMessage", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("IServiceBusMessageListener", "IServiceBusMessageListener", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("IServiceBusMessageListener", "IServiceBusMessageListener", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("IServiceBusMessageSender", "IServiceBusMessageSender", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("IServiceBusMessageSender", "IServiceBusMessageSender", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("ReceiveRequest", "ReceiveRequest", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("ReceiveRequest", "ReceiveRequest", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("ServiceBusMessage", "ServiceBusMessage", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("ServiceBusMessage", "ServiceBusMessage", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("Observable", "Observable", $"{model.Directory}{Path.DirectorySeparatorChar}Internals"));
+        model.Files.Add(_fileFactory.CreateTemplate("Observable", "Observable", $"{model.Directory}{Path.DirectorySeparatorChar}Internals"));
 
         model.Packages.Add(new() { Name = "MediatR.Contracts", Version = "1.0.1" });
 
@@ -277,17 +277,17 @@ public class ProjectFactory : IProjectFactory
 
         model.Packages.Add(new() { Name = "System.Reactive.Linq", Version = "5.0.0" });
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("Messaging.Udp.ConfigureServices", "ConfigureServices", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("Messaging.Udp.ConfigureServices", "ConfigureServices", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("IUdpClientFactory", "IUdpClientFactory", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("IUdpClientFactory", "IUdpClientFactory", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("MessagingClient", "MessagingClient", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("MessagingClient", "MessagingClient", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("ServiceBusMessageListener", "ServiceBusMessageListener", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("ServiceBusMessageListener", "ServiceBusMessageListener", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("ServiceBusMessageSender", "ServiceBusMessageSender", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("ServiceBusMessageSender", "ServiceBusMessageSender", model.Directory));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("UdpClientFactory", "UdpClientFactory", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("UdpClientFactory", "UdpClientFactory", model.Directory));
 
         return model;
     }
@@ -322,15 +322,15 @@ public class ProjectFactory : IProjectFactory
 
         responseBase.Constructors.Add(responseBaseConstructor);
 
-        var entityFrameworFileModel = _fileModelFactory.CreateTemplate("BuildingBlocks.Kernel.EntityFrameworkCoreExtensions", "EntityFrameworkCoreExtensions", model.Directory);
+        var entityFrameworFileModel = _fileFactory.CreateTemplate("BuildingBlocks.Kernel.EntityFrameworkCoreExtensions", "EntityFrameworkCoreExtensions", model.Directory);
 
-        var globalExceptionFilterFileModel = _fileModelFactory.CreateTemplate("BuildingBlocks.Kernel.HttpGlobalExceptionFilter", "HttpGlobalExceptionFilter", model.Directory);
+        var globalExceptionFilterFileModel = _fileFactory.CreateTemplate("BuildingBlocks.Kernel.HttpGlobalExceptionFilter", "HttpGlobalExceptionFilter", model.Directory);
 
-        var domainExceptionfileModel = _fileModelFactory.CreateTemplate("BuildingBlocks.Kernel.DomainException", "DomainException", model.Directory);
+        var domainExceptionfileModel = _fileFactory.CreateTemplate("BuildingBlocks.Kernel.DomainException", "DomainException", model.Directory);
 
-        var internalServerfileModel = _fileModelFactory.CreateTemplate("BuildingBlocks.Kernel.InternalServerErrorObjectResult", "InternalServerErrorObjectResult", model.Directory);
+        var internalServerfileModel = _fileFactory.CreateTemplate("BuildingBlocks.Kernel.InternalServerErrorObjectResult", "InternalServerErrorObjectResult", model.Directory);
 
-        var jsonResponsefileModel = _fileModelFactory.CreateTemplate("BuildingBlocks.Kernel.JsonErrorResponse", "JsonErrorResponse", model.Directory);
+        var jsonResponsefileModel = _fileFactory.CreateTemplate("BuildingBlocks.Kernel.JsonErrorResponse", "JsonErrorResponse", model.Directory);
 
         model.Files.Add(entityFrameworFileModel);
 
@@ -356,21 +356,21 @@ public class ProjectFactory : IProjectFactory
         model.Packages.Add(new() { Name = "Swashbuckle.AspNetCore.SwaggerGen", Version = "6.5.0" });
         model.Packages.Add(new() { Name = "System.IdentityModel.Tokens.Jwt", Version = "6.25.1" });
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.AccessRight", "AccessRight", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.Authentication", "Authentication", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.AuthorizationHeaderParameterOperationFilter", "AuthorizationHeaderParameterOperationFilter", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.AuthorizeResourceOperationAttribute", "AuthorizeResourceOperationAttribute", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.ConfigureServices", "ConfigureServices", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.IPasswordHasher", "IPasswordHasher", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.ITokenBuilder", "ITokenBuilder", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.ITokenProvider", "ITokenProvider", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.Operations", "Operations", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.PasswordHasher", "PasswordHasher", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.ResourceOperationAuthorizationBehavior", "ResourceOperationAuthorizationBehavior", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.ResourceOperationAuthorizationHandler", "ResourceOperationAuthorizationHandler", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.SecurityConstants", "SecurityConstants", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.TokenBuilder", "TokenBuilder", model.Directory));
-        model.Files.Add(_fileModelFactory.CreateTemplate("BuildingBlocks.Security.Security.TokenProvider", "TokenProvider", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.AccessRight", "AccessRight", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.Authentication", "Authentication", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.AuthorizationHeaderParameterOperationFilter", "AuthorizationHeaderParameterOperationFilter", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.AuthorizeResourceOperationAttribute", "AuthorizeResourceOperationAttribute", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.ConfigureServices", "ConfigureServices", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.IPasswordHasher", "IPasswordHasher", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.ITokenBuilder", "ITokenBuilder", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.ITokenProvider", "ITokenProvider", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.Operations", "Operations", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.PasswordHasher", "PasswordHasher", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.ResourceOperationAuthorizationBehavior", "ResourceOperationAuthorizationBehavior", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.ResourceOperationAuthorizationHandler", "ResourceOperationAuthorizationHandler", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.SecurityConstants", "SecurityConstants", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.TokenBuilder", "TokenBuilder", model.Directory));
+        model.Files.Add(_fileFactory.CreateTemplate("BuildingBlocks.Security.Security.TokenProvider", "TokenProvider", model.Directory));
 
         return model;
     }
@@ -405,9 +405,9 @@ public class ProjectFactory : IProjectFactory
 
         if (type.StartsWith("web"))
         {
-            model.Files.Add(_fileModelFactory.CreateTemplate("DefaultProgram", "Program", model.Directory, tokens: tokens));
+            model.Files.Add(_fileFactory.CreateTemplate("DefaultProgram", "Program", model.Directory, tokens: tokens));
 
-            model.Files.Add(_fileModelFactory.CreateTemplate("DefaultConfigureServices", "ConfigureServices", model.Directory, tokens: tokens));
+            model.Files.Add(_fileFactory.CreateTemplate("DefaultConfigureServices", "ConfigureServices", model.Directory, tokens: tokens));
 
             model.Packages.Add(new() { Name = "Microsoft.AspNetCore.OpenApi", Version = "7.0.2" });
 

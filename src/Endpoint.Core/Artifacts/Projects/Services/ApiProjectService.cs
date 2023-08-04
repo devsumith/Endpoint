@@ -21,20 +21,20 @@ public class ApiProjectService : IApiProjectService
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
     private readonly IArtifactGenerator _artifactGenerator;
-    private readonly IFileFactory _fileModelFactory;
-    private readonly IClassModelFactory _classModelFactory;
+    private readonly IFileFactory _fileFactory;
+    private readonly IClassFactory _classFactory;
     private readonly ISyntaxGenerator _syntaxGenerator;
-    private readonly IMethodModelFactory _methodModelFactory;
+    private readonly IMethodFactory _methodFactory;
     private readonly IClipboardService _clipboardService;
     public ApiProjectService(
         ILogger<ApiProjectService> logger,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
         IArtifactGenerator artifactGenerator,
-        IFileFactory fileModelFactory,
-        IClassModelFactory classModelFactory,
+        IFileFactory fileFactory,
+        IClassFactory classFactory,
         ISyntaxGenerator syntaxGenerator,
-        IMethodModelFactory methodModelFactory,
+        IMethodFactory methodFactory,
         IClipboardService clipboardService
         )
     {
@@ -42,10 +42,10 @@ public class ApiProjectService : IApiProjectService
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
-        _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
+        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
         _syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
-        _methodModelFactory = methodModelFactory ?? throw new ArgumentNullException(nameof(methodModelFactory));
+        _methodFactory = methodFactory ?? throw new ArgumentNullException(nameof(methodFactory));
         _clipboardService = clipboardService ?? throw new ArgumentNullException(nameof(clipboardService));
     }
 
@@ -68,9 +68,9 @@ public class ApiProjectService : IApiProjectService
 
         _fileSystem.CreateDirectory(controllersDirectory);
 
-        var controllerClassModel = empty ? _classModelFactory.CreateEmptyController(entityName, csProjDirectory) : _classModelFactory.CreateController(entity, csProjDirectory);
+        var controllerClassModel = empty ? _classFactory.CreateEmptyController(entityName, csProjDirectory) : _classFactory.CreateController(entity, csProjDirectory);
 
-        await _artifactGenerator.CreateAsync(_fileModelFactory.CreateCSharp(controllerClassModel, controllersDirectory));
+        await _artifactGenerator.CreateAsync(_fileFactory.CreateCSharp(controllerClassModel, controllersDirectory));
     }
 
     private async Task AddApiFiles(string serviceName, string directory)
@@ -82,11 +82,11 @@ public class ApiProjectService : IApiProjectService
             .With("SslPort", "5000")
             .Build();
 
-        var configureServiceFile = _fileModelFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", directory, ".cs", tokens: tokens);
+        var configureServiceFile = _fileFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", directory, ".cs", tokens: tokens);
 
-        var appSettingsFile = _fileModelFactory.CreateTemplate("Api.AppSettings", "appsettings", directory, "json", tokens: tokens);
+        var appSettingsFile = _fileFactory.CreateTemplate("Api.AppSettings", "appsettings", directory, "json", tokens: tokens);
 
-        var launchSettingsFile = _fileModelFactory.CreateTemplate("Api.LaunchSettings", "launchsettings", directory, "json", tokens: tokens);
+        var launchSettingsFile = _fileFactory.CreateTemplate("Api.LaunchSettings", "launchsettings", directory, "json", tokens: tokens);
 
 
         foreach (var file in new FileModel[] {
@@ -101,7 +101,7 @@ public class ApiProjectService : IApiProjectService
 
     public async Task ControllerMethodAdd(string name, string controller, string route, string directory)
     {
-        var model = _methodModelFactory.CreateControllerMethod(name, controller, route switch
+        var model = _methodFactory.CreateControllerMethod(name, controller, route switch
         {
             "create" => RouteType.Create,
             "update" => RouteType.Update,

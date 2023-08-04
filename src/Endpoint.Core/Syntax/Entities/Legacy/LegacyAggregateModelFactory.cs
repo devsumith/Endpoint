@@ -10,11 +10,11 @@ using System.Linq;
 namespace Endpoint.Core.Syntax.Entities.Legacy;
 
 [Obsolete]
-public class LegacyAggregatesModelFactory : ILegacyAggregatesModelFactory
+public class LegacyAggregatesFactory : ILegacyAggregatesFactory
 {
     private readonly ISyntaxService _syntaxService;
 
-    public LegacyAggregatesModelFactory(ISyntaxService syntaxService)
+    public LegacyAggregatesFactory(ISyntaxService syntaxService)
     {
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
     }

@@ -56,11 +56,11 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
     private readonly ISolutionUpdateStrategyFactory _solutionUpdateStrategyFactory;
     private readonly IWorkspaceSettingsUpdateStrategyFactory _workspaceSettingsUpdateStrategyFactory;
     private readonly IFileSystem _fileSystem;
-    private readonly ISolutionModelFactory _solutionModelFactory;
+    private readonly ISolutionFactory _solutionFactory;
 
-    public MicroserviceRequestHandler(ISolutionModelFactory solutionModelFactory, ILogger<MicroserviceRequestHandler> logger, IArtifactGenerator artifactGenerator, ISolutionSettingsFileGenerator factory, IWorkspaceGenerator workspaceGenerator, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
+    public MicroserviceRequestHandler(ISolutionFactory solutionFactory, ILogger<MicroserviceRequestHandler> logger, IArtifactGenerator artifactGenerator, ISolutionSettingsFileGenerator factory, IWorkspaceGenerator workspaceGenerator, ISolutionUpdateStrategyFactory solutionUpdateStrategyFactory, IFileSystem fileSystem, IWorkspaceSettingsUpdateStrategyFactory workspaceSettingsUpdateStrategyFactory)
     {
-        _solutionModelFactory = solutionModelFactory;
+        _solutionFactory = solutionFactory;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _factory = factory ?? throw new ArgumentNullException(nameof(factory));
@@ -74,7 +74,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
     {
         if (IsExistingWorkspace(request.Directory))
         {
-            return await _solutionModelFactory.Minimal(new CreateEndpointSolutionOptions
+            return await _solutionFactory.Minimal(new CreateEndpointSolutionOptions
             {
                 Name = createMicroserviceOptions.Name,
                 Directory = createMicroserviceOptions.Directory,
@@ -85,7 +85,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
             });
         }
 
-        return await _solutionModelFactory.Minimal(new CreateEndpointSolutionOptions
+        return await _solutionFactory.Minimal(new CreateEndpointSolutionOptions
         {
             Name = createMicroserviceOptions.Name,
             Directory = $"{createMicroserviceOptions.Directory}",
@@ -117,7 +117,7 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
 
         SolutionModel solutionModel = request.TemplateType switch
         {
-            CleanArchitectureByJasonTalyor => await _solutionModelFactory.CleanArchitectureMicroservice(createMicroserviceOptions),
+            CleanArchitectureByJasonTalyor => await _solutionFactory.CleanArchitectureMicroservice(createMicroserviceOptions),
             Minimal => await CreateMinimalSolutionModel(createMicroserviceOptions, request),
             _ => throw new NotImplementedException()
         };

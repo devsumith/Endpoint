@@ -32,16 +32,16 @@ public class ClassAndInterfaceCreateRequest : IRequest
 public class ClassAndInterfaceCreateRequestHandler : IRequestHandler<ClassAndInterfaceCreateRequest>
 {
     private readonly ILogger<ClassAndInterfaceCreateRequestHandler> _logger;
-    private readonly IClassModelFactory _classModelFactory;
+    private readonly IClassFactory _classFactory;
     private readonly IArtifactGenerator _artifactGenerator;
 
     public ClassAndInterfaceCreateRequestHandler(
         ILogger<ClassAndInterfaceCreateRequestHandler> logger,
         IArtifactGenerator artifactGenerator,
-        IClassModelFactory classModelFactory)
+        IClassFactory classFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
+        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
@@ -63,7 +63,7 @@ public class ClassAndInterfaceCreateRequestHandler : IRequestHandler<ClassAndInt
                 }
             }
 
-            var (classModel, interfaceModel) = _classModelFactory.CreateClassAndInterface(name);
+            var (classModel, interfaceModel) = _classFactory.CreateClassAndInterface(name);
 
             foreach (var @interface in interfaces)
             {

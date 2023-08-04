@@ -39,20 +39,20 @@ public class SolutionCreateRequest : IRequest
 public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateRequest>
 {
     private readonly ILogger<SolutionCreateRequestHandler> _logger;
-    private readonly ISolutionModelFactory _solutionModelFactory;
+    private readonly ISolutionFactory _solutionFactory;
     private readonly ISolutionService _solutionService;
     private readonly ICommandService _commandService;
 
     public SolutionCreateRequestHandler(
         ILogger<SolutionCreateRequestHandler> logger,
         ISolutionService solutionService,
-        ISolutionModelFactory solutionModelFactory,
+        ISolutionFactory solutionFactory,
         ICommandService commandService
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
-        _solutionModelFactory = solutionModelFactory ?? throw new ArgumentNullException(nameof(solutionModelFactory));
+        _solutionFactory = solutionFactory ?? throw new ArgumentNullException(nameof(solutionFactory));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
@@ -60,7 +60,7 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
     {
         _logger.LogInformation("Handled: {0}", nameof(SolutionCreateRequestHandler));
 
-        var model = await _solutionModelFactory.Create(request.Name, request.ProjectName, request.ProjectType, request.FolderName, request.Directory);
+        var model = await _solutionFactory.Create(request.Name, request.ProjectName, request.ProjectType, request.FolderName, request.Directory);
 
         if (request.NoServiceCreate)
             model.RemoveAllServices();

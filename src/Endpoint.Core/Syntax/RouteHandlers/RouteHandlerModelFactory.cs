@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.RouteHandlers;
 
-public class RouteHandlerModelFactory : IRouteHandlerModelFactory
+public class RouteHandlerFactory : IRouteHandlerFactory
 {
     public List<RouteHandlerModel> Create(string dbContextName, LegacyAggregatesModel aggregateRoot)
     {

@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Artifacts.Files.Factories;
 
-public interface IEntityFileModelFactory
+public interface IEntityFileFactory
 {
     EntityFileModel Create(string name, string properties, string directory);
 }

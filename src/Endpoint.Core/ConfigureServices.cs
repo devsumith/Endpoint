@@ -55,7 +55,7 @@ public static class ConfigureServices
     {
         services.AddSingleton<ISyntaxGenerationStrategy, TestSyntaxGenerationStrategy>();
         services.AddSingleton<IPlaywrightService, PlaywrightService>();
-        services.AddSingleton<IMethodModelFactory, MethodModelFactory>();
+        services.AddSingleton<IMethodFactory, MethodFactory>();
         services.AddSingleton<ISyntaxGenerationStrategy, RuleForSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, TypeScriptTypeSyntaxGenerationStrategy>();
         services.AddSingleton<ISyntaxGenerationStrategy, ImportSyntaxGenerationStrategy>();
@@ -90,15 +90,15 @@ public static class ConfigureServices
         services.AddSingleton<INamespaceProvider, NamespaceProvider>();
         services.AddSingleton<IDomainDrivenDesignFileService, DomainDrivenDesignFileService>();
         services.AddSingleton<IDependencyInjectionService, DependencyInjectionService>();
-        services.AddSingleton<IEntityModelFactory, EntityModelFactory>();
-        services.AddSingleton<ILegacyAggregatesModelFactory, LegacyAggregatesModelFactory>();
+        services.AddSingleton<IEntityFactory, EntityFactory>();
+        services.AddSingleton<ILegacyAggregatesFactory, LegacyAggregatesFactory>();
         services.AddSingleton<IFileNamespaceProvider, FileNamespaceProvider>();
         services.AddSingleton<IProjectService, ProjectService>();
         services.AddSingleton<ISolutionService, SolutionService>();
         services.AddSingleton<IFileProvider, FileProvider>();
         services.AddSingleton<ISolutionNamespaceProvider, SolutionNamespaceProvider>();
-        services.AddSingleton<ISolutionModelFactory, SolutionModelFactory>();
-        services.AddSingleton<IControllerModelFactory, ControllerModelFactory>();
+        services.AddSingleton<ISolutionFactory, SolutionFactory>();
+        services.AddSingleton<IControllerFactory, ControllerFactory>();
         services.AddSingleton<IArtifactGenerationStrategy, FolderArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<ClassModel>>();
         services.AddSingleton<IArtifactGenerationStrategy, ObjectFileArtifactGenerationStrategyBase<InterfaceModel>>();
@@ -185,9 +185,9 @@ public static class ConfigureServices
             return new SyntaxService(factory, fileProvider, fileSystem, directory);
         });
 
-        services.AddSingleton<IEntityFileModelFactory, EntityFileModelFactory>();
+        services.AddSingleton<IEntityFileFactory, EntityFileFactory>();
         services.AddSingleton<IProjectFactory, ProjectFactory>();
-        services.AddSingleton<IRouteHandlerModelFactory, RouteHandlerModelFactory>();
+        services.AddSingleton<IRouteHandlerFactory, RouteHandlerFactory>();
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Constants).Assembly));
         services.AddHostedService<ObservableNotificationsProcessor>();
         services.AddSingleton<IPlantUmlParserStrategyFactory, PlantUmlParserStrategyFactory>();
@@ -198,7 +198,7 @@ public static class ConfigureServices
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlFieldParserStrategy>();
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlMethodParserStrategy>();
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlPropertyParserStrategy>();
-        services.AddSingleton<IClassModelFactory, ClassModelFactory>();
+        services.AddSingleton<IClassFactory, ClassFactory>();
     }
 
     public static void AddCoreServices<T>(this IServiceCollection services)

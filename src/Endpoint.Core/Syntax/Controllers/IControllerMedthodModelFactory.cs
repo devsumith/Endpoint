@@ -6,7 +6,7 @@ using Endpoint.Core.Syntax.Methods;
 
 namespace Endpoint.Core.Syntax.Controllers;
 
-public interface IControllerMedthodModelFactory
+public interface IControllerMedthodFactory
 {
 
     MethodModel Create(ClassModel entity, RouteType routeType);

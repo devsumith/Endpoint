@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Solutions;
 
-public class SolutionModelFactory : ISolutionModelFactory
+public class SolutionFactory : ISolutionFactory
 {
-    private readonly IProjectFactory _projectModelFactory;
+    private readonly IProjectFactory _projectFactory;
 
-    public SolutionModelFactory(IProjectFactory projectModelFactory)
+    public SolutionFactory(IProjectFactory projectFactory)
     {
-        _projectModelFactory = projectModelFactory;
+        _projectFactory = projectFactory;
     }
     public async Task<SolutionModel> Create(string name)
     {
@@ -41,7 +41,7 @@ public class SolutionModelFactory : ISolutionModelFactory
             srcFolder.SubFolders.Add(userDefinedFolder);
         }
 
-        var project = await _projectModelFactory.Create(dotNetProjectTypeName, projectName, userDefinedFolder == null ? $"{srcFolder.Directory}" : userDefinedFolder.Directory);
+        var project = await _projectFactory.Create(dotNetProjectTypeName, projectName, userDefinedFolder == null ? $"{srcFolder.Directory}" : userDefinedFolder.Directory);
 
         (userDefinedFolder == null ? srcFolder : userDefinedFolder).Projects.Add(project);
 
@@ -52,7 +52,7 @@ public class SolutionModelFactory : ISolutionModelFactory
     {
         var solutionModel = new SolutionModel(options.Name, options.Directory);
 
-        solutionModel.Projects.Add(await _projectModelFactory.CreateHttpProject(options.Name, solutionModel.SrcDirectory));
+        solutionModel.Projects.Add(await _projectFactory.CreateHttpProject(options.Name, solutionModel.SrcDirectory));
 
         return solutionModel;
     }
@@ -61,7 +61,7 @@ public class SolutionModelFactory : ISolutionModelFactory
     {
         var model = string.IsNullOrEmpty(options.SolutionDirectory) ? new SolutionModel(options.Name, options.Directory) : new SolutionModel(options.Name, options.Directory, options.SolutionDirectory);
 
-        var minimalApiProject = await _projectModelFactory.CreateMinimalApiProject(new CreateMinimalApiProjectOptions
+        var minimalApiProject = await _projectFactory.CreateMinimalApiProject(new CreateMinimalApiProjectOptions
         {
             Name = $"{options.Name}.Api",
             ShortIdPropertyName = false,
@@ -73,7 +73,7 @@ public class SolutionModelFactory : ISolutionModelFactory
             DbContextName = options.DbContextName
         });
 
-        var unitTestProject = await _projectModelFactory.CreateMinimalApiUnitTestsProject(options.Name, model.TestDirectory, options.Resource);
+        var unitTestProject = await _projectFactory.CreateMinimalApiUnitTestsProject(options.Name, model.TestDirectory, options.Resource);
 
         model.Projects.Add(minimalApiProject);
 
@@ -88,19 +88,19 @@ public class SolutionModelFactory : ISolutionModelFactory
     {
         var model = string.IsNullOrEmpty(options.SolutionDirectory) ? new SolutionModel(options.Name, options.Directory) : new SolutionModel(options.Name, options.Directory, options.SolutionDirectory);
 
-        var domain = await _projectModelFactory.CreateLibrary($"{options.Name}.Domain", model.SrcDirectory);
+        var domain = await _projectFactory.CreateLibrary($"{options.Name}.Domain", model.SrcDirectory);
 
         domain.Metadata.Add(Constants.ProjectType.Domain);
 
-        var infrastructure = await _projectModelFactory.CreateLibrary($"{options.Name}.Infrastructure", model.SrcDirectory);
+        var infrastructure = await _projectFactory.CreateLibrary($"{options.Name}.Infrastructure", model.SrcDirectory);
 
         infrastructure.Metadata.Add(Constants.ProjectType.Infrastructure);
 
-        var application = await _projectModelFactory.CreateLibrary($"{options.Name}.Application", model.SrcDirectory);
+        var application = await _projectFactory.CreateLibrary($"{options.Name}.Application", model.SrcDirectory);
 
         application.Metadata.Add(Constants.ProjectType.Application);
 
-        var api = await _projectModelFactory.CreateWebApi($"{options.Name}.Api", model.SrcDirectory);
+        var api = await _projectFactory.CreateWebApi($"{options.Name}.Api", model.SrcDirectory);
 
         api.Metadata.Add(Constants.ProjectType.Api);
 

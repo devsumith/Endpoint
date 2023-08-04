@@ -25,23 +25,23 @@ public class FolderFactory : IFolderFactory
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
     private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly IFileFactory _fileModelFactory;
-    private readonly IClassModelFactory _classModelFactory;
+    private readonly IFileFactory _fileFactory;
+    private readonly IClassFactory _classFactory;
 
     public FolderFactory(
         ILogger<FolderFactory> logger,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
         INamingConventionConverter namingConventionConverter,
-        IFileFactory fileModelFactory,
-        IClassModelFactory classModelFactory)
+        IFileFactory fileFactory,
+        IClassFactory classFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(fileSystem));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
-        _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
+        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
     }
 
     public FolderModel AggregagteCommands(ClassModel aggregate, string directory)
@@ -105,11 +105,11 @@ public class FolderFactory : IFolderFactory
 
         model.Files.Add(new ObjectFileModel<TypeScriptTypeModel>(typeScriptTypeModel, typeScriptTypeModel.Name, model.Directory, ".ts"));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("http-service", $"{modelNameSnakeCase}.service", model.Directory, ".ts", tokens: new TokensBuilder()
+        model.Files.Add(_fileFactory.CreateTemplate("http-service", $"{modelNameSnakeCase}.service", model.Directory, ".ts", tokens: new TokensBuilder()
             .With("entityName", modelNameSnakeCase)
             .Build()));
 
-        model.Files.Add(_fileModelFactory.CreateTemplate("component-store", $"{modelNameSnakeCase}.store", model.Directory, ".ts", tokens: new TokensBuilder()
+        model.Files.Add(_fileFactory.CreateTemplate("component-store", $"{modelNameSnakeCase}.store", model.Directory, ".ts", tokens: new TokensBuilder()
             .With("entityName", modelNameSnakeCase)
             .Build()));
 
@@ -125,7 +125,7 @@ public class FolderFactory : IFolderFactory
 
     public AggregateFolderModel Aggregate(string aggregateName, string properties, string directory)
     {
-        var aggregate = _classModelFactory.CreateEntity(aggregateName, properties);
+        var aggregate = _classFactory.CreateEntity(aggregateName, properties);
 
         var model = new AggregateFolderModel(aggregate, directory);
 

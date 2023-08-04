@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Syntax.Entities.Legacy;
 
-public interface ILegacyAggregatesModelFactory
+public interface ILegacyAggregatesFactory
 {
     LegacyAggregatesModel Create(string resource, string properties);
 }

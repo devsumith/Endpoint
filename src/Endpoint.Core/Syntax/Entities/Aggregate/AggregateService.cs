@@ -21,9 +21,9 @@ public class AggregateService : IAggregateService
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ISyntaxService _syntaxService;
     private readonly IArtifactGenerator _artifactGenerator;
-    private readonly IClassModelFactory _classModelFactory;
+    private readonly IClassFactory _classFactory;
     private readonly IProjectService _projectService;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly IFileProvider _fileProvider;
 
     public AggregateService(
@@ -31,18 +31,18 @@ public class AggregateService : IAggregateService
         INamingConventionConverter namingConventionConverter,
         ISyntaxService syntaxService,
         IArtifactGenerator artifactGenerator,
-        IClassModelFactory classModelFactory,
+        IClassFactory classFactory,
         IProjectService projectService,
-        IFileFactory fileModelFactory,
+        IFileFactory fileFactory,
         IFileProvider fileProvider)
     {
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
+        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
@@ -65,14 +65,14 @@ public class AggregateService : IAggregateService
 
         if (classModel == null)
         {
-            classModel = _classModelFactory.CreateEntity(name, properties);
+            classModel = _classFactory.CreateEntity(name, properties);
         }
 
         var model = new AggregatesModel(_namingConventionConverter, serviceName, classModel, directory);
 
         await _artifactGenerator.CreateAsync(model);
 
-        var fileModel = _fileModelFactory.CreateDbContextInterface(directory);
+        var fileModel = _fileFactory.CreateDbContextInterface(directory);
 
         await _artifactGenerator.CreateAsync(fileModel);
 
@@ -100,7 +100,7 @@ public class AggregateService : IAggregateService
 
         if (classModel == null)
         {
-            classModel = _classModelFactory.CreateEntity(aggregate, properties);
+            classModel = _classFactory.CreateEntity(aggregate, properties);
         }
 
         var commandModel = new CommandModel(serviceName, classModel, _namingConventionConverter, name: name, routeType: routeType switch
@@ -124,7 +124,7 @@ public class AggregateService : IAggregateService
 
         if (classModel == null)
         {
-            classModel = _classModelFactory.CreateEntity(aggregate, properties);
+            classModel = _classFactory.CreateEntity(aggregate, properties);
         }
 
         var queryModel = new QueryModel(serviceName, _namingConventionConverter, classModel, name: name, routeType: routeType.ToLower() switch

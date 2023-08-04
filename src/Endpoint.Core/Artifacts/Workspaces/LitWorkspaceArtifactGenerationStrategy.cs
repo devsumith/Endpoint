@@ -20,19 +20,19 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
     private readonly ILogger<LitWorkspaceArtifactGenerationStrategy> _logger;
     private readonly ICommandService _commandService;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     public LitWorkspaceArtifactGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<LitWorkspaceArtifactGenerationStrategy> logger,
         IFileSystem fileSystem,
         ICommandService commandService,
-        IFileFactory fileModelFactory)
+        IFileFactory fileFactory)
         : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
     public override async Task CreateAsync(IArtifactGenerator artifactGenerator, LitWorkspaceModel model, dynamic context = null)
@@ -66,7 +66,7 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
 
         _commandService.Start("ts-jest config:init", model.Directory);
 
-        var webPackConfig = _fileModelFactory.CreateTemplate("Webpack.Config", "webpack.config", model.Directory, "js");
+        var webPackConfig = _fileFactory.CreateTemplate("Webpack.Config", "webpack.config", model.Directory, "js");
 
         await artifactGenerator.CreateAsync(webPackConfig);
 

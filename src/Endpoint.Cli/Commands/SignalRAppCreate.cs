@@ -41,41 +41,41 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
     private readonly ILogger<SignalRAppCreateRequestHandler> _logger;
     private readonly ISolutionService _solutionService;
     private readonly IAngularService _angularService;
-    private readonly ISolutionModelFactory _solutionModelFactory;
+    private readonly ISolutionFactory _solutionFactory;
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ICommandService _commandService;
-    private readonly IClassModelFactory _classModelFactory;
+    private readonly IClassFactory _classFactory;
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
-    private readonly IFileFactory _fileModelFactory;
+    private readonly IFileFactory _fileFactory;
     private readonly IPlaywrightService _playwrightService;
 
     public SignalRAppCreateRequestHandler(
         ILogger<SignalRAppCreateRequestHandler> logger,
         ISolutionService solutionService,
         IAngularService angularService,
-        ISolutionModelFactory solutionModelFactory,
+        ISolutionFactory solutionFactory,
         IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter,
         ICommandService commandService,
-        IClassModelFactory classModelFactory,
+        IClassFactory classFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileFactory fileModelFactory,
+        IFileFactory fileFactory,
         IPlaywrightService playwrightService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
         _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
-        _solutionModelFactory = solutionModelFactory;
+        _solutionFactory = solutionFactory;
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter)); ;
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
+        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _fileModelFactory = fileModelFactory ?? throw new ArgumentNullException(nameof(fileModelFactory));
+        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         _playwrightService = playwrightService ?? throw new ArgumentNullException(nameof(playwrightService));
     }
 
@@ -138,17 +138,17 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
     {
         _logger.LogInformation("Handled: {0}", nameof(SignalRAppCreateRequestHandler));
 
-        var solutionModel = await _solutionModelFactory.Create(request.Name, $"{request.Name}.Api", "webapi", string.Empty, request.Directory);
+        var solutionModel = await _solutionFactory.Create(request.Name, $"{request.Name}.Api", "webapi", string.Empty, request.Directory);
 
-        var messageModel = _classModelFactory.CreateMessageModel();
+        var messageModel = _classFactory.CreateMessageModel();
 
-        var hubClassModel = _classModelFactory.CreateHubModel(request.Name);
+        var hubClassModel = _classFactory.CreateHubModel(request.Name);
 
-        var interfaceModel = _classModelFactory.CreateHubInterfaceModel(request.Name);
+        var interfaceModel = _classFactory.CreateHubInterfaceModel(request.Name);
 
         var projectModel = solutionModel.DefaultProject;
 
-        var workerModel = _classModelFactory.CreateMessageProducerWorkerModel(request.Name, projectModel.Directory);
+        var workerModel = _classFactory.CreateMessageProducerWorkerModel(request.Name, projectModel.Directory);
 
         projectModel.Files.Add(new ObjectFileModel<ClassModel>(workerModel, workerModel.UsingDirectives, workerModel.Name, projectModel.Directory, ".cs"));
 
@@ -180,7 +180,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         _commandService.Start("npm install @microsoft/signalr", Path.Combine(solutionModel.SrcDirectory, temporaryAppName));
 
-        var mainFileModel = _fileModelFactory
+        var mainFileModel = _fileFactory
             .CreateTemplate(
             "SignalRAppMain",
             "main",
@@ -191,7 +191,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             .With("name", request.Name)
             .Build());
 
-        var componentFileModel = _fileModelFactory
+        var componentFileModel = _fileFactory
             .CreateTemplate(
             "Components.HubClientServiceConsumer.Component",
             $"{nameSnakeCase}{Path.DirectorySeparatorChar}{nameSnakeCase}.component",
@@ -201,7 +201,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             .With("name", request.Name)
             .Build());
 
-        var componentTemplateFileModel = _fileModelFactory
+        var componentTemplateFileModel = _fileFactory
             .CreateTemplate(
             "Components.HubClientServiceConsumer.Html",
             $"{nameSnakeCase}{Path.DirectorySeparatorChar}{nameSnakeCase}.component",
@@ -212,7 +212,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             .With("code", "{{ vm.messages | json }}")
             .Build());
 
-        var hubServiceFileModel = _fileModelFactory
+        var hubServiceFileModel = _fileFactory
             .CreateTemplate(
             "Services.HubClientService.Service",
             $"{serviceName}.service",
@@ -222,7 +222,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             .With("name", request.Name)
             .Build());
 
-        var hubServiceSpecFileModel = _fileModelFactory
+        var hubServiceSpecFileModel = _fileFactory
             .CreateTemplate(
             "Services.HubClientService.Spec",
             $"{serviceName}.service.spec",

@@ -26,11 +26,11 @@ internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest>
 {
     private readonly ILogger _logger;
     private readonly IArtifactGenerator _artifactGenerator;
-    private readonly ISolutionModelFactory _solutionModelFactory;
-    public HttpProjectRequestHandler(ILogger logger, IArtifactGenerator artifactGenerator, ISolutionModelFactory solutionModelFactory)
+    private readonly ISolutionFactory _solutionFactory;
+    public HttpProjectRequestHandler(ILogger logger, IArtifactGenerator artifactGenerator, ISolutionFactory solutionFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _solutionModelFactory = solutionModelFactory ?? throw new ArgumentNullException(nameof(solutionModelFactory));
+        _solutionFactory = solutionFactory ?? throw new ArgumentNullException(nameof(solutionFactory));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
@@ -38,7 +38,7 @@ internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest>
     {
         _logger.LogInformation($"Handled: {nameof(HttpProjectRequestHandler)}");
 
-        var model = await _solutionModelFactory.CreateHttpSolution(new CreateEndpointSolutionOptions
+        var model = await _solutionFactory.CreateHttpSolution(new CreateEndpointSolutionOptions
         {
             Name = request.Name,
             Directory = request.Directory,

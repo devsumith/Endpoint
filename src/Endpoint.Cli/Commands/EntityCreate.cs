@@ -35,25 +35,25 @@ public class EntityAddRequestHandler : IRequestHandler<EntityCreateRequest>
     private readonly IClassService _classService;
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly IClassModelFactory _classModelFactory;
+    private readonly IClassFactory _classFactory;
     public EntityAddRequestHandler(
         ILogger<EntityAddRequestHandler> logger,
         IClassService classService,
         IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter,
-        IClassModelFactory classModelFactory)
+        IClassFactory classFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _classService = classService ?? throw new ArgumentNullException(nameof(classService));
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
-        _classModelFactory = classModelFactory ?? throw new ArgumentNullException(nameof(classModelFactory));
+        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
 
     }
 
     public async Task Handle(EntityCreateRequest request, CancellationToken cancellationToken)
     {
-        var model = _classModelFactory.CreateEntity(request.Name, request.Properties);
+        var model = _classFactory.CreateEntity(request.Name, request.Properties);
 
         await _classService.CreateAsync(request.Name, request.Properties, request.Directory);
 

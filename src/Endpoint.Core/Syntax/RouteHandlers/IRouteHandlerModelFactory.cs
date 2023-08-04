@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.RouteHandlers;
 
-public interface IRouteHandlerModelFactory
+public interface IRouteHandlerFactory
 {
     List<RouteHandlerModel> Create(string dbContextName, LegacyAggregatesModel aggregateRoot);
 }
