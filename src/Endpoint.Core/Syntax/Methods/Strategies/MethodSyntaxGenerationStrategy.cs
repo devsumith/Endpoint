@@ -50,7 +50,7 @@ public class MethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Metho
 
         builder.Append('(');
 
-        builder.Append(string.Join(',', model.Params.Select(async x => await syntaxGenerator.CreateAsync(x))));
+        builder.Append(string.Join(',', await Task.WhenAll(model.Params.Select(async x => await syntaxGenerator.CreateAsync(x)))));
 
         builder.Append(')');
 

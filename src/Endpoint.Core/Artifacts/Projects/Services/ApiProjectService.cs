@@ -84,9 +84,9 @@ public class ApiProjectService : IApiProjectService
 
         var configureServiceFile = _fileFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", directory, ".cs", tokens: tokens);
 
-        var appSettingsFile = _fileFactory.CreateTemplate("Api.AppSettings", "appsettings", directory, "json", tokens: tokens);
+        var appSettingsFile = _fileFactory.CreateTemplate("Api.AppSettings", "appsettings", directory, ".json", tokens: tokens);
 
-        var launchSettingsFile = _fileFactory.CreateTemplate("Api.LaunchSettings", "launchsettings", directory, "json", tokens: tokens);
+        var launchSettingsFile = _fileFactory.CreateTemplate("Api.LaunchSettings", "launchsettings", directory, ".json", tokens: tokens);
 
 
         foreach (var file in new FileModel[] {

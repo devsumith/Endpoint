@@ -6,7 +6,7 @@ namespace Endpoint.Core.Artifacts.Files;
 public class LaunchSettingsFileModel : FileModel
 {
     public LaunchSettingsFileModel(string directory)
-        : base("launchSettings", directory, "json")
+        : base("launchSettings", directory, ".json")
     { }
 }
 

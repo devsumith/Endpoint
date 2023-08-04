@@ -182,7 +182,7 @@ public class ProjectFactory : IProjectFactory
 
                     project.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Infrastructure{Path.DirectorySeparatorChar}{serviceName}.Infrastructure.csproj");
 
-                    project.Files.Add(_fileFactory.CreateTemplate("DddApp.Api.AppSettings", "appsettings", project.Directory, "json", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
+                    project.Files.Add(_fileFactory.CreateTemplate("DddApp.Api.AppSettings", "appsettings", project.Directory, ".json", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
 
                     project.Files.Add(_fileFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", project.Directory, tokens: new TokensBuilder()
                         .With("DbContext", $"{serviceName}DbContext")

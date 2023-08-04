@@ -2,9 +2,9 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "class-create -n MyType -d C:\\temp\\Foo\\IO.Compression",
+      "commandLineArgs": "ddd-app-create -n  -a  -p \"\" -d C:\\temp",
       "environmentVariables": {
-        "Endpoint:DefaultCommand": "namespace-unnest -d C:\\projects\\Cli\\src\\Cli\\Templates"
+        "Endpoint:DefaultCommand": ""
       }
     }
   }

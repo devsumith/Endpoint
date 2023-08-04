@@ -35,7 +35,7 @@ public class InterfaceSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<In
         {
             builder.Append(": ");
 
-            builder.Append(string.Join(',', model.Implements.Select(async x => await syntaxGenerator.CreateAsync(x, context))));
+            builder.Append(string.Join(',', await Task.WhenAll(model.Implements.Select(async x => await syntaxGenerator.CreateAsync(x, context)))));
         }
 
         if (model.Properties.Count + model.Methods.Count == 0)

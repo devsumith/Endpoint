@@ -62,7 +62,7 @@ public class FileFactory : IFileFactory
 
     public TemplatedFileModel LaunchSettingsJson(string projectDirectory, string projectName, int port)
     {
-        return new TemplatedFileModel("LaunchSettings", "LaunchSettings", projectDirectory, "json", new TokensBuilder()
+        return new TemplatedFileModel("LaunchSettings", "LaunchSettings", projectDirectory, ".json", new TokensBuilder()
             .With(nameof(projectName), (SyntaxToken)projectName)
             .With(nameof(port), (SyntaxToken)$"{port}")
             .With("SslPort", (SyntaxToken)$"{port + 1}")
@@ -71,7 +71,7 @@ public class FileFactory : IFileFactory
 
     public TemplatedFileModel AppSettings(string projectDirectory, string projectName, string dbContextName)
     {
-        return new TemplatedFileModel("AppSettings", "appSettings", projectDirectory, "json", new TokensBuilder()
+        return new TemplatedFileModel("AppSettings", "appSettings", projectDirectory, ".json", new TokensBuilder()
             .With(nameof(dbContextName), (SyntaxToken)dbContextName)
             .With("Namespace", (SyntaxToken)projectName)
             .Build());
