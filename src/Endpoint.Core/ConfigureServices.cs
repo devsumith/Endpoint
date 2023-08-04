@@ -3,7 +3,6 @@
 
 using Endpoint.Core;
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.AngularProjects;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Files.Services;
@@ -115,7 +114,6 @@ public static class ConfigureServices
         services.AddSingleton<IArtifactGenerationStrategy, AggregateArtifactsGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, AngularWorkspaceArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, LitWorkspaceArtifactGenerationStrategy>();
-        services.AddSingleton<IArtifactGenerationStrategy, AddAngularTranslateGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, CoreProjectEnsureArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, ApiProjectEnsureArtifactGenerationStrategy>();
         services.AddSingleton<IArtifactGenerationStrategy, CopyrightAddArtifactGenerationStrategy>();

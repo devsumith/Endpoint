@@ -9,7 +9,7 @@ using Endpoint.Core.Syntax.Entities.Aggregate;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Endpoint.Core.Artifacts;
+namespace Endpoint.Core.Artifacts.Files.Strategies;
 
 public class AggregateArtifactsGenerationStrategy : ArtifactGenerationStrategyBase<AggregatesModel>
 {
