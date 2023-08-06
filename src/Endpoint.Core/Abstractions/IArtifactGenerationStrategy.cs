@@ -10,3 +10,9 @@ public interface IArtifactGenerationStrategy
     int Priority { get; }
 }
 
+public interface IArtifactGenerationStrategy<T>
+{
+    bool CanHandle(T model);
+    Task GenerateAsync(IArtifactGenerator generator, T model, dynamic context = null);
+    int Priority { get; }
+}

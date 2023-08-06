@@ -12,3 +12,11 @@ public interface ISyntaxGenerationStrategy
     int Priority { get; }
 }
 
+
+public interface ISyntaxGenerationStrategy<T>
+{
+    bool CanHandle(T model);
+    Task<string> GenerateAsync(ISyntaxGenerator generator, T model, dynamic context = null);
+    int Priority { get; }
+}
+
