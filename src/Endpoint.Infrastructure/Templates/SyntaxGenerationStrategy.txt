@@ -1,27 +1,25 @@
-﻿using Endpoint.Core.Abstractions;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace {{ namespace }};
 
-public class {{ modelNamePascalCase }}SyntaxGenerationStrategy : SyntaxGenerationStrategyBase<{{ modelNamePascalCase }}Model>
+public class {{ modelNamePascalCase }}GenerationStrategy : ISyntaxGenerationStrategy<{{ modelNamePascalCase }}Model>
 {
-    private readonly ILogger<{{ modelNamePascalCase }}SyntaxGenerationStrategy> _logger;
-    public {{ modelNamePascalCase }}SyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
-        ILogger<{{ modelNamePascalCase }}SyntaxGenerationStrategy> logger) 
-        : base(serviceProvider)
+    private readonly ILogger<{{ modelNamePascalCase }}GenerationStrategy> _logger;
+
+    public {{ modelNamePascalCase }}GenerationStrategy(ILogger<{{ modelNamePascalCase }}GenerationStrategy> logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, {{ modelNamePascalCase }}Model model, dynamic context = null)
+    public async Task<string> GenerateAsync(ISyntaxGenerator generator, {{ modelNamePascalCase }}Model model)
     {
-        _logger.LogInformation("Generating syntax for {0}.", model);
 
-        var builder = new StringBuilder();
+        _logger.LogInformation("Generating syntax. {name}", model.Name);
+
+        StringBuilder sb = new StringBuilder();
 
 
-        return builder.ToString();
+        return sb.ToString();
     }
 }
