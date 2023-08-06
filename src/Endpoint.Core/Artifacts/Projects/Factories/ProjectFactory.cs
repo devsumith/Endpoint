@@ -446,4 +446,11 @@ public class ProjectFactory : IProjectFactory
 
         return model;
     }
+
+    public async Task<ProjectModel> CreateCommon(string directory)
+    {
+        var model = new ProjectModel("Services.Common", directory);
+
+        return model;
+    }
 }

@@ -3,7 +3,6 @@
 
 using Endpoint.Core.Options;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Projects.Factories;
 
@@ -26,6 +25,7 @@ public interface IProjectFactory
     Task<ProjectModel> CreatePlaywrightProject(string name, string directory);
     Task<ProjectModel> Create(string type, string name, string directory, List<string> references = null, string metadata = null);
     Task<ProjectModel> CreateCore(string name, string directory);
+    Task<ProjectModel> CreateCommon(string directory);
     Task<ProjectModel> CreateInfrastructure(string name, string directory);
     Task<ProjectModel> CreateApi(string name, string directory);
     Task<ProjectModel> CreateValidationProject(string directory);

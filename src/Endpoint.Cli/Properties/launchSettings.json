@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "ddd-app-create -d C:\\temp",
+      "commandLineArgs": "copyright-add -d C:\\projects\\CodeGeneration_GenerateApplication\\",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

@@ -125,6 +125,8 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var servicesFolder = new FolderModel("Services", sourceFolder.Directory);
 
+        var serviceFolder = new FolderModel(schema, servicesFolder.Directory);
+
         var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder.Directory) { Priority = 1 };
 
         var kernel = await _projectFactory.CreateKernelProject(buildingBlocksFolder.Directory);
@@ -151,17 +153,21 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         buildingBlocksFolder.Projects.Add(compression);
 
-        var core = await _projectFactory.CreateCore(name, servicesFolder.Directory);
+        servicesFolder.Projects.Add(await _projectFactory.CreateCommon(servicesFolder.Directory));
 
-        var infrastructure = await _projectFactory.CreateInfrastructure(name, servicesFolder.Directory);
+        var core = await _projectFactory.CreateCore(name, serviceFolder.Directory);
 
-        var api = await _projectFactory.CreateApi(name, servicesFolder.Directory);
+        var infrastructure = await _projectFactory.CreateInfrastructure(name, serviceFolder.Directory);
+
+        var api = await _projectFactory.CreateApi(name, serviceFolder.Directory);
 
         sourceFolder.Projects.AddRange(new[] { core, infrastructure, api });
 
         model.Folders.Add(sourceFolder);
 
         model.Folders.Add(buildingBlocksFolder);
+
+        model.Folders.Add(servicesFolder);
 
         model.Folders = model.Folders.OrderByDescending(x => x.Priority).ToList();
 

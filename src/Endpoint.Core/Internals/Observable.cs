@@ -9,7 +9,6 @@ namespace Endpoint.Core.Internals;
 
 public class Observable<T> : IObservable<T>
 {
-
     public Observable() { }
 
     private IList<Subscription> _subscriptions = new List<Subscription>();

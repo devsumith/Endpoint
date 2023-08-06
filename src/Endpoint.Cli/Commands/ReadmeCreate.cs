@@ -44,7 +44,7 @@ public class ReadmeCreateRequestHandler : IRequestHandler<ReadmeCreateRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(ReadmeCreateRequestHandler));
 
-        var model = _fileFactory.CreateTemplate("Readme", "README", request.Directory, "md", tokens: new TokensBuilder()
+        var model = _fileFactory.CreateTemplate("Readme", "README", request.Directory, ".md", tokens: new TokensBuilder()
             .With(nameof(request.ProjectName), request.ProjectName)
             .Build());
 

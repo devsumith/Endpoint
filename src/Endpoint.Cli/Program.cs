@@ -3,6 +3,7 @@
 
 using CommandLine;
 using Endpoint.Core;
+using Endpoint.Core.Internals;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,17 +14,17 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
+Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .CreateBootstrapLogger();
+
+Log.Information("Starting Endpoint");
+
 await RunAsync();
 async Task RunAsync()
 {
-    Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .Enrich.FromLogContext()
-            .WriteTo.Console()
-            .CreateBootstrapLogger();
-
-    Log.Information("Starting Endpoint");
-
     var host = Host.CreateDefaultBuilder()
         .ConfigureServices((services) =>
         {
@@ -33,7 +34,14 @@ async Task RunAsync()
 
     var _configuration = host.Services.GetRequiredService<IConfiguration>();
 
-    var _mediator = host.Services.GetRequiredService<IMediator>();
+    var mediator = host.Services.GetRequiredService<IMediator>();
+
+    var notificationObservable = host.Services.GetRequiredService<Observable<INotification>>();
+
+    notificationObservable.Subscribe(async x =>
+    {
+        await mediator.Publish(x);
+    });
 
     var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
 
@@ -63,7 +71,7 @@ async Task RunAsync()
             throw new Exception($"{error.Tag}:{error.Token}");
         }
 
-        await parsedResult.WithParsedAsync(request => _mediator.Send(request));
+        await parsedResult.WithParsedAsync(request => mediator.Send(request));
 
 
     }
