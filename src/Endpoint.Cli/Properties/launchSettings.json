@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "copyright-add -d C:\\projects\\CodeGeneration_GenerateApplication\\",
+      "commandLineArgs": "artifact-generation-strategy-create -n Project -d C:\\projects\\CodeGeneration_GenerateApplication\\src\\CardAdministration.CodeGenerator\\Artifacts\\Projects\\",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
