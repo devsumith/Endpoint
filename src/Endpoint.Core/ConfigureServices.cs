@@ -45,6 +45,8 @@ using Endpoint.Core.Syntax.Statements;
 using Endpoint.Core.Syntax.Types;
 using Endpoint.Core.Syntax.TypeScript;
 using Endpoint.Core.Syntax.TypeScript.Strategies;
+using System.Linq;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -197,6 +199,32 @@ public static class ConfigureServices
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlMethodParserStrategy>();
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlPropertyParserStrategy>();
         services.AddSingleton<IClassFactory, ClassFactory>();
+        services.AddSingleton(typeof(ISyntaxGenerationStrategy<>), typeof(Constants).Assembly);
+        services.AddSingleton(typeof(IArtifactGenerationStrategy<>), typeof(Constants).Assembly);
+    }
+
+    public static void AddSingleton(this IServiceCollection services, Type @interface, Assembly assembly)
+    {
+        var implementations = assembly.GetTypes()
+            .Where(type =>
+                !type.IsAbstract &&
+                type.GetInterfaces().Any(interfaceType =>
+                    interfaceType.IsGenericType &&
+                    interfaceType.GetGenericTypeDefinition() == @interface
+                )
+            )
+            .ToList();
+
+        foreach (var implementation in implementations)
+        {
+            foreach (var implementedInterface in implementation.GetInterfaces())
+            {
+                if (implementedInterface.IsGenericType && implementedInterface.GetGenericTypeDefinition() == @interface)
+                {
+                    services.AddSingleton(implementedInterface, implementation);
+                }
+            }
+        }
     }
 
     public static void AddCoreServices<T>(this IServiceCollection services)

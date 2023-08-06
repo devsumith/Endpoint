@@ -8,4 +8,5 @@ namespace Endpoint.Core.Abstractions;
 public interface IArtifactGenerator
 {
     Task CreateAsync(object model, dynamic context = null);
+    Task GenerateAsync<T>(T model, dynamic context = null);
 }
