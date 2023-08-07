@@ -5,4 +5,16 @@ Code Generator via a simple command line interface with first class support for 
 
 ## How does Endpoint work?
 
+## CLI Commands
+
+### File Generation Commands
+
+### Asp.Net Core Solution / Project Generation Commands
+
+### Angular Workspace / Project Generation Commands
+
+### Fullstack Generation Commands
+
+### Git Commands
+
 ## FAQ
