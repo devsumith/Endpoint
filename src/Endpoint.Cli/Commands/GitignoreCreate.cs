@@ -13,7 +13,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("gitignore-create")]
-public class GitignoreCreateRequest : IRequest {
+public class GitignoreCreateRequest : IRequest
+{
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }

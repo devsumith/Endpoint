@@ -434,7 +434,7 @@ public class ProjectFactory : IProjectFactory
 
         model.Files.Add(_fileFactory.CreateTemplate("BitVector8", "BitVector8", model.Directory));
 
-        model.Files.Add(_fileFactory.CreateTemplate("String255Type", "String255Type", Path.Combine(model.Directory,"Primitives")));
+        model.Files.Add(_fileFactory.CreateTemplate("String255Type", "String255Type", Path.Combine(model.Directory, "Primitives")));
 
         model.Files.Add(_fileFactory.CreateTemplate("Int32Type", "Int32Type", Path.Combine(model.Directory, "Primitives")));
 

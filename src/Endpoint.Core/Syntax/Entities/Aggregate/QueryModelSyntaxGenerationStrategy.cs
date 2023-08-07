@@ -9,8 +9,8 @@ namespace Endpoint.Core.Syntax.Entities.Aggregate;
 public class QueryModelSyntaxGenerationStrategy : ISyntaxGenerationStrategy<QueryModel>
 {
     public QueryModelSyntaxGenerationStrategy(IServiceProvider serviceProvider)
-    { 
-    
+    {
+
     }
 
     public int Priority => 0;

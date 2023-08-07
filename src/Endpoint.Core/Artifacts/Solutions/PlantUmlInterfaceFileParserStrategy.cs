@@ -9,7 +9,7 @@ namespace Endpoint.Core.Artifacts.Solutions;
 public class PlantUmlInterfaceFileParserStrategy : PlantUmlParserStrategyBase<ObjectFileModel<InterfaceModel>>
 {
     public PlantUmlInterfaceFileParserStrategy(IServiceProvider serviceProvider)
-        :base(serviceProvider)
+        : base(serviceProvider)
 
     { }
 

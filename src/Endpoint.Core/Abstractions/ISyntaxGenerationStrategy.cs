@@ -8,7 +8,7 @@ public interface ISyntaxGenerationStrategy<T>
     public bool CanHandle(T model, dynamic context = null) => model is T;
 
     Task<string> GenerateAsync(ISyntaxGenerator generator, T model, dynamic context = null);
-    
+
     int Priority { get; }
 }
 

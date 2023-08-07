@@ -11,7 +11,7 @@ namespace Endpoint.Core.Artifacts.Solutions;
 public class PlantUmlPropertyParserStrategy : PlantUmlParserStrategyBase<PropertyModel>
 {
     public PlantUmlPropertyParserStrategy(IServiceProvider serviceProvider)
-        :base(serviceProvider)
+        : base(serviceProvider)
 
     { }
 

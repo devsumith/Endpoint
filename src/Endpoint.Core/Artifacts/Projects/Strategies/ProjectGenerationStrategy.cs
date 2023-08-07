@@ -30,7 +30,7 @@ public class ProjectGenerationStrategy : IArtifactGenerationStrategy<ProjectMode
     }
 
     public int Priority { get; } = 0;
-    
+
     public async Task GenerateAsync(IArtifactGenerator artifactGenerator, ProjectModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
