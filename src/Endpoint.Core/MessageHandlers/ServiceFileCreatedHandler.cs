@@ -6,7 +6,6 @@ using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.MessageHandlers;
 
@@ -26,7 +25,7 @@ public class ServiceFileCreatedHandler : INotificationHandler<ServiceFileCreated
     {
         _logger.LogInformation("Handled: {0}", nameof(ServiceFileCreatedHandler));
 
-        _dependencyInjectionService.Add(notification.InterfaceName, notification.ClassName, notification.Directory);
+        await _dependencyInjectionService.Add(notification.InterfaceName, notification.ClassName, notification.Directory);
     }
 }
 

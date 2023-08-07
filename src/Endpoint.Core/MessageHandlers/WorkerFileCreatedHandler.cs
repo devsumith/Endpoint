@@ -26,7 +26,7 @@ public class WorkerFileCreatedHandler : INotificationHandler<WorkerFileCreated>
     {
         _logger.LogInformation("Handled: {0}", nameof(WorkerFileCreatedHandler));
 
-        _dependencyInjectionService.AddHosted(notification.Name, notification.Directory);
+        await _dependencyInjectionService.AddHosted(notification.Name, notification.Directory);
     }
 }
 

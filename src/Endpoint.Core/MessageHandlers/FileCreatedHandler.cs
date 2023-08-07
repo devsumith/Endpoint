@@ -2,12 +2,11 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
-using Endpoint.Core.Messages;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Commands;
+using Endpoint.Core.Messages;
 using MediatR;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.MessageHandlers;
 
