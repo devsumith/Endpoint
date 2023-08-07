@@ -16,7 +16,6 @@ namespace Endpoint.Core.Artifacts.Files.Strategies;
 public class TemplatedFileArtifactGenerationStrategy : FileGenerationStrategy, IArtifactGenerationStrategy<TemplatedFileModel>
 {
     private readonly ILogger<TemplatedFileArtifactGenerationStrategy> _logger;
-    private readonly ITemplateLocator _templateLocator;
     private readonly ITemplateProcessor _templateProcessor;
     private readonly ISolutionNamespaceProvider _solutionNamespaceProvider;
     private readonly Observable<INotification> _observableNotifications;
@@ -30,11 +29,10 @@ public class TemplatedFileArtifactGenerationStrategy : FileGenerationStrategy, I
         ILogger<TemplatedFileArtifactGenerationStrategy> logger,
         ILoggerFactory loggerFactory,
         Observable<INotification> observableNotifications)
-        :base(loggerFactory.CreateLogger<FileGenerationStrategy>(), fileSystem)
+        :base(loggerFactory.CreateLogger<FileGenerationStrategy>(), fileSystem, templateLocator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
-        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
         _solutionNamespaceProvider = solutionNamespaceProvider ?? throw new ArgumentNullException(nameof(solutionNamespaceProvider));
         _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
     }

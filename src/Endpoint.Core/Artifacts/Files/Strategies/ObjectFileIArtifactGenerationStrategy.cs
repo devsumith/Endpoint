@@ -4,6 +4,8 @@
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -11,6 +13,21 @@ using System.Text;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
+public class ClassFileArtifactGenerationStrategy : ObjectFileIArtifactGenerationStrategy<ClassModel>
+{
+    public ClassFileArtifactGenerationStrategy(ISyntaxGenerator syntaxGenerator, IFileSystem fileSystem, INamespaceProvider namespaceProvider, Observable<INotification> notificationListener, ILoggerFactory loggerFactory, ITemplateLocator templateLocator, ILogger<ObjectFileIArtifactGenerationStrategy<ClassModel>> logger) 
+        : base(syntaxGenerator, fileSystem, namespaceProvider, notificationListener, loggerFactory, templateLocator, logger)
+    {
+    }
+}
+
+public class InterfaceFileArtifactGenerationStrategy : ObjectFileIArtifactGenerationStrategy<InterfaceModel>
+{
+    public InterfaceFileArtifactGenerationStrategy(ISyntaxGenerator syntaxGenerator, IFileSystem fileSystem, INamespaceProvider namespaceProvider, Observable<INotification> notificationListener, ILoggerFactory loggerFactory, ITemplateLocator templateLocator, ILogger<ObjectFileIArtifactGenerationStrategy<InterfaceModel>> logger)
+        : base(syntaxGenerator, fileSystem, namespaceProvider, notificationListener, loggerFactory, templateLocator, logger)
+    {
+    }
+}
 public abstract class ObjectFileIArtifactGenerationStrategy<T> : FileGenerationStrategy, IArtifactGenerationStrategy<ObjectFileModel<T>>
 {
     private readonly ILogger<ObjectFileIArtifactGenerationStrategy<T>> _logger;
@@ -24,8 +41,10 @@ public abstract class ObjectFileIArtifactGenerationStrategy<T> : FileGenerationS
         IFileSystem fileSystem,
         INamespaceProvider namespaceProvider,
         Observable<INotification> notificationListener,
+        ILoggerFactory loggerFactory,
+        ITemplateLocator templateLocator,
         ILogger<ObjectFileIArtifactGenerationStrategy<T>> logger)
-        :base(default, fileSystem)
+        :base(loggerFactory.CreateLogger<FileGenerationStrategy>(), fileSystem, templateLocator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));

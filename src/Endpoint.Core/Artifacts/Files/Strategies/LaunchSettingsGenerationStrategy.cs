@@ -3,19 +3,18 @@
 
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
+using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 public class LaunchSettingsFileGenerationStrategy : FileGenerationStrategy, IArtifactGenerationStrategy<LaunchSettingsFileModel>
 {
     private readonly ITemplateProcessor _templateProcessor;
-    private readonly ITemplateLocator _templateLocator;
 
-    public LaunchSettingsFileGenerationStrategy(IServiceProvider serviceProvider, ITemplateProcessor templateProcessor, IFileSystem fileSystem, ITemplateLocator templateLocator)
-        :base(default, fileSystem)
+    public LaunchSettingsFileGenerationStrategy(ILoggerFactory loggerFactory, ITemplateProcessor templateProcessor, IFileSystem fileSystem, ITemplateLocator templateLocator)
+        :base(loggerFactory.CreateLogger<FileGenerationStrategy>(), fileSystem, templateLocator)
     {
         _templateProcessor = templateProcessor;
-        _templateLocator = templateLocator;
     }
 
     public async Task GenerateAsync(IArtifactGenerator artifactGenerator, LaunchSettingsFileModel model, dynamic context = null)

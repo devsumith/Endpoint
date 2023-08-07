@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "artifact-generation-strategy-create -n Project -d C:\\projects\\CodeGeneration_GenerateApplication\\src\\CardAdministration.CodeGenerator\\Artifacts\\Projects\\",
+      "commandLineArgs": "class-create -n Project -d C:\\projects\\Starlord\\src\\Starlord",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

@@ -13,11 +13,16 @@ public class FileGenerationStrategy : IArtifactGenerationStrategy<FileModel>
 {
     private readonly ILogger<FileGenerationStrategy> _logger;
     protected readonly IFileSystem _fileSystem;
-
-    public FileGenerationStrategy(ILogger<FileGenerationStrategy> logger, IFileSystem fileSystem)
+    protected readonly ITemplateLocator _templateLocator;
+    
+    public FileGenerationStrategy(
+        ILogger<FileGenerationStrategy> logger, 
+        IFileSystem fileSystem,
+        ITemplateLocator templateLocator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
     public int Priority => 0;
@@ -25,6 +30,9 @@ public class FileGenerationStrategy : IArtifactGenerationStrategy<FileModel>
     public async Task GenerateAsync(IArtifactGenerator generator, FileModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating file artifact. {name}", model.Name);
+        
+        var copyright = string.Join(Environment.NewLine, _templateLocator.Get("Copyright"));
+
 
         var parts = Path.GetDirectoryName(model.Path).Split(Path.DirectorySeparatorChar);
 
@@ -36,7 +44,21 @@ public class FileGenerationStrategy : IArtifactGenerationStrategy<FileModel>
                 _fileSystem.CreateDirectory(dir);
         }
 
-        _fileSystem.WriteAllText(model.Path, model.Content);
+        var ignore = model.Path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}")
+            || model.Path.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}")
+            || model.Path.Contains($"{Path.DirectorySeparatorChar}nupkg{Path.DirectorySeparatorChar}")
+            || model.Path.Contains($"{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}")
+            || model.Path.Contains($"{Path.DirectorySeparatorChar}node_modules{Path.DirectorySeparatorChar}");
+
+        var extension = Path.GetExtension(model.Path);
+
+        var validExtension = extension == ".cs" || extension == ".ts" || extension == ".js";
+
+        _fileSystem.WriteAllText(model.Path, validExtension  && !ignore ? string.Join(Environment.NewLine, new string[]
+        {
+            copyright,
+            model.Content
+        }): model.Content);
 
     }
 }
