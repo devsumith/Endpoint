@@ -6,24 +6,28 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Entities.Aggregate;
 
-public class QueryModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<QueryModel>
+public class QueryModelSyntaxGenerationStrategy : ISyntaxGenerationStrategy<QueryModel>
 {
     public QueryModelSyntaxGenerationStrategy(IServiceProvider serviceProvider)
-        : base(serviceProvider) { }
+    { 
+    
+    }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, QueryModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, QueryModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
-        builder.AppendLine(await syntaxGenerator.CreateAsync(model.Request));
+        builder.AppendLine(await syntaxGenerator.GenerateAsync(model.Request));
 
         builder.AppendLine("");
 
-        builder.AppendLine(await syntaxGenerator.CreateAsync(model.Response));
+        builder.AppendLine(await syntaxGenerator.GenerateAsync(model.Response));
 
         builder.AppendLine("");
 
-        builder.AppendLine(await syntaxGenerator.CreateAsync(model.RequestHandler, context));
+        builder.AppendLine(await syntaxGenerator.GenerateAsync(model.RequestHandler, context));
 
         return builder.ToString();
     }

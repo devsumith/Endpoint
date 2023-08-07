@@ -5,18 +5,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Properties;
 
-public class PropertyAccessorsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<PropertyAccessorModel>>
+public class PropertyAccessorsSyntaxGenerationStrategy : ISyntaxGenerationStrategy<List<PropertyAccessorModel>>
 {
     private readonly ILogger<PropertyAccessorsSyntaxGenerationStrategy> _logger;
     public PropertyAccessorsSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<PropertyAccessorsSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
+    public int Priority { get; } = 0;
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, List<PropertyAccessorModel> model, dynamic context = null)
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<PropertyAccessorModel> model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

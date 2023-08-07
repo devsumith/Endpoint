@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Endpoint.Core.Artifacts.Workspaces;
 
-public class AngularWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategyBase<AngularWorkspaceModel>
+public class AngularWorkspaceArtifactGenerationStrategy : IArtifactGenerationStrategy<AngularWorkspaceModel>
 {
     private readonly ILogger<AngularWorkspaceArtifactGenerationStrategy> _logger;
     private readonly ICommandService _commandService;
@@ -17,13 +17,15 @@ public class AngularWorkspaceArtifactGenerationStrategy : ArtifactGenerationStra
         IServiceProvider serviceProvider,
         ILogger<AngularWorkspaceArtifactGenerationStrategy> logger,
         ICommandService commandService)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, AngularWorkspaceModel model, dynamic context = null)
+    public int Priority { get; } = 0;
+
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, AngularWorkspaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

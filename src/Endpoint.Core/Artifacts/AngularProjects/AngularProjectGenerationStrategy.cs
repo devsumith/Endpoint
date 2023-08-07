@@ -7,22 +7,26 @@ using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Artifacts.AngularProjects;
 
-public class AngularProjectGenerationStrategy : WebGenerationStrategyBase<AngularProjectModel>
+public class AngularProjectGenerationStrategy : IArtifactGenerationStrategy<AngularProjectModel>
 {
     private readonly ICommandService _commandService;
     private readonly ILogger<AngularProjectGenerationStrategy> _logger;
     public AngularProjectGenerationStrategy(
         ICommandService commandService,
-        ILogger<AngularProjectGenerationStrategy> logger,
-        IServiceProvider serviceProvider)
-        : base(serviceProvider)
+        ILogger<AngularProjectGenerationStrategy> logger)
     {
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override void Create(IWebGenerator webGenerator, AngularProjectModel model, dynamic context = null)
+    public int Priority => throw new NotImplementedException();
+
+    public bool CanHandle(AngularProjectModel model, dynamic context = null) => model is AngularProjectModel;
+
+    public async Task GenerateAsync(IArtifactGenerator generator, AngularProjectModel model, dynamic context = null)
     {
+        _logger.LogInformation("Create Angular Project. {name}", model.Name);
+
         _commandService.Start($"ng new {model.Name}", model.Directory);
     }
 }

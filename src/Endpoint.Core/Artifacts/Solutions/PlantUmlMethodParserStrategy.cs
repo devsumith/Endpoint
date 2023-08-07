@@ -17,7 +17,8 @@ public class PlantUmlMethodParserStrategy : PlantUmlParserStrategyBase<MethodMod
     private readonly ILogger<PlantUmlMethodParserStrategy> _logger;
 
     public PlantUmlMethodParserStrategy(ILogger<PlantUmlMethodParserStrategy> logger, IServiceProvider serviceProvider)
-        : base(serviceProvider)
+        :base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }

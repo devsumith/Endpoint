@@ -7,18 +7,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Attributes.Strategies;
 
-public class SwaggerOperationAttributeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<SwaggerOperationAttributeModel>
+public class SwaggerOperationAttributeSyntaxGenerationStrategy : ISyntaxGenerationStrategy<SwaggerOperationAttributeModel>
 {
     private readonly ILogger<SwaggerOperationAttributeSyntaxGenerationStrategy> _logger;
     public SwaggerOperationAttributeSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<SwaggerOperationAttributeSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, SwaggerOperationAttributeModel model, dynamic context = null)
+    public int Priority { get; set; } = 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SwaggerOperationAttributeModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

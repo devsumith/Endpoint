@@ -8,18 +8,21 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Types;
 
-public class TypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<TypeModel>
+public class TypeSyntaxGenerationStrategy : ISyntaxGenerationStrategy<TypeModel>
 {
     private readonly ILogger<TypeSyntaxGenerationStrategy> _logger;
     public TypeSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<TypeSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, TypeModel model, dynamic context = null)
+    public int Priority => 0;
+
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, TypeModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -31,7 +34,7 @@ public class TypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<TypeMod
         {
             builder.Append('<');
 
-            builder.AppendJoin(',', await Task.WhenAll(model.GenericTypeParameters.Select(async x => await syntaxGenerator.CreateAsync(x))));
+            builder.AppendJoin(',', await Task.WhenAll(model.GenericTypeParameters.Select(async x => await syntaxGenerator.GenerateAsync(x))));
 
             builder.Append('>');
         }

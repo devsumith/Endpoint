@@ -1,0 +1,34 @@
+﻿// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using Endpoint.Core.Abstractions;
+using Endpoint.Core.Services;
+
+namespace Endpoint.Core.Artifacts.Files.Strategies;
+
+public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : IArtifactGenerationStrategy<string>
+{
+    private readonly IFileProvider _fileProvider;
+
+    public DbContextFileFromCoreDirectoryArtifactGenerationStrategy(IServiceProvider serviceProvider, IFileProvider fileProvider)
+    {
+        _fileProvider = fileProvider;
+    }
+
+    public int Priority => 0;
+
+    public bool CanHandle(object model, dynamic context = null)
+    {
+        if (model is string value)
+        {
+            var projectDirectory = _fileProvider.Get("*.csproj", value);
+        }
+
+        return false;
+    }
+
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, string directory, dynamic context = null)
+    {
+        throw new NotImplementedException();
+    }
+}

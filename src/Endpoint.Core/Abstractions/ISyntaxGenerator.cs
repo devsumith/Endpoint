@@ -5,6 +5,6 @@ namespace Endpoint.Core.Abstractions;
 
 public interface ISyntaxGenerator
 {
-    Task<string> CreateAsync(object model, dynamic context = null);
+    Task<string> GenerateAsync<T>(T model, dynamic context = null);
 }
 

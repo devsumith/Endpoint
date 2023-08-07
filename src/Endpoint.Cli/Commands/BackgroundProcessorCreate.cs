@@ -73,7 +73,7 @@ public class BackgroundProcessorCreateRequestHandler : IRequestHandler<Backgroun
 
         model.Folders.Add(src);
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
 
         _commandService.Start($"start {model.SolutionPath}");
     }

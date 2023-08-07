@@ -1,7 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,24 +11,35 @@ namespace Endpoint.Core.Abstractions;
 
 public class SyntaxGenerator : ISyntaxGenerator
 {
-    private readonly IEnumerable<ISyntaxGenerationStrategy> _strategies;
     private readonly ILogger<SyntaxGenerator> _logger;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly ConcurrentStack<KeyValuePair<Type, Func<dynamic, Task<string>>>> _strategies = new ConcurrentStack<KeyValuePair<Type, Func<dynamic, Task<string>>>>();
 
-    public SyntaxGenerator(IEnumerable<ISyntaxGenerationStrategy> strategies, ILogger<SyntaxGenerator> logger)
+    public SyntaxGenerator(ILogger<SyntaxGenerator> logger, IServiceProvider serviceProvider)
     {
-        _strategies = strategies ?? throw new ArgumentNullException(nameof(strategies));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
-    public async Task<string> CreateAsync(object model, dynamic context = null)
+    public async Task<string> GenerateAsync<T>(T model, dynamic context = null)
     {
-        var orderedStrategies = _strategies.OrderByDescending(x => x.Priority);
+        var generateAsync = _strategies
+            .Where(x => x.Key == typeof(T))
+            .Select(x => x.Value)
+            .FirstOrDefault();
 
-        var strategies = orderedStrategies.Where(x => x.CanHandle(model, context));
+        if (generateAsync == null)
+        {
+            var strategy = _serviceProvider.GetRequiredService<ISyntaxGenerationStrategy<T>>();
 
-        var strategy = strategies.FirstOrDefault();
+            generateAsync = (dynamic model) => strategy.GenerateAsync(this, model);
 
-        return await strategy.CreateAsync(model, context);
+            _strategies.Push(new(typeof(T), generateAsync));
+        }
+
+        return await generateAsync(model);
+
     }
 }
+
 

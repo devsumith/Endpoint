@@ -43,7 +43,7 @@ public class ClassSyntaxGenerationStrategyTests
             new ConstructorModel(classModel,classModel.Name)
         };
 
-        var result = await sut.CreateAsync(syntaxGenerator, classModel);
+        var result = await sut.GenerateAsync(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
 
@@ -87,7 +87,7 @@ public class ClassSyntaxGenerationStrategyTests
 
         classModel.Methods.Add(method);
 
-        var result = await sut.CreateAsync(syntaxGenerator, classModel);
+        var result = await sut.GenerateAsync(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
 
@@ -145,7 +145,7 @@ public class ClassSyntaxGenerationStrategyTests
             }
         };
 
-        var result = await sut.CreateAsync(syntaxGenerator, classModel);
+        var result = await sut.GenerateAsync(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
 

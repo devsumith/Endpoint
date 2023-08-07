@@ -74,7 +74,7 @@ public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<
 
         Directory.CreateDirectory($"{projectDirectory.Replace("Core", "Infrastructure")}{Path.DirectorySeparatorChar}Data");
 
-        await _artifactGenerator.CreateAsync(
+        await _artifactGenerator.GenerateAsync(
             new ObjectFileModel<InterfaceModel>(
                 interfaceModel,
                 interfaceModel.UsingDirectives,
@@ -82,7 +82,7 @@ public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<
                 projectDirectory,
                 ".cs"));
 
-        await _artifactGenerator.CreateAsync(
+        await _artifactGenerator.GenerateAsync(
             new ObjectFileModel<ClassModel>(
                 classModel,
                 classModel.UsingDirectives,

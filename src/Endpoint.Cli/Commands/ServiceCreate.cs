@@ -40,7 +40,7 @@ public class ServiceCreateRequestHandler : IRequestHandler<ServiceCreateRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(ServiceCreateRequestHandler));
 
-        _domainDrivenDesignFileService.ServiceCreate(request.Name, request.Directory);
+        await _domainDrivenDesignFileService.ServiceCreate(request.Name, request.Directory);
 
 
     }

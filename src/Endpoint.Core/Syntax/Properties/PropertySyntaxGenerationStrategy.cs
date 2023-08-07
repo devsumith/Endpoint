@@ -4,18 +4,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Properties;
 
-public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<PropertyModel>
+public class PropertySyntaxGenerationStrategy : ISyntaxGenerationStrategy<PropertyModel>
 {
     private readonly ILogger<PropertySyntaxGenerationStrategy> _logger;
     public PropertySyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<PropertySyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
+    public int Priority { get; } = 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -23,7 +25,7 @@ public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Pro
 
         if (model.IsClassProperty)
         {
-            builder.Append(await syntaxGenerator.CreateAsync(model.AccessModifier));
+            builder.Append(await syntaxGenerator.GenerateAsync(model.AccessModifier));
 
             builder.Append(" ");
 
@@ -33,7 +35,7 @@ public class PropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Pro
             }
         }
 
-        builder.Append($"{await syntaxGenerator.CreateAsync(model.Type)} {model.Name} {await syntaxGenerator.CreateAsync(model.Accessors)}");
+        builder.Append($"{await syntaxGenerator.GenerateAsync(model.Type)} {model.Name} {await syntaxGenerator.GenerateAsync(model.Accessors)}");
 
         if (model.IsClassProperty && !string.IsNullOrEmpty(model.DefaultValue))
         {

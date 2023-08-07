@@ -39,9 +39,9 @@ public class SignalRService : ISignalRService
     {
         var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj", directory));
 
-        await _artifactGenerator.CreateAsync(CreateSignalRHubFileModel(name, directory));
+        await _artifactGenerator.GenerateAsync(CreateSignalRHubFileModel(name, directory));
 
-        await _artifactGenerator.CreateAsync(CreateSignalRHubFileModel(name, directory));
+        await _artifactGenerator.GenerateAsync(CreateSignalRHubFileModel(name, directory));
     }
 
     public FileModel CreateSignalRHubFileModel(string name, string directory)

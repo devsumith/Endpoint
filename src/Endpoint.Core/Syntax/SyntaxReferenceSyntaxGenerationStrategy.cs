@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax;
 
-public class SyntaxReferenceSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<SyntaxReferenceModel>
+public class SyntaxReferenceSyntaxGenerationStrategy : ISyntaxGenerationStrategy<SyntaxReferenceModel>
 {
     public static string SetInitialLanguageInAppComponent = nameof(SetInitialLanguageInAppComponent);
 
@@ -19,18 +19,18 @@ public class SyntaxReferenceSyntaxGenerationStrategy : SyntaxGenerationStrategyB
         IServiceProvider serviceProvider,
         IFileSystem fileSystem,
         ILogger<SyntaxReferenceSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override int Priority => 10;
+    public int Priority => 10;
 
-    public override bool CanHandle(object model, dynamic context = null)
+    public bool CanHandle(object model, dynamic context = null)
         => model is SyntaxReferenceModel && context != null && context.Request == SetInitialLanguageInAppComponent;
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, SyntaxReferenceModel model, dynamic context = null)
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SyntaxReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

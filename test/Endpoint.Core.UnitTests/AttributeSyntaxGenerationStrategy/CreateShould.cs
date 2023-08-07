@@ -33,7 +33,7 @@ public class CreateShould
 
         // ASSERT
 
-        var result = await sut.CreateAsync(new AttributeModel() { Name = "Fact" });
+        var result = await sut.GenerateAsync(default, new AttributeModel() { Name = "Fact" });
 
         Assert.Equal(expected, result);
     }

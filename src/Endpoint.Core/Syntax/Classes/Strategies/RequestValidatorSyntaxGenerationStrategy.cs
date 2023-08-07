@@ -7,18 +7,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Classes.Strategies;
 
-public class RequestValidatorSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<RequestValidatorModel>
+public class RequestValidatorSyntaxGenerationStrategy : ISyntaxGenerationStrategy<RequestValidatorModel>
 {
     private readonly ILogger<RequestValidatorSyntaxGenerationStrategy> _logger;
     public RequestValidatorSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<RequestValidatorSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, RequestValidatorModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RequestValidatorModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -7,18 +7,21 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.SpecFlow.Strategies;
 
-public class SpecFlowScenarioSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<SpecFlowScenarioModel>
+public class SpecFlowScenarioSyntaxGenerationStrategy : ISyntaxGenerationStrategy<SpecFlowScenarioModel>
 {
     private readonly ILogger<SpecFlowScenarioSyntaxGenerationStrategy> _logger;
     public SpecFlowScenarioSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<SpecFlowScenarioSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, SpecFlowScenarioModel model, dynamic context = null)
+
+    public int Priority { get; } = 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SpecFlowScenarioModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -62,7 +62,7 @@ public class SignalRHubClientCreateRequestHandler : IRequestHandler<SignalRHubCl
             _fileFactory.CreateTemplate("Angular.Services.HubClientService.Spec", $"{nameSnakeCase}-hub-client.service.spec", request.Directory, ".ts", tokens: tokens)
         })
         {
-            await _artifactGenerator.CreateAsync(model);
+            await _artifactGenerator.GenerateAsync(model);
         }
     }
 }

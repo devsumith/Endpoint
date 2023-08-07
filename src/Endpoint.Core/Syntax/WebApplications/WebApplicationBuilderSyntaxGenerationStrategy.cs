@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.WebApplications;
 
-public class WebApplicationBuilderSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<WebApplicationBuilderModel>
+public class WebApplicationBuilderSyntaxGenerationStrategy : ISyntaxGenerationStrategy<WebApplicationBuilderModel>
 {
     private readonly ILogger<WebApplicationBuilderSyntaxGenerationStrategy> _logger;
     private readonly ITemplateLocator _templateLocator;
@@ -18,14 +18,16 @@ public class WebApplicationBuilderSyntaxGenerationStrategy : SyntaxGenerationStr
         ITemplateLocator templateLocator,
         ITemplateProcessor templateProcessor,
         ILogger<WebApplicationBuilderSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationBuilderModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationBuilderModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

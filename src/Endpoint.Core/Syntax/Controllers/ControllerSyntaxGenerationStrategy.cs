@@ -5,13 +5,15 @@ using Endpoint.Core.Abstractions;
 
 namespace Endpoint.Core.Syntax.Controllers;
 
-public class ControllerSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ControllerModel>
+public class ControllerSyntaxGenerationStrategy : ISyntaxGenerationStrategy<ControllerModel>
 {
     public ControllerSyntaxGenerationStrategy(IServiceProvider serviceProvider)
-        : base(serviceProvider)
+
     { }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, ControllerModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ControllerModel model, dynamic context = null)
     {
         /*            new ClassBuilder($"{((Token)model).PascalCase}Controller", new Endpoint.Core.Services.Context(), fileSystem)
                 .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")

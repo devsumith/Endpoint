@@ -70,11 +70,11 @@ public class AggregateService : IAggregateService
 
         var model = new AggregatesModel(_namingConventionConverter, serviceName, classModel, directory);
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
 
         var fileModel = _fileFactory.CreateDbContextInterface(directory);
 
-        await _artifactGenerator.CreateAsync(fileModel);
+        await _artifactGenerator.GenerateAsync(fileModel);
 
         return classModel;
     }
@@ -113,7 +113,7 @@ public class AggregateService : IAggregateService
 
         var model = new ObjectFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, ".cs");
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
     }
 
     public async Task QueryCreate(string routeType, string name, string aggregate, string properties, string directory)
@@ -137,7 +137,7 @@ public class AggregateService : IAggregateService
 
         var model = new ObjectFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, ".cs");
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
     }
 }
 

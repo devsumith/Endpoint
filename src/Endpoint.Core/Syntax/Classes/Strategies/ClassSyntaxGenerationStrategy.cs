@@ -8,23 +8,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Classes.Strategies;
 
-public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassModel>
+public class ClassSyntaxGenerationStrategy : ISyntaxGenerationStrategy<ClassModel>
 {
     private readonly ILogger<ClassSyntaxGenerationStrategy> _logger;
     public ClassSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<ClassSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override bool CanHandle(object model, dynamic context = null)
-    {
-        return model as ClassModel != null;
-    }
+    public int Priority { get; set; } = 0;
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, ClassModel model, dynamic context = null)
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ClassModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -42,10 +39,10 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
 
         foreach (var attribute in model.Attributes)
         {
-            builder.AppendLine(await syntaxGenerator.CreateAsync(attribute));
+            builder.AppendLine(await syntaxGenerator.GenerateAsync(attribute));
         }
 
-        builder.Append(await syntaxGenerator.CreateAsync(model.AccessModifier));
+        builder.Append(await syntaxGenerator.GenerateAsync(model.AccessModifier));
 
         if (model.Static)
             builder.Append(" static");
@@ -56,7 +53,7 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
         {
             builder.Append(": ");
 
-            builder.Append(string.Join(',', await Task.WhenAll(model.Implements.Select(async x => await syntaxGenerator.CreateAsync(x, context)))));
+            builder.Append(string.Join(',', await Task.WhenAll(model.Implements.Select(async x => await syntaxGenerator.GenerateAsync(x, context)))));
         }
 
         if (model.Properties.Count + model.Methods.Count + model.Constructors.Count + model.Fields.Count == 0)
@@ -72,16 +69,16 @@ public class ClassSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ClassM
 
 
         if (model.Fields.Count > 0)
-            builder.AppendLine(((string)await syntaxGenerator.CreateAsync(model.Fields, context)).Indent(1));
+            builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Fields, context)).Indent(1));
 
         if (model.Constructors.Count > 0)
-            builder.AppendLine(((string)await syntaxGenerator.CreateAsync(model.Constructors, context)).Indent(1));
+            builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Constructors, context)).Indent(1));
 
         if (model.Properties.Count > 0)
-            builder.AppendLine(((string)await syntaxGenerator.CreateAsync(model.Properties, context)).Indent(1));
+            builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Properties, context)).Indent(1));
 
         if (model.Methods.Count > 0)
-            builder.AppendLine(((string)await syntaxGenerator.CreateAsync(model.Methods, context)).Indent(1));
+            builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Methods, context)).Indent(1));
 
         builder.AppendLine("}");
 

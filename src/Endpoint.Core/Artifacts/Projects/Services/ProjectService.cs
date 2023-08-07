@@ -36,7 +36,7 @@ public class ProjectService : IProjectService
 
     public async Task AddProjectAsync(ProjectModel model)
     {
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
 
         AddToSolution(model);
     }
@@ -123,7 +123,7 @@ public class ProjectService : IProjectService
         })
         {
             if (!_fileSystem.Exists(file.Path))
-                await _artifactGenerator.CreateAsync(file);
+                await _artifactGenerator.GenerateAsync(file);
         }
     }
 

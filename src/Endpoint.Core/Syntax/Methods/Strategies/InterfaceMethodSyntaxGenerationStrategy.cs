@@ -8,35 +8,38 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
-public class InterfaceMethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<MethodModel>
+public class InterfaceMethodSyntaxGenerationStrategy : ISyntaxGenerationStrategy<MethodModel>
 {
     private readonly ILogger<MethodSyntaxGenerationStrategy> _logger;
     public InterfaceMethodSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<MethodSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override bool CanHandle(object model, dynamic context = null)
+    public bool CanHandle(object model, dynamic context = null)
     {
         return model is MethodModel methodModel && methodModel.Interface;
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public int Priority => 0;
+
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
-        builder.Append($"{await syntaxGenerator.CreateAsync(model.ReturnType)}");
+        builder.Append($"{await syntaxGenerator.GenerateAsync(model.ReturnType)}");
 
         builder.Append($" {model.Name}");
 
         builder.Append('(');
 
-        builder.Append(string.Join(',', await Task.WhenAll(model.Params.Select(async x => await syntaxGenerator.CreateAsync(x)))));
+        builder.Append(string.Join(',', await Task.WhenAll(model.Params.Select(async x => await syntaxGenerator.GenerateAsync(x)))));
 
         builder.Append(");");
 

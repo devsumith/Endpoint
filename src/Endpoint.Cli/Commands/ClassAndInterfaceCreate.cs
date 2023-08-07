@@ -74,9 +74,9 @@ public class ClassAndInterfaceCreateRequestHandler : IRequestHandler<ClassAndInt
 
             var interfaceFileModel = new ObjectFileModel<InterfaceModel>(interfaceModel, interfaceModel.UsingDirectives, interfaceModel.Name, request.Directory, ".cs");
 
-            await _artifactGenerator.CreateAsync(classFileModel);
+            await _artifactGenerator.GenerateAsync(classFileModel);
 
-            await _artifactGenerator.CreateAsync(interfaceFileModel);
+            await _artifactGenerator.GenerateAsync(interfaceFileModel);
         }
     }
 }

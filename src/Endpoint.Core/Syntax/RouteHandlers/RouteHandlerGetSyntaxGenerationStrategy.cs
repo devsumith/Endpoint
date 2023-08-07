@@ -8,21 +8,23 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.RouteHandlers;
 
-public class RouteHandlerGetSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<RouteHandlerModel>
+public class RouteHandlerGetSyntaxGenerationStrategy : ISyntaxGenerationStrategy<RouteHandlerModel>
 {
     private readonly ILogger<RouteHandlerSyntaxGenerationStrategy> _logger;
     public RouteHandlerGetSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<RouteHandlerSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override bool CanHandle(object model, dynamic context = null)
+    public int Priority { get; } = 0;
+
+    public bool CanHandle(object model, dynamic context = null)
         => model is RouteHandlerModel routeHandlerModel && routeHandlerModel.Type == RouteType.Get;
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0} and type {1}.", model, model.Type);
 

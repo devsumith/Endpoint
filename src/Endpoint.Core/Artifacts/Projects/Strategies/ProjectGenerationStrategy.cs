@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
-public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectModel>
+public class ProjectGenerationStrategy : IArtifactGenerationStrategy<ProjectModel>
 {
     private readonly ILogger<ProjectGenerationStrategy> _logger;
     private readonly IFileSystem _fileSystem;
@@ -22,14 +22,16 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
         ILogger<ProjectGenerationStrategy> logger,
         IFileSystem fileSystem,
         ICommandService commandService)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, ProjectModel model, dynamic context = null)
+    public int Priority { get; } = 0;
+    
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, ProjectModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -84,7 +86,7 @@ public class ProjectGenerationStrategy : ArtifactGenerationStrategyBase<ProjectM
 
         foreach (var file in model.Files)
         {
-            await artifactGenerator.CreateAsync(file);
+            await artifactGenerator.GenerateAsync(file);
         }
 
         if (model.GenerateDocumentationFile || templateType == "web" || templateType == "webapi" || templateType == "angular")

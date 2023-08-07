@@ -13,7 +13,7 @@ using System.Reactive.Linq;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
-public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrategyBase<TemplatedFileModel>
+public class TemplatedFileArtifactGenerationStrategy : IArtifactGenerationStrategy<TemplatedFileModel>
 {
     private readonly ILogger<TemplatedFileArtifactGenerationStrategy> _logger;
     private readonly ITemplateLocator _templateLocator;
@@ -30,7 +30,7 @@ public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrateg
         ISolutionNamespaceProvider solutionNamespaceProvider,
         ILogger<TemplatedFileArtifactGenerationStrategy> logger,
         Observable<INotification> observableNotifications)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
@@ -40,7 +40,9 @@ public class TemplatedFileArtifactGenerationStrategy : ArtifactGenerationStrateg
         _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
     }
 
-    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, TemplatedFileModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, TemplatedFileModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

@@ -22,7 +22,7 @@ public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStr
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    public override bool CanHandle(object model, dynamic context = null)
+    public bool CanHandle(object model, dynamic context = null)
     {
         if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
         {
@@ -34,9 +34,9 @@ public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStr
         return false;
     }
 
-    public override int Priority => int.MaxValue;
+    public int Priority => int.MaxValue;
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
@@ -52,7 +52,7 @@ public class GetQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStr
 
         model.Body = builder.ToString();
 
-        return await base.CreateAsync(syntaxGenerator, model);
+        return await base.GenerateAsync(syntaxGenerator, model);
     }
 }
 

@@ -8,18 +8,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.TypeScript.Strategies;
 
-public class ImportSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ImportModel>
+public class ImportSyntaxGenerationStrategy : ISyntaxGenerationStrategy<ImportModel>
 {
     private readonly ILogger<ImportSyntaxGenerationStrategy> _logger;
     public ImportSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<ImportSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, ImportModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ImportModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

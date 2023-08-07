@@ -136,7 +136,7 @@ public class DependencyInjectionService : IDependencyInjectionService
             Namespace = "Microsoft.Extensions.DependencyInjection"
         };
 
-        await _artifactGenerator.CreateAsync(classFileModel);
+        await _artifactGenerator.GenerateAsync(classFileModel);
     }
 
     private async Task AddInternal(string diRegistration, string directory)

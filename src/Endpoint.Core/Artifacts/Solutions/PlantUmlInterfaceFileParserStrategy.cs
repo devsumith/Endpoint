@@ -9,7 +9,8 @@ namespace Endpoint.Core.Artifacts.Solutions;
 public class PlantUmlInterfaceFileParserStrategy : PlantUmlParserStrategyBase<ObjectFileModel<InterfaceModel>>
 {
     public PlantUmlInterfaceFileParserStrategy(IServiceProvider serviceProvider)
-        : base(serviceProvider)
+        :base(serviceProvider)
+
     { }
 
     public override bool CanHandle(string plantUml) => plantUml.StartsWith("class");

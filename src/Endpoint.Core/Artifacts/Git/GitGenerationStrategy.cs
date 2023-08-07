@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Endpoint.Core.Artifacts.Git;
 
-public class GitGenerationStrategy : ArtifactGenerationStrategyBase<GitModel>
+public class GitGenerationStrategy : IArtifactGenerationStrategy<GitModel>
 {
     private readonly ICommandService _commandService;
     private readonly ILogger<GitGenerationStrategy> _logger;
@@ -17,7 +17,7 @@ public class GitGenerationStrategy : ArtifactGenerationStrategyBase<GitModel>
     private readonly IFileSystem _fileSystem;
 
     public GitGenerationStrategy(IServiceProvider serviceProvider, ILogger<GitGenerationStrategy> logger, ICommandService commandService, ITemplateLocator templateLocator, IFileSystem fileSystem)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -25,7 +25,9 @@ public class GitGenerationStrategy : ArtifactGenerationStrategyBase<GitModel>
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, GitModel model, dynamic context = null)
+    public int Priority { get; set; } = 0;
+
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, GitModel model, dynamic context = null)
     {
         _logger.LogInformation($"{nameof(GitGenerationStrategy)}: Handled");
 

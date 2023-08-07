@@ -4,18 +4,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Statements;
 
-public class LogStatementSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<LogStatementModel>
+public class LogStatementSyntaxGenerationStrategy : ISyntaxGenerationStrategy<LogStatementModel>
 {
     private readonly ILogger<LogStatementSyntaxGenerationStrategy> _logger;
     public LogStatementSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<LogStatementSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, LogStatementModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, LogStatementModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

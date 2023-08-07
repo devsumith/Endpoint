@@ -10,18 +10,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.RouteHandlers;
 
-public class RouteHandlerSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<RouteHandlerModel>
+public class RouteHandlerSyntaxGenerationStrategy : ISyntaxGenerationStrategy<RouteHandlerModel>
 {
     private readonly ILogger<RouteHandlerSyntaxGenerationStrategy> _logger;
     public RouteHandlerSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<RouteHandlerSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
+    public int Priority { get; } = 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

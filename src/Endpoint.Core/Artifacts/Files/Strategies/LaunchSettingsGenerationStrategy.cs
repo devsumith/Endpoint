@@ -6,21 +6,23 @@ using Endpoint.Core.Services;
 using System.Text;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
-public class LaunchSettingsFileGenerationStrategy : ArtifactGenerationStrategyBase<LaunchSettingsFileModel>
+public class LaunchSettingsFileGenerationStrategy : IArtifactGenerationStrategy<LaunchSettingsFileModel>
 {
     private readonly ITemplateProcessor _templateProcessor;
     private readonly IFileSystem _fileSystem;
     private readonly ITemplateLocator _templateLocator;
 
     public LaunchSettingsFileGenerationStrategy(IServiceProvider serviceProvider, ITemplateProcessor templateProcessor, IFileSystem fileSystem, ITemplateLocator templateLocator)
-        : base(serviceProvider)
+
     {
         _templateProcessor = templateProcessor;
         _fileSystem = fileSystem;
         _templateLocator = templateLocator;
     }
 
-    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, LaunchSettingsFileModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, LaunchSettingsFileModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 

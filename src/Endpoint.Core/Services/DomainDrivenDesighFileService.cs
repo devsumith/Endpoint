@@ -81,7 +81,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
-        await _artifactGenerator.CreateAsync(classFileModel);
+        await _artifactGenerator.GenerateAsync(classFileModel);
 
     }
 
@@ -112,13 +112,13 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         {
             classModel.Fields.Add(new FieldModel()
             {
-                Name = $"_{_namingConventionConverter.Convert(NamingConvention.CamelCase, await _syntaxGenerator.CreateAsync(typeModel))}",
+                Name = $"_{_namingConventionConverter.Convert(NamingConvention.CamelCase, await _syntaxGenerator.GenerateAsync(typeModel))}",
                 Type = typeModel
             });
 
             constructorModel.Params.Add(new ParamModel()
             {
-                Name = $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, await _syntaxGenerator.CreateAsync(typeModel))}",
+                Name = $"{_namingConventionConverter.Convert(NamingConvention.CamelCase, await _syntaxGenerator.GenerateAsync(typeModel))}",
                 Type = typeModel
             });
         }
@@ -155,7 +155,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
-        await _artifactGenerator.CreateAsync(classFileModel);
+        await _artifactGenerator.GenerateAsync(classFileModel);
 
     }
 
@@ -307,7 +307,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Methods.Add(method);
 
-        await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs"));
+        await _artifactGenerator.GenerateAsync(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs"));
     }
 
     public async Task ServiceCreate(string name, string directory)
@@ -364,7 +364,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 ".cs"
                 );
 
-            await _artifactGenerator.CreateAsync(interfaceFile);
+            await _artifactGenerator.GenerateAsync(interfaceFile);
 
             return @interface;
         }
@@ -405,7 +405,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 ".cs"
                 );
 
-            await _artifactGenerator.CreateAsync(classFile);
+            await _artifactGenerator.GenerateAsync(classFile);
 
             _notificationListener.Broadcast(new ServiceFileCreated(@interface.Name, @class.Name, directory));
 

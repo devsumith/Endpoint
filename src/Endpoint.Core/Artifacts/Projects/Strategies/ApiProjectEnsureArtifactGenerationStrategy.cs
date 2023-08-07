@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
-public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStrategyBase<ProjectReferenceModel>
+public class ApiProjectEnsureArtifactGenerationStrategy : IArtifactGenerationStrategy<ProjectReferenceModel>
 {
     private readonly ILogger<ApiProjectEnsureArtifactGenerationStrategy> _logger;
     private readonly IFileFactory _fileFactory;
@@ -26,7 +26,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
         IServiceProvider serviceProvider,
         ICommandService commandService,
         ILogger<ApiProjectEnsureArtifactGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -35,12 +35,12 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
         _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
-    public override bool CanHandle(object model, dynamic context = null)
+    public bool CanHandle(object model, dynamic context = null)
         => model is ProjectReferenceModel && context != null && context.Command is ApiProjectEnsure;
 
-    public override int Priority => 10;
+    public int Priority => 10;
 
-    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -69,17 +69,17 @@ public class ApiProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStra
 
         if (!_fileSystem.Exists($"{projectDirectory}{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}launchSettings.json"))
         {
-            await artifactGenerator.CreateAsync(_fileFactory.LaunchSettingsJson(projectDirectory, projectName, 5000));
+            await artifactGenerator.GenerateAsync(_fileFactory.LaunchSettingsJson(projectDirectory, projectName, 5000));
         }
 
         if (!_fileSystem.Exists($"{projectDirectory}{Path.DirectorySeparatorChar}ConfigureServices.cs"))
         {
-            await artifactGenerator.CreateAsync(_fileFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", projectDirectory, tokens: new TokensBuilder()
+            await artifactGenerator.GenerateAsync(_fileFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", projectDirectory, tokens: new TokensBuilder()
                 .With("DbContext", dbContext)
                 .With("serviceName", projectName)
                 .Build()));
 
-            await artifactGenerator.CreateAsync(_fileFactory.CreateTemplate("Api.Program", "Program", projectDirectory, tokens: new TokensBuilder()
+            await artifactGenerator.GenerateAsync(_fileFactory.CreateTemplate("Api.Program", "Program", projectDirectory, tokens: new TokensBuilder()
                 .With("DbContext", dbContext)
                 .With("serviceName", projectName)
                 .Build()));

@@ -54,7 +54,7 @@ public class SyntaxGenerationStrategyCreateRequestHandler : IRequestHandler<Synt
 
         var model = _fileFactory.CreateTemplate("SyntaxGenerationStrategy", $"{request.Name}SyntaxGenerationStrategy", request.Directory, tokens: tokens);
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
 
 
     }

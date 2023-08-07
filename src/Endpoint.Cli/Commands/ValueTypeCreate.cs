@@ -56,6 +56,6 @@ public class ValueTypeCreateRequestHandler : IRequestHandler<ValueTypeCreateRequ
 
         var model = new TemplatedFileModel("ValueType", $"{_namingConventionConverter.Convert(NamingConvention.PascalCase, request.Name)}Type", request.Directory, ".cs", tokens);
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
     }
 }

@@ -36,7 +36,7 @@ public class HttpAttributeGenerationStrategyTests
 
         var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(), mockLogger);
 
-        var actual = await sut.CreateAsync(model);
+        var actual = await sut.GenerateAsync(default, model);
 
         Assert.Equal(string.Join(Environment.NewLine, expected), actual);
     }

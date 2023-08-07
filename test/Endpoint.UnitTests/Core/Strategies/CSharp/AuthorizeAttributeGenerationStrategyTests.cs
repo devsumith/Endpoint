@@ -30,7 +30,7 @@ public class AuthorizeAttributeGenerationStrategyTests
 
         var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(), mockLogger);
 
-        var actual = await sut.CreateAsync(new AttributeModel(AttributeType.Authorize, "Authorize", new System.Collections.Generic.Dictionary<string, string>()));
+        var actual = await sut.GenerateAsync(default, new AttributeModel(AttributeType.Authorize, "Authorize", new System.Collections.Generic.Dictionary<string, string>()));
 
         Assert.Equal(expected, actual);
     }

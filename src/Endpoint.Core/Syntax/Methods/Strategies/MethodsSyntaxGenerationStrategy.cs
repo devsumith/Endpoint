@@ -9,18 +9,21 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
-public class MethodsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<MethodModel>>
+public class MethodsSyntaxGenerationStrategy : ISyntaxGenerationStrategy<List<MethodModel>>
 {
     private readonly ILogger<MethodsSyntaxGenerationStrategy> _logger;
     public MethodsSyntaxGenerationStrategy(
         ILogger<MethodsSyntaxGenerationStrategy> logger,
         IServiceProvider serviceProvider)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, List<MethodModel> model, dynamic context = null)
+    public int Priority => 0;
+
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<MethodModel> model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -28,7 +31,7 @@ public class MethodsSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List
 
         foreach (var method in model)
         {
-            builder.AppendLine(await syntaxGenerator.CreateAsync(method, context));
+            builder.AppendLine(await syntaxGenerator.GenerateAsync(method, context));
 
             if (method != model.Last())
             {

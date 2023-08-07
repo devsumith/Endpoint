@@ -55,7 +55,7 @@ public class AddArrangeActAssertFileCreatedHandler : INotificationHandler<FileCr
         {
             if (line.Contains("should create"))
             {
-                var testRef = await _syntaxGenerator.CreateAsync(new TestReferenceModel()
+                var testRef = await _syntaxGenerator.GenerateAsync(new TestReferenceModel()
                 {
                     SystemUnderTestName = sut
                 });

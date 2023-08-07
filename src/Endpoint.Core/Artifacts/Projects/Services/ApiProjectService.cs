@@ -55,7 +55,7 @@ public class ApiProjectService : IApiProjectService
 
         var entity = new EntityModel(entityName);
 
-        await _artifactGenerator.CreateAsync(new ProjectReferenceModel()
+        await _artifactGenerator.GenerateAsync(new ProjectReferenceModel()
         {
             ReferenceDirectory = directory
         }, new { Command = new ApiProjectEnsure() });
@@ -70,7 +70,7 @@ public class ApiProjectService : IApiProjectService
 
         var controllerClassModel = empty ? _classFactory.CreateEmptyController(entityName, csProjDirectory) : _classFactory.CreateController(entity, csProjDirectory);
 
-        await _artifactGenerator.CreateAsync(_fileFactory.CreateCSharp(controllerClassModel, controllersDirectory));
+        await _artifactGenerator.GenerateAsync(_fileFactory.CreateCSharp(controllerClassModel, controllersDirectory));
     }
 
     private async Task AddApiFiles(string serviceName, string directory)
@@ -95,7 +95,7 @@ public class ApiProjectService : IApiProjectService
             launchSettingsFile
         })
         {
-            await _artifactGenerator.CreateAsync(file);
+            await _artifactGenerator.GenerateAsync(file);
         }
     }
 
@@ -116,7 +116,7 @@ public class ApiProjectService : IApiProjectService
             _ => throw new NotImplementedException()
         }, directory);
 
-        var syntax = await _syntaxGenerator.CreateAsync(model);
+        var syntax = await _syntaxGenerator.GenerateAsync(model);
 
         _clipboardService.SetText(syntax);
 

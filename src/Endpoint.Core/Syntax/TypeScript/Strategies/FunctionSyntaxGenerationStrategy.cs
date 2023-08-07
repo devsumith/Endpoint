@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.TypeScript.Strategies;
 
-public class FunctionSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<FunctionModel>
+public class FunctionSyntaxGenerationStrategy : ISyntaxGenerationStrategy<FunctionModel>
 {
     private readonly ILogger<FunctionSyntaxGenerationStrategy> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;
@@ -18,13 +18,15 @@ public class FunctionSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Fun
         IServiceProvider serviceProvider,
         INamingConventionConverter namingConventionConverter,
         ILogger<FunctionSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, FunctionModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, FunctionModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -32,7 +34,7 @@ public class FunctionSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Fun
 
         foreach (var import in model.Imports)
         {
-            builder.AppendLine(await syntaxGenerator.CreateAsync(import));
+            builder.AppendLine(await syntaxGenerator.GenerateAsync(import));
 
             if (import == model.Imports.Last())
             {

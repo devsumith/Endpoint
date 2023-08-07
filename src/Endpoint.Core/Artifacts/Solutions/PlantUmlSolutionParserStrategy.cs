@@ -11,11 +11,11 @@ namespace Endpoint.Core.Artifacts.Solutions;
 public class PlantUmlSolutionParserStrategy : PlantUmlParserStrategyBase<SolutionModel>
 {
     public PlantUmlSolutionParserStrategy(IServiceProvider serviceProvider)
-        : base(serviceProvider)
+        :base(serviceProvider)
     { }
-    public override int Priority => int.MaxValue;
+    public int Priority => int.MaxValue;
 
-    public override bool CanHandle(string plantUml) => plantUml.StartsWith("@startuml");
+    public  override bool CanHandle(string plantUml) => plantUml.StartsWith("@startuml");
 
     protected override SolutionModel Create(IPlantUmlParserStrategyFactory factory, string plantUml, dynamic context = null)
     {

@@ -74,7 +74,7 @@ public class WebSocketAppCreateRequestHandler : IRequestHandler<WebSocketAppCrea
             _fileSystem.DeleteDirectory(model.SolutionDirectory);
         }
 
-        await _generator.CreateAsync(model);
+        await _generator.GenerateAsync(model);
 
         _commandService.Start($"start {model.SolultionFileName}", model.SolutionDirectory);
     }

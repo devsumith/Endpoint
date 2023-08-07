@@ -9,19 +9,19 @@ using System.Linq;
 
 namespace Endpoint.Core.Artifacts.Solutions;
 
-public class SolutionGenerationStrategy : ArtifactGenerationStrategyBase<SolutionModel>
+public class SolutionGenerationStrategy : IArtifactGenerationStrategy<SolutionModel>
 {
     private readonly ICommandService _commandService;
     private readonly IFileSystem _fileSystem;
 
     public SolutionGenerationStrategy(IServiceProvider serviceProvider, ICommandService commandService, IFileSystem fileSystem)
-        : base(serviceProvider)
+
     {
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, SolutionModel model, dynamic context = null)
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, SolutionModel model, dynamic context = null)
     {
         _fileSystem.CreateDirectory(model.SolutionDirectory);
 
@@ -35,7 +35,7 @@ public class SolutionGenerationStrategy : ArtifactGenerationStrategyBase<Solutio
         }
     }
 
-
+    public int Priority { get; } = 0;
     private async Task CreateProjectsAndAddToSln(IArtifactGenerator artifactGenerator, SolutionModel model, List<FolderModel> folders)
     {
         foreach (var folder in folders)
@@ -44,7 +44,7 @@ public class SolutionGenerationStrategy : ArtifactGenerationStrategyBase<Solutio
             {
                 _fileSystem.CreateDirectory(folder.Directory);
 
-                await artifactGenerator.CreateAsync(project);
+                await artifactGenerator.GenerateAsync(project);
 
                 _commandService.Start($"dotnet sln {model.SolultionFileName} add {project.Path}", model.SolutionDirectory);
             }

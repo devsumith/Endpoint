@@ -7,18 +7,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.RouteHandlers;
 
-public class RouteHandlerUpdateSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<RouteHandlerModel>
+public class RouteHandlerUpdateSyntaxGenerationStrategy : ISyntaxGenerationStrategy<RouteHandlerModel>
 {
     private readonly ILogger<RouteHandlerSyntaxGenerationStrategy> _logger;
     public RouteHandlerUpdateSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<RouteHandlerSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override bool CanHandle(object model, dynamic context = null)
+    public int Priority { get; } = 0;
+
+    public bool CanHandle(object model, dynamic context = null)
     {
         if (model is RouteHandlerModel routeHandlerModel)
         {
@@ -27,7 +29,7 @@ public class RouteHandlerUpdateSyntaxGenerationStrategy : SyntaxGenerationStrate
 
         return false;
     }
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

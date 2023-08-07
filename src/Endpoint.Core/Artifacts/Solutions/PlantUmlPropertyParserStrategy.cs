@@ -11,7 +11,8 @@ namespace Endpoint.Core.Artifacts.Solutions;
 public class PlantUmlPropertyParserStrategy : PlantUmlParserStrategyBase<PropertyModel>
 {
     public PlantUmlPropertyParserStrategy(IServiceProvider serviceProvider)
-        : base(serviceProvider)
+        :base(serviceProvider)
+
     { }
 
     public override bool CanHandle(string plantUml) => plantUml.StartsWith("-");

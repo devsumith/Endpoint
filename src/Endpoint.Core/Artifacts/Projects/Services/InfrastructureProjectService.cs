@@ -55,7 +55,7 @@ public class InfrastructureProjectService : IInfrastructureProjectService
 
         var fileModel = _fileFactory.CreateCSharp(dbContext, dataDirectory);
 
-        await _artifactGenerator.CreateAsync(fileModel);
+        await _artifactGenerator.GenerateAsync(fileModel);
     }
 }
 

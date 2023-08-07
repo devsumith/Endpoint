@@ -42,7 +42,7 @@ public class FolderService : IFolderService
 
         var entity = _syntaxService.SolutionModel?.GetClass(aggregate.Name, serviceName);
 
-        await _artifactGenerator.CreateAsync(model, new { Entity = entity });
+        await _artifactGenerator.GenerateAsync(model, new { Entity = entity });
 
         return model;
     }
@@ -55,7 +55,7 @@ public class FolderService : IFolderService
 
         var entity = _syntaxService.SolutionModel?.GetClass(aggregate.Name, serviceName);
 
-        await _artifactGenerator.CreateAsync(model, new { Entity = entity });
+        await _artifactGenerator.GenerateAsync(model, new { Entity = entity });
 
         return model;
     }

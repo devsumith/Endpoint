@@ -5,15 +5,18 @@ using Endpoint.Core.Abstractions;
 
 namespace Endpoint.Core.Syntax.Entities;
 
-public class EntityModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<EntityModel>
+public class EntityModelSyntaxGenerationStrategy : ISyntaxGenerationStrategy<EntityModel>
 {
     public EntityModelSyntaxGenerationStrategy(IServiceProvider serviceProvider)
-        : base(serviceProvider)
+
     {
 
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, EntityModel model, dynamic context = null)
+    public int Priority => 0;
+
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, EntityModel model, dynamic context = null)
     {
         throw new NotImplementedException();
     }

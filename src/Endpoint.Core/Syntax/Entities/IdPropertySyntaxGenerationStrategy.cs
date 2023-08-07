@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Entities;
 
-public class IdPropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<PropertyModel>
+public class IdPropertySyntaxGenerationStrategy : ISyntaxGenerationStrategy<PropertyModel>
 {
     private readonly ILogger<IdPropertySyntaxGenerationStrategy> _logger;
     private readonly ISyntaxService _syntaxService;
@@ -17,18 +17,18 @@ public class IdPropertySyntaxGenerationStrategy : SyntaxGenerationStrategyBase<P
         IServiceProvider serviceProvider,
         ISyntaxService syntaxService,
         ILogger<IdPropertySyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
     }
 
-    public override int Priority => 1;
+    public int Priority => 1;
 
-    public override bool CanHandle(object model, dynamic context = null)
+    public bool CanHandle(object model, dynamic context = null)
         => model is PropertyModel propertyModel && propertyModel.Id;
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

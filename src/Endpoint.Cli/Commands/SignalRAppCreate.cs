@@ -158,7 +158,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         projectModel.Files.Add(new ObjectFileModel<InterfaceModel>(interfaceModel, interfaceModel.Name, projectModel.Directory, ".cs"));
 
-        await _artifactGenerator.CreateAsync(solutionModel);
+        await _artifactGenerator.GenerateAsync(solutionModel);
 
         HubAdd(projectModel, request.Name);
 
@@ -234,17 +234,17 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var appHtmlFileModel = new ContentFileModel("<router-outlet />", "app.component", Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app"), ".html");
 
-        await _artifactGenerator.CreateAsync(mainFileModel);
+        await _artifactGenerator.GenerateAsync(mainFileModel);
 
-        await _artifactGenerator.CreateAsync(componentTemplateFileModel);
+        await _artifactGenerator.GenerateAsync(componentTemplateFileModel);
 
-        await _artifactGenerator.CreateAsync(componentFileModel);
+        await _artifactGenerator.GenerateAsync(componentFileModel);
 
-        await _artifactGenerator.CreateAsync(hubServiceFileModel);
+        await _artifactGenerator.GenerateAsync(hubServiceFileModel);
 
-        await _artifactGenerator.CreateAsync(hubServiceSpecFileModel);
+        await _artifactGenerator.GenerateAsync(hubServiceSpecFileModel);
 
-        await _artifactGenerator.CreateAsync(appHtmlFileModel);
+        await _artifactGenerator.GenerateAsync(appHtmlFileModel);
 
         Directory.Move(Path.Combine(solutionModel.SrcDirectory, temporaryAppName), Path.Combine(solutionModel.SrcDirectory, $"{request.Name}.App"));
 

@@ -40,7 +40,7 @@ public class ClassObjectFileArtifactGenerationStrategyTests
             new UsingDirectiveModel() { Name = "Sytem" }
         }, "Foo", "directory", "extension");
 
-        await sut.CreateAsync(objectFileModel);
+        await sut.GenerateAsync(objectFileModel);
     }
 }
 

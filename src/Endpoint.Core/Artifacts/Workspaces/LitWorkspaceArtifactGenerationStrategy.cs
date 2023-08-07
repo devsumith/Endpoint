@@ -15,7 +15,7 @@ using System.IO;
 
 namespace Endpoint.Core.Artifacts.Workspaces;
 
-public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategyBase<LitWorkspaceModel>
+public class LitWorkspaceArtifactGenerationStrategy : IArtifactGenerationStrategy<LitWorkspaceModel>
 {
     private readonly ILogger<LitWorkspaceArtifactGenerationStrategy> _logger;
     private readonly ICommandService _commandService;
@@ -27,7 +27,6 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
         IFileSystem fileSystem,
         ICommandService commandService,
         IFileFactory fileFactory)
-        : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -35,7 +34,9 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
         _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
-    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, LitWorkspaceModel model, dynamic context = null)
+    public int Priority { get; } = 0;
+
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, LitWorkspaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -68,7 +69,7 @@ public class LitWorkspaceArtifactGenerationStrategy : ArtifactGenerationStrategy
 
         var webPackConfig = _fileFactory.CreateTemplate("Webpack.Config", "webpack.config", model.Directory, "js");
 
-        await artifactGenerator.CreateAsync(webPackConfig);
+        await artifactGenerator.GenerateAsync(webPackConfig);
 
         var packageJsonPath = $"{model.Directory}{Path.DirectorySeparatorChar}package.json";
 

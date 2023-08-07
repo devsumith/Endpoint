@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.TypeScript.Strategies;
 
-public class TypeScriptTypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<TypeScriptTypeModel>
+public class TypeScriptTypeSyntaxGenerationStrategy : ISyntaxGenerationStrategy<TypeScriptTypeModel>
 {
     private readonly ILogger<TypeScriptTypeSyntaxGenerationStrategy> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;
@@ -17,13 +17,15 @@ public class TypeScriptTypeSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
         IServiceProvider serviceProvider,
         ILogger<TypeScriptTypeSyntaxGenerationStrategy> logger,
         INamingConventionConverter namingConventionConverter)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, TypeScriptTypeModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, TypeScriptTypeModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

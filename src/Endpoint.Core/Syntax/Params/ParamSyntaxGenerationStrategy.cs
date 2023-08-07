@@ -7,18 +7,21 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Params;
 
-public class ParamSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ParamModel>
+public class ParamSyntaxGenerationStrategy : ISyntaxGenerationStrategy<ParamModel>
 {
     private readonly ILogger<ParamSyntaxGenerationStrategy> _logger;
     public ParamSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<ParamSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, ParamModel model, dynamic context = null)
+    public int Priority { get; } = 0;
+
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ParamModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -28,9 +31,9 @@ public class ParamSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ParamM
             builder.Append("this ");
 
         if (model.Attribute != null)
-            builder.Append(await syntaxGenerator.CreateAsync(model.Attribute));
+            builder.Append(await syntaxGenerator.GenerateAsync(model.Attribute));
 
-        builder.Append($"{await syntaxGenerator.CreateAsync(model.Type)} {model.Name}");
+        builder.Append($"{await syntaxGenerator.GenerateAsync(model.Type)} {model.Name}");
 
         return builder.ToString();
     }

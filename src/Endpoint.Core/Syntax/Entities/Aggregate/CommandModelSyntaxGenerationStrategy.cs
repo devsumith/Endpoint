@@ -6,28 +6,32 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Entities.Aggregate;
 
-public class CommandModelSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<CommandModel>
+public class CommandModelSyntaxGenerationStrategy : ISyntaxGenerationStrategy<CommandModel>
 {
     public CommandModelSyntaxGenerationStrategy(IServiceProvider serviceProvider)
-        : base(serviceProvider) { }
+    { 
+    
+    }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, CommandModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, CommandModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
-        builder.AppendLine(await syntaxGenerator.CreateAsync(model.RequestValidator, context));
+        builder.AppendLine(await syntaxGenerator.GenerateAsync(model.RequestValidator, context));
 
         builder.AppendLine("");
 
-        builder.AppendLine(await syntaxGenerator.CreateAsync(model.Request, context));
+        builder.AppendLine(await syntaxGenerator.GenerateAsync(model.Request, context));
 
         builder.AppendLine("");
 
-        builder.AppendLine(await syntaxGenerator.CreateAsync(model.Response, context));
+        builder.AppendLine(await syntaxGenerator.GenerateAsync(model.Response, context));
 
         builder.AppendLine("");
 
-        builder.AppendLine(await syntaxGenerator.CreateAsync(model.RequestHandler, context));
+        builder.AppendLine(await syntaxGenerator.GenerateAsync(model.RequestHandler, context));
 
         return builder.ToString();
     }

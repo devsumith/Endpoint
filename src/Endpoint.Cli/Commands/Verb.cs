@@ -55,7 +55,7 @@ public class VerbRequestHandler : IRequestHandler<VerbRequest>
 
         var model = _fileFactory.CreateTemplate("Verb", request.Name, request.Directory, tokens: tokens);
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
 
 
     }

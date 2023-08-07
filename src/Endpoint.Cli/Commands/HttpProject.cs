@@ -44,7 +44,7 @@ internal class HttpProjectRequestHandler : IRequestHandler<HttpProjectRequest>
             Directory = request.Directory,
         });
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
 
 
     }

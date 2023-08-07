@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
-public class CoreProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStrategyBase<ProjectReferenceModel>
+public class CoreProjectEnsureArtifactGenerationStrategy : IArtifactGenerationStrategy<ProjectReferenceModel>
 {
     private readonly ILogger<ApiProjectEnsureArtifactGenerationStrategy> _logger;
     private readonly IFileFactory _fileFactory;
@@ -26,7 +26,7 @@ public class CoreProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStr
         IServiceProvider serviceProvider,
         ICommandService commandService,
         ILogger<ApiProjectEnsureArtifactGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -36,12 +36,12 @@ public class CoreProjectEnsureArtifactGenerationStrategy : ArtifactGenerationStr
     }
 
 
-    public override bool CanHandle(object model, dynamic context = null)
+    public bool CanHandle(object model, dynamic context = null)
         => model is ProjectReferenceModel && context != null && context.Command is CoreProjectEnsure;
 
-    public override int Priority => 10;
+    public int Priority => 10;
 
-    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

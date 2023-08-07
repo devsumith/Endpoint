@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Constructors;
 
-public class ConstructorSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ConstructorModel>
+public class ConstructorSyntaxGenerationStrategy : ISyntaxGenerationStrategy<ConstructorModel>
 {
     private readonly ILogger<ConstructorSyntaxGenerationStrategy> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;
@@ -18,25 +18,28 @@ public class ConstructorSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<
         IServiceProvider serviceProvider,
         INamingConventionConverter namingConventionConverter,
         ILogger<ConstructorSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, ConstructorModel model, dynamic context = null)
+    public int Priority => 0;
+
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ConstructorModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
-        builder.Append(await syntaxGenerator.CreateAsync(model.AccessModifier));
+        builder.Append(await syntaxGenerator.GenerateAsync(model.AccessModifier));
 
         builder.Append($" {model.Name}");
 
         builder.Append('(');
 
-        builder.Append(string.Join(',', await Task.WhenAll(model.Params.Select(async x => await syntaxGenerator.CreateAsync(x)))));
+        builder.Append(string.Join(',', await Task.WhenAll(model.Params.Select(async x => await syntaxGenerator.GenerateAsync(x)))));
 
         builder.Append(')');
 

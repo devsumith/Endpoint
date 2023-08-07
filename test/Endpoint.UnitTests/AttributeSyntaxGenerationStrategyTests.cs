@@ -49,7 +49,7 @@ public class AttributeSyntaxGenerationStrategyTests
             Name = "ApiController"
         };
 
-        var result = await sut.CreateAsync(model);
+        var result = await sut.GenerateAsync(default, model);
 
         Assert.Equal("[ApiController]", result);
 

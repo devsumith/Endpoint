@@ -7,18 +7,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Playwright;
 
-public class TestSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<TestModel>
+public class TestSyntaxGenerationStrategy : ISyntaxGenerationStrategy<TestModel>
 {
     private readonly ILogger<TestSyntaxGenerationStrategy> _logger;
     public TestSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<TestSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, TestModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, TestModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

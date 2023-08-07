@@ -48,7 +48,7 @@ public class SpecFlowService : ISpecFlowService
 
         var fileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
-        await _artifactGenerator.CreateAsync(fileModel);
+        await _artifactGenerator.GenerateAsync(fileModel);
     }
 
     public async Task CreateHook(string name, string directory)
@@ -68,13 +68,13 @@ public class SpecFlowService : ISpecFlowService
 
         var fileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
-        await _artifactGenerator.CreateAsync(fileModel);
+        await _artifactGenerator.GenerateAsync(fileModel);
     }
 
     public async Task CreateDockerControllerHooks(string directory)
     {
         var model = _fileFactory.CreateTemplate("DockerControllerHooks", "DockerControllerHooks", directory);
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
     }
 }

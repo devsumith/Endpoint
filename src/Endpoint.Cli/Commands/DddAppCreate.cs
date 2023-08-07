@@ -171,7 +171,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         model.Folders = model.Folders.OrderByDescending(x => x.Priority).ToList();
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
 
         var aggregatesModelDirectory = Path.Combine(core.Directory, "AggregatesModel");
 
@@ -182,7 +182,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
             new EntityModel(entity.Name) { Properties = entity.Properties}
         }, name);
 
-        await _artifactGenerator.CreateAsync(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), ".cs"));
+        await _artifactGenerator.GenerateAsync(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), ".cs"));
 
         await _apiProjectService.ControllerAdd(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
 

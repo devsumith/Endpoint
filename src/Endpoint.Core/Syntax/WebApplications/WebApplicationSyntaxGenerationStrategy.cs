@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.WebApplications;
 
-public class WebApplicationSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<WebApplicationModel>
+public class WebApplicationSyntaxGenerationStrategy : ISyntaxGenerationStrategy<WebApplicationModel>
 {
     private readonly ILogger<WebApplicationSyntaxGenerationStrategy> _logger;
     private readonly ITemplateLocator _templateLocator;
@@ -20,14 +20,16 @@ public class WebApplicationSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
         ITemplateProcessor templateProcessor,
         ITemplateLocator templateLocator,
         ILogger<WebApplicationSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -41,12 +43,12 @@ public class WebApplicationSyntaxGenerationStrategy : SyntaxGenerationStrategyBa
 
         foreach (var entity in model.Entities)
         {
-            builder.AppendLine(await syntaxGenerator.CreateAsync(entity));
+            builder.AppendLine(await syntaxGenerator.GenerateAsync(entity));
 
             builder.AppendLine();
         }
 
-        builder.AppendLine(await syntaxGenerator.CreateAsync(new DbContextModel(_namingConventionConverter, model.DbContextName, model.Entities, "")));
+        builder.AppendLine(await syntaxGenerator.GenerateAsync(new DbContextModel(_namingConventionConverter, model.DbContextName, model.Entities, "")));
 
         return builder.ToString();
     }

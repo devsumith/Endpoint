@@ -91,7 +91,7 @@ public class AngularService : IAngularService
 
         var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
 
-        await _artifactGenerator.CreateAsync(_fileFactory.CreateTemplate(
+        await _artifactGenerator.GenerateAsync(_fileFactory.CreateTemplate(
             "Components.Default.Component",
             $"{nameSnakeCase}.component",
             componentDirectory,
@@ -101,7 +101,7 @@ public class AngularService : IAngularService
             .Build()
             ));
 
-        await _artifactGenerator.CreateAsync(_fileFactory.CreateTemplate(
+        await _artifactGenerator.GenerateAsync(_fileFactory.CreateTemplate(
             "Components.Default.Html",
             $"{nameSnakeCase}.component",
             componentDirectory,
@@ -130,7 +130,7 @@ public class AngularService : IAngularService
 
         var fileModel = new ObjectFileModel<FunctionModel>(model, $"create-{nameSnakeCase}-view-model", componentDirectory, ".ts");
 
-        await _artifactGenerator.CreateAsync(fileModel);
+        await _artifactGenerator.GenerateAsync(fileModel);
 
         await IndexCreate(false, componentDirectory);
 
@@ -214,7 +214,7 @@ public class AngularService : IAngularService
     {
         var workspaceModel = new AngularWorkspaceModel(name, version, rootDirectory);
 
-        await _artifactGenerator.CreateAsync(workspaceModel);
+        await _artifactGenerator.GenerateAsync(workspaceModel);
 
         _utlitityService.CopyrightAdd(workspaceModel.Directory);
 
@@ -268,7 +268,7 @@ public class AngularService : IAngularService
 
             foreach (var file in files)
             {
-                await _artifactGenerator.CreateAsync(file);
+                await _artifactGenerator.GenerateAsync(file);
             }
 
             _fileSystem.Delete($"{appDirectory}{Path.DirectorySeparatorChar}app.module.ts");
@@ -321,7 +321,7 @@ public class AngularService : IAngularService
                 _fileSystem.Delete(file);
             }
 
-            await _artifactGenerator.CreateAsync(new ContentFileModel($"export const BASE_URL = '{_namingConventionConverter.Convert(NamingConvention.KebobCase, model.Name).ToUpper()}:BASE_URL';", "constants", libFolder, ".ts"));
+            await _artifactGenerator.GenerateAsync(new ContentFileModel($"export const BASE_URL = '{_namingConventionConverter.Convert(NamingConvention.KebobCase, model.Name).ToUpper()}:BASE_URL';", "constants", libFolder, ".ts"));
 
             await IndexCreate(false, libFolder);
 
@@ -336,7 +336,7 @@ public class AngularService : IAngularService
 
             publicApiContent.Add("export * from './lib';");
 
-            await _artifactGenerator.CreateAsync(new ContentFileModel(new StringBuilder()
+            await _artifactGenerator.GenerateAsync(new ContentFileModel(new StringBuilder()
                 .AppendJoin(Environment.NewLine, publicApiContent)
                 .ToString(), "public-api", Path.Combine(model.Directory, "src"), ".ts"));
 
@@ -737,7 +737,7 @@ public class AngularService : IAngularService
 
         var fileModel = new ObjectFileModel<TypeScriptTypeModel>(model, ((SyntaxToken)model.Name).SnakeCase(), directory, ".ts");
 
-        await _artifactGenerator.CreateAsync(fileModel);
+        await _artifactGenerator.GenerateAsync(fileModel);
     }
 
     public async Task ListComponentCreate(string name, string directory)
@@ -829,7 +829,7 @@ public class AngularService : IAngularService
 
             var model = _fileFactory.CreateTemplate(name, $"_{nameSnakeCase}", scssDirectory, ".scss", tokens: new TokensBuilder().With("prefix", "g").Build());
 
-            await _artifactGenerator.CreateAsync(model);
+            await _artifactGenerator.GenerateAsync(model);
         }
 
         await IndexCreate(true, scssDirectory);
@@ -862,7 +862,7 @@ public class AngularService : IAngularService
 
         var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
 
-        await _artifactGenerator.CreateAsync(_fileFactory.CreateTemplate(
+        await _artifactGenerator.GenerateAsync(_fileFactory.CreateTemplate(
             "Components.Control.Component",
             $"{nameSnakeCase}.component",
             componentDirectory,
@@ -872,7 +872,7 @@ public class AngularService : IAngularService
             .Build()
             ));
 
-        await _artifactGenerator.CreateAsync(_fileFactory.CreateTemplate(
+        await _artifactGenerator.GenerateAsync(_fileFactory.CreateTemplate(
             "Components.Control.Html",
             $"{nameSnakeCase}.component",
             componentDirectory,

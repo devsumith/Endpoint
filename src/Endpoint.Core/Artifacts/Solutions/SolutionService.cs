@@ -56,7 +56,7 @@ public class SolutionService : ISolutionService
 
     public async Task Create(SolutionModel model)
     {
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
     }
 
     public async Task EventDrivenMicroservicesCreate(string name, string services, string directory)
@@ -69,7 +69,7 @@ public class SolutionService : ISolutionService
 
         solutionModel.Folders.Add(await ServicesCreate(services, solutionModel.SolutionDirectory, notifications));
 
-        await _artifactGenerator.CreateAsync(solutionModel);
+        await _artifactGenerator.GenerateAsync(solutionModel);
 
         foreach (var notification in notifications)
         {
@@ -172,7 +172,7 @@ public class SolutionService : ISolutionService
             SolutionRootDirectory = directory
         });
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
 
         return model;
     }
@@ -202,13 +202,13 @@ public class SolutionService : ISolutionService
 
         var messagingProjectModel = await _projectFactory.CreateMessagingProject(messagingDirectory);
 
-        await _artifactGenerator.CreateAsync(messagingProjectModel);
+        await _artifactGenerator.GenerateAsync(messagingProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
 
         var messagingUdpProjectModel = await _projectFactory.CreateMessagingUdpProject(messagingDirectory);
 
-        await _artifactGenerator.CreateAsync(messagingUdpProjectModel);
+        await _artifactGenerator.GenerateAsync(messagingUdpProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
 
@@ -240,13 +240,13 @@ public class SolutionService : ISolutionService
 
         var messagingProjectModel = await _projectFactory.CreateMessagingProject(messagingDirectory);
 
-        await _artifactGenerator.CreateAsync(messagingProjectModel);
+        await _artifactGenerator.GenerateAsync(messagingProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
 
         var messagingUdpProjectModel = await _projectFactory.CreateMessagingUdpProject(messagingDirectory);
 
-        await _artifactGenerator.CreateAsync(messagingUdpProjectModel);
+        await _artifactGenerator.GenerateAsync(messagingUdpProjectModel);
 
         _commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
     }

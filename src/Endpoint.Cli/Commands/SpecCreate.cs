@@ -58,7 +58,7 @@ public class SpecCreateRequestHandler : IRequestHandler<SpecCreateRequest>
             .With("fileName", fileName)
             .Build());
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
 
     }
 }

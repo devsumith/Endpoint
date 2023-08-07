@@ -6,18 +6,21 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Properties;
 
-public class PropertiesSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<List<PropertyModel>>
+public class PropertiesSyntaxGenerationStrategy : ISyntaxGenerationStrategy<List<PropertyModel>>
 {
     private readonly ILogger<PropertiesSyntaxGenerationStrategy> _logger;
     public PropertiesSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<PropertiesSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, List<PropertyModel> model, dynamic context = null)
+    public int Priority { get; } = 0;
+
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<PropertyModel> model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -25,7 +28,7 @@ public class PropertiesSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<L
 
         foreach (var property in model)
         {
-            builder.Append(await syntaxGenerator.CreateAsync(property));
+            builder.Append(await syntaxGenerator.GenerateAsync(property));
 
             if (property != model.Last())
                 builder.AppendLine();

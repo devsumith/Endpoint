@@ -2,17 +2,15 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Abstractions;
+using Endpoint.Core.Artifacts.Files.Commands;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Text;
-using Microsoft.CSharp;
-using Endpoint.Core.Artifacts.Files.Commands;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
-public class CopyrightAddArtifactGenerationStrategy : ArtifactGenerationStrategyBase<FileReferenceModel>
+public class CopyrightAddArtifactGenerationStrategy : IArtifactGenerationStrategy<FileReferenceModel>
 {
     private readonly ILogger<CopyrightAddArtifactGenerationStrategy> _logger;
     private readonly ITemplateLocator _templateLocator;
@@ -23,20 +21,19 @@ public class CopyrightAddArtifactGenerationStrategy : ArtifactGenerationStrategy
         ILogger<CopyrightAddArtifactGenerationStrategy> logger,
         IFileSystem fileSystem,
         ITemplateLocator templateLocator)
-        : base(serviceProvider)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
-    public override int Priority => 10;
+    public int Priority => 10;
 
-    public override bool CanHandle(object model, dynamic context)
+    public bool CanHandle(object model, dynamic context)
     {
         return model is FileReferenceModel && context != null && context is CopyrightAdd;
     }
-    public override async Task CreateAsync(IArtifactGenerator artifactGenerator, FileReferenceModel model, dynamic context = null)
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, FileReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

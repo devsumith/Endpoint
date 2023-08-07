@@ -11,19 +11,17 @@ namespace Endpoint.Core.Abstractions;
 
 public class ArtifactGenerator : IArtifactGenerator
 {
-    private readonly IEnumerable<IArtifactGenerationStrategy> _strategies;
     private readonly ILogger<ArtifactGenerator> _logger;
     private readonly IServiceProvider _serviceProvider;
     private readonly ConcurrentStack<KeyValuePair<Type, Func<dynamic, Task>>> _generateAsyncFuncs = new ConcurrentStack<KeyValuePair<Type, Func<dynamic, Task>>>();
 
 
     public ArtifactGenerator(
-        IEnumerable<IArtifactGenerationStrategy> strategies,
+
         ILogger<ArtifactGenerator> logger,
         IServiceProvider serviceProvider
         )
     {
-        _strategies = strategies ?? throw new ArgumentNullException(nameof(strategies));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
@@ -46,15 +44,6 @@ public class ArtifactGenerator : IArtifactGenerator
 
         await generateAsync(model);
 
-    }
-
-    public async Task CreateAsync(object model, dynamic context = null)
-    {
-        var strategy = _strategies.Where(x => x.CanHandle(model, context))
-        .OrderBy(x => x.Priority)
-        .FirstOrDefault();
-
-        await strategy.CreateAsync(model, context);
     }
 }
 

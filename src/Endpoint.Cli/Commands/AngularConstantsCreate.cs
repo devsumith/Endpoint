@@ -41,6 +41,6 @@ public class AngularConstantsCreateRequestHandler : IRequestHandler<AngularConst
 
         var model = new ContentFileModel(content, "constants", request.Directory, ".ts");
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
     }
 }

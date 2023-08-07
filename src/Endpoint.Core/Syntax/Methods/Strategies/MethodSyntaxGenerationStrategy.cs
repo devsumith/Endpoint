@@ -9,20 +9,22 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
-public class MethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<MethodModel>
+public class MethodSyntaxGenerationStrategy : ISyntaxGenerationStrategy<MethodModel>
 {
     private readonly ILogger<MethodSyntaxGenerationStrategy> _logger;
     public MethodSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<MethodSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override bool CanHandle(object model, dynamic context = null)
+    public int Priority { get; } = 0;
+
+    public bool CanHandle(object model, dynamic context = null)
         => model is MethodModel methodModel && !methodModel.Interface;
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -30,10 +32,10 @@ public class MethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Metho
 
         foreach (var attribute in model.Attributes)
         {
-            builder.AppendLine(await syntaxGenerator.CreateAsync(attribute));
+            builder.AppendLine(await syntaxGenerator.GenerateAsync(attribute));
         }
 
-        builder.Append(await syntaxGenerator.CreateAsync(model.AccessModifier));
+        builder.Append(await syntaxGenerator.GenerateAsync(model.AccessModifier));
 
         if (model.Override)
             builder.Append(" override");
@@ -44,13 +46,13 @@ public class MethodSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<Metho
         if (model.Params.SingleOrDefault(x => x.ExtensionMethodParam) != null || model.Static)
             builder.Append(" static");
 
-        builder.Append($" {await syntaxGenerator.CreateAsync(model.ReturnType)}");
+        builder.Append($" {await syntaxGenerator.GenerateAsync(model.ReturnType)}");
 
         builder.Append($" {model.Name}");
 
         builder.Append('(');
 
-        builder.Append(string.Join(',', await Task.WhenAll(model.Params.Select(async x => await syntaxGenerator.CreateAsync(x)))));
+        builder.Append(string.Join(',', await Task.WhenAll(model.Params.Select(async x => await syntaxGenerator.GenerateAsync(x)))));
 
         builder.Append(')');
 

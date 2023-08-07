@@ -8,18 +8,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Attributes.Strategies;
 
-public class AttributeSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<AttributeModel>
+public class AttributeSyntaxGenerationStrategy : ISyntaxGenerationStrategy<AttributeModel>
 {
     private readonly ILogger<AttributeSyntaxGenerationStrategy> _logger;
     public AttributeSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<AttributeSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, AttributeModel model, dynamic context = null)
+    public int Priority { get; set; } = 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, AttributeModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

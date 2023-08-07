@@ -7,18 +7,20 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Classes.Strategies;
 
-public class ResponseSyntaxGenerationStrategy : SyntaxGenerationStrategyBase<ResponseAttributeModel>
+public class ResponseSyntaxGenerationStrategy : ISyntaxGenerationStrategy<ResponseAttributeModel>
 {
     private readonly ILogger<ResponseSyntaxGenerationStrategy> _logger;
     public ResponseSyntaxGenerationStrategy(
         IServiceProvider serviceProvider,
         ILogger<ResponseSyntaxGenerationStrategy> logger)
-        : base(serviceProvider)
+
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, ResponseAttributeModel model, dynamic context = null)
+    public int Priority => 0;
+
+    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ResponseAttributeModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

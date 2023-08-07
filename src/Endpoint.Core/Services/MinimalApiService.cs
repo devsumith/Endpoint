@@ -27,7 +27,7 @@ public class MinimalApiService : IMinimalApiService
 
         var model = new MinimalApiProgramFileModel(name, directory, name, dbContextName, entities);
 
-        await _artifactGenerator.CreateAsync(model);
+        await _artifactGenerator.GenerateAsync(model);
     }
 }
 
