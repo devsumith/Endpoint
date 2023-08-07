@@ -15,6 +15,7 @@
     <None Remove="Templates\BuildingBlocks\IO.Compression\Int32Type.txt" />
     <None Remove="Templates\BuildingBlocks\IO.Compression\IPackable.txt" />
     <None Remove="Templates\BuildingBlocks\IO.Compression\String255Type.txt" />
+    <None Remove="Templates\Catch2.txt" />
     <None Remove="Templates\EditorConfig.txt" />
     <None Remove="Templates\ValueObject.txt" />
     <None Remove="Templates\ValueType.txt" />
@@ -116,6 +117,7 @@
     <EmbeddedResource Include="Templates\BuildingBlocks\Validation\ConfigureServices.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\Validation\ResponseBase.txt" />
     <EmbeddedResource Include="Templates\BuildingBlocks\Validation\ValidationBehavior.txt" />
+    <EmbeddedResource Include="Templates\Catch2.txt" />
     <EmbeddedResource Include="Templates\Console\EmptyProgram.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientExtensions.txt" />
     <EmbeddedResource Include="Templates\Console\HttpClientFactory.txt" />

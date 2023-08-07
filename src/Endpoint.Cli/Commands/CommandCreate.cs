@@ -46,7 +46,7 @@ public class CommandCreateRequestHandler : IRequestHandler<CommandCreateRequest>
 
     public async Task Handle(CommandCreateRequest request, CancellationToken cancellationToken)
     {
-        _aggregateService.CommandCreate(request.RouteType, request.Name, request.Aggregate, request.Properties, request.Directory);
+        await _aggregateService.CommandCreate(request.RouteType, request.Name, request.Aggregate, request.Properties, request.Directory);
     }
 }
 

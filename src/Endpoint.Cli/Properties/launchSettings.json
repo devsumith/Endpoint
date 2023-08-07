@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "class-create -n Project -d C:\\projects\\Starlord\\src\\Starlord",
+      "commandLineArgs": "catch2-create -n Project -d C:\\projects\\Starlord\\src\\Starlord",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
