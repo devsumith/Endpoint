@@ -6,21 +6,17 @@ using Endpoint.Core.Services;
 using System.Text;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
-public class LaunchSettingsFileGenerationStrategy : IArtifactGenerationStrategy<LaunchSettingsFileModel>
+public class LaunchSettingsFileGenerationStrategy : FileGenerationStrategy, IArtifactGenerationStrategy<LaunchSettingsFileModel>
 {
     private readonly ITemplateProcessor _templateProcessor;
-    private readonly IFileSystem _fileSystem;
     private readonly ITemplateLocator _templateLocator;
 
     public LaunchSettingsFileGenerationStrategy(IServiceProvider serviceProvider, ITemplateProcessor templateProcessor, IFileSystem fileSystem, ITemplateLocator templateLocator)
-
+        :base(default, fileSystem)
     {
         _templateProcessor = templateProcessor;
-        _fileSystem = fileSystem;
         _templateLocator = templateLocator;
     }
-
-    public int Priority => 0;
 
     public async Task GenerateAsync(IArtifactGenerator artifactGenerator, LaunchSettingsFileModel model, dynamic context = null)
     {
@@ -28,20 +24,11 @@ public class LaunchSettingsFileGenerationStrategy : IArtifactGenerationStrategy<
 
         var template = _templateLocator.Get("LaunchSettings");
 
-        /*        var tokens = new TokensBuilder()
-                    .With(nameof(settings.RootNamespace), settings.RootNamespace)
-                    .With("Directory", settings.ApiDirectory)
-                    .With("Namespace", settings.ApiNamespace)
-                    .With(nameof(settings.Port), $"{settings.Port}")
-                    .With(nameof(settings.SslPort), $"{settings.SslPort}")
-                    .With("ProjectName", settings.ApiNamespace)
-                    .With("LaunchUrl", "")
-                    .Build();*/
-
         builder.AppendLine(_templateProcessor.Process(template, model));
 
+        model.Content = builder.ToString();
 
-        _fileSystem.WriteAllText(model.Path, builder.ToString());
+        await base.GenerateAsync(artifactGenerator, model, null);
     }
 }
 

@@ -13,11 +13,10 @@ using System.Reactive.Linq;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
-public class TemplatedFileArtifactGenerationStrategy : IArtifactGenerationStrategy<TemplatedFileModel>
+public class TemplatedFileArtifactGenerationStrategy : FileGenerationStrategy, IArtifactGenerationStrategy<TemplatedFileModel>
 {
     private readonly ILogger<TemplatedFileArtifactGenerationStrategy> _logger;
     private readonly ITemplateLocator _templateLocator;
-    private readonly IFileSystem _fileSystem;
     private readonly ITemplateProcessor _templateProcessor;
     private readonly ISolutionNamespaceProvider _solutionNamespaceProvider;
     private readonly Observable<INotification> _observableNotifications;
@@ -29,20 +28,20 @@ public class TemplatedFileArtifactGenerationStrategy : IArtifactGenerationStrate
         IFileSystem fileSystem,
         ISolutionNamespaceProvider solutionNamespaceProvider,
         ILogger<TemplatedFileArtifactGenerationStrategy> logger,
+        ILoggerFactory loggerFactory,
         Observable<INotification> observableNotifications)
-
+        :base(loggerFactory.CreateLogger<FileGenerationStrategy>(), fileSystem)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _solutionNamespaceProvider = solutionNamespaceProvider ?? throw new ArgumentNullException(nameof(solutionNamespaceProvider));
         _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
     }
 
     public int Priority => 0;
 
-    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, TemplatedFileModel model, dynamic context = null)
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, TemplatedFileModel model, dynamic? context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -59,19 +58,9 @@ public class TemplatedFileArtifactGenerationStrategy : IArtifactGenerationStrate
 
         var result = _templateProcessor.Process(template, model.Tokens);
 
-        var parts = Path.GetDirectoryName(model.Path).Split(Path.DirectorySeparatorChar);
+        model.Content = string.Join(Environment.NewLine, result);
 
-        for (var i = 1; i <= parts.Length; i++)
-        {
-            var dir = string.Join(Path.DirectorySeparatorChar, parts.Take(i));
-
-            if (!Directory.Exists(dir))
-                _fileSystem.CreateDirectory(dir);
-        }
-
-        _fileSystem.WriteAllText(model.Path, string.Join(Environment.NewLine, result));
-
-        _observableNotifications.Broadcast(new FileCreated(model.Path));
+        await base.GenerateAsync(artifactGenerator, model as FileModel, null);
 
     }
 }

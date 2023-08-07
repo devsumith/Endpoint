@@ -3,7 +3,6 @@
 
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Internals;
-using Endpoint.Core.Messages;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -12,8 +11,7 @@ using System.Text;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
-public abstract class ObjectFileIArtifactGenerationStrategy<T> : IArtifactGenerationStrategy<ObjectFileModel<T>>
-    where T : class
+public abstract class ObjectFileIArtifactGenerationStrategy<T> : FileGenerationStrategy, IArtifactGenerationStrategy<ObjectFileModel<T>>
 {
     private readonly ILogger<ObjectFileIArtifactGenerationStrategy<T>> _logger;
     private readonly ISyntaxGenerator _syntaxGenerator;
@@ -22,13 +20,12 @@ public abstract class ObjectFileIArtifactGenerationStrategy<T> : IArtifactGenera
     private readonly Observable<INotification> _notificationListener;
 
     public ObjectFileIArtifactGenerationStrategy(
-        IServiceProvider serviceProvider,
         ISyntaxGenerator syntaxGenerator,
         IFileSystem fileSystem,
         INamespaceProvider namespaceProvider,
         Observable<INotification> notificationListener,
         ILogger<ObjectFileIArtifactGenerationStrategy<T>> logger)
-
+        :base(default, fileSystem)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
@@ -36,8 +33,6 @@ public abstract class ObjectFileIArtifactGenerationStrategy<T> : IArtifactGenera
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
     }
-
-    public int Priority => 0;
 
     public async Task GenerateAsync(IArtifactGenerator artifactGenerator, ObjectFileModel<T> model, dynamic context = null)
     {
@@ -66,8 +61,8 @@ public abstract class ObjectFileIArtifactGenerationStrategy<T> : IArtifactGenera
 
         builder.AppendLine(await _syntaxGenerator.GenerateAsync(model.Object, context));
 
-        _fileSystem.WriteAllText(model.Path, builder.ToString());
+        model.Content = builder.ToString();
 
-        _notificationListener.Broadcast(new FileCreated(model.Path));
+        await base.GenerateAsync(artifactGenerator, model, null);
     }
 }
