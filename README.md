@@ -11,6 +11,8 @@ If you like or are using this project to learn or start your solution, please gi
 
 ## CLI Commands
 
+### Code Generation Commands
+
 ### File Generation Commands
 
 ### Asp.Net Core Solution / Project Generation Commands
