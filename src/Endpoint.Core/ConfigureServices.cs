@@ -97,7 +97,6 @@ public static class ConfigureServices
         services.AddSingleton<IProjectFactory, ProjectFactory>();
         services.AddSingleton<IRouteHandlerFactory, RouteHandlerFactory>();
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Constants).Assembly));
-        services.AddHostedService<ObservableNotificationsProcessor>();
         services.AddSingleton<IPlantUmlParserStrategyFactory, PlantUmlParserStrategyFactory>();
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlProjectParserStrategy>();
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlSolutionParserStrategy>();
