@@ -8,5 +8,3 @@ public interface IUtlitityService
     void CopyrightAdd(string directory);
 
 }
-
-

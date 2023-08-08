@@ -1,6 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Endpoint.Core.Syntax.Classes;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Types;
@@ -13,6 +14,7 @@ public class TypeModel
         GenericTypeParameters = new List<TypeModel>();
     }
 
+    public ClassModel Class { get; set; }
     public string Name { get; set; }
     public List<TypeModel> GenericTypeParameters { get; set; }
     public bool Nullable { get; set; }

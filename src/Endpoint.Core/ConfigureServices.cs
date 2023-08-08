@@ -22,6 +22,7 @@ using Endpoint.Core.Syntax.Entities.Aggregate;
 using Endpoint.Core.Syntax.Entities.Legacy;
 using Endpoint.Core.Syntax.Methods.Factories;
 using Endpoint.Core.Syntax.RouteHandlers;
+using Endpoint.Core.Syntax.Types;
 using System.Linq;
 using System.Reflection;
 
@@ -31,7 +32,7 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
-
+        services.AddSingleton<ITypeFactory, TypeFactory>();
         services.AddSingleton<IPlaywrightService, PlaywrightService>();
         services.AddSingleton<IMethodFactory, MethodFactory>();
         services.AddSingleton<ISpecFlowService, SpecFlowService>();
