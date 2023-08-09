@@ -4,7 +4,7 @@
 using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 
-namespace Endpoint.Core.Artifacts.Projects;
+namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
 public class ConsoleMicroserviceTestArtifactGenerationStrategy : IArtifactGenerationStrategy<ConsoleMicroserviceProjectModel>
 {

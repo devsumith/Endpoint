@@ -17,6 +17,7 @@
     <None Remove="Templates\BuildingBlocks\IO.Compression\String255Type.txt" />
     <None Remove="Templates\Catch2.txt" />
     <None Remove="Templates\EditorConfig.txt" />
+    <None Remove="Templates\EsProj.txt" />
     <None Remove="Templates\ValueObject.txt" />
     <None Remove="Templates\ValueType.txt" />
   </ItemGroup>
@@ -164,6 +165,7 @@
     <EmbeddedResource Include="Templates\Readme.txt" />
     <EmbeddedResource Include="Templates\ValueType.txt" />
     <EmbeddedResource Include="Templates\ValueObject.txt" />
+    <EmbeddedResource Include="Templates\EsProj.txt" />
     <EmbeddedResource Include="Templates\Webpack.Config.txt" />
     <EmbeddedResource Include="Templates\Verb.txt" />
   </ItemGroup>

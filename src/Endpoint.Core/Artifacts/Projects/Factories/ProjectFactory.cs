@@ -386,6 +386,7 @@ public class ProjectFactory : IProjectFactory
             "classlib" => DotNetProjectType.ClassLib,
             "worker" => DotNetProjectType.Worker,
             "xunit" => DotNetProjectType.XUnit,
+            "ts" => DotNetProjectType.TypeScriptStandalone,
             _ => DotNetProjectType.Console
         };
 

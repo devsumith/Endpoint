@@ -6,7 +6,7 @@ using Endpoint.Core.Internals;
 using Endpoint.Core.Services;
 using MediatR;
 
-namespace Endpoint.Core.Artifacts.Projects;
+namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
 public class ConsoleMicroserviceArtifactGenerationStrategy : IArtifactGenerationStrategy<ConsoleMicroserviceProjectModel>
 {

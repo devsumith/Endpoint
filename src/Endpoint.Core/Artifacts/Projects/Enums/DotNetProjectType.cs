@@ -13,6 +13,7 @@ public enum DotNetProjectType
     MinimalWebApi,
     Web,
     Worker,
-    Angular
+    Angular,
+    TypeScriptStandalone
 }
 

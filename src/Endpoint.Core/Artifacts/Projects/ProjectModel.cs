@@ -6,10 +6,10 @@ using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Projects.Enums;
 using Endpoint.Core.Services;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using static System.IO.Path;
 
 namespace Endpoint.Core.Artifacts.Projects;
 
@@ -17,8 +17,9 @@ public class ProjectModel
 {
     public string Name { get; init; }
     public string Directory { get; init; }
-    public string Path => $"{Directory}{System.IO.Path.DirectorySeparatorChar}{Name}.csproj";
+    public string Path => Combine(Directory, $"{Name}{Extension}");
     public string Namespace => Name;
+    public string Extension { get; set; } = ".csproj";
     public DotNetProjectType DotNetProjectType { get; set; }
     public List<FileModel> Files { get; init; } = new List<FileModel>();
     public List<PackageModel> Packages { get; init; } = new();
@@ -58,7 +59,8 @@ public class ProjectModel
     {
         DotNetProjectType = dotNetProjectType;
         Name = name;
-        Directory = $"{parentDirectory}{System.IO.Path.DirectorySeparatorChar}{name}";
+        Extension = dotNetProjectType == DotNetProjectType.TypeScriptStandalone ? ".esproj" : "csproj";
+        Directory = Combine(parentDirectory, name);
         References = references ?? new List<string>();
         Folders = new List<FolderModel>();
     }
@@ -67,7 +69,7 @@ public class ProjectModel
     {
         DotNetProjectType = DotNetProjectType.ClassLib;
         Name = name;
-        Directory = $"{parentDirectory}{System.IO.Path.DirectorySeparatorChar}{name}";
+        Directory = Combine(parentDirectory, name);
         References = new List<string>();
         Folders = new List<FolderModel>();
     }
