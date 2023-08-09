@@ -31,6 +31,7 @@ public class AngularStandaloneProjectArtifactGenerationStrategy : IArtifactGener
         var result = _templateProcessor.Process(template, new TokensBuilder()
             .With("projectName",model.Name)
             .Build());
+
         _fileSystem.CreateDirectory(model.Directory);
 
         _fileSystem.WriteAllText(model.Path, result);

@@ -35,7 +35,9 @@ public class ArtifactGenerator : IArtifactGenerator
 
         if (generateAsync == null)
         {
-            var strategy = _serviceProvider.GetRequiredService<IArtifactGenerationStrategy<T>>();
+            var strategies = _serviceProvider.GetRequiredService<IEnumerable<IArtifactGenerationStrategy<T>>>();
+
+            var strategy = strategies.Where(x => x.CanHandle(model, context)).OrderByDescending(x => x.Priority).FirstOrDefault();
 
             generateAsync = (dynamic model) => strategy.GenerateAsync(this, model);
 

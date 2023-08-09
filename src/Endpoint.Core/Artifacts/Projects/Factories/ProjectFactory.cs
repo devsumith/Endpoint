@@ -377,9 +377,7 @@ public class ProjectFactory : IProjectFactory
 
     public async Task<ProjectModel> Create(string type, string name, string directory, List<string> references = null, string metadata = null)
     {
-        var model = await CreateLibrary(name, directory, metadata?.Split(',').ToList());
-
-        model.DotNetProjectType = type switch
+        var dotNetProjectType = type switch
         {
             "web" => DotNetProjectType.Web,
             "webapi" => DotNetProjectType.WebApi,
@@ -389,6 +387,8 @@ public class ProjectFactory : IProjectFactory
             "ts" => DotNetProjectType.TypeScriptStandalone,
             _ => DotNetProjectType.Console
         };
+
+        var model = new ProjectModel(dotNetProjectType, name, directory);
 
         var parts = name.Split('.');
 

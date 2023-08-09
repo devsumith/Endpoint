@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "catch2-create -n Project -d C:\\projects\\Starlord\\src\\Starlord",
+      "commandLineArgs": "solution-create -n drunk -t ts -p drunk -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
