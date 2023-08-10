@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "project-add -n drunk -t ts -d C:\\projects\\FooBaz\\",
+      "commandLineArgs": "solution-create -n CodeOpinion -p app -t ts -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
