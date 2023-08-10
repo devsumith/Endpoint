@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "solution-create -n drunk -t ts -p drunk -d C:\\projects",
+      "commandLineArgs": "project-add -n drunk -t ts -d C:\\projects\\FooBaz\\",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

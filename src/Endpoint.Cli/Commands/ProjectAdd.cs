@@ -72,7 +72,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
     public async Task Handle(ProjectAddRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(ProjectAddRequestHandler));
+        _logger.LogInformation("Adding Project. {name}", request.Name);
 
         if (string.IsNullOrEmpty(request.Name))
         {
@@ -84,9 +84,9 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
         var projectDirectory = Path.GetDirectoryName(projectPath);
 
-        if (string.IsNullOrEmpty(request.FolderName))
+        if (!string.IsNullOrEmpty(request.FolderName))
         {
-            _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{request.FolderName}");
+            _fileSystem.CreateDirectory(Path.Combine(request.Directory, request.FolderName));
         }
 
         var model = await _projectFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);
@@ -96,7 +96,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
     public void ProjectAdd(string directory)
     {
-        var projectPath = _fileProvider.Get("*.csproj", directory);
+        var projectPath = _fileProvider.Get("*.*sproj", directory);
 
         if (projectPath != Constants.FileNotFound)
         {

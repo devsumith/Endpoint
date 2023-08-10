@@ -5,13 +5,16 @@ using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Services;
+using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
+
 namespace Endpoint.Core.Artifacts.Projects.Services;
+
+//https://learn.microsoft.com/en-us/visualstudio/extensibility/internals/solution-dot-sln-file?view=vs-2022
 
 public class ProjectService : IProjectService
 {
@@ -38,7 +41,7 @@ public class ProjectService : IProjectService
     {
         await _artifactGenerator.GenerateAsync(model);
 
-        AddToSolution(model);
+        await AddToSolution(model);
     }
 
     public async Task AddToSolution(ProjectModel model)
@@ -46,7 +49,37 @@ public class ProjectService : IProjectService
         var solution = _fileProvider.Get("*.sln", model.Directory);
         var solutionName = Path.GetFileName(solution);
         var solutionDirectory = _fileSystem.GetDirectoryName(solution);
-        _commandService.Start($"dotnet sln {solutionName} add {model.Path}", solutionDirectory);
+
+        if(model.Extension == ".csproj")
+        {
+            _commandService.Start($"dotnet sln {solutionName} add {model.Path}", solutionDirectory);
+        }
+        else
+        {
+            var lines = new List<string>();
+
+            var projectEntry = new string[2]
+            {
+                "Project(\"{" + $"{Guid.NewGuid()}".ToUpper() + "}\") = \"" + model.Name + "\", \"" + model.Path.Replace($"{solutionDirectory}{Path.DirectorySeparatorChar}", string.Empty) + "\", \"{" + $"{Guid.NewGuid()}".ToUpper() + "}\"",
+                "EndProject"
+            };
+
+            foreach(var line in _fileSystem.ReadAllLines(solution))
+            {
+                lines.Add(line);
+
+                if(line.StartsWith("MinimumVisualStudioVersion"))
+                {
+                    foreach(var entry in projectEntry)
+                    {
+                        lines.Add(entry);
+                    }
+                }
+            }
+
+            _fileSystem.WriteAllLines(solution, lines.ToArray());
+        }
+        
     }
 
     public async Task AddGenerateDocumentationFile(string csprojFilePath)
