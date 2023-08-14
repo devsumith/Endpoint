@@ -84,9 +84,9 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
         var projectDirectory = Path.GetDirectoryName(projectPath);
 
-        if (!string.IsNullOrEmpty(request.FolderName))
+        if (string.IsNullOrEmpty(request.FolderName))
         {
-            _fileSystem.CreateDirectory(Path.Combine(request.Directory, request.FolderName));
+            _fileSystem.CreateDirectory(request.Directory);
         }
 
         var model = await _projectFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);

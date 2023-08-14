@@ -59,7 +59,7 @@ public class ProjectModel
     {
         DotNetProjectType = dotNetProjectType;
         Name = name;
-        Extension = dotNetProjectType == DotNetProjectType.TypeScriptStandalone ? ".esproj" : "csproj";
+        Extension = dotNetProjectType == DotNetProjectType.TypeScriptStandalone ? ".esproj" : ".csproj";
         Directory = Combine(parentDirectory, name);
         References = references ?? new List<string>();
         Folders = new List<FolderModel>();

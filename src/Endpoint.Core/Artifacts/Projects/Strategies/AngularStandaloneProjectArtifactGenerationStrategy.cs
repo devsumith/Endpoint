@@ -24,6 +24,11 @@ public class AngularStandaloneProjectArtifactGenerationStrategy : IArtifactGener
 
     public int Priority => 1;
 
+    public bool CanHandle(ProjectModel model, dynamic context = null)
+    {
+        return model.Extension == ".esproj";
+    }
+
     public async Task GenerateAsync(IArtifactGenerator generator, ProjectModel model, dynamic context = null)
     {
         var template = string.Join(Environment.NewLine, _templateLocator.Get("EsProj"));

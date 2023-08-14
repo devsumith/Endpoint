@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "solution-create -n CodeOpinion -p app -t ts -d C:\\projects",
+      "commandLineArgs": "project-add -n eShopOnContainers.CodeGenerator.App -t console -d C:\\projects\\eShopOnContainers\\src\\CodeGenerator",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
