@@ -35,7 +35,7 @@ public class AngularTestRequestHandler : IRequestHandler<AngularTestRequest>
 
     public async Task Handle(AngularTestRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(AngularTestRequestHandler));
+        _logger.LogInformation("Testing Angular. {searchPattern}", request.SearchPattern);
 
         await _angularService.Test(request.Directory, request.SearchPattern);
     }
