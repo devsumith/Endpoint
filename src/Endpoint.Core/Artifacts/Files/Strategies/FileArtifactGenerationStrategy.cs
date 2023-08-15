@@ -41,7 +41,7 @@ public class FileGenerationStrategy : IArtifactGenerationStrategy<FileModel>
             var dir = string.Join(Path.DirectorySeparatorChar, parts.Take(i));
 
             if (!Directory.Exists(dir))
-                _fileSystem.CreateDirectory(dir);
+                _fileSystem.Directory.CreateDirectory(dir);
         }
 
         var ignore = model.Path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}")
@@ -54,7 +54,7 @@ public class FileGenerationStrategy : IArtifactGenerationStrategy<FileModel>
 
         var validExtension = extension == ".cs" || extension == ".ts" || extension == ".js";
 
-        _fileSystem.WriteAllText(model.Path, validExtension  && !ignore ? string.Join(Environment.NewLine, new string[]
+        _fileSystem.File.WriteAllText(model.Path, validExtension  && !ignore ? string.Join(Environment.NewLine, new string[]
         {
             copyright,
             model.Content

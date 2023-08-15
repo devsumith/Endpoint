@@ -66,7 +66,7 @@ public class ApiProjectService : IApiProjectService
 
         var controllersDirectory = $"{csProjDirectory}{Path.DirectorySeparatorChar}Controllers";
 
-        _fileSystem.CreateDirectory(controllersDirectory);
+        _fileSystem.Directory.CreateDirectory(controllersDirectory);
 
         var controllerClassModel = empty ? _classFactory.CreateEmptyController(entityName, csProjDirectory) : _classFactory.CreateController(entity, csProjDirectory);
 

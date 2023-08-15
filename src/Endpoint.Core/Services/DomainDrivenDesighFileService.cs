@@ -312,7 +312,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
     public async Task ServiceCreate(string name, string directory)
     {
-        if (_fileSystem.Exists($"{directory}{Path.DirectorySeparatorChar}{name}.cs"))
+        if (_fileSystem.File.Exists($"{directory}{Path.DirectorySeparatorChar}{name}.cs"))
         {
             throw new Exception($"Service exists: {$"{directory}{Path.DirectorySeparatorChar}{name}.cs"}");
         }

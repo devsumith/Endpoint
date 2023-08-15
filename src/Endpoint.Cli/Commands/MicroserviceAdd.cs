@@ -60,7 +60,7 @@ public class MicroserviceAddRequestHandler : IRequestHandler<MicroserviceAddRequ
         {
             var microserviceRootDirectory = $"{request.Directory}{Path.DirectorySeparatorChar}{name}";
 
-            _fileSystem.CreateDirectory(microserviceRootDirectory);
+            _fileSystem.Directory.CreateDirectory(microserviceRootDirectory);
 
             foreach (var layer in new List<string> { "Core", "Infrastructure", "Api" })
             {

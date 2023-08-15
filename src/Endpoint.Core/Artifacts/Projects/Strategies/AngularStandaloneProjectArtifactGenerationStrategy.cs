@@ -37,8 +37,8 @@ public class AngularStandaloneProjectArtifactGenerationStrategy : IArtifactGener
             .With("projectName",model.Name)
             .Build());
 
-        _fileSystem.CreateDirectory(model.Directory);
+        _fileSystem.Directory.CreateDirectory(model.Directory);
 
-        _fileSystem.WriteAllText(model.Path, result);
+        _fileSystem.File.WriteAllText(model.Path, result);
     }
 }

@@ -58,7 +58,7 @@ public class DependencyInjectionService : IDependencyInjectionService
             "public static void Add" + projectSuffix + "Services(this IServiceCollection services) {",
             "}" }).ToString().Indent(1);
 
-        var fileContent = _fileSystem.ReadAllText(configureServicesFilePath);
+        var fileContent = _fileSystem.File.ReadAllText(configureServicesFilePath);
 
         var newContent = new StringBuilder();
 
@@ -103,7 +103,7 @@ public class DependencyInjectionService : IDependencyInjectionService
             newContent = new StringBuilder(fileContent);
         }
 
-        _fileSystem.WriteAllText(configureServicesFilePath, newContent.ToString());
+        _fileSystem.File.WriteAllText(configureServicesFilePath, newContent.ToString());
     }
 
     public async Task AddConfigureServices(string layer, string directory)

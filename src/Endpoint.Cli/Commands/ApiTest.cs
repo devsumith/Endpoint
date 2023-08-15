@@ -44,7 +44,7 @@ public class ApiTest
 
             var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
 
-            _fileSystem.WriteAllText($@"{request.Directory}/{((SyntaxToken)request.EntityName).PascalCase}ControllerTests.cs", contents);
+            _fileSystem.File.WriteAllText($@"{request.Directory}/{((SyntaxToken)request.EntityName).PascalCase}ControllerTests.cs", contents);
         }
     }
 }

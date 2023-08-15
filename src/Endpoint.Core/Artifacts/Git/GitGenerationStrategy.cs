@@ -44,7 +44,7 @@ public class GitGenerationStrategy : IArtifactGenerationStrategy<GitModel>
 
         _commandService.Start($"git config user.email {model.Email}", model.Directory);
 
-        _fileSystem.WriteAllText($@"{model.Directory}{Path.DirectorySeparatorChar}.gitignore", string.Join(Environment.NewLine, _templateLocator.Get("GitIgnoreFile")));
+        _fileSystem.File.WriteAllText($@"{model.Directory}{Path.DirectorySeparatorChar}.gitignore", string.Join(Environment.NewLine, _templateLocator.Get("GitIgnoreFile")));
 
         _commandService.Start($"git remote add origin https://{model.Username}:{model.PersonalAccessToken}@github.com/{model.Username}/{model.RepositoryName}.git", model.Directory);
 

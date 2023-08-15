@@ -24,11 +24,11 @@ public class AggregateArtifactsGenerationStrategy : IArtifactGenerationStrategy<
     {
         var aggregateDirectory = $"{model.Directory}{Path.DirectorySeparatorChar}{model.Aggregate.Name}Aggregate";
 
-        _fileSystem.CreateDirectory(aggregateDirectory);
+        _fileSystem.Directory.CreateDirectory(aggregateDirectory);
 
-        _fileSystem.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Commands");
+        _fileSystem.Directory.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Commands");
 
-        _fileSystem.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries");
+        _fileSystem.Directory.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries");
 
         await artifactGenerator
             .GenerateAsync(new ObjectFileModel<ClassModel>(model.Aggregate, model.Aggregate.UsingDirectives, model.Aggregate.Name, aggregateDirectory, ".cs"));

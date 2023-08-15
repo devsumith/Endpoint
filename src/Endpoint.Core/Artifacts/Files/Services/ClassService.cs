@@ -83,7 +83,7 @@ public class ClassService : IClassService
         {
             foreach (var path in Directory.GetFiles(Path.GetDirectoryName(projectDirectory), "*.cs", SearchOption.AllDirectories))
             {
-                if (_fileSystem.ReadAllText(path).Contains($"class {name}"))
+                if (_fileSystem.File.ReadAllText(path).Contains($"class {name}"))
                 {
                     classPath = path;
                     break;
@@ -95,7 +95,7 @@ public class ClassService : IClassService
         {
             foreach (var path in Directory.GetFiles(Path.GetDirectoryName(Path.GetDirectoryName(projectDirectory)), "*.cs", SearchOption.AllDirectories))
             {
-                if (_fileSystem.ReadAllText(path).Contains($"class {name}"))
+                if (_fileSystem.File.ReadAllText(path).Contains($"class {name}"))
                 {
                     classPath = path;
                     break;
@@ -103,7 +103,7 @@ public class ClassService : IClassService
             }
         }
 
-        _fileSystem.CreateDirectory($"{projectDirectory}{Path.DirectorySeparatorChar}{name}");
+        _fileSystem.Directory.CreateDirectory($"{projectDirectory}{Path.DirectorySeparatorChar}{name}");
 
 
         foreach (var methodModel in Parse(name, classPath))
@@ -161,7 +161,7 @@ public class ClassService : IClassService
 
         var insideClass = false;
 
-        foreach (var line in _fileSystem.ReadAllLines(path))
+        foreach (var line in _fileSystem.File.ReadAllLines(path))
         {
             if (insideClass)
             {

@@ -148,7 +148,7 @@ public class SettingsModel
 
     public void PersistToFileSystem(IFileSystem fileSystem)
     {
-        fileSystem.WriteAllLines($"{RootDirectory}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
+        fileSystem.File.WriteAllLines($"{RootDirectory}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
                 Serialize(this, new JsonSerializerOptions
                     {
                         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -164,7 +164,7 @@ public class SettingsModel
             AppDirectories = AppDirectories.Concat(new string[1] { directory }).ToList();
         }
 
-        fileSystem.WriteAllLines($"{RootDirectory}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
+        fileSystem.File.WriteAllLines($"{RootDirectory}{Path.DirectorySeparatorChar}clisettings.json", new string[1] {
                 Serialize(this, new JsonSerializerOptions
                     {
                         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

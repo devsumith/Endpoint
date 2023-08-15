@@ -58,7 +58,7 @@ public class CoreProjectEnsureArtifactGenerationStrategy : IArtifactGenerationSt
 
     private void EnsureDefaultFilesRemoved(string projectDirectory)
     {
-        _fileSystem.Delete($"{projectDirectory}{Path.DirectorySeparatorChar}Class1.cs");
+        _fileSystem.File.Delete($"{projectDirectory}{Path.DirectorySeparatorChar}Class1.cs");
     }
 
     private void EnsureDefaultFilesAdd(IArtifactGenerator artifactGenerator, string projectDirectory)
@@ -77,7 +77,7 @@ public class CoreProjectEnsureArtifactGenerationStrategy : IArtifactGenerationSt
             "Microsoft.EntityFrameworkCore"
         })
         {
-            var projectFileContents = _fileSystem.ReadAllText(projectPath);
+            var projectFileContents = _fileSystem.File.ReadAllText(projectPath);
 
             if (!projectFileContents.Contains($"PackageReference Include=\"{package}\""))
             {

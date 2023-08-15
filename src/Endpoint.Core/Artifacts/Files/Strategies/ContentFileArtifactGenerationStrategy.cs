@@ -20,6 +20,6 @@ public class ContentFileArtifactGenerationStrategy : IArtifactGenerationStrategy
     public int Priority => 0;
     public async Task GenerateAsync(IArtifactGenerator artifactGenerator, ContentFileModel model, dynamic context = null)
     {
-        _fileSystem.WriteAllText(model.Path, model.Content);
+        _fileSystem.File.WriteAllText(model.Path, model.Content);
     }
 }

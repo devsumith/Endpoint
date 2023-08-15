@@ -49,7 +49,7 @@ public class ProjectModel
     {
         var launchSettingsPath = System.IO.Path.Combine(Directory, "Properties", "launchSettings.json");
 
-        var json = JsonSerializer.Deserialize<JsonNode>(fileSystem.ReadAllText(launchSettingsPath));
+        var json = JsonSerializer.Deserialize<JsonNode>(fileSystem.File.ReadAllText(launchSettingsPath));
 
         var applicationUrl = $"{json["profiles"]["https"]["applicationUrl"]}".Split(";").First();
 

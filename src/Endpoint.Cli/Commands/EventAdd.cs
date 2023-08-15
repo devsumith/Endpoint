@@ -55,7 +55,7 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest>
 
         if (!Directory.Exists(aggregateEventsDirectory))
         {
-            _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{aggregateEventsDirectory}");
+            _fileSystem.Directory.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{aggregateEventsDirectory}");
         }
 
         _commandService.Start($"endpoint event {request.Aggregate} {eventName}", aggregateEventsDirectory);
@@ -116,7 +116,7 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest>
 
         }
 
-        _fileSystem.WriteAllText($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}{((SyntaxToken)request.Aggregate).PascalCase}.cs", string.Join(Environment.NewLine, newLines));
+        _fileSystem.File.WriteAllText($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}{((SyntaxToken)request.Aggregate).PascalCase}.cs", string.Join(Environment.NewLine, newLines));
 
 
     }

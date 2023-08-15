@@ -38,7 +38,7 @@ public class Feature
         {
             if (request.Directory.EndsWith("Features"))
             {
-                _fileSystem.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{((SyntaxToken)request.Entity).PascalCasePlural}");
+                _fileSystem.Directory.CreateDirectory($"{request.Directory}{Path.DirectorySeparatorChar}{((SyntaxToken)request.Entity).PascalCasePlural}");
 
                 request.Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{((SyntaxToken)request.Entity).PascalCasePlural}";
             }

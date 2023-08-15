@@ -37,7 +37,7 @@ public class AddArrangeActAssertFileCreatedHandler : INotificationHandler<FileCr
         if (!notification.Path.EndsWith("spec.ts"))
             return;
 
-        var content = _fileSystem.ReadAllText(notification.Path);
+        var content = _fileSystem.File.ReadAllText(notification.Path);
 
         if (content.Contains("// ARRANGE") && content.Contains("// ACT") && content.Contains("// ASSERT"))
             return;
@@ -78,6 +78,6 @@ public class AddArrangeActAssertFileCreatedHandler : INotificationHandler<FileCr
             }
         }
 
-        _fileSystem.WriteAllText(notification.Path, contentBuilder.ToString());
+        _fileSystem.File.WriteAllText(notification.Path, contentBuilder.ToString());
     }
 }

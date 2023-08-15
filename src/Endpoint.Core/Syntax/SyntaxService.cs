@@ -26,9 +26,9 @@ public class SyntaxService : ISyntaxService
 
             var plantUmlPath = $"{solutionDirectory}{Path.DirectorySeparatorChar}documentation{Path.DirectorySeparatorChar}model.plantuml";
 
-            if (fileSystem.Exists(plantUmlPath))
+            if (fileSystem.File.Exists(plantUmlPath))
             {
-                var plantUml = fileSystem.ReadAllText(plantUmlPath);
+                var plantUml = fileSystem.File.ReadAllText(plantUmlPath);
 
                 SolutionModel = parserStrategyFactory.CreateFor(plantUml, new
                 {

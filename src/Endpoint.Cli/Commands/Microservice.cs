@@ -150,6 +150,6 @@ public class MicroserviceRequestHandler : IRequestHandler<MicroserviceRequest>
         throw new NotImplementedException();
     }
 
-    public bool IsExistingWorkspace(string directory) => _fileSystem.Exists($"{directory}{Path.DirectorySeparatorChar}Workspace.json");
+    public bool IsExistingWorkspace(string directory) => _fileSystem.File.Exists($"{directory}{Path.DirectorySeparatorChar}Workspace.json");
 }
 */

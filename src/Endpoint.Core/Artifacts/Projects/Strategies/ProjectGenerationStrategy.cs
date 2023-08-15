@@ -47,25 +47,25 @@ public class ProjectGenerationStrategy : IArtifactGenerationStrategy<ProjectMode
             _ => "console"
         };
 
-        _fileSystem.CreateDirectory(model.Directory);
+        _fileSystem.Directory.CreateDirectory(model.Directory);
 
         _commandService.Start($"dotnet new {templateType} --framework net7.0", model.Directory);
 
-        foreach (var path in _fileSystem.GetFiles(model.Directory, "*1.cs", SearchOption.AllDirectories))
-            _fileSystem.Delete(path);
+        foreach (var path in _fileSystem.Directory.GetFiles(model.Directory, "*1.cs", SearchOption.AllDirectories))
+            _fileSystem.File.Delete(path);
 
         if (templateType == "webapi")
         {
-            _fileSystem.Delete($"{model.Directory}{Path.DirectorySeparatorChar}Controllers{Path.DirectorySeparatorChar}WeatherForecastController.cs");
+            _fileSystem.File.Delete($"{model.Directory}{Path.DirectorySeparatorChar}Controllers{Path.DirectorySeparatorChar}WeatherForecastController.cs");
 
-            _fileSystem.Delete($"{model.Directory}{Path.DirectorySeparatorChar}WeatherForecast.cs");
+            _fileSystem.File.Delete($"{model.Directory}{Path.DirectorySeparatorChar}WeatherForecast.cs");
 
-            _fileSystem.DeleteDirectory($"{model.Directory}{Path.DirectorySeparatorChar}Controllers");
+            _fileSystem.Directory.Delete($"{model.Directory}{Path.DirectorySeparatorChar}Controllers");
         }
 
         foreach (var folder in model.Folders)
         {
-            _fileSystem.CreateDirectory(folder.Directory);
+            _fileSystem.Directory.CreateDirectory(folder.Directory);
         }
 
         foreach (var package in model.Packages)

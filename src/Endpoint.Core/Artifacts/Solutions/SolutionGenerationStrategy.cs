@@ -26,7 +26,7 @@ public class SolutionGenerationStrategy : IArtifactGenerationStrategy<SolutionMo
 
     public async Task GenerateAsync(IArtifactGenerator artifactGenerator, SolutionModel model, dynamic context = null)
     {
-        _fileSystem.CreateDirectory(model.SolutionDirectory);
+        _fileSystem.Directory.CreateDirectory(model.SolutionDirectory);
 
         _commandService.Start($"dotnet new sln -n {model.Name}", model.SolutionDirectory);
 
@@ -45,7 +45,7 @@ public class SolutionGenerationStrategy : IArtifactGenerationStrategy<SolutionMo
         {
             foreach (var project in folder.Projects.OrderBy(x => x.Order))
             {
-                _fileSystem.CreateDirectory(folder.Directory);
+                _fileSystem.Directory.CreateDirectory(folder.Directory);
 
                 await artifactGenerator.GenerateAsync(project);
 

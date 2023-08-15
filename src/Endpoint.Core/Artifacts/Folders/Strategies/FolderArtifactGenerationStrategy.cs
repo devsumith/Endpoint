@@ -27,7 +27,7 @@ public class FolderArtifactGenerationStrategy : IArtifactGenerationStrategy<Fold
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
-        _fileSystem.CreateDirectory(model.Directory);
+        _fileSystem.Directory.CreateDirectory(model.Directory);
 
         foreach (var fileModel in model.Files)
         {

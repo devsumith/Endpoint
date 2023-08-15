@@ -4,3 +4,4 @@
 global using System;
 global using System.Threading.Tasks;
 global using Endpoint.Core.Syntax;
+global using System.IO.Abstractions;

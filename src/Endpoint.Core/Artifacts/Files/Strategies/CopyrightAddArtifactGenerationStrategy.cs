@@ -51,7 +51,7 @@ public class CopyrightAddArtifactGenerationStrategy : IArtifactGenerationStrateg
 
         if (validExtension && !ignore)
         {
-            var originalFileContents = _fileSystem.ReadAllText(model.Path);
+            var originalFileContents = _fileSystem.File.ReadAllText(model.Path);
 
             if (originalFileContents.Contains(copyright) == false)
             {
@@ -63,7 +63,7 @@ public class CopyrightAddArtifactGenerationStrategy : IArtifactGenerationStrateg
 
                 newFileContentsBuilder.AppendLine(originalFileContents);
 
-                _fileSystem.WriteAllText(model.Path, newFileContentsBuilder.ToString());
+                _fileSystem.File.WriteAllText(model.Path, newFileContentsBuilder.ToString());
             }
         }
     }

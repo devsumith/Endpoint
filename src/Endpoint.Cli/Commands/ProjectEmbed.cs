@@ -55,7 +55,7 @@ public class ProjectEmbedRequestHandler : IRequestHandler<ProjectEmbedRequest>
                 break;
             }
 
-            var content = _fileSystem.ReadAllText(path);
+            var content = _fileSystem.File.ReadAllText(path);
 
             var resolvedPath = path.Replace(projectDirectory, request.OutputDirectory);
 
@@ -69,10 +69,10 @@ public class ProjectEmbedRequestHandler : IRequestHandler<ProjectEmbedRequest>
 
                 if (parts.Count > 1)
                 {
-                    _fileSystem.CreateDirectory(string.Join(Path.DirectorySeparatorChar, parts));
+                    _fileSystem.Directory.CreateDirectory(string.Join(Path.DirectorySeparatorChar, parts));
                 }
             }
-            _fileSystem.WriteAllText(resolvedPath, content);
+            _fileSystem.File.WriteAllText(resolvedPath, content);
         }
 
     }

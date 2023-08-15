@@ -71,7 +71,7 @@ public class WebSocketAppCreateRequestHandler : IRequestHandler<WebSocketAppCrea
 
         if (System.IO.Directory.Exists(model.SolutionDirectory))
         {
-            _fileSystem.DeleteDirectory(model.SolutionDirectory);
+            _fileSystem.Directory.Delete(model.SolutionDirectory);
         }
 
         await _generator.GenerateAsync(model);

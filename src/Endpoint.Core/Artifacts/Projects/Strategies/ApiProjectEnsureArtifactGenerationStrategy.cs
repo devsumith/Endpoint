@@ -57,8 +57,8 @@ public class ApiProjectEnsureArtifactGenerationStrategy : IArtifactGenerationStr
 
     private void EnsureDefaultFilesRemoved(string projectDirectory)
     {
-        _fileSystem.Delete($"{projectDirectory}{Path.DirectorySeparatorChar}Controllers{Path.DirectorySeparatorChar}WeatherForecastController.cs");
-        _fileSystem.Delete($"{projectDirectory}{Path.DirectorySeparatorChar}WeatherForecast.cs");
+        _fileSystem.File.Delete($"{projectDirectory}{Path.DirectorySeparatorChar}Controllers{Path.DirectorySeparatorChar}WeatherForecastController.cs");
+        _fileSystem.File.Delete($"{projectDirectory}{Path.DirectorySeparatorChar}WeatherForecast.cs");
     }
 
     private async Task EnsureApiDefaultFilesAdd(IArtifactGenerator artifactGenerator, string projectDirectory)
@@ -67,12 +67,12 @@ public class ApiProjectEnsureArtifactGenerationStrategy : IArtifactGenerationStr
 
         var dbContext = $"{projectName}DbContext";
 
-        if (!_fileSystem.Exists($"{projectDirectory}{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}launchSettings.json"))
+        if (!_fileSystem.File.Exists($"{projectDirectory}{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}launchSettings.json"))
         {
             await artifactGenerator.GenerateAsync(_fileFactory.LaunchSettingsJson(projectDirectory, projectName, 5000));
         }
 
-        if (!_fileSystem.Exists($"{projectDirectory}{Path.DirectorySeparatorChar}ConfigureServices.cs"))
+        if (!_fileSystem.File.Exists($"{projectDirectory}{Path.DirectorySeparatorChar}ConfigureServices.cs"))
         {
             await artifactGenerator.GenerateAsync(_fileFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", projectDirectory, tokens: new TokensBuilder()
                 .With("DbContext", dbContext)
@@ -100,7 +100,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : IArtifactGenerationStr
             "Swashbuckle.AspNetCore.Newtonsoft"
         })
         {
-            var projectFileContents = _fileSystem.ReadAllText(projectPath);
+            var projectFileContents = _fileSystem.File.ReadAllText(projectPath);
 
             if (!projectFileContents.Contains($"PackageReference Include=\"{package}\""))
             {

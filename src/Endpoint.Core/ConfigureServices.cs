@@ -23,6 +23,7 @@ using Endpoint.Core.Syntax.Entities.Legacy;
 using Endpoint.Core.Syntax.Methods.Factories;
 using Endpoint.Core.Syntax.RouteHandlers;
 using Endpoint.Core.Syntax.Types;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Reflection;
 

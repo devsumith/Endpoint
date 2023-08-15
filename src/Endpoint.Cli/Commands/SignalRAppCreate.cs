@@ -98,7 +98,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var programContent = new List<string>();
 
-        foreach (var line in _fileSystem.ReadAllLines(programPath))
+        foreach (var line in _fileSystem.File.ReadAllLines(programPath))
         {
             if (line.Contains("app.Run();"))
             {
@@ -110,7 +110,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             programContent.Add(line);
         }
 
-        _fileSystem.WriteAllLines(programPath, programContent.ToArray());
+        _fileSystem.File.WriteAllLines(programPath, programContent.ToArray());
 
         ServiceAdd(projectModel, signalrServiceAddition);
     }
@@ -121,7 +121,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var configureServicesContent = new List<string>();
 
-        foreach (var line in _fileSystem.ReadAllLines(configureServicePath))
+        foreach (var line in _fileSystem.File.ReadAllLines(configureServicePath))
         {
             configureServicesContent.Add(line);
 
@@ -131,7 +131,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             }
         }
 
-        _fileSystem.WriteAllLines(configureServicePath, configureServicesContent.ToArray());
+        _fileSystem.File.WriteAllLines(configureServicePath, configureServicesContent.ToArray());
     }
 
     public async Task Handle(SignalRAppCreateRequest request, CancellationToken cancellationToken)

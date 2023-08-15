@@ -48,7 +48,7 @@ public class ProjectService : IProjectService
     {
         var solution = _fileProvider.Get("*.sln", model.Directory);
         var solutionName = Path.GetFileName(solution);
-        var solutionDirectory = _fileSystem.GetDirectoryName(solution);
+        var solutionDirectory = _fileSystem.Path.GetDirectoryName(solution);
 
         if(model.Extension == ".csproj")
         {
@@ -64,7 +64,7 @@ public class ProjectService : IProjectService
                 "EndProject"
             };
 
-            foreach(var line in _fileSystem.ReadAllLines(solution))
+            foreach(var line in _fileSystem.File.ReadAllLines(solution))
             {
                 lines.Add(line);
 
@@ -77,7 +77,7 @@ public class ProjectService : IProjectService
                 }
             }
 
-            _fileSystem.WriteAllLines(solution, lines.ToArray());
+            _fileSystem.File.WriteAllLines(solution, lines.ToArray());
         }
         
     }
@@ -131,9 +131,9 @@ public class ProjectService : IProjectService
     {
         var projectPath = _fileProvider.Get("*.csproj", directory);
 
-        var projectDirectory = _fileSystem.GetDirectoryName(projectPath);
+        var projectDirectory = _fileSystem.Path.GetDirectoryName(projectPath);
 
-        var projectFileContents = _fileSystem.ReadAllText(projectPath);
+        var projectFileContents = _fileSystem.File.ReadAllText(projectPath);
 
         if (!projectFileContents.Contains($"PackageReference Include=\"{name}\""))
         {
@@ -146,7 +146,7 @@ public class ProjectService : IProjectService
     {
         var projectPath = _fileProvider.Get("*.csproj", directory);
 
-        var projectDirectory = _fileSystem.GetDirectoryName(projectPath);
+        var projectDirectory = _fileSystem.Path.GetDirectoryName(projectPath);
 
         foreach (var file in new List<FileModel>()
         {
@@ -155,7 +155,7 @@ public class ProjectService : IProjectService
             _fileFactory.CreateLinqExtensions(projectDirectory)
         })
         {
-            if (!_fileSystem.Exists(file.Path))
+            if (!_fileSystem.File.Exists(file.Path))
                 await _artifactGenerator.GenerateAsync(file);
         }
     }

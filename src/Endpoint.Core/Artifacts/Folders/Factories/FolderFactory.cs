@@ -48,7 +48,7 @@ public class FolderFactory : IFolderFactory
     {
         var aggregateName = aggregate.Name;
 
-        _fileSystem.CreateDirectory(directory);
+        _fileSystem.Directory.CreateDirectory(directory);
 
         var model = new FolderModel("Commands", directory);
 

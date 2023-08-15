@@ -47,7 +47,7 @@ public class InfrastructureProjectService : IInfrastructureProjectService
 
         var dataDirectory = $"{csProjDirectory}{Path.DirectorySeparatorChar}Data";
 
-        _fileSystem.CreateDirectory(dataDirectory);
+        _fileSystem.Directory.CreateDirectory(dataDirectory);
 
         var serviceName = Path.GetFileNameWithoutExtension(csProjPath).Split('.').First();
 

@@ -40,11 +40,11 @@ public class LitWorkspaceArtifactGenerationStrategy : IArtifactGenerationStrateg
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
-        _fileSystem.CreateDirectory(model.Directory);
+        _fileSystem.Directory.CreateDirectory(model.Directory);
 
-        _fileSystem.CreateDirectory($"{model.Directory}{Path.DirectorySeparatorChar}apps");
+        _fileSystem.Directory.CreateDirectory($"{model.Directory}{Path.DirectorySeparatorChar}apps");
 
-        _fileSystem.CreateDirectory($"{model.Directory}{Path.DirectorySeparatorChar}libs");
+        _fileSystem.Directory.CreateDirectory($"{model.Directory}{Path.DirectorySeparatorChar}libs");
 
         _commandService.Start("npm init -y", model.Directory);
 
@@ -84,20 +84,20 @@ public class LitWorkspaceArtifactGenerationStrategy : IArtifactGenerationStrateg
             { "test","jest" },
         });
 
-        _fileSystem.WriteAllText($"{model.Directory}lit.json", "{ }");
+        _fileSystem.File.WriteAllText($"{model.Directory}lit.json", "{ }");
 
         DefaultContractResolver contractResolver = new DefaultContractResolver
         {
             NamingStrategy = new CamelCaseNamingStrategy()
         };
 
-        _fileSystem.WriteAllText(packageJsonPath, JsonConvert.SerializeObject(packageJsonObject, new JsonSerializerSettings
+        _fileSystem.File.WriteAllText(packageJsonPath, JsonConvert.SerializeObject(packageJsonObject, new JsonSerializerSettings
         {
             ContractResolver = contractResolver,
             Formatting = Formatting.Indented
         }));
 
-        _fileSystem.WriteAllText($"{model.Directory}{Path.DirectorySeparatorChar}tsconfig.json", JsonConvert.SerializeObject(new TsConfigModel(), new JsonSerializerSettings
+        _fileSystem.File.WriteAllText($"{model.Directory}{Path.DirectorySeparatorChar}tsconfig.json", JsonConvert.SerializeObject(new TsConfigModel(), new JsonSerializerSettings
         {
             ContractResolver = contractResolver,
             Formatting = Formatting.Indented
