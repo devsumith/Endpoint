@@ -1,8 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
-using Endpoint.Core.Artifacts.Files.Commands;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.IO;
@@ -10,7 +8,7 @@ using System.Text;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
-public class CopyrightAddArtifactGenerationStrategy : IArtifactGenerationStrategy<FileReferenceModel>
+public class CopyrightAddArtifactGenerationStrategy : GenericArtifactGenerationStrategy<FileReferenceModel>
 {
     private readonly ILogger<CopyrightAddArtifactGenerationStrategy> _logger;
     private readonly ITemplateLocator _templateLocator;
@@ -27,13 +25,7 @@ public class CopyrightAddArtifactGenerationStrategy : IArtifactGenerationStrateg
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
-    public int Priority => 10;
-
-    public bool CanHandle(object model, dynamic context)
-    {
-        return model is FileReferenceModel && context != null && context is CopyrightAdd;
-    }
-    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, FileReferenceModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, FileReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

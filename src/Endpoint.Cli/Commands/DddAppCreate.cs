@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Folders.Factories;
 using Endpoint.Core.Artifacts.Projects.Factories;
@@ -24,6 +23,7 @@ using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Entities.Aggregate;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Artifacts.Services;
+using Endpoint.Core.Artifacts;
 
 namespace Endpoint.Cli.Commands;
 

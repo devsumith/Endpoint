@@ -1,23 +1,19 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
-public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
+public class PageQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerationStrategy<MethodModel>
 {
     private readonly INamingConventionConverter _namingConventionConverter;
+    
     public PageQueryHandlerMethodGenerationStrategy(
-        IServiceProvider serviceProvider,
-        INamingConventionConverter namingConventionConverter,
-        ILogger<MethodSyntaxGenerationStrategy> logger)
-        : base(serviceProvider, logger)
+        INamingConventionConverter namingConventionConverter)
     {
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
@@ -31,10 +27,18 @@ public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationSt
 
         return false;
     }
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target, dynamic context = null)
+    {
+        if (context != null && target is MethodModel)
+        {
+            return await GenerateAsync(generator, target as MethodModel, context);
+        }
 
-    public int Priority => int.MaxValue;
+        return null;
+    }
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
@@ -68,6 +72,6 @@ public class PageQueryHandlerMethodGenerationStrategy : MethodSyntaxGenerationSt
 
         model.Body = builder.ToString();
 
-        return await base.GenerateAsync(syntaxGenerator, model);
+        return await syntaxGenerator.GenerateAsync(model);
     }
 }

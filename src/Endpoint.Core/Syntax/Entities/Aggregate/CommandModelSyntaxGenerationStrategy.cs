@@ -1,21 +1,20 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.Entities.Aggregate;
 
-public class CommandModelSyntaxGenerationStrategy : ISyntaxGenerationStrategy<CommandModel>
+public class CommandModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<CommandModel>
 {
     public CommandModelSyntaxGenerationStrategy(IServiceProvider serviceProvider)
     {
 
     }
 
-    public int Priority => 0;
+    
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, CommandModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, CommandModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 

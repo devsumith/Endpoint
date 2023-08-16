@@ -1,10 +1,9 @@
-using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.Properties;
 
-public class PropertySyntaxGenerationStrategy : ISyntaxGenerationStrategy<PropertyModel>
+public class PropertySyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<PropertyModel>
 {
     private readonly ILogger<PropertySyntaxGenerationStrategy> _logger;
     public PropertySyntaxGenerationStrategy(
@@ -15,9 +14,9 @@ public class PropertySyntaxGenerationStrategy : ISyntaxGenerationStrategy<Proper
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public int Priority { get; } = 0;
+    public int GetPriority() => 0;
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

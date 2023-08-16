@@ -2,18 +2,16 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Abstractions;
-using Endpoint.Core.Services;
-using System.IO;
-using SimpleNLG.Extensions;
+using Endpoint.Core.Artifacts.Projects;
 using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Artifacts.Projects.Services;
-using Endpoint.Core.Artifacts.Projects;
+using Endpoint.Core.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
 

@@ -1,14 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace Endpoint.Core.Syntax;
 
-public class SyntaxReferenceSyntaxGenerationStrategy : ISyntaxGenerationStrategy<SyntaxReferenceModel>
+public class SyntaxReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<SyntaxReferenceModel>
 {
     public static string SetInitialLanguageInAppComponent = nameof(SetInitialLanguageInAppComponent);
 
@@ -25,12 +24,12 @@ public class SyntaxReferenceSyntaxGenerationStrategy : ISyntaxGenerationStrategy
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public int Priority => 10;
+    
 
     public bool CanHandle(object model, dynamic context = null)
         => model is SyntaxReferenceModel && context != null && context.Request == SetInitialLanguageInAppComponent;
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SyntaxReferenceModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SyntaxReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

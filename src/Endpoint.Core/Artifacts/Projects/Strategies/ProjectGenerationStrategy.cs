@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Projects.Enums;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
@@ -11,14 +10,13 @@ using System.Xml.Linq;
 
 namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
-public class ProjectGenerationStrategy : IArtifactGenerationStrategy<ProjectModel>
+public class ProjectGenerationStrategy : GenericArtifactGenerationStrategy<ProjectModel>
 {
     private readonly ILogger<ProjectGenerationStrategy> _logger;
     private readonly IFileSystem _fileSystem;
     private readonly ICommandService _commandService;
 
     public ProjectGenerationStrategy(
-        IServiceProvider serviceProvider,
         ILogger<ProjectGenerationStrategy> logger,
         IFileSystem fileSystem,
         ICommandService commandService)
@@ -29,9 +27,7 @@ public class ProjectGenerationStrategy : IArtifactGenerationStrategy<ProjectMode
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public int Priority { get; } = 0;
-
-    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, ProjectModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator generator, ProjectModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -86,7 +82,7 @@ public class ProjectGenerationStrategy : IArtifactGenerationStrategy<ProjectMode
 
         foreach (var file in model.Files)
         {
-            await artifactGenerator.GenerateAsync(file);
+            await generator.GenerateAsync(file);
         }
 
         if (model.GenerateDocumentationFile || templateType == "web" || templateType == "webapi" || templateType == "angular")

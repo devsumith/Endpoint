@@ -17,7 +17,7 @@ public class PlantUmlClassFileParserStrategy : PlantUmlParserStrategyBase<Object
 
     }
 
-    public int Priority { get; } = 0;
+    public int GetPriority() => 0;
 
     public override bool CanHandle(string plantUml) => plantUml.StartsWith("class");
 

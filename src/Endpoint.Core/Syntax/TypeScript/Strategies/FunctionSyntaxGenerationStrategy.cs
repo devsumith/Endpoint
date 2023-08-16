@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.TypeScript.Strategies;
 
-public class FunctionSyntaxGenerationStrategy : ISyntaxGenerationStrategy<FunctionModel>
+public class FunctionSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<FunctionModel>
 {
     private readonly ILogger<FunctionSyntaxGenerationStrategy> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;
@@ -24,9 +23,9 @@ public class FunctionSyntaxGenerationStrategy : ISyntaxGenerationStrategy<Functi
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    public int Priority => 0;
+    
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, FunctionModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, FunctionModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

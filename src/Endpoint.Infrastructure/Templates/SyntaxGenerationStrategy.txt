@@ -12,7 +12,7 @@ public class {{ modelNamePascalCase }}GenerationStrategy : ISyntaxGenerationStra
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator generator, {{ modelNamePascalCase }}Model model)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, {{ modelNamePascalCase }}Model model)
     {
 
         _logger.LogInformation("Generating syntax. {name}", model.Name);

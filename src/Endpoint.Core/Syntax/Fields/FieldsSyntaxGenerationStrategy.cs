@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,7 @@ using System.Text;
 namespace Endpoint.Core.Syntax.Fields;
 
 
-public class FieldsSyntaxGenerationStrategy : ISyntaxGenerationStrategy<List<FieldModel>>
+public class FieldsSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<List<FieldModel>>
 {
     private readonly ILogger<FieldsSyntaxGenerationStrategy> _logger;
     public FieldsSyntaxGenerationStrategy(
@@ -21,7 +20,7 @@ public class FieldsSyntaxGenerationStrategy : ISyntaxGenerationStrategy<List<Fie
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<FieldModel> model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<FieldModel> model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -38,7 +37,7 @@ public class FieldsSyntaxGenerationStrategy : ISyntaxGenerationStrategy<List<Fie
         return builder.ToString();
     }
 
-    public int Priority => 0;
+    
 
     private async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, FieldModel model, dynamic context = null)
     {

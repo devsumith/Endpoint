@@ -1,14 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Syntax.Properties;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.Entities;
 
-public class IdPropertySyntaxGenerationStrategy : ISyntaxGenerationStrategy<PropertyModel>
+public class IdPropertySyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<PropertyModel>
 {
     private readonly ILogger<IdPropertySyntaxGenerationStrategy> _logger;
     private readonly ISyntaxService _syntaxService;
@@ -23,12 +22,12 @@ public class IdPropertySyntaxGenerationStrategy : ISyntaxGenerationStrategy<Prop
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
     }
 
-    public int Priority => 1;
+    public int GetPriority => 1;
 
     public bool CanHandle(object model, dynamic context = null)
         => model is PropertyModel propertyModel && propertyModel.Id;
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

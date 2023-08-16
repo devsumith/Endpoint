@@ -12,7 +12,7 @@ public class {{ modelNamePascalCase }}GenerationStrategy : IArtifactGenerationSt
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task GenerateAsync(IArtifactGenerator generator, {{ modelNamePascalCase }}Model model)
+    public override async Task GenerateAsync(IArtifactGenerator generator, {{ modelNamePascalCase }}Model model)
     {
         _logger.LogInformation("Generating artifact. {name}", model.Name);
 

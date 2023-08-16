@@ -1,11 +1,8 @@
 ﻿// Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.Classes;
-using Endpoint.Core.Syntax.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -13,49 +10,34 @@ using System.Text;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
-public class ClassFileArtifactGenerationStrategy : ObjectFileIArtifactGenerationStrategy<ClassModel>
-{
-    public ClassFileArtifactGenerationStrategy(ISyntaxGenerator syntaxGenerator, IFileSystem fileSystem, INamespaceProvider namespaceProvider, Observable<INotification> notificationListener, ILoggerFactory loggerFactory, ITemplateLocator templateLocator, ILogger<ObjectFileIArtifactGenerationStrategy<ClassModel>> logger) 
-        : base(syntaxGenerator, fileSystem, namespaceProvider, notificationListener, loggerFactory, templateLocator, logger)
-    {
-    }
-}
-
-public class InterfaceFileArtifactGenerationStrategy : ObjectFileIArtifactGenerationStrategy<InterfaceModel>
-{
-    public InterfaceFileArtifactGenerationStrategy(ISyntaxGenerator syntaxGenerator, IFileSystem fileSystem, INamespaceProvider namespaceProvider, Observable<INotification> notificationListener, ILoggerFactory loggerFactory, ITemplateLocator templateLocator, ILogger<ObjectFileIArtifactGenerationStrategy<InterfaceModel>> logger)
-        : base(syntaxGenerator, fileSystem, namespaceProvider, notificationListener, loggerFactory, templateLocator, logger)
-    {
-    }
-}
-public abstract class ObjectFileIArtifactGenerationStrategy<T> : FileGenerationStrategy, IArtifactGenerationStrategy<ObjectFileModel<T>>
+public abstract class ObjectFileIArtifactGenerationStrategy<T> : GenericArtifactGenerationStrategy<ObjectFileModel<T>>
 {
     private readonly ILogger<ObjectFileIArtifactGenerationStrategy<T>> _logger;
     private readonly ISyntaxGenerator _syntaxGenerator;
     private readonly IFileSystem _fileSystem;
     private readonly INamespaceProvider _namespaceProvider;
     private readonly Observable<INotification> _notificationListener;
+    private readonly IGenericArtifactGenerationStrategy<FileModel> _fileArtifactGenerationStrategy;
 
     public ObjectFileIArtifactGenerationStrategy(
         ISyntaxGenerator syntaxGenerator,
         IFileSystem fileSystem,
         INamespaceProvider namespaceProvider,
         Observable<INotification> notificationListener,
-        ILoggerFactory loggerFactory,
-        ITemplateLocator templateLocator,
+        IGenericArtifactGenerationStrategy<FileModel> fileArtifactGenerationStrategy,
         ILogger<ObjectFileIArtifactGenerationStrategy<T>> logger)
-        :base(loggerFactory.CreateLogger<FileGenerationStrategy>(), fileSystem, templateLocator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
         _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
+        _fileArtifactGenerationStrategy = fileArtifactGenerationStrategy ?? throw new ArgumentNullException(nameof(fileArtifactGenerationStrategy));
     }
 
-    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, ObjectFileModel<T> model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator generator, ObjectFileModel<T> model, dynamic context = null)
     {
-        _logger.LogInformation("Generating artifact for {0}.", model);
+        _logger.LogInformation("Generating Object File. {name}", model.Name);
 
         var builder = new StringBuilder();
 
@@ -78,10 +60,12 @@ public abstract class ObjectFileIArtifactGenerationStrategy<T> : FileGenerationS
             builder.AppendLine();
         }
 
+        _logger.LogInformation("Generating syntax of Object File. {name}", model.Name);
+
         builder.AppendLine(await _syntaxGenerator.GenerateAsync(model.Object, context));
 
         model.Content = builder.ToString();
 
-        await base.GenerateAsync(artifactGenerator, model, null);
+        await _fileArtifactGenerationStrategy.GenerateAsync(generator, model);
     }
 }

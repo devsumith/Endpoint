@@ -1,40 +1,34 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
 
-public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerationStrategy
+public class CreateCommandHandlerMethodGenerationStrategy : GenericSyntaxGenerationStrategy<MethodModel>
 {
     private readonly INamingConventionConverter _namingConventionConverter;
-    public CreateCommandHandlerMethodGenerationStrategy(
-        IServiceProvider serviceProvider,
-        INamingConventionConverter namingConventionConverter,
-        ILogger<MethodSyntaxGenerationStrategy> logger)
-        : base(serviceProvider, logger)
+
+    public CreateCommandHandlerMethodGenerationStrategy(INamingConventionConverter namingConventionConverter)
     {
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
-    public bool CanHandle(object model, dynamic context = null)
+
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target, dynamic context = null)
     {
-        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
+        if (context != null && target is MethodModel)
         {
-            return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.StartsWith($"Create");
+            return await GenerateAsync(generator, target as MethodModel, context);
         }
 
-        return false;
+        return null;
     }
 
-    public int Priority => int.MaxValue;
-
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         var builder = new StringBuilder();
 
@@ -73,7 +67,7 @@ public class CreateCommandHandlerMethodGenerationStrategy : MethodSyntaxGenerati
 
         model.Body = builder.ToString();
 
-        return await base.GenerateAsync(syntaxGenerator, model);
+        return await syntaxGenerator.GenerateAsync(model);
     }
 }
 

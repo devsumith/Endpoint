@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Projects.Commands;
 using Endpoint.Core.Services;
@@ -11,7 +10,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
-public class ApiProjectEnsureArtifactGenerationStrategy : IArtifactGenerationStrategy<ProjectReferenceModel>
+public class ApiProjectEnsureArtifactGenerationStrategy : GenericArtifactGenerationStrategy<ProjectReferenceModel>
 {
     private readonly ILogger<ApiProjectEnsureArtifactGenerationStrategy> _logger;
     private readonly IFileFactory _fileFactory;
@@ -38,9 +37,9 @@ public class ApiProjectEnsureArtifactGenerationStrategy : IArtifactGenerationStr
     public bool CanHandle(object model, dynamic context = null)
         => model is ProjectReferenceModel && context != null && context.Command is ApiProjectEnsure;
 
-    public int Priority => 10;
+    
 
-    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

@@ -11,7 +11,6 @@ using Endpoint.Core.Services;
 using System.IO;
 using System.Linq;
 using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Types;
 using static SerilogTimings.Operation;
@@ -21,6 +20,7 @@ using Endpoint.Core.Syntax.Methods;
 using SimpleNLG.Extensions;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax;
+using Endpoint.Core.Artifacts;
 
 namespace Endpoint.Cli.Commands;
 

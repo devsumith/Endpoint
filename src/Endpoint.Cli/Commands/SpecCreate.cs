@@ -8,8 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Services;
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Files.Factories;
+using Endpoint.Core.Artifacts;
 
 namespace Endpoint.Cli.Commands;
 

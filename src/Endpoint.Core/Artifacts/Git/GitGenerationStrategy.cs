@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using Octokit;
@@ -9,7 +8,7 @@ using System.IO;
 
 namespace Endpoint.Core.Artifacts.Git;
 
-public class GitGenerationStrategy : IArtifactGenerationStrategy<GitModel>
+public class GitGenerationStrategy : GenericArtifactGenerationStrategy<GitModel>
 {
     private readonly ICommandService _commandService;
     private readonly ILogger<GitGenerationStrategy> _logger;
@@ -27,7 +26,7 @@ public class GitGenerationStrategy : IArtifactGenerationStrategy<GitModel>
 
     public int Priority { get; set; } = 0;
 
-    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, GitModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, GitModel model, dynamic context = null)
     {
         _logger.LogInformation($"{nameof(GitGenerationStrategy)}: Handled");
 

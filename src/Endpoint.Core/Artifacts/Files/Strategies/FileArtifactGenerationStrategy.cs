@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.IO;
@@ -9,7 +8,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
-public class FileGenerationStrategy : IArtifactGenerationStrategy<FileModel>
+public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileModel>
 {
     private readonly ILogger<FileGenerationStrategy> _logger;
     protected readonly IFileSystem _fileSystem;
@@ -25,9 +24,7 @@ public class FileGenerationStrategy : IArtifactGenerationStrategy<FileModel>
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
-    public int Priority => 0;
-
-    public async Task GenerateAsync(IArtifactGenerator generator, FileModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator generator, FileModel model, dynamic? context = null)
     {
         _logger.LogInformation("Generating file artifact. {name}", model.Name);
         

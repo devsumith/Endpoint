@@ -1,33 +1,34 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
-public class TemplatedFileArtifactGenerationStrategy : FileGenerationStrategy, IArtifactGenerationStrategy<TemplatedFileModel>
+public class TemplatedFileArtifactGenerationStrategy : GenericArtifactGenerationStrategy<TemplatedFileModel>
 {
     private readonly ILogger<TemplatedFileArtifactGenerationStrategy> _logger;
     private readonly ITemplateProcessor _templateProcessor;
     private readonly ISolutionNamespaceProvider _solutionNamespaceProvider;
-
+    private readonly ITemplateLocator _templateLocator;
+    private readonly IGenericArtifactGenerationStrategy<FileModel> _fileModelGenerationStrategy;
     public TemplatedFileArtifactGenerationStrategy(
+        IGenericArtifactGenerationStrategy<FileModel> fileModelGenerationStrategy,
         ITemplateProcessor templateProcessor,
         ITemplateLocator templateLocator,
-        IFileSystem fileSystem,
         ISolutionNamespaceProvider solutionNamespaceProvider,
-        ILogger<TemplatedFileArtifactGenerationStrategy> logger,
-        ILoggerFactory loggerFactory)
-        :base(loggerFactory.CreateLogger<FileGenerationStrategy>(), fileSystem, templateLocator)
+        ILogger<TemplatedFileArtifactGenerationStrategy> logger)        
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
         _solutionNamespaceProvider = solutionNamespaceProvider ?? throw new ArgumentNullException(nameof(solutionNamespaceProvider));
+        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
+        _fileModelGenerationStrategy = fileModelGenerationStrategy ?? throw new ArgumentNullException(nameof(fileModelGenerationStrategy));
     }
 
-    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, TemplatedFileModel model, dynamic? context = null)
+
+    public override async Task GenerateAsync(IArtifactGenerator generator, TemplatedFileModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -46,7 +47,6 @@ public class TemplatedFileArtifactGenerationStrategy : FileGenerationStrategy, I
 
         model.Content = string.Join(Environment.NewLine, result);
 
-        await base.GenerateAsync(artifactGenerator, model as FileModel, null);
-
+        await _fileModelGenerationStrategy.GenerateAsync(generator, model, null);
     }
 }

@@ -1,14 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.Interfaces;
 
-public class InterfaceSyntaxGenerationStrategy : ISyntaxGenerationStrategy<InterfaceModel>
+public class InterfaceSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<InterfaceModel>
 {
     private readonly ILogger<InterfaceSyntaxGenerationStrategy> _logger;
     public InterfaceSyntaxGenerationStrategy(
@@ -18,15 +17,8 @@ public class InterfaceSyntaxGenerationStrategy : ISyntaxGenerationStrategy<Inter
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-
-    public bool CanHandle(InterfaceModel model, dynamic context = null)
-    {
-        return model as InterfaceModel != null;
-    }
-
-    public int Priority => 0;
-
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, InterfaceModel model, dynamic context = null)
+    
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, InterfaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -56,7 +48,7 @@ public class InterfaceSyntaxGenerationStrategy : ISyntaxGenerationStrategy<Inter
             builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Properties, context)).Indent(1));
 
         if (model.Methods.Count > 0)
-            builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Methods, context)).Indent(1));
+            builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Methods, this)).Indent(1));
 
         builder.AppendLine("}");
 

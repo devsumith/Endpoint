@@ -1,13 +1,12 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.RequestHandlers;
 
-public class RequestHandlerGetByIdSyntaxGenerationStrategy : ISyntaxGenerationStrategy<RequestHandlerModel>
+public class RequestHandlerGetByIdSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<RequestHandlerModel>
 {
     private readonly ILogger<RequestHandlerGetByIdSyntaxGenerationStrategy> _logger;
     public RequestHandlerGetByIdSyntaxGenerationStrategy(
@@ -18,11 +17,11 @@ public class RequestHandlerGetByIdSyntaxGenerationStrategy : ISyntaxGenerationSt
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public int Priority { get; } = 0;
+    public int GetPriority() => 0;
 
     public bool CanHandle(object model, dynamic context = null)
         => model is RequestHandlerModel requestHandlerModel && requestHandlerModel.RouteType == RouteType.GetById;
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RequestHandlerModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RequestHandlerModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0} and type {1}.", model);
 

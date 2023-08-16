@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Projects.Enums;
 using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Artifacts.Solutions;
@@ -16,6 +15,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Endpoint.Core.Artifacts;
 
 namespace Endpoint.Cli.Commands;
 

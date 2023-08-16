@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core;
-using Endpoint.Core.Abstractions;
+using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.AngularProjects;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Files.Services;
@@ -108,8 +108,8 @@ public static class ConfigureServices
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlMethodParserStrategy>();
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlPropertyParserStrategy>();
         services.AddSingleton<IClassFactory, ClassFactory>();
-        services.AddSingleton(typeof(ISyntaxGenerationStrategy<>), typeof(Constants).Assembly);
-        services.AddSingleton(typeof(IArtifactGenerationStrategy<>), typeof(Constants).Assembly);
+        services.AddSingleton(typeof(IGenericSyntaxGenerationStrategy<>), typeof(Constants).Assembly);
+        services.AddSingleton(typeof(IGenericArtifactGenerationStrategy<>), typeof(Constants).Assembly);
     }
 
     public static void AddSingleton(this IServiceCollection services, Type @interface, Assembly assembly)

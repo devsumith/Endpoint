@@ -1,13 +1,12 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.Attributes.Strategies;
 
-public class ProducesResponseTypeAttributeSyntaxGenerationStrategy : ISyntaxGenerationStrategy<ProducesResponseTypeAttributeModel>
+public class ProducesResponseTypeAttributeSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<ProducesResponseTypeAttributeModel>
 {
     private readonly ILogger<ProducesResponseTypeAttributeSyntaxGenerationStrategy> _logger;
     public ProducesResponseTypeAttributeSyntaxGenerationStrategy(
@@ -18,9 +17,9 @@ public class ProducesResponseTypeAttributeSyntaxGenerationStrategy : ISyntaxGene
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public int Priority { get; set; } = 0;
+    public int GetPriority { get; set; } = 0;
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ProducesResponseTypeAttributeModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ProducesResponseTypeAttributeModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

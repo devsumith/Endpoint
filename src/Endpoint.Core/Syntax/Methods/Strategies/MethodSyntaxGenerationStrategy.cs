@@ -1,30 +1,22 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
-using Endpoint.Core.Syntax.Constructors;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
-public class MethodSyntaxGenerationStrategy : ISyntaxGenerationStrategy<MethodModel>
+public class MethodSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<MethodModel>
 {
     private readonly ILogger<MethodSyntaxGenerationStrategy> _logger;
     public MethodSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
         ILogger<MethodSyntaxGenerationStrategy> logger)
-
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public int Priority { get; } = 0;
-
-    public bool CanHandle(object model, dynamic context = null)
-        => model is MethodModel methodModel && !methodModel.Interface;
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

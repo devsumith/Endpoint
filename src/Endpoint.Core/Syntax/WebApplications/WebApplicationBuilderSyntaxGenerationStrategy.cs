@@ -1,14 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.WebApplications;
 
-public class WebApplicationBuilderSyntaxGenerationStrategy : ISyntaxGenerationStrategy<WebApplicationBuilderModel>
+public class WebApplicationBuilderSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<WebApplicationBuilderModel>
 {
     private readonly ILogger<WebApplicationBuilderSyntaxGenerationStrategy> _logger;
     private readonly ITemplateLocator _templateLocator;
@@ -25,9 +24,9 @@ public class WebApplicationBuilderSyntaxGenerationStrategy : ISyntaxGenerationSt
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
-    public int Priority => 0;
+    
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationBuilderModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationBuilderModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

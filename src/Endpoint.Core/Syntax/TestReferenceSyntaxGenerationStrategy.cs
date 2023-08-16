@@ -1,13 +1,12 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace Endpoint.Core.Syntax;
 
-public class TestReferenceSyntaxGenerationStrategy : ISyntaxGenerationStrategy<TestReferenceModel>
+public class TestReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<TestReferenceModel>
 {
     private readonly ILogger<TestReferenceSyntaxGenerationStrategy> _logger;
     public TestReferenceSyntaxGenerationStrategy(
@@ -18,9 +17,9 @@ public class TestReferenceSyntaxGenerationStrategy : ISyntaxGenerationStrategy<T
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public int Priority => 0;
+    
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, TestReferenceModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, TestReferenceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -1,13 +1,12 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
-public class LaunchSettingsFileGenerationStrategy : FileGenerationStrategy, IArtifactGenerationStrategy<LaunchSettingsFileModel>
+public class LaunchSettingsFileGenerationStrategy : FileGenerationStrategy, IGenericArtifactGenerationStrategy<LaunchSettingsFileModel>
 {
     private readonly ITemplateProcessor _templateProcessor;
 

@@ -4,9 +4,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Projects;
 using Endpoint.Core.Artifacts.Projects.Enums;
+using Endpoint.Core.Artifacts;
 
 namespace Endpoint.Cli.Commands;
 

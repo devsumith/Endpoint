@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.Constructors;
 
-public class ConstructorSyntaxGenerationStrategy : ISyntaxGenerationStrategy<ConstructorModel>
+public class ConstructorSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<ConstructorModel>
 {
     private readonly ILogger<ConstructorSyntaxGenerationStrategy> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;
@@ -24,10 +23,10 @@ public class ConstructorSyntaxGenerationStrategy : ISyntaxGenerationStrategy<Con
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public int Priority => 0;
+    
 
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ConstructorModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ConstructorModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

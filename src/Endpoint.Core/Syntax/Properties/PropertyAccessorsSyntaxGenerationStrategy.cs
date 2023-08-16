@@ -1,11 +1,10 @@
-﻿using Endpoint.Core.Abstractions;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.Properties;
 
-public class PropertyAccessorsSyntaxGenerationStrategy : ISyntaxGenerationStrategy<List<PropertyAccessorModel>>
+public class PropertyAccessorsSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<List<PropertyAccessorModel>>
 {
     private readonly ILogger<PropertyAccessorsSyntaxGenerationStrategy> _logger;
     public PropertyAccessorsSyntaxGenerationStrategy(
@@ -15,10 +14,10 @@ public class PropertyAccessorsSyntaxGenerationStrategy : ISyntaxGenerationStrate
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-    public int Priority { get; } = 0;
+    public int GetPriority() => 0;
 
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<PropertyAccessorModel> model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<PropertyAccessorModel> model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

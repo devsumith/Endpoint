@@ -1,14 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.Classes.Strategies;
 
-public class ClassSyntaxGenerationStrategy : ISyntaxGenerationStrategy<ClassModel>
+public class ClassSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<ClassModel>
 {
     private readonly ILogger<ClassSyntaxGenerationStrategy> _logger;
     public ClassSyntaxGenerationStrategy(
@@ -19,9 +18,9 @@ public class ClassSyntaxGenerationStrategy : ISyntaxGenerationStrategy<ClassMode
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public int Priority { get; set; } = 0;
+    public int GetPriority { get; set; } = 0;
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ClassModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ClassModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

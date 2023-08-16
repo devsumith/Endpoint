@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Lit;
 using Endpoint.Core.Extensions;
@@ -15,7 +14,7 @@ using System.IO;
 
 namespace Endpoint.Core.Artifacts.Workspaces;
 
-public class LitWorkspaceArtifactGenerationStrategy : IArtifactGenerationStrategy<LitWorkspaceModel>
+public class LitWorkspaceArtifactGenerationStrategy : GenericArtifactGenerationStrategy<LitWorkspaceModel>
 {
     private readonly ILogger<LitWorkspaceArtifactGenerationStrategy> _logger;
     private readonly ICommandService _commandService;
@@ -34,9 +33,8 @@ public class LitWorkspaceArtifactGenerationStrategy : IArtifactGenerationStrateg
         _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
-    public int Priority { get; } = 0;
-
-    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, LitWorkspaceModel model, dynamic context = null)
+    
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, LitWorkspaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

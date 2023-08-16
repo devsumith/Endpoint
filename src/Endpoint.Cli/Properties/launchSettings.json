@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "project-add -n eShopOnContainers.CodeGenerator.App -t console -d C:\\projects\\eShopOnContainers\\src\\CodeGenerator",
+      "commandLineArgs": "signalr-app-create -n DeviceStatus2 -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

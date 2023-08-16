@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Abstractions;
+using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Git;
 using MediatR;
 using Microsoft.Extensions.Logging;

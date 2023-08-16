@@ -1,33 +1,39 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
+using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
-public class InterfaceMethodSyntaxGenerationStrategy : ISyntaxGenerationStrategy<MethodModel>
+public class InterfaceMethodSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<MethodModel>
 {
-    private readonly ILogger<MethodSyntaxGenerationStrategy> _logger;
+    private readonly INamingConventionConverter _namingConventionConverter;
+    private readonly ILogger<InterfaceMethodSyntaxGenerationStrategy> _logger;
     public InterfaceMethodSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
-        ILogger<MethodSyntaxGenerationStrategy> logger)
-
+        INamingConventionConverter namingConventionConverter,
+        ILogger<InterfaceMethodSyntaxGenerationStrategy> logger)
     {
+        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public bool CanHandle(object model, dynamic context = null)
+    public override int GetPriority() => 1;
+
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target, dynamic context = null)
     {
-        return model is MethodModel methodModel && methodModel.Interface;
+        if (context != null && context is InterfaceSyntaxGenerationStrategy && target is MethodModel)
+        {
+            return await GenerateAsync(generator, target as MethodModel, context);
+        }
+
+        return null;
     }
 
-    public int Priority => 0;
-
-
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

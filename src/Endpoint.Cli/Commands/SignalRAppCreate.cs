@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Projects;
 using Endpoint.Core.Artifacts.Solutions;
@@ -19,6 +18,7 @@ using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Interfaces;
 using Endpoint.Core.Artifacts.Services;
+using Endpoint.Core.Artifacts;
 
 namespace Endpoint.Cli.Commands;
 
@@ -79,15 +79,6 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         _playwrightService = playwrightService ?? throw new ArgumentNullException(nameof(playwrightService));
     }
 
-    public void PlaywrightCreate(string name, string directory)
-    {
-        var e2eDirectory = Path.Combine(directory, $"{name}.E2e");
-
-        Directory.CreateDirectory(e2eDirectory);
-
-        _playwrightService.Create(e2eDirectory);
-    }
-
     public void HubAdd(ProjectModel projectModel, string name)
     {
         var appBuilderRegistration = $"app.MapHub<{name}.Api.{name}Hub>(\"/hub\");";
@@ -137,6 +128,12 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
     public async Task Handle(SignalRAppCreateRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handled: {0}", nameof(SignalRAppCreateRequestHandler));
+
+        if(_fileSystem.Directory.Exists(Path.Combine(request.Directory, request.Name)))
+        {
+            _fileSystem.Directory.Delete(Path.Combine(request.Directory, request.Name), true);
+        }
+
 
         var solutionModel = await _solutionFactory.Create(request.Name, $"{request.Name}.Api", "webapi", string.Empty, request.Directory);
 
@@ -247,8 +244,6 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         await _artifactGenerator.GenerateAsync(appHtmlFileModel);
 
         Directory.Move(Path.Combine(solutionModel.SrcDirectory, temporaryAppName), Path.Combine(solutionModel.SrcDirectory, $"{request.Name}.App"));
-
-        PlaywrightCreate(request.Name, solutionModel.SrcDirectory);
 
         _commandService.Start("code .", solutionModel.SolutionDirectory);
 

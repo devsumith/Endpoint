@@ -7,13 +7,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Artifacts.Files;
 using System.Collections.Generic;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Interfaces;
 using Endpoint.Core.Syntax.Types;
+using Endpoint.Core.Artifacts;
 
 namespace Endpoint.Cli.Commands;
 

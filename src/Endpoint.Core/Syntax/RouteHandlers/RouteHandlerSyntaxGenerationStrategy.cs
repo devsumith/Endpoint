@@ -1,8 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
-using Endpoint.Core.Syntax;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +8,7 @@ using System.Text;
 
 namespace Endpoint.Core.Syntax.RouteHandlers;
 
-public class RouteHandlerSyntaxGenerationStrategy : ISyntaxGenerationStrategy<RouteHandlerModel>
+public class RouteHandlerSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<RouteHandlerModel>
 {
     private readonly ILogger<RouteHandlerSyntaxGenerationStrategy> _logger;
     public RouteHandlerSyntaxGenerationStrategy(
@@ -21,9 +19,9 @@ public class RouteHandlerSyntaxGenerationStrategy : ISyntaxGenerationStrategy<Ro
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public int Priority { get; } = 0;
+    public int GetPriority() => 0;
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -1,10 +1,9 @@
-using Endpoint.Core.Abstractions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
-public class AngularStandaloneProjectArtifactGenerationStrategy : IArtifactGenerationStrategy<ProjectModel>
+public class AngularStandaloneProjectArtifactGenerationStrategy : IGenericArtifactGenerationStrategy<ProjectModel>
 {
     private readonly ILogger<AngularStandaloneProjectArtifactGenerationStrategy> _logger;
     private readonly IFileSystem _fileSystem;
@@ -22,14 +21,21 @@ public class AngularStandaloneProjectArtifactGenerationStrategy : IArtifactGener
         _templateProcessor= templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
     }
 
-    public int Priority => 1;
-
-    public bool CanHandle(ProjectModel model, dynamic context = null)
+    public async Task<bool> GenerateAsync(IArtifactGenerator generator, object target, dynamic context = null)
     {
-        return model.Extension == ".esproj";
+        if (target is ProjectModel model && model.Extension == ".esproj")
+        {
+            await GenerateAsync(generator, model, context);
+
+            return true;
+        }
+        else
+            return false;
     }
 
-    public async Task GenerateAsync(IArtifactGenerator generator, ProjectModel model, dynamic context = null)
+    public virtual int GetPriority() => 1;
+
+    public async Task GenerateAsync(IArtifactGenerator generator, ProjectModel model, dynamic? context = null)
     {
         var template = string.Join(Environment.NewLine, _templateLocator.Get("EsProj"));
 

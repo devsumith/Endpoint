@@ -1,19 +1,17 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Abstractions;
-
 namespace Endpoint.Core.Syntax.Controllers;
 
-public class ControllerSyntaxGenerationStrategy : ISyntaxGenerationStrategy<ControllerModel>
+public class ControllerSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<ControllerModel>
 {
     public ControllerSyntaxGenerationStrategy(IServiceProvider serviceProvider)
 
     { }
 
-    public int Priority => 0;
+    
 
-    public async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ControllerModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ControllerModel model, dynamic context = null)
     {
         /*            new ClassBuilder($"{((Token)model).PascalCase}Controller", new Endpoint.Core.Services.Context(), fileSystem)
                 .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")
