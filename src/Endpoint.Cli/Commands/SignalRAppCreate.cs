@@ -49,7 +49,6 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
     private readonly IFileProvider _fileProvider;
     private readonly IFileSystem _fileSystem;
     private readonly IFileFactory _fileFactory;
-    private readonly IPlaywrightService _playwrightService;
 
     public SignalRAppCreateRequestHandler(
         ILogger<SignalRAppCreateRequestHandler> logger,
@@ -62,8 +61,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         IClassFactory classFactory,
         IFileProvider fileProvider,
         IFileSystem fileSystem,
-        IFileFactory fileFactory,
-        IPlaywrightService playwrightService)
+        IFileFactory fileFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
@@ -76,7 +74,6 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
-        _playwrightService = playwrightService ?? throw new ArgumentNullException(nameof(playwrightService));
     }
 
     public void HubAdd(ProjectModel projectModel, string name)
