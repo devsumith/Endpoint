@@ -5,11 +5,11 @@ namespace Endpoint.Core.Syntax;
 
 public abstract class GenericSyntaxGenerationStrategy<T> : IGenericSyntaxGenerationStrategy<T>
 {
-    public abstract Task<string> GenerateAsync(ISyntaxGenerator generator, T model, dynamic context = null);    
+    public abstract Task<string> GenerateAsync(ISyntaxGenerator generator, T model, dynamic context = null);
 
     public async virtual Task<string> GenerateAsync(ISyntaxGenerator generator, object target, dynamic context = null)
     {
-        if(target is T model)
+        if (target is T model)
         {
             return await GenerateAsync(generator, model, context);
         }

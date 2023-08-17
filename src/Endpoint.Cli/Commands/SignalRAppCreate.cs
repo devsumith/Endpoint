@@ -126,7 +126,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
     {
         _logger.LogInformation("Handled: {0}", nameof(SignalRAppCreateRequestHandler));
 
-        if(_fileSystem.Directory.Exists(Path.Combine(request.Directory, request.Name)))
+        if (_fileSystem.Directory.Exists(Path.Combine(request.Directory, request.Name)))
         {
             _fileSystem.Directory.Delete(Path.Combine(request.Directory, request.Name), true);
         }

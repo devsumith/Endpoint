@@ -11,7 +11,8 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("catch2-create")]
-public class Catch2CreateRequest : IRequest {
+public class Catch2CreateRequest : IRequest
+{
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }

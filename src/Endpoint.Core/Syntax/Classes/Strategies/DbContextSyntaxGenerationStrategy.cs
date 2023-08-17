@@ -17,7 +17,7 @@ public class DbContextSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, DbContextModel model, dynamic context = null)
     {

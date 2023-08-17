@@ -7,26 +7,20 @@ using System.IO;
 
 namespace Endpoint.Core.Artifacts.Workspaces;
 
-public class AngularWorkspaceArtifactGenerationStrategy : GenericArtifactGenerationStrategy<AngularWorkspaceModel>
+public class AngularWorkspaceGenerationStrategy : GenericArtifactGenerationStrategy<AngularWorkspaceModel>
 {
-    private readonly ILogger<AngularWorkspaceArtifactGenerationStrategy> _logger;
+    private readonly ILogger<AngularWorkspaceGenerationStrategy> _logger;
     private readonly ICommandService _commandService;
 
-    public AngularWorkspaceArtifactGenerationStrategy(
-        IServiceProvider serviceProvider,
-        ILogger<AngularWorkspaceArtifactGenerationStrategy> logger,
-        ICommandService commandService)
-
+    public AngularWorkspaceGenerationStrategy(ILogger<AngularWorkspaceGenerationStrategy> logger, ICommandService commandService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public int GetPriority() => 0;
-
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, AngularWorkspaceModel model, dynamic context = null)
     {
-        _logger.LogInformation("Generating artifact for {0}.", model);
+        _logger.LogInformation("Generating Angular Workspace. {name}", model.Name);
 
         _commandService.Start($"npm uninstall @angular/cli -g", model.RootDirectory);
 
@@ -37,6 +31,5 @@ public class AngularWorkspaceArtifactGenerationStrategy : GenericArtifactGenerat
         _commandService.Start($"npm install @ngrx/component-store --force", Path.Combine(model.RootDirectory, model.Name));
 
         _commandService.Start($"npm install @ngrx/component --force", Path.Combine(model.RootDirectory, model.Name));
-
     }
 }

@@ -49,7 +49,7 @@ public class ProjectService : IProjectService
         var solutionName = Path.GetFileName(solution);
         var solutionDirectory = _fileSystem.Path.GetDirectoryName(solution);
 
-        if(model.Extension == ".csproj")
+        if (model.Extension == ".csproj")
         {
             _commandService.Start($"dotnet sln {solutionName} add {model.Path}", solutionDirectory);
         }
@@ -63,13 +63,13 @@ public class ProjectService : IProjectService
                 "EndProject"
             };
 
-            foreach(var line in _fileSystem.File.ReadAllLines(solution))
+            foreach (var line in _fileSystem.File.ReadAllLines(solution))
             {
                 lines.Add(line);
 
-                if(line.StartsWith("MinimumVisualStudioVersion"))
+                if (line.StartsWith("MinimumVisualStudioVersion"))
                 {
-                    foreach(var entry in projectEntry)
+                    foreach (var entry in projectEntry)
                     {
                         lines.Add(entry);
                     }
@@ -78,7 +78,7 @@ public class ProjectService : IProjectService
 
             _fileSystem.File.WriteAllLines(solution, lines.ToArray());
         }
-        
+
     }
 
     public async Task AddGenerateDocumentationFile(string csprojFilePath)

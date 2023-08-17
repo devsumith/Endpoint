@@ -17,7 +17,7 @@ public class RequestValidatorSyntaxGenerationStrategy : GenericSyntaxGenerationS
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RequestValidatorModel model, dynamic context = null)
     {

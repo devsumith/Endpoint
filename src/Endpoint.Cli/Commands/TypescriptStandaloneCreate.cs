@@ -12,8 +12,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("ts-project-create")]
-public class TypescriptStandaloneCreateRequest : IRequest {
-    [Option('n',"name")]
+public class TypescriptStandaloneCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 
@@ -36,7 +37,7 @@ public class TypescriptStandaloneCreateRequestHandler : IRequestHandler<Typescri
     {
         _logger.LogInformation("Handled: {0}", nameof(TypescriptStandaloneCreateRequestHandler));
 
-        var model = new ProjectModel(DotNetProjectType.TypeScriptStandalone,request.Name,request.Directory);
+        var model = new ProjectModel(DotNetProjectType.TypeScriptStandalone, request.Name, request.Directory);
 
         await _artifactGenerator.GenerateAsync(model);
     }

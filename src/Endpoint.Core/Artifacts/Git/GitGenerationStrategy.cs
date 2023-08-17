@@ -15,7 +15,7 @@ public class GitGenerationStrategy : GenericArtifactGenerationStrategy<GitModel>
     private readonly ITemplateLocator _templateLocator;
     private readonly IFileSystem _fileSystem;
 
-    public GitGenerationStrategy(IServiceProvider serviceProvider, ILogger<GitGenerationStrategy> logger, ICommandService commandService, ITemplateLocator templateLocator, IFileSystem fileSystem)
+    public GitGenerationStrategy(ILogger<GitGenerationStrategy> logger, ICommandService commandService, ITemplateLocator templateLocator, IFileSystem fileSystem)
 
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -24,9 +24,7 @@ public class GitGenerationStrategy : GenericArtifactGenerationStrategy<GitModel>
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public int Priority { get; set; } = 0;
-
-    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, GitModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, GitModel model, dynamic? context = null)
     {
         _logger.LogInformation($"{nameof(GitGenerationStrategy)}: Handled");
 

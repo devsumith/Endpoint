@@ -9,28 +9,25 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
 
-public class AddResource
+[Verb("add-resource")]
+public class AddResourceRequest : IRequest
 {
-    [Verb("add-resource")]
-    public class Request : IRequest
+    [Option('r', "resource")]
+    public string Resource { get; set; }
+
+    [Option("properties")]
+    public string Properties { get; set; }
+
+    [Option('d', "directory")]
+    public string Directory { get; set; } = Environment.CurrentDirectory;
+}
+
+public class AddResourceHandler : IRequestHandler<AddResourceRequest>
+{
+    public async Task Handle(AddResourceRequest request, CancellationToken cancellationToken)
     {
-        [Option('r', "resource")]
-        public string Resource { get; set; }
+        //var options = TinyMapper.Map<AddResourceOptions>(request);
 
-        [Option("properties")]
-        public string Properties { get; set; }
-
-        [Option('d', "directory")]
-        public string Directory { get; set; } = Environment.CurrentDirectory;
-    }
-
-    public class Handler : IRequestHandler<Request>
-    {
-        public async Task Handle(Request request, CancellationToken cancellationToken)
-        {
-            //var options = TinyMapper.Map<AddResourceOptions>(request);
-
-            //AdditionalResourceGenerator.Generate(options, _factory);
-        }
+        //AdditionalResourceGenerator.Generate(options, _factory);
     }
 }

@@ -12,7 +12,7 @@ public abstract class GenericArtifactGenerationStrategy<T> : IGenericArtifactGen
     {
         if (target is T model)
         {
-            await GenerateAsync(generator, model, context); 
+            await GenerateAsync(generator, model, context);
 
             return true;
         }

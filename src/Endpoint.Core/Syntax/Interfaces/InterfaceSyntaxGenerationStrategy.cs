@@ -17,7 +17,7 @@ public class InterfaceSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-    
+
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, InterfaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);

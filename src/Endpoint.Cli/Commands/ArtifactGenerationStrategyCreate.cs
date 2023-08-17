@@ -58,7 +58,5 @@ public class ArtifactGenerationStrategyCreateRequestHandler : IRequestHandler<Ar
         var model = _fileFactory.CreateTemplate("ArtifactGenerationStrategy", $"{request.Name}ArtifactGenerationStrategy", request.Directory, tokens: tokens);
 
         await _artifactGenerator.GenerateAsync(model);
-
-
     }
 }

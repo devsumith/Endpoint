@@ -24,7 +24,7 @@ public class SyntaxReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationSt
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    
+
 
     public bool CanHandle(object model, dynamic context = null)
         => model is SyntaxReferenceModel && context != null && context.Request == SetInitialLanguageInAppComponent;

@@ -14,7 +14,7 @@ public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : GenericA
         _fileProvider = fileProvider;
     }
 
-    
+
 
     public bool CanHandle(object model, dynamic context = null)
     {

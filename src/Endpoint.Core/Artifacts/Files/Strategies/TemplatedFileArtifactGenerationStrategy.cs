@@ -18,7 +18,7 @@ public class TemplatedFileArtifactGenerationStrategy : GenericArtifactGeneration
         ITemplateProcessor templateProcessor,
         ITemplateLocator templateLocator,
         ISolutionNamespaceProvider solutionNamespaceProvider,
-        ILogger<TemplatedFileArtifactGenerationStrategy> logger)        
+        ILogger<TemplatedFileArtifactGenerationStrategy> logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));

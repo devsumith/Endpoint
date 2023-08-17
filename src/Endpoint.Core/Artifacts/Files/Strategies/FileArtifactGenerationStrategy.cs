@@ -13,9 +13,9 @@ public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileMode
     private readonly ILogger<FileGenerationStrategy> _logger;
     protected readonly IFileSystem _fileSystem;
     protected readonly ITemplateLocator _templateLocator;
-    
+
     public FileGenerationStrategy(
-        ILogger<FileGenerationStrategy> logger, 
+        ILogger<FileGenerationStrategy> logger,
         IFileSystem fileSystem,
         ITemplateLocator templateLocator)
     {
@@ -27,7 +27,7 @@ public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileMode
     public override async Task GenerateAsync(IArtifactGenerator generator, FileModel model, dynamic? context = null)
     {
         _logger.LogInformation("Generating file artifact. {name}", model.Name);
-        
+
         var copyright = string.Join(Environment.NewLine, _templateLocator.Get("Copyright"));
 
 
@@ -51,11 +51,11 @@ public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileMode
 
         var validExtension = extension == ".cs" || extension == ".ts" || extension == ".js";
 
-        _fileSystem.File.WriteAllText(model.Path, validExtension  && !ignore ? string.Join(Environment.NewLine, new string[]
+        _fileSystem.File.WriteAllText(model.Path, validExtension && !ignore ? string.Join(Environment.NewLine, new string[]
         {
             copyright,
             model.Content
-        }): model.Content);
+        }) : model.Content);
 
     }
 }

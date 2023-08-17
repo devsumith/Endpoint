@@ -22,7 +22,7 @@ public class TypeScriptTypeSyntaxGenerationStrategy : GenericSyntaxGenerationStr
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, TypeScriptTypeModel model, dynamic context = null)
     {

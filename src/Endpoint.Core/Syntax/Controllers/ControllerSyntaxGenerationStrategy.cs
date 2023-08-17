@@ -9,7 +9,7 @@ public class ControllerSyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
 
     { }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ControllerModel model, dynamic context = null)
     {

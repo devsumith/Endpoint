@@ -47,7 +47,7 @@ public class ArtifactGenerator : IArtifactGenerator
                 {
                     generateAsync = (object model) => strategy.GenerateAsync(this, model, context);
 
-                    _generateAsyncFuncs.Push(new (model.GetType(), strategy.GetPriority(), generateAsync));
+                    _generateAsyncFuncs.Push(new(model.GetType(), strategy.GetPriority(), generateAsync));
 
                     break;
                 }
@@ -57,7 +57,7 @@ public class ArtifactGenerator : IArtifactGenerator
         {
             await generateAsync(model);
         }
-            
+
     }
 }
 

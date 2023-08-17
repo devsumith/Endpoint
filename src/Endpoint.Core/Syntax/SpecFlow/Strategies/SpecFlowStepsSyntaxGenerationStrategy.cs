@@ -17,7 +17,7 @@ public class SpecFlowStepsSyntaxGenerationStrategy : GenericSyntaxGenerationStra
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SpecFlowStepsModel model, dynamic context = null)
     {

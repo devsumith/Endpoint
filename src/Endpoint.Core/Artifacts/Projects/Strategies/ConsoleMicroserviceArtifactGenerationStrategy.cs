@@ -21,7 +21,7 @@ public class ConsoleMicroserviceArtifactGenerationStrategy : GenericArtifactGene
         _notificationListener = notificationListener;
     }
 
-    
+
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ConsoleMicroserviceProjectModel model, dynamic context = null)
     {

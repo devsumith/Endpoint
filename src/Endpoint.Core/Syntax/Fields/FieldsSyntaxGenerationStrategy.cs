@@ -37,7 +37,7 @@ public class FieldsSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Li
         return builder.ToString();
     }
 
-    
+
 
     private async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, FieldModel model, dynamic context = null)
     {

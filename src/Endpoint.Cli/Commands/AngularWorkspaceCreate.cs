@@ -57,4 +57,3 @@ internal class AngularWorkspaceCreateRequestHandler : IRequestHandler<AngularWor
         await _angularService.CreateWorkspace(request.Name, request.Version, request.ProjectName, request.ProjectType, request.Prefix, request.Directory);
     }
 }
-

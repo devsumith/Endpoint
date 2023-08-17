@@ -13,12 +13,12 @@ public class AngularStandaloneProjectArtifactGenerationStrategy : IGenericArtifa
         ILogger<AngularStandaloneProjectArtifactGenerationStrategy> logger,
         IFileSystem fileSystem,
         ITemplateLocator templateLocator,
-        ITemplateProcessor templateProcessor) 
+        ITemplateProcessor templateProcessor)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _templateLocator= templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
-        _templateProcessor= templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
+        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
+        _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
     }
 
     public async Task<bool> GenerateAsync(IArtifactGenerator generator, object target, dynamic context = null)
@@ -40,7 +40,7 @@ public class AngularStandaloneProjectArtifactGenerationStrategy : IGenericArtifa
         var template = string.Join(Environment.NewLine, _templateLocator.Get("EsProj"));
 
         var result = _templateProcessor.Process(template, new TokensBuilder()
-            .With("projectName",model.Name)
+            .With("projectName", model.Name)
             .Build());
 
         _fileSystem.Directory.CreateDirectory(model.Directory);

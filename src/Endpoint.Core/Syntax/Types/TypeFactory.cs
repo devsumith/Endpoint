@@ -3,11 +3,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.Types;
 
-public class TypeFactory: ITypeFactory
+public class TypeFactory : ITypeFactory
 {
     private readonly ILogger<TypeFactory> _logger;
 
-    public TypeFactory(ILogger<TypeFactory> logger){
+    public TypeFactory(ILogger<TypeFactory> logger)
+    {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -15,9 +16,10 @@ public class TypeFactory: ITypeFactory
     {
         _logger.LogInformation("Create Type");
 
-        return new TypeModel(@class.Name) {
+        return new TypeModel(@class.Name)
+        {
             Class = @class,
-        };       
+        };
     }
 
 }

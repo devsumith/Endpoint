@@ -12,7 +12,7 @@ public class QueryModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
 
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, QueryModel model, dynamic context = null)
     {

@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Artifacts;
 
-public interface IGenericArtifactGenerationStrategy<T>: IArtifactGenerationStrategy
+public interface IGenericArtifactGenerationStrategy<T> : IArtifactGenerationStrategy
 {
-    Task GenerateAsync(IArtifactGenerator generator, T model, dynamic context = null);    
+    Task GenerateAsync(IArtifactGenerator generator, T model, dynamic context = null);
 }

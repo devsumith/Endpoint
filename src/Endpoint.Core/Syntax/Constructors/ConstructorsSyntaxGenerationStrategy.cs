@@ -19,7 +19,7 @@ public class ConstructorsSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<ConstructorModel> model, dynamic context = null)
     {

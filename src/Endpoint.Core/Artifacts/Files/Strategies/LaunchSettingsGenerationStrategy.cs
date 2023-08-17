@@ -11,7 +11,7 @@ public class LaunchSettingsFileGenerationStrategy : FileGenerationStrategy, IGen
     private readonly ITemplateProcessor _templateProcessor;
 
     public LaunchSettingsFileGenerationStrategy(ILoggerFactory loggerFactory, ITemplateProcessor templateProcessor, IFileSystem fileSystem, ITemplateLocator templateLocator)
-        :base(loggerFactory.CreateLogger<FileGenerationStrategy>(), fileSystem, templateLocator)
+        : base(loggerFactory.CreateLogger<FileGenerationStrategy>(), fileSystem, templateLocator)
     {
         _templateProcessor = templateProcessor;
     }

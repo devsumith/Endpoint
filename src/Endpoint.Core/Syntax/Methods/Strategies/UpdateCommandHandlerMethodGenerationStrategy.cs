@@ -12,7 +12,7 @@ namespace Endpoint.Core.Syntax.Methods.Strategies;
 public class UpdateCommandHandlerMethodGenerationStrategy : GenericSyntaxGenerationStrategy<MethodModel>
 {
     private readonly INamingConventionConverter _namingConventionConverter;
-    
+
     public UpdateCommandHandlerMethodGenerationStrategy(
         INamingConventionConverter namingConventionConverter)
     {

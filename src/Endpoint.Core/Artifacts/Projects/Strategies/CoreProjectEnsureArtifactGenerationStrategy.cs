@@ -38,7 +38,7 @@ public class CoreProjectEnsureArtifactGenerationStrategy : GenericArtifactGenera
     public bool CanHandle(object model, dynamic context = null)
         => model is ProjectReferenceModel && context != null && context.Command is CoreProjectEnsure;
 
-    
+
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
     {

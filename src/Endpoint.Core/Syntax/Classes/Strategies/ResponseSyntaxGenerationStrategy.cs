@@ -17,7 +17,7 @@ public class ResponseSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ResponseAttributeModel model, dynamic context = null)
     {

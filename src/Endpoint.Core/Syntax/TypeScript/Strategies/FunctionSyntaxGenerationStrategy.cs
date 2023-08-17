@@ -23,7 +23,7 @@ public class FunctionSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, FunctionModel model, dynamic context = null)
     {

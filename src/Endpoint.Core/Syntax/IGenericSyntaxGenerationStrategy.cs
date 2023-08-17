@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Syntax;
 
-public interface IGenericSyntaxGenerationStrategy<T>: ISyntaxGenerationStrategy
+public interface IGenericSyntaxGenerationStrategy<T> : ISyntaxGenerationStrategy
 {
     Task<string> GenerateAsync(ISyntaxGenerator generator, T model, dynamic context = null);
 }

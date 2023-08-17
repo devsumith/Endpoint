@@ -11,7 +11,7 @@ public class EntityModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrate
 
     }
 
-    
+
 
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, EntityModel model, dynamic context = null)

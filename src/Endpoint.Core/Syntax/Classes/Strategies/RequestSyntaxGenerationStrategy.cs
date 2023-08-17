@@ -17,7 +17,7 @@ public class RequestSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<R
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RequestModel model, dynamic context = null)
     {

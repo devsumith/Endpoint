@@ -24,7 +24,7 @@ public class SyntaxGenerator : ISyntaxGenerator
     }
 
     public async Task<string> GenerateAsync<T>(T model, dynamic context = null)
-    {        
+    {
         if (!_generateAsyncFuncs.Where(x => x.Item1 == typeof(T)).Any())
         {
             var inner = typeof(IGenericSyntaxGenerationStrategy<>).MakeGenericType(model.GetType());
@@ -51,7 +51,7 @@ public class SyntaxGenerator : ISyntaxGenerator
             result = await strategy(this, model, context);
 
             if (result != null)
-            {                
+            {
                 return result;
             }
         }

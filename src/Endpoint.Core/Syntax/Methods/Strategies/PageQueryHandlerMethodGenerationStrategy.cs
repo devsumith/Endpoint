@@ -11,7 +11,7 @@ namespace Endpoint.Core.Syntax.Methods.Strategies;
 public class PageQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerationStrategy<MethodModel>
 {
     private readonly INamingConventionConverter _namingConventionConverter;
-    
+
     public PageQueryHandlerMethodGenerationStrategy(
         INamingConventionConverter namingConventionConverter)
     {

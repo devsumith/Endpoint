@@ -17,7 +17,7 @@ public class TestReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationStra
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, TestReferenceModel model, dynamic context = null)
     {

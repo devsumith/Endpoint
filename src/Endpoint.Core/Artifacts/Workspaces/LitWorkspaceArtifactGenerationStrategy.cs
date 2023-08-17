@@ -33,7 +33,7 @@ public class LitWorkspaceArtifactGenerationStrategy : GenericArtifactGenerationS
         _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
-    
+
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, LitWorkspaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);

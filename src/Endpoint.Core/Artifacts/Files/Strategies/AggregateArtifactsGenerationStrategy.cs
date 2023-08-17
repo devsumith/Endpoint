@@ -17,7 +17,7 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    
+
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, AggregatesModel model, dynamic context = null)
     {

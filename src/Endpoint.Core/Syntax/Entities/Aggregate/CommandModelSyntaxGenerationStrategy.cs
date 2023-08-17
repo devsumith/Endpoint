@@ -12,7 +12,7 @@ public class CommandModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
 
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, CommandModel model, dynamic context = null)
     {
