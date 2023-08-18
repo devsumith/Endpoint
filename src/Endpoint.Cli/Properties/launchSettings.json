@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "signalr-app-create -n DeviceStatus2 -d C:\\projects",
+      "commandLineArgs": "signalr-app-create -n HappyHourShower -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

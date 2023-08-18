@@ -33,6 +33,7 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
+        services.AddSingleton<IObjectCache, ObjectCache>();
         services.AddSingleton<ITypeFactory, TypeFactory>();
         services.AddSingleton<IPlaywrightService, PlaywrightService>();
         services.AddSingleton<IMethodFactory, MethodFactory>();
