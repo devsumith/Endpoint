@@ -43,10 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="nupkg\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Endpoint.Infrastructure\Endpoint.Infrastructure.csproj" />
   </ItemGroup>
 

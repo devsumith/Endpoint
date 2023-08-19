@@ -18,6 +18,9 @@
     <None Remove="Templates\Catch2.txt" />
     <None Remove="Templates\EditorConfig.txt" />
     <None Remove="Templates\EsProj.txt" />
+    <None Remove="Templates\Lit\LitPackageJson.txt" />
+    <None Remove="Templates\Lit\LitTsConfigJson.txt" />
+    <None Remove="Templates\Lit\LitWebpackConfig.txt" />
     <None Remove="Templates\ValueObject.txt" />
     <None Remove="Templates\ValueType.txt" />
   </ItemGroup>
@@ -136,6 +139,9 @@
     <EmbeddedResource Include="Templates\Infrastructure\SeedData.txt" />
     <EmbeddedResource Include="Templates\IntegrationTests\ApiTest.txt" />
     <EmbeddedResource Include="Templates\IntegrationTests\WebApplicationFactory.txt" />
+    <EmbeddedResource Include="Templates\Lit\LitTsConfigJson.txt" />
+    <EmbeddedResource Include="Templates\Lit\LitWebpackConfig.txt" />
+    <EmbeddedResource Include="Templates\Lit\LitPackageJson.txt" />
     <EmbeddedResource Include="Templates\Scss\Actions.txt" />
     <EmbeddedResource Include="Templates\Scss\Brand.txt" />
     <EmbeddedResource Include="Templates\Scss\Breakpoints.txt" />

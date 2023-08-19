@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "signalr-app-create -n HappyHourShower -d C:\\projects",
+      "commandLineArgs": "lit-workspace-create -n Loca -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

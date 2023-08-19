@@ -15,7 +15,6 @@ public class ArtifactGenerator : IArtifactGenerator
     private readonly IObjectCache _cache;
     private readonly IServiceProvider _serviceProvider;
 
-
     public ArtifactGenerator(
 
         ILogger<ArtifactGenerator> logger,
