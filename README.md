@@ -1,5 +1,5 @@
 # Endpoint
-Code Generator via a simple command line interface with first class support for generating Minimal Api's
+Design-Time Code Generator via a command line interface
 
 ## Give a Star! :star:
 
