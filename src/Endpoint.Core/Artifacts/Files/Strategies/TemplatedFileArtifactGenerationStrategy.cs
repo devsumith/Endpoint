@@ -45,7 +45,7 @@ public class TemplatedFileArtifactGenerationStrategy : GenericArtifactGeneration
 
         var result = _templateProcessor.Process(template, model.Tokens);
 
-        model.Content = string.Join(Environment.NewLine, result);
+        model.Body = string.Join(Environment.NewLine, result);
 
         await _fileModelGenerationStrategy.GenerateAsync(generator, model, null);
     }

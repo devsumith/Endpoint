@@ -30,7 +30,6 @@ public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileMode
 
         var copyright = string.Join(Environment.NewLine, _templateLocator.Get("Copyright"));
 
-
         var parts = Path.GetDirectoryName(model.Path).Split(Path.DirectorySeparatorChar);
 
         for (var i = 1; i <= parts.Length; i++)
@@ -54,8 +53,8 @@ public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileMode
         _fileSystem.File.WriteAllText(model.Path, validExtension && !ignore ? string.Join(Environment.NewLine, new string[]
         {
             copyright,
-            model.Content
-        }) : model.Content);
+            model.Body
+        }) : model.Body);
 
     }
 }

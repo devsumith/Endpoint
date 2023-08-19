@@ -3,13 +3,8 @@
 
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
-using Endpoint.Core.Extensions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Endpoint.Core.Artifacts.Lit;
@@ -20,8 +15,6 @@ public class LitWorkspaceArtifactGenerationStrategy : GenericArtifactGenerationS
     private readonly ICommandService _commandService;
     private readonly IFileSystem _fileSystem;
     private readonly IFileFactory _fileFactory;
-    private readonly ITemplateLocator _templateLocator;
-    private readonly ITemplateProcessor _templateProcessor;
 
     public LitWorkspaceArtifactGenerationStrategy(
         ILogger<LitWorkspaceArtifactGenerationStrategy> logger,
@@ -36,14 +29,16 @@ public class LitWorkspaceArtifactGenerationStrategy : GenericArtifactGenerationS
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
-        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
-        _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
     }
-
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, LitWorkspaceModel model, dynamic context = null)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
+
+        if(_fileSystem.Directory.Exists(model.Directory))
+        {
+            _fileSystem.Directory.Delete(model.Directory, true);
+        }
 
         _fileSystem.Directory.CreateDirectory(model.Directory);
 
@@ -55,15 +50,27 @@ public class LitWorkspaceArtifactGenerationStrategy : GenericArtifactGenerationS
 
         var webPackConfig = _fileFactory.CreateTemplate("LitWebpackConfig", "webpack.config", model.Directory, ".js");
 
+        var indexTsModel = new FileModel("index", Path.Combine(model.Directory, "src"), ".ts") { Body = $"console.log(\"{model.Name}\")"};
+
+        var indexHtmlModel = new TemplatedFileModel("LitIndexHtml", "index", model.Directory, ".html", new TokensBuilder()
+            .With("name", model.Name)
+            .Build());
+
         await artifactGenerator.GenerateAsync(webPackConfig);
 
         await artifactGenerator.GenerateAsync(packageJsonModel);
 
         await artifactGenerator.GenerateAsync(tsConfigModel);
 
+        await artifactGenerator.GenerateAsync(indexTsModel);
+
+        await artifactGenerator.GenerateAsync(indexHtmlModel);
+
         _commandService.Start("npm install --force", model.Directory);
 
         _commandService.Start("ts-jest config:init", model.Directory);
+
+        _commandService.Start("code .", model.Directory);
 
     }
 }

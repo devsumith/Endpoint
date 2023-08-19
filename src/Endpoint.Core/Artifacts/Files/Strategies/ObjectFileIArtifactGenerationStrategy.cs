@@ -64,7 +64,7 @@ public abstract class ObjectFileIArtifactGenerationStrategy<T> : GenericArtifact
 
         builder.AppendLine(await _syntaxGenerator.GenerateAsync(model.Object, context));
 
-        model.Content = builder.ToString();
+        model.Body = builder.ToString();
 
         await _fileArtifactGenerationStrategy.GenerateAsync(generator, model);
     }

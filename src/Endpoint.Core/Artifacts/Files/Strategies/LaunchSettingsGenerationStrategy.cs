@@ -24,7 +24,7 @@ public class LaunchSettingsFileGenerationStrategy : FileGenerationStrategy, IGen
 
         builder.AppendLine(_templateProcessor.Process(template, model));
 
-        model.Content = builder.ToString();
+        model.Body = builder.ToString();
 
         await base.GenerateAsync(artifactGenerator, model, null);
     }

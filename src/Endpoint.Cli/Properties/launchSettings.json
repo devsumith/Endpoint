@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "lit-workspace-create -n Loca -d C:\\projects",
+      "commandLineArgs": "lit-workspace-create -n Tower -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

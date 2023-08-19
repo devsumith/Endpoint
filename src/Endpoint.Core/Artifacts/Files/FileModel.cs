@@ -12,10 +12,10 @@ public class FileModel
         Extension = extension;
     }
 
-    public string Content { get; set; }
+    public string Body { get; set; }
     public string Name { get; init; }
     public string Directory { get; init; }
     public string Extension { get; init; }
-    public string Path => $"{Directory}{System.IO.Path.DirectorySeparatorChar}{Name}{Extension}";
+    public string Path => System.IO.Path.Combine(Directory,$"{Name}{Extension}");
 }
 
