@@ -3,17 +3,19 @@ using System.Collections.Concurrent;
 
 namespace Endpoint.Core.Services;
 
-public class ObjectCache: IObjectCache
+public class ObjectCache : IObjectCache
 {
     private readonly ILogger<ObjectCache> _logger;
 
     private static ConcurrentDictionary<string, object> _cache = new ConcurrentDictionary<string, object>();
 
-    public ObjectCache(ILogger<ObjectCache> logger){
+    public ObjectCache(ILogger<ObjectCache> logger)
+    {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    private object Get(string key) {
+    private object Get(string key)
+    {
 
         _cache.TryGetValue(key, out object value);
 

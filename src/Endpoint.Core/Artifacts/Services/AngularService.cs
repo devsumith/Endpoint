@@ -836,6 +836,7 @@ public class AngularService : IAngularService
 
     public async Task ScssComponentCreate(string name, string directory)
     {
+
         var applicationDirectory = Path.GetDirectoryName(_fileProvider.Get("tsconfig.app.json", directory));
 
         var scssDirectory = Path.Combine(applicationDirectory, "src", ".scss");

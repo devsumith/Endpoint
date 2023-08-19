@@ -47,6 +47,6 @@ public class LitWorkspaceCreateRequestHandler : IRequestHandler<LitWorkspaceCrea
 
         await _litService.WorkspaceCreate(request.Name, request.Directory);
 
-        _commandService.Start("code .", Path.Combine(request.Directory,request.Name));
+        _commandService.Start("code .", Path.Combine(request.Directory, request.Name));
     }
 }

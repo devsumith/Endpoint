@@ -35,7 +35,7 @@ public class LitWorkspaceArtifactGenerationStrategy : GenericArtifactGenerationS
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
-        if(_fileSystem.Directory.Exists(model.Directory))
+        if (_fileSystem.Directory.Exists(model.Directory))
         {
             _fileSystem.Directory.Delete(model.Directory, true);
         }
@@ -50,7 +50,7 @@ public class LitWorkspaceArtifactGenerationStrategy : GenericArtifactGenerationS
 
         var webPackConfig = _fileFactory.CreateTemplate("LitWebpackConfig", "webpack.config", model.Directory, ".js");
 
-        var indexTsModel = new FileModel("index", Path.Combine(model.Directory, "src"), ".ts") { Body = $"console.log(\"{model.Name}\")"};
+        var indexTsModel = new FileModel("index", Path.Combine(model.Directory, "src"), ".ts") { Body = $"console.log(\"{model.Name}\")" };
 
         var indexHtmlModel = new TemplatedFileModel("LitIndexHtml", "index", model.Directory, ".html", new TokensBuilder()
             .With("name", model.Name)
