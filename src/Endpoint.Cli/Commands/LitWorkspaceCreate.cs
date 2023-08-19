@@ -22,7 +22,7 @@ public class LitWorkspaceCreateRequest : IRequest
 
 
     [Option('d', Required = false)]
-    public string Directory { get; set; } = System.Environment.CurrentDirectory;
+    public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
 public class LitWorkspaceCreateRequestHandler : IRequestHandler<LitWorkspaceCreateRequest>
@@ -47,6 +47,6 @@ public class LitWorkspaceCreateRequestHandler : IRequestHandler<LitWorkspaceCrea
 
         await _litService.WorkspaceCreate(request.Name, request.Directory);
 
-        _commandService.Start("code .", $"{request.Directory}{Path.DirectorySeparatorChar}{request.Name}");
+        _commandService.Start("code .", Path.Combine(request.Directory,request.Name));
     }
 }
