@@ -13,7 +13,7 @@ public class LitProjectModel
         Name = name;
         RootDirectory = rootDirectory;
         Kind = kind;
-        Directory = directory ?? $"{RootDirectory}{Path.DirectorySeparatorChar}{name}";
+        Directory = directory ?? Path.Combine(RootDirectory,name);
         Prefix = prefix ?? (Kind == "library" ? "lib" : "app");
     }
 
