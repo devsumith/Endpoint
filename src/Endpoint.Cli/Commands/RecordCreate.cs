@@ -1,7 +1,7 @@
 using CommandLine;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Syntax.Record;
+using Endpoint.Core.Syntax.Records;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;

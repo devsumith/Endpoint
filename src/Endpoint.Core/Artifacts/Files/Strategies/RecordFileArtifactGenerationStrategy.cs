@@ -3,7 +3,7 @@
 
 using Endpoint.Core.Internals;
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.Record;
+using Endpoint.Core.Syntax.Records;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

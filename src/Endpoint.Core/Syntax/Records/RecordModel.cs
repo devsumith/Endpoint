@@ -1,6 +1,6 @@
 using System;
 
-namespace Endpoint.Core.Syntax.Record;
+namespace Endpoint.Core.Syntax.Records;
 
 public class RecordModel {
     public RecordModel(string name)
@@ -10,11 +10,4 @@ public class RecordModel {
 
     public string Name { get; set; }
     public RecordType Type { get; set; } = RecordType.Struct;
-}
-
-
-public enum RecordType
-{
-    Class,
-    Struct
 }

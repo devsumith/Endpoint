@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
 using System.Text;
-using static Endpoint.Core.Syntax.Record.RecordType;
+using static Endpoint.Core.Syntax.Records.RecordType;
 
-namespace Endpoint.Core.Syntax.Record;
+namespace Endpoint.Core.Syntax.Records;
 
 public class RecordSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<RecordModel>
 {
