@@ -53,6 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Syntax\Record\" />
     <Folder Include="Syntax\Statements\" />
     <Folder Include="Syntax\RouteHandlers\Create\" />
     <Folder Include="Messages\" />

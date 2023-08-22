@@ -11,7 +11,8 @@ namespace Endpoint.Core.Artifacts.Files.Strategies;
 
 public class ClassFileArtifactGenerationStrategy : ObjectFileIArtifactGenerationStrategy<ClassModel>
 {
-    public ClassFileArtifactGenerationStrategy(ISyntaxGenerator syntaxGenerator, IFileSystem fileSystem, INamespaceProvider namespaceProvider, Observable<INotification> notificationListener, IGenericArtifactGenerationStrategy<FileModel> fileArtifactGenerationStrategy, ILogger<ObjectFileIArtifactGenerationStrategy<ClassModel>> logger) : base(syntaxGenerator, fileSystem, namespaceProvider, notificationListener, fileArtifactGenerationStrategy, logger)
+    public ClassFileArtifactGenerationStrategy(ISyntaxGenerator syntaxGenerator, IFileSystem fileSystem, INamespaceProvider namespaceProvider, Observable<INotification> notificationListener, IGenericArtifactGenerationStrategy<FileModel> fileArtifactGenerationStrategy, ILogger<ObjectFileIArtifactGenerationStrategy<ClassModel>> logger) 
+        : base(syntaxGenerator, fileSystem, namespaceProvider, notificationListener, fileArtifactGenerationStrategy, logger)
     {
     }
 }

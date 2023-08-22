@@ -53,6 +53,7 @@ public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileMode
         _fileSystem.File.WriteAllText(model.Path, validExtension && !ignore ? string.Join(Environment.NewLine, new string[]
         {
             copyright,
+            string.Empty,
             model.Body
         }) : model.Body);
 
