@@ -17,7 +17,7 @@ public class TemplatedExpressionBodyGenerationStrategy : GenericSyntaxGeneration
         ITemplateLocator templateLocator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _templateLocator= templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
+        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator generator, TemplatedExpressionBodyModel model, dynamic? context = null)

@@ -5,10 +5,10 @@ namespace Endpoint.Core.Syntax.ExpressionBodies;
 
 public class ExpressionBodyModel
 {
-	public ExpressionBodyModel(string body)
-	{
-		Body= body;
-	}
+    public ExpressionBodyModel(string body)
+    {
+        Body = body;
+    }
 
     public string Body { get; set; }
 }

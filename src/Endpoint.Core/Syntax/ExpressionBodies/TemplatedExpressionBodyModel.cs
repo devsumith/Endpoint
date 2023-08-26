@@ -5,11 +5,12 @@ using System;
 
 namespace Endpoint.Core.Syntax.ExpressionBodies;
 
-public class TemplatedExpressionBodyModel {
+public class TemplatedExpressionBodyModel
+{
 
-	public TemplatedExpressionBodyModel(string template)
-	{
-		Template = template;
-	}
+    public TemplatedExpressionBodyModel(string template)
+    {
+        Template = template;
+    }
     public string Template { get; set; }
 }
