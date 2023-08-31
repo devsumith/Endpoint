@@ -2,8 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using DotLiquid;
-using Endpoint.Core.Syntax;
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -13,7 +11,7 @@ namespace Endpoint.Core.Services;
 
 public class LiquidTemplateProcessor : ITemplateProcessor
 {
-    public string[] Process(string[] template, IDictionary<string, object> tokens, string[] ignoreTokens = null)
+    public string Process(string template, IDictionary<string, object> tokens, string[] ignoreTokens = null)
     {
         Hash hash = default;
 
@@ -41,7 +39,7 @@ public class LiquidTemplateProcessor : ITemplateProcessor
 
             var liquidTemplate = Template.Parse(string.Join(Environment.NewLine, template));
 
-            return liquidTemplate.Render(hash).Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            return liquidTemplate.Render(hash);
         }
         catch (Exception e)
         {
@@ -69,7 +67,7 @@ public class LiquidTemplateProcessor : ITemplateProcessor
         }
     }
 
-    public string Process(string[] template, dynamic model)
+    public string Process(string template, dynamic model)
     {
         var dictionary = ConvertObjectToDictionary(model);
 

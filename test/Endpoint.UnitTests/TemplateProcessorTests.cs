@@ -9,7 +9,8 @@ using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Properties;
 using System.Collections.Generic;
 using Xunit;
-
+using System.Text;
+using System;
 
 namespace Endpoint.UnitTests;
 
@@ -21,7 +22,7 @@ public class TemplateProcessorTests
     [Fact]
     public void Process_ShouldRenderObject()
     {
-        var template = new string[1] { "{{ Title }}" };
+        var template = "{{ Title }}";
 
         var sut = new LiquidTemplateProcessor();
 
@@ -41,7 +42,7 @@ public class TemplateProcessorTests
         };
 
 
-        var template = new string[9] {
+        var template = new StringBuilder().AppendJoin(Environment.NewLine, new string[9] {
             "{% for using in Usings %}using {{ using }};",
             "{% endfor %}",
             "namespace {{ Namespace }}",
@@ -51,7 +52,7 @@ public class TemplateProcessorTests
             "{% for prop in Properties %}        {{ prop }}{% endfor %}",
             "    }",
             "}"
-        };
+        }).ToString();
 
         var sut = new LiquidTemplateProcessor();
 

@@ -15,9 +15,10 @@ public class EmbeddedResourceTemplateLocatorBase<T> : ITemplateLocator
     private readonly ILogger<EmbeddedResourceTemplateLocatorBase<T>> _logger;
     public EmbeddedResourceTemplateLocatorBase(ILogger<EmbeddedResourceTemplateLocatorBase<T>> logger)
     {
-        _logger = logger;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-    public string[] Get(string name)
+
+    public string Get(string name)
     {
         _logger.LogInformation("Attempting to get template for: {naem}.", name);
 
@@ -36,7 +37,7 @@ public class EmbeddedResourceTemplateLocatorBase<T> : ITemplateLocator
         throw new Exception("");
     }
 
-    public string[] GetResource(Assembly assembly, string name)
+    public string GetResource(Assembly assembly, string name)
     {
         _logger.LogInformation("Attempting to get resource for: {naem}.", name);
 
@@ -52,7 +53,7 @@ public class EmbeddedResourceTemplateLocatorBase<T> : ITemplateLocator
                     lines.Add(line);
                 }
             }
-            return lines.ToArray();
+            return string.Join(Environment.NewLine, lines);
         }
     }
 }

@@ -4,10 +4,12 @@
 using CommandLine;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax;
+using Humanizer;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -60,18 +62,18 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest>
 
         _commandService.Start($"endpoint event {request.Aggregate} {eventName}", aggregateEventsDirectory);
 
-        var whenTemplate = new string[4] {
+        var whenTemplate = new StringBuilder().AppendJoin(Environment.NewLine, new string[4] {
             "public void When({{ namePascalCase }} {{ nameCamelCase }})".Indent(2),
             "{".Indent(3),
             "Value = {{ nameCamelCase }}.Value".Indent(4),
-            "}".Indent(3) };
+            "}".Indent(3) }).ToString();
 
-        var methodTemplate = new string[5] {
+        var methodTemplate = new StringBuilder().AppendJoin(Environment.NewLine, new string[5] {
         "public {{ entityNamePascalCase }} {{ method }}(string value)".Indent(2),
         "{".Indent(2),
         "Apply(new {{ namePascalCase }}(value));".Indent(3),
         "return this;".Indent(3),
-        "}".Indent(2) };
+        "}".Indent(2) }).ToString();
 
         var tokens = new TokensBuilder()
             .With("name", (SyntaxToken)eventName)
@@ -89,10 +91,7 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest>
         {
             if (line.Contains("EnsureValidState"))
             {
-                foreach (var newLine in whenResult)
-                {
-                    newLines.Add(newLine);
-                }
+                newLines.Add(whenResult);
 
                 newLines.Add("");
 
@@ -100,10 +99,7 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest>
             }
             else if (line.Contains($"public Guid {request.Aggregate}Id"))
             {
-                foreach (var newLine in methodResult)
-                {
-                    newLines.Add(newLine);
-                }
+                newLines.Add(methodResult);
 
                 newLines.Add("");
 
@@ -116,7 +112,7 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest>
 
         }
 
-        _fileSystem.File.WriteAllText($@"{settings.DomainDirectory}{Path.DirectorySeparatorChar}Models{Path.DirectorySeparatorChar}{((SyntaxToken)request.Aggregate).PascalCase}.cs", string.Join(Environment.NewLine, newLines));
+        _fileSystem.File.WriteAllText(Path.Combine(settings.DomainDirectory,"Models",$"{request.Aggregate.Pascalize()}.cs"), string.Join(Environment.NewLine, newLines));
 
 
     }
