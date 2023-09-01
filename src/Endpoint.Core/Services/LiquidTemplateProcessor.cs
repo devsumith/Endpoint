@@ -9,6 +9,38 @@ using System.Reflection;
 
 namespace Endpoint.Core.Services;
 
+public class RazorTeplateProcessor : ITemplateProcessor
+{
+    public string Process(string template, IDictionary<string, object> tokens, string[] ignoreTokens = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public string Process(string template, IDictionary<string, object> tokens)
+    {
+        throw new NotImplementedException();
+    }
+
+    public string Process(string template, dynamic model)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<string> ProcessAsync(string template, IDictionary<string, object> tokens, string[] ignoreTokens = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<string> ProcessAsync(string template, IDictionary<string, object> tokens)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<string> ProcessAsync(string template, dynamic model)
+    {
+        throw new NotImplementedException();
+    }
+}
 public class LiquidTemplateProcessor : ITemplateProcessor
 {
     public string Process(string template, IDictionary<string, object> tokens, string[] ignoreTokens = null)
@@ -140,6 +172,21 @@ public class LiquidTemplateProcessor : ITemplateProcessor
         {
             return new Dictionary<string, object>();
         }
+    }
+
+    public Task<string> ProcessAsync(string template, IDictionary<string, object> tokens, string[] ignoreTokens = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<string> ProcessAsync(string template, IDictionary<string, object> tokens)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<string> ProcessAsync(string template, dynamic model)
+    {
+        throw new NotImplementedException();
     }
 }
 

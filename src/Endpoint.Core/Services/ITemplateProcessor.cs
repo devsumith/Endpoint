@@ -10,4 +10,8 @@ public interface ITemplateProcessor
     string Process(string template, IDictionary<string, object> tokens, string[] ignoreTokens = null);
     string Process(string template, IDictionary<string, object> tokens);
     string Process(string template, dynamic model);
+
+    Task<string> ProcessAsync(string template, IDictionary<string, object> tokens, string[] ignoreTokens = null);
+    Task<string> ProcessAsync(string template, IDictionary<string, object> tokens);
+    Task<string> ProcessAsync(string template, dynamic model);
 }

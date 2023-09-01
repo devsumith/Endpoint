@@ -28,7 +28,7 @@ public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileMode
     {
         _logger.LogInformation("Generating file artifact. {name}", model.Name);
 
-        var copyright = string.Join(Environment.NewLine, _templateLocator.Get("Copyright"));
+        var copyright = _templateLocator.Get("Copyright");
 
         var parts = Path.GetDirectoryName(model.Path).Split(Path.DirectorySeparatorChar);
 
