@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Internals;
-using Endpoint.Core.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.IO;
@@ -40,7 +39,7 @@ public class UtlitityService : IUtlitityService
             {
                 _logger.LogInformation("Broadcasting FileCreated Notification for {path}", path);
 
-                _observableNotifications.Broadcast(new FileCreated(path));
+                // TODO: write the copyright
             }
         }
     }

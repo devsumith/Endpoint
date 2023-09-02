@@ -6,14 +6,12 @@ using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Projects.Enums;
 using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Internals;
-using Endpoint.Core.Messages;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Services;
 using MediatR;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Solutions;
 
@@ -115,8 +113,6 @@ public class SolutionService : ISolutionService
             var fileModel = new ObjectFileModel<ClassModel>(serviceBusMessageConsumer, serviceBusMessageConsumer.UsingDirectives, serviceBusMessageConsumer.Name, coreModel.Directory, ".cs");
 
             coreModel.Files.Add(fileModel);
-
-            notifications.Add(new WorkerFileCreated(fileModel.Name, coreModel.Directory));
 
             coreModel.References.Add(@"..\..\..\BuildingBlocks\Messaging\Messaging.Udp\Messaging.Udp.csproj");
 

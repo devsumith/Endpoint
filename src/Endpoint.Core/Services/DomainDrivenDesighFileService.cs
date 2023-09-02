@@ -4,7 +4,6 @@
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Internals;
-using Endpoint.Core.Messages;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Constructors;
 using Endpoint.Core.Syntax.Fields;
@@ -18,7 +17,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Services;
 
@@ -406,8 +404,6 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 );
 
             await _artifactGenerator.GenerateAsync(classFile);
-
-            _notificationListener.Broadcast(new ServiceFileCreated(@interface.Name, @class.Name, directory));
 
             return @class;
         }

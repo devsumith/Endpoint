@@ -7,7 +7,6 @@ using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Workspaces;
 using Endpoint.Core.Extensions;
 using Endpoint.Core.Internals;
-using Endpoint.Core.Messages;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Angular;
 using Endpoint.Core.Syntax.Classes;
@@ -21,7 +20,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Services;
 
@@ -134,14 +132,6 @@ public class AngularService : IAngularService
         await IndexCreate(false, componentDirectory);
 
         await IndexCreate(false, directory);
-
-        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.ts"));
-
-        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.scss"));
-
-        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.html"));
-
-        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.spec.ts"));
     }
 
     public async Task ServiceCreate(string name, string directory)
@@ -152,9 +142,6 @@ public class AngularService : IAngularService
 
         await IndexCreate(false, directory);
 
-        _observableNotifications.Broadcast(new FileCreated($"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}.service.ts"));
-
-        _observableNotifications.Broadcast(new FileCreated($"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}.service.spec.ts"));
     }
 
     public async Task KarmaRemove(string directory)
@@ -886,14 +873,6 @@ public class AngularService : IAngularService
         await IndexCreate(false, componentDirectory);
 
         await IndexCreate(false, directory);
-
-        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.ts"));
-
-        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.scss"));
-
-        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.html"));
-
-        _observableNotifications.Broadcast(new FileCreated($"{componentDirectory}{Path.DirectorySeparatorChar}{nameSnakeCase}.component.spec.ts"));
     }
 
     public async Task Test(string directory, string searchPattern = "*.spec.ts")

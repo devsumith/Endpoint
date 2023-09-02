@@ -5,7 +5,6 @@ using CommandLine;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Internals;
-using Endpoint.Core.Messages;
 using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Constructors;
@@ -132,7 +131,5 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
         var fileModel = new ObjectFileModel<ClassModel>(model, usings, model.Name, request.Directory, ".cs");
 
         await _artifactGenerator.GenerateAsync(fileModel);
-
-        _notificationListener.Broadcast(new WorkerFileCreated(model.Name, request.Directory));
     }
 }

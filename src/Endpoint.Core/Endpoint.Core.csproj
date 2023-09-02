@@ -55,7 +55,6 @@
   <ItemGroup>
     <Folder Include="Syntax\Statements\" />
     <Folder Include="Syntax\RouteHandlers\Create\" />
-    <Folder Include="Messages\" />
     <Folder Include="Syntax\SpecFlow\Services\" />
   </ItemGroup>
 </Project>
