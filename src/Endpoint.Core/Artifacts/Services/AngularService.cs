@@ -86,7 +86,7 @@ public class AngularService : IAngularService
 
         _commandService.Start($"ng g c {name}", directory);
 
-        var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
+        var componentDirectory = _fileSystem.Path.Combine(directory,nameSnakeCase);
 
         await _artifactGenerator.GenerateAsync(_fileFactory.CreateTemplate(
             "Components.Default.Component",

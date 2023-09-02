@@ -1,10 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Endpoint.Core.Extensions;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Linq;
+using System.Text;
+using static Endpoint.Core.Constants;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
@@ -28,7 +31,7 @@ public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileMode
     {
         _logger.LogInformation("Generating file artifact. {name}", model.Name);
 
-        var copyright = _templateLocator.Get("Copyright");
+        var copyright = _templateLocator.GetCopyright();
 
         var parts = Path.GetDirectoryName(model.Path).Split(Path.DirectorySeparatorChar);
 
@@ -40,22 +43,13 @@ public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileMode
                 _fileSystem.Directory.CreateDirectory(dir);
         }
 
-        var ignore = model.Path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}")
-            || model.Path.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}")
-            || model.Path.Contains($"{Path.DirectorySeparatorChar}nupkg{Path.DirectorySeparatorChar}")
-            || model.Path.Contains($"{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}")
-            || model.Path.Contains($"{Path.DirectorySeparatorChar}node_modules{Path.DirectorySeparatorChar}");
-
         var extension = Path.GetExtension(model.Path);
 
         var validExtension = extension == ".cs" || extension == ".ts" || extension == ".js";
 
-        _fileSystem.File.WriteAllText(model.Path, validExtension && !ignore ? string.Join(Environment.NewLine, new string[]
-        {
-            copyright,
-            string.Empty,
-            model.Body
-        }) : model.Body);
+        _fileSystem.File.WriteAllText(model.Path, validExtension && !ExcludePatterns.Any(model.Path.Contains) 
+            ? new StringBuilder().AppendJoin(Environment.NewLine, copyright, string.Empty, model.Body).ToString() 
+            : model.Body);
 
     }
 }

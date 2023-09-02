@@ -1,6 +1,8 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.IO;
+
 namespace Endpoint.Core;
 
 public static class Constants
@@ -9,6 +11,13 @@ public static class Constants
 
     public static string RootNamespace = nameof(Endpoint);
     public static string SettingsFileName = "clisettings.json";
+    public static string[] ExcludePatterns = new[]
+    {
+        $"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}",
+        $"{Path.DirectorySeparatorChar}nupkg{Path.DirectorySeparatorChar}",
+        $"{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}",
+        $"{Path.DirectorySeparatorChar}node_modules{Path.DirectorySeparatorChar}"
+    };
 
     public static class ApiFileTemplates
     {

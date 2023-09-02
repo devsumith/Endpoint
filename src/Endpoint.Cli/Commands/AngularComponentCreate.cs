@@ -38,7 +38,7 @@ public class AngularComponentCreateRequestHandler : IRequestHandler<AngularCompo
 
     public async Task Handle(AngularComponentCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(AngularComponentCreateRequestHandler));
+        _logger.LogInformation("Creating Angular Component.", nameof(AngularComponentCreateRequestHandler));
 
         await _angularService.ComponentCreate(request.Name, request.Directory);
     }
