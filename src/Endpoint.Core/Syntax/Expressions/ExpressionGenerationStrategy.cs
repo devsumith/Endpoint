@@ -4,18 +4,18 @@
 using Microsoft.Extensions.Logging;
 using System.Text;
 
-namespace Endpoint.Core.Syntax.ExpressionBodies;
+namespace Endpoint.Core.Syntax.Expressions;
 
-public class ExpressionBodyGenerationStrategy : GenericSyntaxGenerationStrategy<ExpressionBodyModel>
+public class ExpressionGenerationStrategy : GenericSyntaxGenerationStrategy<ExpressionModel>
 {
-    private readonly ILogger<ExpressionBodyGenerationStrategy> _logger;
+    private readonly ILogger<ExpressionGenerationStrategy> _logger;
 
-    public ExpressionBodyGenerationStrategy(ILogger<ExpressionBodyGenerationStrategy> logger)
+    public ExpressionGenerationStrategy(ILogger<ExpressionGenerationStrategy> logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, ExpressionBodyModel model, dynamic? context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, ExpressionModel model, dynamic? context = null)
     {
         _logger.LogInformation("Generating Expression Body.");
 

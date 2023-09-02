@@ -5,22 +5,22 @@ using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.Text;
 
-namespace Endpoint.Core.Syntax.ExpressionBodies;
+namespace Endpoint.Core.Syntax.Expressions;
 
-public class TemplatedExpressionBodyGenerationStrategy : GenericSyntaxGenerationStrategy<TemplatedExpressionBodyModel>
+public class TemplatedExpressionGenerationStrategy : GenericSyntaxGenerationStrategy<TemplateExpressionModel>
 {
-    private readonly ILogger<TemplatedExpressionBodyGenerationStrategy> _logger;
+    private readonly ILogger<TemplatedExpressionGenerationStrategy> _logger;
     private readonly ITemplateLocator _templateLocator;
 
-    public TemplatedExpressionBodyGenerationStrategy(
-        ILogger<TemplatedExpressionBodyGenerationStrategy> logger,
+    public TemplatedExpressionGenerationStrategy(
+        ILogger<TemplatedExpressionGenerationStrategy> logger,
         ITemplateLocator templateLocator)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, TemplatedExpressionBodyModel model, dynamic? context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, TemplateExpressionModel model, dynamic? context = null)
     {
         _logger.LogInformation("Generating Templated Expression Body");
 

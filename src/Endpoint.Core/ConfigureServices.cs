@@ -20,6 +20,7 @@ using Endpoint.Core.Syntax.Controllers;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Entities.Aggregate;
 using Endpoint.Core.Syntax.Entities.Legacy;
+using Endpoint.Core.Syntax.Expressions;
 using Endpoint.Core.Syntax.Methods.Factories;
 using Endpoint.Core.Syntax.RouteHandlers;
 using Endpoint.Core.Syntax.Types;
@@ -31,8 +32,9 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
 {
-    public static void AddCoreServices(this IServiceCollection services)
+    public static void AddCoreServices(this IServiceCollection services)        
     {
+        services.AddSingleton<IExpressionFactory, ExpressionFactory>();
         services.AddSingleton<IObjectCache, ObjectCache>();
         services.AddSingleton<ITypeFactory, TypeFactory>();
         services.AddSingleton<IPlaywrightService, PlaywrightService>();
@@ -144,6 +146,7 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+
 
 
 
