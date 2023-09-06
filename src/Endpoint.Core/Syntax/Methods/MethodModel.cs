@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Syntax.Attributes;
+using Endpoint.Core.Syntax.Expressions;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Types;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ public class MethodModel
     public string Name { get; set; }
     public bool Override { get; set; }
     public TypeModel ReturnType { get; set; }
-    public string Body { get; set; }
+    public ExpressionModel Body { get; set; }
     public bool Interface { get; set; }
     public bool Async { get; set; }
     public bool Static { get; set; }

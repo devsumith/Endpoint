@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "record-create -n Tower -d C:\\projects\\Taliban\\src\\Taliban",
+      "commandLineArgs": "record-create -n Foo -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

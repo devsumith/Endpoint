@@ -113,7 +113,7 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
             Name = "ExecuteAsync",
             Override = true,
             AccessModifier = AccessModifier.Protected,
-            Body = methodBodyBuilder.ToString(),
+            Body = new Core.Syntax.Expressions.ExpressionModel(methodBodyBuilder.ToString()),
             Async = true,
             ReturnType = new TypeModel() { Name = "Task" },
             Params = new List<ParamModel>

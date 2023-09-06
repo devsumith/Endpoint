@@ -56,7 +56,7 @@ public class GetQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerationSt
 
         builder.AppendLine("};");
 
-        model.Body = builder.ToString();
+        model.Body = new Syntax.Expressions.ExpressionModel(builder.ToString());
 
         return await syntaxGenerator.GenerateAsync(model);
     }

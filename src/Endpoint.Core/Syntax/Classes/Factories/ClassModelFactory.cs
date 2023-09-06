@@ -237,7 +237,7 @@ public class ClassFactory : IClassFactory
 
                 methodBodyBuilder.Append("return response;");
 
-                methodModel.Body = methodBodyBuilder.ToString();
+                methodModel.Body = new Syntax.Expressions.ExpressionModel(methodBodyBuilder.ToString());
 
                 break;
 
@@ -264,7 +264,7 @@ public class ClassFactory : IClassFactory
                     cancellationTokenParam
                 };
 
-                methodModel.Body = $"return await _mediator.Send(new Get{entityNamePascalCasePlural}Request(), cancellationToken);";
+                methodModel.Body = new Syntax.Expressions.ExpressionModel($"return await _mediator.Send(new Get{entityNamePascalCasePlural}Request(), cancellationToken);");
 
                 break;
 
@@ -292,7 +292,7 @@ public class ClassFactory : IClassFactory
                     cancellationTokenParam
                 };
 
-                methodModel.Body = "return await _mediator.Send(request, cancellationToken);";
+                methodModel.Body = new Syntax.Expressions.ExpressionModel("return await _mediator.Send(request, cancellationToken);");
 
                 break;
 
@@ -320,7 +320,7 @@ public class ClassFactory : IClassFactory
                     cancellationTokenParam
                 };
 
-                methodModel.Body = "return await _mediator.Send(request, cancellationToken);";
+                methodModel.Body = new Syntax.Expressions.ExpressionModel("return await _mediator.Send(request, cancellationToken);");
                 break;
 
             case RouteType.Delete:
@@ -347,12 +347,12 @@ public class ClassFactory : IClassFactory
                     cancellationTokenParam
                 };
 
-                methodModel.Body = new StringBuilder().AppendJoin(Environment.NewLine, new string[]
+                methodModel.Body = new Syntax.Expressions.ExpressionModel(new StringBuilder().AppendJoin(Environment.NewLine, new string[]
                 {
                     $"var request = new Delete{entityNamePascalCase}Request()" + " {" + $"{entityIdNamePascalCase} = {entityIdNameCamelCase}" + " };",
                     "",
                     "return await _mediator.Send(request, cancellationToken);"
-                }).ToString();
+                }).ToString());
 
                 break;
 
@@ -458,7 +458,7 @@ public class ClassFactory : IClassFactory
             Name = "ExecuteAsync",
             Override = true,
             AccessModifier = AccessModifier.Protected,
-            Body = methodBodyBuilder.ToString(),
+            Body = new Syntax.Expressions.ExpressionModel(methodBodyBuilder.ToString()),
             Async = true,
             ReturnType = new TypeModel() { Name = "Task" },
             Params = new List<ParamModel>
@@ -587,7 +587,7 @@ public class ClassFactory : IClassFactory
 
         methodBodyBuilder.AppendLine("}");
 
-        model.Methods.First().Body = methodBodyBuilder.ToString();
+        model.Methods.First().Body = new Syntax.Expressions.ExpressionModel(methodBodyBuilder.ToString());
 
         model.Constructors.First().Params.Add(new ParamModel()
         {
@@ -734,7 +734,7 @@ public class ClassFactory : IClassFactory
             AccessModifier = AccessModifier.Protected,
             Async = true,
             ReturnType = new("Task"),
-            Body = string.Join(Environment.NewLine, methodBody)
+            Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, methodBody))
         };
 
         method.Params.Add(ParamModel.CancellationToken);

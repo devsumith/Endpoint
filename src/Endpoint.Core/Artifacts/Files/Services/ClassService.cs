@@ -134,12 +134,7 @@ public class ClassService : IClassService
                         Name = "Fact"
                     }
                 },
-                Body = string.Join(Environment.NewLine, new string[]
-                                {
-                                    "ARRANGE",
-                                    "ACT",
-                                    "ASSERT"
-                                }.Select(x => $"// {x}{Environment.NewLine}"))
+                Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, new string[] { "ARRANGE", "ACT", "ASSERT" }.Select(x => $"// {x}{Environment.NewLine}")))
             };
 
             classModel.Methods.Add(fact);

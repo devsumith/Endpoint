@@ -106,7 +106,7 @@ public class DeleteRequestHandlerModel : RequestHandlerModel
 
         });
 
-        Methods.Single().Body = builder.ToString();
+        Methods.Single().Body = new Syntax.Expressions.ExpressionModel(builder.ToString());
     }
 }
 
@@ -162,7 +162,7 @@ public class UpdateRequestHandlerModel : RequestHandlerModel
 
         methodBodyBuilder.AppendLine("};");
 
-        Methods.Single().Body = methodBodyBuilder.ToString();
+        Methods.Single().Body = new Syntax.Expressions.ExpressionModel(methodBodyBuilder.ToString());
     }
 }
 
@@ -218,7 +218,7 @@ public class CreateRequestHandlerModel : RequestHandlerModel
 
         methodBodyBuilder.AppendLine("};");
 
-        Methods.Single().Body = methodBodyBuilder.ToString();
+        Methods.Single().Body = new Syntax.Expressions.ExpressionModel(methodBodyBuilder.ToString());
     }
 }
 
@@ -254,7 +254,7 @@ public class GetRequestHandlerModel : RequestHandlerModel
 
         builder.AppendLine("};");
 
-        Methods.Single().Body = builder.ToString();
+        Methods.Single().Body = new Syntax.Expressions.ExpressionModel(builder.ToString());
     }
 }
 
@@ -289,7 +289,7 @@ public class GetByIdRequestHandlerModel : RequestHandlerModel
 
         builder.AppendLine("};");
 
-        Methods.Single().Body = builder.ToString();
+        Methods.Single().Body = new Syntax.Expressions.ExpressionModel(builder.ToString());
     }
 }
 
@@ -344,6 +344,6 @@ public class PageRequestHandlerModel : RequestHandlerModel
 
         builder.AppendLine("};");
 
-        Methods.Single().Body = builder.ToString();
+        Methods.Single().Body = new Syntax.Expressions.ExpressionModel(builder.ToString());
     }
 }

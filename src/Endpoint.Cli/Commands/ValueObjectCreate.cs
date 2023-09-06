@@ -83,7 +83,7 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
             ReturnType = new TypeModel("IEnumerable<object>"),
             Override = true,
             AccessModifier = AccessModifier.Protected,
-            Body = "throw new NotImplementedException();"
+            Body = new Core.Syntax.Expressions.ExpressionModel("throw new NotImplementedException();")
         };
 
         @class.Methods.Add(equalityMethod);

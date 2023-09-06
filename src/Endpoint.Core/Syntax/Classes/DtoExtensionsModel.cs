@@ -45,7 +45,7 @@ public class DtoExtensionsModel : ClassModel
                     Type = new TypeModel(entity.Name)
                 }
             },
-            Body = toDtoMethodBodyBuilder.ToString()
+            Body = new Syntax.Expressions.ExpressionModel(toDtoMethodBodyBuilder.ToString())
         });
 
         Methods.Add(new MethodModel()
@@ -87,7 +87,7 @@ public class DtoExtensionsModel : ClassModel
                     DefaultValue = "null"
                 }
             },
-            Body = $"return await {namingConventionConverter.Convert(NamingConvention.CamelCase, entity.Name, pluralize: true)}.Select(x => x.ToDto()).ToListAsync(cancellationToken);"
+            Body = new Syntax.Expressions.ExpressionModel($"return await {namingConventionConverter.Convert(NamingConvention.CamelCase, entity.Name, pluralize: true)}.Select(x => x.ToDto()).ToListAsync(cancellationToken);")
         });
 
 

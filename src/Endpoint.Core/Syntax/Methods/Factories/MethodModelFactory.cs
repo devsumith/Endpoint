@@ -82,7 +82,7 @@ public class MethodFactory : IMethodFactory
 
         methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("OK", $"{name}Response"));
 
-        methodModel.Body = "return await _mediator.Send(request, cancellationToken);";
+        methodModel.Body = new Syntax.Expressions.ExpressionModel("return await _mediator.Send(request, cancellationToken);");
 
         return methodModel;
     }

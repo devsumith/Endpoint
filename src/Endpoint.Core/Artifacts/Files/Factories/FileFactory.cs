@@ -148,7 +148,7 @@ public class FileFactory : IFileFactory
             }
         };
 
-        methodModel.Body = "return queryable.Skip(pageSize * pageIndex).Take(pageSize);";
+        methodModel.Body = new Syntax.Expressions.ExpressionModel( "return queryable.Skip(pageSize * pageIndex).Take(pageSize);");
 
         classModel.Methods.Add(methodModel);
 

@@ -84,7 +84,7 @@ public class DbContextModel : ClassModel
             Params = new List<ParamModel> {
                 new () { Type = new ("ModelBuilder"), Name = "modelBuilder" }
             },
-            Body = onModelCreatingMethodBodyBuilder.ToString()
+            Body = new Syntax.Expressions.ExpressionModel(onModelCreatingMethodBodyBuilder.ToString())
         };
 
         Methods.Add(onModelCreatingMethod);

@@ -22,5 +22,13 @@ public class ExpressionFactory: IExpressionFactory
         throw new NotImplementedException();
     }
 
+    public async Task<ExpressionModel> LogInformationAsync(string value)
+    {
+        _logger.LogInformation("Create Expression.");
+
+        var model = new ExpressionModel($"_logger.LogInformation(\"{value}\");");
+
+        return model;
+    }
 }
 

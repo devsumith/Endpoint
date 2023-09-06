@@ -95,7 +95,7 @@ public class DomainDrivenDesignService : IDomainDrivenDesignService
             AccessModifier = AccessModifier.Protected,
             Async = true,
             ReturnType = new TypeModel("Task"),
-            Body = string.Join(Environment.NewLine, methodBody)
+            Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, methodBody))
         };
 
         method.Params.Add(new ParamModel()

@@ -59,7 +59,7 @@ public class PlantUmlMethodParserStrategy : PlantUmlParserStrategyBase<MethodMod
             Name = name,
             Params = @params,
             Async = returnType.Name.StartsWith("Task"),
-            Body = "throw new NotImplementedException();"
+            Body = new Syntax.Expressions.ExpressionModel("throw new NotImplementedException();")
         };
     }
 }

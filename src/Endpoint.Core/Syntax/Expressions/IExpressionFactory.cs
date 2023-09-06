@@ -10,6 +10,7 @@ namespace Endpoint.Core.Syntax.Expressions;
 public interface IExpressionFactory
 {
     Task<ExpressionModel> CreateAsync();
+    Task<ExpressionModel> LogInformationAsync(string value);
 
 }
 

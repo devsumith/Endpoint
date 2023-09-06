@@ -25,23 +25,21 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
     private readonly IArtifactGenerator _artifactGenerator;
     private readonly IFileProvider _fileProvider;
-    private readonly Observable<INotification> _notificationListener;
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly ISyntaxGenerator _syntaxGenerator;
     private readonly IFileSystem _fileSystem;
     private readonly INamespaceProvider _namespaceProvider;
+
     public DomainDrivenDesignFileService(
         INamespaceProvider namespaceProvider,
         IFileSystem fileSystem,
         IArtifactGenerator artifactGenerator,
         IFileProvider fileProvider,
-        Observable<INotification> notificationListener,
         INamingConventionConverter namingConventionConverter,
         ISyntaxGenerator syntaxGenerator)
     {
         _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _notificationListener = notificationListener ?? throw new ArgumentNullException(nameof(notificationListener));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -146,7 +144,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 },
                 ParamModel.CancellationToken
             },
-            Body = new StringBuilder().AppendLine("_logger.LogInformation(\"Message Handled: {message}\", message);").ToString()
+            Body = new Syntax.Expressions.ExpressionModel(new StringBuilder().AppendLine("_logger.LogInformation(\"Message Handled: {message}\", message);").ToString())
         };
 
         classModel.Methods.Add(methodModel);
@@ -296,7 +294,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             AccessModifier = AccessModifier.Protected,
             Async = true,
             ReturnType = new("Task"),
-            Body = string.Join(Environment.NewLine, methodBody)
+            Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, methodBody))
         };
 
         method.Params.Add(ParamModel.CancellationToken);
@@ -332,9 +330,9 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             new ()
             {
                 Name = "DoWorkAsync",
-                ReturnType = new TypeModel("Task"),
+                ReturnType = TypeModel.Task,
                 Async = true,
-                Body = "_logger.LogInformation(\"DoWorkAsync\");"
+                Body = new Syntax.Expressions.ExpressionModel("_logger.LogInformation(\"DoWorkAsync\");")
             }
         };
 

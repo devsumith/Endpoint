@@ -48,7 +48,7 @@ public class MethodSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Me
 
         builder.Append(')');
 
-        if (string.IsNullOrEmpty(model.Body))
+        if (model.Body == null)
             builder.Append("{ }");
         else
         {
@@ -56,7 +56,9 @@ public class MethodSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Me
 
             builder.AppendLine("{");
 
-            builder.AppendLine(model.Body.Indent(1));
+            string body = await syntaxGenerator.GenerateAsync(model.Body);
+
+            builder.AppendLine(body.Indent(1));
 
             builder.Append('}');
         }
