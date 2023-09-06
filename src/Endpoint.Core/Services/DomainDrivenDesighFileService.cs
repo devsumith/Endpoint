@@ -310,30 +310,26 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
     public async Task ServiceCreate(string name, string directory)
     {
-        if (_fileSystem.File.Exists($"{directory}{Path.DirectorySeparatorChar}{name}.cs"))
+        if (_fileSystem.File.Exists(Path.Combine(directory,$"{name}.cs")))
         {
-            throw new Exception($"Service exists: {$"{directory}{Path.DirectorySeparatorChar}{name}.cs"}");
+            throw new Exception($"Service exists: {Path.Combine(directory, $"{name}.cs")}");
         }
 
         var usingDirectives = new List<UsingDirectiveModel>()
         {
-            new UsingDirectiveModel() { Name = "Microsoft.Extensions.Logging" },
-            new UsingDirectiveModel() { Name = "System" },
-            new UsingDirectiveModel() { Name = "System.Threading.Tasks" }
+            new () { Name = "Microsoft.Extensions.Logging" },
+            new () { Name = "System" },
+            new () { Name = "System.Threading.Tasks" }
         };
 
         var fields = new List<FieldModel>()
         {
-            new FieldModel()
-            {
-                Name = "_logger",
-                Type = TypeModel.LoggerOf(name)
-            }
+            FieldModel.LoggerOf(name)
         };
 
         var methods = new List<MethodModel>()
         {
-            new MethodModel()
+            new ()
             {
                 Name = "DoWorkAsync",
                 ReturnType = new TypeModel("Task"),
@@ -373,18 +369,15 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
             var constructors = new List<ConstructorModel>()
             {
-                new ConstructorModel(@class, @class.Name)
+                new (@class, @class.Name)
                 {
                     Params = new List<ParamModel>
                     {
-                        new ParamModel()
-                        {
-                            Type = TypeModel.LoggerOf(name),
-                            Name = "logger"
-                        }
+                        ParamModel.LoggerOf(name)
                     }
                 }
             };
+
             @class.Constructors = constructors;
 
             @class.Methods = methods;
@@ -393,7 +386,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
             @class.UsingDirectives.AddRange(usingDirectives);
 
-            @class.Implements.Add(new TypeModel() { Name = @interface.Name });
+            @class.Implements.Add(new () { Name = @interface.Name });
 
             var classFile = new ObjectFileModel<ClassModel>(
                 @class,
