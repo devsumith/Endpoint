@@ -1,25 +1,22 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Syntax.Attributes;
-using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Services;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using Endpoint.Core.Syntax.Attributes;
-using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Constructors;
 using Endpoint.Core.Syntax.Entities;
+using Endpoint.Core.Syntax.Expressions;
 using Endpoint.Core.Syntax.Fields;
 using Endpoint.Core.Syntax.Interfaces;
 using Endpoint.Core.Syntax.Methods;
+using Endpoint.Core.Syntax.Methods.Factories;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Types;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace Endpoint.Core.Syntax.Classes.Factories;
 
@@ -28,12 +25,28 @@ public class ClassFactory : IClassFactory
     private readonly INamingConventionConverter _namingConventionConverter;
     private readonly INamespaceProvider _namespaceProvider;
     private readonly IFileProvider _fileProvider;
-
-    public ClassFactory(INamingConventionConverter namingConventionConverter, INamespaceProvider namespaceProvider, IFileProvider fileProvider)
+    private readonly IMethodFactory _methodFactory;
+    public ClassFactory(INamingConventionConverter namingConventionConverter, INamespaceProvider namespaceProvider, IFileProvider fileProvider, IMethodFactory methodFactory)
     {
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
+        _methodFactory = methodFactory ?? throw new ArgumentNullException(nameof(methodFactory));
+    }
+
+    public async Task<ClassModel> DtoExtensionsCreateAsync(ClassModel aggregate)
+    {
+        var model = new ClassModel($"{aggregate.Name}Extensions")
+        {
+            Static = true,
+            Methods = new List<MethodModel>()
+            {
+                await _methodFactory.ToDtoCreateAsync(aggregate),
+                await _methodFactory.ToDtosAsyncCreateAsync(aggregate),
+            }
+        };
+
+        return model;
     }
 
     public ClassModel CreateController(EntityModel model, string directory)

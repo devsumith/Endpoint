@@ -8,6 +8,7 @@ using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using Endpoint.Core.Syntax.Expressions;
 
 namespace Endpoint.Core.Syntax.Methods.Factories;
 
@@ -15,14 +16,19 @@ public class MethodFactory : IMethodFactory
 {
     private readonly ILogger<MethodFactory> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;
+    private readonly IExpressionFactory _expressionFactory;
 
     public MethodFactory(
         ILogger<MethodFactory> logger,
-        INamingConventionConverter namingConventionConverter)
+        INamingConventionConverter namingConventionConverter,
+        IExpressionFactory expressionFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        _expressionFactory = expressionFactory ?? throw new ArgumentNullException(nameof(expressionFactory));
     }
+
+
 
     public MethodModel CreateControllerMethod(string name, string controller, RouteType routeType, string directory)
     {
@@ -85,6 +91,75 @@ public class MethodFactory : IMethodFactory
         methodModel.Body = new Syntax.Expressions.ExpressionModel("return await _mediator.Send(request, cancellationToken);");
 
         return methodModel;
+    }
+
+    public async Task<MethodModel> ToDtoCreateAsync(ClassModel aggregate)
+    {
+        var model = new MethodModel()
+        {
+            Name = "ToDto",
+            Static = true,
+            ReturnType = new TypeModel($"{aggregate.Name}Dto"),
+            Params = new()
+            {
+                new()
+                {
+                    ExtensionMethodParam = true,
+                    Name = _namingConventionConverter.Convert(NamingConvention.CamelCase, aggregate.Name),
+                    Type = new (aggregate.Name)
+                }
+            },
+            Body = await _expressionFactory.ToDtoCreateAsync(aggregate)
+        };
+
+        return model;
+    }
+
+    public async Task<MethodModel> ToDtosAsyncCreateAsync(ClassModel aggregate)
+    {
+        var model = new MethodModel()
+        {
+            Name = "ToDtosAsync",
+            Async = true,
+            Static = true,
+            ReturnType = new("Task")
+            {
+                GenericTypeParameters = new()
+                {
+                    new ("List")
+                    {
+                        GenericTypeParameters = new()
+                        {
+                            new ($"{aggregate.Name}Dto")
+                        }
+                    }
+                }
+            },
+            Params = new ()
+            {
+                new()
+                {
+                    ExtensionMethodParam = true,
+                    Name = _namingConventionConverter.Convert(NamingConvention.CamelCase,aggregate.Name, pluralize: true),
+                    Type = new ("IQueryable")
+                    {
+                        GenericTypeParameters = new ()
+                        {
+                            new (aggregate.Name)
+                        }
+                    }
+                },
+                new()
+                {
+                    Name = "cancellationToken",
+                    Type = new ("CancellationToken"),
+                    DefaultValue = "null"
+                }
+            },
+            Body = new ExpressionModel($"return await {_namingConventionConverter.Convert(NamingConvention.CamelCase, aggregate.Name, pluralize: true)}.Select(x => x.ToDto()).ToListAsync(cancellationToken);")
+        };
+
+        return model;
     }
 }
 

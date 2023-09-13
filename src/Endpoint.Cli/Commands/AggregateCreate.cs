@@ -2,14 +2,13 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
+using Endpoint.Core.Artifacts;
+using Endpoint.Core.Artifacts.Folders.Factories;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Artifacts.Folders.Factories;
-using Endpoint.Core.Syntax.Classes;
-using Endpoint.Core.Artifacts;
 
 namespace Endpoint.Cli.Commands;
 
@@ -52,23 +51,11 @@ public class AggregateCreateRequestHandler : IRequestHandler<AggregateCreateRequ
     public async Task Handle(AggregateCreateRequest request, CancellationToken cancellationToken)
     {
 
-        // Usings
+        _logger.LogInformation("Creating Aggregate. {name}", request.Name);
 
-        // Update Db Context
+        var model = await _folderFactory.CreateAggregateAsync(request.Name, request.Properties, request.Directory);
 
-        _logger.LogInformation("Handled: {0}", nameof(AggregateCreateRequestHandler));
+        await _artifactGenerator.GenerateAsync(model);
 
-        var model = _folderFactory.Aggregate(request.Name, request.Properties, request.Directory);
-
-        await _artifactGenerator.GenerateAsync(model, new AggregateCreateContext(model.Aggregate));
     }
-}
-
-public class AggregateCreateContext
-{
-    public AggregateCreateContext(ClassModel entity)
-    {
-        Entity = entity;
-    }
-    public ClassModel Entity { get; set; }
 }

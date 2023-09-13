@@ -21,5 +21,6 @@ public interface IClassFactory
     Tuple<ClassModel, InterfaceModel> CreateClassAndInterface(string name);
     ClassModel CreateServiceBusMessageConsumer(string name, string messagesNamespace);
     ClassModel CreateConfigureServices(string serviceSuffix);
+    Task<ClassModel> DtoExtensionsCreateAsync(ClassModel aggregate);
 }
 

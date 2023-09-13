@@ -7,7 +7,7 @@ using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Types;
 using System.Collections.Generic;
 using System.Text;
-
+using Endpoint.Core.Syntax.Expressions;
 
 namespace Endpoint.Core.Syntax.Classes;
 
@@ -45,7 +45,7 @@ public class DtoExtensionsModel : ClassModel
                     Type = new TypeModel(entity.Name)
                 }
             },
-            Body = new Syntax.Expressions.ExpressionModel(toDtoMethodBodyBuilder.ToString())
+            Body = new ExpressionModel(toDtoMethodBodyBuilder.ToString())
         });
 
         Methods.Add(new MethodModel()

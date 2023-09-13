@@ -1,21 +1,18 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Services;
-using Microsoft.Extensions.Logging;
-using SimpleNLG;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Entities.Aggregate;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.TypeScript;
-using Endpoint.Core.Syntax;
+using Microsoft.Extensions.Logging;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace Endpoint.Core.Artifacts.Folders.Factories;
 
@@ -46,6 +43,8 @@ public class FolderFactory : IFolderFactory
 
     public FolderModel AggregagteCommands(ClassModel aggregate, string directory)
     {
+        _logger.LogInformation("Generating Aggregate Commands. {name}", aggregate.Name);
+
         var aggregateName = aggregate.Name;
 
         _fileSystem.Directory.CreateDirectory(directory);
@@ -123,20 +122,19 @@ public class FolderFactory : IFolderFactory
         return model;
     }
 
-    public AggregateFolderModel Aggregate(string aggregateName, string properties, string directory)
+    public async Task<FolderModel> CreateAggregateAsync(string aggregateName, string properties, string directory)
     {
         var aggregate = _classFactory.CreateEntity(aggregateName, properties);
 
-        var model = new AggregateFolderModel(aggregate, directory);
+        var model = new FolderModel($"{aggregateName}Aggregate", directory);
 
         model.SubFolders.Add(AggregagteCommands(aggregate, model.Directory));
 
         model.SubFolders.Add(AggregagteQueries(aggregate, model.Directory));
 
-
         var aggregateDto = aggregate.CreateDto();
 
-        var extensions = new DtoExtensionsModel(_namingConventionConverter, $"{aggregate.Name}Extensions", aggregate);
+        var extensions = await _classFactory.DtoExtensionsCreateAsync(aggregate);
 
         model.Files.Add(new ObjectFileModel<ClassModel>(aggregate, aggregate.UsingDirectives, aggregate.Name, model.Directory, ".cs"));
 

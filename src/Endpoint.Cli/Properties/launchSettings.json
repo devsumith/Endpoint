@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "record-create -n Foo -d C:\\projects",
+      "commandLineArgs": "aggregate-create -n GroceryItem -d C:\\projects\\PaperBack\\src\\Services\\GroceryService\\GroceryService.Core\\AggregatesModel",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
