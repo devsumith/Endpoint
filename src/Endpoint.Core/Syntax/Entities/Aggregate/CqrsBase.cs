@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Entities.Aggregate;
 
-public class CqrsBase
+public class CqrsBase: SyntaxModel
 {
     public CqrsBase()
     {

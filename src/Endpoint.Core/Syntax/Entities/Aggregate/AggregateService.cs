@@ -6,12 +6,12 @@ using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.AggregateModels;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Syntax.Entities.Aggregate;
 
@@ -25,7 +25,7 @@ public class AggregateService : IAggregateService
     private readonly IProjectService _projectService;
     private readonly IFileFactory _fileFactory;
     private readonly IFileProvider _fileProvider;
-
+    private readonly IAggregateModelFactory _aggregateModelFactory;
     public AggregateService(
         ILogger<AggregateService> logger,
         INamingConventionConverter namingConventionConverter,
@@ -34,7 +34,8 @@ public class AggregateService : IAggregateService
         IClassFactory classFactory,
         IProjectService projectService,
         IFileFactory fileFactory,
-        IFileProvider fileProvider)
+        IFileProvider fileProvider,
+        IAggregateModelFactory aggregateModelFactory)
     {
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
@@ -44,6 +45,7 @@ public class AggregateService : IAggregateService
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
         _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        _aggregateModelFactory = aggregateModelFactory ?? throw new ArgumentException(nameof(aggregateModelFactory));
     }
 
     public async Task<ClassModel> Add(string name, string properties, string directory, string serviceName)
@@ -68,7 +70,7 @@ public class AggregateService : IAggregateService
             classModel = _classFactory.CreateEntity(name, properties);
         }
 
-        var model = new AggregatesModel(_namingConventionConverter, serviceName, classModel, directory);
+        var model = await _aggregateModelFactory.CreateAsync(name, classModel.Properties);
 
         await _artifactGenerator.GenerateAsync(model);
 

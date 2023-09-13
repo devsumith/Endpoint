@@ -14,6 +14,7 @@ using Endpoint.Core.Artifacts.Services;
 using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Artifacts.SpecFlow;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.AggregateModels;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes.Services;
 using Endpoint.Core.Syntax.Controllers;
@@ -24,7 +25,6 @@ using Endpoint.Core.Syntax.Expressions;
 using Endpoint.Core.Syntax.Methods.Factories;
 using Endpoint.Core.Syntax.RouteHandlers;
 using Endpoint.Core.Syntax.Types;
-using System.IO.Abstractions;
 using System.Linq;
 using System.Reflection;
 
@@ -32,8 +32,10 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
 {
-    public static void AddCoreServices(this IServiceCollection services)        
+    public static void AddCoreServices(this IServiceCollection services)                        
     {
+        services.AddSingleton<IAggregateModelFactory, AggregateModelFactory>();
+        services.AddSingleton<ISyntaxFactory, SyntaxFactory>();
         services.AddSingleton<IExpressionFactory, ExpressionFactory>();
         services.AddSingleton<IObjectCache, ObjectCache>();
         services.AddSingleton<ITypeFactory, TypeFactory>();
@@ -146,6 +148,8 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+
+
 
 
 

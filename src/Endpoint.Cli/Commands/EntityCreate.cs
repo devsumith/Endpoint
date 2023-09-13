@@ -59,9 +59,9 @@ public class EntityAddRequestHandler : IRequestHandler<EntityCreateRequest>
 
         await _classService.CreateAsync($"{request.Name}Dto", request.Properties, request.Directory);
 
-        var dtoExtensions = new DtoExtensionsModel(_namingConventionConverter, $"{model.Name}Extensions", model);
+        //var dtoExtensions = new DtoExtensionsModel(_namingConventionConverter, $"{model.Name}Extensions", model);
 
-        await _artifactGenerator.GenerateAsync(new ObjectFileModel<ClassModel>(dtoExtensions, $"{model.Name}Extensions", request.Directory, ".cs"));
+        //await _artifactGenerator.GenerateAsync(new ObjectFileModel<ClassModel>(dtoExtensions, $"{model.Name}Extensions", request.Directory, ".cs"));
 
     }
 }
