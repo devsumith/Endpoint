@@ -36,7 +36,7 @@ public class AggregateModelFactory: IAggregateModelFactory
 
         var model = new AggregateModel()
         {
-            Queries = new List<QueryModel>(),
+            Queries = new List<Entities.Aggregate.QueryModel>(),
             Commands = new List<CommandModel>(),
             Aggregate = aggregate,
             AggregateDto = aggregate.CreateDto(),
@@ -61,13 +61,13 @@ public class AggregateModelFactory: IAggregateModelFactory
 
                 case RouteType.Get:
                 case RouteType.GetById:
-                    model.Queries.Add(new QueryModel(serviceName, null, aggregate, routeType));
+                    model.Queries.Add(new QueryModel());//(serviceName, null, aggregate, routeType));
                     break;
 
                 case RouteType.Delete:
                 case RouteType.Create:
                 case RouteType.Update:
-                    model.Commands.Add(new CommandModel(serviceName, aggregate, null, routeType));
+                    model.Commands.Add(new CommandModel()); //new CommandModel(serviceName, aggregate, null, routeType));
                     break;
             }
         }

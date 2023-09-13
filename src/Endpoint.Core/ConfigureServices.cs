@@ -18,6 +18,7 @@ using Endpoint.Core.Syntax.AggregateModels;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes.Services;
 using Endpoint.Core.Syntax.Controllers;
+using Endpoint.Core.Syntax.Cqrs;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Entities.Aggregate;
 using Endpoint.Core.Syntax.Entities.Legacy;
@@ -32,8 +33,9 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
 {
-    public static void AddCoreServices(this IServiceCollection services)                        
+    public static void AddCoreServices(this IServiceCollection services)                                
     {
+        services.AddSingleton<ICqrsFactory, CqrsFactory>();
         services.AddSingleton<IAggregateModelFactory, AggregateModelFactory>();
         services.AddSingleton<ISyntaxFactory, SyntaxFactory>();
         services.AddSingleton<IExpressionFactory, ExpressionFactory>();
@@ -148,6 +150,7 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+
 
 
 

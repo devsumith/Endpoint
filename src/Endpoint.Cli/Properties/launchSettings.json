@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "aggregate-create -n GroceryItem -d C:\\projects\\PaperBack\\src\\Services\\GroceryService\\GroceryService.Core\\AggregatesModel",
+      "commandLineArgs": "query-create -a GroceryItem -p GroceryItemId:Guid -d C:\\projects\\PaperBack\\src\\Services\\GroceryService\\GroceryService.Core\\AggregatesModel\\GroceryItemAggregate\\Queries",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

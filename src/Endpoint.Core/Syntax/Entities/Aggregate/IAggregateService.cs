@@ -10,7 +10,7 @@ public interface IAggregateService
 {
     Task<ClassModel> Add(string name, string properties, string directory, string microserviceName);
     Task CommandCreate(string routeType, string name, string aggregate, string properties, string directory);
-    Task QueryCreate(string routeType, string name, string aggregate, string properties, string directory);
+    Task QueryCreateAsync(string routeType, string name, string aggregate, string properties, string directory);
 
 }
 

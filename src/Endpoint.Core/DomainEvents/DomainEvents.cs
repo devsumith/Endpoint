@@ -35,3 +35,9 @@ public static class DomainEvents
         }
     }
 }
+
+
+public class MicroserviceNamespaceRequested
+{
+    public string Namespace { get; set; }
+}

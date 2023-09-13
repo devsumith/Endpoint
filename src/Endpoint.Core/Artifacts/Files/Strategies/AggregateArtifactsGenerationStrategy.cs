@@ -22,7 +22,9 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, AggregateModel model, dynamic context = null)
     {
-        var aggregateDirectory = $"{model.Directory}{Path.DirectorySeparatorChar}{model.Aggregate.Name}Aggregate";
+        var directory = string.Empty;
+
+        var aggregateDirectory = $"{directory}{Path.DirectorySeparatorChar}{model.Aggregate.Name}Aggregate";
 
         _fileSystem.Directory.CreateDirectory(aggregateDirectory);
 
@@ -44,7 +46,7 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
         {
             await artifactGenerator
                 .GenerateAsync(
-                new ObjectFileModel<QueryModel>(
+                new ObjectFileModel<Syntax.Entities.Aggregate.QueryModel>(
                     query,
                     query.UsingDirectives,
                     query.Name,

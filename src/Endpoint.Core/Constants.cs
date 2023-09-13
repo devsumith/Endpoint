@@ -19,6 +19,12 @@ public static class Constants
         $"{Path.DirectorySeparatorChar}node_modules{Path.DirectorySeparatorChar}"
     };
 
+    public static class FileExtensions
+    {
+        public static string CSharpFile = ".cs";
+        public static string CSharpProject = "*.csproj";
+    }
+
     public static class ApiFileTemplates
     {
         public static readonly string AppSettings = nameof(AppSettings);

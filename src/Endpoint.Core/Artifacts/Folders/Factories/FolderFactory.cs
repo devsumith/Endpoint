@@ -56,7 +56,9 @@ public class FolderFactory : IFolderFactory
         foreach (var routeType in new RouteType[] { RouteType.Create, RouteType.Delete, RouteType.Update })
         {
             //TODO: build command and subclasses fully here. Class factory
-            var command = new CommandModel(microserviceName, aggregate, _namingConventionConverter, routeType);
+            //var command = new CommandModel(microserviceName, aggregate, _namingConventionConverter, routeType);
+
+            var command = new CommandModel();
 
             model.Files.Add(new ObjectFileModel<CommandModel>(command, command.UsingDirectives, command.Name, model.Directory, ".cs"));
         }
@@ -72,9 +74,9 @@ public class FolderFactory : IFolderFactory
 
         foreach (var routeType in new RouteType[] { RouteType.GetById, RouteType.Get, RouteType.Page })
         {
-            var query = new QueryModel(microserviceName, _namingConventionConverter, aggregate, routeType);
+            var query = new QueryModel(); //(microserviceName, _namingConventionConverter, aggregate, routeType);
 
-            model.Files.Add(new ObjectFileModel<QueryModel>(query, query.UsingDirectives, query.Name, model.Directory, ".cs"));
+            model.Files.Add(new ObjectFileModel<Syntax.Entities.Aggregate.QueryModel>((Syntax.Entities.Aggregate.QueryModel)query, (System.Collections.Generic.List<UsingDirectiveModel>)query.UsingDirectives, (string)query.Name, model.Directory, ".cs"));
         }
 
         return model;

@@ -9,9 +9,11 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.AggregateModels;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
+using Endpoint.Core.Syntax.Cqrs;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Linq;
+using static Endpoint.Core.Constants.FileExtensions;
 
 namespace Endpoint.Core.Syntax.Entities.Aggregate;
 
@@ -26,6 +28,8 @@ public class AggregateService : IAggregateService
     private readonly IFileFactory _fileFactory;
     private readonly IFileProvider _fileProvider;
     private readonly IAggregateModelFactory _aggregateModelFactory;
+    private readonly ICqrsFactory _cqrsFactory;
+
     public AggregateService(
         ILogger<AggregateService> logger,
         INamingConventionConverter namingConventionConverter,
@@ -35,7 +39,8 @@ public class AggregateService : IAggregateService
         IProjectService projectService,
         IFileFactory fileFactory,
         IFileProvider fileProvider,
-        IAggregateModelFactory aggregateModelFactory)
+        IAggregateModelFactory aggregateModelFactory,
+        ICqrsFactory cqrsFactory)
     {
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
@@ -46,6 +51,7 @@ public class AggregateService : IAggregateService
         _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _aggregateModelFactory = aggregateModelFactory ?? throw new ArgumentException(nameof(aggregateModelFactory));
+        _cqrsFactory = cqrsFactory ?? throw new ArgumentNullException(nameof(cqrsFactory));
     }
 
     public async Task<ClassModel> Add(string name, string properties, string directory, string serviceName)
@@ -96,7 +102,7 @@ public class AggregateService : IAggregateService
 
     public async Task CommandCreate(string routeType, string name, string aggregate, string properties, string directory)
     {
-        var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
+        var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get(CSharpProject, directory)).Split('.').First();
 
         var classModel = _syntaxService.SolutionModel?.GetClass(aggregate, serviceName);
 
@@ -105,39 +111,26 @@ public class AggregateService : IAggregateService
             classModel = _classFactory.CreateEntity(aggregate, properties);
         }
 
-        var commandModel = new CommandModel(serviceName, classModel, _namingConventionConverter, name: name, routeType: routeType switch
-        {
+        var commandModel = new CommandModel(); //(serviceName, classModel, _namingConventionConverter, name: name, routeType: routeType switch
+/*        {
             "create" => RouteType.Create,
             "update" => RouteType.Update,
             "delete" => RouteType.Delete,
             _ => throw new NotSupportedException()
-        });
+        })*/;
 
         var model = new ObjectFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, ".cs");
 
         await _artifactGenerator.GenerateAsync(model);
     }
 
-    public async Task QueryCreate(string routeType, string name, string aggregate, string properties, string directory)
+    public async Task QueryCreateAsync(string routeType, string name, string aggregate, string properties, string directory)
     {
-        var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
+        var rootNamespace = Path.GetFileNameWithoutExtension(_fileProvider.Get(CSharpProject, directory)).Split('.').First();
 
-        var classModel = _syntaxService.SolutionModel?.GetClass(aggregate, serviceName);
+        var queryModel = await _cqrsFactory.CreateQueryAsync(routeType, name, properties);
 
-        if (classModel == null)
-        {
-            classModel = _classFactory.CreateEntity(aggregate, properties);
-        }
-
-        var queryModel = new QueryModel(serviceName, _namingConventionConverter, classModel, name: name, routeType: routeType.ToLower() switch
-        {
-            "get" => RouteType.Get,
-            "getbyid" => RouteType.GetById,
-            "page" => RouteType.Page,
-            _ => throw new NotSupportedException()
-        });
-
-        var model = new ObjectFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, ".cs");
+        var model = new ObjectFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, CSharpFile);
 
         await _artifactGenerator.GenerateAsync(model);
     }

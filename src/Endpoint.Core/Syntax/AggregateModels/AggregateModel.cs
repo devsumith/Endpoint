@@ -14,7 +14,6 @@ public class AggregateModel : SyntaxModel
     public ClassModel AggregateDto { get; set; }
     public ClassModel AggregateExtensions { get; set; }
     public List<CommandModel> Commands { get; set; }
-    public List<QueryModel> Queries { get; set; }
-    public string Directory { get; set; }
+    public List<Entities.Aggregate.QueryModel> Queries { get; set; }
 }
 

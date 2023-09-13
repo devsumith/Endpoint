@@ -25,7 +25,7 @@ public class QueryCreateRequest : IRequest
     public string Properties { get; set; }
 
     [Option('r', "route-type")]
-    public string RouteType { get; set; }
+    public string RouteType { get; set; } = "get";
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -46,9 +46,8 @@ public class QueryCreateRequestHandler : IRequestHandler<QueryCreateRequest>
 
     public async Task Handle(QueryCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(QueryCreateRequestHandler));
+        _logger.LogInformation("Creating Query. {name}", request.Name);
 
-        _aggregateService.QueryCreate(request.RouteType, request.Name, request.Aggregate, request.Properties, request.Directory);
-
+        await _aggregateService.QueryCreateAsync(request.RouteType, request.Name, request.Aggregate, request.Properties, request.Directory);
     }
 }

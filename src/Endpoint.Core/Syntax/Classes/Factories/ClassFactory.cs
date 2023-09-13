@@ -5,7 +5,6 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Attributes;
 using Endpoint.Core.Syntax.Constructors;
 using Endpoint.Core.Syntax.Entities;
-using Endpoint.Core.Syntax.Expressions;
 using Endpoint.Core.Syntax.Fields;
 using Endpoint.Core.Syntax.Interfaces;
 using Endpoint.Core.Syntax.Methods;
@@ -13,6 +12,7 @@ using Endpoint.Core.Syntax.Methods.Factories;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Types;
+using Octokit;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,6 +26,7 @@ public class ClassFactory : IClassFactory
     private readonly INamespaceProvider _namespaceProvider;
     private readonly IFileProvider _fileProvider;
     private readonly IMethodFactory _methodFactory;
+
     public ClassFactory(INamingConventionConverter namingConventionConverter, INamespaceProvider namespaceProvider, IFileProvider fileProvider, IMethodFactory methodFactory)
     {
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
@@ -373,6 +374,7 @@ public class ClassFactory : IClassFactory
 
         return methodModel;
     }
+
     public ClassModel CreateEntity(string name, string properties = null)
     {
         var classModel = new ClassModel(name);
@@ -784,5 +786,87 @@ public class ClassFactory : IClassFactory
 
         return classModel;
     }
+
+    public async Task<ClassModel> CreateRequestAsync(string name, string responseName)
+    {
+        var model = new ClassModel(name);
+
+        model.Implements.Add(new("IRequest")
+        {
+            GenericTypeParameters = new() { new(responseName) }
+        });
+
+        /*        Name = routeType switch
+                {
+                    RouteType.Create => $"Create{entity.Name}Request",
+                    RouteType.Update => $"Update{entity.Name}Request",
+                    RouteType.Delete => $"Delete{entity.Name}Request",
+                    RouteType.Get => $"Get{entityNamePascalCasePlural}Request",
+                    RouteType.GetById => $"Get{entity.Name}ByIdRequest",
+                    RouteType.Page => $"Get{entityNamePascalCasePlural}PageRequest",
+                    _ => throw new NotSupportedException()
+                };
+
+                Implements.Add(new TypeModel("IRequest")
+                {
+                    GenericTypeParameters = new List<TypeModel> { new TypeModel(response.Name) }
+                });
+
+                if (routeType == RouteType.Delete)
+                {
+
+                    Properties.Add(entity.Properties.FirstOrDefault(x => x.Name == $"{entity.Name}Id"));
+                }
+
+                if (routeType == RouteType.Create)
+                {
+                    foreach (var prop in entity.Properties.Where(x => x.Name != $"{entity.Name}Id"))
+                    {
+                        Properties.Add(new PropertyModel(this, AccessModifier.Public, prop.Type, prop.Name, PropertyAccessorModel.GetSet));
+                    }
+                }
+
+                if (routeType == RouteType.Update)
+                {
+                    foreach (var prop in entity.Properties)
+                    {
+                        Properties.Add(new PropertyModel(this, AccessModifier.Public, prop.Type, prop.Name, PropertyAccessorModel.GetSet));
+                    }
+                }
+
+                if (routeType == RouteType.GetById)
+                {
+                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("Guid"), $"{entity.Name}Id", PropertyAccessorModel.GetSet));
+
+                }
+
+                if (routeType == RouteType.Page)
+                {
+                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("int"), "PageSize", PropertyAccessorModel.GetSet));
+
+                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("int"), "Index", PropertyAccessorModel.GetSet));
+
+                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("int"), "Length", PropertyAccessorModel.GetSet));
+                */
+
+        return model;
+    }
+
+    public async Task<ClassModel> CreateResponseAsync(string name)
+    {
+        var model = new ClassModel(name);
+
+
+        return model;
+    }
+
+    public async Task<ClassModel> CreateRequestHandlerAsync(string name)
+    {
+        var model = new ClassModel(name);
+
+
+        return model;
+    }
+
 }
 
