@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Endpoint.Core.Syntax.Properties;
+namespace Endpoint.Core.Syntax.Properties.Strategies;
 
 public class PropertiesSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<List<PropertyModel>>
 {

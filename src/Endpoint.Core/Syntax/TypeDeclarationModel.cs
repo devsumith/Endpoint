@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax;
 
-public class TypeDeclarationModel
+public class TypeDeclarationModel: SyntaxModel
 {
     public TypeDeclarationModel(string name)
     {

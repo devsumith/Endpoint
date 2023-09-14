@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Endpoint.Core.Syntax.Properties;
+namespace Endpoint.Core.Syntax.Properties.Strategies;
 
 public class PropertyAccessorsSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<List<PropertyAccessorModel>>
 {

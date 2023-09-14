@@ -56,6 +56,7 @@
     <Folder Include="DomainEvents\" />
     <Folder Include="Notifications\" />
     <Folder Include="Syntax\Cqrs\" />
+    <Folder Include="Syntax\Properties\Factories\" />
     <Folder Include="Syntax\Statements\" />
     <Folder Include="Syntax\RouteHandlers\Create\" />
     <Folder Include="Syntax\SpecFlow\Services\" />

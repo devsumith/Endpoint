@@ -1,4 +1,4 @@
-// Copyright (c) Quinntyne Brown. All Rights Reserved.
+/*// Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Microsoft.Extensions.Logging;
@@ -29,3 +29,4 @@ public class RequestValidatorSyntaxGenerationStrategy : GenericSyntaxGenerationS
         return builder.ToString();
     }
 }
+*/

@@ -1,6 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Endpoint.Core.Syntax.Cqrs;
 using System.Runtime.CompilerServices;
 using static System.Linq.Enumerable;
 
@@ -42,5 +43,13 @@ public static class StringExtensions
         return new Tuple<string, string>(parts[0], parts[1]);
     }
 
+    public static ResponseType ToResponseType(this string value)
+    {
+        return value.ToLower() switch
+        {
+            "get" => ResponseType.Get,
+            _ => throw new InvalidOperationException()
+        };
+    }
 }
 

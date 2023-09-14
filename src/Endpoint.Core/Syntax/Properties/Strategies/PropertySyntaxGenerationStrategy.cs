@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using System.Text;
 
-namespace Endpoint.Core.Syntax.Properties;
+namespace Endpoint.Core.Syntax.Properties.Strategies;
 
 public class PropertySyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<PropertyModel>
 {

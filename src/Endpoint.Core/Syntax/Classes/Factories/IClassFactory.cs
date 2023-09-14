@@ -1,8 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Endpoint.Core.Syntax.Cqrs;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Interfaces;
+using Endpoint.Core.Syntax.Properties;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Classes.Factories;
@@ -22,6 +24,7 @@ public interface IClassFactory
     ClassModel CreateServiceBusMessageConsumer(string name, string messagesNamespace);
     ClassModel CreateConfigureServices(string serviceSuffix);
     Task<ClassModel> DtoExtensionsCreateAsync(ClassModel aggregate);
-    Task<ClassModel> CreateRequestAsync(string requestName, string properties);
+    Task<ClassModel> CreateQueryAsync(string requestName, string properties);
+    Task<ClassModel> CreateResponseAsync(ResponseType responseType, string entityName, string name = null);
 }
 

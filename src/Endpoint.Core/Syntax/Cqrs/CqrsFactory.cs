@@ -51,7 +51,7 @@ public class CqrsFactory: ICqrsFactory
 
         model.Response = null; // new ResponseModel(entity, routeType, namingConventionConverter);
 
-        model.Request = await _classFactory.CreateRequestAsync(model.Name, properties);
+        model.Request = await _classFactory.CreateQueryAsync(model.Name, properties);
 
         model.RequestHandler = null;
 /*        model.RequestHandler = routeType switch

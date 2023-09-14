@@ -4,6 +4,7 @@
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Attributes;
 using Endpoint.Core.Syntax.Constructors;
+using Endpoint.Core.Syntax.Cqrs;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Fields;
 using Endpoint.Core.Syntax.Interfaces;
@@ -11,8 +12,8 @@ using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Methods.Factories;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
+using Endpoint.Core.Syntax.Properties.Factories;
 using Endpoint.Core.Syntax.Types;
-using Octokit;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,9 +27,11 @@ public class ClassFactory : IClassFactory
     private readonly INamespaceProvider _namespaceProvider;
     private readonly IFileProvider _fileProvider;
     private readonly IMethodFactory _methodFactory;
+    private readonly IPropertyFactory _propertyFactory;
 
-    public ClassFactory(INamingConventionConverter namingConventionConverter, INamespaceProvider namespaceProvider, IFileProvider fileProvider, IMethodFactory methodFactory)
+    public ClassFactory(IPropertyFactory propertyFactory, INamingConventionConverter namingConventionConverter, INamespaceProvider namespaceProvider, IFileProvider fileProvider, IMethodFactory methodFactory)
     {
+        _propertyFactory = propertyFactory ?? throw new ArgumentNullException(nameof(propertyFactory));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
@@ -787,7 +790,7 @@ public class ClassFactory : IClassFactory
         return classModel;
     }
 
-    public async Task<ClassModel> CreateRequestAsync(string name, string responseName)
+    public async Task<ClassModel> CreateQueryAsync(string name, string responseName)
     {
         var model = new ClassModel(name);
 
@@ -852,10 +855,15 @@ public class ClassFactory : IClassFactory
         return model;
     }
 
-    public async Task<ClassModel> CreateResponseAsync(string name)
+    public async Task<ClassModel> CreateResponseAsync(ResponseType responseType, string entityName, string name = null)
     {
-        var model = new ClassModel(name);
+        var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
+        var responseName = string.IsNullOrEmpty(name) ? $"Get{entityNamePascalCasePlural}Response" : name;
+
+        var model = new ClassModel(responseName);
+
+        model.Properties = await _propertyFactory.ResponsePropertiesCreateAsync(responseType, model, entityName);
 
         return model;
     }
