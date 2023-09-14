@@ -48,6 +48,11 @@ public static class StringExtensions
         return value.ToLower() switch
         {
             "get" => ResponseType.Get,
+            "getbyId" => ResponseType.GetById,
+            "page" => ResponseType.Page,
+            "create" => ResponseType.Create,
+            "delete" => ResponseType.Delete,
+            "update" => ResponseType.Update,
             _ => throw new InvalidOperationException()
         };
     }
