@@ -18,7 +18,7 @@ public class PropertyFactory: IPropertyFactory
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    public async Task<List<PropertyModel>> ResponsePropertiesCreateAsync(ResponseType responseType, TypeDeclarationModel parent, string entityName)
+    public async Task<List<PropertyModel>> ResponsePropertiesCreateAsync(RequestType responseType, TypeDeclarationModel parent, string entityName)
     {
         _logger.LogInformation("Creating Response Properties. {entityName}", entityName);
 
@@ -26,7 +26,7 @@ public class PropertyFactory: IPropertyFactory
 
         switch(responseType)
         {
-            case ResponseType.Get:
+            case RequestType.Get:
                 var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
                 model.Add(new (parent, Public, ListOf($"{entityName}Dto"), entityNamePascalCasePlural, GetSet));

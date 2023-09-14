@@ -47,7 +47,7 @@ public class ResponseCreateRequestHandler : IRequestHandler<ResponseCreateReques
     {
         _logger.LogInformation("Creating Response. {name}", request.ResponseType);;
 
-        var model = await _classFactory.CreateResponseAsync(request.ResponseType.ToResponseType(), request.EntityName);
+        var model = await _classFactory.CreateResponseAsync(request.ResponseType.ToRequestType(), request.EntityName);
 
         await _artifactGenerator.GenerateAsync(new ObjectFileModel<ClassModel>(model, model.Name, request.Directory, CSharpFile));
 

@@ -1,6 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Cqrs;
 using System.Runtime.CompilerServices;
 using static System.Linq.Enumerable;
@@ -43,16 +44,25 @@ public static class StringExtensions
         return new Tuple<string, string>(parts[0], parts[1]);
     }
 
-    public static ResponseType ToResponseType(this string value)
+    public static RequestType ToRequestType(this string value)
     {
         return value.ToLower() switch
         {
-            "get" => ResponseType.Get,
-            "getbyId" => ResponseType.GetById,
-            "page" => ResponseType.Page,
-            "create" => ResponseType.Create,
-            "delete" => ResponseType.Delete,
-            "update" => ResponseType.Update,
+            "get" => RequestType.Get,
+            "getbyId" => RequestType.GetById,
+            "page" => RequestType.Page,
+            "create" => RequestType.Create,
+            "delete" => RequestType.Delete,
+            "update" => RequestType.Update,
+            _ => throw new InvalidOperationException()
+        };
+    }
+
+    public static string ToRequestName(this string value, INamingConventionConverter namingConventionConverter)
+    {
+        return value.ToLower() switch
+        {
+            "get" => $"Get{namingConventionConverter.Convert(NamingConvention.PascalCase, value, pluralize: true)}",
             _ => throw new InvalidOperationException()
         };
     }

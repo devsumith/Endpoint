@@ -24,7 +24,7 @@ public interface IClassFactory
     ClassModel CreateServiceBusMessageConsumer(string name, string messagesNamespace);
     ClassModel CreateConfigureServices(string serviceSuffix);
     Task<ClassModel> DtoExtensionsCreateAsync(ClassModel aggregate);
-    Task<ClassModel> CreateQueryAsync(string requestName, string properties);
-    Task<ClassModel> CreateResponseAsync(ResponseType responseType, string entityName, string name = null);
+    Task<ClassModel> CreateRequestAsync(string requestName, string properties);
+    Task<ClassModel> CreateResponseAsync(RequestType responseType, string entityName, string name = null);
 }
 

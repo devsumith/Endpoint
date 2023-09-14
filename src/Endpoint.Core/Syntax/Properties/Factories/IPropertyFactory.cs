@@ -6,6 +6,6 @@ namespace Endpoint.Core.Syntax.Properties.Factories;
 public interface IPropertyFactory
 {
 
-    Task<List<PropertyModel>> ResponsePropertiesCreateAsync(ResponseType responseType, TypeDeclarationModel parent, string entityName);
+    Task<List<PropertyModel>> ResponsePropertiesCreateAsync(RequestType responseType, TypeDeclarationModel parent, string entityName);
 }
 

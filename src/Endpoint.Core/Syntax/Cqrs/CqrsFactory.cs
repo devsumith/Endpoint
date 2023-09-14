@@ -37,31 +37,16 @@ public class CqrsFactory: ICqrsFactory
     {
         _logger.LogInformation("Creating Cqrs Query. {name}", aggregateName); ;
 
-        var aggregateNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, aggregateName, pluralize: true);
-
-        var model = new QueryModel();
-
-        model.Name = routeType switch
+        var model = new QueryModel
         {
-            "get" => $"Get{aggregateNamePascalCasePlural}",
-            "getbyid" => $"Get{aggregateName}ById",
-            "page" => $"Get{aggregateNamePascalCasePlural}Page",
-            _ => throw new NotSupportedException()
+            Name = routeType.ToRequestName(_namingConventionConverter),
+
+            Response = await _classFactory.CreateResponseAsync(routeType.ToRequestType(), aggregateName),
+
+            Request = await _classFactory.CreateResponseAsync(routeType.ToRequestType(), aggregateName),
+
+            RequestHandler = null
         };
-
-        model.Response = null; // new ResponseModel(entity, routeType, namingConventionConverter);
-
-        model.Request = await _classFactory.CreateQueryAsync(model.Name, properties);
-
-        model.RequestHandler = null;
-/*        model.RequestHandler = routeType switch
-        {
-            RouteType.Get => new GetRequestHandlerModel(entity, Request, Response, routeType, microserviceName, namingConventionConverter),
-            RouteType.GetById => new GetByIdRequestHandlerModel(entity, Request, Response, routeType, microserviceName, namingConventionConverter),
-            RouteType.Page => new PageRequestHandlerModel(entity, Request, Response, routeType, microserviceName, namingConventionConverter),
-
-            _ => throw new NotSupportedException()
-        }*/;
 
         return model;
     }

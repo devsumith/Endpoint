@@ -790,7 +790,7 @@ public class ClassFactory : IClassFactory
         return classModel;
     }
 
-    public async Task<ClassModel> CreateQueryAsync(string name, string responseName)
+    public async Task<ClassModel> CreateRequestAsync(string name, string responseName)
     {
         var model = new ClassModel(name);
 
@@ -855,7 +855,7 @@ public class ClassFactory : IClassFactory
         return model;
     }
 
-    public async Task<ClassModel> CreateResponseAsync(ResponseType responseType, string entityName, string name = null)
+    public async Task<ClassModel> CreateResponseAsync(RequestType responseType, string entityName, string name = null)
     {
         var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
