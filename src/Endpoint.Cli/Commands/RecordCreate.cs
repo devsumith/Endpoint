@@ -40,9 +40,9 @@ public class RecordCreateRequestHandler : IRequestHandler<RecordCreateRequest>
 
         var model = new RecordModel(request.Name);
 
-        var file = new ObjectFileModel<RecordModel>(
+        var file = new CodeFileModel<RecordModel>(
             model,
-            new List<Core.Syntax.UsingDirectiveModel>(),
+            new List<Core.Syntax.UsingModel>(),
             model.Name,
             request.Directory,
             ".cs"

@@ -49,7 +49,7 @@ public class ResponseCreateRequestHandler : IRequestHandler<ResponseCreateReques
 
         var model = await _classFactory.CreateResponseAsync(request.ResponseType.ToRequestType(), request.EntityName);
 
-        await _artifactGenerator.GenerateAsync(new ObjectFileModel<ClassModel>(model, model.Name, request.Directory, CSharpFile));
+        await _artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(model, model.Name, request.Directory, CSharpFile));
 
     }
 }

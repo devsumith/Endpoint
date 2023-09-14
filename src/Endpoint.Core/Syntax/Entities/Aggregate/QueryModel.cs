@@ -6,16 +6,17 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Entities.Aggregate;
 
-public class QueryModel
+public class QueryModel: SyntaxModel
 {
     public QueryModel()
     {
-        UsingDirectives = new List<UsingDirectiveModel>();
+        UsingDirectives = new List<UsingModel>();
     }
+
     public string Name { get; set; }
     public ClassModel Request { get; set; }
     public ClassModel Response { get; set; }
     public ClassModel RequestHandler { get; set; }
-    public List<UsingDirectiveModel> UsingDirectives { get; set; }
+    public List<UsingModel> UsingDirectives { get; set; }
 }
 

@@ -7,10 +7,10 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Artifacts.Files;
 
-public class EntityFileModel : ObjectFileModel<EntityModel>
+public class EntityFileModel : CodeFileModel<EntityModel>
 {
     public EntityFileModel(EntityModel @object, string directory)
-        : base(@object, new List<UsingDirectiveModel>(), @object.Name, directory, ".cs")
+        : base(@object, new List<UsingModel>(), @object.Name, directory, ".cs")
     {
         if (@object.UsingDirectives != null)
         {

@@ -88,7 +88,7 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
 
         @class.Methods.Add(equalityMethod);
 
-        var classFile = new ObjectFileModel<ClassModel>(
+        var classFile = new CodeFileModel<ClassModel>(
             @class,
             @class.UsingDirectives,
             @class.Name,

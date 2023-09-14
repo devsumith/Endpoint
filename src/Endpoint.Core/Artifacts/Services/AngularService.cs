@@ -125,7 +125,7 @@ public class AngularService : IAngularService
             .Append($");")
             .ToString();
 
-        var fileModel = new ObjectFileModel<FunctionModel>(model, $"create-{nameSnakeCase}-view-model", componentDirectory, ".ts");
+        var fileModel = new CodeFileModel<FunctionModel>(model, $"create-{nameSnakeCase}-view-model", componentDirectory, ".ts");
 
         await _artifactGenerator.GenerateAsync(fileModel);
 
@@ -721,7 +721,7 @@ public class AngularService : IAngularService
             }
         }
 
-        var fileModel = new ObjectFileModel<TypeScriptTypeModel>(model, ((SyntaxToken)model.Name).SnakeCase(), directory, ".ts");
+        var fileModel = new CodeFileModel<TypeScriptTypeModel>(model, ((SyntaxToken)model.Name).SnakeCase(), directory, ".ts");
 
         await _artifactGenerator.GenerateAsync(fileModel);
     }

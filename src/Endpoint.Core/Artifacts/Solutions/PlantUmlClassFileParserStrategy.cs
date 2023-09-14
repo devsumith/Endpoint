@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Artifacts.Solutions;
 
-public class PlantUmlClassFileParserStrategy : PlantUmlParserStrategyBase<ObjectFileModel<ClassModel>>
+public class PlantUmlClassFileParserStrategy : PlantUmlParserStrategyBase<CodeFileModel<ClassModel>>
 {
     public PlantUmlClassFileParserStrategy(IServiceProvider serviceProvider)
         : base(serviceProvider)
@@ -21,7 +21,7 @@ public class PlantUmlClassFileParserStrategy : PlantUmlParserStrategyBase<Object
 
     public override bool CanHandle(string plantUml) => plantUml.StartsWith("class");
 
-    protected override ObjectFileModel<ClassModel> Create(IPlantUmlParserStrategyFactory factory, string plantUml, dynamic context = null)
+    protected override CodeFileModel<ClassModel> Create(IPlantUmlParserStrategyFactory factory, string plantUml, dynamic context = null)
     {
         var plantUmlLines = plantUml.Split(Environment.NewLine);
 
@@ -41,7 +41,7 @@ public class PlantUmlClassFileParserStrategy : PlantUmlParserStrategyBase<Object
         }
 
 
-        return new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, context.Project.Directory, ".cs");
+        return new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, context.Project.Directory, ".cs");
     }
 }
 

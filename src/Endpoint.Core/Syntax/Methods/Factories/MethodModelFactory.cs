@@ -9,6 +9,7 @@ using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using Endpoint.Core.Syntax.Expressions;
+using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Factories;
 
@@ -91,6 +92,39 @@ public class MethodFactory : IMethodFactory
         methodModel.Body = new Syntax.Expressions.ExpressionModel("return await _mediator.Send(request, cancellationToken);");
 
         return methodModel;
+    }
+
+    public async Task<MethodModel> CreateWorkerExecuteAsync()
+    {
+        var methodBodyBuilder = new StringBuilder();
+
+        methodBodyBuilder.AppendLine("while (!stoppingToken.IsCancellationRequested)");
+
+        methodBodyBuilder.AppendLine("{");
+
+        methodBodyBuilder.AppendLine("_logger.LogInformation(\"Worker running at: {time}\", DateTimeOffset.Now);".Indent(1));
+
+        methodBodyBuilder.AppendLine("await Task.Delay(1000, stoppingToken);".Indent(1));
+
+        methodBodyBuilder.AppendLine("}");
+
+        return new MethodModel()
+        {
+            Name = "ExecuteAsync",
+            Override = true,
+            AccessModifier = AccessModifier.Protected,
+            Body = new ExpressionModel(methodBodyBuilder.ToString()),
+            Async = true,
+            ReturnType = new("Task"),
+            Params = new List<ParamModel>
+            {
+                new ()
+                {
+                    Name = "stoppingToken",
+                    Type = new ("CancellationToken")
+                }
+            }
+        };
     }
 
     public async Task<MethodModel> ToDtoCreateAsync(ClassModel aggregate)

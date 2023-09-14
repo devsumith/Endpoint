@@ -110,7 +110,7 @@ public class DependencyInjectionService : IDependencyInjectionService
     {
         var classModel = new ClassModel("ConfigureServices");
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = _namespaceProvider.Get(directory) });
+        classModel.UsingDirectives.Add(new UsingModel() { Name = _namespaceProvider.Get(directory) });
 
         var methodParam = new ParamModel()
         {
@@ -131,7 +131,7 @@ public class DependencyInjectionService : IDependencyInjectionService
 
         classModel.Methods.Add(method);
 
-        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs")
+        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs")
         {
             Namespace = "Microsoft.Extensions.DependencyInjection"
         };

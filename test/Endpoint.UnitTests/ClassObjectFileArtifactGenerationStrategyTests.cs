@@ -35,9 +35,9 @@ public class ClassObjectFileArtifactGenerationStrategyTests
 
         var classModel = new ClassModel("Foo");
 
-        var objectFileModel = new ObjectFileModel<ClassModel>(classModel, new List<UsingDirectiveModel>() {
+        var objectFileModel = new CodeFileModel<ClassModel>(classModel, new List<UsingModel>() {
 
-            new UsingDirectiveModel() { Name = "Sytem" }
+            new UsingModel() { Name = "Sytem" }
         }, "Foo", "directory", "extension");
 
         await sut.GenerateAsync(objectFileModel);

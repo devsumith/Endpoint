@@ -182,7 +182,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
             new EntityModel(entity.Name) { Properties = entity.Properties}
         }, name);
 
-        await _artifactGenerator.GenerateAsync(new ObjectFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), ".cs"));
+        await _artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(dbContext, dbContext.UsingDirectives, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), ".cs"));
 
         await _apiProjectService.ControllerAdd(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
 

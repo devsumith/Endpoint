@@ -44,7 +44,7 @@ public class SpecFlowFeatureCreateRequestHandler : IRequestHandler<SpecFlowFeatu
 
         var model = new SpecFlowFeatureModel(request.Name);
 
-        var fileModel = new ObjectFileModel<SpecFlowFeatureModel>(model, model.Name, request.Directory, "feature");
+        var fileModel = new CodeFileModel<SpecFlowFeatureModel>(model, model.Name, request.Directory, "feature");
 
         await _artifactGenerator.GenerateAsync(fileModel);
     }

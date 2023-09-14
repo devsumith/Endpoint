@@ -66,7 +66,7 @@ class Order {
 -string Password
 }");
 
-        Assert.Equal(typeof(ObjectFileModel<ClassModel>), result.GetType());
+        Assert.Equal(typeof(CodeFileModel<ClassModel>), result.GetType());
 
     }
 

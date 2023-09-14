@@ -119,7 +119,7 @@ public class AggregateService : IAggregateService
             _ => throw new NotSupportedException()
         })*/;
 
-        var model = new ObjectFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, ".cs");
+        var model = new CodeFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, ".cs");
 
         await _artifactGenerator.GenerateAsync(model);
     }
@@ -130,7 +130,7 @@ public class AggregateService : IAggregateService
 
         var queryModel = await _cqrsFactory.CreateQueryAsync(routeType, name, properties);
 
-        var model = new ObjectFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, CSharpFile);
+        var model = new CodeFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, CSharpFile);
 
         await _artifactGenerator.GenerateAsync(model);
     }

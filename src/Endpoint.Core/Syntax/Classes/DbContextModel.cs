@@ -31,7 +31,7 @@ public class DbContextModel : ClassModel
         Entities = entities;
         Schema = serviceName.Remove("Service");
 
-        UsingDirectives.AddRange(new UsingDirectiveModel[]
+        UsingDirectives.AddRange(new UsingModel[]
         {
             new ($"{serviceName}.Core"),
             new ("Microsoft.EntityFrameworkCore")

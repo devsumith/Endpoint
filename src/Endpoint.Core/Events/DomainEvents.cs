@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Enpoint.Core;
+namespace Enpoint.Core.Events;
 
 public static class DomainEvents
 {
@@ -34,10 +34,4 @@ public static class DomainEvents
             action(args);
         }
     }
-}
-
-
-public class MicroserviceNamespaceRequested
-{
-    public string Namespace { get; set; }
 }

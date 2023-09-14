@@ -110,7 +110,7 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         configureServicesClassModel.Methods.First().Body = new Core.Syntax.Expressions.ExpressionModel(configureServicesMethodBodyBuilder.ToString());
 
-        var configureServicesFileModel = new ObjectFileModel<ClassModel>(configureServicesClassModel, new()
+        var configureServicesFileModel = new CodeFileModel<ClassModel>(configureServicesClassModel, new()
         {
             new (projectModel.Name)
 
@@ -136,7 +136,7 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
             projectModel.Files.Add(programFileModel);
         }
 
-        projectModel.Files.Add(new ObjectFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.UsingDirectives, serviceBusMessageConsumerClassModel.Name, projectModel.Directory, ".cs"));
+        projectModel.Files.Add(new CodeFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.UsingDirectives, serviceBusMessageConsumerClassModel.Name, projectModel.Directory, ".cs"));
 
         projectModel.References.Add(@"..\Messaging.Udp\Messaging.Udp.csproj");
 

@@ -53,8 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DomainEvents\" />
-    <Folder Include="Notifications\" />
+    <Folder Include="Events\" />
     <Folder Include="Syntax\Properties\Factories\" />
     <Folder Include="Syntax\Statements\" />
     <Folder Include="Syntax\RouteHandlers\Create\" />

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.TypeScript;
 
-public class TypeScriptTypeModel
+public class TypeScriptTypeModel: SyntaxModel
 {
 
     public TypeScriptTypeModel(string name)

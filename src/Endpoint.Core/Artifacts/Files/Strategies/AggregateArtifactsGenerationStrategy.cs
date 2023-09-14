@@ -33,20 +33,20 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
         _fileSystem.Directory.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries");
 
         await artifactGenerator
-            .GenerateAsync(new ObjectFileModel<ClassModel>(model.Aggregate, model.Aggregate.UsingDirectives, model.Aggregate.Name, aggregateDirectory, ".cs"));
+            .GenerateAsync(new CodeFileModel<ClassModel>(model.Aggregate, model.Aggregate.UsingDirectives, model.Aggregate.Name, aggregateDirectory, ".cs"));
 
         await artifactGenerator
-            .GenerateAsync(new ObjectFileModel<ClassModel>(model.AggregateDto, model.AggregateDto.UsingDirectives, model.AggregateDto.Name, aggregateDirectory, ".cs"));
+            .GenerateAsync(new CodeFileModel<ClassModel>(model.AggregateDto, model.AggregateDto.UsingDirectives, model.AggregateDto.Name, aggregateDirectory, ".cs"));
 
         await artifactGenerator
-            .GenerateAsync(new ObjectFileModel<ClassModel>(model.AggregateExtensions, model.AggregateExtensions.UsingDirectives, model.AggregateExtensions.Name, aggregateDirectory, ".cs"));
+            .GenerateAsync(new CodeFileModel<ClassModel>(model.AggregateExtensions, model.AggregateExtensions.UsingDirectives, model.AggregateExtensions.Name, aggregateDirectory, ".cs"));
 
 
         foreach (var query in model.Queries)
         {
             await artifactGenerator
                 .GenerateAsync(
-                new ObjectFileModel<Syntax.Entities.Aggregate.QueryModel>(
+                new CodeFileModel<QueryModel>(
                     query,
                     query.UsingDirectives,
                     query.Name,
@@ -58,7 +58,7 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
         {
             await artifactGenerator
                 .GenerateAsync(
-                new ObjectFileModel<CommandModel>(
+                new CodeFileModel<CommandModel>(
                     command,
                     command.UsingDirectives,
                     command.Name,

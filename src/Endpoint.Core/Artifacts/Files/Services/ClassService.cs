@@ -56,7 +56,7 @@ public class ClassService : IClassService
                 @class.Properties.Add(new PropertyModel(@class, AccessModifier.Public, new TypeModel() { Name = propertyType }, propertyName, new List<PropertyAccessorModel>()));
             }
 
-        var classFile = new ObjectFileModel<ClassModel>(
+        var classFile = new CodeFileModel<ClassModel>(
             @class,
             @class.UsingDirectives,
             @class.Name,
@@ -145,7 +145,7 @@ public class ClassService : IClassService
 
             classModel.UsingAsDirectives.Add(new UsingAsDirectiveModel($"{_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))}.{name}", name));
 
-            await _artifactGenerator.GenerateAsync(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", ".cs"));
+            await _artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", ".cs"));
         }
     }
 

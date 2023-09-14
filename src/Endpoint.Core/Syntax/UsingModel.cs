@@ -3,14 +3,14 @@
 
 namespace Endpoint.Core.Syntax;
 
-public class UsingDirectiveModel
+public class UsingModel
 {
-    public UsingDirectiveModel(string name)
+    public UsingModel(string name)
     {
         Name = name;
     }
 
-    public UsingDirectiveModel()
+    public UsingModel()
     {
 
     }

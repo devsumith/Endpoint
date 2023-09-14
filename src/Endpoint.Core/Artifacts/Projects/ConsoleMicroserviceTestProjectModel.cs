@@ -24,7 +24,7 @@ public class ConsoleMicroserviceTestProjectModel : ProjectModel
 
         var classModel = new ClassModel("Worker");
 
-        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, "Worker", Directory, ".cs");
+        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, "Worker", Directory, ".cs");
 
         Files = new List<FileModel>
         {

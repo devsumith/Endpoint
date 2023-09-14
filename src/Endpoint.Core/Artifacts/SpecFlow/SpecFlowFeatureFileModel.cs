@@ -6,7 +6,7 @@ using Endpoint.Core.Syntax.SpecFlow;
 
 namespace Endpoint.Core.Artifacts.SpecFlow;
 
-public class SpecFlowFeatureFileModel : ObjectFileModel<SpecFlowFeatureModel>
+public class SpecFlowFeatureFileModel : CodeFileModel<SpecFlowFeatureModel>
 {
     public SpecFlowFeatureFileModel(SpecFlowFeatureModel model, string directory)
         : base(model, model.Name, directory, "feature")

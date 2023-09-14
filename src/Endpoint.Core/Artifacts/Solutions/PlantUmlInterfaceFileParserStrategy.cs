@@ -6,7 +6,7 @@ using Endpoint.Core.Syntax.Interfaces;
 
 namespace Endpoint.Core.Artifacts.Solutions;
 
-public class PlantUmlInterfaceFileParserStrategy : PlantUmlParserStrategyBase<ObjectFileModel<InterfaceModel>>
+public class PlantUmlInterfaceFileParserStrategy : PlantUmlParserStrategyBase<CodeFileModel<InterfaceModel>>
 {
     public PlantUmlInterfaceFileParserStrategy(IServiceProvider serviceProvider)
         : base(serviceProvider)
@@ -15,7 +15,7 @@ public class PlantUmlInterfaceFileParserStrategy : PlantUmlParserStrategyBase<Ob
 
     public override bool CanHandle(string plantUml) => plantUml.StartsWith("class");
 
-    protected override ObjectFileModel<InterfaceModel> Create(IPlantUmlParserStrategyFactory factory, string plantUml, dynamic context = null)
+    protected override CodeFileModel<InterfaceModel> Create(IPlantUmlParserStrategyFactory factory, string plantUml, dynamic context = null)
     {
         throw new NotImplementedException();
     }

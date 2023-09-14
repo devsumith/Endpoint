@@ -37,7 +37,7 @@ public class CqrsFactory: ICqrsFactory
     {
         _logger.LogInformation("Creating Cqrs Query. {name}", aggregateName); ;
 
-        var model = new QueryModel
+        return new ()
         {
             Name = routeType.ToRequestName(_namingConventionConverter),
 
@@ -46,9 +46,7 @@ public class CqrsFactory: ICqrsFactory
             Request = await _classFactory.CreateResponseAsync(routeType.ToRequestType(), aggregateName),
 
             RequestHandler = null
-        };
-
-        return model;
+        }; ;
     }
 }
 

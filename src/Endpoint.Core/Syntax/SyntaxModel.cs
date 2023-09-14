@@ -5,6 +5,9 @@ namespace Endpoint.Core.Syntax;
 
 public class SyntaxModel
 {
-
+    public SyntaxModel()
+    {
+        
+    }
 }
 

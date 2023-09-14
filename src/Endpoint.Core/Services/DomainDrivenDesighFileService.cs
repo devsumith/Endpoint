@@ -75,7 +75,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Implements.Add(new("IRequest"));
 
-        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
+        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
         await _artifactGenerator.GenerateAsync(classFileModel);
 
@@ -89,7 +89,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var classModel = new ClassModel(messageHandlerName);
 
-        classModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "MediatR" });
+        classModel.UsingDirectives.Add(new UsingModel() { Name = "MediatR" });
 
         classModel.Fields = new List<FieldModel>()
         {
@@ -149,7 +149,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Methods.Add(methodModel);
 
-        var classFileModel = new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
+        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
         await _artifactGenerator.GenerateAsync(classFileModel);
 
@@ -303,7 +303,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Methods.Add(method);
 
-        await _artifactGenerator.GenerateAsync(new ObjectFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs"));
+        await _artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs"));
     }
 
     public async Task ServiceCreate(string name, string directory)
@@ -313,7 +313,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             throw new Exception($"Service exists: {Path.Combine(directory, $"{name}.cs")}");
         }
 
-        var usingDirectives = new List<UsingDirectiveModel>()
+        var usingDirectives = new List<UsingModel>()
         {
             new () { Name = "Microsoft.Extensions.Logging" },
             new () { Name = "System" },
@@ -340,7 +340,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         _ = await createClass(@interface, name, methods, usingDirectives, directory);
 
-        async Task<InterfaceModel> createInterface(string name, List<MethodModel> methods, List<UsingDirectiveModel> usings, string directory)
+        async Task<InterfaceModel> createInterface(string name, List<MethodModel> methods, List<UsingModel> usings, string directory)
         {
             var @interface = new InterfaceModel($"I{name}");
 
@@ -348,7 +348,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
             @interface.UsingDirectives.AddRange(usings);
 
-            var interfaceFile = new ObjectFileModel<InterfaceModel>(
+            var interfaceFile = new CodeFileModel<InterfaceModel>(
                 @interface,
                 @interface.UsingDirectives,
                 @interface.Name,
@@ -361,7 +361,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             return @interface;
         }
 
-        async Task<ClassModel> createClass(InterfaceModel @interface, string name, List<MethodModel> methods, List<UsingDirectiveModel> usings, string directory)
+        async Task<ClassModel> createClass(InterfaceModel @interface, string name, List<MethodModel> methods, List<UsingModel> usings, string directory)
         {
             var @class = new ClassModel(name);
 
@@ -386,7 +386,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
             @class.Implements.Add(new () { Name = @interface.Name });
 
-            var classFile = new ObjectFileModel<ClassModel>(
+            var classFile = new CodeFileModel<ClassModel>(
                 @class,
                 @class.UsingDirectives,
                 @class.Name,

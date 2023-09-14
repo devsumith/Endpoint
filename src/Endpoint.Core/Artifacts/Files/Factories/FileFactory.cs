@@ -79,7 +79,7 @@ public class FileFactory : IFileFactory
 
     public FileModel CreateCSharp<T>(T classModel, string directory)
         where T : TypeDeclarationModel
-        => new ObjectFileModel<T>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
+        => new CodeFileModel<T>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
 
     public FileModel CreateResponseBase(string directory)
     {
@@ -181,7 +181,7 @@ public class FileFactory : IFileFactory
 
         var serviceName = Path.GetFileNameWithoutExtension(projectDirectory).Split('.')[0];
 
-        var usingDirectives = new List<UsingDirectiveModel>();
+        var usingDirectives = new List<UsingModel>();
 
         foreach (var folder in Directory.GetDirectories($"{projectDirectory}{Path.DirectorySeparatorChar}AggregatesModel"))
         {
@@ -201,7 +201,7 @@ public class FileFactory : IFileFactory
         }.ToInterface();
 
 
-        return new ObjectFileModel<InterfaceModel>(interfaceModel, interfaceModel.UsingDirectives, interfaceModel.Name, projectDirectory, ".cs");
+        return new CodeFileModel<InterfaceModel>(interfaceModel, interfaceModel.UsingDirectives, interfaceModel.Name, projectDirectory, ".cs");
 
     }
 }

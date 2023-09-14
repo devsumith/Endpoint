@@ -110,7 +110,7 @@ public class SolutionService : ISolutionService
 
             var serviceBusMessageConsumer = _domainDrivenDesignService.ServiceBusMessageConsumerCreate($"{coreModel.Name}.Messages", coreModel.Directory);
 
-            var fileModel = new ObjectFileModel<ClassModel>(serviceBusMessageConsumer, serviceBusMessageConsumer.UsingDirectives, serviceBusMessageConsumer.Name, coreModel.Directory, ".cs");
+            var fileModel = new CodeFileModel<ClassModel>(serviceBusMessageConsumer, serviceBusMessageConsumer.UsingDirectives, serviceBusMessageConsumer.Name, coreModel.Directory, ".cs");
 
             coreModel.Files.Add(fileModel);
 

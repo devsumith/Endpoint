@@ -46,7 +46,7 @@ public class InterfaceCreateRequestHandler : IRequestHandler<InterfaceCreateRequ
         {
             var model = new InterfaceModel(name);
 
-            await _artifactGenerator.GenerateAsync(new ObjectFileModel<InterfaceModel>(model, model.UsingDirectives, name, request.Directory, ".cs"));
+            await _artifactGenerator.GenerateAsync(new CodeFileModel<InterfaceModel>(model, model.UsingDirectives, name, request.Directory, ".cs"));
         }
 
     }

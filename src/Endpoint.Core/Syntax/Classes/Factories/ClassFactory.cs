@@ -415,85 +415,6 @@ public class ClassFactory : IClassFactory
         return dbContext;
     }
 
-    public ClassModel CreateWorker(string name, string directory)
-    {
-        var usings = new List<UsingDirectiveModel>()
-        {
-            new UsingDirectiveModel() { Name = "Microsoft.Extensions.Hosting" },
-            new UsingDirectiveModel() { Name = "Microsoft.Extensions.Logging" },
-            new UsingDirectiveModel() { Name = "System" },
-            new UsingDirectiveModel() { Name = "System.Threading" },
-            new UsingDirectiveModel() { Name = "System.Threading.Tasks" }
-        };
-
-        var model = new ClassModel(name);
-
-        var fields = new List<FieldModel>()
-        {
-            new FieldModel()
-            {
-                Name = "_logger",
-                Type = TypeModel.LoggerOf(name)
-            }
-        };
-
-        var constructors = new List<ConstructorModel>()
-        {
-
-            new ConstructorModel(model,model.Name)
-            {
-                Params = new List<ParamModel>
-                {
-                    new ParamModel()
-                    {
-                        Type = TypeModel.LoggerOf(name),
-                        Name = "logger"
-                    }
-                }
-            }
-        };
-
-        model.Fields = fields;
-
-        model.Constructors = constructors;
-
-        model.Implements.Add(new TypeModel() { Name = "BackgroundService" });
-
-        var methodBodyBuilder = new StringBuilder();
-
-        methodBodyBuilder.AppendLine("while (!stoppingToken.IsCancellationRequested)");
-
-        methodBodyBuilder.AppendLine("{");
-
-        methodBodyBuilder.AppendLine("_logger.LogInformation(\"Worker running at: {time}\", DateTimeOffset.Now);".Indent(1));
-
-        methodBodyBuilder.AppendLine("await Task.Delay(1000, stoppingToken);".Indent(1));
-
-        methodBodyBuilder.AppendLine("}");
-
-        var method = new MethodModel()
-        {
-            Name = "ExecuteAsync",
-            Override = true,
-            AccessModifier = AccessModifier.Protected,
-            Body = new Syntax.Expressions.ExpressionModel(methodBodyBuilder.ToString()),
-            Async = true,
-            ReturnType = new TypeModel() { Name = "Task" },
-            Params = new List<ParamModel>
-            {
-                new ParamModel()
-                {
-                    Name = "stoppingToken",
-                    Type = new TypeModel() { Name = "CancellationToken" }
-                }
-            }
-        };
-
-        model.Methods.Add(method);
-
-        return model;
-    }
-
     public ClassModel CreateMessageModel()
     {
         var model = new ClassModel($"Message");
@@ -534,7 +455,7 @@ public class ClassFactory : IClassFactory
             }
         });
 
-        hubClassModel.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.AspNetCore.SignalR" });
+        hubClassModel.UsingDirectives.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
 
         return hubClassModel;
     }
@@ -556,11 +477,11 @@ public class ClassFactory : IClassFactory
         return interfaceModel;
     }
 
-    public ClassModel CreateMessageProducerWorkerModel(string name, string directory)
+    public async Task<ClassModel> CreateMessageProducerWorkerAsync(string name, string directory)
     {
-        var model = CreateWorker("MessageProducer", directory);
+        var model = await CreateWorkerAsync("MessageProducer");
 
-        model.UsingDirectives.Add(new UsingDirectiveModel() { Name = "System.Text.Json" });
+        model.UsingDirectives.Add(new UsingModel() { Name = "System.Text.Json" });
 
         var hubContextType = new TypeModel("IHubContext")
         {
@@ -571,7 +492,7 @@ public class ClassFactory : IClassFactory
             }
         };
 
-        model.UsingDirectives.Add(new UsingDirectiveModel() { Name = "Microsoft.AspNetCore.SignalR" });
+        model.UsingDirectives.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
 
         model.Fields.Add(new FieldModel()
         {
@@ -876,5 +797,44 @@ public class ClassFactory : IClassFactory
         return model;
     }
 
+    public async Task<ClassModel> CreateWorkerAsync(string name)
+    {
+        var usings = new List<UsingModel>()
+        {
+            new () { Name = "Microsoft.Extensions.Hosting" },
+            new () { Name = "Microsoft.Extensions.Logging" },
+            new () { Name = "System" },
+            new () { Name = "System.Threading" },
+            new () { Name = "System.Threading.Tasks" }
+        };
+
+        var model = new ClassModel(name);
+
+        var fields = new List<FieldModel>()
+        {
+            FieldModel.LoggerOf(name)
+        };
+
+        var constructors = new List<ConstructorModel>()
+        {
+            new (model, model.Name)
+            {
+                Params = new ()
+                {
+                    ParamModel.LoggerOf(name)
+                }
+            }
+        };
+
+        model.Fields = fields;
+
+        model.Constructors = constructors;
+
+        model.Implements.Add(new("BackgroundService"));
+
+        model.Methods.Add(await _methodFactory.CreateWorkerExecuteAsync());
+
+        return model;
+    }
 }
 

@@ -66,7 +66,7 @@ public class SolutionModel
             {
                 foreach (var file in project.Files)
                 {
-                    if (file is ObjectFileModel<ClassModel> classFileModel)
+                    if (file is CodeFileModel<ClassModel> classFileModel)
                     {
                         if (classFileModel.Object.Name.Split('.').Last() == name)
                             return classFileModel.Object;

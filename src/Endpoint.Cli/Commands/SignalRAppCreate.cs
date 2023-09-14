@@ -131,7 +131,6 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             _fileSystem.Directory.Delete(Path.Combine(request.Directory, request.Name), true);
         }
 
-
         var solutionModel = await _solutionFactory.Create(request.Name, $"{request.Name}.Api", "webapi", string.Empty, request.Directory);
 
         var messageModel = _classFactory.CreateMessageModel();
@@ -142,15 +141,15 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var projectModel = solutionModel.DefaultProject;
 
-        var workerModel = _classFactory.CreateMessageProducerWorkerModel(request.Name, projectModel.Directory);
+        var workerModel = await _classFactory.CreateMessageProducerWorkerAsync(request.Name, projectModel.Directory);
 
-        projectModel.Files.Add(new ObjectFileModel<ClassModel>(workerModel, workerModel.UsingDirectives, workerModel.Name, projectModel.Directory, ".cs"));
+        projectModel.Files.Add(new CodeFileModel<ClassModel>(workerModel, workerModel.UsingDirectives, workerModel.Name, projectModel.Directory, ".cs"));
 
-        projectModel.Files.Add(new ObjectFileModel<ClassModel>(messageModel, messageModel.UsingDirectives, messageModel.Name, projectModel.Directory, ".cs"));
+        projectModel.Files.Add(new CodeFileModel<ClassModel>(messageModel, messageModel.UsingDirectives, messageModel.Name, projectModel.Directory, ".cs"));
 
-        projectModel.Files.Add(new ObjectFileModel<ClassModel>(hubClassModel, hubClassModel.UsingDirectives, hubClassModel.Name, projectModel.Directory, ".cs"));
+        projectModel.Files.Add(new CodeFileModel<ClassModel>(hubClassModel, hubClassModel.UsingDirectives, hubClassModel.Name, projectModel.Directory, ".cs"));
 
-        projectModel.Files.Add(new ObjectFileModel<InterfaceModel>(interfaceModel, interfaceModel.Name, projectModel.Directory, ".cs"));
+        projectModel.Files.Add(new CodeFileModel<InterfaceModel>(interfaceModel, interfaceModel.Name, projectModel.Directory, ".cs"));
 
         await _artifactGenerator.GenerateAsync(solutionModel);
 
