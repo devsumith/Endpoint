@@ -3,9 +3,9 @@
 
 namespace Endpoint.Core.Syntax;
 
-public class UsingAsDirectiveModel
+public class UsingAsModel
 {
-    public UsingAsDirectiveModel(string name, string @as)
+    public UsingAsModel(string name, string @as)
     {
         Name = name;
         Alias = @as;

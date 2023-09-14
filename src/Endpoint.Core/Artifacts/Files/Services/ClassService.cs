@@ -143,7 +143,7 @@ public class ClassService : IClassService
 
             classModel.UsingDirectives.Add(new(_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))));
 
-            classModel.UsingAsDirectives.Add(new UsingAsDirectiveModel($"{_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))}.{name}", name));
+            classModel.UsingAsDirectives.Add(new UsingAsModel($"{_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))}.{name}", name));
 
             await _artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", ".cs"));
         }

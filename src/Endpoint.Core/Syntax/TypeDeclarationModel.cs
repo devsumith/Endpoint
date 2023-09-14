@@ -13,12 +13,12 @@ public class TypeDeclarationModel: SyntaxModel
         Name = name;
         Properties = new List<PropertyModel>();
         UsingDirectives = new List<UsingModel>();
-        UsingAsDirectives = new List<UsingAsDirectiveModel>();
+        UsingAsDirectives = new List<UsingAsModel>();
     }
 
     public string Name { get; set; }
     public List<PropertyModel> Properties { get; set; }
     public List<UsingModel> UsingDirectives { get; set; }
-    public List<UsingAsDirectiveModel> UsingAsDirectives { get; set; }
+    public List<UsingAsModel> UsingAsDirectives { get; set; }
 }
 
