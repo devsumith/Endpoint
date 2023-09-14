@@ -44,7 +44,7 @@ public class ClassService : IClassService
 
         var @class = new ClassModel(name);
 
-        @class.UsingDirectives.Add(new("System"));
+        @class.Usings.Add(new("System"));
 
         if (!string.IsNullOrEmpty(properties))
             foreach (var property in properties.Split(','))
@@ -58,7 +58,7 @@ public class ClassService : IClassService
 
         var classFile = new CodeFileModel<ClassModel>(
             @class,
-            @class.UsingDirectives,
+            @class.Usings,
             @class.Name,
             directory,
             ".cs"
@@ -139,13 +139,13 @@ public class ClassService : IClassService
 
             classModel.Methods.Add(fact);
 
-            classModel.UsingDirectives.Add(new("Xunit"));
+            classModel.Usings.Add(new("Xunit"));
 
-            classModel.UsingDirectives.Add(new(_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))));
+            classModel.Usings.Add(new(_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))));
 
-            classModel.UsingAsDirectives.Add(new UsingAsModel($"{_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))}.{name}", name));
+            classModel.UsingAs.Add(new UsingAsModel($"{_nameSpaceProvider.Get(Path.GetDirectoryName(classPath))}.{name}", name));
 
-            await _artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", ".cs"));
+            await _artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, $"{projectDirectory}{Path.DirectorySeparatorChar}{name}", ".cs"));
         }
     }
 

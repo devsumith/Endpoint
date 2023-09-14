@@ -26,9 +26,9 @@ public class ClassSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Cla
 
         var builder = new StringBuilder();
 
-        if (model.UsingAsDirectives.Count > 0)
+        if (model.UsingAs.Count > 0)
         {
-            foreach (var directive in model.UsingAsDirectives)
+            foreach (var directive in model.UsingAs)
             {
                 builder.AppendLine($"using {directive.Alias} = {directive.Name};");
             }

@@ -19,6 +19,7 @@ using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Interfaces;
 using Endpoint.Core.Artifacts.Services;
 using Endpoint.Core.Artifacts;
+using static Endpoint.Core.Constants.FileExtensions;
 
 namespace Endpoint.Cli.Commands;
 
@@ -143,13 +144,13 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var workerModel = await _classFactory.CreateMessageProducerWorkerAsync(request.Name, projectModel.Directory);
 
-        projectModel.Files.Add(new CodeFileModel<ClassModel>(workerModel, workerModel.UsingDirectives, workerModel.Name, projectModel.Directory, ".cs"));
+        projectModel.Files.Add(new CodeFileModel<ClassModel>(workerModel, workerModel.Name, projectModel.Directory, CSharpFile));
 
-        projectModel.Files.Add(new CodeFileModel<ClassModel>(messageModel, messageModel.UsingDirectives, messageModel.Name, projectModel.Directory, ".cs"));
+        projectModel.Files.Add(new CodeFileModel<ClassModel>(messageModel, messageModel.Name, projectModel.Directory, CSharpFile));
 
-        projectModel.Files.Add(new CodeFileModel<ClassModel>(hubClassModel, hubClassModel.UsingDirectives, hubClassModel.Name, projectModel.Directory, ".cs"));
+        projectModel.Files.Add(new CodeFileModel<ClassModel>(hubClassModel, hubClassModel.Name, projectModel.Directory, CSharpFile));
 
-        projectModel.Files.Add(new CodeFileModel<InterfaceModel>(interfaceModel, interfaceModel.Name, projectModel.Directory, ".cs"));
+        projectModel.Files.Add(new CodeFileModel<InterfaceModel>(interfaceModel, interfaceModel.Name, projectModel.Directory, CSharpFile));
 
         await _artifactGenerator.GenerateAsync(solutionModel);
 
@@ -171,14 +172,14 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         _commandService.Start($"ng g c {_namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}", appDirectory);
 
-        _commandService.Start("npm install @microsoft/signalr", Path.Combine(solutionModel.SrcDirectory, temporaryAppName));
+        _commandService.Start("npm install @microsoft/signalr --force", Path.Combine(solutionModel.SrcDirectory, temporaryAppName));
 
         var mainFileModel = _fileFactory
             .CreateTemplate(
             "SignalRAppMain",
             "main",
             Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src"),
-            ".ts",
+            TypeScriptFile,
             tokens: new TokensBuilder()
             .With("baseUrl", projectModel.GetApplicationUrl(_fileSystem))
             .With("name", request.Name)
@@ -187,9 +188,9 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         var componentFileModel = _fileFactory
             .CreateTemplate(
             "Components.HubClientServiceConsumer.Component",
-            $"{nameSnakeCase}{Path.DirectorySeparatorChar}{nameSnakeCase}.component",
+            Path.Combine(nameSnakeCase, $"{nameSnakeCase}.component"),
             appDirectory,
-            ".ts",
+            TypeScriptFile,
             tokens: new TokensBuilder()
             .With("name", request.Name)
             .Build());
@@ -197,9 +198,9 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         var componentTemplateFileModel = _fileFactory
             .CreateTemplate(
             "Components.HubClientServiceConsumer.Html",
-            $"{nameSnakeCase}{Path.DirectorySeparatorChar}{nameSnakeCase}.component",
+            Path.Combine(nameSnakeCase, $"{nameSnakeCase}.component"),
             appDirectory,
-            ".html",
+            HtmlFile,
             tokens: new TokensBuilder()
             .With("name", request.Name)
             .With("code", "{{ vm.messages | json }}")
@@ -210,7 +211,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             "Services.HubClientService.Service",
             $"{serviceName}.service",
             appDirectory,
-            ".ts",
+            TypeScriptFile,
             tokens: new TokensBuilder()
             .With("name", request.Name)
             .Build());
@@ -220,12 +221,12 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             "Services.HubClientService.Spec",
             $"{serviceName}.service.spec",
             appDirectory,
-            ".ts",
+            TypeScriptFile,
             tokens: new TokensBuilder()
             .With("name", request.Name)
             .Build());
 
-        var appHtmlFileModel = new ContentFileModel("<router-outlet />", "app.component", Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app"), ".html");
+        var appHtmlFileModel = new ContentFileModel("<router-outlet />", "app.component", Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app"), HtmlFile);
 
         await _artifactGenerator.GenerateAsync(mainFileModel);
 

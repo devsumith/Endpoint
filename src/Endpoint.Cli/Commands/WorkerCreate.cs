@@ -4,17 +4,11 @@
 using CommandLine;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Constructors;
-using Endpoint.Core.Syntax.Fields;
-using Endpoint.Core.Syntax.Methods.Factories;
-using Endpoint.Core.Syntax.Params;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using static Endpoint.Core.Constants.FileExtensions;
@@ -55,7 +49,7 @@ public class WorkerCreateRequestHandler : IRequestHandler<WorkerCreateRequest>
 
         var model = await _classFactory.CreateWorkerAsync(request.Name);
 
-        var fileModel = new CodeFileModel<ClassModel>(model, model.UsingDirectives, model.Name, request.Directory, CSharpFile);
+        var fileModel = new CodeFileModel<ClassModel>(model, model.Name, request.Directory, CSharpFile);
 
         await _artifactGenerator.GenerateAsync(fileModel);
     }

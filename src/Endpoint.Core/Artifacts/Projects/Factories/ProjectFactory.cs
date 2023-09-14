@@ -342,7 +342,7 @@ public class ProjectFactory : IProjectFactory
 
         model.Files.Add(jsonResponsefileModel);
 
-        model.Files.Add(new CodeFileModel<ClassModel>(responseBase, responseBase.UsingDirectives, responseBase.Name, model.Directory, ".cs"));
+        model.Files.Add(new CodeFileModel<ClassModel>(responseBase, responseBase.Usings, responseBase.Name, model.Directory, ".cs"));
 
         return model;
     }

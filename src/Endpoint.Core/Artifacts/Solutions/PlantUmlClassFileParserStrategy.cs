@@ -41,7 +41,7 @@ public class PlantUmlClassFileParserStrategy : PlantUmlParserStrategyBase<CodeFi
         }
 
 
-        return new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, context.Project.Directory, ".cs");
+        return new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, context.Project.Directory, ".cs");
     }
 }
 

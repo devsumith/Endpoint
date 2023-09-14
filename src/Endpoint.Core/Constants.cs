@@ -22,7 +22,9 @@ public static class Constants
     public static class FileExtensions
     {
         public static string CSharpFile = ".cs";
-        public static string CSharpProject = "*.csproj";
+        public static string TypeScriptFile = ".ts";
+        public static string CSharpProject = ".csproj";
+        public static string HtmlFile = ".html";
     }
 
     public static class ApiFileTemplates

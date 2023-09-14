@@ -102,7 +102,7 @@ public class AggregateService : IAggregateService
 
     public async Task CommandCreate(string routeType, string name, string aggregate, string properties, string directory)
     {
-        var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get(CSharpProject, directory)).Split('.').First();
+        var serviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
 
         var classModel = _syntaxService.SolutionModel?.GetClass(aggregate, serviceName);
 
@@ -126,7 +126,7 @@ public class AggregateService : IAggregateService
 
     public async Task QueryCreateAsync(string routeType, string name, string aggregate, string properties, string directory)
     {
-        var rootNamespace = Path.GetFileNameWithoutExtension(_fileProvider.Get(CSharpProject, directory)).Split('.').First();
+        var rootNamespace = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
 
         var queryModel = await _cqrsFactory.CreateQueryAsync(routeType, name, properties);
 

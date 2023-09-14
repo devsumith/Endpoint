@@ -79,7 +79,7 @@ public class FileFactory : IFileFactory
 
     public FileModel CreateCSharp<T>(T classModel, string directory)
         where T : TypeDeclarationModel
-        => new CodeFileModel<T>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
+        => new CodeFileModel<T>(classModel, classModel.Usings, classModel.Name, directory, ".cs");
 
     public FileModel CreateResponseBase(string directory)
     {
@@ -197,11 +197,11 @@ public class FileFactory : IFileFactory
         }
         var interfaceModel = new DbContextModel(_namingConventionConverter, $"{serviceName}DbContext", entities, serviceName)
         {
-            UsingDirectives = usingDirectives
+            Usings = usingDirectives
         }.ToInterface();
 
 
-        return new CodeFileModel<InterfaceModel>(interfaceModel, interfaceModel.UsingDirectives, interfaceModel.Name, projectDirectory, ".cs");
+        return new CodeFileModel<InterfaceModel>(interfaceModel, interfaceModel.Usings, interfaceModel.Name, projectDirectory, ".cs");
 
     }
 }

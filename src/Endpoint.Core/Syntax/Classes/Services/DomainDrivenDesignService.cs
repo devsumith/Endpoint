@@ -25,15 +25,15 @@ public class DomainDrivenDesignService : IDomainDrivenDesignService
 
         classModel.Implements.Add(new TypeModel("BackgroundService"));
 
-        classModel.UsingDirectives.Add(new("MediatR"));
+        classModel.Usings.Add(new("MediatR"));
 
-        classModel.UsingDirectives.Add(new("Messaging"));
+        classModel.Usings.Add(new("Messaging"));
 
-        classModel.UsingDirectives.Add(new("Newtonsoft.Json"));
+        classModel.Usings.Add(new("Newtonsoft.Json"));
 
-        classModel.UsingDirectives.Add(new("Microsoft.Extensions.Hosting"));
+        classModel.Usings.Add(new("Microsoft.Extensions.Hosting"));
 
-        classModel.UsingDirectives.Add(new("Microsoft.Extensions.Logging"));
+        classModel.Usings.Add(new("Microsoft.Extensions.Logging"));
 
         var ctor = new ConstructorModel(classModel, classModel.Name);
 

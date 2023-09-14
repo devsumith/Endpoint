@@ -138,11 +138,11 @@ public class FolderFactory : IFolderFactory
 
         var extensions = await _classFactory.DtoExtensionsCreateAsync(aggregate);
 
-        model.Files.Add(new CodeFileModel<ClassModel>(aggregate, aggregate.UsingDirectives, aggregate.Name, model.Directory, ".cs"));
+        model.Files.Add(new CodeFileModel<ClassModel>(aggregate, aggregate.Usings, aggregate.Name, model.Directory, ".cs"));
 
-        model.Files.Add(new CodeFileModel<ClassModel>(aggregateDto, aggregateDto.UsingDirectives, aggregateDto.Name, model.Directory, ".cs"));
+        model.Files.Add(new CodeFileModel<ClassModel>(aggregateDto, aggregateDto.Usings, aggregateDto.Name, model.Directory, ".cs"));
 
-        model.Files.Add(new CodeFileModel<ClassModel>(extensions, extensions.UsingDirectives, extensions.Name, model.Directory, ".cs"));
+        model.Files.Add(new CodeFileModel<ClassModel>(extensions, extensions.Usings, extensions.Name, model.Directory, ".cs"));
 
         return model;
     }

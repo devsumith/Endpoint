@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "response-create -r Get -e GroceryItem -d C:\\projects\\PaperBack\\src\\Services\\GroceryService\\GroceryService.Core\\AggregatesModel\\GroceryItemAggregate\\Queries",
+      "commandLineArgs": "signalr-app-create -n Party -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

@@ -75,7 +75,7 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
 
         @class.Implements.Add(new TypeModel("ValueObject"));
 
-        @class.UsingDirectives.Add(new("System"));
+        @class.Usings.Add(new("System"));
 
         var equalityMethod = new MethodModel
         {
@@ -90,7 +90,7 @@ public class ValueObjectCreateRequestHandler : IRequestHandler<ValueObjectCreate
 
         var classFile = new CodeFileModel<ClassModel>(
             @class,
-            @class.UsingDirectives,
+            @class.Usings,
             @class.Name,
             request.Directory,
             ".cs"

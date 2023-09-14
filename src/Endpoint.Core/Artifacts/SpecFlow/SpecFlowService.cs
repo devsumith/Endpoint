@@ -40,12 +40,12 @@ public class SpecFlowService : ISpecFlowService
             Name = "Binding"
         });
 
-        classModel.UsingDirectives.Add(new UsingModel()
+        classModel.Usings.Add(new UsingModel()
         {
             Name = "TechTalk.SpecFlow"
         });
 
-        var fileModel = new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
+        var fileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs");
 
         await _artifactGenerator.GenerateAsync(fileModel);
     }
@@ -63,9 +63,9 @@ public class SpecFlowService : ISpecFlowService
             Name = "Binding"
         });
 
-        classModel.UsingDirectives.Add(new("TechTalk.SpecFlow"));
+        classModel.Usings.Add(new("TechTalk.SpecFlow"));
 
-        var fileModel = new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
+        var fileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs");
 
         await _artifactGenerator.GenerateAsync(fileModel);
     }

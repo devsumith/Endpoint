@@ -136,7 +136,7 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
             projectModel.Files.Add(programFileModel);
         }
 
-        projectModel.Files.Add(new CodeFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.UsingDirectives, serviceBusMessageConsumerClassModel.Name, projectModel.Directory, ".cs"));
+        projectModel.Files.Add(new CodeFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.Usings, serviceBusMessageConsumerClassModel.Name, projectModel.Directory, ".cs"));
 
         projectModel.References.Add(@"..\Messaging.Udp\Messaging.Udp.csproj");
 

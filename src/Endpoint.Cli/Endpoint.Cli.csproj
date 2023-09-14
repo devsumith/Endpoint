@@ -51,9 +51,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="NotificationHandlers\" />
-  </ItemGroup>
   
 </Project>

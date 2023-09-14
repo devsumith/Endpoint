@@ -52,7 +52,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Properties.AddRange(properties);
 
-        classModel.UsingDirectives.Add(new("MediatR"));
+        classModel.Usings.Add(new("MediatR"));
 
         var constructorModel = new ConstructorModel(classModel, classModel.Name);
 
@@ -75,7 +75,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Implements.Add(new("IRequest"));
 
-        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
+        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs");
 
         await _artifactGenerator.GenerateAsync(classFileModel);
 
@@ -89,7 +89,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var classModel = new ClassModel(messageHandlerName);
 
-        classModel.UsingDirectives.Add(new UsingModel() { Name = "MediatR" });
+        classModel.Usings.Add(new UsingModel() { Name = "MediatR" });
 
         classModel.Fields = new List<FieldModel>()
         {
@@ -149,7 +149,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Methods.Add(methodModel);
 
-        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs");
+        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs");
 
         await _artifactGenerator.GenerateAsync(classFileModel);
 
@@ -171,25 +171,25 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Implements.Add(new("BackgroundService"));
 
-        classModel.UsingDirectives.Add(new("Messaging"));
+        classModel.Usings.Add(new("Messaging"));
 
-        classModel.UsingDirectives.Add(new("Messaging.Udp"));
+        classModel.Usings.Add(new("Messaging.Udp"));
 
-        classModel.UsingDirectives.Add(new("Microsoft.Extensions.DependencyInjection"));
+        classModel.Usings.Add(new("Microsoft.Extensions.DependencyInjection"));
 
-        classModel.UsingDirectives.Add(new("Microsoft.Extensions.Hosting"));
+        classModel.Usings.Add(new("Microsoft.Extensions.Hosting"));
 
-        classModel.UsingDirectives.Add(new("System.Text"));
+        classModel.Usings.Add(new("System.Text"));
 
-        classModel.UsingDirectives.Add(new("Microsoft.Extensions.Logging"));
+        classModel.Usings.Add(new("Microsoft.Extensions.Logging"));
 
-        classModel.UsingDirectives.Add(new("System.Threading.Tasks"));
+        classModel.Usings.Add(new("System.Threading.Tasks"));
 
-        classModel.UsingDirectives.Add(new("System.Threading"));
+        classModel.Usings.Add(new("System.Threading"));
 
-        classModel.UsingDirectives.Add(new("MediatR"));
+        classModel.Usings.Add(new("MediatR"));
 
-        classModel.UsingDirectives.Add(new("System.Linq"));
+        classModel.Usings.Add(new("System.Linq"));
 
 
         var constructorModel = new ConstructorModel(classModel, classModel.Name);
@@ -303,7 +303,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Methods.Add(method);
 
-        await _artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(classModel, classModel.UsingDirectives, classModel.Name, directory, ".cs"));
+        await _artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs"));
     }
 
     public async Task ServiceCreate(string name, string directory)
@@ -346,11 +346,11 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
             @interface.Methods = methods.Select(x => new MethodModel() { Name = x.Name, ReturnType = x.ReturnType, Async = x.Async, Interface = true }).ToList();
 
-            @interface.UsingDirectives.AddRange(usings);
+            @interface.Usings.AddRange(usings);
 
             var interfaceFile = new CodeFileModel<InterfaceModel>(
                 @interface,
-                @interface.UsingDirectives,
+                @interface.Usings,
                 @interface.Name,
                 directory,
                 ".cs"
@@ -382,13 +382,13 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
             @class.Fields = fields;
 
-            @class.UsingDirectives.AddRange(usingDirectives);
+            @class.Usings.AddRange(usingDirectives);
 
             @class.Implements.Add(new () { Name = @interface.Name });
 
             var classFile = new CodeFileModel<ClassModel>(
                 @class,
-                @class.UsingDirectives,
+                @class.Usings,
                 @class.Name,
                 directory,
                 ".cs"

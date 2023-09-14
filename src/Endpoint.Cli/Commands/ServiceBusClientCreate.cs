@@ -119,7 +119,7 @@ public class ServiceBusClientCreateRequestHandler : IRequestHandler<ServiceBusCl
 
         model.Files.Add(configureServicesFileModel);
 
-        model.Files.Add(new CodeFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.UsingDirectives, serviceBusMessageConsumerClassModel.Name, model.Directory, ".cs"));
+        model.Files.Add(new CodeFileModel<ClassModel>(serviceBusMessageConsumerClassModel, serviceBusMessageConsumerClassModel.Usings, serviceBusMessageConsumerClassModel.Name, model.Directory, ".cs"));
 
         model.References.Add(@"..\Messaging.Udp\Messaging.Udp.csproj");
 

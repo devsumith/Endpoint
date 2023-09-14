@@ -12,9 +12,9 @@ public class EntityFileModel : CodeFileModel<EntityModel>
     public EntityFileModel(EntityModel @object, string directory)
         : base(@object, new List<UsingModel>(), @object.Name, directory, ".cs")
     {
-        if (@object.UsingDirectives != null)
+        if (@object.Usings != null)
         {
-            foreach (var @using in @object.UsingDirectives)
+            foreach (var @using in @object.Usings)
             {
                 Usings.Add(@using);
             }

@@ -31,7 +31,7 @@ public class DbContextModel : ClassModel
         Entities = entities;
         Schema = serviceName.Remove("Service");
 
-        UsingDirectives.AddRange(new UsingModel[]
+        Usings.AddRange(new UsingModel[]
         {
             new ($"{serviceName}.Core"),
             new ("Microsoft.EntityFrameworkCore")
@@ -68,7 +68,7 @@ public class DbContextModel : ClassModel
                 namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true),
                 PropertyAccessorModel.GetPrivateSet));
 
-            UsingDirectives.Add(new($"{serviceName}.Core.AggregatesModel.{entity.Name}Aggregate"));
+            Usings.Add(new($"{serviceName}.Core.AggregatesModel.{entity.Name}Aggregate"));
         }
 
         var onModelCreatingMethodBodyBuilder = new StringBuilder();
@@ -94,7 +94,7 @@ public class DbContextModel : ClassModel
     {
         InterfaceModel interfaceModel = new($"I{Name}");
 
-        interfaceModel.UsingDirectives = UsingDirectives;
+        interfaceModel.Usings = Usings;
 
         foreach (var prop in Properties)
         {

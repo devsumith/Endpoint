@@ -63,21 +63,21 @@ public class ClassFactory : IClassFactory
 
         var classModel = new ClassModel($"{model.Name}Controller");
 
-        classModel.UsingDirectives.Add(new($"{rootNamesapce}.Core.AggregatesModel.{model.Name}Aggregate.Commands"));
+        classModel.Usings.Add(new($"{rootNamesapce}.Core.AggregatesModel.{model.Name}Aggregate.Commands"));
 
-        classModel.UsingDirectives.Add(new($"{rootNamesapce}.Core.AggregatesModel.{model.Name}Aggregate.Queries"));
+        classModel.Usings.Add(new($"{rootNamesapce}.Core.AggregatesModel.{model.Name}Aggregate.Queries"));
 
-        classModel.UsingDirectives.Add(new("System.Net"));
+        classModel.Usings.Add(new("System.Net"));
 
-        classModel.UsingDirectives.Add(new("System.Threading.Tasks"));
+        classModel.Usings.Add(new("System.Threading.Tasks"));
 
-        classModel.UsingDirectives.Add(new("MediatR"));
+        classModel.Usings.Add(new("MediatR"));
 
-        classModel.UsingDirectives.Add(new("Microsoft.AspNetCore.Mvc"));
+        classModel.Usings.Add(new("Microsoft.AspNetCore.Mvc"));
 
-        classModel.UsingDirectives.Add(new("System.Net.Mime"));
+        classModel.Usings.Add(new("System.Net.Mime"));
 
-        classModel.UsingDirectives.Add(new("Swashbuckle.AspNetCore.Annotations"));
+        classModel.Usings.Add(new("Swashbuckle.AspNetCore.Annotations"));
 
         classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.ApiController, Name = nameof(AttributeType.ApiController) });
 
@@ -123,17 +123,17 @@ public class ClassFactory : IClassFactory
 
         var classModel = new ClassModel($"{name}Controller");
 
-        classModel.UsingDirectives.Add(new("System.Net"));
+        classModel.Usings.Add(new("System.Net"));
 
-        classModel.UsingDirectives.Add(new("System.Threading.Tasks"));
+        classModel.Usings.Add(new("System.Threading.Tasks"));
 
-        classModel.UsingDirectives.Add(new("MediatR"));
+        classModel.Usings.Add(new("MediatR"));
 
-        classModel.UsingDirectives.Add(new("Microsoft.AspNetCore.Mvc"));
+        classModel.Usings.Add(new("Microsoft.AspNetCore.Mvc"));
 
-        classModel.UsingDirectives.Add(new("System.Net.Mime"));
+        classModel.Usings.Add(new("System.Net.Mime"));
 
-        classModel.UsingDirectives.Add(new("Swashbuckle.AspNetCore.Annotations"));
+        classModel.Usings.Add(new("Swashbuckle.AspNetCore.Annotations"));
 
         classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.ApiController, Name = nameof(AttributeType.ApiController) });
 
@@ -455,7 +455,7 @@ public class ClassFactory : IClassFactory
             }
         });
 
-        hubClassModel.UsingDirectives.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
+        hubClassModel.Usings.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
 
         return hubClassModel;
     }
@@ -481,7 +481,7 @@ public class ClassFactory : IClassFactory
     {
         var model = await CreateWorkerAsync("MessageProducer");
 
-        model.UsingDirectives.Add(new UsingModel() { Name = "System.Text.Json" });
+        model.Usings.Add(new UsingModel() { Name = "System.Text.Json" });
 
         var hubContextType = new TypeModel("IHubContext")
         {
@@ -492,7 +492,7 @@ public class ClassFactory : IClassFactory
             }
         };
 
-        model.UsingDirectives.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
+        model.Usings.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
 
         model.Fields.Add(new FieldModel()
         {
@@ -554,25 +554,25 @@ public class ClassFactory : IClassFactory
 
         classModel.Implements.Add(new("BackgroundService"));
 
-        classModel.UsingDirectives.Add(new("Messaging"));
+        classModel.Usings.Add(new("Messaging"));
 
-        classModel.UsingDirectives.Add(new("Messaging.Udp"));
+        classModel.Usings.Add(new("Messaging.Udp"));
 
-        classModel.UsingDirectives.Add(new("Microsoft.Extensions.DependencyInjection"));
+        classModel.Usings.Add(new("Microsoft.Extensions.DependencyInjection"));
 
-        classModel.UsingDirectives.Add(new("Microsoft.Extensions.Hosting"));
+        classModel.Usings.Add(new("Microsoft.Extensions.Hosting"));
 
-        classModel.UsingDirectives.Add(new("System.Text"));
+        classModel.Usings.Add(new("System.Text"));
 
-        classModel.UsingDirectives.Add(new("Microsoft.Extensions.Logging"));
+        classModel.Usings.Add(new("Microsoft.Extensions.Logging"));
 
-        classModel.UsingDirectives.Add(new("System.Threading.Tasks"));
+        classModel.Usings.Add(new("System.Threading.Tasks"));
 
-        classModel.UsingDirectives.Add(new("System.Threading"));
+        classModel.Usings.Add(new("System.Threading"));
 
-        classModel.UsingDirectives.Add(new("MediatR"));
+        classModel.Usings.Add(new("MediatR"));
 
-        classModel.UsingDirectives.Add(new("System.Linq"));
+        classModel.Usings.Add(new("System.Linq"));
 
 
         var constructorModel = new ConstructorModel(classModel, classModel.Name);
@@ -808,7 +808,10 @@ public class ClassFactory : IClassFactory
             new () { Name = "System.Threading.Tasks" }
         };
 
-        var model = new ClassModel(name);
+        var model = new ClassModel(name)
+        {
+            Usings = usings
+        };
 
         var fields = new List<FieldModel>()
         {

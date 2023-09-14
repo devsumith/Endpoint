@@ -24,7 +24,7 @@ public class DbContextInterfaceModel : ClassModel
                 namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true),
                 PropertyAccessorModel.Get));
 
-            UsingDirectives.Add(new($"{serviceName}.Core.AggregatesModel.{entity.Name}Aggregate"));
+            Usings.Add(new($"{serviceName}.Core.AggregatesModel.{entity.Name}Aggregate"));
         }
     }
 

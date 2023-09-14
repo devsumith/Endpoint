@@ -33,13 +33,13 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
         _fileSystem.Directory.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries");
 
         await artifactGenerator
-            .GenerateAsync(new CodeFileModel<ClassModel>(model.Aggregate, model.Aggregate.UsingDirectives, model.Aggregate.Name, aggregateDirectory, ".cs"));
+            .GenerateAsync(new CodeFileModel<ClassModel>(model.Aggregate, model.Aggregate.Usings, model.Aggregate.Name, aggregateDirectory, ".cs"));
 
         await artifactGenerator
-            .GenerateAsync(new CodeFileModel<ClassModel>(model.AggregateDto, model.AggregateDto.UsingDirectives, model.AggregateDto.Name, aggregateDirectory, ".cs"));
+            .GenerateAsync(new CodeFileModel<ClassModel>(model.AggregateDto, model.AggregateDto.Usings, model.AggregateDto.Name, aggregateDirectory, ".cs"));
 
         await artifactGenerator
-            .GenerateAsync(new CodeFileModel<ClassModel>(model.AggregateExtensions, model.AggregateExtensions.UsingDirectives, model.AggregateExtensions.Name, aggregateDirectory, ".cs"));
+            .GenerateAsync(new CodeFileModel<ClassModel>(model.AggregateExtensions, model.AggregateExtensions.Usings, model.AggregateExtensions.Name, aggregateDirectory, ".cs"));
 
 
         foreach (var query in model.Queries)
