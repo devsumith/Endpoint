@@ -21,7 +21,7 @@ public class NamespaceGenerationStrategy : GenericSyntaxGenerationStrategy<Names
 
         StringBuilder sb = new StringBuilder();
 
-        sb.AppendLine($"namespace {model.Name}");
+        sb.AppendLine($"namespace {model.Name};");
 
         return sb.ToString();
     }

@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Core.Syntax.Namespaces.Factories;
 
-public class NamespaceFactory: INamespaceFactory
+public class NamespaceFactory : INamespaceFactory
 {
     private readonly ILogger<NamespaceFactory> _logger;
 
-    public NamespaceFactory(ILogger<NamespaceFactory> logger){
+    public NamespaceFactory(ILogger<NamespaceFactory> logger)
+    {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 

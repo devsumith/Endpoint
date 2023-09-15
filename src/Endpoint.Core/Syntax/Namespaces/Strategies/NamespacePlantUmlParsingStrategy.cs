@@ -1,9 +1,8 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Microsoft.Extensions.Logging;
-using System.Text;
 using Endpoint.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.Namespaces.Strategies;
 
@@ -20,8 +19,11 @@ public class NamespacePlantUmlParsingStrategy : BaseSyntaxParsingStrategy<Namesp
 
     public override async Task<NamespaceModel> ParseAsync(ISyntaxParser parser, string value)
     {
-        _logger.LogInformation("Parsing PlantUml for syntax. {typeName}", typeof(NamespaceModel).Name);
+        _logger.LogInformation("Parsing PlantUml for Namespace syntax. {typeName}", typeof(NamespaceModel).Name);
 
-        return new NamespaceModel();
+        return new NamespaceModel()
+        {
+            Name = value
+        };
     }
 }

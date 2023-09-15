@@ -5,7 +5,8 @@ using Endpoint.Core.Services;
 
 namespace Endpoint.Core.Extensions;
 
-public static class TemplateLocatorExtensions { 
+public static class TemplateLocatorExtensions
+{
 
     public static string GetCopyright(this ITemplateLocator templateLocator)
     {

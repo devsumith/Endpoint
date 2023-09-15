@@ -16,12 +16,13 @@ using System.IO.Abstractions;
 
 namespace Endpoint.Core.Syntax.AggregateModels;
 
-public class AggregateModelFactory: IAggregateModelFactory
+public class AggregateModelFactory : IAggregateModelFactory
 {
     private readonly ILogger<AggregateModelFactory> _logger;
     private readonly IClassFactory _classFactory;
 
-    public AggregateModelFactory(ILogger<AggregateModelFactory> logger, IClassFactory classFactory){
+    public AggregateModelFactory(ILogger<AggregateModelFactory> logger, IClassFactory classFactory)
+    {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
     }

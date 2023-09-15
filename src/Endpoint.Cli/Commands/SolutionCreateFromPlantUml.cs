@@ -50,10 +50,6 @@ public class SolutionCreateFromPlantUmlRequestHandler : IRequestHandler<Solution
     {
         _logger.LogInformation("Handled: {0}", nameof(SolutionCreateFromPlantUmlRequestHandler));
 
-        var value = await _clipboardService.GetTextAsync(cancellationToken);
 
-        var model = await _solutionService.CreateFromPlantUml(value, request.Name, request.Directory);
-
-        _commandService.Start($"start {model.SolutionPath}", model.Directory);
     }
 }

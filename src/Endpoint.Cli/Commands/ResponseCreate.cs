@@ -17,8 +17,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("response-create")]
-public class ResponseCreateRequest : IRequest {
-    [Option('r',"response-type")]
+public class ResponseCreateRequest : IRequest
+{
+    [Option('r', "response-type")]
     public string ResponseType { get; set; }
 
 
@@ -45,7 +46,7 @@ public class ResponseCreateRequestHandler : IRequestHandler<ResponseCreateReques
 
     public async Task Handle(ResponseCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Creating Response. {name}", request.ResponseType);;
+        _logger.LogInformation("Creating Response. {name}", request.ResponseType); ;
 
         var model = await _classFactory.CreateResponseAsync(request.ResponseType.ToRequestType(), request.EntityName);
 

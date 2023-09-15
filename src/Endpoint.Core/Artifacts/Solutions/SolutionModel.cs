@@ -21,12 +21,6 @@ public class SolutionModel
         Folders = new List<FolderModel>();
     }
 
-    public string Name { get; init; }
-    public string Directory { get; init; }
-    public List<FolderModel> Folders { get; set; }
-    public List<DependsOnModel> DependOns { get; set; }
-    public List<ProjectModel> Projects { get; private set; }
-    public List<FileModel> Files { get; set; }
     public SolutionModel(string name, string directory)
     {
         Name = name;
@@ -45,6 +39,12 @@ public class SolutionModel
         SolutionDirectory = solutionDirectory;
     }
 
+    public string Name { get; init; }
+    public string Directory { get; init; }
+    public List<FolderModel> Folders { get; set; }
+    public List<DependsOnModel> DependOns { get; set; }
+    public List<ProjectModel> Projects { get; private set; }
+    public List<FileModel> Files { get; set; }
     public string SrcDirectoryName { get; private set; } = "src";
     public string TestDirectoryName { get; private set; } = "tests";
     public string SrcDirectory => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{SrcDirectoryName}";

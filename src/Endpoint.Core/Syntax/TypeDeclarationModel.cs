@@ -6,16 +6,16 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax;
 
-public class TypeDeclarationModel: SyntaxModel
+public class TypeDeclarationModel : SyntaxModel
 {
     public TypeDeclarationModel()
     {
-        
+
     }
     public TypeDeclarationModel(string name)
     {
         Name = name;
-        Properties = new List<PropertyModel>();;
+        Properties = new List<PropertyModel>(); ;
         UsingAs = new List<UsingAsModel>();
     }
 

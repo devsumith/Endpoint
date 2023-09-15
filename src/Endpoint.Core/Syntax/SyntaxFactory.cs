@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Core.Syntax;
 
-public class SyntaxFactory: ISyntaxFactory
+public class SyntaxFactory : ISyntaxFactory
 {
     private readonly ILogger<SyntaxFactory> _logger;
 
-    public SyntaxFactory(ILogger<SyntaxFactory> logger){
+    public SyntaxFactory(ILogger<SyntaxFactory> logger)
+    {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 

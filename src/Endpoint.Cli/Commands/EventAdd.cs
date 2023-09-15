@@ -112,7 +112,7 @@ public class EventAddRequestHandler : IRequestHandler<EventAddRequest>
 
         }
 
-        _fileSystem.File.WriteAllText(Path.Combine(settings.DomainDirectory,"Models",$"{request.Aggregate.Pascalize()}.cs"), string.Join(Environment.NewLine, newLines));
+        _fileSystem.File.WriteAllText(Path.Combine(settings.DomainDirectory, "Models", $"{request.Aggregate.Pascalize()}.cs"), string.Join(Environment.NewLine, newLines));
 
 
     }

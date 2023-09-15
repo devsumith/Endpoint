@@ -22,7 +22,7 @@ public class ArtifactParser : IArtifactParser
     }
 
     public async Task<T> ParseAsync<T>(string valueOrDirectoryOrPath)
-        where T: class
+        where T : class
     {
         _logger.LogInformation("Parsing for Artifact. {typeName}", typeof(T).Name);
 

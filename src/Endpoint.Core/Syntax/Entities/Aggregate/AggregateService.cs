@@ -112,12 +112,13 @@ public class AggregateService : IAggregateService
         }
 
         var commandModel = new CommandModel(); //(serviceName, classModel, _namingConventionConverter, name: name, routeType: routeType switch
-/*        {
-            "create" => RouteType.Create,
-            "update" => RouteType.Update,
-            "delete" => RouteType.Delete,
-            _ => throw new NotSupportedException()
-        })*/;
+        /*        {
+                    "create" => RouteType.Create,
+                    "update" => RouteType.Update,
+                    "delete" => RouteType.Delete,
+                    _ => throw new NotSupportedException()
+                })*/
+        ;
 
         var model = new CodeFileModel<CommandModel>(commandModel, commandModel.UsingDirectives, commandModel.Name, directory, ".cs");
 

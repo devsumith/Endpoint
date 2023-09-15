@@ -10,8 +10,6 @@ public interface ISolutionService
 {
     Task AddSolutionItem(string path);
     Task Create(SolutionModel model);
-    Task Create(string name, string plantUmlSourcePath, string directory);
-    Task<SolutionModel> CreateFromPlantUml(string plantUml, string name, string directory);
     Task EventDrivenMicroservicesCreate(string name, string services, string directory);
     Task MessagingBuildingBlockAdd(string directory);
     Task IOCompressionBuildingBlockAdd(string directory);

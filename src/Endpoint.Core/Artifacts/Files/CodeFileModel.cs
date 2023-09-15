@@ -11,7 +11,7 @@ public class CodeFileModel<T> : FileModel
 {
     public CodeFileModel()
     {
-        
+
     }
 
     public CodeFileModel(T @object, string name, string directory, string extension)

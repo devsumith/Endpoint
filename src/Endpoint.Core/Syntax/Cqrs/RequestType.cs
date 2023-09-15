@@ -3,7 +3,8 @@
 
 namespace Endpoint.Core.Syntax.Cqrs;
 
-public enum RequestType { 
+public enum RequestType
+{
 
     Get,
     GetById,

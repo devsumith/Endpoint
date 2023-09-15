@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Entities.Aggregate;
 
-public class QueryModel: SyntaxModel
+public class QueryModel : SyntaxModel
 {
     public QueryModel()
     {

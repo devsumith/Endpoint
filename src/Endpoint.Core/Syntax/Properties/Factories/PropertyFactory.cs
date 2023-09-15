@@ -8,12 +8,13 @@ using static Endpoint.Core.Syntax.Types.TypeModel;
 
 namespace Endpoint.Core.Syntax.Properties.Factories;
 
-public class PropertyFactory: IPropertyFactory
+public class PropertyFactory : IPropertyFactory
 {
     private readonly ILogger<PropertyFactory> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;
 
-    public PropertyFactory(ILogger<PropertyFactory> logger, INamingConventionConverter namingConventionConverter){
+    public PropertyFactory(ILogger<PropertyFactory> logger, INamingConventionConverter namingConventionConverter)
+    {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
@@ -24,12 +25,12 @@ public class PropertyFactory: IPropertyFactory
 
         var model = new List<PropertyModel>();
 
-        switch(responseType)
+        switch (responseType)
         {
             case RequestType.Get:
                 var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
-                model.Add(new (parent, Public, ListOf($"{entityName}Dto"), entityNamePascalCasePlural, GetSet));
+                model.Add(new(parent, Public, ListOf($"{entityName}Dto"), entityNamePascalCasePlural, GetSet));
                 break;
 
             default:

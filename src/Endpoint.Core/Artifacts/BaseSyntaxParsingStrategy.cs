@@ -6,10 +6,11 @@ namespace Endpoint.Core.Artifacts;
 public abstract class BaseArtifactParsingStrategy<T> : IArtifactParsingStrategy<T>
     where T : class
 {
-    public virtual int GetPriority() { 
-    
+    public virtual int GetPriority()
+    {
+
         return 0;
-    } 
+    }
 
     public abstract Task<T> ParseAsync(IArtifactParser parser, string valueOrDirectoryOrPath);
 

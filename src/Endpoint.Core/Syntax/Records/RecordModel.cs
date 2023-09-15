@@ -1,6 +1,6 @@
 namespace Endpoint.Core.Syntax.Records;
 
-public class RecordModel: SyntaxModel
+public class RecordModel : SyntaxModel
 {
     public RecordModel(string name)
     {

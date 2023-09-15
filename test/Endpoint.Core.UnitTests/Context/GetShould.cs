@@ -9,7 +9,8 @@ namespace Endpoint.Core.UnitTests.Context;
 using Context = Endpoint.Core.Services.Context;
 
 
-public class GetShould {
+public class GetShould
+{
 
     [Fact]
     public void ReturnExpectedItem()
@@ -22,7 +23,7 @@ public class GetShould {
 
         var sut = ActivatorUtilities.CreateInstance<Context>(serviceProvider);
 
-        sut.Set(new Foo() {  Name = "Foo" });
+        sut.Set(new Foo() { Name = "Foo" });
 
 
         var result = sut.Get<Foo>();

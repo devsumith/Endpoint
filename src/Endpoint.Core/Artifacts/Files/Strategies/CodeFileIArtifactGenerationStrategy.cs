@@ -11,11 +11,11 @@ namespace Endpoint.Core.Artifacts.Files.Strategies;
 public abstract class CodeFileIArtifactGenerationStrategy<T> : GenericArtifactGenerationStrategy<CodeFileModel<T>>
     where T : SyntaxModel
 {
-    private readonly ILogger<CodeFileIArtifactGenerationStrategy<T>> _logger;
-    private readonly ISyntaxGenerator _syntaxGenerator;
-    private readonly IFileSystem _fileSystem;
-    private readonly INamespaceProvider _namespaceProvider;
-    private readonly IGenericArtifactGenerationStrategy<FileModel> _fileArtifactGenerationStrategy;
+    protected readonly ILogger<CodeFileIArtifactGenerationStrategy<T>> _logger;
+    protected readonly ISyntaxGenerator _syntaxGenerator;
+    protected readonly IFileSystem _fileSystem;
+    protected readonly INamespaceProvider _namespaceProvider;
+    protected readonly IGenericArtifactGenerationStrategy<FileModel> _fileArtifactGenerationStrategy;
 
     public CodeFileIArtifactGenerationStrategy(
         ISyntaxGenerator syntaxGenerator,
@@ -33,7 +33,7 @@ public abstract class CodeFileIArtifactGenerationStrategy<T> : GenericArtifactGe
 
     public override async Task GenerateAsync(IArtifactGenerator generator, CodeFileModel<T> model, dynamic context = null)
     {
-        _logger.LogInformation("Generating Object File. {name}", model.Name);
+        _logger.LogInformation("Generating Code File. {name}", model.Name);
 
         var stringBuilder = new StringBuilder();
 

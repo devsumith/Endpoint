@@ -10,8 +10,8 @@ public interface ISyntaxParsingStrategy
     int GetPriority();
 }
 
-public interface ISyntaxParsingStrategy<T>: ISyntaxParsingStrategy
+public interface ISyntaxParsingStrategy<T> : ISyntaxParsingStrategy
     where T : SyntaxModel
-{    
+{
     Task<T> ParseAsync(ISyntaxParser parser, string value);
 }

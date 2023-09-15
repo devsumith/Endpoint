@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Namespaces;
 
-public class NamespaceModel: SyntaxModel
+public class NamespaceModel : SyntaxModel
 {
     public NamespaceModel()
     {
-        
+
     }
     public NamespaceModel(string name, List<SyntaxModel> syntaxModels)
     {

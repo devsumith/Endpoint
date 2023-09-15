@@ -15,8 +15,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("namespace-create")]
-public class NamespaceCreateRequest : IRequest {
-    [Option('n',"name")]
+public class NamespaceCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
 

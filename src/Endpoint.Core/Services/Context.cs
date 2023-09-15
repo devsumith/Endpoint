@@ -33,7 +33,8 @@ public class Context : IContext
     {
         _logger.LogInformation("Setting context. {typeName}", typeof(T).Name);
 
-        DomainEvents.Register<T>(x => {            
+        DomainEvents.Register<T>(x =>
+        {
             var sourceProperties = item.GetType().GetProperties();
             var destinationProperties = x.GetType().GetProperties();
 

@@ -47,8 +47,8 @@ public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileMode
 
         var validExtension = extension == ".cs" || extension == ".ts" || extension == ".js";
 
-        _fileSystem.File.WriteAllText(model.Path, validExtension && !ExcludePatterns.Any(model.Path.Contains) 
-            ? new StringBuilder().AppendJoin(Environment.NewLine, copyright, string.Empty, model.Body).ToString() 
+        _fileSystem.File.WriteAllText(model.Path, validExtension && !ExcludePatterns.Any(model.Path.Contains)
+            ? new StringBuilder().AppendJoin(Environment.NewLine, copyright, string.Empty, model.Body).ToString()
             : model.Body);
 
     }

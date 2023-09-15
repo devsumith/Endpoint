@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Endpoint.Core.Syntax;
 
-public class SyntaxParser: ISyntaxParser
+public class SyntaxParser : ISyntaxParser
 {
     private readonly ILogger<SyntaxParser> _logger;
     private readonly IServiceProvider _serviceProvider;

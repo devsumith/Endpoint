@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Methods;
 
-public class MethodModel: SyntaxModel
+public class MethodModel : SyntaxModel
 {
     public MethodModel()
     {

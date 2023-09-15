@@ -308,7 +308,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
     public async Task ServiceCreate(string name, string directory)
     {
-        if (_fileSystem.File.Exists(Path.Combine(directory,$"{name}.cs")))
+        if (_fileSystem.File.Exists(Path.Combine(directory, $"{name}.cs")))
         {
             throw new Exception($"Service exists: {Path.Combine(directory, $"{name}.cs")}");
         }
@@ -384,7 +384,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
             @class.Usings.AddRange(usingDirectives);
 
-            @class.Implements.Add(new () { Name = @interface.Name });
+            @class.Implements.Add(new() { Name = @interface.Name });
 
             var classFile = new CodeFileModel<ClassModel>(
                 @class,

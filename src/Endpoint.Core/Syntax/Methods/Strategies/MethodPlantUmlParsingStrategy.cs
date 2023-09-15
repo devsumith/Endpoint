@@ -57,7 +57,7 @@ public class MethodPlantUmlParsingStrategy : BaseSyntaxParsingStrategy<MethodMod
             Name = name,
             Params = @params,
             Async = returnType.Name.StartsWith("Task"),
-            Body = new ("throw new NotImplementedException();")
+            Body = new("throw new NotImplementedException();")
         };
     }
 

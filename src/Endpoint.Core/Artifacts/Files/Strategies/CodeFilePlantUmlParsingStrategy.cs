@@ -36,7 +36,7 @@ public abstract class CodeFilePlantUmlParsingStrategy<T> : BaseArtifactParsingSt
 
 public class NamespaceCodeFilePlantUmlParsingStrategy : CodeFilePlantUmlParsingStrategy<NamespaceModel>
 {
-    public NamespaceCodeFilePlantUmlParsingStrategy(IContext context, ISyntaxParser syntaxParser, ILogger<CodeFilePlantUmlParsingStrategy<NamespaceModel>> logger) : 
+    public NamespaceCodeFilePlantUmlParsingStrategy(IContext context, ISyntaxParser syntaxParser, ILogger<CodeFilePlantUmlParsingStrategy<NamespaceModel>> logger) :
         base(context, syntaxParser, logger)
     { }
 }

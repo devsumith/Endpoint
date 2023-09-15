@@ -7,7 +7,7 @@ public class FileModel
 {
     public FileModel()
     {
-        
+
     }
     public FileModel(string name, string directory, string extension)
     {

@@ -13,7 +13,7 @@ using Endpoint.Core.Syntax.Classes.Factories;
 
 namespace Endpoint.Core.Syntax.Cqrs;
 
-public class CqrsFactory: ICqrsFactory
+public class CqrsFactory : ICqrsFactory
 {
     private readonly ILogger<CqrsFactory> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;
@@ -37,7 +37,7 @@ public class CqrsFactory: ICqrsFactory
     {
         _logger.LogInformation("Creating Cqrs Query. {name}", aggregateName); ;
 
-        return new ()
+        return new()
         {
             Name = routeType.ToRequestName(_namingConventionConverter),
 

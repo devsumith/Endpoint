@@ -14,8 +14,9 @@ namespace Endpoint.Cli.Commands;
 
 
 [Verb("parsing-strategy-create")]
-public class ParsingStrategyCreateRequest : IRequest {
-    [Option('n',"name")]
+public class ParsingStrategyCreateRequest : IRequest
+{
+    [Option('n', "name")]
     public string Name { get; set; }
 
     [Option('i', "input")]

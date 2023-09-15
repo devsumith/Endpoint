@@ -38,7 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
 {
-    public static void AddCoreServices(this IServiceCollection services)                                        
+    public static void AddCoreServices(this IServiceCollection services)
     {
         services.AddSingleton<INamespaceFactory, NamespaceFactory>();
         services.AddSingleton<IPropertyFactory, PropertyFactory>();
@@ -94,33 +94,13 @@ public static class ConfigureServices
         services.AddSingleton<ISyntaxGenerator, SyntaxGenerator>();
 
         services.AddSingleton<IClipboardService, ClipboardService>();
-        services.AddSingleton<ISyntaxService>(services =>
-        {
-            var factory = services.GetRequiredService<IPlantUmlParserStrategyFactory>();
-            var fileProvider = services.GetRequiredService<IFileProvider>();
-            var fileSystem = services.GetRequiredService<IFileSystem>();
 
-            var args = Environment.GetCommandLineArgs();
-
-            var directoryOptionIndex = Array.IndexOf(args, "-d");
-
-            var directory = directoryOptionIndex != -1 ? args[directoryOptionIndex + 1] : Environment.CurrentDirectory;
-
-            return new SyntaxService(factory, fileProvider, fileSystem, directory);
-        });
 
         services.AddSingleton<IEntityFileFactory, EntityFileFactory>();
         services.AddSingleton<IProjectFactory, ProjectFactory>();
         services.AddSingleton<IRouteHandlerFactory, RouteHandlerFactory>();
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Constants).Assembly));
-        services.AddSingleton<IPlantUmlParserStrategyFactory, PlantUmlParserStrategyFactory>();
-        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlProjectParserStrategy>();
-        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlSolutionParserStrategy>();
-        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlClassFileParserStrategy>();
-        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlInterfaceFileParserStrategy>();
-        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlFieldParserStrategy>();
-        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlMethodParserStrategy>();
-        services.AddSingleton<IPlantUmlParserStrategy, PlantUmlPropertyParserStrategy>();
+
         services.AddSingleton<IClassFactory, ClassFactory>();
 
         services.AddSingleton<IArtifactParser, ArtifactParser>();

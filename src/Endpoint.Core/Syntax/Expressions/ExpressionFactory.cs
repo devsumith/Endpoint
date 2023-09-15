@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Endpoint.Core.Syntax.Expressions;
 
-public class ExpressionFactory: IExpressionFactory
+public class ExpressionFactory : IExpressionFactory
 {
     private readonly ILogger<ExpressionFactory> _logger;
     private readonly INamingConventionConverter _namingConventionConverter;

@@ -169,7 +169,7 @@ public class MethodFactory : IMethodFactory
                     }
                 }
             },
-            Params = new ()
+            Params = new()
             {
                 new()
                 {

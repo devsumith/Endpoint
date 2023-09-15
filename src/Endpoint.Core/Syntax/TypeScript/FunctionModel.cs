@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.TypeScript;
 
-public class FunctionModel: SyntaxModel
+public class FunctionModel : SyntaxModel
 {
 
     public FunctionModel()

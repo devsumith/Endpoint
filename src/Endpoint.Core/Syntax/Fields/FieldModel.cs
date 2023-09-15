@@ -5,7 +5,7 @@ using Endpoint.Core.Syntax.Types;
 
 namespace Endpoint.Core.Syntax.Fields;
 
-public class FieldModel: SyntaxModel
+public class FieldModel : SyntaxModel
 {
     public FieldModel()
     {

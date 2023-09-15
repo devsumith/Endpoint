@@ -18,7 +18,6 @@ namespace Endpoint.Core.Artifacts.Solutions.Services;
 public class SolutionService : ISolutionService
 {
     private readonly IArtifactGenerator _artifactGenerator;
-    private readonly IPlantUmlParserStrategyFactory _plantUmlParserStrategyFactory;
     private readonly IProjectFactory _projectFactory;
     private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;
     private readonly IDomainDrivenDesignService _domainDrivenDesignService;
@@ -28,7 +27,6 @@ public class SolutionService : ISolutionService
 
     public SolutionService(
         IArtifactGenerator artifactGenerator,
-        IPlantUmlParserStrategyFactory plantUmlParserStrategyFactory,
         IProjectFactory projectFactory,
         IDomainDrivenDesignFileService domainDrivenDesignFileService,
         IDomainDrivenDesignService domainDrivenDesignService,
@@ -37,7 +35,6 @@ public class SolutionService : ISolutionService
         ICommandService commandService)
     {
         _artifactGenerator = artifactGenerator;
-        _plantUmlParserStrategyFactory = plantUmlParserStrategyFactory;
         _projectFactory = projectFactory;
         _domainDrivenDesignFileService = domainDrivenDesignFileService;
         _domainDrivenDesignService = domainDrivenDesignService;
@@ -159,18 +156,6 @@ public class SolutionService : ISolutionService
 
     }
 
-    public async Task<SolutionModel> CreateFromPlantUml(string plantUml, string name, string directory)
-    {
-        var model = _plantUmlParserStrategyFactory.CreateFor(plantUml, new
-        {
-            SolutionName = name,
-            SolutionRootDirectory = directory
-        });
-
-        await _artifactGenerator.GenerateAsync(model);
-
-        return model;
-    }
 
     public async Task MessagingBuildingBlockAdd(string directory)
     {
