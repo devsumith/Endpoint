@@ -3,9 +3,17 @@
 
 namespace Endpoint.Core.Artifacts;
 
-public interface IArtifactParsingStrategy<T>
+public interface IArtifactParsingStrategy
 {
     int GetPriority();
+
+    Task<object> ParseObjectAsync(IArtifactParser parser, string valueOrDirectoryOrPath);
+}
+
+public interface IArtifactParsingStrategy<T> : IArtifactParsingStrategy
+    where T : class
+{
+    
 
     Task<T> ParseAsync(IArtifactParser parser, string valueOrDirectoryOrPath);
 }

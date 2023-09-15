@@ -9,42 +9,43 @@ using System.Linq;
 
 namespace Endpoint.Core.Artifacts;
 
-public class ArtifactGenerator : IArtifactGenerator
+public class ArtifactParser : IArtifactParser
 {
-    private readonly ILogger<ArtifactGenerator> _logger;
-    private readonly IObjectCache _cache;
+    private readonly ILogger<ArtifactParser> _logger;
     private readonly IServiceProvider _serviceProvider;
-
-    public ArtifactGenerator(
-
-        ILogger<ArtifactGenerator> logger,
-        IServiceProvider serviceProvider,
-        IObjectCache cache
-        )
+    private readonly IObjectCache _cache;
+    public ArtifactParser(ILogger<ArtifactParser> logger, IServiceProvider serviceProvider, IObjectCache cache)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
-    public async Task GenerateAsync(object model, dynamic context = null)
+    public async Task<T> ParseAsync<T>(string valueOrDirectoryOrPath)
+        where T: class
     {
-        _logger.LogInformation("Generating artifact for model. {type}", model.GetType());
+        _logger.LogInformation("Parsing for Artifact. {typeName}", typeof(T).Name);
 
-        var inner = typeof(IGenericArtifactGenerationStrategy<>).MakeGenericType(model.GetType());
+        var inner = typeof(IArtifactParsingStrategy<>).MakeGenericType(typeof(T));
 
         var type = typeof(IEnumerable<>).MakeGenericType(inner);
 
-        var strategies = _cache.FromCacheOrService(() => _serviceProvider.GetRequiredService(type) as IEnumerable<IArtifactGenerationStrategy>, $"{GetType().Name}{model.GetType().FullName}");
+        var strategies = _cache.FromCacheOrService(() => _serviceProvider.GetRequiredService(type) as IEnumerable<IArtifactParsingStrategy>, typeof(T).FullName);
 
         var orderedStrategies = strategies!.OrderByDescending(x => x.GetPriority());
 
         foreach (var strategy in orderedStrategies)
         {
-            if (await strategy.GenerateAsync(this, model))
-                break;
+            var result = await strategy.ParseObjectAsync(this, valueOrDirectoryOrPath);
+
+            if (result != null)
+            {
+                return result as T;
+            }
         }
 
+        throw new InvalidOperationException();
     }
 }
+
 

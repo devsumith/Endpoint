@@ -7,9 +7,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
-public class InterfaceFileArtifactGenerationStrategy : ObjectFileIArtifactGenerationStrategy<InterfaceModel>
+public class InterfaceFileArtifactGenerationStrategy : CodeFileIArtifactGenerationStrategy<InterfaceModel>
 {
-    public InterfaceFileArtifactGenerationStrategy(ISyntaxGenerator syntaxGenerator, IFileSystem fileSystem, INamespaceProvider namespaceProvider, IGenericArtifactGenerationStrategy<FileModel> fileArtifactGenerationStrategy, ILogger<ObjectFileIArtifactGenerationStrategy<InterfaceModel>> logger) 
+    public InterfaceFileArtifactGenerationStrategy(ISyntaxGenerator syntaxGenerator, IFileSystem fileSystem, INamespaceProvider namespaceProvider, IGenericArtifactGenerationStrategy<FileModel> fileArtifactGenerationStrategy, ILogger<CodeFileIArtifactGenerationStrategy<InterfaceModel>> logger) 
         : base(syntaxGenerator, fileSystem, namespaceProvider, fileArtifactGenerationStrategy, logger)
     {
     }

@@ -7,6 +7,10 @@ namespace Endpoint.Core.Syntax.Namespaces;
 
 public class NamespaceModel: SyntaxModel
 {
+    public NamespaceModel()
+    {
+        
+    }
     public NamespaceModel(string name, List<SyntaxModel> syntaxModels)
     {
         Name = name;

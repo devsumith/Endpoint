@@ -5,17 +5,22 @@ namespace Endpoint.Core.Artifacts.Files;
 
 public class FileModel
 {
+    public FileModel()
+    {
+        
+    }
     public FileModel(string name, string directory, string extension)
     {
         Name = name;
         Directory = directory;
         Extension = extension;
+        Path = System.IO.Path.Combine(Directory, $"{Name}{Extension}");
     }
 
     public string Body { get; set; }
-    public string Name { get; init; }
-    public string Directory { get; init; }
-    public string Extension { get; init; }
-    public string Path => System.IO.Path.Combine(Directory, $"{Name}{Extension}");
+    public string Name { get; set; }
+    public string Directory { get; set; }
+    public string Extension { get; set; }
+    public string Path { get; set; }
 }
 

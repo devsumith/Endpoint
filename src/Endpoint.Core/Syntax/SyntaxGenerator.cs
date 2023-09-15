@@ -27,7 +27,7 @@ public class SyntaxGenerator : ISyntaxGenerator
 
         var type = typeof(IEnumerable<>).MakeGenericType(inner);
 
-        var strategies = _cache.FromCacheOrService(() => _serviceProvider.GetRequiredService(type) as IEnumerable<ISyntaxGenerationStrategy>, model.GetType().FullName);
+        var strategies = _cache.FromCacheOrService(() => _serviceProvider.GetRequiredService(type) as IEnumerable<ISyntaxGenerationStrategy>, $"{GetType().Name}{model.GetType().FullName}");
 
         var orderedStrategies = strategies!.OrderByDescending(x => x.GetPriority());
 

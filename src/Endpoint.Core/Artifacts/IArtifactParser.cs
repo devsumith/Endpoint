@@ -5,5 +5,6 @@ namespace Endpoint.Core.Artifacts;
 
 public interface IArtifactParser
 {
-    Task<T> ParseAsync<T>(string valueOrdirectoryOrPath);
+    Task<T> ParseAsync<T>(string valueOrDirectoryOrPath)
+        where T : class;
 }

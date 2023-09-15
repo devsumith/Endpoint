@@ -9,6 +9,11 @@ namespace Endpoint.Core.Artifacts.Files;
 public class CodeFileModel<T> : FileModel
     where T : SyntaxModel
 {
+    public CodeFileModel()
+    {
+        
+    }
+
     public CodeFileModel(T @object, string name, string directory, string extension)
     : base(name.Split('.').Last(), directory, extension)
     {
@@ -23,7 +28,7 @@ public class CodeFileModel<T> : FileModel
         Usings = usings;
     }
 
-    public T Object { get; init; }
+    public T Object { get; set; }
 
     public List<UsingModel> Usings { get; set; }
 

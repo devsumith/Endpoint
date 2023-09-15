@@ -122,6 +122,10 @@ public static class ConfigureServices
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlMethodParserStrategy>();
         services.AddSingleton<IPlantUmlParserStrategy, PlantUmlPropertyParserStrategy>();
         services.AddSingleton<IClassFactory, ClassFactory>();
+
+        services.AddSingleton<IArtifactParser, ArtifactParser>();
+        services.AddSingleton<ISyntaxParser, SyntaxParser>();
+
         services.AddSingleton(typeof(IGenericSyntaxGenerationStrategy<>), typeof(Constants).Assembly);
         services.AddSingleton(typeof(IGenericArtifactGenerationStrategy<>), typeof(Constants).Assembly);
         services.AddSingleton(typeof(ISyntaxParsingStrategy<>), typeof(Constants).Assembly);

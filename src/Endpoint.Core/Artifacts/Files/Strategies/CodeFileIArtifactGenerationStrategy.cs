@@ -8,21 +8,21 @@ using System.Text;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
-public abstract class ObjectFileIArtifactGenerationStrategy<T> : GenericArtifactGenerationStrategy<CodeFileModel<T>>
+public abstract class CodeFileIArtifactGenerationStrategy<T> : GenericArtifactGenerationStrategy<CodeFileModel<T>>
     where T : SyntaxModel
 {
-    private readonly ILogger<ObjectFileIArtifactGenerationStrategy<T>> _logger;
+    private readonly ILogger<CodeFileIArtifactGenerationStrategy<T>> _logger;
     private readonly ISyntaxGenerator _syntaxGenerator;
     private readonly IFileSystem _fileSystem;
     private readonly INamespaceProvider _namespaceProvider;
     private readonly IGenericArtifactGenerationStrategy<FileModel> _fileArtifactGenerationStrategy;
 
-    public ObjectFileIArtifactGenerationStrategy(
+    public CodeFileIArtifactGenerationStrategy(
         ISyntaxGenerator syntaxGenerator,
         IFileSystem fileSystem,
         INamespaceProvider namespaceProvider,
         IGenericArtifactGenerationStrategy<FileModel> fileArtifactGenerationStrategy,
-        ILogger<ObjectFileIArtifactGenerationStrategy<T>> logger)
+        ILogger<CodeFileIArtifactGenerationStrategy<T>> logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
