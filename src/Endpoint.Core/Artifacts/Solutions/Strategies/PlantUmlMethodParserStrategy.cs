@@ -1,16 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Syntax.Types;
-using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Params;
+using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Endpoint.Core.Artifacts.Solutions;
+namespace Endpoint.Core.Artifacts.Solutions.Strategies;
 
 public class PlantUmlMethodParserStrategy : PlantUmlParserStrategyBase<MethodModel>
 {

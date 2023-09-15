@@ -13,7 +13,7 @@ using MediatR;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Endpoint.Core.Artifacts.Solutions;
+namespace Endpoint.Core.Artifacts.Solutions.Services;
 
 public class SolutionService : ISolutionService
 {

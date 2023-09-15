@@ -3,7 +3,6 @@
 
 using CommandLine;
 using Endpoint.Core.Artifacts.Projects.Factories;
-using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Services;
 using MediatR;
@@ -16,6 +15,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Artifacts.Solutions.Factories;
+using Endpoint.Core.Artifacts.Solutions.Services;
 
 namespace Endpoint.Cli.Commands;
 

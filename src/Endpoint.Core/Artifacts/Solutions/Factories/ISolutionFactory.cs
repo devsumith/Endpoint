@@ -2,9 +2,8 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Options;
-using System.Threading.Tasks;
 
-namespace Endpoint.Core.Artifacts.Solutions;
+namespace Endpoint.Core.Artifacts.Solutions.Factories;
 
 public interface ISolutionFactory
 {

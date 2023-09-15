@@ -7,7 +7,7 @@ using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Properties;
 using System.Linq;
 
-namespace Endpoint.Core.Artifacts.Solutions;
+namespace Endpoint.Core.Artifacts.Solutions.Strategies;
 
 public class PlantUmlClassFileParserStrategy : PlantUmlParserStrategyBase<CodeFileModel<ClassModel>>
 {

@@ -6,7 +6,7 @@ using Endpoint.Core.Artifacts.Projects;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Endpoint.Core.Artifacts.Solutions;
+namespace Endpoint.Core.Artifacts.Solutions.Strategies;
 
 public class PlantUmlSolutionParserStrategy : PlantUmlParserStrategyBase<SolutionModel>
 {

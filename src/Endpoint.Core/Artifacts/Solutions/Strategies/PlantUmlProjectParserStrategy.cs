@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Endpoint.Core.Artifacts.Solutions;
+namespace Endpoint.Core.Artifacts.Solutions.Strategies;
 
 public class PlantUmlProjectParserStrategy : PlantUmlParserStrategyBase<ProjectModel>
 {

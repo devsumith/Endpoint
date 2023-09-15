@@ -7,4 +7,3 @@ public interface ISyntaxGenerator
 {
     Task<string> GenerateAsync<T>(T model, dynamic context = null);
 }
-

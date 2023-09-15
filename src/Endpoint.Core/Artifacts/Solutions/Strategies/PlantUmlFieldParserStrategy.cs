@@ -3,7 +3,7 @@
 
 using Endpoint.Core.Syntax.Properties;
 
-namespace Endpoint.Core.Artifacts.Solutions;
+namespace Endpoint.Core.Artifacts.Solutions.Strategies;
 
 public class PlantUmlFieldParserStrategy : PlantUmlParserStrategyBase<PropertyModel>
 {

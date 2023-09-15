@@ -7,7 +7,6 @@ using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Projects;
-using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -16,6 +15,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Endpoint.Core.Artifacts;
+using Endpoint.Core.Artifacts.Solutions.Factories;
 
 namespace Endpoint.Cli.Commands;
 

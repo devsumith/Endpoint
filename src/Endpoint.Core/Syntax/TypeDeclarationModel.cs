@@ -8,6 +8,10 @@ namespace Endpoint.Core.Syntax;
 
 public class TypeDeclarationModel: SyntaxModel
 {
+    public TypeDeclarationModel()
+    {
+        
+    }
     public TypeDeclarationModel(string name)
     {
         Name = name;

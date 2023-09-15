@@ -24,6 +24,8 @@ using Endpoint.Core.Syntax.Entities.Aggregate;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Artifacts.Services;
 using Endpoint.Core.Artifacts;
+using Endpoint.Core.Artifacts.Solutions.Factories;
+using Endpoint.Core.Artifacts.Solutions.Services;
 
 namespace Endpoint.Cli.Commands;
 

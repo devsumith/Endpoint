@@ -3,8 +3,9 @@
 
 namespace Endpoint.Core.Artifacts;
 
-public interface IGenericArtifactGenerationStrategy<T> : IArtifactGenerationStrategy
+public interface IArtifactParsingStrategy<T>
 {
-    Task GenerateAsync(IArtifactGenerator generator, T model, dynamic context = null);
-}
+    int GetPriority();
 
+    Task<T> ParseAsync(IArtifactParser parser, string valueOrDirectoryOrPath);
+}

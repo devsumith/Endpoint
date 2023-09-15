@@ -7,7 +7,7 @@ using Endpoint.Core.Services;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Endpoint.Core.Artifacts.Solutions;
+namespace Endpoint.Core.Artifacts.Solutions.Strategies;
 
 public class SolutionGenerationStrategy : GenericArtifactGenerationStrategy<SolutionModel>
 {

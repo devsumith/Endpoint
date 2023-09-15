@@ -4,7 +4,6 @@
 using CommandLine;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Projects;
-using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Services;
 using MediatR;
@@ -20,6 +19,8 @@ using Endpoint.Core.Syntax.Interfaces;
 using Endpoint.Core.Artifacts.Services;
 using Endpoint.Core.Artifacts;
 using static Endpoint.Core.Constants.FileExtensions;
+using Endpoint.Core.Artifacts.Solutions.Factories;
+using Endpoint.Core.Artifacts.Solutions.Services;
 
 namespace Endpoint.Cli.Commands;
 

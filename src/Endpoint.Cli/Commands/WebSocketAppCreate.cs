@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Endpoint.Core.Services;
 using Endpoint.Core.Artifacts.Files.Factories;
-using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Artifacts;
+using Endpoint.Core.Artifacts.Solutions.Factories;
+using Endpoint.Core.Artifacts.Solutions.Services;
 
 namespace Endpoint.Cli.Commands;
 [Verb("ws-app-create")]

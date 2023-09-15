@@ -6,7 +6,7 @@ using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Properties;
 using System.Linq;
 
-namespace Endpoint.Core.Artifacts.Solutions;
+namespace Endpoint.Core.Artifacts.Solutions.Strategies;
 
 public class PlantUmlPropertyParserStrategy : PlantUmlParserStrategyBase<PropertyModel>
 {

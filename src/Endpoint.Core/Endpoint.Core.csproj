@@ -14,6 +14,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageId>Quinntyne.Endpoint.Core</PackageId>
     <Title>Endpoint Core</Title>
+    <NoWarn>1998;4014</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

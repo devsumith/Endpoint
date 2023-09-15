@@ -4,7 +4,7 @@
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Syntax.Interfaces;
 
-namespace Endpoint.Core.Artifacts.Solutions;
+namespace Endpoint.Core.Artifacts.Solutions.Strategies;
 
 public class PlantUmlInterfaceFileParserStrategy : PlantUmlParserStrategyBase<CodeFileModel<InterfaceModel>>
 {

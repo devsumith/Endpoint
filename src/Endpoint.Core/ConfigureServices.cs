@@ -12,6 +12,9 @@ using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Artifacts.Services;
 using Endpoint.Core.Artifacts.Solutions;
+using Endpoint.Core.Artifacts.Solutions.Factories;
+using Endpoint.Core.Artifacts.Solutions.Services;
+using Endpoint.Core.Artifacts.Solutions.Strategies;
 using Endpoint.Core.Artifacts.SpecFlow;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.AggregateModels;
@@ -121,6 +124,8 @@ public static class ConfigureServices
         services.AddSingleton<IClassFactory, ClassFactory>();
         services.AddSingleton(typeof(IGenericSyntaxGenerationStrategy<>), typeof(Constants).Assembly);
         services.AddSingleton(typeof(IGenericArtifactGenerationStrategy<>), typeof(Constants).Assembly);
+        services.AddSingleton(typeof(ISyntaxParsingStrategy<>), typeof(Constants).Assembly);
+        services.AddSingleton(typeof(IArtifactParsingStrategy<>), typeof(Constants).Assembly);
     }
 
     public static void AddSingleton(this IServiceCollection services, Type @interface, Assembly assembly)

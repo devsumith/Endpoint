@@ -5,9 +5,8 @@ using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Options;
 using System.IO;
-using System.Threading.Tasks;
 
-namespace Endpoint.Core.Artifacts.Solutions;
+namespace Endpoint.Core.Artifacts.Solutions.Factories;
 
 public class SolutionFactory : ISolutionFactory
 {
