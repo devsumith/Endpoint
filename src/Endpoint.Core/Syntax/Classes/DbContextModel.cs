@@ -103,7 +103,7 @@ public class DbContextModel : ClassModel
 
         var saveChangesAsyncMethodModel = new MethodModel();
 
-        saveChangesAsyncMethodModel.Interface = true;
+        saveChangesAsyncMethodModel.IsInterface = true;
 
         saveChangesAsyncMethodModel.Params.Add(ParamModel.CancellationToken);
 

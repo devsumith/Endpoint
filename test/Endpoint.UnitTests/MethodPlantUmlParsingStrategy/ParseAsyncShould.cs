@@ -4,6 +4,7 @@
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Methods;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Xunit;
@@ -28,7 +29,7 @@ public class ParseAsyncShould
 
         var context = serviceProvider.GetService<IContext>();
 
-        context.Set<TypeDeclarationModel>(new ClassModel("Foo"));
+        context.Set(new MethodModel() { IsInterface = true });
 
         var sut = ActivatorUtilities.CreateInstance<MethodPlantUmlParsingStrategy>(serviceProvider);
 

@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.Logging;
@@ -48,12 +47,12 @@ public class MethodPlantUmlParsingStrategy : BaseSyntaxParsingStrategy<MethodMod
             });
         }
 
-        var isClassModel = _context.Get<TypeDeclarationModel>() is ClassModel;
+        var isInterface = _context.Get<MethodModel>().IsInterface;
 
         return new MethodModel()
         {
             AccessModifier = AccessModifier.Public,
-            Interface = !isClassModel,
+            IsInterface = isInterface,
             ReturnType = returnType,
             Name = name,
             Params = @params,

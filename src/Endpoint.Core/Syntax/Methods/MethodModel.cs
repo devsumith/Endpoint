@@ -26,7 +26,7 @@ public class MethodModel: SyntaxModel
     public bool Override { get; set; }
     public TypeModel ReturnType { get; set; }
     public ExpressionModel Body { get; set; }
-    public bool Interface { get; set; }
+    public bool IsInterface { get; set; }
     public bool Async { get; set; }
     public bool Static { get; set; }
 }

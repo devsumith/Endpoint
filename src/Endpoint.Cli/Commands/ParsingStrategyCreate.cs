@@ -13,25 +13,28 @@ using System.Threading.Tasks;
 namespace Endpoint.Cli.Commands;
 
 
-[Verb("syntax-generation-strategy-create")]
-public class SyntaxGenerationStrategyCreateRequest : IRequest
-{
-    [Option('n', "name")]
+[Verb("parsing-strategy-create")]
+public class ParsingStrategyCreateRequest : IRequest {
+    [Option('n',"name")]
     public string Name { get; set; }
+
+    [Option('i', "input")]
+    public string Input { get; set; }
+
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class SyntaxGenerationStrategyCreateRequestHandler : IRequestHandler<SyntaxGenerationStrategyCreateRequest>
+public class ParsingStrategyCreateRequestHandler : IRequestHandler<ParsingStrategyCreateRequest>
 {
     private readonly IArtifactGenerator _artifactGenerator;
-    private readonly ILogger<SyntaxGenerationStrategyCreateRequestHandler> _logger;
+    private readonly ILogger<ParsingStrategyCreateRequestHandler> _logger;
     private readonly IFileFactory _fileFactory;
     private readonly INamespaceProvider _namespaceProvider;
 
-    public SyntaxGenerationStrategyCreateRequestHandler(
-        ILogger<SyntaxGenerationStrategyCreateRequestHandler> logger,
+    public ParsingStrategyCreateRequestHandler(
+        ILogger<ParsingStrategyCreateRequestHandler> logger,
         IArtifactGenerator artifactGenerator,
         IFileFactory fileFactory,
         INamespaceProvider namespaceProvider
@@ -43,19 +46,19 @@ public class SyntaxGenerationStrategyCreateRequestHandler : IRequestHandler<Synt
         _namespaceProvider = namespaceProvider;
     }
 
-    public async Task Handle(SyntaxGenerationStrategyCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(ParsingStrategyCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Handled: {nameof(SyntaxGenerationStrategyCreateRequestHandler)}");
+        _logger.LogInformation("Creating Parsing Strategy: {name}", request.Name);
 
         var tokens = new TokensBuilder()
             .With("ModelName", request.Name)
+            .With("InputName", request.Input)
             .With("Namespace", _namespaceProvider.Get(request.Directory))
             .Build();
 
-        var model = _fileFactory.CreateTemplate("SyntaxGenerationStrategy", $"{request.Name}SyntaxGenerationStrategy", request.Directory, tokens: tokens);
+        var model = _fileFactory.CreateTemplate("ParsingStrategy", $"{request.Name}{request.Input}ParsingStrategy", request.Directory, tokens: tokens);
 
         await _artifactGenerator.GenerateAsync(model);
-
 
     }
 }

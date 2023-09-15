@@ -29,7 +29,7 @@ public class ClassModel : InterfaceModel
 
     public override void AddMethod(MethodModel method)
     {
-        method.Interface = false;
+        method.IsInterface = false;
         Methods.Add(method);
     }
 

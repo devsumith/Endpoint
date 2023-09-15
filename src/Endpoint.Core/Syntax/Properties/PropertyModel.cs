@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Properties;
 
-public class PropertyModel
+public class PropertyModel : SyntaxModel
 {
     public AccessModifier AccessModifier { get; private set; }
     public TypeModel Type { get; private set; }

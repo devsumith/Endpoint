@@ -1,0 +1,24 @@
+using Microsoft.Extensions.Logging;
+using System.Text;
+using Endpoint.Core.Services;
+
+namespace {{ namespace }};
+
+public class {{ modelNamePascalCase }}{{ inputNamePascalCase }}ParsingStrategy : BaseSyntaxParsingStrategy<{{ modelNamePascalCase }}Model>
+{
+    private readonly ILogger<{{ modelNamePascalCase }}{{ inputNamePascalCase }}ParsingStrategy> _logger;
+    private readonly IContext _context;
+
+    public {{ modelNamePascalCase }}{{ inputNamePascalCase }}ParsingStrategy(IContext context, ILogger<{{ modelNamePascalCase }}{{ inputNamePascalCase }}ParsingStrategy> logger)
+    {
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    public override async Task<{{ modelNamePascalCase }}Model> ParseAsync(ISyntaxParser parser, string value)
+    {
+        _logger.LogInformation("Parsing {{ inputNamePascalCase }} for syntax. {typeName}", typeof({{ modelNamePascalCase }}Model).Name);
+
+        throw new NotImplementedException();
+    }
+}

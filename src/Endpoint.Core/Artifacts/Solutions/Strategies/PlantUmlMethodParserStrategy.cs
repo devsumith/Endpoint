@@ -53,7 +53,7 @@ public class PlantUmlMethodParserStrategy : PlantUmlParserStrategyBase<MethodMod
         return new MethodModel()
         {
             AccessModifier = AccessModifier.Public,
-            Interface = !isClassModel,
+            IsInterface = !isClassModel,
             ReturnType = returnType,
             Name = name,
             Params = @params,

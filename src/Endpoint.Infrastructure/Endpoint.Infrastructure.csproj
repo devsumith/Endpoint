@@ -22,6 +22,7 @@
     <None Remove="Templates\Lit\LitPackageJson.txt" />
     <None Remove="Templates\Lit\LitTsConfigJson.txt" />
     <None Remove="Templates\Lit\LitWebpackConfig.txt" />
+    <None Remove="Templates\ParsingStrategy.txt" />
     <None Remove="Templates\ValueObject.txt" />
     <None Remove="Templates\ValueType.txt" />
   </ItemGroup>
@@ -144,6 +145,7 @@
     <EmbeddedResource Include="Templates\Lit\LitTsConfigJson.txt" />
     <EmbeddedResource Include="Templates\Lit\LitWebpackConfig.txt" />
     <EmbeddedResource Include="Templates\Lit\LitPackageJson.txt" />
+    <EmbeddedResource Include="Templates\ParsingStrategy.txt" />
     <EmbeddedResource Include="Templates\Scss\Actions.txt" />
     <EmbeddedResource Include="Templates\Scss\Brand.txt" />
     <EmbeddedResource Include="Templates\Scss\Breakpoints.txt" />

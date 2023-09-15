@@ -21,7 +21,7 @@ public class InterfaceModel : TypeDeclarationModel
 
     public virtual void AddMethod(MethodModel method)
     {
-        method.Interface = true;
+        method.IsInterface = true;
         Methods.Add(method);
     }
 }

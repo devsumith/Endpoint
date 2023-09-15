@@ -467,7 +467,7 @@ public class ClassFactory : IClassFactory
         interfaceModel.Methods.Add(new MethodModel()
         {
             ParentType = interfaceModel,
-            Interface = true,
+            IsInterface = true,
             ReturnType = new TypeModel("Task"),
             AccessModifier = AccessModifier.Public,
             Name = "Message",

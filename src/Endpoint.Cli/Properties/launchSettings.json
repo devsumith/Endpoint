@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "signalr-app-create -n Party -d C:\\projects",
+      "commandLineArgs": "parsing-strategy-create -n Property -i PlantUml -d C:\\projects\\Endpoint\\src\\Endpoint.Core\\Syntax\\Properties\\Strategies",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
