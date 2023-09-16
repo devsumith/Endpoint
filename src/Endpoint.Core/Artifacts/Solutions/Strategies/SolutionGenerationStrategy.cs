@@ -3,6 +3,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
@@ -27,6 +29,14 @@ public class SolutionGenerationStrategy : GenericArtifactGenerationStrategy<Solu
         fileSystem.Directory.CreateDirectory(model.SolutionDirectory);
 
         commandService.Start($"dotnet new sln -n {model.Name}", model.SolutionDirectory);
+
+        var solutionDocsDirectory = fileSystem.Path.Combine(model.SolutionDirectory, "docs");
+
+        fileSystem.Directory.CreateDirectory(solutionDocsDirectory);
+
+        await generator.GenerateAsync(new ContentFileModel($"# {model.Name}", "README", solutionDocsDirectory, ".md"));
+
+        await generator.GenerateAsync(new ContentFileModel($"# {model.Name}", "README", model.SolutionDirectory, ".md"));
 
         await CreateProjectsAndAddToSln(generator, model, model.Folders);
 

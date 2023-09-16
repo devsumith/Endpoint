@@ -95,7 +95,7 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.XUnit, $"{name}.Tests", directory);
 
-        model.Packages.Add(new("StyleCop.Analyzers", "1.1.118"));
+        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         return model;
     }
@@ -226,7 +226,7 @@ public class ProjectFactory : IProjectFactory
             DotNetProjectType = DotNetProjectType.WebApi,
         };
 
-        model.Packages.Add(new("StyleCop.Analyzers", "1.1.118"));
+        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         if (additionalMetadata != null)
         {
@@ -255,7 +255,7 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Messaging", directory);
 
-        model.Packages.Add(new("StyleCop.Analyzers", "1.1.118"));
+        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         model.Files.Add(fileFactory.CreateTemplate("IMessagingClient", "IMessagingClient", model.Directory));
 
@@ -320,7 +320,7 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Kernel", directory);
 
-        model.Packages.Add(new("StyleCop.Analyzers", "1.1.118"));
+        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         model.Packages.Add(new ("Microsoft.EntityFrameworkCore", "7.0.2"));
         model.Packages.Add(new ("Microsoft.AspNetCore.Mvc.Core", "2.2.5"));

@@ -99,6 +99,17 @@ public class ProjectModel
 
     public List<string> References { get; set; }
 
+    public List<string> NoWarn { get; set; } = new ()
+    {
+        "1998",
+        "4014,",
+        "SA1101",
+        "SA1600,",
+        "SA1200",
+        "SA1633",
+        "1591",
+    };
+
     public List<FolderModel> Folders { get; set; }
 
     public string GetApplicationUrl(IFileSystem fileSystem)

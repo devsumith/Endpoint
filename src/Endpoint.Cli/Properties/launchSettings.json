@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "service-create -n Win1 -d C:\\projects\\CppDom\\src\\CppDom.Core",
+      "commandLineArgs": "git-create -n MyUltraCoolLibrary -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

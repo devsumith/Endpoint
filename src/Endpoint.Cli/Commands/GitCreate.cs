@@ -42,7 +42,7 @@ public class GitCreateRequestHandler : IRequestHandler<GitCreateRequest>
 
         var model = new GitModel(request.RepositoryName)
         {
-            Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{request.RepositoryName}",
+            Directory = Path.Combine(request.Directory, request.RepositoryName),
         };
 
         await artifactGenerator.GenerateAsync(model);

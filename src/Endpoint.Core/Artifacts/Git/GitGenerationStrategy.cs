@@ -49,5 +49,11 @@ public class GitGenerationStrategy : GenericArtifactGenerationStrategy<GitModel>
         commandService.Start("git commit -m intial", model.Directory);
 
         commandService.Start("git push --set-upstream origin master", model.Directory);
+
+        commandService.Start("git checkout -b gh-pages", model.Directory);
+
+        commandService.Start("git push --set-upstream origin gh-pages", model.Directory);
+
+        commandService.Start("git checkout -", model.Directory);
     }
 }
