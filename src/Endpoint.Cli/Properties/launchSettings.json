@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "image-create -i C:\\projects\\Test\\test.txt -o C:\\projects\\Test\\foo.png -d C:\\projects",
+      "commandLineArgs": "service-create -n Foo -d C:\\projects\\PaperBack\\src\\Services\\GroceryService\\GroceryService.Api",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

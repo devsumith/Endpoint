@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using DotLiquid.Util;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
@@ -16,6 +17,14 @@ using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Types;
+using Microsoft.Build.Locator;
+using Microsoft.Build.Locator;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.MSBuild;
+//using Microsoft.CodeAnalysis.CSharp.Workspaces;
+
 using static Endpoint.Core.Constants.FileExtensions;
 using static Endpoint.Core.Syntax.Types.TypeModel;
 
@@ -311,6 +320,22 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         {
             throw new Exception($"Service exists: {fileSystem.Path.Combine(directory, $"{name}{CSharpFile}")}");
         }
+
+        var solutionPath = fileProvider.Get("*.sln", directory);
+
+        var projectName = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory));
+
+        MSBuildLocator.RegisterDefaults();
+
+        var workspace = MSBuildWorkspace.Create();
+
+        var path = fileProvider.Get("*.csproj", directory);
+
+        var project = await workspace.OpenProjectAsync(path);
+
+        var shouldInstallLogging = !project.MetadataReferences.Any(x => x.Display.Contains("Microsoft.Extensions.Logging."));
+
+        var shouldInstallDI = !project.MetadataReferences.Any(x => x.Display.Contains("Microsoft.Extensions.DependencyInjection."));
 
         var usingDirectives = new List<UsingModel>()
         {
