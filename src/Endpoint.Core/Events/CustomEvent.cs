@@ -7,9 +7,9 @@ public class CustomEvent<T>
 {
     public CustomEvent()
     {
-
     }
 
     public string Name { get; set; }
+
     public T Payload { get; set; }
 }

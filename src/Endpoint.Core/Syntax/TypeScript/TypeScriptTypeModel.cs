@@ -1,14 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Syntax.Properties;
 using System.Collections.Generic;
+using Endpoint.Core.Syntax.Properties;
 
 namespace Endpoint.Core.Syntax.TypeScript;
 
 public class TypeScriptTypeModel : SyntaxModel
 {
-
     public TypeScriptTypeModel(string name)
     {
         Name = name;
@@ -16,6 +15,6 @@ public class TypeScriptTypeModel : SyntaxModel
     }
 
     public string Name { get; set; }
+
     public List<PropertyModel> Properties { get; set; }
 }
-

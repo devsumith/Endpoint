@@ -12,6 +12,6 @@ public class ReactAppReferenceModel
     }
 
     public string Name { get; set; }
+
     public string ReferenceDirectory { get; set; }
 }
-

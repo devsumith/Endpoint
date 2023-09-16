@@ -8,13 +8,6 @@ namespace Endpoint.Core.Syntax.RouteHandlers;
 
 public class RouteHandlerModel
 {
-    public string Name { get; private set; }
-    public string Pattern { get; private set; }
-    public string DbContextName { get; private set; }
-    public EntityModel Entity { get; private set; }
-    public RouteType Type { get; private set; }
-    public List<ProducesAttributeModel> Produces { get; private set; }
-
     public RouteHandlerModel(string name, string pattern, string dbContextName, EntityModel entity, RouteType routeHandlerType)
     {
         Name = name;
@@ -25,5 +18,15 @@ public class RouteHandlerModel
         Produces = new List<ProducesAttributeModel>();
     }
 
-}
+    public string Name { get; private set; }
 
+    public string Pattern { get; private set; }
+
+    public string DbContextName { get; private set; }
+
+    public EntityModel Entity { get; private set; }
+
+    public RouteType Type { get; private set; }
+
+    public List<ProducesAttributeModel> Produces { get; private set; }
+}

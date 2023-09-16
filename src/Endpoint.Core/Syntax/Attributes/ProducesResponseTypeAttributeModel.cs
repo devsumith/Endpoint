@@ -5,7 +5,6 @@ namespace Endpoint.Core.Syntax.Attributes;
 
 public class ProducesResponseTypeAttributeModel : AttributeModel
 {
-
     public ProducesResponseTypeAttributeModel(string httpStatusCodeName, string typeName = null)
     {
         HttpStatusCodeName = httpStatusCodeName;
@@ -13,6 +12,6 @@ public class ProducesResponseTypeAttributeModel : AttributeModel
     }
 
     public string HttpStatusCodeName { get; set; }
+
     public string TypeName { get; set; }
 }
-

@@ -5,7 +5,6 @@ namespace Endpoint.Core.Syntax.Units;
 
 public enum RequestType
 {
-
     Get,
     GetById,
     Page,

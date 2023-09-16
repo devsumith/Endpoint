@@ -8,11 +8,7 @@ namespace Endpoint.Core.Syntax.Methods.ControllerMethods;
 
 public class CreateControllerMethodModel : MethodModel
 {
-
     public CreateControllerMethodModel(INamingConventionConverter namingConventionConverter, ClassModel entity)
     {
-
     }
-
 }
-

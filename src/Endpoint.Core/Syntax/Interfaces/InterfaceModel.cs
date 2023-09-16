@@ -1,9 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Types;
-using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Interfaces;
 
@@ -11,7 +11,6 @@ public class InterfaceModel : TypeDeclarationModel
 {
     public InterfaceModel()
     {
-
     }
 
     public InterfaceModel(string name)
@@ -22,6 +21,7 @@ public class InterfaceModel : TypeDeclarationModel
     }
 
     public List<TypeModel> Implements { get; set; }
+
     public List<MethodModel> Methods { get; set; }
 
     public virtual void AddMethod(MethodModel method)

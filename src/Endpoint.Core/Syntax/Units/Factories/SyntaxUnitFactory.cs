@@ -1,37 +1,37 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Properties;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Units.Factories;
 
 public class SyntaxUnitFactory : ISyntaxUnitFactory
 {
-    private readonly ILogger<SyntaxUnitFactory> _logger;
-    private readonly IClassFactory _classFactory;
+    private readonly ILogger<SyntaxUnitFactory> logger;
+    private readonly IClassFactory classFactory;
+
     public SyntaxUnitFactory(ILogger<SyntaxUnitFactory> logger, IClassFactory classFactory)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
     }
 
     public async Task CreateAsync()
     {
-        _logger.LogInformation("Create");
-
+        logger.LogInformation("Create");
     }
 
     public async Task<AggregateModel> CreateAsync(string name, List<PropertyModel> properties)
     {
-        _logger.LogInformation("Create Aggregate Model. {name}", name);
+        logger.LogInformation("Create Aggregate Model. {name}", name);
 
         var aggregate = new ClassModel(name);
 
-        var serviceName = "";
+        var serviceName = string.Empty;
 
         var model = new AggregateModel()
         {
@@ -39,9 +39,8 @@ public class SyntaxUnitFactory : ISyntaxUnitFactory
             Commands = new List<CommandModel>(),
             Aggregate = aggregate,
             AggregateDto = aggregate.CreateDto(),
-            AggregateExtensions = await _classFactory.DtoExtensionsCreateAsync(aggregate)
+            AggregateExtensions = await classFactory.DtoExtensionsCreateAsync(aggregate),
         };
-
 
         foreach (var routeType in new[]
         {
@@ -50,7 +49,7 @@ public class SyntaxUnitFactory : ISyntaxUnitFactory
             RouteType.GetById,
             RouteType.Delete,
             RouteType.Create,
-            RouteType.Update
+            RouteType.Update,
         })
         {
             switch (routeType)
@@ -60,13 +59,13 @@ public class SyntaxUnitFactory : ISyntaxUnitFactory
 
                 case RouteType.Get:
                 case RouteType.GetById:
-                    model.Queries.Add(new QueryModel());//(serviceName, null, aggregate, routeType));
+                    model.Queries.Add(new QueryModel()); // (serviceName, null, aggregate, routeType));
                     break;
 
                 case RouteType.Delete:
                 case RouteType.Create:
                 case RouteType.Update:
-                    model.Commands.Add(new CommandModel()); //new CommandModel(serviceName, aggregate, null, routeType));
+                    model.Commands.Add(new CommandModel()); // new CommandModel(serviceName, aggregate, null, routeType));
                     break;
             }
         }
@@ -74,4 +73,3 @@ public class SyntaxUnitFactory : ISyntaxUnitFactory
         return model;
     }
 }
-

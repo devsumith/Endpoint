@@ -16,7 +16,7 @@ public static class Constants
         $"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}",
         $"{Path.DirectorySeparatorChar}nupkg{Path.DirectorySeparatorChar}",
         $"{Path.DirectorySeparatorChar}Properties{Path.DirectorySeparatorChar}",
-        $"{Path.DirectorySeparatorChar}node_modules{Path.DirectorySeparatorChar}"
+        $"{Path.DirectorySeparatorChar}node_modules{Path.DirectorySeparatorChar}",
     };
 
     public static class FileExtensions
@@ -64,4 +64,3 @@ public static class Constants
         public const string Cli = nameof(Cli);
     }
 }
-

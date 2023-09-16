@@ -8,7 +8,4 @@ namespace Endpoint.Core.Artifacts.Projects.Services;
 public interface IInfrastructureProjectService
 {
     Task DbContextAdd(string directory);
-
 }
-
-

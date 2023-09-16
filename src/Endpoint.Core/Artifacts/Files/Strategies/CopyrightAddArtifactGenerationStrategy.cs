@@ -1,18 +1,18 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Services;
-using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Text;
+using Endpoint.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
 public class CopyrightAddArtifactGenerationStrategy : GenericArtifactGenerationStrategy<FileReferenceModel>
 {
-    private readonly ILogger<CopyrightAddArtifactGenerationStrategy> _logger;
-    private readonly ITemplateLocator _templateLocator;
-    private readonly IFileSystem _fileSystem;
+    private readonly ILogger<CopyrightAddArtifactGenerationStrategy> logger;
+    private readonly ITemplateLocator templateLocator;
+    private readonly IFileSystem fileSystem;
 
     public CopyrightAddArtifactGenerationStrategy(
 
@@ -20,16 +20,16 @@ public class CopyrightAddArtifactGenerationStrategy : GenericArtifactGenerationS
         IFileSystem fileSystem,
         ITemplateLocator templateLocator)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, FileReferenceModel model)
     {
-        _logger.LogInformation("Generating artifact for {0}.", model);
+        logger.LogInformation("Generating artifact for {0}.", model);
 
-        var copyright = string.Join(Environment.NewLine, _templateLocator.Get("Copyright"));
+        var copyright = string.Join(Environment.NewLine, templateLocator.Get("Copyright"));
 
         var ignore = model.Path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}")
             || model.Path.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}")
@@ -43,7 +43,7 @@ public class CopyrightAddArtifactGenerationStrategy : GenericArtifactGenerationS
 
         if (validExtension && !ignore)
         {
-            var originalFileContents = _fileSystem.File.ReadAllText(model.Path);
+            var originalFileContents = fileSystem.File.ReadAllText(model.Path);
 
             if (originalFileContents.Contains(copyright) == false)
             {
@@ -55,7 +55,7 @@ public class CopyrightAddArtifactGenerationStrategy : GenericArtifactGenerationS
 
                 newFileContentsBuilder.AppendLine(originalFileContents);
 
-                _fileSystem.File.WriteAllText(model.Path, newFileContentsBuilder.ToString());
+                fileSystem.File.WriteAllText(model.Path, newFileContentsBuilder.ToString());
             }
         }
     }

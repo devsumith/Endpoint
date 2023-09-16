@@ -15,7 +15,7 @@ public static class StringExtensions
         {
             string[] values = value.Split(Environment.NewLine);
 
-            var result = string.Join(Environment.NewLine, values.Select(v => string.IsNullOrEmpty(v) ? v : $"{string.Join("", Range(1, spaces * indent).Select(i => ' '))}{v}"));
+            var result = string.Join(Environment.NewLine, values.Select(v => string.IsNullOrEmpty(v) ? v : $"{string.Join(string.Empty, Range(1, spaces * indent).Select(i => ' '))}{v}"));
 
             return result;
         }
@@ -23,7 +23,6 @@ public static class StringExtensions
         {
             throw;
         }
-
     }
 
     public static string Remove(this string value, string item) => value.Replace(item, string.Empty);
@@ -38,7 +37,9 @@ public static class StringExtensions
         var parts = value.Split(':');
 
         if (parts.Length == 1)
+        {
             return new Tuple<string, string>(value, string.Empty);
+        }
 
         return new Tuple<string, string>(parts[0], parts[1]);
     }
@@ -66,4 +67,3 @@ public static class StringExtensions
         };
     }
 }
-

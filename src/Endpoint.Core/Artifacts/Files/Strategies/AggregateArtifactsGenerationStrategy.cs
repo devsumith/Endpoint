@@ -1,23 +1,21 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.IO;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Units;
-using System.IO;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
 public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStrategy<AggregateModel>
 {
-    private readonly IFileSystem _fileSystem;
+    private readonly IFileSystem fileSystem;
+
     public AggregateArtifactsGenerationStrategy(IServiceProvider serviceProvider, IFileSystem fileSystem)
     {
-
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
-
-
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, AggregateModel model)
     {
@@ -25,11 +23,11 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
 
         var aggregateDirectory = $"{directory}{Path.DirectorySeparatorChar}{model.Aggregate.Name}Aggregate";
 
-        _fileSystem.Directory.CreateDirectory(aggregateDirectory);
+        fileSystem.Directory.CreateDirectory(aggregateDirectory);
 
-        _fileSystem.Directory.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Commands");
+        fileSystem.Directory.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Commands");
 
-        _fileSystem.Directory.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries");
+        fileSystem.Directory.CreateDirectory($"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries");
 
         await artifactGenerator
             .GenerateAsync(new CodeFileModel<ClassModel>(model.Aggregate, model.Aggregate.Usings, model.Aggregate.Name, aggregateDirectory, ".cs"));
@@ -39,7 +37,6 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
 
         await artifactGenerator
             .GenerateAsync(new CodeFileModel<ClassModel>(model.AggregateExtensions, model.AggregateExtensions.Usings, model.AggregateExtensions.Name, aggregateDirectory, ".cs"));
-
 
         foreach (var query in model.Queries)
         {
@@ -66,4 +63,3 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
         }
     }
 }
-

@@ -9,6 +9,5 @@ public enum AccessModifier
     Private,
     Protected,
     Internal,
-    Inherited
+    Inherited,
 }
-

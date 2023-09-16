@@ -7,21 +7,22 @@ namespace Endpoint.Core.Artifacts.Folders.Strategies;
 
 public class FolderArtifactGenerationStrategy : GenericArtifactGenerationStrategy<FolderModel>
 {
-    private readonly ILogger<FolderArtifactGenerationStrategy> _logger;
-    private readonly IFileSystem _fileSystem;
+    private readonly ILogger<FolderArtifactGenerationStrategy> logger;
+    private readonly IFileSystem fileSystem;
+
     public FolderArtifactGenerationStrategy(
         IFileSystem fileSystem,
         ILogger<FolderArtifactGenerationStrategy> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, FolderModel model)
     {
-        _logger.LogInformation("Generating artifact for {0}.", model);
+        logger.LogInformation("Generating artifact for {0}.", model);
 
-        _fileSystem.Directory.CreateDirectory(model.Directory);
+        fileSystem.Directory.CreateDirectory(model.Directory);
 
         foreach (var fileModel in model.Files)
         {

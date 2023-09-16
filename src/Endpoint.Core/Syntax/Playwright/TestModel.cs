@@ -5,8 +5,5 @@ namespace Endpoint.Core.Syntax.Playwright;
 
 public class TestModel
 {
-
     public string Description { get; set; }
-
 }
-

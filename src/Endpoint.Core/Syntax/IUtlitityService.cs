@@ -6,5 +6,4 @@ namespace Endpoint.Core.Syntax;
 public interface IUtlitityService
 {
     void CopyrightAdd(string directory);
-
 }

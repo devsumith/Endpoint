@@ -8,7 +8,6 @@ namespace Endpoint.Core.Artifacts.Units;
 public class Folder<T>
     where T : SyntaxUnitModel
 {
-
 }
 
 public abstract class CodeUnitArtifactGenerationStrategy<T> : GenericArtifactGenerationStrategy<Folder<T>>

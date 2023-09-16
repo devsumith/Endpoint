@@ -15,7 +15,8 @@ public class LitWorkspaceModel
     }
 
     public string Name { get; set; }
+
     public string RootDirectory { get; set; }
+
     public string Directory { get; set; }
 }
-

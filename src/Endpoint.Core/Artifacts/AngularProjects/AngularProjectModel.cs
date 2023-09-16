@@ -31,14 +31,17 @@ public class AngularProjectModel
         {
             Directory = $"{RootDirectory}{Path.DirectorySeparatorChar}projects{Path.DirectorySeparatorChar}{name}";
         }
-
     }
 
     public string Root { get; set; }
+
     public string Name { get; set; }
+
     public string Prefix { get; set; }
+
     public string Directory { get; set; }
+
     public string RootDirectory { get; set; }
+
     public string ProjectType { get; set; } = "application";
 }
-

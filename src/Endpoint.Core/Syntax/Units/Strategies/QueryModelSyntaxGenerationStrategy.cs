@@ -10,10 +10,7 @@ public class QueryModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
 {
     public QueryModelSyntaxGenerationStrategy(IServiceProvider serviceProvider)
     {
-
     }
-
-
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, QueryModel model)
     {
@@ -21,15 +18,14 @@ public class QueryModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
 
         builder.AppendLine(await syntaxGenerator.GenerateAsync(model.Request));
 
-        builder.AppendLine("");
+        builder.AppendLine(string.Empty);
 
         builder.AppendLine(await syntaxGenerator.GenerateAsync(model.Response));
 
-        builder.AppendLine("");
+        builder.AppendLine(string.Empty);
 
         builder.AppendLine(await syntaxGenerator.GenerateAsync(model.RequestHandler));
 
         return builder.ToString();
     }
 }
-

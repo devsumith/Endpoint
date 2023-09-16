@@ -14,6 +14,5 @@ public enum DotNetProjectType
     Web,
     Worker,
     Angular,
-    TypeScriptStandalone
+    TypeScriptStandalone,
 }
-

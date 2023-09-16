@@ -1,23 +1,24 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.Classes.Strategies;
 
 public class ClassSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<ClassModel>
 {
-    private readonly ILogger<ClassSyntaxGenerationStrategy> _logger;
+    private readonly ILogger<ClassSyntaxGenerationStrategy> logger;
+
     public ClassSyntaxGenerationStrategy(ILogger<ClassSyntaxGenerationStrategy> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ClassModel model)
     {
-        _logger.LogInformation("Generating syntax for {0}.", model);
+        logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
@@ -39,7 +40,9 @@ public class ClassSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Cla
         builder.Append(await syntaxGenerator.GenerateAsync(model.AccessModifier));
 
         if (model.Static)
+        {
             builder.Append(" static");
+        }
 
         builder.Append($" class {model.Name}");
 
@@ -61,22 +64,28 @@ public class ClassSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Cla
 
         builder.AppendLine("{");
 
-
         if (model.Fields.Count > 0)
+        {
             builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Fields)).Indent(1));
+        }
 
         if (model.Constructors.Count > 0)
+        {
             builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Constructors)).Indent(1));
+        }
 
         if (model.Properties.Count > 0)
+        {
             builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Properties)).Indent(1));
+        }
 
         if (model.Methods.Count > 0)
+        {
             builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Methods)).Indent(1));
+        }
 
         builder.AppendLine("}");
 
         return builder.ToString();
     }
 }
-

@@ -8,9 +8,8 @@ namespace Endpoint.Core.Artifacts.SpecFlow;
 public interface ISpecFlowService
 {
     Task CreateHook(string name, string directory);
+
     Task CreatePageObject(string name, string directory);
+
     Task CreateDockerControllerHooks(string directory);
-
 }
-
-

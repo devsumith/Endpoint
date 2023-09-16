@@ -1,12 +1,12 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Threading.Tasks;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Methods;
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Endpoint.UnitTests.MethodPlantUmlParsingStrategy;
@@ -39,6 +39,4 @@ public class ParseAsyncShould
         // ASSERT
         Assert.NotNull(result);
     }
-
 }
-

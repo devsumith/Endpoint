@@ -8,22 +8,21 @@ namespace Endpoint.Core.Services;
 
 public class FileNamespaceProvider : IFileNamespaceProvider
 {
-    private readonly IFileProvider _fileProvider;
+    private readonly IFileProvider fileProvider;
 
     public FileNamespaceProvider(IFileProvider fileProvider)
     {
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
     public string Get(string directory)
     {
-        var projectNamespace = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory));
+        var projectNamespace = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory));
 
-        var projectDirectoryParts = Path.GetDirectoryName(_fileProvider.Get("*.csproj", directory)).Split(Path.DirectorySeparatorChar);
+        var projectDirectoryParts = Path.GetDirectoryName(fileProvider.Get("*.csproj", directory)).Split(Path.DirectorySeparatorChar);
 
         var fileDirectoryParts = directory.Split(Path.DirectorySeparatorChar).Skip(projectDirectoryParts.Length);
 
         return fileDirectoryParts.Any() ? $"{projectNamespace}.{string.Join(".", fileDirectoryParts)}" : projectNamespace;
     }
 }
-

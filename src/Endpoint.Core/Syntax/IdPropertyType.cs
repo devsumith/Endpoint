@@ -6,6 +6,5 @@ namespace Endpoint.Core.Syntax;
 public enum IdPropertyType
 {
     Guid,
-    Int
+    Int,
 }
-

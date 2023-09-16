@@ -1,20 +1,20 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Syntax.Properties;
-using Endpoint.Core.Services;
-using Octokit;
 using System.Collections.Generic;
-using Octokit.Internal;
+using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Types;
+using Octokit;
+using Octokit.Internal;
 
 namespace Endpoint.Core.Syntax.Classes;
 
 public class ResponseModel : ClassModel
 {
     public ResponseModel(ClassModel entity, RouteType routeType, INamingConventionConverter namingConventionConverter)
-        : base("")
+        : base(string.Empty)
     {
         var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, true);
 
@@ -44,7 +44,7 @@ public class ResponseModel : ClassModel
                 GenericTypeParameters = new List<TypeModel>
                 {
                     new TypeModel($"{entity.Name}Dto")
-                }
+                },
             }, $"{entityNamePascalCasePlural}", PropertyAccessorModel.GetSet, required: true));
         }
 
@@ -57,9 +57,8 @@ public class ResponseModel : ClassModel
                 GenericTypeParameters = new List<TypeModel>()
                 {
                     new TypeModel($"{entity.Name}Dto")
-                }
+                },
             }, "Entities ", PropertyAccessorModel.GetSet, required: true));
         }
     }
 }
-

@@ -7,7 +7,5 @@ namespace Endpoint.Core.Syntax;
 
 public class TestReferenceModel
 {
-
     public string SystemUnderTestName { get; set; }
 }
-

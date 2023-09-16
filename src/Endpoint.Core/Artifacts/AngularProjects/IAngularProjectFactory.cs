@@ -7,4 +7,3 @@ public interface IAngularProjectFactory
 {
     AngularProjectModel Create(string name, string prefix, string directory);
 }
-

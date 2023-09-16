@@ -8,14 +8,15 @@ namespace Endpoint.Core.Artifacts.AngularProjects;
 
 public class AngularProjectGenerationStrategy : GenericArtifactGenerationStrategy<AngularProjectModel>
 {
-    private readonly ICommandService _commandService;
-    private readonly ILogger<AngularProjectGenerationStrategy> _logger;
+    private readonly ICommandService commandService;
+    private readonly ILogger<AngularProjectGenerationStrategy> logger;
+
     public AngularProjectGenerationStrategy(
         ICommandService commandService,
         ILogger<AngularProjectGenerationStrategy> logger)
     {
-        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public int Priority => throw new NotImplementedException();
@@ -24,10 +25,8 @@ public class AngularProjectGenerationStrategy : GenericArtifactGenerationStrateg
 
     public override async Task GenerateAsync(IArtifactGenerator generator, AngularProjectModel model)
     {
-        _logger.LogInformation("Create Angular Project. {name}", model.Name);
+        logger.LogInformation("Create Angular Project. {name}", model.Name);
 
-        _commandService.Start($"ng new {model.Name}", model.Directory);
+        commandService.Start($"ng new {model.Name}", model.Directory);
     }
 }
-
-

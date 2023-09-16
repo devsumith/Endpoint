@@ -14,8 +14,12 @@ public class AngularWorkspaceModel
         RootDirectory = rootDirectory;
         Directory = $"{RootDirectory}{Path.DirectorySeparatorChar}{name}";
     }
+
     public string Version { get; set; }
+
     public string Name { get; set; }
+
     public string RootDirectory { get; set; }
+
     public string Directory { get; set; }
 }

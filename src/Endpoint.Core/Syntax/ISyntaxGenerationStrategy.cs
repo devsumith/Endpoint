@@ -9,4 +9,3 @@ public interface ISyntaxGenerationStrategy
 
     int GetPriority();
 }
-

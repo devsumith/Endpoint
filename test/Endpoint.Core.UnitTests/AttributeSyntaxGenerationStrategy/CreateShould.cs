@@ -14,7 +14,6 @@ public class CreateShould
     public async Task CreateExpectedSyntax_GivenValidModel()
     {
         // ARRANGE
-
         var services = new ServiceCollection();
 
         services.AddCoreServices();
@@ -25,19 +24,12 @@ public class CreateShould
 
         var expected = "[Fact]";
 
-
         // ACT
-
         var sut = ActivatorUtilities.CreateInstance<AttributeSyntaxGenerationStrategy>(container);
 
-
         // ASSERT
-
         var result = await sut.GenerateAsync(default, new AttributeModel() { Name = "Fact" });
 
         Assert.Equal(expected, result);
     }
-
 }
-
-

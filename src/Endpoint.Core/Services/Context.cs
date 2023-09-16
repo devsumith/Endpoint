@@ -8,17 +8,17 @@ namespace Endpoint.Core.Services;
 
 public class Context : IContext
 {
-    private readonly ILogger<Context> _logger;
+    private readonly ILogger<Context> logger;
 
     public Context(ILogger<Context> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public T Get<T>()
         where T : class
     {
-        _logger.LogInformation("Retrieving context. {typeName}", typeof(T).Name);
+        logger.LogInformation("Retrieving context. {typeName}", typeof(T).Name);
 
         var @event = new CustomEvent<T>() { };
 
@@ -30,7 +30,7 @@ public class Context : IContext
     public void Set<T>(T item)
         where T : class
     {
-        _logger.LogInformation("Setting context. {typeName}", typeof(T).Name);
+        logger.LogInformation("Setting context. {typeName}", typeof(T).Name);
 
         DomainEvents.Register<CustomEvent<T>>(x =>
         {

@@ -14,6 +14,5 @@ public enum AttributeType
     Http,
     SwaggerOperation,
     Route,
-    Fact
+    Fact,
 }
-

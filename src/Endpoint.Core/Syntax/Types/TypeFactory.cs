@@ -5,22 +5,20 @@ namespace Endpoint.Core.Syntax.Types;
 
 public class TypeFactory : ITypeFactory
 {
-    private readonly ILogger<TypeFactory> _logger;
+    private readonly ILogger<TypeFactory> logger;
 
     public TypeFactory(ILogger<TypeFactory> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task<TypeModel> Create(ClassModel @class)
     {
-        _logger.LogInformation("Create Type");
+        logger.LogInformation("Create Type");
 
         return new TypeModel(@class.Name)
         {
             Class = @class,
         };
     }
-
 }
-

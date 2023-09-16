@@ -9,8 +9,8 @@ public class NamespaceModel : SyntaxModel
 {
     public NamespaceModel()
     {
-
     }
+
     public NamespaceModel(string name, List<SyntaxModel> syntaxModels)
     {
         Name = name;
@@ -18,6 +18,6 @@ public class NamespaceModel : SyntaxModel
     }
 
     public string Name { get; set; }
+
     public List<SyntaxModel> SyntaxModels { get; set; }
 }
-

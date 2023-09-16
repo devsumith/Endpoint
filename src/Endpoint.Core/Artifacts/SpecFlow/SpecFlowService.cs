@@ -11,23 +11,23 @@ namespace Endpoint.Core.Artifacts.SpecFlow;
 
 public class SpecFlowService : ISpecFlowService
 {
-    private readonly ILogger<SpecFlowService> _logger;
-    private readonly IFileFactory _fileFactory;
-    private readonly IArtifactGenerator _artifactGenerator;
+    private readonly ILogger<SpecFlowService> logger;
+    private readonly IFileFactory fileFactory;
+    private readonly IArtifactGenerator artifactGenerator;
+
     public SpecFlowService(
         ILogger<SpecFlowService> logger,
         IArtifactGenerator artifactGenerator,
-        IFileFactory fileFactory
-        )
+        IFileFactory fileFactory)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
     public async Task CreatePageObject(string name, string directory)
     {
-        _logger.LogInformation("Create Page Object: {name}", name);
+        logger.LogInformation("Create Page Object: {name}", name);
 
         var pageObjectName = $"{name}PageObject";
 
@@ -35,22 +35,22 @@ public class SpecFlowService : ISpecFlowService
 
         classModel.Attributes.Add(new AttributeModel()
         {
-            Name = "Binding"
+            Name = "Binding",
         });
 
         classModel.Usings.Add(new UsingModel()
         {
-            Name = "TechTalk.SpecFlow"
+            Name = "TechTalk.SpecFlow",
         });
 
         var fileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs");
 
-        await _artifactGenerator.GenerateAsync(fileModel);
+        await artifactGenerator.GenerateAsync(fileModel);
     }
 
     public async Task CreateHook(string name, string directory)
     {
-        _logger.LogInformation("Create Hook: {name}", name);
+        logger.LogInformation("Create Hook: {name}", name);
 
         var hookName = $"{name}Hooks";
 
@@ -58,20 +58,20 @@ public class SpecFlowService : ISpecFlowService
 
         classModel.Attributes.Add(new AttributeModel()
         {
-            Name = "Binding"
+            Name = "Binding",
         });
 
-        classModel.Usings.Add(new("TechTalk.SpecFlow"));
+        classModel.Usings.Add(new ("TechTalk.SpecFlow"));
 
         var fileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs");
 
-        await _artifactGenerator.GenerateAsync(fileModel);
+        await artifactGenerator.GenerateAsync(fileModel);
     }
 
     public async Task CreateDockerControllerHooks(string directory)
     {
-        var model = _fileFactory.CreateTemplate("DockerControllerHooks", "DockerControllerHooks", directory);
+        var model = fileFactory.CreateTemplate("DockerControllerHooks", "DockerControllerHooks", directory);
 
-        await _artifactGenerator.GenerateAsync(model);
+        await artifactGenerator.GenerateAsync(model);
     }
 }

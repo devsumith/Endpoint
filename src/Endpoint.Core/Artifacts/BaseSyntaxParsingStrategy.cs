@@ -8,7 +8,6 @@ public abstract class BaseArtifactParsingStrategy<T> : IArtifactParsingStrategy<
 {
     public virtual int GetPriority()
     {
-
         return 0;
     }
 

@@ -1,20 +1,20 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Microsoft.Extensions.Logging;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.RouteHandlers;
 
 public class RouteHandlerCreateSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<RouteHandlerModel>
 {
-    private readonly ILogger<RouteHandlerCreateSyntaxGenerationStrategy> _logger;
+    private readonly ILogger<RouteHandlerCreateSyntaxGenerationStrategy> logger;
+
     public RouteHandlerCreateSyntaxGenerationStrategy(
 
         ILogger<RouteHandlerCreateSyntaxGenerationStrategy> logger)
-
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public int GetPriority() => 0;
@@ -24,7 +24,7 @@ public class RouteHandlerCreateSyntaxGenerationStrategy : GenericSyntaxGeneratio
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model)
     {
-        _logger.LogInformation("Generating syntax for {0} and type {1}.", model, model.Type);
+        logger.LogInformation("Generating syntax for {0} and type {1}.", model, model.Type);
 
         var resource = (SyntaxToken)model.Entity.Name;
 
@@ -42,7 +42,7 @@ public class RouteHandlerCreateSyntaxGenerationStrategy : GenericSyntaxGeneratio
 
         builder.AppendLine("await context.SaveChangesAsync();".Indent(2));
 
-        builder.AppendLine("");
+        builder.AppendLine(string.Empty);
 
         builder.AppendLine(($"return Results.Created($\"/{resource.SnakeCasePlural}/" + "{" + $"{resource.CamelCase}.{idPropertyName}" + "}\"," + $"{resource.CamelCase});").Indent(2));
 

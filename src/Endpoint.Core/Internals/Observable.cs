@@ -9,11 +9,13 @@ namespace Endpoint.Core.Internals;
 
 public class Observable<T> : IObservable<T>
 {
-    public Observable() { }
+    private IList<Subscription> subscriptions = new List<Subscription>();
 
-    private IList<Subscription> _subscriptions = new List<Subscription>();
+    public Observable()
+    {
+    }
 
-    private readonly object _lock = new object();
+    private readonly object @lock = new object();
 
     public IDisposable Subscribe(IObserver<T> observer)
     {
@@ -27,7 +29,7 @@ public class Observable<T> : IObservable<T>
 
     public void Broadcast(T item)
     {
-        var subscriptions = _subscriptions;
+        var subscriptions = this.subscriptions;
         for (int i = 0; i < subscriptions.Count; i++)
         {
             subscriptions[i].Observer.OnNext(item);
@@ -36,7 +38,7 @@ public class Observable<T> : IObservable<T>
 
     protected void BroadcastError(Exception error)
     {
-        var subscriptions = _subscriptions;
+        var subscriptions = this.subscriptions;
         for (int i = 0; i < subscriptions.Count; i++)
         {
             subscriptions[i].Observer.OnError(error);
@@ -45,7 +47,7 @@ public class Observable<T> : IObservable<T>
 
     protected void BroadcastOnCompleted()
     {
-        var subscriptions = _subscriptions;
+        var subscriptions = this.subscriptions;
         for (int i = 0; i < subscriptions.Count; i++)
         {
             subscriptions[i].Observer.OnCompleted();
@@ -54,26 +56,26 @@ public class Observable<T> : IObservable<T>
 
     private Subscription AddSubscription(IObserver<T> observer)
     {
-        lock (_lock)
+        lock (@lock)
         {
-            var subscriptions = new List<Subscription>(_subscriptions);
+            var subscriptions = new List<Subscription>(this.subscriptions);
             var subscription = new Subscription() { Observable = this, Observer = observer };
             subscriptions.Add(subscription);
-            Interlocked.Exchange(ref _subscriptions, subscriptions);
+            Interlocked.Exchange(ref this.subscriptions, subscriptions);
             return subscription;
         }
     }
 
     private void RemoveSubscription(IObserver<T> observer)
     {
-        lock (_lock)
+        lock (@lock)
         {
-            var subscriptions = new List<Subscription>(_subscriptions);
+            var subscriptions = new List<Subscription>(this.subscriptions);
             var subscription = subscriptions.FirstOrDefault(s => s.Observer == observer);
             if (subscription != null)
             {
                 subscriptions.Remove(subscription);
-                Interlocked.Exchange(ref _subscriptions, subscriptions);
+                Interlocked.Exchange(ref this.subscriptions, subscriptions);
             }
         }
     }
@@ -88,6 +90,4 @@ public class Observable<T> : IObservable<T>
             Observable.Unsubscribe(Observer);
         }
     }
-
 }
-

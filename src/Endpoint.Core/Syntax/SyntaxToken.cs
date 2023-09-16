@@ -15,4 +15,3 @@ public record SyntaxToken
 
     public static explicit operator SyntaxToken(string token) => new SyntaxToken(token);
 }
-

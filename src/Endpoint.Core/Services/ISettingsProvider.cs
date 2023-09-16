@@ -9,4 +9,3 @@ public interface ISettingsProvider
 {
     dynamic Get(string directory = null);
 }
-

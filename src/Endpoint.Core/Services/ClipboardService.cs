@@ -18,4 +18,3 @@ public class ClipboardService : IClipboardService
         return await TextCopy.ClipboardService.GetTextAsync(cancellationToken);
     }
 }
-

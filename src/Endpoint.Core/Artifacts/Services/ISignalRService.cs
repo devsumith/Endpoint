@@ -10,7 +10,4 @@ public interface ISignalRService
     Task Add(string directory);
 
     Task AddHub(string name, string directory);
-
 }
-
-

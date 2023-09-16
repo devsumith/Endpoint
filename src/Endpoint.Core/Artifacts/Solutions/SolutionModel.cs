@@ -40,19 +40,33 @@ public class SolutionModel
     }
 
     public string Name { get; init; }
+
     public string Directory { get; init; }
+
     public List<FolderModel> Folders { get; set; }
+
     public List<DependsOnModel> DependOns { get; set; }
+
     public List<ProjectModel> Projects { get; private set; }
+
     public List<FileModel> Files { get; set; }
+
     public string SrcDirectoryName { get; private set; } = "src";
+
     public string TestDirectoryName { get; private set; } = "tests";
+
     public string SrcDirectory => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{SrcDirectoryName}";
+
     public string TestDirectory => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{TestDirectoryName}";
+
     public string SolutionPath => $"{SolutionDirectory}{Path.DirectorySeparatorChar}{Name}.sln";
+
     public string SolutionDirectory { get; set; }
+
     public string SolultionFileName => $"{Name}.sln";
+
     public ProjectModel DefaultProject => Folders.First().Projects.First();
+
     public void RemoveAllServices()
     {
         Folders.Clear();
@@ -69,7 +83,9 @@ public class SolutionModel
                     if (file is CodeFileModel<ClassModel> classFileModel)
                     {
                         if (classFileModel.Object.Name.Split('.').Last() == name)
+                        {
                             return classFileModel.Object;
+                        }
                     }
                 }
             }

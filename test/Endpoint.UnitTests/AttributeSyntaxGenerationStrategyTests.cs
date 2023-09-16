@@ -1,17 +1,16 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Threading.Tasks;
 using Endpoint.Core.Syntax.Attributes;
 using Endpoint.Core.Syntax.Attributes.Strategies;
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Endpoint.UnitTests;
 
 public class AttributeSyntaxGenerationStrategyTests
 {
-
     [Fact]
     public void CreateShould_ReturnAppropiateAttribute()
     {
@@ -23,11 +22,9 @@ public class AttributeSyntaxGenerationStrategyTests
 
         var container = services.BuildServiceProvider();
 
-
         var sut = ActivatorUtilities.CreateInstance<AttributeSyntaxGenerationStrategy>(container);
 
         Assert.NotNull(sut);
-
     }
 
     [Fact]
@@ -41,18 +38,15 @@ public class AttributeSyntaxGenerationStrategyTests
 
         var container = services.BuildServiceProvider();
 
-
         var sut = ActivatorUtilities.CreateInstance<AttributeSyntaxGenerationStrategy>(container);
 
         var model = new AttributeModel()
         {
-            Name = "ApiController"
+            Name = "ApiController",
         };
 
         var result = await sut.GenerateAsync(default, model);
 
         Assert.Equal("[ApiController]", result);
-
     }
 }
-

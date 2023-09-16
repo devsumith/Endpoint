@@ -1,16 +1,14 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-
+using System;
+using System.Threading.Tasks;
 using Endpoint.Core.Syntax.Attributes;
 using Endpoint.Core.Syntax.Attributes.Strategies;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Threading.Tasks;
 using Xunit;
-
 
 namespace Endpoint.UnitTests.Core.Strategies.CSharp;
 
@@ -21,9 +19,9 @@ public class HttpAttributeGenerationStrategyTests
     {
         var expected = new string[1] { "[HttpGet(Name = \"getCharacters\")]" };
 
-        var model = new AttributeModel(AttributeType.Http, "HttpGet", new()
+        var model = new AttributeModel(AttributeType.Http, "HttpGet", new ()
         {
-            { "Name", "getCharacters" }
+            { "Name", "getCharacters" },
         });
 
         var services = new ServiceCollection();
@@ -41,5 +39,3 @@ public class HttpAttributeGenerationStrategyTests
         Assert.Equal(string.Join(Environment.NewLine, expected), actual);
     }
 }
-
-

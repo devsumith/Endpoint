@@ -13,11 +13,11 @@ public class PackageModel
 
     public PackageModel()
     {
-
     }
 
     public string Name { get; init; }
+
     public string Version { get; init; }
+
     public bool IsPreRelease { get; init; }
 }
-

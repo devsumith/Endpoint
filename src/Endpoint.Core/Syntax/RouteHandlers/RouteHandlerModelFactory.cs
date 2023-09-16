@@ -18,43 +18,37 @@ public class RouteHandlerFactory : IRouteHandlerFactory
             $"/{resourceNameToken.SnakeCasePlural}",
             dbContextName,
             aggregateRoot,
-            RouteType.Create
-            ),
+            RouteType.Create),
 
             new RouteHandlerModel(
             $"Get{resourceNameToken.PascalCasePlural}",
             $"/{resourceNameToken.SnakeCasePlural}",
             dbContextName,
             aggregateRoot,
-            RouteType.Get
-            ),
+            RouteType.Get),
 
             new RouteHandlerModel(
             $"Get{resourceNameToken.PascalCase}ById",
             $"/{resourceNameToken.SnakeCasePlural}",
             dbContextName,
             aggregateRoot,
-            RouteType.GetById
-            ),
+            RouteType.GetById),
 
             new RouteHandlerModel(
             $"Update{resourceNameToken.PascalCase}",
             $"/{resourceNameToken.SnakeCasePlural}",
             dbContextName,
             aggregateRoot,
-            RouteType.Update
-            ),
+            RouteType.Update),
 
             new RouteHandlerModel(
             $"Delete{resourceNameToken.PascalCase}",
             $"/{resourceNameToken.SnakeCasePlural}",
             dbContextName,
             aggregateRoot,
-            RouteType.Delete
-            )
+            RouteType.Delete),
         };
 
         return routes;
     }
 }
-

@@ -1,6 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Attributes;
 using Endpoint.Core.Syntax.Constructors;
@@ -14,28 +18,24 @@ using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Properties.Factories;
 using Endpoint.Core.Syntax.Types;
 using Endpoint.Core.Syntax.Units;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Endpoint.Core.Syntax.Classes.Factories;
 
 public class ClassFactory : IClassFactory
 {
-    private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly INamespaceProvider _namespaceProvider;
-    private readonly IFileProvider _fileProvider;
-    private readonly IMethodFactory _methodFactory;
-    private readonly IPropertyFactory _propertyFactory;
+    private readonly INamingConventionConverter namingConventionConverter;
+    private readonly INamespaceProvider namespaceProvider;
+    private readonly IFileProvider fileProvider;
+    private readonly IMethodFactory methodFactory;
+    private readonly IPropertyFactory propertyFactory;
 
     public ClassFactory(IPropertyFactory propertyFactory, INamingConventionConverter namingConventionConverter, INamespaceProvider namespaceProvider, IFileProvider fileProvider, IMethodFactory methodFactory)
     {
-        _propertyFactory = propertyFactory ?? throw new ArgumentNullException(nameof(propertyFactory));
-        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
-        _methodFactory = methodFactory ?? throw new ArgumentNullException(nameof(methodFactory));
+        this.propertyFactory = propertyFactory ?? throw new ArgumentNullException(nameof(propertyFactory));
+        this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        this.namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
+        this.methodFactory = methodFactory ?? throw new ArgumentNullException(nameof(methodFactory));
     }
 
     public async Task<ClassModel> DtoExtensionsCreateAsync(ClassModel aggregate)
@@ -45,9 +45,9 @@ public class ClassFactory : IClassFactory
             Static = true,
             Methods = new List<MethodModel>()
             {
-                await _methodFactory.ToDtoCreateAsync(aggregate),
-                await _methodFactory.ToDtosAsyncCreateAsync(aggregate),
-            }
+                await methodFactory.ToDtoCreateAsync(aggregate),
+                await methodFactory.ToDtosAsyncCreateAsync(aggregate),
+            },
         };
 
         return model;
@@ -55,29 +55,29 @@ public class ClassFactory : IClassFactory
 
     public ClassModel CreateController(EntityModel model, string directory)
     {
-        var csProjPath = _fileProvider.Get("*.csproj", directory);
+        var csProjPath = fileProvider.Get("*.csproj", directory);
 
         var csProjDirectory = Path.GetDirectoryName(csProjPath);
 
-        var rootNamesapce = _namespaceProvider.Get(csProjDirectory).Split('.')[0];
+        var rootNamesapce = namespaceProvider.Get(csProjDirectory).Split('.')[0];
 
         var classModel = new ClassModel($"{model.Name}Controller");
 
-        classModel.Usings.Add(new($"{rootNamesapce}.Core.AggregatesModel.{model.Name}Aggregate.Commands"));
+        classModel.Usings.Add(new ($"{rootNamesapce}.Core.AggregatesModel.{model.Name}Aggregate.Commands"));
 
-        classModel.Usings.Add(new($"{rootNamesapce}.Core.AggregatesModel.{model.Name}Aggregate.Queries"));
+        classModel.Usings.Add(new ($"{rootNamesapce}.Core.AggregatesModel.{model.Name}Aggregate.Queries"));
 
-        classModel.Usings.Add(new("System.Net"));
+        classModel.Usings.Add(new ("System.Net"));
 
-        classModel.Usings.Add(new("System.Threading.Tasks"));
+        classModel.Usings.Add(new ("System.Threading.Tasks"));
 
-        classModel.Usings.Add(new("MediatR"));
+        classModel.Usings.Add(new ("MediatR"));
 
-        classModel.Usings.Add(new("Microsoft.AspNetCore.Mvc"));
+        classModel.Usings.Add(new ("Microsoft.AspNetCore.Mvc"));
 
-        classModel.Usings.Add(new("System.Net.Mime"));
+        classModel.Usings.Add(new ("System.Net.Mime"));
 
-        classModel.Usings.Add(new("Swashbuckle.AspNetCore.Annotations"));
+        classModel.Usings.Add(new ("Swashbuckle.AspNetCore.Annotations"));
 
         classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.ApiController, Name = nameof(AttributeType.ApiController) });
 
@@ -93,19 +93,21 @@ public class ClassFactory : IClassFactory
 
         classModel.Fields.Add(FieldModel.LoggerOf(classModel.Name));
 
-        classModel.Constructors.Add(new(classModel, classModel.Name)
+        classModel.Constructors.Add(new (classModel, classModel.Name)
         {
-            Params = new()
+            Params = new ()
             {
                 ParamModel.Mediator,
                 ParamModel.LoggerOf(classModel.Name)
-            }
+            },
         });
 
         foreach (var route in Enum.GetValues<RouteType>())
         {
             if (route == RouteType.Page)
+            {
                 break;
+            }
 
             classModel.Methods.Add(CreateControllerMethod(classModel, model, route));
         }
@@ -115,25 +117,25 @@ public class ClassFactory : IClassFactory
 
     public ClassModel CreateEmptyController(string name, string directory)
     {
-        var csProjPath = _fileProvider.Get("*.csproj", directory);
+        var csProjPath = fileProvider.Get("*.csproj", directory);
 
         var csProjDirectory = Path.GetDirectoryName(csProjPath);
 
-        var rootNamesapce = _namespaceProvider.Get(csProjDirectory).Split('.')[0];
+        var rootNamesapce = namespaceProvider.Get(csProjDirectory).Split('.')[0];
 
         var classModel = new ClassModel($"{name}Controller");
 
-        classModel.Usings.Add(new("System.Net"));
+        classModel.Usings.Add(new ("System.Net"));
 
-        classModel.Usings.Add(new("System.Threading.Tasks"));
+        classModel.Usings.Add(new ("System.Threading.Tasks"));
 
-        classModel.Usings.Add(new("MediatR"));
+        classModel.Usings.Add(new ("MediatR"));
 
-        classModel.Usings.Add(new("Microsoft.AspNetCore.Mvc"));
+        classModel.Usings.Add(new ("Microsoft.AspNetCore.Mvc"));
 
-        classModel.Usings.Add(new("System.Net.Mime"));
+        classModel.Usings.Add(new ("System.Net.Mime"));
 
-        classModel.Usings.Add(new("Swashbuckle.AspNetCore.Annotations"));
+        classModel.Usings.Add(new ("Swashbuckle.AspNetCore.Annotations"));
 
         classModel.Attributes.Add(new AttributeModel() { Type = AttributeType.ApiController, Name = nameof(AttributeType.ApiController) });
 
@@ -149,14 +151,45 @@ public class ClassFactory : IClassFactory
 
         classModel.Fields.Add(FieldModel.LoggerOf(classModel.Name));
 
-        classModel.Constructors.Add(new(classModel, classModel.Name)
+        classModel.Constructors.Add(new (classModel, classModel.Name)
         {
-            Params = new()
+            Params = new ()
             {
                 ParamModel.Mediator,
                 ParamModel.LoggerOf(classModel.Name)
-            }
+            },
         });
+
+        return classModel;
+    }
+
+    public ClassModel CreateEntity(string name, string properties = null)
+    {
+        var classModel = new ClassModel(name);
+
+        var hasId = false;
+
+        if (!string.IsNullOrEmpty(properties))
+        {
+            foreach (var property in properties.Split(','))
+            {
+                var parts = property.Split(':');
+                var propName = parts[0];
+                var propType = parts[1];
+
+                if (propName == $"{name}Id")
+                {
+                    hasId = true;
+                }
+
+                classModel.Properties.Add(new PropertyModel(classModel, AccessModifier.Public, new TypeModel(propType), propName, PropertyAccessorModel.GetSet));
+            }
+        }
+
+        if (!hasId)
+        {
+            classModel.Properties.Add(new PropertyModel(classModel, AccessModifier.Public, new ("Guid"), $"{name}Id", PropertyAccessorModel.GetSet));
+        }
 
         return classModel;
     }
@@ -167,16 +200,16 @@ public class ClassFactory : IClassFactory
         {
             ParentType = controller,
             Async = true,
-            AccessModifier = AccessModifier.Public
+            AccessModifier = AccessModifier.Public,
         };
 
         var cancellationTokenParam = ParamModel.CancellationToken;
 
-        var entityNameCamelCase = _namingConventionConverter.Convert(NamingConvention.CamelCase, model.Name);
+        var entityNameCamelCase = namingConventionConverter.Convert(NamingConvention.CamelCase, model.Name);
 
-        var entityNamePascalCase = _namingConventionConverter.Convert(NamingConvention.PascalCase, model.Name);
+        var entityNamePascalCase = namingConventionConverter.Convert(NamingConvention.PascalCase, model.Name);
 
-        var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, model.Name, pluralize: true);
+        var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, model.Name, pluralize: true);
 
         var entityIdNameCamelCase = $"{entityNameCamelCase}Id";
 
@@ -189,7 +222,7 @@ public class ClassFactory : IClassFactory
             RouteType.Create => "Create",
             RouteType.Update => "Update",
             RouteType.Delete => "Delete",
-            _ => ""
+            _ => string.Empty
         };
 
         methodModel.ReturnType = routeType switch
@@ -213,9 +246,10 @@ public class ClassFactory : IClassFactory
                 {
                     Name = "HttpGet",
                     Template = "\"{" + entityIdNameCamelCase + ":guid}\"",
-                    Properties = new Dictionary<string, string>() {
+                    Properties = new Dictionary<string, string>()
+                    {
                     { "Name", $"get{entityNamePascalCase}ById" }
-                }
+                },
                 });
 
                 methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("NotFound", "string"));
@@ -228,19 +262,19 @@ public class ClassFactory : IClassFactory
 
                 methodModel.Params = new List<ParamModel>
                 {
-                    new ParamModel { Type = new TypeModel("Guid"), Name = entityIdNameCamelCase, Attribute = new AttributeModel() { Name ="FromRoute" } },
-                    cancellationTokenParam
+                    new ParamModel { Type = new TypeModel("Guid"), Name = entityIdNameCamelCase, Attribute = new AttributeModel() { Name = "FromRoute" } },
+                    cancellationTokenParam,
                 };
 
                 var methodBodyBuilder = new StringBuilder();
 
                 methodBodyBuilder.AppendLine($"var request = new Get{entityNamePascalCase}ByIdRequest()" + "{" + $"{entityIdNamePascalCase} = {entityIdNameCamelCase}" + "};");
 
-                methodBodyBuilder.AppendLine("");
+                methodBodyBuilder.AppendLine(string.Empty);
 
                 methodBodyBuilder.AppendLine("var response = await _mediator.Send(request, cancellationToken);");
 
-                methodBodyBuilder.AppendLine("");
+                methodBodyBuilder.AppendLine(string.Empty);
 
                 methodBodyBuilder.AppendLine($"if (response.{entityNamePascalCase} == null)");
 
@@ -250,7 +284,7 @@ public class ClassFactory : IClassFactory
 
                 methodBodyBuilder.AppendLine("}");
 
-                methodBodyBuilder.AppendLine("");
+                methodBodyBuilder.AppendLine(string.Empty);
 
                 methodBodyBuilder.Append("return response;");
 
@@ -265,9 +299,10 @@ public class ClassFactory : IClassFactory
                 methodModel.Attributes.Add(new AttributeModel()
                 {
                     Name = "HttpGet",
-                    Properties = new Dictionary<string, string>() {
+                    Properties = new Dictionary<string, string>()
+                    {
                     { "Name", $"get{entityNamePascalCasePlural}" }
-                }
+                },
                 });
 
                 methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
@@ -278,7 +313,7 @@ public class ClassFactory : IClassFactory
 
                 methodModel.Params = new List<ParamModel>
                 {
-                    cancellationTokenParam
+                    cancellationTokenParam,
                 };
 
                 methodModel.Body = new Syntax.Expressions.ExpressionModel($"return await _mediator.Send(new Get{entityNamePascalCasePlural}Request(), cancellationToken);");
@@ -292,9 +327,10 @@ public class ClassFactory : IClassFactory
                 methodModel.Attributes.Add(new AttributeModel()
                 {
                     Name = "HttpPost",
-                    Properties = new Dictionary<string, string>() {
+                    Properties = new Dictionary<string, string>()
+                    {
                     { "Name", $"create{entityNamePascalCase}" }
-                }
+                },
                 });
 
                 methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
@@ -305,8 +341,8 @@ public class ClassFactory : IClassFactory
 
                 methodModel.Params = new List<ParamModel>
                 {
-                    new ParamModel { Type = new TypeModel($"Create{entityNamePascalCase}Request "), Name = "request", Attribute = new AttributeModel() { Name ="FromBody" } },
-                    cancellationTokenParam
+                    new ParamModel { Type = new TypeModel($"Create{entityNamePascalCase}Request "), Name = "request", Attribute = new AttributeModel() { Name = "FromBody" } },
+                    cancellationTokenParam,
                 };
 
                 methodModel.Body = new Syntax.Expressions.ExpressionModel("return await _mediator.Send(request, cancellationToken);");
@@ -320,9 +356,10 @@ public class ClassFactory : IClassFactory
                 methodModel.Attributes.Add(new AttributeModel()
                 {
                     Name = "HttpPut",
-                    Properties = new Dictionary<string, string>() {
+                    Properties = new Dictionary<string, string>()
+                    {
                     { "Name", $"update{entityNamePascalCase}" }
-                }
+                },
                 });
 
                 methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
@@ -333,8 +370,8 @@ public class ClassFactory : IClassFactory
 
                 methodModel.Params = new List<ParamModel>
                 {
-                    new ParamModel { Type = new TypeModel($"Update{entityNamePascalCase}Request "), Name = "request", Attribute = new AttributeModel() { Name ="FromBody" } },
-                    cancellationTokenParam
+                    new ParamModel { Type = new TypeModel($"Update{entityNamePascalCase}Request "), Name = "request", Attribute = new AttributeModel() { Name = "FromBody" } },
+                    cancellationTokenParam,
                 };
 
                 methodModel.Body = new Syntax.Expressions.ExpressionModel("return await _mediator.Send(request, cancellationToken);");
@@ -347,9 +384,10 @@ public class ClassFactory : IClassFactory
                 {
                     Name = "HttpDelete",
                     Template = "\"{" + entityIdNameCamelCase + ":guid}\"",
-                    Properties = new Dictionary<string, string>() {
+                    Properties = new Dictionary<string, string>()
+                    {
                     { "Name", $"delete{entityNamePascalCase}" }
-                }
+                },
                 });
 
                 methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
@@ -360,57 +398,26 @@ public class ClassFactory : IClassFactory
 
                 methodModel.Params = new List<ParamModel>
                 {
-                    new ParamModel { Type = new TypeModel("Guid"), Name = entityIdNameCamelCase, Attribute = new AttributeModel() { Name ="FromRoute" } },
-                    cancellationTokenParam
+                    new ParamModel { Type = new TypeModel("Guid"), Name = entityIdNameCamelCase, Attribute = new AttributeModel() { Name = "FromRoute" } },
+                    cancellationTokenParam,
                 };
 
                 methodModel.Body = new Syntax.Expressions.ExpressionModel(new StringBuilder().AppendJoin(Environment.NewLine, new string[]
                 {
                     $"var request = new Delete{entityNamePascalCase}Request()" + " {" + $"{entityIdNamePascalCase} = {entityIdNameCamelCase}" + " };",
-                    "",
-                    "return await _mediator.Send(request, cancellationToken);"
+                    string.Empty,
+                    "return await _mediator.Send(request, cancellationToken);",
                 }).ToString());
 
                 break;
-
         }
 
         return methodModel;
     }
 
-    public ClassModel CreateEntity(string name, string properties = null)
-    {
-        var classModel = new ClassModel(name);
-
-        var hasId = false;
-
-        if (!string.IsNullOrEmpty(properties))
-        {
-            foreach (var property in properties.Split(','))
-            {
-                var parts = property.Split(':');
-                var propName = parts[0];
-                var propType = parts[1];
-
-                if (propName == $"{name}Id")
-                    hasId = true;
-
-                classModel.Properties.Add(new PropertyModel(classModel, AccessModifier.Public, new TypeModel(propType), propName, PropertyAccessorModel.GetSet));
-
-            }
-        }
-
-        if (!hasId)
-        {
-            classModel.Properties.Add(new PropertyModel(classModel, AccessModifier.Public, new("Guid"), $"{name}Id", PropertyAccessorModel.GetSet));
-        }
-
-        return classModel;
-    }
-
     public ClassModel CreateDbContext(string name, List<EntityModel> entities, string serviceName)
     {
-        var dbContext = new DbContextModel(_namingConventionConverter, name, entities, serviceName);
+        var dbContext = new DbContextModel(namingConventionConverter, name, entities, serviceName);
 
         return dbContext;
     }
@@ -424,10 +431,9 @@ public class ClassFactory : IClassFactory
             AccessModifier.Public,
             new TypeModel("string"),
             "MessageType",
-            PropertyAccessorModel.GetSet
-            )
+            PropertyAccessorModel.GetSet)
         {
-            DefaultValue = "nameof(Message)"
+            DefaultValue = "nameof(Message)",
         });
 
         model.Properties.Add(new PropertyModel(
@@ -435,10 +441,9 @@ public class ClassFactory : IClassFactory
             AccessModifier.Public,
             new TypeModel("DateTimeOffset"),
             "Created",
-            PropertyAccessorModel.GetSet
-            )
+            PropertyAccessorModel.GetSet)
         {
-            DefaultValue = "DateTimeOffset.Now"
+            DefaultValue = "DateTimeOffset.Now",
         });
 
         return model;
@@ -450,9 +455,10 @@ public class ClassFactory : IClassFactory
 
         hubClassModel.Implements.Add(new TypeModel("Hub")
         {
-            GenericTypeParameters = new List<TypeModel>() {
+            GenericTypeParameters = new List<TypeModel>()
+            {
                 new TypeModel($"I{name}Hub")
-            }
+            },
         });
 
         hubClassModel.Usings.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
@@ -471,7 +477,7 @@ public class ClassFactory : IClassFactory
             ReturnType = new TypeModel("Task"),
             AccessModifier = AccessModifier.Public,
             Name = "Message",
-            Params = new() { new() { Name = "message", Type = new("string") } }
+            Params = new () { new () { Name = "message", Type = new ("string") } },
         });
 
         return interfaceModel;
@@ -489,16 +495,15 @@ public class ClassFactory : IClassFactory
             {
                 new TypeModel($"{name}Hub"),
                 new TypeModel($"I{name}Hub")
-            }
+            },
         };
 
         model.Usings.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
 
         model.Fields.Add(new FieldModel()
         {
-
             Type = hubContextType,
-            Name = "_hubContext"
+            Name = "_hubContext",
         });
 
         var methodBodyBuilder = new StringBuilder();
@@ -509,18 +514,18 @@ public class ClassFactory : IClassFactory
 
         methodBodyBuilder.AppendLine("_logger.LogInformation(\"Worker running at: {time}\", DateTimeOffset.Now);".Indent(1));
 
-        methodBodyBuilder.AppendLine("");
+        methodBodyBuilder.AppendLine(string.Empty);
 
         methodBodyBuilder.Append(new StringBuilder()
             .AppendLine("var message = new Message();")
-            .AppendLine("")
+            .AppendLine(string.Empty)
             .AppendLine("var json = JsonSerializer.Serialize(message);")
-            .AppendLine("")
+            .AppendLine(string.Empty)
             .AppendLine("await _hubContext.Clients.All.Message(json);")
             .ToString()
             .Indent(1));
 
-        methodBodyBuilder.AppendLine("");
+        methodBodyBuilder.AppendLine(string.Empty);
 
         methodBodyBuilder.AppendLine("await Task.Delay(1000, stoppingToken);".Indent(1));
 
@@ -531,7 +536,7 @@ public class ClassFactory : IClassFactory
         model.Constructors.First().Params.Add(new ParamModel()
         {
             Type = hubContextType,
-            Name = "hubContext"
+            Name = "hubContext",
         });
 
         return model;
@@ -552,28 +557,27 @@ public class ClassFactory : IClassFactory
     {
         var classModel = new ClassModel(name);
 
-        classModel.Implements.Add(new("BackgroundService"));
+        classModel.Implements.Add(new ("BackgroundService"));
 
-        classModel.Usings.Add(new("Messaging"));
+        classModel.Usings.Add(new ("Messaging"));
 
-        classModel.Usings.Add(new("Messaging.Udp"));
+        classModel.Usings.Add(new ("Messaging.Udp"));
 
-        classModel.Usings.Add(new("Microsoft.Extensions.DependencyInjection"));
+        classModel.Usings.Add(new ("Microsoft.Extensions.DependencyInjection"));
 
-        classModel.Usings.Add(new("Microsoft.Extensions.Hosting"));
+        classModel.Usings.Add(new ("Microsoft.Extensions.Hosting"));
 
-        classModel.Usings.Add(new("System.Text"));
+        classModel.Usings.Add(new ("System.Text"));
 
-        classModel.Usings.Add(new("Microsoft.Extensions.Logging"));
+        classModel.Usings.Add(new ("Microsoft.Extensions.Logging"));
 
-        classModel.Usings.Add(new("System.Threading.Tasks"));
+        classModel.Usings.Add(new ("System.Threading.Tasks"));
 
-        classModel.Usings.Add(new("System.Threading"));
+        classModel.Usings.Add(new ("System.Threading"));
 
-        classModel.Usings.Add(new("MediatR"));
+        classModel.Usings.Add(new ("MediatR"));
 
-        classModel.Usings.Add(new("System.Linq"));
-
+        classModel.Usings.Add(new ("System.Linq"));
 
         var constructorModel = new ConstructorModel(classModel, classModel.Name);
 
@@ -586,51 +590,51 @@ public class ClassFactory : IClassFactory
                 "IServiceScopeFactory" => "serviceScopeFactory"
             };
 
-            classModel.Fields.Add(new()
+            classModel.Fields.Add(new ()
             {
                 Name = $"_{propName}",
-                Type = type
+                Type = type,
             });
 
-            constructorModel.Params.Add(new()
+            constructorModel.Params.Add(new ()
             {
                 Name = propName,
-                Type = type
+                Type = type,
             });
         }
 
-        classModel.Fields.Add(new()
+        classModel.Fields.Add(new ()
         {
             Name = $"_supportedMessageTypes",
-            Type = new("string[]"),
-            DefaultValue = "new string[] { }"
+            Type = new ("string[]"),
+            DefaultValue = "new string[] { }",
         });
 
         var methodBody = new string[]
         {
             "var client = _udpClientFactory.Create();",
 
-            "",
+            string.Empty,
 
             "while(!cancellationToken.IsCancellationRequested) {",
 
-            "",
+            string.Empty,
 
             "var result = await client.ReceiveAsync(cancellationToken);".Indent(1),
 
-            "",
+            string.Empty,
 
             "var json = Encoding.UTF8.GetString(result.Buffer);".Indent(1),
 
-            "",
+            string.Empty,
 
             "var message = System.Text.Json.JsonSerializer.Deserialize<ServiceBusMessage>(json)!;".Indent(1),
 
-            "",
+            string.Empty,
 
             "var messageType = message.MessageAttributes[\"MessageType\"];".Indent(1),
 
-            "",
+            string.Empty,
 
             "if(_supportedMessageTypes.Contains(messageType))".Indent(1),
 
@@ -643,23 +647,23 @@ public class ClassFactory : IClassFactory
             .ToString()
             .Indent(2),
 
-            "",
+            string.Empty,
 
             "var request = System.Text.Json.JsonSerializer.Deserialize(message.Body, type!)!;".Indent(2),
 
-            "",
+            string.Empty,
 
             "using (var scope = _serviceScopeFactory.CreateScope())".Indent(2),
 
             "{".Indent(2),
 
-            "",
+            string.Empty,
 
             "}".Indent(2),
 
             "}".Indent(1),
 
-            "",
+            string.Empty,
 
             "await Task.Delay(0);".Indent(1),
 
@@ -672,8 +676,8 @@ public class ClassFactory : IClassFactory
             Override = true,
             AccessModifier = AccessModifier.Protected,
             Async = true,
-            ReturnType = new("Task"),
-            Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, methodBody))
+            ReturnType = new ("Task"),
+            Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, methodBody)),
         };
 
         method.Params.Add(ParamModel.CancellationToken);
@@ -693,7 +697,7 @@ public class ClassFactory : IClassFactory
         {
             Type = new TypeModel("IServiceCollection"),
             Name = "services",
-            ExtensionMethodParam = true
+            ExtensionMethodParam = true,
         };
 
         var method = new MethodModel()
@@ -701,7 +705,7 @@ public class ClassFactory : IClassFactory
             Name = $"Add{serviceSuffix}Services",
             ReturnType = new TypeModel("void"),
             Static = true,
-            Params = new List<ParamModel>() { methodParam }
+            Params = new List<ParamModel>() { methodParam },
         };
 
         classModel.Static = true;
@@ -715,9 +719,9 @@ public class ClassFactory : IClassFactory
     {
         var model = new ClassModel(name);
 
-        model.Implements.Add(new("IRequest")
+        model.Implements.Add(new ("IRequest")
         {
-            GenericTypeParameters = new() { new(responseName) }
+            GenericTypeParameters = new () { new (responseName) },
         });
 
         /*        Name = routeType switch
@@ -778,13 +782,13 @@ public class ClassFactory : IClassFactory
 
     public async Task<ClassModel> CreateResponseAsync(RequestType responseType, string entityName, string name = null)
     {
-        var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
+        var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
         var responseName = string.IsNullOrEmpty(name) ? $"Get{entityNamePascalCasePlural}Response" : name;
 
         var model = new ClassModel(responseName);
 
-        model.Properties = await _propertyFactory.ResponsePropertiesCreateAsync(responseType, model, entityName);
+        model.Properties = await propertyFactory.ResponsePropertiesCreateAsync(responseType, model, entityName);
 
         return model;
     }
@@ -792,7 +796,6 @@ public class ClassFactory : IClassFactory
     public async Task<ClassModel> CreateRequestHandlerAsync(string name)
     {
         var model = new ClassModel(name);
-
 
         return model;
     }
@@ -805,17 +808,17 @@ public class ClassFactory : IClassFactory
             new () { Name = "Microsoft.Extensions.Logging" },
             new () { Name = "System" },
             new () { Name = "System.Threading" },
-            new () { Name = "System.Threading.Tasks" }
+            new () { Name = "System.Threading.Tasks" },
         };
 
         var model = new ClassModel(name)
         {
-            Usings = usings
+            Usings = usings,
         };
 
         var fields = new List<FieldModel>()
         {
-            FieldModel.LoggerOf(name)
+            FieldModel.LoggerOf(name),
         };
 
         var constructors = new List<ConstructorModel>()
@@ -826,18 +829,17 @@ public class ClassFactory : IClassFactory
                 {
                     ParamModel.LoggerOf(name)
                 }
-            }
+            },
         };
 
         model.Fields = fields;
 
         model.Constructors = constructors;
 
-        model.Implements.Add(new("BackgroundService"));
+        model.Implements.Add(new ("BackgroundService"));
 
-        model.Methods.Add(await _methodFactory.CreateWorkerExecuteAsync());
+        model.Methods.Add(await methodFactory.CreateWorkerExecuteAsync());
 
         return model;
     }
 }
-

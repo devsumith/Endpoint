@@ -1,20 +1,20 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Microsoft.Extensions.Logging;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.RouteHandlers;
 
 public class RouteHandlerGetSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<RouteHandlerModel>
 {
-    private readonly ILogger<RouteHandlerSyntaxGenerationStrategy> _logger;
+    private readonly ILogger<RouteHandlerSyntaxGenerationStrategy> logger;
+
     public RouteHandlerGetSyntaxGenerationStrategy(
 
         ILogger<RouteHandlerSyntaxGenerationStrategy> logger)
-
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public int GetPriority() => 0;
@@ -24,7 +24,7 @@ public class RouteHandlerGetSyntaxGenerationStrategy : GenericSyntaxGenerationSt
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model)
     {
-        _logger.LogInformation("Generating syntax for {0} and type {1}.", model, model.Type);
+        logger.LogInformation("Generating syntax for {0} and type {1}.", model, model.Type);
 
         var resource = (SyntaxToken)model.Entity.Name;
 

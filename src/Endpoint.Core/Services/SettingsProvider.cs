@@ -1,10 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Options;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using Endpoint.Core.Options;
 using static System.Environment;
 using static System.IO.Path;
 using static System.Text.Json.JsonSerializer;
@@ -35,7 +35,5 @@ public class SettingsProvider : ISettingsProvider
         }
 
         return null;
-
     }
 }
-

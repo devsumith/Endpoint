@@ -14,7 +14,4 @@ public interface IMethodFactory
     Task<MethodModel> ToDtosAsyncCreateAsync(ClassModel aggregate);
 
     Task<MethodModel> CreateWorkerExecuteAsync();
-
 }
-
-

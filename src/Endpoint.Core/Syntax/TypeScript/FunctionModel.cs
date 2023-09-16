@@ -7,14 +7,14 @@ namespace Endpoint.Core.Syntax.TypeScript;
 
 public class FunctionModel : SyntaxModel
 {
-
     public FunctionModel()
     {
         Imports = new List<ImportModel>();
     }
 
     public string Name { get; set; }
+
     public string Body { get; set; }
+
     public List<ImportModel> Imports { get; set; }
 }
-

@@ -1,21 +1,21 @@
 ﻿// Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Services;
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
+using Endpoint.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 
 public abstract class CodeFileIArtifactGenerationStrategy<T> : GenericArtifactGenerationStrategy<CodeFileModel<T>>
     where T : SyntaxModel
 {
-    protected readonly ILogger<CodeFileIArtifactGenerationStrategy<T>> _logger;
-    protected readonly ISyntaxGenerator _syntaxGenerator;
-    protected readonly IFileSystem _fileSystem;
-    protected readonly INamespaceProvider _namespaceProvider;
-    protected readonly IGenericArtifactGenerationStrategy<FileModel> _fileArtifactGenerationStrategy;
+    protected readonly ILogger<CodeFileIArtifactGenerationStrategy<T>> logger;
+    protected readonly ISyntaxGenerator syntaxGenerator;
+    protected readonly IFileSystem fileSystem;
+    protected readonly INamespaceProvider namespaceProvider;
+    protected readonly IGenericArtifactGenerationStrategy<FileModel> fileArtifactGenerationStrategy;
 
     public CodeFileIArtifactGenerationStrategy(
         ISyntaxGenerator syntaxGenerator,
@@ -24,16 +24,16 @@ public abstract class CodeFileIArtifactGenerationStrategy<T> : GenericArtifactGe
         IGenericArtifactGenerationStrategy<FileModel> fileArtifactGenerationStrategy,
         ILogger<CodeFileIArtifactGenerationStrategy<T>> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
-        _fileArtifactGenerationStrategy = fileArtifactGenerationStrategy ?? throw new ArgumentNullException(nameof(fileArtifactGenerationStrategy));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
+        this.fileArtifactGenerationStrategy = fileArtifactGenerationStrategy ?? throw new ArgumentNullException(nameof(fileArtifactGenerationStrategy));
     }
 
     public override async Task GenerateAsync(IArtifactGenerator generator, CodeFileModel<T> model)
     {
-        _logger.LogInformation("Generating Code File. {name}", model.Name);
+        logger.LogInformation("Generating Code File. {name}", model.Name);
 
         var stringBuilder = new StringBuilder();
 
@@ -47,7 +47,7 @@ public abstract class CodeFileIArtifactGenerationStrategy<T> : GenericArtifactGe
             }
         }
 
-        var fileNamespace = string.IsNullOrEmpty(model.Namespace) ? _namespaceProvider.Get(model.Directory) : model.Namespace;
+        var fileNamespace = string.IsNullOrEmpty(model.Namespace) ? namespaceProvider.Get(model.Directory) : model.Namespace;
 
         if (!string.IsNullOrEmpty(fileNamespace) && fileNamespace != "NamespaceNotFound" && !fileNamespace.Contains(".lib."))
         {
@@ -56,10 +56,10 @@ public abstract class CodeFileIArtifactGenerationStrategy<T> : GenericArtifactGe
             stringBuilder.AppendLine();
         }
 
-        stringBuilder.AppendLine(await _syntaxGenerator.GenerateAsync(model.Object));
+        stringBuilder.AppendLine(await syntaxGenerator.GenerateAsync(model.Object));
 
         model.Body = stringBuilder.ToString();
 
-        await _fileArtifactGenerationStrategy.GenerateAsync(generator, model);
+        await fileArtifactGenerationStrategy.GenerateAsync(generator, model);
     }
 }

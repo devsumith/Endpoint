@@ -6,10 +6,8 @@ namespace Endpoint.Core.Syntax.Controllers;
 public class ControllerSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<ControllerModel>
 {
     public ControllerSyntaxGenerationStrategy(IServiceProvider serviceProvider)
-
-    { }
-
-
+    {
+    }
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ControllerModel model)
     {
@@ -40,9 +38,6 @@ public class ControllerSyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
                 .WithMethod(new MethodBuilder().WithSettings(settings).WithEndpointType(RouteType.Delete).WithResource(model).WithAuthorize(false).Build())
                 .Build();
         */
-        return "";
+        return string.Empty;
     }
-
-
 }
-

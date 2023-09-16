@@ -8,20 +8,20 @@ namespace Endpoint.Core.UnitTests.Syntax
 
     public class RuleForModelTests
     {
-        private RuleForModel _testClass;
-        private PropertyModel _property;
+        private RuleForModel testClass;
+        private PropertyModel property;
 
         public RuleForModelTests()
         {
-            _property = new PropertyModel(new TypeModel("TestValue1785358663"), "TestValue563825375", new PropertyAccessorModel(PropertyAccessorType.Set));
-            _testClass = new RuleForModel(_property);
+            property = new PropertyModel(new TypeModel("TestValue1785358663"), "TestValue563825375", new PropertyAccessorModel(PropertyAccessorType.Set));
+            testClass = new RuleForModel(property);
         }
 
         [Fact]
         public void CanConstruct()
         {
             // Act
-            var instance = new RuleForModel(_property);
+            var instance = new RuleForModel(property);
 
             // Assert
             Assert.NotNull(instance);
@@ -36,7 +36,7 @@ namespace Endpoint.Core.UnitTests.Syntax
         [Fact]
         public void PropertyIsInitializedCorrectly()
         {
-            Assert.Same(_property, _testClass.Property);
+            Assert.Same(property, testClass.Property);
         }
 
         [Fact]
@@ -46,10 +46,10 @@ namespace Endpoint.Core.UnitTests.Syntax
             var testValue = new PropertyModel(new TypeModel("TestValue1766792680"), "TestValue658604556", new PropertyAccessorModel(PropertyAccessorType.Get));
 
             // Act
-            _testClass.Property = testValue;
+            testClass.Property = testValue;
 
             // Assert
-            Assert.Same(testValue, _testClass.Property);
+            Assert.Same(testValue, testClass.Property);
         }
     }
 }

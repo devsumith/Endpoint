@@ -2,51 +2,58 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System;
-using System.Text;
-using System.Linq;
-using System.Globalization;
 using System.Collections.Generic;
-using Humanizer;
+using System.Globalization;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using Humanizer;
 
 namespace Endpoint.Core.Services;
 
 public class NamingConventionConverter : INamingConventionConverter
 {
+    public static string CamelCase(string input)
+    {
+        return input.First().ToString().ToLower() + input.Substring(1);
+    }
+
     public string Convert(NamingConvention to, string value) => Convert(GetNamingConvention(value), to, value);
 
     public string Convert(NamingConvention from, NamingConvention to, string value)
     {
         if (string.IsNullOrEmpty(value))
-            return "";
+        {
+            return string.Empty;
+        }
 
         switch (to)
         {
             case NamingConvention.CamelCase:
                 value = FirstCharacterUpperAfterADash(value);
                 value = FirstCharacterUpperAfterASpace(value);
-                value = value.Replace("-", "");
-                value = value.Replace(" ", "");
+                value = value.Replace("-", string.Empty);
+                value = value.Replace(" ", string.Empty);
                 return value.First().ToString().ToLower() + value.Substring(1);
 
             case NamingConvention.PascalCase:
                 value = FirstCharacterUpperAfterADash(value);
                 value = FirstCharacterUpperAfterASpace(value);
-                value = value.Replace("-", "");
-                value = value.Replace(" ", "");
+                value = value.Replace("-", string.Empty);
+                value = value.Replace(" ", string.Empty);
                 return value.First().ToString().ToUpper() + value.Substring(1);
 
             case NamingConvention.SnakeCase:
                 value = FirstCharacterUpperAfterASpace(value);
-                value = value.Replace(" ", "");
+                value = value.Replace(" ", string.Empty);
                 return string.Concat(value.Select((x, i) => i > 0 && char.IsUpper(x) ? "-" + x.ToString() : x.ToString())).ToLower();
 
             case NamingConvention.TitleCase:
                 value = FirstCharacterUpperAfterASpace(value);
                 value = FirstCharacterUpperAfterADash(value);
-                value = value.Replace(" ", "");
+                value = value.Replace(" ", string.Empty);
                 value = InsertSpaceBeforeUpperCase(value);
-                value = value.Replace("-", "");
+                value = value.Replace("-", string.Empty);
                 return value.First().ToString().ToUpper() + value.Substring(1);
 
             case NamingConvention.AllCaps:
@@ -56,7 +63,10 @@ public class NamingConventionConverter : INamingConventionConverter
                 return value;
 
             case NamingConvention.KebobCase:
-                if (string.IsNullOrEmpty(value)) { return value; }
+                if (string.IsNullOrEmpty(value))
+                {
+                    return value;
+                }
 
                 var startUnderscores = Regex.Match(value, @"^_+");
                 return startUnderscores + Regex.Replace(value, @"([a-z0-9])([A-Z])", "$1_$2").ToLower();
@@ -65,23 +75,25 @@ public class NamingConventionConverter : INamingConventionConverter
         return value;
     }
 
-    public static string CamelCase(string input)
-    {
-        return input.First().ToString().ToLower() + input.Substring(1);
-    }
-
     public static string PascalCaseToTitleCase(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
-            return "";
+        {
+            return string.Empty;
+        }
+
         StringBuilder newText = new StringBuilder(input.Length * 2);
         newText.Append(input[0]);
         for (int i = 1; i < input.Length; i++)
         {
             if (char.IsUpper(input[i]) && input[i - 1] != ' ')
+            {
                 newText.Append(' ');
+            }
+
             newText.Append(input[i]);
         }
+
         return newText.ToString();
     }
 
@@ -90,7 +102,7 @@ public class NamingConventionConverter : INamingConventionConverter
         System.Text.StringBuilder resultBuilder = new System.Text.StringBuilder();
         foreach (char c in input)
         {
-            if (!Char.IsLetterOrDigit(c))
+            if (!char.IsLetterOrDigit(c))
             {
                 resultBuilder.Append(" ");
             }
@@ -99,28 +111,39 @@ public class NamingConventionConverter : INamingConventionConverter
                 resultBuilder.Append(c);
             }
         }
+
         string result = resultBuilder.ToString();
         TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-        result = textInfo.ToTitleCase(result).Replace(" ", String.Empty);
+        result = textInfo.ToTitleCase(result).Replace(" ", string.Empty);
         return result;
     }
 
     public NamingConvention GetNamingConvention(string value)
     {
         if (string.IsNullOrEmpty(value))
+        {
             return NamingConvention.None;
+        }
 
         if (IsNamingConventionType(NamingConvention.CamelCase, value))
+        {
             return NamingConvention.CamelCase;
+        }
 
         if (IsNamingConventionType(NamingConvention.PascalCase, value))
+        {
             return NamingConvention.PascalCase;
+        }
 
         if (IsNamingConventionType(NamingConvention.SnakeCase, value))
+        {
             return NamingConvention.SnakeCase;
+        }
 
         if (IsNamingConventionType(NamingConvention.TitleCase, value))
+        {
             return NamingConvention.TitleCase;
+        }
 
         return NamingConvention.None;
     }
@@ -158,7 +181,9 @@ public class NamingConventionConverter : INamingConventionConverter
         foreach (char c in value.ToList())
         {
             if (string.IsNullOrWhiteSpace(c.ToString()))
+            {
                 indexesOfTitleCharacter.Add(index + 1);
+            }
 
             index++;
         }
@@ -189,7 +214,10 @@ public class NamingConventionConverter : INamingConventionConverter
         foreach (char c in value.ToList())
         {
             if (c.ToString() == "-")
+            {
                 indexesOfTitleCharacter.Add(index + 1);
+            }
+
             index++;
         }
 
@@ -215,15 +243,22 @@ public class NamingConventionConverter : INamingConventionConverter
     public string InsertSpaceBeforeUpperCase(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            return "";
+        {
+            return string.Empty;
+        }
+
         StringBuilder newText = new StringBuilder(value.Length * 2);
         newText.Append(value[0]);
         for (int i = 1; i < value.Length; i++)
         {
             if (char.IsUpper(value[i]) && value[i - 1] != ' ')
+            {
                 newText.Append(' ');
+            }
+
             newText.Append(value[i]);
         }
+
         return newText.ToString();
     }
 

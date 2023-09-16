@@ -1,6 +1,8 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
+using System.IO;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Projects.Enums;
@@ -10,20 +12,18 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Services;
 using MediatR;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Endpoint.Core.Artifacts.Solutions.Services;
 
 public class SolutionService : ISolutionService
 {
-    private readonly IArtifactGenerator _artifactGenerator;
-    private readonly IProjectFactory _projectFactory;
-    private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;
-    private readonly IDomainDrivenDesignService _domainDrivenDesignService;
-    private readonly Observable<INotification> _notificationListener;
-    private readonly IFileProvider _fileProvider;
-    private readonly ICommandService _commandService;
+    private readonly IArtifactGenerator artifactGenerator;
+    private readonly IProjectFactory projectFactory;
+    private readonly IDomainDrivenDesignFileService domainDrivenDesignFileService;
+    private readonly IDomainDrivenDesignService domainDrivenDesignService;
+    private readonly Observable<INotification> notificationListener;
+    private readonly IFileProvider fileProvider;
+    private readonly ICommandService commandService;
 
     public SolutionService(
         IArtifactGenerator artifactGenerator,
@@ -34,13 +34,13 @@ public class SolutionService : ISolutionService
         IFileProvider fileProvider,
         ICommandService commandService)
     {
-        _artifactGenerator = artifactGenerator;
-        _projectFactory = projectFactory;
-        _domainDrivenDesignFileService = domainDrivenDesignFileService;
-        _domainDrivenDesignService = domainDrivenDesignService;
-        _notificationListener = notificationListener;
-        _fileProvider = fileProvider;
-        _commandService = commandService;
+        this.artifactGenerator = artifactGenerator;
+        this.projectFactory = projectFactory;
+        this.domainDrivenDesignFileService = domainDrivenDesignFileService;
+        this.domainDrivenDesignService = domainDrivenDesignService;
+        this.notificationListener = notificationListener;
+        this.fileProvider = fileProvider;
+        this.commandService = commandService;
     }
 
     public async Task AddSolutionItem(string path)
@@ -50,7 +50,7 @@ public class SolutionService : ISolutionService
 
     public async Task Create(SolutionModel model)
     {
-        await _artifactGenerator.GenerateAsync(model);
+        await artifactGenerator.GenerateAsync(model);
     }
 
     public async Task EventDrivenMicroservicesCreate(string name, string services, string directory)
@@ -63,12 +63,16 @@ public class SolutionService : ISolutionService
 
         solutionModel.Folders.Add(await ServicesCreate(services, solutionModel.SolutionDirectory, notifications));
 
-        await _artifactGenerator.GenerateAsync(solutionModel);
+        await artifactGenerator.GenerateAsync(solutionModel);
 
         foreach (var notification in notifications)
         {
-            _notificationListener.Broadcast(notification);
+            notificationListener.Broadcast(notification);
         }
+    }
+
+    public async Task Create(string name, string plantUmlSourcePath, string directory)
+    {
     }
 
     private async Task<FolderModel> BuildingBlocksCreate(string directory)
@@ -77,11 +81,11 @@ public class SolutionService : ISolutionService
 
         var messagingFolder = new FolderModel("Messaging", model.Directory);
 
-        model.Projects.Add(await _projectFactory.CreateKernelProject(model.Directory));
+        model.Projects.Add(await projectFactory.CreateKernelProject(model.Directory));
 
-        messagingFolder.Projects.Add(await _projectFactory.CreateMessagingProject(messagingFolder.Directory));
+        messagingFolder.Projects.Add(await projectFactory.CreateMessagingProject(messagingFolder.Directory));
 
-        messagingFolder.Projects.Add(await _projectFactory.CreateMessagingUdpProject(messagingFolder.Directory));
+        messagingFolder.Projects.Add(await projectFactory.CreateMessagingUdpProject(messagingFolder.Directory));
 
         model.SubFolders.Add(messagingFolder);
 
@@ -93,19 +97,20 @@ public class SolutionService : ISolutionService
         var model = new FolderModel("Services", directory);
 
         if (string.IsNullOrEmpty(services))
+        {
             return model;
-
+        }
 
         foreach (var service in services.Split(','))
         {
             var serviceFolder = new FolderModel(service, model.Directory);
 
-            var coreModel = await _projectFactory.CreateLibrary($"{service}.Core", serviceFolder.Directory, new List<string>()
+            var coreModel = await projectFactory.CreateLibrary($"{service}.Core", serviceFolder.Directory, new List<string>()
             {
-                Constants.ProjectType.Core
+                Constants.ProjectType.Core,
             });
 
-            var serviceBusMessageConsumer = _domainDrivenDesignService.ServiceBusMessageConsumerCreate($"{coreModel.Name}.Messages", coreModel.Directory);
+            var serviceBusMessageConsumer = domainDrivenDesignService.ServiceBusMessageConsumerCreate($"{coreModel.Name}.Messages", coreModel.Directory);
 
             var fileModel = new CodeFileModel<ClassModel>(serviceBusMessageConsumer, serviceBusMessageConsumer.Usings, serviceBusMessageConsumer.Name, coreModel.Directory, ".cs");
 
@@ -115,18 +120,18 @@ public class SolutionService : ISolutionService
 
             serviceFolder.Projects.Add(coreModel);
 
-            var infrastructureModel = await _projectFactory.CreateLibrary($"{service}.Infrastructure", serviceFolder.Directory, new List<string>()
+            var infrastructureModel = await projectFactory.CreateLibrary($"{service}.Infrastructure", serviceFolder.Directory, new List<string>()
             {
-                Constants.ProjectType.Infrastructure
+                Constants.ProjectType.Infrastructure,
             });
 
             infrastructureModel.References.Add(@$"..\{service}.Core\{service}.Core.csproj");
 
             serviceFolder.Projects.Add(infrastructureModel);
 
-            var apiProjectModel = await _projectFactory.CreateLibrary($"{service}.Api", serviceFolder.Directory, new List<string>()
+            var apiProjectModel = await projectFactory.CreateLibrary($"{service}.Api", serviceFolder.Directory, new List<string>()
             {
-                Constants.ProjectType.Api
+                Constants.ProjectType.Api,
             });
 
             apiProjectModel.References.Add(@$"..\{service}.Infrastructure\{service}.Infrastructure.csproj");
@@ -145,21 +150,12 @@ public class SolutionService : ISolutionService
     {
         var model = new FolderModel("Apps", directory);
 
-
-
         return model;
     }
 
-
-    public async Task Create(string name, string plantUmlSourcePath, string directory)
-    {
-
-    }
-
-
     public async Task MessagingBuildingBlockAdd(string directory)
     {
-        var solutionPath = _fileProvider.Get("*.sln", directory);
+        var solutionPath = fileProvider.Get("*.sln", directory);
 
         var solutionName = Path.GetFileName(solutionPath);
 
@@ -179,25 +175,22 @@ public class SolutionService : ISolutionService
             Directory.CreateDirectory(messagingDirectory);
         }
 
+        var messagingProjectModel = await projectFactory.CreateMessagingProject(messagingDirectory);
 
-        var messagingProjectModel = await _projectFactory.CreateMessagingProject(messagingDirectory);
+        await artifactGenerator.GenerateAsync(messagingProjectModel);
 
-        await _artifactGenerator.GenerateAsync(messagingProjectModel);
+        commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
 
-        _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
+        var messagingUdpProjectModel = await projectFactory.CreateMessagingUdpProject(messagingDirectory);
 
-        var messagingUdpProjectModel = await _projectFactory.CreateMessagingUdpProject(messagingDirectory);
+        await artifactGenerator.GenerateAsync(messagingUdpProjectModel);
 
-        await _artifactGenerator.GenerateAsync(messagingUdpProjectModel);
-
-        _commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
-
-
+        commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
     }
 
     public async Task IOCompressionBuildingBlockAdd(string directory)
     {
-        var solutionPath = _fileProvider.Get("*.sln", directory);
+        var solutionPath = fileProvider.Get("*.sln", directory);
 
         var solutionName = Path.GetFileName(solutionPath);
 
@@ -217,17 +210,16 @@ public class SolutionService : ISolutionService
             Directory.CreateDirectory(messagingDirectory);
         }
 
+        var messagingProjectModel = await projectFactory.CreateMessagingProject(messagingDirectory);
 
-        var messagingProjectModel = await _projectFactory.CreateMessagingProject(messagingDirectory);
+        await artifactGenerator.GenerateAsync(messagingProjectModel);
 
-        await _artifactGenerator.GenerateAsync(messagingProjectModel);
+        commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
 
-        _commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
+        var messagingUdpProjectModel = await projectFactory.CreateMessagingUdpProject(messagingDirectory);
 
-        var messagingUdpProjectModel = await _projectFactory.CreateMessagingUdpProject(messagingDirectory);
+        await artifactGenerator.GenerateAsync(messagingUdpProjectModel);
 
-        await _artifactGenerator.GenerateAsync(messagingUdpProjectModel);
-
-        _commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
+        commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
     }
 }

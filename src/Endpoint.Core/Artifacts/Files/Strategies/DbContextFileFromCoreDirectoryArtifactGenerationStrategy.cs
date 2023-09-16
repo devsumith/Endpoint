@@ -7,20 +7,18 @@ namespace Endpoint.Core.Artifacts.Files.Strategies;
 
 public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : GenericArtifactGenerationStrategy<string>
 {
-    private readonly IFileProvider _fileProvider;
+    private readonly IFileProvider fileProvider;
 
     public DbContextFileFromCoreDirectoryArtifactGenerationStrategy(IServiceProvider serviceProvider, IFileProvider fileProvider)
     {
-        _fileProvider = fileProvider;
+        this.fileProvider = fileProvider;
     }
-
-
 
     public bool CanHandle(object model)
     {
         if (model is string value)
         {
-            var projectDirectory = _fileProvider.Get("*.csproj", value);
+            var projectDirectory = fileProvider.Get("*.csproj", value);
         }
 
         return false;

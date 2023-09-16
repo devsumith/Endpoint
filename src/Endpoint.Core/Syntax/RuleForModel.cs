@@ -14,4 +14,3 @@ public class RuleForModel
 
     public PropertyModel Property { get; set; }
 }
-

@@ -1,24 +1,25 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
+using System.Linq;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Endpoint.Core.Syntax;
 
 public class SyntaxGenerator : ISyntaxGenerator
 {
-    private readonly ILogger<SyntaxGenerator> _logger;
-    private readonly IServiceProvider _serviceProvider;
-    private readonly IObjectCache _cache;
+    private readonly ILogger<SyntaxGenerator> logger;
+    private readonly IServiceProvider serviceProvider;
+    private readonly IObjectCache cache;
+
     public SyntaxGenerator(ILogger<SyntaxGenerator> logger, IObjectCache cache, IServiceProvider serviceProvider)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+        this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
     public async Task<string> GenerateAsync<T>(T model)
@@ -27,7 +28,7 @@ public class SyntaxGenerator : ISyntaxGenerator
 
         var type = typeof(IEnumerable<>).MakeGenericType(inner);
 
-        var strategies = _cache.FromCacheOrService(() => _serviceProvider.GetRequiredService(type) as IEnumerable<ISyntaxGenerationStrategy>, $"{GetType().Name}{model.GetType().FullName}");
+        var strategies = cache.FromCacheOrService(() => serviceProvider.GetRequiredService(type) as IEnumerable<ISyntaxGenerationStrategy>, $"{GetType().Name}{model.GetType().FullName}");
 
         var orderedStrategies = strategies!.OrderByDescending(x => x.GetPriority());
 
@@ -46,5 +47,3 @@ public class SyntaxGenerator : ISyntaxGenerator
         throw new Exception();
     }
 }
-
-

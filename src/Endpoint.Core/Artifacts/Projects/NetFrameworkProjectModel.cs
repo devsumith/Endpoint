@@ -6,4 +6,3 @@ namespace Endpoint.Core.Artifacts.Projects;
 public class NetFrameworkProjectModel : ProjectModel
 {
 }
-

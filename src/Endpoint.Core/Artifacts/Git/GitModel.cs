@@ -15,9 +15,12 @@ public class GitModel
     }
 
     public string Username { get; init; }
+
     public string Email { get; init; }
+
     public string PersonalAccessToken { get; init; }
+
     public string RepositoryName { get; init; }
+
     public string Directory { get; init; }
 }
-

@@ -1,9 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.WebApplications;
-using System.Collections.Generic;
 
 namespace Endpoint.Core.Artifacts.Files;
 
@@ -20,18 +20,19 @@ public class MinimalApiProgramFileModel : FileModel
         {
             "Microsoft.EntityFrameworkCore",
             "Microsoft.OpenApi.Models",
-            "System.Reflection"
+            "System.Reflection",
         };
         ApiNamespace = apiNamespace;
         DbContextName = dbContextName;
-
     }
 
     public WebApplicationModel WebApplication { get; set; }
+
     public WebApplicationBuilderModel WebApplicationBuilder { get; set; }
+
     public string DbContextName { get; private set; }
+
     public string ApiNamespace { get; set; }
+
     public List<string> Usings { get; private set; }
-
 }
-

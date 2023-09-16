@@ -1,21 +1,22 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.IO;
 using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Options;
-using System.IO;
 
 namespace Endpoint.Core.Artifacts.Solutions.Factories;
 
 public class SolutionFactory : ISolutionFactory
 {
-    private readonly IProjectFactory _projectFactory;
+    private readonly IProjectFactory projectFactory;
 
     public SolutionFactory(IProjectFactory projectFactory)
     {
-        _projectFactory = projectFactory;
+        this.projectFactory = projectFactory;
     }
+
     public async Task<SolutionModel> Create(string name)
     {
         var model = new SolutionModel() { Name = name };
@@ -40,7 +41,7 @@ public class SolutionFactory : ISolutionFactory
             srcFolder.SubFolders.Add(userDefinedFolder);
         }
 
-        var project = await _projectFactory.Create(dotNetProjectTypeName, projectName, userDefinedFolder == null ? $"{srcFolder.Directory}" : userDefinedFolder.Directory);
+        var project = await projectFactory.Create(dotNetProjectTypeName, projectName, userDefinedFolder == null ? $"{srcFolder.Directory}" : userDefinedFolder.Directory);
 
         (userDefinedFolder == null ? srcFolder : userDefinedFolder).Projects.Add(project);
 
@@ -51,7 +52,7 @@ public class SolutionFactory : ISolutionFactory
     {
         var solutionModel = new SolutionModel(options.Name, options.Directory);
 
-        solutionModel.Projects.Add(await _projectFactory.CreateHttpProject(options.Name, solutionModel.SrcDirectory));
+        solutionModel.Projects.Add(await projectFactory.CreateHttpProject(options.Name, solutionModel.SrcDirectory));
 
         return solutionModel;
     }
@@ -60,7 +61,7 @@ public class SolutionFactory : ISolutionFactory
     {
         var model = string.IsNullOrEmpty(options.SolutionDirectory) ? new SolutionModel(options.Name, options.Directory) : new SolutionModel(options.Name, options.Directory, options.SolutionDirectory);
 
-        var minimalApiProject = await _projectFactory.CreateMinimalApiProject(new CreateMinimalApiProjectOptions
+        var minimalApiProject = await projectFactory.CreateMinimalApiProject(new CreateMinimalApiProjectOptions
         {
             Name = $"{options.Name}.Api",
             ShortIdPropertyName = false,
@@ -69,10 +70,10 @@ public class SolutionFactory : ISolutionFactory
             Properties = options.Properties,
             Port = 5000,
             Directory = model.SrcDirectory,
-            DbContextName = options.DbContextName
+            DbContextName = options.DbContextName,
         });
 
-        var unitTestProject = await _projectFactory.CreateMinimalApiUnitTestsProject(options.Name, model.TestDirectory, options.Resource);
+        var unitTestProject = await projectFactory.CreateMinimalApiUnitTestsProject(options.Name, model.TestDirectory, options.Resource);
 
         model.Projects.Add(minimalApiProject);
 
@@ -87,19 +88,19 @@ public class SolutionFactory : ISolutionFactory
     {
         var model = string.IsNullOrEmpty(options.SolutionDirectory) ? new SolutionModel(options.Name, options.Directory) : new SolutionModel(options.Name, options.Directory, options.SolutionDirectory);
 
-        var domain = await _projectFactory.CreateLibrary($"{options.Name}.Domain", model.SrcDirectory);
+        var domain = await projectFactory.CreateLibrary($"{options.Name}.Domain", model.SrcDirectory);
 
         domain.Metadata.Add(Constants.ProjectType.Domain);
 
-        var infrastructure = await _projectFactory.CreateLibrary($"{options.Name}.Infrastructure", model.SrcDirectory);
+        var infrastructure = await projectFactory.CreateLibrary($"{options.Name}.Infrastructure", model.SrcDirectory);
 
         infrastructure.Metadata.Add(Constants.ProjectType.Infrastructure);
 
-        var application = await _projectFactory.CreateLibrary($"{options.Name}.Application", model.SrcDirectory);
+        var application = await projectFactory.CreateLibrary($"{options.Name}.Application", model.SrcDirectory);
 
         application.Metadata.Add(Constants.ProjectType.Application);
 
-        var api = await _projectFactory.CreateWebApi($"{options.Name}.Api", model.SrcDirectory);
+        var api = await projectFactory.CreateWebApi($"{options.Name}.Api", model.SrcDirectory);
 
         api.Metadata.Add(Constants.ProjectType.Api);
 
@@ -140,8 +141,6 @@ public class SolutionFactory : ISolutionFactory
     {
         return new SolutionModel
         {
-
         };
     }
 }
-

@@ -8,11 +8,11 @@ namespace Endpoint.Core.Syntax.Controllers;
 
 public class ControllerFactory : IControllerFactory
 {
-    private readonly INamingConventionConverter _namingConventionConverter;
+    private readonly INamingConventionConverter namingConventionConverter;
 
     public ControllerFactory(INamingConventionConverter namingConventionConverter)
     {
-        _namingConventionConverter = namingConventionConverter;
+        this.namingConventionConverter = namingConventionConverter;
     }
 
     public ClassModel Create(ClassModel entity)
@@ -20,4 +20,3 @@ public class ControllerFactory : IControllerFactory
         throw new NotImplementedException();
     }
 }
-

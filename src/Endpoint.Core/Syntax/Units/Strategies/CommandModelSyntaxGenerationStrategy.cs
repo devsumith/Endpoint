@@ -10,10 +10,7 @@ public class CommandModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
 {
     public CommandModelSyntaxGenerationStrategy(IServiceProvider serviceProvider)
     {
-
     }
-
-
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, CommandModel model)
     {
@@ -21,15 +18,15 @@ public class CommandModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
 
         builder.AppendLine(await syntaxGenerator.GenerateAsync(model.RequestValidator));
 
-        builder.AppendLine("");
+        builder.AppendLine(string.Empty);
 
         builder.AppendLine(await syntaxGenerator.GenerateAsync(model.Request));
 
-        builder.AppendLine("");
+        builder.AppendLine(string.Empty);
 
         builder.AppendLine(await syntaxGenerator.GenerateAsync(model.Response));
 
-        builder.AppendLine("");
+        builder.AppendLine(string.Empty);
 
         builder.AppendLine(await syntaxGenerator.GenerateAsync(model.RequestHandler));
 

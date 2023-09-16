@@ -13,10 +13,20 @@ public class FieldModel : SyntaxModel
         ReadOnly = true;
     }
 
+    public static FieldModel Mediator => new FieldModel()
+    {
+        Type = new TypeModel($"IMediator"),
+        Name = "_mediator",
+    };
+
     public TypeModel Type { get; set; }
+
     public string Name { get; set; }
+
     public bool ReadOnly { get; set; }
+
     public string DefaultValue { get; set; }
+
     public AccessModifier AccessModifier { get; set; }
 
     public static FieldModel LoggerOf(string name)
@@ -24,14 +34,7 @@ public class FieldModel : SyntaxModel
         return new FieldModel()
         {
             Type = TypeModel.LoggerOf(name),
-            Name = "_logger"
+            Name = "_logger",
         };
     }
-
-    public static FieldModel Mediator => new FieldModel()
-    {
-        Type = new TypeModel($"IMediator"),
-        Name = "_mediator"
-    };
-
 }

@@ -8,7 +8,4 @@ namespace Endpoint.Core.Artifacts.Services;
 public interface ILitService
 {
     Task WorkspaceCreate(string name, string rootDirectory);
-
 }
-
-

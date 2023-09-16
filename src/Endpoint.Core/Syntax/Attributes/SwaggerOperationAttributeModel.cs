@@ -12,7 +12,8 @@ public class SwaggerOperationAttributeModel : AttributeModel
         Summary = summary;
         Description = description;
     }
+
     public string Summary { get; set; }
+
     public string Description { get; set; }
 }
-

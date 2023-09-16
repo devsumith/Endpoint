@@ -10,18 +10,21 @@ public class NamespaceProvider : INamespaceProvider
 {
     public NamespaceProvider()
     {
-
     }
 
     public string Get(string directory, int depth = 0)
     {
         if (string.IsNullOrEmpty(directory))
+        {
             return "NamespaceNotFound";
+        }
 
         var parts = directory.Split(Path.DirectorySeparatorChar);
 
         if (parts.Length <= depth)
+        {
             return "NamespaceNotFound";
+        }
 
         var path = string.Join(Path.DirectorySeparatorChar, parts.Take(parts.Length - depth));
 
@@ -50,4 +53,3 @@ public class NamespaceProvider : INamespaceProvider
         throw new NotImplementedException();
     }
 }
-

@@ -7,4 +7,3 @@ public interface IFileNamespaceProvider
 {
     string Get(string directory);
 }
-

@@ -5,17 +5,17 @@ namespace Endpoint.Core.Artifacts.Files.Strategies;
 
 public class ContentFileArtifactGenerationStrategy : GenericArtifactGenerationStrategy<ContentFileModel>
 {
-    private readonly IFileSystem _fileSystem;
+    private readonly IFileSystem fileSystem;
+
     public ContentFileArtifactGenerationStrategy(
 
-        IFileSystem fileSystem
-        )
+        IFileSystem fileSystem)
     {
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ContentFileModel model)
     {
-        _fileSystem.File.WriteAllText(model.Path, model.Content);
+        fileSystem.File.WriteAllText(model.Path, model.Content);
     }
 }

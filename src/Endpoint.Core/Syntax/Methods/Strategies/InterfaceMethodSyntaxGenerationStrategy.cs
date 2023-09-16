@@ -1,24 +1,25 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Linq;
+using System.Text;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Interfaces;
 using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
 public class InterfaceMethodSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<MethodModel>
 {
-    private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly ILogger<InterfaceMethodSyntaxGenerationStrategy> _logger;
+    private readonly INamingConventionConverter namingConventionConverter;
+    private readonly ILogger<InterfaceMethodSyntaxGenerationStrategy> logger;
+
     public InterfaceMethodSyntaxGenerationStrategy(
         INamingConventionConverter namingConventionConverter,
         ILogger<InterfaceMethodSyntaxGenerationStrategy> logger)
     {
-        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public override int GetPriority() => 1;
@@ -35,7 +36,7 @@ public class InterfaceMethodSyntaxGenerationStrategy : GenericSyntaxGenerationSt
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model)
     {
-        _logger.LogInformation("Generating syntax for {0}.", model);
+        logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 

@@ -10,7 +10,8 @@ public class FileReplacementModel
         Replace = replace;
         With = with;
     }
+
     public string Replace { get; init; }
+
     public string With { get; init; }
 }
-

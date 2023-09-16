@@ -5,20 +5,21 @@ namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
 public class AngularStandaloneProjectArtifactGenerationStrategy : IGenericArtifactGenerationStrategy<ProjectModel>
 {
-    private readonly ILogger<AngularStandaloneProjectArtifactGenerationStrategy> _logger;
-    private readonly IFileSystem _fileSystem;
-    private readonly ITemplateLocator _templateLocator;
-    private readonly ITemplateProcessor _templateProcessor;
+    private readonly ILogger<AngularStandaloneProjectArtifactGenerationStrategy> logger;
+    private readonly IFileSystem fileSystem;
+    private readonly ITemplateLocator templateLocator;
+    private readonly ITemplateProcessor templateProcessor;
+
     public AngularStandaloneProjectArtifactGenerationStrategy(
         ILogger<AngularStandaloneProjectArtifactGenerationStrategy> logger,
         IFileSystem fileSystem,
         ITemplateLocator templateLocator,
         ITemplateProcessor templateProcessor)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
-        _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
+        this.templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
     }
 
     public async Task<bool> GenerateAsync(IArtifactGenerator generator, object target)
@@ -30,21 +31,23 @@ public class AngularStandaloneProjectArtifactGenerationStrategy : IGenericArtifa
             return true;
         }
         else
+        {
             return false;
+        }
     }
 
     public virtual int GetPriority() => 1;
 
     public async Task GenerateAsync(IArtifactGenerator generator, ProjectModel model)
     {
-        var template = string.Join(Environment.NewLine, _templateLocator.Get("EsProj"));
+        var template = string.Join(Environment.NewLine, templateLocator.Get("EsProj"));
 
-        var result = _templateProcessor.Process(template, new TokensBuilder()
+        var result = templateProcessor.Process(template, new TokensBuilder()
             .With("projectName", model.Name)
             .Build());
 
-        _fileSystem.Directory.CreateDirectory(model.Directory);
+        fileSystem.Directory.CreateDirectory(model.Directory);
 
-        _fileSystem.File.WriteAllText(model.Path, result);
+        fileSystem.File.WriteAllText(model.Path, result);
     }
 }

@@ -9,7 +9,6 @@ public class CommandModel : QueryModel
 {
     public CommandModel()
     {
-
     }
 
     public ClassModel RequestValidator { get; set; }
@@ -42,6 +41,4 @@ public class CommandModel : QueryModel
             RequestValidator = new RequestValidatorModel(Request);
         }
     */
-
 }
-

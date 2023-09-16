@@ -7,6 +7,5 @@ public enum From
 {
     Route,
     Body,
-    Uri
+    Uri,
 }
-

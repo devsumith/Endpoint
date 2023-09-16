@@ -5,11 +5,11 @@ namespace Endpoint.Core.Syntax.Entities;
 
 public class EntityFactory : IEntityFactory
 {
-    private readonly ISyntaxService _syntaxService;
+    private readonly ISyntaxService syntaxService;
 
     public EntityFactory(ISyntaxService syntaxService)
     {
-        _syntaxService = syntaxService;
+        this.syntaxService = syntaxService;
     }
 
     public EntityModel Create(string name, string properties)
@@ -37,4 +37,3 @@ public class EntityFactory : IEntityFactory
         throw new NotImplementedException();
     }
 }
-

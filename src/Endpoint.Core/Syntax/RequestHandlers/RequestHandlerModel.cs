@@ -11,10 +11,9 @@ public class RequestHandlerModel : ClassModel
     public RequestHandlerModel(string name)
         : base(name)
     {
-
     }
 
     public RouteType RouteType { get; set; }
+
     public EntityModel Entity { get; set; }
 }
-

@@ -1,16 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.RouteHandlers;
-using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.WebApplications;
 
 public class WebApplicationModel
 {
-
     public WebApplicationModel(string title, string dbContextName, List<EntityModel> entities)
     {
         Title = title;
@@ -27,46 +26,43 @@ public class WebApplicationModel
                 $"/{resource.SnakeCasePlural}",
                 dbContextName,
                 entity,
-                RouteType.Create
-                ));
+                RouteType.Create));
 
             RouteHandlers.Add(new RouteHandlerModel(
                 $"Create{resource.PascalCase}",
                 $"/{resource.SnakeCasePlural}",
                 dbContextName,
                 entity,
-                RouteType.Get
-                ));
+                RouteType.Get));
 
             RouteHandlers.Add(new RouteHandlerModel(
                 $"Create{resource.PascalCase}",
                 $"/{resource.SnakeCasePlural}",
                 dbContextName,
                 entity,
-                RouteType.GetById
-                ));
+                RouteType.GetById));
 
             RouteHandlers.Add(new RouteHandlerModel(
                 $"Create{resource.PascalCase}",
                 $"/{resource.SnakeCasePlural}",
                 dbContextName,
                 entity,
-                RouteType.Update
-                ));
+                RouteType.Update));
 
             RouteHandlers.Add(new RouteHandlerModel(
                 $"Create{resource.PascalCase}",
                 $"/{resource.SnakeCasePlural}",
                 dbContextName,
                 entity,
-                RouteType.Delete
-                ));
+                RouteType.Delete));
         }
     }
 
     public string Title { get; set; }
+
     public List<RouteHandlerModel> RouteHandlers { get; set; }
+
     public List<EntityModel> Entities { get; set; }
+
     public string DbContextName { get; set; }
 }
-

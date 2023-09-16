@@ -1,9 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Entities;
-using System.Collections.Generic;
 
 namespace Endpoint.Core.Artifacts.Files;
 
@@ -21,4 +21,3 @@ public class EntityFileModel : CodeFileModel<EntityModel>
         }
     }
 }
-

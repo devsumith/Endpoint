@@ -8,6 +8,6 @@ namespace Endpoint.Core.Syntax;
 public interface ISyntaxService
 {
     SyntaxModel SyntaxModel { get; set; }
+
     SolutionModel SolutionModel { get; set; }
 }
-

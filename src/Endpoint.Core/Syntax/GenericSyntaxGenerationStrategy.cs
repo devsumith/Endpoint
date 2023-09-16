@@ -19,4 +19,3 @@ public abstract class GenericSyntaxGenerationStrategy<T> : IGenericSyntaxGenerat
 
     public virtual int GetPriority() => 0;
 }
-

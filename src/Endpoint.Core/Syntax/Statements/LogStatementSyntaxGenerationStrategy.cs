@@ -1,24 +1,22 @@
-using Microsoft.Extensions.Logging;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.Statements;
 
 public class LogStatementSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<LogStatementModel>
 {
-    private readonly ILogger<LogStatementSyntaxGenerationStrategy> _logger;
+    private readonly ILogger<LogStatementSyntaxGenerationStrategy> logger;
+
     public LogStatementSyntaxGenerationStrategy(
 
         ILogger<LogStatementSyntaxGenerationStrategy> logger)
-
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-
-
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, LogStatementModel model)
     {
-        _logger.LogInformation("Generating syntax for {0}.", model);
+        logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
@@ -41,7 +39,7 @@ public class LogStatementSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
             "_logger.LogInformation(",
             "\"----- Sending command: {CommandName}: ({@Command})\",".Indent(1),
             $"nameof(Create{((SyntaxToken)model.Resource).PascalCase}Request),".Indent(1),
-            "request);".Indent(1)
+            "request);".Indent(1),
     };
 
     public string[] BuildForUpdateCommand(LogStatementModel model)
@@ -50,9 +48,10 @@ public class LogStatementSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
             "_logger.LogInformation(",
             "\"----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})\",".Indent(1),
             $"nameof(Update{((SyntaxToken)model.Resource).PascalCase}Request),".Indent(1),
-            //$"nameof(request.{((SyntaxToken)model.Resource).PascalCase}.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)}),".Indent(1),
-            //$"request.{((SyntaxToken)model.Resource).PascalCase}.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)},".Indent(1),
-            "request);".Indent(1)
+
+            // $"nameof(request.{((SyntaxToken)model.Resource).PascalCase}.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)}),".Indent(1),
+            // $"request.{((SyntaxToken)model.Resource).PascalCase}.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)},".Indent(1),
+            "request);".Indent(1),
         };
 
     public string[] BuildForDeleteCommand(LogStatementModel model)
@@ -61,9 +60,9 @@ public class LogStatementSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
             "_logger.LogInformation(",
             "\"----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})\",".Indent(1),
             $"nameof(Remove{((SyntaxToken)model.Resource).PascalCase}Request),".Indent(1),
-            //$"nameof(request.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)}),".Indent(1),
-            //$"request.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)},".Indent(1),
-            "request);".Indent(1)
-        };
 
+            // $"nameof(request.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)}),".Indent(1),
+            // $"request.{IdPropertyNameBuilder.Build(model.Settings,model.Resource)},".Indent(1),
+            "request);".Indent(1),
+        };
 }

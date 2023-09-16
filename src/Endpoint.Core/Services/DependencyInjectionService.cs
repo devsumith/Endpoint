@@ -1,6 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Syntax.Classes;
@@ -9,20 +13,16 @@ using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Endpoint.Core.Services;
 
 public class DependencyInjectionService : IDependencyInjectionService
 {
-    private readonly ILogger<DependencyInjectionService> _logger;
-    private readonly IFileProvider _fileProvider;
-    private readonly IFileSystem _fileSystem;
-    private readonly IArtifactGenerator _artifactGenerator;
-    private readonly INamespaceProvider _namespaceProvider;
+    private readonly ILogger<DependencyInjectionService> logger;
+    private readonly IFileProvider fileProvider;
+    private readonly IFileSystem fileSystem;
+    private readonly IArtifactGenerator artifactGenerator;
+    private readonly INamespaceProvider namespaceProvider;
 
     public DependencyInjectionService(
         ILogger<DependencyInjectionService> logger,
@@ -31,11 +31,11 @@ public class DependencyInjectionService : IDependencyInjectionService
         IFileSystem fileSystem,
         INamespaceProvider namespaceProvider)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
     }
 
     public async Task Add(string interfaceName, string className, string directory, ServiceLifetime? serviceLifetime = null)
@@ -52,13 +52,48 @@ public class DependencyInjectionService : IDependencyInjectionService
         await AddInternal(diRegistration, directory);
     }
 
+    public async Task AddConfigureServices(string layer, string directory)
+    {
+        var classModel = new ClassModel("ConfigureServices");
+
+        classModel.Usings.Add(new UsingModel() { Name = namespaceProvider.Get(directory) });
+
+        var methodParam = new ParamModel()
+        {
+            Type = new TypeModel("IServiceCollection"),
+            Name = "services",
+            ExtensionMethodParam = true,
+        };
+
+        var method = new MethodModel()
+        {
+            Name = $"Add{layer}Services",
+            ReturnType = new TypeModel("void"),
+            Static = true,
+            Params = new List<ParamModel>() { methodParam },
+        };
+
+        classModel.Static = true;
+
+        classModel.Methods.Add(method);
+
+        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs")
+        {
+            Namespace = "Microsoft.Extensions.DependencyInjection",
+        };
+
+        await artifactGenerator.GenerateAsync(classFileModel);
+    }
+
     private void UpdateConfigureServices(string diRegistration, string projectSuffix, string configureServicesFilePath)
     {
-        var emptyServiceCollection = new StringBuilder().AppendJoin(Environment.NewLine, new string[] {
+        var emptyServiceCollection = new StringBuilder().AppendJoin(Environment.NewLine, new string[]
+        {
             "public static void Add" + projectSuffix + "Services(this IServiceCollection services) {",
-            "}" }).ToString().Indent(1);
+            "}",
+        }).ToString().Indent(1);
 
-        var fileContent = _fileSystem.File.ReadAllText(configureServicesFilePath);
+        var fileContent = fileSystem.File.ReadAllText(configureServicesFilePath);
 
         var newContent = new StringBuilder();
 
@@ -88,7 +123,6 @@ public class DependencyInjectionService : IDependencyInjectionService
                     newContent.AppendLine(diRegistration);
                     registrationAdded = true;
                 }
-
             }
         }
 
@@ -103,47 +137,14 @@ public class DependencyInjectionService : IDependencyInjectionService
             newContent = new StringBuilder(fileContent);
         }
 
-        _fileSystem.File.WriteAllText(configureServicesFilePath, newContent.ToString());
-    }
-
-    public async Task AddConfigureServices(string layer, string directory)
-    {
-        var classModel = new ClassModel("ConfigureServices");
-
-        classModel.Usings.Add(new UsingModel() { Name = _namespaceProvider.Get(directory) });
-
-        var methodParam = new ParamModel()
-        {
-            Type = new TypeModel("IServiceCollection"),
-            Name = "services",
-            ExtensionMethodParam = true
-        };
-
-        var method = new MethodModel()
-        {
-            Name = $"Add{layer}Services",
-            ReturnType = new TypeModel("void"),
-            Static = true,
-            Params = new List<ParamModel>() { methodParam }
-        };
-
-        classModel.Static = true;
-
-        classModel.Methods.Add(method);
-
-        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs")
-        {
-            Namespace = "Microsoft.Extensions.DependencyInjection"
-        };
-
-        await _artifactGenerator.GenerateAsync(classFileModel);
+        fileSystem.File.WriteAllText(configureServicesFilePath, newContent.ToString());
     }
 
     private async Task AddInternal(string diRegistration, string directory)
     {
-        var path = _fileProvider.Get("ConfigureServices.cs", directory);
+        var path = fileProvider.Get("ConfigureServices.cs", directory);
 
-        var projectPath = _fileProvider.Get("*.csproj", directory);
+        var projectPath = fileProvider.Get("*.csproj", directory);
 
         var projectDirectory = Path.GetDirectoryName(projectPath);
 

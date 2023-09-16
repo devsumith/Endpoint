@@ -1,26 +1,26 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.Interfaces;
 
 public class InterfaceSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<InterfaceModel>
 {
-    private readonly ILogger<InterfaceSyntaxGenerationStrategy> _logger;
+    private readonly ILogger<InterfaceSyntaxGenerationStrategy> logger;
+
     public InterfaceSyntaxGenerationStrategy(
 
         ILogger<InterfaceSyntaxGenerationStrategy> logger)
-
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, InterfaceModel model)
     {
-        _logger.LogInformation("Generating syntax for {0}.", model);
+        logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
@@ -45,14 +45,17 @@ public class InterfaceSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy
         builder.AppendLine("{");
 
         if (model.Properties.Count > 0)
+        {
             builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Properties)).Indent(1));
+        }
 
         if (model.Methods.Count > 0)
+        {
             builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Methods)).Indent(1));
+        }
 
         builder.AppendLine("}");
 
         return builder.ToString();
-
     }
 }

@@ -8,14 +8,16 @@ namespace Endpoint.Core.Syntax.SpecFlow;
 
 public class SpecFlowScenarioModel
 {
-
     public SpecFlowScenarioModel()
     {
         And = new List<string>();
     }
+
     public string Given { get; init; }
+
     public string When { get; init; }
+
     public string Then { get; init; }
+
     public List<string> And { get; init; }
 }
-

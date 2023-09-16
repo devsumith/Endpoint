@@ -1,6 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.IO;
+using System.Linq;
+using System.Text;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Services;
@@ -10,20 +13,17 @@ using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.TypeScript;
 using Endpoint.Core.Syntax.Units;
 using Microsoft.Extensions.Logging;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Endpoint.Core.Artifacts.Folders.Factories;
 
 public class FolderFactory : IFolderFactory
 {
-    private readonly ILogger<FolderFactory> _logger;
-    private readonly IFileProvider _fileProvider;
-    private readonly IFileSystem _fileSystem;
-    private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly IFileFactory _fileFactory;
-    private readonly IClassFactory _classFactory;
+    private readonly ILogger<FolderFactory> logger;
+    private readonly IFileProvider fileProvider;
+    private readonly IFileSystem fileSystem;
+    private readonly INamingConventionConverter namingConventionConverter;
+    private readonly IFileFactory fileFactory;
+    private readonly IClassFactory classFactory;
 
     public FolderFactory(
         ILogger<FolderFactory> logger,
@@ -33,31 +33,30 @@ public class FolderFactory : IFolderFactory
         IFileFactory fileFactory,
         IClassFactory classFactory)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(fileSystem));
-        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
-        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
+        this.classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
     }
 
     public FolderModel AggregagteCommands(ClassModel aggregate, string directory)
     {
-        _logger.LogInformation("Generating Aggregate Commands. {name}", aggregate.Name);
+        logger.LogInformation("Generating Aggregate Commands. {name}", aggregate.Name);
 
         var aggregateName = aggregate.Name;
 
-        _fileSystem.Directory.CreateDirectory(directory);
+        fileSystem.Directory.CreateDirectory(directory);
 
         var model = new FolderModel("Commands", directory);
 
-        var microserviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
+        var microserviceName = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory)).Split('.').First();
 
         foreach (var routeType in new RouteType[] { RouteType.Create, RouteType.Delete, RouteType.Update })
         {
-            //TODO: build command and subclasses fully here. Class factory
-            //var command = new CommandModel(microserviceName, aggregate, _namingConventionConverter, routeType);
-
+            // TODO: build command and subclasses fully here. Class factory
+            // var command = new CommandModel(microserviceName, aggregate, _namingConventionConverter, routeType);
             var command = new CommandModel();
 
             model.Files.Add(new CodeFileModel<CommandModel>(command, command.UsingDirectives, command.Name, model.Directory, ".cs"));
@@ -70,11 +69,11 @@ public class FolderFactory : IFolderFactory
     {
         var model = new FolderModel("Queries", directory);
 
-        var microserviceName = Path.GetFileNameWithoutExtension(_fileProvider.Get("*.csproj", directory)).Split('.').First();
+        var microserviceName = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory)).Split('.').First();
 
         foreach (var routeType in new RouteType[] { RouteType.GetById, RouteType.Get, RouteType.Page })
         {
-            var query = new QueryModel(); //(microserviceName, _namingConventionConverter, aggregate, routeType);
+            var query = new QueryModel(); // (microserviceName, _namingConventionConverter, aggregate, routeType);
 
             model.Files.Add(new CodeFileModel<QueryModel>((QueryModel)query, (System.Collections.Generic.List<UsingModel>)query.UsingDirectives, (string)query.Name, model.Directory, ".cs"));
         }
@@ -84,7 +83,7 @@ public class FolderFactory : IFolderFactory
 
     public FolderModel AngularDomainModel(string modelName, string properties, string directory)
     {
-        var modelNameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, modelName);
+        var modelNameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, modelName);
 
         var model = new FolderModel(modelNameSnakeCase, directory);
 
@@ -92,7 +91,7 @@ public class FolderFactory : IFolderFactory
 
         foreach (var property in properties.Split(','))
         {
-            var propertyName = _namingConventionConverter.Convert(NamingConvention.CamelCase, property.Split(':')[0]);
+            var propertyName = namingConventionConverter.Convert(NamingConvention.CamelCase, property.Split(':')[0]);
 
             var propertyType = property.Split(':')[1] switch
             {
@@ -106,27 +105,27 @@ public class FolderFactory : IFolderFactory
 
         model.Files.Add(new CodeFileModel<TypeScriptTypeModel>(typeScriptTypeModel, typeScriptTypeModel.Name, model.Directory, ".ts"));
 
-        model.Files.Add(_fileFactory.CreateTemplate("http-service", $"{modelNameSnakeCase}.service", model.Directory, ".ts", tokens: new TokensBuilder()
+        model.Files.Add(fileFactory.CreateTemplate("http-service", $"{modelNameSnakeCase}.service", model.Directory, ".ts", tokens: new TokensBuilder()
             .With("entityName", modelNameSnakeCase)
             .Build()));
 
-        model.Files.Add(_fileFactory.CreateTemplate("component-store", $"{modelNameSnakeCase}.store", model.Directory, ".ts", tokens: new TokensBuilder()
+        model.Files.Add(fileFactory.CreateTemplate("component-store", $"{modelNameSnakeCase}.store", model.Directory, ".ts", tokens: new TokensBuilder()
             .With("entityName", modelNameSnakeCase)
             .Build()));
 
-        model.Files.Add(new ContentFileModel(new StringBuilder()
+        model.Files.Add(new ContentFileModel(
+            new StringBuilder()
             .AppendLine($"export * from './{modelNameSnakeCase}';")
             .AppendLine($"export * from './{modelNameSnakeCase}.service';")
             .AppendLine($"export * from './{modelNameSnakeCase}.store';")
             .ToString(), "index", model.Directory, ".ts"));
-
 
         return model;
     }
 
     public async Task<FolderModel> CreateAggregateAsync(string aggregateName, string properties, string directory)
     {
-        var aggregate = _classFactory.CreateEntity(aggregateName, properties);
+        var aggregate = classFactory.CreateEntity(aggregateName, properties);
 
         var model = new FolderModel($"{aggregateName}Aggregate", directory);
 
@@ -136,7 +135,7 @@ public class FolderFactory : IFolderFactory
 
         var aggregateDto = aggregate.CreateDto();
 
-        var extensions = await _classFactory.DtoExtensionsCreateAsync(aggregate);
+        var extensions = await classFactory.DtoExtensionsCreateAsync(aggregate);
 
         model.Files.Add(new CodeFileModel<ClassModel>(aggregate, aggregate.Usings, aggregate.Name, model.Directory, ".cs"));
 
@@ -158,4 +157,3 @@ public class AggregateFolderModel : FolderModel
 
     public ClassModel Aggregate { get; set; }
 }
-

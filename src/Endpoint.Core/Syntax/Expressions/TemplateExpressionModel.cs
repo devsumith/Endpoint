@@ -9,5 +9,6 @@ public class TemplateExpressionModel
     {
         Template = template;
     }
+
     public string Template { get; set; }
 }

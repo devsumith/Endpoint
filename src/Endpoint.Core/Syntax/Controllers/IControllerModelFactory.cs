@@ -9,4 +9,3 @@ public interface IControllerFactory
 {
     ClassModel Create(ClassModel entity);
 }
-

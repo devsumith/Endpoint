@@ -12,6 +12,6 @@ public class WebApplicationBuilderModel
     }
 
     public string Title { get; set; }
+
     public string DbContextName { get; set; }
 }
-

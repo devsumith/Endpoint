@@ -1,10 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Syntax.Angular;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using Endpoint.Core.Syntax.Angular;
+using Newtonsoft.Json.Linq;
 
 namespace Endpoint.Core.Extensions;
 
@@ -12,7 +12,6 @@ public static class JObjectExtensions
 {
     public static void AddBuildConfiguration(this JObject jObject, string configurationName, string projectName, List<FileReplacementModel> fileReplacements)
     {
-
         var configurationObject = new JObject();
 
         var fileReplacementArray = new JArray();
@@ -42,17 +41,20 @@ public static class JObjectExtensions
     {
         jObject["projects"][projectName]["schematics"] = new JObject
         {
-            { "@schematics/angular:component", new JObject() {
+            {
+                "@schematics/angular:component", new JObject()
+            {
                 { "standalone", true },
-                { "style", "scss" }
+                { "style", "scss" },
             }
             },
-            { "@schematics/angular:directive", new JObject() {
-                { "standalone", true }
+            {
+                "@schematics/angular:directive", new JObject()
+            {
+                { "standalone", true },
             }
             },
         };
-
     }
 
     public static void UpdateCompilerOptionsToUseJestTypes(this JObject jObject)
@@ -115,7 +117,6 @@ public static class JObjectExtensions
         {
             jObject.Add(key, value);
         }
-
     }
 
     public static void AddSupportedLocales(this JObject jObject, string projectName, List<string> locales = null)
@@ -131,11 +132,10 @@ public static class JObjectExtensions
 
         var projectJObject = jObject["projects"][projectName] as JObject;
 
-
         projectJObject.AddOrUpdate("i18n", new JObject
         {
             { "sourceLocale", "en-US" },
-            { "locales", localesObject }
+            { "locales", localesObject },
         });
 
         var buildOptions = jObject["projects"][projectName]["architect"]["build"]["options"] as JObject;
@@ -155,4 +155,3 @@ public static class JObjectExtensions
         return $"{jObject["projects"][projectName]["root"]}";
     }
 }
-

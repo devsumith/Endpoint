@@ -1,25 +1,24 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Text;
 using Endpoint.Core.Syntax.Properties;
 using Microsoft.Extensions.Logging;
-using System.Text;
 
 namespace Endpoint.Core.Syntax.Entities;
 
 public class IdPropertySyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<PropertyModel>
 {
-    private readonly ILogger<IdPropertySyntaxGenerationStrategy> _logger;
-    private readonly ISyntaxService _syntaxService;
+    private readonly ILogger<IdPropertySyntaxGenerationStrategy> logger;
+    private readonly ISyntaxService syntaxService;
 
     public IdPropertySyntaxGenerationStrategy(
 
         ISyntaxService syntaxService,
         ILogger<IdPropertySyntaxGenerationStrategy> logger)
-
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
     }
 
     public int GetPriority => 1;
@@ -29,10 +28,9 @@ public class IdPropertySyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model)
     {
-        _logger.LogInformation("Generating syntax for {0}.", model);
+        logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
-
 
         return builder.ToString();
     }

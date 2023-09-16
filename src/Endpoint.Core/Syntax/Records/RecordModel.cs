@@ -8,5 +8,6 @@ public class RecordModel : SyntaxModel
     }
 
     public string Name { get; set; }
+
     public RecordType Type { get; set; } = RecordType.Struct;
 }

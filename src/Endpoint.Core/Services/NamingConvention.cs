@@ -11,5 +11,5 @@ public enum NamingConvention
     TitleCase,
     AllCaps,
     KebobCase,
-    None
+    None,
 }

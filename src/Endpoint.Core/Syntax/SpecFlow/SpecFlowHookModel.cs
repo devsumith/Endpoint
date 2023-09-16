@@ -5,5 +5,6 @@ using System;
 
 namespace Endpoint.Core.Syntax.SpecFlow;
 
-public class SpecFlowHookModel { }
-
+public class SpecFlowHookModel
+{
+}

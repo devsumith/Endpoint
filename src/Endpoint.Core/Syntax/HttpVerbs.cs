@@ -11,6 +11,5 @@ public enum HttpVerbs
     Options,
     Path,
     Post,
-    Put
+    Put,
 }
-

@@ -1,11 +1,11 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using DotLiquid;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
+using DotLiquid;
 
 namespace Endpoint.Core.Services;
 
@@ -41,6 +41,7 @@ public class RazorTeplateProcessor : ITemplateProcessor
         throw new NotImplementedException();
     }
 }
+
 public class LiquidTemplateProcessor : ITemplateProcessor
 {
     public string Process(string template, IDictionary<string, object> tokens, string[] ignoreTokens = null)
@@ -62,7 +63,6 @@ public class LiquidTemplateProcessor : ITemplateProcessor
                 }
 
                 hash = Hash.FromDictionary(dictionary);
-
             }
             else
             {
@@ -108,6 +108,11 @@ public class LiquidTemplateProcessor : ITemplateProcessor
         return string.Join(Environment.NewLine, result);
     }
 
+    public Task<string> ProcessAsync(string template, IDictionary<string, object> tokens, string[] ignoreTokens = null)
+    {
+        throw new NotImplementedException();
+    }
+
     private static Dictionary<string, object> ConvertObjectToDictionary(object o)
     {
         try
@@ -129,7 +134,7 @@ public class LiquidTemplateProcessor : ITemplateProcessor
                     {
                         var list = new List<string>();
 
-                        foreach (var x in (propValue as IEnumerable<string>))
+                        foreach (var x in propValue as IEnumerable<string>)
                         {
                             list.Add(x);
                         }
@@ -140,7 +145,7 @@ public class LiquidTemplateProcessor : ITemplateProcessor
                     {
                         var list = new List<object>();
 
-                        foreach (var x in (propValue as IEnumerable<object>))
+                        foreach (var x in propValue as IEnumerable<object>)
                         {
                             list.Add(ConvertObjectToDictionary(x));
                         }
@@ -153,7 +158,6 @@ public class LiquidTemplateProcessor : ITemplateProcessor
                     }
                     else
                     {
-
                         var tokens = new TokensBuilder()
                             .With(prop.Name, (SyntaxToken)propValue.ToString())
                             .Build();
@@ -174,11 +178,6 @@ public class LiquidTemplateProcessor : ITemplateProcessor
         }
     }
 
-    public Task<string> ProcessAsync(string template, IDictionary<string, object> tokens, string[] ignoreTokens = null)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<string> ProcessAsync(string template, IDictionary<string, object> tokens)
     {
         throw new NotImplementedException();
@@ -189,4 +188,3 @@ public class LiquidTemplateProcessor : ITemplateProcessor
         throw new NotImplementedException();
     }
 }
-

@@ -9,11 +9,11 @@ namespace Endpoint.Core.Syntax.Controllers;
 
 public class ControllerMethodFactory : IControllerMedthodFactory
 {
-    private readonly INamingConventionConverter _namingConventionConverter;
+    private readonly INamingConventionConverter namingConventionConverter;
 
     public ControllerMethodFactory(INamingConventionConverter namingConventionConverter)
     {
-        _namingConventionConverter = namingConventionConverter;
+        this.namingConventionConverter = namingConventionConverter;
     }
 
     public MethodModel Create(ClassModel entity, RouteType routeType)
@@ -21,4 +21,3 @@ public class ControllerMethodFactory : IControllerMedthodFactory
         throw new NotImplementedException();
     }
 }
-

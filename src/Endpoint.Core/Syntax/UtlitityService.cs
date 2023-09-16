@@ -1,24 +1,24 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.IO;
 using Endpoint.Core.Internals;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.IO;
 
 namespace Endpoint.Core.Syntax;
 
 public class UtlitityService : IUtlitityService
 {
-    private readonly ILogger<UtlitityService> _logger;
-    private readonly Observable<INotification> _observableNotifications;
+    private readonly ILogger<UtlitityService> logger;
+    private readonly Observable<INotification> observableNotifications;
+
     public UtlitityService(
         ILogger<UtlitityService> logger,
-        Observable<INotification> observableNotifications
-        )
+        Observable<INotification> observableNotifications)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
     }
 
     public void CopyrightAdd(string directory)
@@ -37,12 +37,10 @@ public class UtlitityService : IUtlitityService
 
             if (validExtension && !ignore)
             {
-                _logger.LogInformation("Broadcasting FileCreated Notification for {path}", path);
+                logger.LogInformation("Broadcasting FileCreated Notification for {path}", path);
 
                 // TODO: write the copyright
             }
         }
     }
 }
-
-

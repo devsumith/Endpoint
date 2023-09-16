@@ -6,17 +6,11 @@ namespace Endpoint.Core.Syntax.Entities;
 public class EntityModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<EntityModel>
 {
     public EntityModelSyntaxGenerationStrategy(IServiceProvider serviceProvider)
-
     {
-
     }
-
-
-
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, EntityModel model)
     {
         throw new NotImplementedException();
     }
 }
-

@@ -8,7 +8,6 @@ namespace Endpoint.Core.Artifacts.Files.Services;
 public interface IClassService
 {
     Task CreateAsync(string name, string properties, string directory);
+
     Task UnitTestCreateAsync(string name, string methods, string directory);
 }
-
-

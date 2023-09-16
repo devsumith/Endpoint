@@ -9,27 +9,33 @@ namespace Endpoint.Core.Events;
 public static class DomainEvents
 {
     [ThreadStatic]
-    private static List<Delegate> _actions;
+    private static List<Delegate> actions;
 
-    public static void Register<T>(Action<T> callback) where T : class
+    public static void Register<T>(Action<T> callback)
+        where T : class
     {
-        if (_actions == null)
+        if (actions == null)
         {
-            _actions = new List<Delegate>();
+            actions = new List<Delegate>();
         }
 
-        _actions.Add(callback);
+        actions.Add(callback);
     }
 
     public static void ClearCallbacks()
     {
-        _actions = null;
+        actions = null;
     }
 
-    public static void Raise<T>(T args) where T : class
+    public static void Raise<T>(T args)
+        where T : class
     {
-        if (_actions == null) return;
-        foreach (var action in _actions.OfType<Action<T>>())
+        if (actions == null)
+        {
+            return;
+        }
+
+        foreach (var action in actions.OfType<Action<T>>())
         {
             action(args);
         }

@@ -7,11 +7,11 @@ namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
 public class ConsoleMicroserviceTestArtifactGenerationStrategy : GenericArtifactGenerationStrategy<ConsoleMicroserviceProjectModel>
 {
-    private readonly IFileSystem _fileSytem;
-    public ConsoleMicroserviceTestArtifactGenerationStrategy(IServiceProvider serviceProvider, IFileSystem fileSystem)
+    private readonly IFileSystem fileSytem;
 
+    public ConsoleMicroserviceTestArtifactGenerationStrategy(IServiceProvider serviceProvider, IFileSystem fileSystem)
     {
-        _fileSytem = fileSystem;
+        fileSytem = fileSystem;
     }
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ConsoleMicroserviceProjectModel model)

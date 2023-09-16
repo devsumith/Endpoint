@@ -6,4 +6,3 @@ public interface ITypeFactory
 {
     Task<TypeModel> Create(ClassModel @class);
 }
-

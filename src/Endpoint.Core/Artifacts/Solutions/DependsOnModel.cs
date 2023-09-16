@@ -7,13 +7,13 @@ namespace Endpoint.Core.Artifacts.Solutions;
 
 public class DependsOnModel
 {
-    public ProjectModel Client { get; init; }
-    public ProjectModel Service { get; init; }
-
     public DependsOnModel(ProjectModel client, ProjectModel service)
     {
         Client = client;
         Service = service;
     }
-}
 
+    public ProjectModel Client { get; init; }
+
+    public ProjectModel Service { get; init; }
+}

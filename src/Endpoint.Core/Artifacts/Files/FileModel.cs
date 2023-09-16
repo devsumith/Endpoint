@@ -7,8 +7,8 @@ public class FileModel
 {
     public FileModel()
     {
-
     }
+
     public FileModel(string name, string directory, string extension)
     {
         Name = name;
@@ -18,9 +18,12 @@ public class FileModel
     }
 
     public string Body { get; set; }
+
     public string Name { get; set; }
+
     public string Directory { get; set; }
+
     public string Extension { get; set; }
+
     public string Path { get; set; }
 }
-

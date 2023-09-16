@@ -14,6 +14,5 @@ public enum RouteType
     HttpGet,
     HttpPut,
     HttpDelete,
-    HttpPost
+    HttpPost,
 }
-

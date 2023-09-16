@@ -8,22 +8,22 @@ namespace Endpoint.Core.Syntax.Namespaces.Strategies;
 
 public class NamespacePlantUmlParsingStrategy : BaseSyntaxParsingStrategy<NamespaceModel>
 {
-    private readonly ILogger<NamespacePlantUmlParsingStrategy> _logger;
-    private readonly IContext _context;
+    private readonly ILogger<NamespacePlantUmlParsingStrategy> logger;
+    private readonly IContext context;
 
     public NamespacePlantUmlParsingStrategy(IContext context, ILogger<NamespacePlantUmlParsingStrategy> logger)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public override async Task<NamespaceModel> ParseAsync(ISyntaxParser parser, string value)
     {
-        _logger.LogInformation("Parsing PlantUml for Namespace syntax. {typeName}", typeof(NamespaceModel).Name);
+        logger.LogInformation("Parsing PlantUml for Namespace syntax. {typeName}", typeof(NamespaceModel).Name);
 
         return new NamespaceModel()
         {
-            Name = value
+            Name = value,
         };
     }
 }

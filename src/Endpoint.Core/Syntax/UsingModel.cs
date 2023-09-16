@@ -12,7 +12,6 @@ public class UsingModel
 
     public UsingModel()
     {
-
     }
 
     public string Name { get; init; }

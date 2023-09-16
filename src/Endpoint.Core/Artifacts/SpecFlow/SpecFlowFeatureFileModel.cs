@@ -11,7 +11,5 @@ public class SpecFlowFeatureFileModel : CodeFileModel<SpecFlowFeatureModel>
     public SpecFlowFeatureFileModel(SpecFlowFeatureModel model, string directory)
         : base(model, model.Name, directory, "feature")
     {
-
     }
 }
-

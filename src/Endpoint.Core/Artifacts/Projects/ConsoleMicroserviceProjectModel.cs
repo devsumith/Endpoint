@@ -7,7 +7,6 @@ namespace Endpoint.Core.Artifacts.Projects;
 
 public class ConsoleMicroserviceProjectModel : ProjectModel
 {
-
     public ConsoleMicroserviceProjectModel(string name)
     {
         Name = name;

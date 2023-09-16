@@ -1,17 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Microsoft.Extensions.DependencyInjection;
 using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Endpoint.Core.UnitTests.Context;
 
 using Context = Endpoint.Core.Services.Context;
 
-
 public class GetShould
 {
-
     [Fact]
     public void ReturnExpectedItem()
     {

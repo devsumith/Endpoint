@@ -1,14 +1,14 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Syntax.Constructors;
-using Endpoint.Core.Syntax.Methods.ControllerMethods;
-using Endpoint.Core.Syntax.Types;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Attributes;
 using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Constructors;
 using Endpoint.Core.Syntax.Fields;
+using Endpoint.Core.Syntax.Methods.ControllerMethods;
 using Endpoint.Core.Syntax.Params;
+using Endpoint.Core.Syntax.Types;
 
 namespace Endpoint.Core.Syntax.Controllers;
 
@@ -17,7 +17,6 @@ public class ControllerModel : ClassModel
     public ControllerModel(INamingConventionConverter namingConventionConverter, ClassModel entity)
         : base($"{entity.Name}Controller")
     {
-
         Attributes.Add(new AttributeModel(AttributeType.ApiController, "ApiController", null));
 
         Implements.Add(new TypeModel("ControllerBase"));
@@ -60,9 +59,7 @@ public class ControllerModel : ClassModel
                 case RouteType.Delete:
                     Methods.Add(new DeleteControllerMethodModel(namingConventionConverter, entity));
                     break;
-
             }
         }
     }
 }
-

@@ -6,5 +6,6 @@ namespace Endpoint.Core.Artifacts.Services;
 public interface IPlaywrightService
 {
     void Create(string directory);
+
     void TestCreate(string description, string directory);
 }

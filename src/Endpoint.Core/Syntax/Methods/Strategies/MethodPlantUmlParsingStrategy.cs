@@ -1,29 +1,29 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
+using System.Linq;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
 public class MethodPlantUmlParsingStrategy : BaseSyntaxParsingStrategy<MethodModel>
 {
-    private readonly ILogger<MethodPlantUmlParsingStrategy> _logger;
-    private readonly IContext _context;
+    private readonly ILogger<MethodPlantUmlParsingStrategy> logger;
+    private readonly IContext context;
 
     public MethodPlantUmlParsingStrategy(IContext context, ILogger<MethodPlantUmlParsingStrategy> logger)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public override async Task<MethodModel> ParseAsync(ISyntaxParser parser, string value)
     {
-        _logger.LogInformation("Parsing for method");
+        logger.LogInformation("Parsing for method");
 
         var returnType = new TypeModel(value.Replace("+", string.Empty).Split(' ').First());
         var name = value.Replace("+", string.Empty).Split(' ').ElementAt(1).Split('(').First();
@@ -34,7 +34,9 @@ public class MethodPlantUmlParsingStrategy : BaseSyntaxParsingStrategy<MethodMod
         foreach (var p in rawParams)
         {
             if (string.IsNullOrEmpty(p))
+            {
                 break;
+            }
 
             var parts = p.Split(' ');
             var t = new TypeModel(parts[0]);
@@ -43,11 +45,11 @@ public class MethodPlantUmlParsingStrategy : BaseSyntaxParsingStrategy<MethodMod
             @params.Add(new ParamModel
             {
                 Type = t,
-                Name = n
+                Name = n,
             });
         }
 
-        var isInterface = _context.Get<MethodModel>().IsInterface;
+        var isInterface = context.Get<MethodModel>().IsInterface;
 
         return new MethodModel()
         {
@@ -57,8 +59,7 @@ public class MethodPlantUmlParsingStrategy : BaseSyntaxParsingStrategy<MethodMod
             Name = name,
             Params = @params,
             Async = returnType.Name.StartsWith("Task"),
-            Body = new("throw new NotImplementedException();")
+            Body = new ("throw new NotImplementedException();"),
         };
     }
-
 }

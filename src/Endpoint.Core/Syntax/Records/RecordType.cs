@@ -3,5 +3,5 @@
 public enum RecordType
 {
     Class,
-    Struct
+    Struct,
 }

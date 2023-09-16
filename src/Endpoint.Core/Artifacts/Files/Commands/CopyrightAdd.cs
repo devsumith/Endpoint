@@ -5,4 +5,6 @@ using System;
 
 namespace Endpoint.Core.Artifacts.Files.Commands;
 
-public class CopyrightAdd { }
+public class CopyrightAdd
+{
+}

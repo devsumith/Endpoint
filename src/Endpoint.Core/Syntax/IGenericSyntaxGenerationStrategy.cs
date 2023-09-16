@@ -7,4 +7,3 @@ public interface IGenericSyntaxGenerationStrategy<T> : ISyntaxGenerationStrategy
 {
     Task<string> GenerateAsync(ISyntaxGenerator generator, T model);
 }
-

@@ -8,21 +8,20 @@ namespace Endpoint.Core.Artifacts.Services;
 
 public class PlaywrightService : IPlaywrightService
 {
-    private readonly ILogger<PlaywrightService> _logger;
-    private readonly ICommandService _commandService;
+    private readonly ILogger<PlaywrightService> logger;
+    private readonly ICommandService commandService;
 
     public PlaywrightService(
         ILogger<PlaywrightService> logger,
-        ICommandService commandService
-        )
+        ICommandService commandService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
     public void Create(string directory)
     {
-        _commandService.Start("npm init playwright@latest", directory);
+        commandService.Start("npm init playwright@latest", directory);
     }
 
     public void TestCreate(string description, string directory)
@@ -30,5 +29,3 @@ public class PlaywrightService : IPlaywrightService
         throw new NotImplementedException();
     }
 }
-
-

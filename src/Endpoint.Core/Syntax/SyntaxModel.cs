@@ -14,4 +14,3 @@ public class SyntaxModel
 
     public List<UsingModel> Usings { get; set; }
 }
-

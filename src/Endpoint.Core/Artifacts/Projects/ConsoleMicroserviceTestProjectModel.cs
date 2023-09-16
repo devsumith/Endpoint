@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Projects.Enums;
 using Endpoint.Core.Syntax.Classes;
-using System.Collections.Generic;
 
 namespace Endpoint.Core.Artifacts.Projects;
 
@@ -19,7 +19,7 @@ public class ConsoleMicroserviceTestProjectModel : ProjectModel
         Order = 1;
         References = new List<string>
         {
-            @$"..\\{name.Replace(".Tests","")}\\{name.Replace(".Tests","")}.csproj"
+            @$"..\\{name.Replace(".Tests", string.Empty)}\\{name.Replace(".Tests", string.Empty)}.csproj",
         };
 
         var classModel = new ClassModel("Worker");
@@ -28,7 +28,7 @@ public class ConsoleMicroserviceTestProjectModel : ProjectModel
 
         Files = new List<FileModel>
         {
-            classFileModel
+            classFileModel,
         };
     }
 }

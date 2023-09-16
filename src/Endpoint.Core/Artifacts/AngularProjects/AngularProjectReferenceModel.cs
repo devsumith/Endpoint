@@ -13,7 +13,8 @@ public class AngularProjectReferenceModel
     }
 
     public string Name { get; set; }
+
     public string ReferencedDirectory { get; set; }
+
     public string ProjectType { get; set; }
 }
-

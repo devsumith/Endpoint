@@ -8,6 +8,6 @@ namespace Endpoint.Core.Artifacts.Projects;
 public class ProjectReferenceModel
 {
     public string ReferenceDirectory { get; set; }
+
     public string Name { get; set; }
 }
-

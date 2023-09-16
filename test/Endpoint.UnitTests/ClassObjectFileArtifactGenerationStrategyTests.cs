@@ -1,14 +1,14 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Endpoint.UnitTests;
@@ -17,7 +17,6 @@ public class ClassObjectFileArtifactGenerationStrategyTests
 {
     public ClassObjectFileArtifactGenerationStrategyTests()
     {
-
     }
 
     [Fact]
@@ -35,12 +34,11 @@ public class ClassObjectFileArtifactGenerationStrategyTests
 
         var classModel = new ClassModel("Foo");
 
-        var objectFileModel = new CodeFileModel<ClassModel>(classModel, new List<UsingModel>() {
-
-            new UsingModel() { Name = "Sytem" }
+        var objectFileModel = new CodeFileModel<ClassModel>(classModel, new List<UsingModel>()
+        {
+            new UsingModel() { Name = "Sytem" },
         }, "Foo", "directory", "extension");
 
         await sut.GenerateAsync(objectFileModel);
     }
 }
-

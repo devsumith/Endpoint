@@ -9,19 +9,17 @@ namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
 public class ConsoleMicroserviceArtifactGenerationStrategy : GenericArtifactGenerationStrategy<ConsoleMicroserviceProjectModel>
 {
-    private readonly IFileSystem _fileSytem;
-    private readonly Observable<INotification> _notificationListener;
+    private readonly IFileSystem fileSytem;
+    private readonly Observable<INotification> notificationListener;
+
     public ConsoleMicroserviceArtifactGenerationStrategy(
 
         IFileSystem fileSystem,
         Observable<INotification> notificationListener)
-
     {
-        _fileSytem = fileSystem;
-        _notificationListener = notificationListener;
+        fileSytem = fileSystem;
+        this.notificationListener = notificationListener;
     }
-
-
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ConsoleMicroserviceProjectModel model)
     {

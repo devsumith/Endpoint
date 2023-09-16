@@ -7,7 +7,6 @@ namespace Endpoint.Core.Artifacts.Lit;
 
 public class LitProjectModel
 {
-
     public LitProjectModel(string name, string rootDirectory, string prefix = null, string kind = "library", string directory = null)
     {
         Name = name;
@@ -18,9 +17,12 @@ public class LitProjectModel
     }
 
     public string Name { get; set; }
+
     public string Directory { get; set; }
+
     public string RootDirectory { get; set; }
+
     public string Kind { get; set; }
+
     public string Prefix { get; set; }
 }
-

@@ -12,11 +12,11 @@ namespace Endpoint.Core.Syntax.Classes.Services;
 
 public class DomainDrivenDesignService : IDomainDrivenDesignService
 {
-    private readonly ILogger<DomainDrivenDesignService> _logger;
+    private readonly ILogger<DomainDrivenDesignService> logger;
 
     public DomainDrivenDesignService(ILogger<DomainDrivenDesignService> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public ClassModel ServiceBusMessageConsumerCreate(string messagesNamespace, string directory)
@@ -25,15 +25,15 @@ public class DomainDrivenDesignService : IDomainDrivenDesignService
 
         classModel.Implements.Add(new TypeModel("BackgroundService"));
 
-        classModel.Usings.Add(new("MediatR"));
+        classModel.Usings.Add(new ("MediatR"));
 
-        classModel.Usings.Add(new("Messaging"));
+        classModel.Usings.Add(new ("Messaging"));
 
-        classModel.Usings.Add(new("Newtonsoft.Json"));
+        classModel.Usings.Add(new ("Newtonsoft.Json"));
 
-        classModel.Usings.Add(new("Microsoft.Extensions.Hosting"));
+        classModel.Usings.Add(new ("Microsoft.Extensions.Hosting"));
 
-        classModel.Usings.Add(new("Microsoft.Extensions.Logging"));
+        classModel.Usings.Add(new ("Microsoft.Extensions.Logging"));
 
         var ctor = new ConstructorModel(classModel, classModel.Name);
 
@@ -49,43 +49,43 @@ public class DomainDrivenDesignService : IDomainDrivenDesignService
             classModel.Fields.Add(new FieldModel()
             {
                 Name = $"_{propName}",
-                Type = type
+                Type = type,
             });
 
             ctor.Params.Add(new ParamModel()
             {
                 Name = propName,
-                Type = type
+                Type = type,
             });
         }
 
         var methodBody = new string[]
         {
             "await _messagingClient.StartAsync(stoppingToken);",
-            "",
+            string.Empty,
             "while(!stoppingToken.IsCancellationRequested) {",
-            "",
+            string.Empty,
             "try".Indent(1),
             "{".Indent(1),
             "var message = await _messagingClient.ReceiveAsync(new ReceiveRequest());".Indent(2),
-            "",
+            string.Empty,
             "var messageType = message.MessageAttributes[\"MessageType\"];".Indent(2),
-            "",
+            string.Empty,
             ($"var type = Type.GetType($\"{messagesNamespace}." + "{messageType}\");").Indent(2),
-            "",
+            string.Empty,
             "var request = JsonConvert.DeserializeObject(message.Body, type!) as IRequest;".Indent(2),
-            "",
+            string.Empty,
             "await _mediator.Send(request!);".Indent(2),
-            "",
+            string.Empty,
             "await Task.Delay(100);".Indent(2),
             "}".Indent(1),
             "catch(Exception exception)".Indent(1),
             "{".Indent(1),
             "_logger.LogError(exception.Message);".Indent(2),
-            "",
+            string.Empty,
             "continue;".Indent(2),
             "}".Indent(1),
-            "}"
+            "}",
         };
 
         var method = new MethodModel
@@ -95,13 +95,13 @@ public class DomainDrivenDesignService : IDomainDrivenDesignService
             AccessModifier = AccessModifier.Protected,
             Async = true,
             ReturnType = new TypeModel("Task"),
-            Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, methodBody))
+            Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, methodBody)),
         };
 
         method.Params.Add(new ParamModel()
         {
             Name = "stoppingToken",
-            Type = new TypeModel("CancellationToken")
+            Type = new TypeModel("CancellationToken"),
         });
 
         classModel.Constructors.Add(ctor);
@@ -109,9 +109,5 @@ public class DomainDrivenDesignService : IDomainDrivenDesignService
         classModel.Methods.Add(method);
 
         return classModel;
-
     }
-
 }
-
-

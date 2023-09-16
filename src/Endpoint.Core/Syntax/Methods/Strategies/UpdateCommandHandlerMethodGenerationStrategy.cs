@@ -1,24 +1,23 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Linq;
+using System.Text;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Microsoft.VisualStudio.OLE.Interop;
-using System.Linq;
-using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
 public class UpdateCommandHandlerMethodGenerationStrategy : GenericSyntaxGenerationStrategy<MethodModel>
 {
-    private readonly INamingConventionConverter _namingConventionConverter;
+    private readonly INamingConventionConverter namingConventionConverter;
 
     public UpdateCommandHandlerMethodGenerationStrategy(
         INamingConventionConverter namingConventionConverter)
     {
-        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
-
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target)
     {
@@ -36,26 +35,26 @@ public class UpdateCommandHandlerMethodGenerationStrategy : GenericSyntaxGenerat
 
         var entityName = entity.Name;
 
-        var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
+        var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
-        var entityNameCamelCase = _namingConventionConverter.Convert(NamingConvention.CamelCase, entityName); ;
+        var entityNameCamelCase = namingConventionConverter.Convert(NamingConvention.CamelCase, entityName);
 
         var builder = new StringBuilder();
 
         builder.AppendLine($"var {entityNameCamelCase} = await _context.{entityNamePascalCasePlural}.SingleAsync(x => x.{entityName}Id == request.{entityName}Id);");
 
-        builder.AppendLine("");
+        builder.AppendLine(string.Empty);
 
         foreach (var property in entity.Properties.Where(x => x.Id == false && x.Name != $"{model.Name}Id"))
         {
             builder.AppendLine($"{entityNameCamelCase}.{property.Name} = request.{property.Name};");
         }
 
-        builder.AppendLine("");
+        builder.AppendLine(string.Empty);
 
         builder.AppendLine("await _context.SaveChangesAsync(cancellationToken);");
 
-        builder.AppendLine("");
+        builder.AppendLine(string.Empty);
 
         builder.AppendLine("return new ()");
 
@@ -70,4 +69,3 @@ public class UpdateCommandHandlerMethodGenerationStrategy : GenericSyntaxGenerat
         return await syntaxGenerator.GenerateAsync(model);
     }
 }
-

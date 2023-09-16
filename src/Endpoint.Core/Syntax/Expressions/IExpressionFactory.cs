@@ -8,8 +8,8 @@ namespace Endpoint.Core.Syntax.Expressions;
 public interface IExpressionFactory
 {
     Task<ExpressionModel> CreateAsync();
+
     Task<ExpressionModel> LogInformationAsync(string value);
+
     Task<ExpressionModel> ToDtoCreateAsync(ClassModel aggregate);
-
 }
-

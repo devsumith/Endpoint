@@ -7,13 +7,13 @@ namespace Endpoint.Core.Syntax.SpecFlow;
 
 public class SpecFlowFeatureModel : SyntaxModel
 {
-
     public SpecFlowFeatureModel(string name)
     {
         Name = name;
         Scenarios = new List<SpecFlowScenarioModel>();
     }
+
     public string Name { get; init; }
+
     public List<SpecFlowScenarioModel> Scenarios { get; init; }
 }
-

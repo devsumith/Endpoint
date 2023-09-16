@@ -1,24 +1,25 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
 public class MethodSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<MethodModel>
 {
-    private readonly ILogger<MethodSyntaxGenerationStrategy> _logger;
+    private readonly ILogger<MethodSyntaxGenerationStrategy> logger;
+
     public MethodSyntaxGenerationStrategy(
         ILogger<MethodSyntaxGenerationStrategy> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model)
     {
-        _logger.LogInformation("Generating syntax for {0}.", model);
+        logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
@@ -30,13 +31,19 @@ public class MethodSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Me
         builder.Append(await syntaxGenerator.GenerateAsync(model.AccessModifier));
 
         if (model.Override)
+        {
             builder.Append(" override");
+        }
 
         if (model.Async)
+        {
             builder.Append(" async");
+        }
 
         if (model.Params.SingleOrDefault(x => x.ExtensionMethodParam) != null || model.Static)
+        {
             builder.Append(" static");
+        }
 
         builder.Append($" {await syntaxGenerator.GenerateAsync(model.ReturnType)}");
 
@@ -49,7 +56,9 @@ public class MethodSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Me
         builder.Append(')');
 
         if (model.Body == null)
+        {
             builder.Append("{ }");
+        }
         else
         {
             builder.AppendLine();
@@ -66,4 +75,3 @@ public class MethodSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Me
         return builder.ToString();
     }
 }
-

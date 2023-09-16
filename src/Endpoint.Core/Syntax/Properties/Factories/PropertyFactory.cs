@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Units;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using static Endpoint.Core.Syntax.AccessModifier;
 using static Endpoint.Core.Syntax.Properties.PropertyAccessorModel;
 using static Endpoint.Core.Syntax.Types.TypeModel;
@@ -10,27 +10,27 @@ namespace Endpoint.Core.Syntax.Properties.Factories;
 
 public class PropertyFactory : IPropertyFactory
 {
-    private readonly ILogger<PropertyFactory> _logger;
-    private readonly INamingConventionConverter _namingConventionConverter;
+    private readonly ILogger<PropertyFactory> logger;
+    private readonly INamingConventionConverter namingConventionConverter;
 
     public PropertyFactory(ILogger<PropertyFactory> logger, INamingConventionConverter namingConventionConverter)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
     public async Task<List<PropertyModel>> ResponsePropertiesCreateAsync(RequestType responseType, TypeDeclarationModel parent, string entityName)
     {
-        _logger.LogInformation("Creating Response Properties. {entityName}", entityName);
+        logger.LogInformation("Creating Response Properties. {entityName}", entityName);
 
         var model = new List<PropertyModel>();
 
         switch (responseType)
         {
             case RequestType.Get:
-                var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
+                var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
-                model.Add(new(parent, Public, ListOf($"{entityName}Dto"), entityNamePascalCasePlural, GetSet));
+                model.Add(new (parent, Public, ListOf($"{entityName}Dto"), entityNamePascalCasePlural, GetSet));
                 break;
 
             default:
@@ -48,7 +48,7 @@ public class PropertyFactory : IPropertyFactory
 
             var props = properties.Split(',');
 
-            foreach(var prop in props) { 
+            foreach(var prop in props) {
 
                 var parts = prop.Split(':');
 
@@ -57,6 +57,4 @@ public class PropertyFactory : IPropertyFactory
 
             return model;
         }*/
-
 }
-

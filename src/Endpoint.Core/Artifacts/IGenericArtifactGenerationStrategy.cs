@@ -7,4 +7,3 @@ public interface IGenericArtifactGenerationStrategy<T> : IArtifactGenerationStra
 {
     Task GenerateAsync(IArtifactGenerator generator, T model);
 }
-

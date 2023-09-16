@@ -1,27 +1,26 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Artifacts.Files.Factories;
-using Endpoint.Core.Services;
-using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Artifacts.Files.Factories;
+using Endpoint.Core.Services;
+using Microsoft.CodeAnalysis;
 
 namespace Endpoint.Core.Artifacts.Projects.Services;
 
-//https://learn.microsoft.com/en-us/visualstudio/extensibility/internals/solution-dot-sln-file?view=vs-2022
-
+// https://learn.microsoft.com/en-us/visualstudio/extensibility/internals/solution-dot-sln-file?view=vs-2022
 public class ProjectService : IProjectService
 {
-    private readonly ICommandService _commandService;
-    private readonly IFileProvider _fileProvider;
-    private readonly IArtifactGenerator _artifactGenerator;
-    private readonly IFileSystem _fileSystem;
-    private readonly IFileFactory _fileFactory;
+    private readonly ICommandService commandService;
+    private readonly IFileProvider fileProvider;
+    private readonly IArtifactGenerator artifactGenerator;
+    private readonly IFileSystem fileSystem;
+    private readonly IFileFactory fileFactory;
+
     public ProjectService(
         IArtifactGenerator artifactGenerator,
         ICommandService commandService,
@@ -29,29 +28,29 @@ public class ProjectService : IProjectService
         IFileSystem fileSystem,
         IFileFactory fileFactory)
     {
-        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
+        this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
     public async Task AddProjectAsync(ProjectModel model)
     {
-        await _artifactGenerator.GenerateAsync(model);
+        await artifactGenerator.GenerateAsync(model);
 
         await AddToSolution(model);
     }
 
     public async Task AddToSolution(ProjectModel model)
     {
-        var solution = _fileProvider.Get("*.sln", model.Directory);
+        var solution = fileProvider.Get("*.sln", model.Directory);
         var solutionName = Path.GetFileName(solution);
-        var solutionDirectory = _fileSystem.Path.GetDirectoryName(solution);
+        var solutionDirectory = fileSystem.Path.GetDirectoryName(solution);
 
         if (model.Extension == ".csproj")
         {
-            _commandService.Start($"dotnet sln {solutionName} add {model.Path}", solutionDirectory);
+            commandService.Start($"dotnet sln {solutionName} add {model.Path}", solutionDirectory);
         }
         else
         {
@@ -60,10 +59,10 @@ public class ProjectService : IProjectService
             var projectEntry = new string[2]
             {
                 "Project(\"{" + $"{Guid.NewGuid()}".ToUpper() + "}\") = \"" + model.Name + "\", \"" + model.Path.Replace($"{solutionDirectory}{Path.DirectorySeparatorChar}", string.Empty) + "\", \"{" + $"{Guid.NewGuid()}".ToUpper() + "}\"",
-                "EndProject"
+                "EndProject",
             };
 
-            foreach (var line in _fileSystem.File.ReadAllLines(solution))
+            foreach (var line in fileSystem.File.ReadAllLines(solution))
             {
                 lines.Add(line);
 
@@ -76,9 +75,8 @@ public class ProjectService : IProjectService
                 }
             }
 
-            _fileSystem.File.WriteAllLines(solution, lines.ToArray());
+            fileSystem.File.WriteAllLines(solution, lines.ToArray());
         }
-
     }
 
     public async Task AddGenerateDocumentationFile(string csprojFilePath)
@@ -99,11 +97,25 @@ public class ProjectService : IProjectService
     {
         var doc = XDocument.Load(csprojFilePath);
         var projectNode = doc.FirstNode as XElement;
-        projectNode.Add(_createEndpointPostBuildTargetElement());
+        projectNode.Add(CreateEndpointPostBuildTargetElement());
         doc.Save(csprojFilePath);
     }
 
-    private XElement _createEndpointPostBuildTargetElement()
+    public async Task PackageAdd(string name, string directory)
+    {
+        var projectPath = fileProvider.Get("*.csproj", directory);
+
+        var projectDirectory = fileSystem.Path.GetDirectoryName(projectPath);
+
+        var projectFileContents = fileSystem.File.ReadAllText(projectPath);
+
+        if (!projectFileContents.Contains($"PackageReference Include=\"{name}\""))
+        {
+            commandService.Start($"dotnet add package {name}", projectDirectory);
+        }
+    }
+
+    private XElement CreateEndpointPostBuildTargetElement()
     {
         var dotnetToolRestoreCommand = new XElement("Exec");
 
@@ -126,36 +138,23 @@ public class ProjectService : IProjectService
         return element;
     }
 
-    public async Task PackageAdd(string name, string directory)
-    {
-        var projectPath = _fileProvider.Get("*.csproj", directory);
-
-        var projectDirectory = _fileSystem.Path.GetDirectoryName(projectPath);
-
-        var projectFileContents = _fileSystem.File.ReadAllText(projectPath);
-
-        if (!projectFileContents.Contains($"PackageReference Include=\"{name}\""))
-        {
-            _commandService.Start($"dotnet add package {name}", projectDirectory);
-        }
-
-    }
-
     public async Task CoreFilesAdd(string directory)
     {
-        var projectPath = _fileProvider.Get("*.csproj", directory);
+        var projectPath = fileProvider.Get("*.csproj", directory);
 
-        var projectDirectory = _fileSystem.Path.GetDirectoryName(projectPath);
+        var projectDirectory = fileSystem.Path.GetDirectoryName(projectPath);
 
         foreach (var file in new List<FileModel>()
         {
-            _fileFactory.CreateResponseBase(projectDirectory),
-            _fileFactory.CreateCoreUsings(projectDirectory),
-            _fileFactory.CreateLinqExtensions(projectDirectory)
+            fileFactory.CreateResponseBase(projectDirectory),
+            fileFactory.CreateCoreUsings(projectDirectory),
+            fileFactory.CreateLinqExtensions(projectDirectory),
         })
         {
-            if (!_fileSystem.File.Exists(file.Path))
-                await _artifactGenerator.GenerateAsync(file);
+            if (!fileSystem.File.Exists(file.Path))
+            {
+                await artifactGenerator.GenerateAsync(file);
+            }
         }
     }
 
@@ -173,4 +172,3 @@ public class ProjectService : IProjectService
         CoreFilesAdd(directory);
     }
 }
-

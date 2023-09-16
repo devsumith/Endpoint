@@ -1,6 +1,8 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Linq;
+using System.Reflection;
 using Endpoint.Core;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.AngularProjects;
@@ -27,8 +29,6 @@ using Endpoint.Core.Syntax.RouteHandlers;
 using Endpoint.Core.Syntax.Types;
 using Endpoint.Core.Syntax.Units.Factories;
 using Endpoint.Core.Syntax.Units.Services;
-using System.Linq;
-using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -90,7 +90,6 @@ public static class ConfigureServices
 
         services.AddSingleton<IClipboardService, ClipboardService>();
 
-
         services.AddSingleton<IEntityFileFactory, EntityFileFactory>();
         services.AddSingleton<IProjectFactory, ProjectFactory>();
         services.AddSingleton<IRouteHandlerFactory, RouteHandlerFactory>();
@@ -114,9 +113,7 @@ public static class ConfigureServices
                 !type.IsAbstract &&
                 type.GetInterfaces().Any(interfaceType =>
                     interfaceType.IsGenericType &&
-                    interfaceType.GetGenericTypeDefinition() == @interface
-                )
-            )
+                    interfaceType.GetGenericTypeDefinition() == @interface))
             .ToList();
 
         foreach (var implementation in implementations)
@@ -138,27 +135,3 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

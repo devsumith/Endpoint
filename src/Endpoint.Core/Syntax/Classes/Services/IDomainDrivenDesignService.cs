@@ -6,7 +6,4 @@ namespace Endpoint.Core.Syntax.Classes.Services;
 public interface IDomainDrivenDesignService
 {
     ClassModel ServiceBusMessageConsumerCreate(string messagesNamespace, string directory);
-
 }
-
-

@@ -8,18 +8,18 @@ namespace Endpoint.Core.Syntax.Classes.Strategies;
 
 public class ClassPlantUmlParsingStrategy : BaseSyntaxParsingStrategy<ClassModel>
 {
-    private readonly ILogger<ClassPlantUmlParsingStrategy> _logger;
-    private readonly IContext _context;
+    private readonly ILogger<ClassPlantUmlParsingStrategy> logger;
+    private readonly IContext context;
 
     public ClassPlantUmlParsingStrategy(IContext context, ILogger<ClassPlantUmlParsingStrategy> logger)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public override async Task<ClassModel> ParseAsync(ISyntaxParser parser, string value)
     {
-        _logger.LogInformation("Parsing PlantUml for syntax. {typeName}", typeof(ClassModel).Name);
+        logger.LogInformation("Parsing PlantUml for syntax. {typeName}", typeof(ClassModel).Name);
 
         throw new NotImplementedException();
     }

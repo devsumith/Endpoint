@@ -1,23 +1,25 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Linq;
+using System.Text;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
 
 public class GetQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerationStrategy<MethodModel>
 {
-    private readonly INamingConventionConverter _namingConventionConverter;
+    private readonly INamingConventionConverter namingConventionConverter;
 
     public GetQueryHandlerMethodGenerationStrategy(
         INamingConventionConverter namingConventionConverter)
     {
-        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
+
+    public int Priority => int.MaxValue;
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target)
     {
@@ -28,6 +30,7 @@ public class GetQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerationSt
 
         return null;
     }
+
     public bool CanHandle(object model)
     {
         /*        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
@@ -40,15 +43,13 @@ public class GetQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerationSt
         return false;
     }
 
-    public int Priority => int.MaxValue;
-
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model)
     {
         var builder = new StringBuilder();
 
-        var entityName = ""; // ""; // context.Entity.Name;
+        var entityName = string.Empty; // ""; // context.Entity.Name;
 
-        var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
+        var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 
         builder.AppendLine("return new () {");
 
@@ -61,4 +62,3 @@ public class GetQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerationSt
         return await syntaxGenerator.GenerateAsync(model);
     }
 }
-

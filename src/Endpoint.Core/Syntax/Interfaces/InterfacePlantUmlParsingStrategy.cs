@@ -8,18 +8,18 @@ namespace Endpoint.Core.Syntax.Interfaces;
 
 public class InterfacePlantUmlParsingStrategy : BaseSyntaxParsingStrategy<InterfaceModel>
 {
-    private readonly ILogger<InterfacePlantUmlParsingStrategy> _logger;
-    private readonly IContext _context;
+    private readonly ILogger<InterfacePlantUmlParsingStrategy> logger;
+    private readonly IContext context;
 
     public InterfacePlantUmlParsingStrategy(IContext context, ILogger<InterfacePlantUmlParsingStrategy> logger)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public override async Task<InterfaceModel> ParseAsync(ISyntaxParser parser, string value)
     {
-        _logger.LogInformation("Parsing PlantUml for syntax. {typeName}", typeof(InterfaceModel).Name);
+        logger.LogInformation("Parsing PlantUml for syntax. {typeName}", typeof(InterfaceModel).Name);
 
         throw new NotImplementedException();
     }

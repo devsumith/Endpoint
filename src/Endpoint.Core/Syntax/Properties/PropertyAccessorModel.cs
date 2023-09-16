@@ -4,14 +4,15 @@ namespace Endpoint.Core.Syntax.Properties;
 
 public class PropertyAccessorModel
 {
-    public string AccessModifier { get; private set; }
-    public PropertyAccessorType Type { get; private set; }
-
     public PropertyAccessorModel(string accessModifier, PropertyAccessorType classPropertyAccessorType)
         : this(classPropertyAccessorType)
     {
         AccessModifier = accessModifier;
     }
+
+    public string AccessModifier { get; private set; }
+
+    public PropertyAccessorType Type { get; private set; }
 
     public PropertyAccessorModel(PropertyAccessorType classPropertyAccessorType)
     {
@@ -20,7 +21,6 @@ public class PropertyAccessorModel
 
     private PropertyAccessorModel()
     {
-
     }
 
     public static PropertyAccessorModel Get => new PropertyAccessorModel(PropertyAccessorType.Get);

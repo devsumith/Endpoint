@@ -7,7 +7,4 @@ namespace Endpoint.Core.Syntax.Angular;
 
 public class NgHttpServiceModel
 {
-
-
 }
-

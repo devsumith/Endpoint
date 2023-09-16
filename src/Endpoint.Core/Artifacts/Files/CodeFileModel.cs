@@ -11,7 +11,6 @@ public class CodeFileModel<T> : FileModel
 {
     public CodeFileModel()
     {
-
     }
 
     public CodeFileModel(T @object, string name, string directory, string extension)
@@ -34,4 +33,3 @@ public class CodeFileModel<T> : FileModel
 
     public string Namespace { get; set; }
 }
-

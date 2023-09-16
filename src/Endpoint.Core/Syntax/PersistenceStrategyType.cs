@@ -6,6 +6,5 @@ namespace Endpoint.Core.Syntax;
 public enum PersistenceStrategyType
 {
     EntityFrameworkCore,
-    Dapper
+    Dapper,
 }
-

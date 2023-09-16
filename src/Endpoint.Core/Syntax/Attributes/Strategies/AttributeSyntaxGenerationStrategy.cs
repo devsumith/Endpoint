@@ -1,28 +1,26 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.Attributes.Strategies;
 
 public class AttributeSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<AttributeModel>
 {
-    private readonly ILogger<AttributeSyntaxGenerationStrategy> _logger;
+    private readonly ILogger<AttributeSyntaxGenerationStrategy> logger;
+
     public AttributeSyntaxGenerationStrategy(
 
         ILogger<AttributeSyntaxGenerationStrategy> logger)
-
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-
-
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, AttributeModel model)
     {
-        _logger.LogInformation("Generating syntax for {0}.", model);
+        logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
@@ -72,7 +70,6 @@ public class AttributeSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy
         }
 
         builder.Append(']');
-
 
         return builder.ToString();
     }

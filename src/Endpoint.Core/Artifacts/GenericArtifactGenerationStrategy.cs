@@ -17,7 +17,9 @@ public abstract class GenericArtifactGenerationStrategy<T> : IGenericArtifactGen
             return true;
         }
         else
+        {
             return false;
+        }
     }
 
     public virtual int GetPriority() => 0;

@@ -13,4 +13,3 @@ public static class ConfigureServices
         services.AddSingleton<ITemplateLocator, EmbeddedResourceTemplateLocatorBase<Marker>>();
     }
 }
-

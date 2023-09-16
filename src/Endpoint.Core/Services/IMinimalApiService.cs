@@ -9,4 +9,3 @@ public interface IMinimalApiService
 {
     Task Create(string name, string dbContextName, string entityName, string directory);
 }
-

@@ -1,35 +1,33 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Syntax.Attributes;
+using System.Collections.Generic;
+using System.Text;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Attributes;
 using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Expressions;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using Endpoint.Core.Syntax.Expressions;
-using System.Text;
 
 namespace Endpoint.Core.Syntax.Methods.Factories;
 
 public class MethodFactory : IMethodFactory
 {
-    private readonly ILogger<MethodFactory> _logger;
-    private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly IExpressionFactory _expressionFactory;
+    private readonly ILogger<MethodFactory> logger;
+    private readonly INamingConventionConverter namingConventionConverter;
+    private readonly IExpressionFactory expressionFactory;
 
     public MethodFactory(
         ILogger<MethodFactory> logger,
         INamingConventionConverter namingConventionConverter,
         IExpressionFactory expressionFactory)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
-        _expressionFactory = expressionFactory ?? throw new ArgumentNullException(nameof(expressionFactory));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        this.expressionFactory = expressionFactory ?? throw new ArgumentNullException(nameof(expressionFactory));
     }
-
-
 
     public MethodModel CreateControllerMethod(string name, string controller, RouteType routeType, string directory)
     {
@@ -41,7 +39,7 @@ public class MethodFactory : IMethodFactory
 
     public MethodModel CreateDefaultControllerMethod(string name, string controller, RouteType routeType, string directory, string swaggerSummery = "", string swaggerDescription = "", string template = null, Dictionary<string, string> properties = null)
     {
-        var nameTitleCase = _namingConventionConverter.Convert(NamingConvention.TitleCase, name);
+        var nameTitleCase = namingConventionConverter.Convert(NamingConvention.TitleCase, name);
 
         swaggerSummery = string.IsNullOrEmpty(swaggerSummery) ? nameTitleCase : swaggerSummery;
 
@@ -54,8 +52,7 @@ public class MethodFactory : IMethodFactory
             ParentType = controllerClassmodel,
             Async = true,
             AccessModifier = AccessModifier.Public,
-            Name = name
-
+            Name = name,
         };
 
         methodModel.ReturnType = TypeModel.CreateTaskOfActionResultOf($"{name}Response");
@@ -64,23 +61,23 @@ public class MethodFactory : IMethodFactory
         {
             new ParamModel()
             {
-                Type = new TypeModel($"{_namingConventionConverter.Convert(NamingConvention.PascalCase,name)}Request"),
+                Type = new TypeModel($"{namingConventionConverter.Convert(NamingConvention.PascalCase, name)}Request"),
                 Name = "request",
-                Attribute = new AttributeModel() { Name = "FromBody" }
+                Attribute = new AttributeModel() { Name = "FromBody" },
             },
-            ParamModel.CancellationToken
+            ParamModel.CancellationToken,
         };
 
         methodModel.Attributes.Add(new SwaggerOperationAttributeModel(swaggerSummery, swaggerDescription));
 
-        methodModel.Attributes.Add(new()
+        methodModel.Attributes.Add(new ()
         {
             Name = "HttpGet",
             Template = template,
             Properties = properties ?? new Dictionary<string, string>()
             {
-                { "Name", _namingConventionConverter.Convert(NamingConvention.CamelCase,name) }
-            }
+                { "Name", namingConventionConverter.Convert(NamingConvention.CamelCase, name) }
+            },
         });
 
         methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
@@ -115,7 +112,7 @@ public class MethodFactory : IMethodFactory
             AccessModifier = AccessModifier.Protected,
             Body = new ExpressionModel(methodBodyBuilder.ToString()),
             Async = true,
-            ReturnType = new("Task"),
+            ReturnType = new ("Task"),
             Params = new List<ParamModel>
             {
                 new ()
@@ -123,7 +120,7 @@ public class MethodFactory : IMethodFactory
                     Name = "stoppingToken",
                     Type = new ("CancellationToken")
                 }
-            }
+            },
         };
     }
 
@@ -134,16 +131,16 @@ public class MethodFactory : IMethodFactory
             Name = "ToDto",
             Static = true,
             ReturnType = new TypeModel($"{aggregate.Name}Dto"),
-            Params = new()
+            Params = new ()
             {
-                new()
+                new ()
                 {
                     ExtensionMethodParam = true,
-                    Name = _namingConventionConverter.Convert(NamingConvention.CamelCase, aggregate.Name),
+                    Name = namingConventionConverter.Convert(NamingConvention.CamelCase, aggregate.Name),
                     Type = new (aggregate.Name)
-                }
+                },
             },
-            Body = await _expressionFactory.ToDtoCreateAsync(aggregate)
+            Body = await expressionFactory.ToDtoCreateAsync(aggregate),
         };
 
         return model;
@@ -156,45 +153,43 @@ public class MethodFactory : IMethodFactory
             Name = "ToDtosAsync",
             Async = true,
             Static = true,
-            ReturnType = new("Task")
+            ReturnType = new ("Task")
             {
-                GenericTypeParameters = new()
+                GenericTypeParameters = new ()
                 {
                     new ("List")
                     {
-                        GenericTypeParameters = new()
+                        GenericTypeParameters = new ()
                         {
                             new ($"{aggregate.Name}Dto")
                         }
                     }
-                }
+                },
             },
-            Params = new()
+            Params = new ()
             {
-                new()
+                new ()
                 {
                     ExtensionMethodParam = true,
-                    Name = _namingConventionConverter.Convert(NamingConvention.CamelCase,aggregate.Name, pluralize: true),
+                    Name = namingConventionConverter.Convert(NamingConvention.CamelCase, aggregate.Name, pluralize: true),
                     Type = new ("IQueryable")
                     {
                         GenericTypeParameters = new ()
                         {
                             new (aggregate.Name)
                         }
-                    }
+                    },
                 },
-                new()
+                new ()
                 {
                     Name = "cancellationToken",
                     Type = new ("CancellationToken"),
                     DefaultValue = "null"
-                }
+                },
             },
-            Body = new ExpressionModel($"return await {_namingConventionConverter.Convert(NamingConvention.CamelCase, aggregate.Name, pluralize: true)}.Select(x => x.ToDto()).ToListAsync(cancellationToken);")
+            Body = new ExpressionModel($"return await {namingConventionConverter.Convert(NamingConvention.CamelCase, aggregate.Name, pluralize: true)}.Select(x => x.ToDto()).ToListAsync(cancellationToken);"),
         };
 
         return model;
     }
 }
-
-

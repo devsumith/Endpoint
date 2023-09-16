@@ -7,12 +7,13 @@ namespace Endpoint.Core.Services;
 
 public class SolutionNamespaceProvider : ISolutionNamespaceProvider
 {
-    private readonly IFileProvider _fileProvider;
+    private readonly IFileProvider fileProvider;
 
     public SolutionNamespaceProvider(IFileProvider fileProvider)
     {
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
+
     public string Get(string directory)
     {
         if (!Directory.Exists(directory))
@@ -20,7 +21,6 @@ public class SolutionNamespaceProvider : ISolutionNamespaceProvider
             return "SolutionNamespaceNotFound";
         }
 
-        return Path.GetFileNameWithoutExtension(_fileProvider.Get("*.sln", directory));
+        return Path.GetFileNameWithoutExtension(fileProvider.Get("*.sln", directory));
     }
 }
-

@@ -14,7 +14,6 @@ public class ClassModel : InterfaceModel
 {
     public ClassModel()
     {
-
     }
 
     public ClassModel(string name)
@@ -27,9 +26,13 @@ public class ClassModel : InterfaceModel
     }
 
     public AccessModifier AccessModifier { get; set; }
+
     public List<FieldModel> Fields { get; set; }
+
     public List<ConstructorModel> Constructors { get; set; }
+
     public List<AttributeModel> Attributes { get; set; }
+
     public bool Static { get; set; }
 
     public override void AddMethod(MethodModel method)
@@ -41,8 +44,6 @@ public class ClassModel : InterfaceModel
     public ClassModel CreateDto()
         => new ClassModel($"{Name}Dto")
         {
-            Properties = Properties
+            Properties = Properties,
         };
-
 }
-

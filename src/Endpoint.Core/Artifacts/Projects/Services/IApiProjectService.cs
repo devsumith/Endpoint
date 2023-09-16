@@ -8,8 +8,6 @@ namespace Endpoint.Core.Artifacts.Projects.Services;
 public interface IApiProjectService
 {
     Task ControllerAdd(string entityName, bool empty, string directory);
+
     Task ControllerMethodAdd(string name, string controller, string route, string directory);
-
 }
-
-

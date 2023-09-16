@@ -19,8 +19,6 @@ public class TenseConverter : ITenseConverter
 
         DocumentElement documentElement = phraseFactory.createSentence(clause);
 
-        return new Realiser(lexicon).realise(documentElement).getRealisation().Replace(".", "");
-
+        return new Realiser(lexicon).realise(documentElement).getRealisation().Replace(".", string.Empty);
     }
 }
-

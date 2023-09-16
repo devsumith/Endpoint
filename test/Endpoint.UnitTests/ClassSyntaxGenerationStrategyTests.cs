@@ -1,18 +1,18 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Syntax.Classes;
-using Endpoint.Core.Syntax.Methods;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Endpoint.Core.Syntax;
+using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Strategies;
 using Endpoint.Core.Syntax.Constructors;
 using Endpoint.Core.Syntax.Fields;
+using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 using Xunit;
-using System.Threading.Tasks;
 
 namespace Endpoint.UnitTests;
 
@@ -39,13 +39,12 @@ public class ClassSyntaxGenerationStrategyTests
 
         classModel.Constructors = new List<ConstructorModel>()
         {
-            new ConstructorModel(classModel,classModel.Name)
+            new ConstructorModel(classModel, classModel.Name),
         };
 
         var result = await sut.GenerateAsync(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
-
     }
 
     [Fact]
@@ -71,7 +70,7 @@ public class ClassSyntaxGenerationStrategyTests
         {
             Type = new TypeModel("IServiceCollection"),
             Name = "services",
-            ExtensionMethodParam = true
+            ExtensionMethodParam = true,
         };
 
         var method = new MethodModel()
@@ -79,7 +78,7 @@ public class ClassSyntaxGenerationStrategyTests
             Name = "AddApplicationServices",
             ReturnType = new TypeModel("void"),
             Static = true,
-            Params = new List<ParamModel>() { methodParam }
+            Params = new List<ParamModel>() { methodParam },
         };
 
         classModel.Static = true;
@@ -89,7 +88,6 @@ public class ClassSyntaxGenerationStrategyTests
         var result = await sut.GenerateAsync(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
-
     }
 
     [Fact]
@@ -113,25 +111,29 @@ public class ClassSyntaxGenerationStrategyTests
 
         classModel.Fields = new List<FieldModel>()
         {
-            new FieldModel() { Name = "_logger", Type = new TypeModel() {
+            new FieldModel()
+            {
+                Name = "_logger", Type = new TypeModel()
+            {
                 Name = "ILogger",
                 GenericTypeParameters = new List<TypeModel>
                 {
                     new TypeModel() { Name = classModel.Name }
                 }
-
-            }, AccessModifier = AccessModifier.Private }
+            }, AccessModifier = AccessModifier.Private
+            },
         };
 
         classModel.Constructors = new List<ConstructorModel>()
         {
-            new ConstructorModel(classModel,classModel.Name)
+            new ConstructorModel(classModel, classModel.Name)
             {
                 Params = new List<ParamModel>()
                 {
                     new ParamModel
                     {
-                        Type = new TypeModel() {
+                        Type = new TypeModel()
+                        {
                             Name = "ILogger",
                             GenericTypeParameters = new List<TypeModel>
                             {
@@ -141,13 +143,11 @@ public class ClassSyntaxGenerationStrategyTests
                         Name = "logger"
                     }
                 }
-            }
+            },
         };
 
         var result = await sut.GenerateAsync(syntaxGenerator, classModel);
 
         Assert.Equal(expected, result);
-
     }
 }
-

@@ -1,29 +1,29 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.RouteHandlers;
 
 public class RouteHandlerSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<RouteHandlerModel>
 {
-    private readonly ILogger<RouteHandlerSyntaxGenerationStrategy> _logger;
+    private readonly ILogger<RouteHandlerSyntaxGenerationStrategy> logger;
+
     public RouteHandlerSyntaxGenerationStrategy(
 
         ILogger<RouteHandlerSyntaxGenerationStrategy> logger)
-
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public int GetPriority() => 0;
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model)
     {
-        _logger.LogInformation("Generating syntax for {0}.", model);
+        logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
@@ -41,7 +41,7 @@ public class RouteHandlerSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
             content.Add("{".Indent(1));
             content.Add($"context.{resourceNameToken.PascalCasePlural}.Add({resourceNameToken.CamelCase});".Indent(2));
             content.Add("await context.SaveChangesAsync();".Indent(2));
-            content.Add("");
+            content.Add(string.Empty);
             content.Add(($"return Results.Created($\"/{resourceNameToken.SnakeCasePlural}/" + "{" + $"{resourceNameToken.CamelCase}.{idPropertyName}" + "}\"," + $"{resourceNameToken.CamelCase});").Indent(2));
 
             content.Add("})".Indent(1));
@@ -69,27 +69,25 @@ public class RouteHandlerSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
             content.Add(".Produces(StatusCodes.Status404NotFound);".Indent(1));
         }
 
-
         if (model.Type == RouteType.Update)
         {
             content.Add($"app.MapPut(\"/{resourceNameToken.SnakeCasePlural}/" + "{" + "id" + "}" + $"\", async ({idPropertyType} id, {resourceNameToken.PascalCase} input{resourceNameToken.PascalCase}, {dbContextNameToken.PascalCase} context) =>");
             content.Add("{".Indent(1));
             content.Add($"var {resourceNameToken.CamelCase} = await context.{resourceNameToken.PascalCasePlural}.FindAsync(id);".Indent(2));
-            content.Add("");
+            content.Add(string.Empty);
             content.Add($"if ({resourceNameToken.CamelCase} is null) return Results.NotFound();".Indent(2));
-            content.Add("");
+            content.Add(string.Empty);
 
             foreach (var property in model.Entity.Properties.Where(x => x.Id == false))
             {
                 content.Add($"{resourceNameToken.CamelCase}.{((SyntaxToken)property.Name).PascalCase} = input{resourceNameToken.PascalCase}.{((SyntaxToken)property.Name).PascalCase};".Indent(2));
             }
 
-            content.Add("");
+            content.Add(string.Empty);
 
             content.Add("await context.SaveChangesAsync();".Indent(2));
 
             content.Add("return Results.NoContent();".Indent(2));
-
 
             content.Add("})".Indent(1));
 
@@ -97,7 +95,6 @@ public class RouteHandlerSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
             content.Add(".Produces(StatusCodes.Status204NoContent)".Indent(1));
             content.Add(".Produces(StatusCodes.Status404NotFound);".Indent(1));
         }
-
 
         if (model.Type == RouteType.Delete)
         {
@@ -109,7 +106,7 @@ public class RouteHandlerSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
             content.Add("await context.SaveChangesAsync();".Indent(3));
             content.Add($"return Results.Ok({resourceNameToken.CamelCase});".Indent(3));
             content.Add("}".Indent(2));
-            content.Add("");
+            content.Add(string.Empty);
             content.Add("return Results.NotFound();".Indent(2));
             content.Add("})".Indent(1));
             content.Add($".WithName(\"Delete{resourceNameToken.PascalCase}\")".Indent(1));

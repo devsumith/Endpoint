@@ -5,11 +5,11 @@ namespace Endpoint.Core.Artifacts.Files.Factories;
 
 public class EntityFileFactory : IEntityFileFactory
 {
-    private readonly ISyntaxService _syntaxService;
+    private readonly ISyntaxService syntaxService;
 
     public EntityFileFactory(ISyntaxService syntaxService)
     {
-        _syntaxService = syntaxService;
+        this.syntaxService = syntaxService;
     }
 
     public EntityFileModel Create(string name, string properties, string directory)
@@ -41,4 +41,3 @@ public class EntityFileFactory : IEntityFileFactory
         throw new NotImplementedException();
     }
 }
-

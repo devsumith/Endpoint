@@ -5,7 +5,6 @@ namespace Endpoint.Core.Syntax;
 
 public class SyntaxReferenceModel
 {
-
     public SyntaxReferenceModel(string syntax)
     {
         Syntax = syntax;
@@ -13,4 +12,3 @@ public class SyntaxReferenceModel
 
     public string Syntax { get; set; }
 }
-

@@ -7,10 +7,8 @@ namespace Endpoint.Core.Syntax.Units;
 
 public class SyntaxUnitModel : SyntaxModel
 {
-
     public SyntaxUnitModel()
     {
-
     }
 
     public SyntaxUnitModel(string name)
@@ -20,5 +18,6 @@ public class SyntaxUnitModel : SyntaxModel
     }
 
     public string Name { get; set; }
+
     public List<SyntaxModel> Code { get; set; }
 }

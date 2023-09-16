@@ -1,9 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Text;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
-using System.Text;
 
 namespace Endpoint.Core.Syntax;
 
@@ -11,25 +11,24 @@ public class SyntaxReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationSt
 {
     public static string SetInitialLanguageInAppComponent = nameof(SetInitialLanguageInAppComponent);
 
-    private readonly ILogger<SyntaxReferenceSyntaxGenerationStrategy> _logger;
-    private readonly IFileSystem _fileSystem;
+    private readonly ILogger<SyntaxReferenceSyntaxGenerationStrategy> logger;
+    private readonly IFileSystem fileSystem;
 
     public SyntaxReferenceSyntaxGenerationStrategy(
 
         IFileSystem fileSystem,
         ILogger<SyntaxReferenceSyntaxGenerationStrategy> logger)
-
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
     public bool CanHandle(object model)
-        => true; //model is SyntaxReferenceModel && context.Request == SetInitialLanguageInAppComponent;
+        => true; // model is SyntaxReferenceModel && context.Request == SetInitialLanguageInAppComponent;
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SyntaxReferenceModel model)
     {
-        _logger.LogInformation("Generating syntax for {0}.", model);
+        logger.LogInformation("Generating syntax for {0}.", model);
 
         var builder = new StringBuilder();
 
@@ -42,9 +41,9 @@ public class SyntaxReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationSt
         var ctor = new string[]
         {
             "constructor(private readonly _translateService: TranslateService) {",
-            $"_translateService.setDefaultLang(\"en\");".Indent(1,tabSize),
-            $"_translateService.use(localStorage.getItem(\"currentLanguage\") || \"en\");".Indent(1,tabSize),
-            "}"
+            $"_translateService.setDefaultLang(\"en\");".Indent(1, tabSize),
+            $"_translateService.use(localStorage.getItem(\"currentLanguage\") || \"en\");".Indent(1, tabSize),
+            "}",
         };
 
         var importAdded = false;
@@ -74,8 +73,7 @@ public class SyntaxReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationSt
 
             if (line.Contains("constructor") && !constructorUpdated && !createConstructor)
             {
-                //newLines.RemoveAt(newLines.Count - 1);
-
+                // newLines.RemoveAt(newLines.Count - 1);
                 var newLine = line.Replace("constructor(", "constructor(private readonly _translateService: TranslateService, ");
 
                 builder.AppendLine(newLine);
@@ -86,7 +84,6 @@ public class SyntaxReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationSt
                 constructorUpdated = true;
             }
         }
-
 
         return builder.ToString();
     }
