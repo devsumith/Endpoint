@@ -494,6 +494,134 @@ public class ClassFactory : IClassFactory
         return classModel;
     }
 
+    public async Task<ClassModel> CreateRequestAsync(string name, string responseName)
+    {
+        var model = new ClassModel(name);
+
+        model.Implements.Add(new ("IRequest")
+        {
+            GenericTypeParameters = new () { new (responseName) },
+        });
+
+        /*        Name = routeType switch
+                {
+                    RouteType.Create => $"Create{entity.Name}Request",
+                    RouteType.Update => $"Update{entity.Name}Request",
+                    RouteType.Delete => $"Delete{entity.Name}Request",
+                    RouteType.Get => $"Get{entityNamePascalCasePlural}Request",
+                    RouteType.GetById => $"Get{entity.Name}ByIdRequest",
+                    RouteType.Page => $"Get{entityNamePascalCasePlural}PageRequest",
+                    _ => throw new NotSupportedException()
+                };
+
+                Implements.Add(new TypeModel("IRequest")
+                {
+                    GenericTypeParameters = new List<TypeModel> { new TypeModel(response.Name) }
+                });
+
+                if (routeType == RouteType.Delete)
+                {
+
+                    Properties.Add(entity.Properties.FirstOrDefault(x => x.Name == $"{entity.Name}Id"));
+                }
+
+                if (routeType == RouteType.Create)
+                {
+                    foreach (var prop in entity.Properties.Where(x => x.Name != $"{entity.Name}Id"))
+                    {
+                        Properties.Add(new PropertyModel(this, AccessModifier.Public, prop.Type, prop.Name, PropertyAccessorModel.GetSet));
+                    }
+                }
+
+                if (routeType == RouteType.Update)
+                {
+                    foreach (var prop in entity.Properties)
+                    {
+                        Properties.Add(new PropertyModel(this, AccessModifier.Public, prop.Type, prop.Name, PropertyAccessorModel.GetSet));
+                    }
+                }
+
+                if (routeType == RouteType.GetById)
+                {
+                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("Guid"), $"{entity.Name}Id", PropertyAccessorModel.GetSet));
+
+                }
+
+                if (routeType == RouteType.Page)
+                {
+                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("int"), "PageSize", PropertyAccessorModel.GetSet));
+
+                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("int"), "Index", PropertyAccessorModel.GetSet));
+
+                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("int"), "Length", PropertyAccessorModel.GetSet));
+                */
+
+        return model;
+    }
+
+    public async Task<ClassModel> CreateResponseAsync(RequestType responseType, string entityName, string name = null)
+    {
+        var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
+
+        var responseName = string.IsNullOrEmpty(name) ? $"Get{entityNamePascalCasePlural}Response" : name;
+
+        var model = new ClassModel(responseName);
+
+        model.Properties = await propertyFactory.ResponsePropertiesCreateAsync(responseType, model, entityName);
+
+        return model;
+    }
+
+    public async Task<ClassModel> CreateRequestHandlerAsync(string name)
+    {
+        var model = new ClassModel(name);
+
+        return model;
+    }
+
+    public async Task<ClassModel> CreateWorkerAsync(string name)
+    {
+        var usings = new List<UsingModel>()
+        {
+            new () { Name = "Microsoft.Extensions.Hosting" },
+            new () { Name = "Microsoft.Extensions.Logging" },
+            new () { Name = "System" },
+            new () { Name = "System.Threading" },
+            new () { Name = "System.Threading.Tasks" },
+        };
+
+        var model = new ClassModel(name)
+        {
+            Usings = usings,
+        };
+
+        var fields = new List<FieldModel>()
+        {
+            FieldModel.LoggerOf(name),
+        };
+
+        var constructors = new List<ConstructorModel>()
+        {
+            new (model, model.Name)
+            {
+                Params = new ()
+                {
+                    ParamModel.LoggerOf(name),
+                },
+            },
+        };
+
+        model.Fields = fields;
+
+        model.Constructors = constructors;
+
+        model.Implements.Add(new ("BackgroundService"));
+
+        model.Methods.Add(await methodFactory.CreateWorkerExecuteAsync());
+
+        return model;
+    }
+
     private MethodModel CreateControllerMethod(ClassModel controller, EntityModel model, RouteType routeType)
     {
         MethodModel methodModel = new MethodModel
@@ -713,133 +841,5 @@ public class ClassFactory : IClassFactory
         }
 
         return methodModel;
-    }
-
-    public async Task<ClassModel> CreateRequestAsync(string name, string responseName)
-    {
-        var model = new ClassModel(name);
-
-        model.Implements.Add(new ("IRequest")
-        {
-            GenericTypeParameters = new () { new (responseName) },
-        });
-
-        /*        Name = routeType switch
-                {
-                    RouteType.Create => $"Create{entity.Name}Request",
-                    RouteType.Update => $"Update{entity.Name}Request",
-                    RouteType.Delete => $"Delete{entity.Name}Request",
-                    RouteType.Get => $"Get{entityNamePascalCasePlural}Request",
-                    RouteType.GetById => $"Get{entity.Name}ByIdRequest",
-                    RouteType.Page => $"Get{entityNamePascalCasePlural}PageRequest",
-                    _ => throw new NotSupportedException()
-                };
-
-                Implements.Add(new TypeModel("IRequest")
-                {
-                    GenericTypeParameters = new List<TypeModel> { new TypeModel(response.Name) }
-                });
-
-                if (routeType == RouteType.Delete)
-                {
-
-                    Properties.Add(entity.Properties.FirstOrDefault(x => x.Name == $"{entity.Name}Id"));
-                }
-
-                if (routeType == RouteType.Create)
-                {
-                    foreach (var prop in entity.Properties.Where(x => x.Name != $"{entity.Name}Id"))
-                    {
-                        Properties.Add(new PropertyModel(this, AccessModifier.Public, prop.Type, prop.Name, PropertyAccessorModel.GetSet));
-                    }
-                }
-
-                if (routeType == RouteType.Update)
-                {
-                    foreach (var prop in entity.Properties)
-                    {
-                        Properties.Add(new PropertyModel(this, AccessModifier.Public, prop.Type, prop.Name, PropertyAccessorModel.GetSet));
-                    }
-                }
-
-                if (routeType == RouteType.GetById)
-                {
-                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("Guid"), $"{entity.Name}Id", PropertyAccessorModel.GetSet));
-
-                }
-
-                if (routeType == RouteType.Page)
-                {
-                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("int"), "PageSize", PropertyAccessorModel.GetSet));
-
-                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("int"), "Index", PropertyAccessorModel.GetSet));
-
-                    Properties.Add(new PropertyModel(this, AccessModifier.Public, new TypeModel("int"), "Length", PropertyAccessorModel.GetSet));
-                */
-
-        return model;
-    }
-
-    public async Task<ClassModel> CreateResponseAsync(RequestType responseType, string entityName, string name = null)
-    {
-        var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
-
-        var responseName = string.IsNullOrEmpty(name) ? $"Get{entityNamePascalCasePlural}Response" : name;
-
-        var model = new ClassModel(responseName);
-
-        model.Properties = await propertyFactory.ResponsePropertiesCreateAsync(responseType, model, entityName);
-
-        return model;
-    }
-
-    public async Task<ClassModel> CreateRequestHandlerAsync(string name)
-    {
-        var model = new ClassModel(name);
-
-        return model;
-    }
-
-    public async Task<ClassModel> CreateWorkerAsync(string name)
-    {
-        var usings = new List<UsingModel>()
-        {
-            new () { Name = "Microsoft.Extensions.Hosting" },
-            new () { Name = "Microsoft.Extensions.Logging" },
-            new () { Name = "System" },
-            new () { Name = "System.Threading" },
-            new () { Name = "System.Threading.Tasks" },
-        };
-
-        var model = new ClassModel(name)
-        {
-            Usings = usings,
-        };
-
-        var fields = new List<FieldModel>()
-        {
-            FieldModel.LoggerOf(name),
-        };
-
-        var constructors = new List<ConstructorModel>()
-        {
-            new (model, model.Name)
-            {
-                Params = new ()
-                {
-                    ParamModel.LoggerOf(name),
-                },
-            },
-        };
-
-        model.Fields = fields;
-
-        model.Constructors = constructors;
-
-        model.Implements.Add(new ("BackgroundService"));
-
-        model.Methods.Add(await methodFactory.CreateWorkerExecuteAsync());
-
-        return model;
     }
 }

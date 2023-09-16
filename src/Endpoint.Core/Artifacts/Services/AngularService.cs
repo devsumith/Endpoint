@@ -545,6 +545,192 @@ public class AngularService : IAngularService
         await ComponentCreate($"{nameSnakeCase}-list", directory);
     }
 
+    public async Task DetailComponentCreate(string name, string directory)
+    {
+        var nameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
+
+        await ComponentCreate($"{nameSnakeCase}-detail", directory);
+    }
+
+    public async Task IndexCreate(bool scss, string directory)
+    {
+        List<string> lines = new ();
+
+        foreach (var path in Directory.GetDirectories(directory))
+        {
+            var files = Directory.GetFiles(path);
+
+            var fileNames = Directory.GetFiles(path).Select(Path.GetFileNameWithoutExtension);
+
+            var containsIndex = Directory.GetFiles(path)
+                .Select(Path.GetFileNameWithoutExtension)
+            .Contains("index");
+
+            if (!scss && Directory.GetFiles(path)
+                .Select(Path.GetFileNameWithoutExtension)
+                .Contains("index"))
+            {
+                lines.Add($"export * from './{Path.GetFileNameWithoutExtension(path)}';");
+            }
+        }
+
+        if (scss)
+        {
+            foreach (var file in Directory.GetFiles(directory, "*.scss"))
+            {
+                if (!file.EndsWith("index.scss"))
+                {
+                    lines.Add($"@use './{Path.GetFileNameWithoutExtension(file)}';");
+                }
+            }
+
+            fileSystem.File.WriteAllLines($"{directory}{Path.DirectorySeparatorChar}index.scss", lines.ToArray());
+        }
+        else
+        {
+            foreach (var file in Directory.GetFiles(directory, "*.ts"))
+            {
+                if (!file.Contains(".spec.") && !file.EndsWith("index.ts"))
+                {
+                    lines.Add($"export * from './{Path.GetFileNameWithoutExtension(file)}';");
+                }
+            }
+
+            fileSystem.File.WriteAllLines($"{directory}{Path.DirectorySeparatorChar}index.ts", lines.ToArray());
+        }
+    }
+
+    public async Task DefaultScssCreate(string directory)
+    {
+        var applicationDirectory = Path.GetDirectoryName(fileProvider.Get("tsconfig.app.json", directory));
+
+        var scssDirectory = Path.Combine(applicationDirectory, "src", ".scss");
+
+        fileSystem.Directory.CreateDirectory(scssDirectory);
+
+        foreach (var name in new string[]
+        {
+                "Actions",
+                "Brand",
+                "Breakpoints",
+                "Buttons",
+                "Dialogs",
+                "Field",
+                "FormFields",
+                "Header",
+                "Label",
+                "Pills",
+                "RouterLinkActive",
+                "Table",
+                "Textarea",
+                "Title",
+                "TitleBar",
+                "Variables",
+        })
+        {
+            var nameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
+
+            var model = fileFactory.CreateTemplate(name, $"_{nameSnakeCase}", scssDirectory, ".scss", tokens: new TokensBuilder().With("prefix", "g").Build());
+
+            await artifactGenerator.GenerateAsync(model);
+        }
+
+        await IndexCreate(true, scssDirectory);
+    }
+
+    public async Task ScssComponentCreate(string name, string directory)
+    {
+        var applicationDirectory = Path.GetDirectoryName(fileProvider.Get("tsconfig.app.json", directory));
+
+        var scssDirectory = Path.Combine(applicationDirectory, "src", ".scss");
+
+        fileSystem.Directory.CreateDirectory(scssDirectory);
+
+        var nameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
+
+        fileSystem.File.WriteAllLines(Path.Combine(scssDirectory, $"_{nameSnakeCase}.scss"), new string[3]
+        {
+                    $".g-{nameSnakeCase}" + " {",
+                    string.Empty,
+                    "}",
+        });
+
+        await IndexCreate(true, scssDirectory);
+    }
+
+    public async Task ControlCreate(string name, string directory)
+    {
+        var nameSnakeCase = ((SyntaxToken)name).SnakeCase();
+
+        commandService.Start($"ng g c {name}", directory);
+
+        var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
+
+        await artifactGenerator.GenerateAsync(fileFactory.CreateTemplate(
+            "Components.Control.Component",
+            $"{nameSnakeCase}.component",
+            componentDirectory,
+            ".ts",
+            tokens: new TokensBuilder()
+            .With("name", name)
+            .Build()));
+
+        await artifactGenerator.GenerateAsync(fileFactory.CreateTemplate(
+            "Components.Control.Html",
+            $"{nameSnakeCase}.component",
+            componentDirectory,
+            ".html",
+            tokens: new TokensBuilder()
+            .With("name", name)
+            .With("messageBinding", "{{ vm.message }}")
+            .Build()));
+
+        await IndexCreate(false, componentDirectory);
+
+        await IndexCreate(false, directory);
+    }
+
+    public async Task Test(string directory, string searchPattern = "*.spec.ts")
+    {
+        var angularJsonPath = fileProvider.Get("angular.json", directory);
+
+        var angularJson = JObject.Parse(fileSystem.File.ReadAllText(angularJsonPath));
+
+        var projectDirectory = Path.GetDirectoryName(fileProvider.Get("tsconfig.*", directory));
+
+        string root = null!;
+
+        var rootParts = new List<string>();
+
+        var afterProjects = false;
+
+        foreach (var part in projectDirectory.Split(Path.DirectorySeparatorChar).Skip(2))
+        {
+            if (afterProjects)
+            {
+                rootParts.Add(part);
+            }
+
+            if (part == "projects")
+            {
+                afterProjects = true;
+            }
+        }
+
+        root = rootParts.Count > 1 ? $"@{string.Join("/", rootParts)}" : rootParts.First();
+
+        foreach (var path in new DirectoryInfo(directory).GetFiles(searchPattern)
+            .OrderByDescending(fileInfo => fileInfo.LastWriteTime)
+            .Select(fileInfo => fileInfo.FullName))
+        {
+            var testName = string.Join(string.Empty, Path.GetFileNameWithoutExtension(path)
+                .Remove(".spec")
+                .Split('.').Select(x => namingConventionConverter.Convert(NamingConvention.PascalCase, x)));
+
+            commandService.Start($"ng test --test-name-pattern='{testName}' --watch --project {root}", directory);
+        }
+    }
+
     private void AddImports(AngularProjectModel model)
     {
         var mainPath = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}main.ts";
@@ -730,191 +916,5 @@ public class AngularService : IAngularService
         }
 
         fileSystem.File.WriteAllLines(appComponentPath, newLines.ToArray());
-    }
-
-    public async Task DetailComponentCreate(string name, string directory)
-    {
-        var nameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
-
-        await ComponentCreate($"{nameSnakeCase}-detail", directory);
-    }
-
-    public async Task IndexCreate(bool scss, string directory)
-    {
-        List<string> lines = new ();
-
-        foreach (var path in Directory.GetDirectories(directory))
-        {
-            var files = Directory.GetFiles(path);
-
-            var fileNames = Directory.GetFiles(path).Select(Path.GetFileNameWithoutExtension);
-
-            var containsIndex = Directory.GetFiles(path)
-                .Select(Path.GetFileNameWithoutExtension)
-            .Contains("index");
-
-            if (!scss && Directory.GetFiles(path)
-                .Select(Path.GetFileNameWithoutExtension)
-                .Contains("index"))
-            {
-                lines.Add($"export * from './{Path.GetFileNameWithoutExtension(path)}';");
-            }
-        }
-
-        if (scss)
-        {
-            foreach (var file in Directory.GetFiles(directory, "*.scss"))
-            {
-                if (!file.EndsWith("index.scss"))
-                {
-                    lines.Add($"@use './{Path.GetFileNameWithoutExtension(file)}';");
-                }
-            }
-
-            fileSystem.File.WriteAllLines($"{directory}{Path.DirectorySeparatorChar}index.scss", lines.ToArray());
-        }
-        else
-        {
-            foreach (var file in Directory.GetFiles(directory, "*.ts"))
-            {
-                if (!file.Contains(".spec.") && !file.EndsWith("index.ts"))
-                {
-                    lines.Add($"export * from './{Path.GetFileNameWithoutExtension(file)}';");
-                }
-            }
-
-            fileSystem.File.WriteAllLines($"{directory}{Path.DirectorySeparatorChar}index.ts", lines.ToArray());
-        }
-    }
-
-    public async Task DefaultScssCreate(string directory)
-    {
-        var applicationDirectory = Path.GetDirectoryName(fileProvider.Get("tsconfig.app.json", directory));
-
-        var scssDirectory = Path.Combine(applicationDirectory, "src", ".scss");
-
-        fileSystem.Directory.CreateDirectory(scssDirectory);
-
-        foreach (var name in new string[]
-        {
-                "Actions",
-                "Brand",
-                "Breakpoints",
-                "Buttons",
-                "Dialogs",
-                "Field",
-                "FormFields",
-                "Header",
-                "Label",
-                "Pills",
-                "RouterLinkActive",
-                "Table",
-                "Textarea",
-                "Title",
-                "TitleBar",
-                "Variables",
-        })
-        {
-            var nameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
-
-            var model = fileFactory.CreateTemplate(name, $"_{nameSnakeCase}", scssDirectory, ".scss", tokens: new TokensBuilder().With("prefix", "g").Build());
-
-            await artifactGenerator.GenerateAsync(model);
-        }
-
-        await IndexCreate(true, scssDirectory);
-    }
-
-    public async Task ScssComponentCreate(string name, string directory)
-    {
-        var applicationDirectory = Path.GetDirectoryName(fileProvider.Get("tsconfig.app.json", directory));
-
-        var scssDirectory = Path.Combine(applicationDirectory, "src", ".scss");
-
-        fileSystem.Directory.CreateDirectory(scssDirectory);
-
-        var nameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
-
-        fileSystem.File.WriteAllLines(Path.Combine(scssDirectory, $"_{nameSnakeCase}.scss"), new string[3]
-        {
-                    $".g-{nameSnakeCase}" + " {",
-                    string.Empty,
-                    "}",
-        });
-
-        await IndexCreate(true, scssDirectory);
-    }
-
-    public async Task ControlCreate(string name, string directory)
-    {
-        var nameSnakeCase = ((SyntaxToken)name).SnakeCase();
-
-        commandService.Start($"ng g c {name}", directory);
-
-        var componentDirectory = $"{directory}{Path.DirectorySeparatorChar}{nameSnakeCase}";
-
-        await artifactGenerator.GenerateAsync(fileFactory.CreateTemplate(
-            "Components.Control.Component",
-            $"{nameSnakeCase}.component",
-            componentDirectory,
-            ".ts",
-            tokens: new TokensBuilder()
-            .With("name", name)
-            .Build()));
-
-        await artifactGenerator.GenerateAsync(fileFactory.CreateTemplate(
-            "Components.Control.Html",
-            $"{nameSnakeCase}.component",
-            componentDirectory,
-            ".html",
-            tokens: new TokensBuilder()
-            .With("name", name)
-            .With("messageBinding", "{{ vm.message }}")
-            .Build()));
-
-        await IndexCreate(false, componentDirectory);
-
-        await IndexCreate(false, directory);
-    }
-
-    public async Task Test(string directory, string searchPattern = "*.spec.ts")
-    {
-        var angularJsonPath = fileProvider.Get("angular.json", directory);
-
-        var angularJson = JObject.Parse(fileSystem.File.ReadAllText(angularJsonPath));
-
-        var projectDirectory = Path.GetDirectoryName(fileProvider.Get("tsconfig.*", directory));
-
-        string root = null!;
-
-        var rootParts = new List<string>();
-
-        var afterProjects = false;
-
-        foreach (var part in projectDirectory.Split(Path.DirectorySeparatorChar).Skip(2))
-        {
-            if (afterProjects)
-            {
-                rootParts.Add(part);
-            }
-
-            if (part == "projects")
-            {
-                afterProjects = true;
-            }
-        }
-
-        root = rootParts.Count > 1 ? $"@{string.Join("/", rootParts)}" : rootParts.First();
-
-        foreach (var path in new DirectoryInfo(directory).GetFiles(searchPattern)
-            .OrderByDescending(fileInfo => fileInfo.LastWriteTime)
-            .Select(fileInfo => fileInfo.FullName))
-        {
-            var testName = string.Join(string.Empty, Path.GetFileNameWithoutExtension(path)
-                .Remove(".spec")
-                .Split('.').Select(x => namingConventionConverter.Convert(NamingConvention.PascalCase, x)));
-
-            commandService.Start($"ng test --test-name-pattern='{testName}' --watch --project {root}", directory);
-        }
     }
 }
