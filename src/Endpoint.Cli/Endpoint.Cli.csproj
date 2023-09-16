@@ -19,7 +19,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <UserSecretsId>06c49638-0786-4731-9c6b-3921161c01b5</UserSecretsId>
     <PackageId>Quinntyne.Endpoint.Cli</PackageId>
-    <NoWarn>1998;4014</NoWarn>
+    <NoWarn>1998;4014,SA1101,SA1600,SA1200,SA1633</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

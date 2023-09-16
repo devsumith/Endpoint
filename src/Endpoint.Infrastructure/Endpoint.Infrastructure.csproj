@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <NoWarn>1998;4014,SA1101,SA1600,SA1200,SA1633</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -178,6 +179,13 @@
     <EmbeddedResource Include="Templates\EsProj.txt" />
     <EmbeddedResource Include="Templates\Webpack.Config.txt" />
     <EmbeddedResource Include="Templates\Verb.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
