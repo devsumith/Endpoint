@@ -14,8 +14,8 @@ using static System.IO.Path;
 
 namespace Endpoint.Cli.Commands;
 
-[Verb("image-create")]
-public class ImageCreateRequest : IRequest
+[Verb("puml-image-create")]
+public class PlantUmlImageCreateRequest : IRequest
 {
     [Option('i', "input-path", Required = true)]
     public string InputPath { get; set; }
@@ -30,7 +30,7 @@ public class ImageCreateRequest : IRequest
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
-public class ImageCreateRequestHandler : IRequestHandler<ImageCreateRequest>
+public class ImageCreateRequestHandler : IRequestHandler<PlantUmlImageCreateRequest>
 {
     private readonly ILogger<ImageCreateRequestHandler> logger;
     private readonly ICommandService commandService;
@@ -41,7 +41,7 @@ public class ImageCreateRequestHandler : IRequestHandler<ImageCreateRequest>
         this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public async Task Handle(ImageCreateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(PlantUmlImageCreateRequest request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Creating Image", nameof(ImageCreateRequestHandler));
 
