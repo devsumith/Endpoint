@@ -14,7 +14,7 @@ public class FunctionSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<
     private readonly INamingConventionConverter _namingConventionConverter;
 
     public FunctionSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         INamingConventionConverter namingConventionConverter,
         ILogger<FunctionSyntaxGenerationStrategy> logger)
 

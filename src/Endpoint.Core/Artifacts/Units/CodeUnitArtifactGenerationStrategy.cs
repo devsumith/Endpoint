@@ -6,7 +6,7 @@ using Endpoint.Core.Syntax.Units;
 namespace Endpoint.Core.Artifacts.Units;
 
 public class Folder<T>
-    where T: SyntaxUnitModel
+    where T : SyntaxUnitModel
 {
 
 }

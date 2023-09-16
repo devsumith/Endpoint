@@ -13,7 +13,7 @@ public class TypeScriptTypeSyntaxGenerationStrategy : GenericSyntaxGenerationStr
     private readonly INamingConventionConverter _namingConventionConverter;
 
     public TypeScriptTypeSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<TypeScriptTypeSyntaxGenerationStrategy> logger,
         INamingConventionConverter namingConventionConverter)
 

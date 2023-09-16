@@ -7,7 +7,7 @@ public class LogStatementSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
 {
     private readonly ILogger<LogStatementSyntaxGenerationStrategy> _logger;
     public LogStatementSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<LogStatementSyntaxGenerationStrategy> logger)
 
     {

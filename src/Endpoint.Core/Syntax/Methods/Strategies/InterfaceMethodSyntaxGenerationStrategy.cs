@@ -25,10 +25,10 @@ public class InterfaceMethodSyntaxGenerationStrategy : GenericSyntaxGenerationSt
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target)
     {
-/*        if (context is InterfaceSyntaxGenerationStrategy && target is MethodModel)
-        {
-            return await GenerateAsync(generator, target as MethodModel);
-        }*/
+        /*        if (context is InterfaceSyntaxGenerationStrategy && target is MethodModel)
+                {
+                    return await GenerateAsync(generator, target as MethodModel);
+                }*/
 
         return null;
     }

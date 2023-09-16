@@ -11,7 +11,7 @@ public class InterfaceSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy
 {
     private readonly ILogger<InterfaceSyntaxGenerationStrategy> _logger;
     public InterfaceSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<InterfaceSyntaxGenerationStrategy> logger)
 
     {

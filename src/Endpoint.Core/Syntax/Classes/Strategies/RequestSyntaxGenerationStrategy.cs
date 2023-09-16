@@ -10,7 +10,7 @@ public class RequestSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<R
 {
     private readonly ILogger<RequestSyntaxGenerationStrategy> _logger;
     public RequestSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<RequestSyntaxGenerationStrategy> logger)
 
     {

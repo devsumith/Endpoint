@@ -1,6 +1,6 @@
 namespace Endpoint.Core.Syntax.Statements;
 
-public class LogStatementModel: SyntaxModel
+public class LogStatementModel : SyntaxModel
 {
 
     public LogStatementModel()

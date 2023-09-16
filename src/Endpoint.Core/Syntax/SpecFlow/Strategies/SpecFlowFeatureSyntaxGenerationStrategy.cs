@@ -10,7 +10,7 @@ public class SpecFlowFeatureSyntaxGenerationStrategy : GenericSyntaxGenerationSt
 {
     private readonly ILogger<SpecFlowFeatureSyntaxGenerationStrategy> _logger;
     public SpecFlowFeatureSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<SpecFlowFeatureSyntaxGenerationStrategy> logger)
 
     {

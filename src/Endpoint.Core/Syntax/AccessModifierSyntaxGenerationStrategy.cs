@@ -10,7 +10,7 @@ public class AccessModifierSyntaxGenerationStrategy : GenericSyntaxGenerationStr
 {
     private readonly ILogger<AccessModifierSyntaxGenerationStrategy> _logger;
     public AccessModifierSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<AccessModifierSyntaxGenerationStrategy> logger)
 
     {

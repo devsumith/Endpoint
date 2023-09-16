@@ -10,7 +10,7 @@ public class RequestHandlerCreateSyntaxGenerationStrategy : GenericSyntaxGenerat
 {
     private readonly ILogger<RequestHandlerCreateSyntaxGenerationStrategy> _logger;
     public RequestHandlerCreateSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<RequestHandlerCreateSyntaxGenerationStrategy> logger)
 
     {

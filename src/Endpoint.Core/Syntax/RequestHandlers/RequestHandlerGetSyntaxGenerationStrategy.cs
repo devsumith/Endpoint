@@ -11,7 +11,7 @@ public class RequestHandlerGetSyntaxGenerationStrategy : GenericSyntaxGeneration
 {
     private readonly ILogger<RequestHandlerGetSyntaxGenerationStrategy> _logger;
     public RequestHandlerGetSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<RequestHandlerGetSyntaxGenerationStrategy> logger)
 
     {

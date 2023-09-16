@@ -9,7 +9,7 @@ public class PropertiesSyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
 {
     private readonly ILogger<PropertiesSyntaxGenerationStrategy> _logger;
     public PropertiesSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<PropertiesSyntaxGenerationStrategy> logger)
 
     {

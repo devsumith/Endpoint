@@ -10,7 +10,7 @@ public class TestReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationStra
 {
     private readonly ILogger<TestReferenceSyntaxGenerationStrategy> _logger;
     public TestReferenceSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<TestReferenceSyntaxGenerationStrategy> logger)
 
     {

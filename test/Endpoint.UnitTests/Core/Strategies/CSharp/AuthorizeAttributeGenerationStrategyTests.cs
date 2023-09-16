@@ -29,7 +29,7 @@ public class AuthorizeAttributeGenerationStrategyTests
 
         var mockLogger = new Mock<ILogger<AttributeSyntaxGenerationStrategy>>().Object;
 
-        var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(), mockLogger);
+        var sut = new AttributeSyntaxGenerationStrategy(mockLogger);
 
         var actual = await sut.GenerateAsync(default, new AttributeModel(AttributeType.Authorize, "Authorize", new Dictionary<string, string>()));
 

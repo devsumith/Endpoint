@@ -10,14 +10,14 @@ public class SwaggerOperationAttributeSyntaxGenerationStrategy : GenericSyntaxGe
 {
     private readonly ILogger<SwaggerOperationAttributeSyntaxGenerationStrategy> _logger;
     public SwaggerOperationAttributeSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<SwaggerOperationAttributeSyntaxGenerationStrategy> logger)
 
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SwaggerOperationAttributeModel model)
     {

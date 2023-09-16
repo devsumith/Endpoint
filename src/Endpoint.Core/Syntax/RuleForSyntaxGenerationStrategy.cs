@@ -10,7 +10,7 @@ public class RuleForSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<R
 {
     private readonly ILogger<RuleForSyntaxGenerationStrategy> _logger;
     public RuleForSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<RuleForSyntaxGenerationStrategy> logger)
 
     {

@@ -10,7 +10,7 @@ public class ParamSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Par
 {
     private readonly ILogger<ParamSyntaxGenerationStrategy> _logger;
     public ParamSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<ParamSyntaxGenerationStrategy> logger)
 
     {

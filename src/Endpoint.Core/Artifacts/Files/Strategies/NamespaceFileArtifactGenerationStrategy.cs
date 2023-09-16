@@ -32,7 +32,7 @@ public class NamespaceFileArtifactGenerationStrategy : CodeFileIArtifactGenerati
         }
 
         stringBuilder.AppendLine();
-        
+
         stringBuilder.AppendLine(await _syntaxGenerator.GenerateAsync(model.Object));
 
         model.Body = stringBuilder.ToString();

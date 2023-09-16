@@ -11,7 +11,7 @@ public class ImportSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Im
 {
     private readonly ILogger<ImportSyntaxGenerationStrategy> _logger;
     public ImportSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<ImportSyntaxGenerationStrategy> logger)
 
     {

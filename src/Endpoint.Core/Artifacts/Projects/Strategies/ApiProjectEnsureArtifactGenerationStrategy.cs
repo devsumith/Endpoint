@@ -21,7 +21,7 @@ public class ApiProjectEnsureArtifactGenerationStrategy : GenericArtifactGenerat
         IFileFactory fileFactory,
         IFileSystem fileSystem,
         IFileProvider fileProvider,
-        IServiceProvider serviceProvider,
+
         ICommandService commandService,
         ILogger<ApiProjectEnsureArtifactGenerationStrategy> logger)
 

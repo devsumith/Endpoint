@@ -20,10 +20,10 @@ public class PageQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerationS
 
     public bool CanHandle(object model)
     {
-/*        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
-        {
-            return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.EndsWith($"PageRequest");
-        }*/
+        /*        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
+                {
+                    return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.EndsWith($"PageRequest");
+                }*/
 
         return false;
     }

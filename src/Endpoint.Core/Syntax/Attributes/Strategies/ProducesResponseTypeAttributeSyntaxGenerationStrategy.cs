@@ -10,14 +10,14 @@ public class ProducesResponseTypeAttributeSyntaxGenerationStrategy : GenericSynt
 {
     private readonly ILogger<ProducesResponseTypeAttributeSyntaxGenerationStrategy> _logger;
     public ProducesResponseTypeAttributeSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<ProducesResponseTypeAttributeSyntaxGenerationStrategy> logger)
 
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ProducesResponseTypeAttributeModel model)
     {

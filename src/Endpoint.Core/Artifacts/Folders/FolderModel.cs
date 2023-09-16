@@ -18,7 +18,7 @@ public class FolderModel
     public FolderModel(string name, string parentDirectory)
     {
         Name = name;
-        Directory = Path.Combine(parentDirectory,name);
+        Directory = Path.Combine(parentDirectory, name);
         SubFolders = new List<FolderModel>();
         Projects = new List<ProjectModel>();
         Files = new List<FileModel>();

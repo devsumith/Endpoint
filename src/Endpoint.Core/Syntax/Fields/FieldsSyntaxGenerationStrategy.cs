@@ -13,7 +13,7 @@ public class FieldsSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Li
 {
     private readonly ILogger<FieldsSyntaxGenerationStrategy> _logger;
     public FieldsSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<FieldsSyntaxGenerationStrategy> logger)
 
     {

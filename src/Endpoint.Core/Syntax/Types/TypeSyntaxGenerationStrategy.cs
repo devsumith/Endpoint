@@ -11,7 +11,7 @@ public class TypeSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Type
 {
     private readonly ILogger<TypeSyntaxGenerationStrategy> _logger;
     public TypeSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<TypeSyntaxGenerationStrategy> logger)
 
     {

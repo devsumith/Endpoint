@@ -21,20 +21,20 @@ public class GetByIdQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerati
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target)
     {
-/*        if (target is MethodModel)
-        {
-            return await GenerateAsync(generator, target as MethodModel);
-        }*/
+        /*        if (target is MethodModel)
+                {
+                    return await GenerateAsync(generator, target as MethodModel);
+                }*/
 
         return null;
     }
 
     public bool CanHandle(object model)
     {
-/*        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
-        {
-            return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.StartsWith($"Get{entity.Name}ByIdRequest");
-        }*/
+        /*        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
+                {
+                    return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.StartsWith($"Get{entity.Name}ByIdRequest");
+                }*/
 
         return false;
     }

@@ -10,7 +10,7 @@ public class RequestValidatorSyntaxGenerationStrategy : GenericSyntaxGenerationS
 {
     private readonly ILogger<RequestValidatorSyntaxGenerationStrategy> _logger;
     public RequestValidatorSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<RequestValidatorSyntaxGenerationStrategy> logger)
 
     {

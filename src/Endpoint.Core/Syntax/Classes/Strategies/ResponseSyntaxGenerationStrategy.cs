@@ -10,7 +10,7 @@ public class ResponseSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<
 {
     private readonly ILogger<ResponseSyntaxGenerationStrategy> _logger;
     public ResponseSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<ResponseSyntaxGenerationStrategy> logger)
 
     {

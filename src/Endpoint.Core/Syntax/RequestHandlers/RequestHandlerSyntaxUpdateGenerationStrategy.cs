@@ -14,7 +14,7 @@ public class RequestHandlerSyntaxUpdateGenerationStrategy : GenericSyntaxGenerat
     public int GetPriority() => 0;
 
     public RequestHandlerSyntaxUpdateGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ISyntaxService syntaxService,
         ILogger<RequestHandlerSyntaxUpdateGenerationStrategy> logger)
 

@@ -21,21 +21,21 @@ public class GetQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerationSt
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target)
     {
-/*        if (target is MethodModel)
-        {
-            return await GenerateAsync(generator, target as MethodModel);
-        }*/
+        /*        if (target is MethodModel)
+                {
+                    return await GenerateAsync(generator, target as MethodModel);
+                }*/
 
         return null;
     }
     public bool CanHandle(object model)
     {
-/*        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
-        {
-            var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true);
+        /*        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
+                {
+                    var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entity.Name, pluralize: true);
 
-            return methodModel.Params.First().Type.Name == $"Get{entityNamePascalCasePlural}Request";
-        }*/
+                    return methodModel.Params.First().Type.Name == $"Get{entityNamePascalCasePlural}Request";
+                }*/
 
         return false;
     }

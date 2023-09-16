@@ -15,7 +15,7 @@ public class CopyrightAddArtifactGenerationStrategy : GenericArtifactGenerationS
     private readonly IFileSystem _fileSystem;
 
     public CopyrightAddArtifactGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<CopyrightAddArtifactGenerationStrategy> logger,
         IFileSystem fileSystem,
         ITemplateLocator templateLocator)

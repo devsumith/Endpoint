@@ -12,7 +12,7 @@ public class ConsoleMicroserviceArtifactGenerationStrategy : GenericArtifactGene
     private readonly IFileSystem _fileSytem;
     private readonly Observable<INotification> _notificationListener;
     public ConsoleMicroserviceArtifactGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         IFileSystem fileSystem,
         Observable<INotification> notificationListener)
 

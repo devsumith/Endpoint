@@ -13,7 +13,7 @@ public class WebApplicationBuilderSyntaxGenerationStrategy : GenericSyntaxGenera
     private readonly ITemplateLocator _templateLocator;
     private readonly ITemplateProcessor _templateProcessor;
     public WebApplicationBuilderSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ITemplateLocator templateLocator,
         ITemplateProcessor templateProcessor,
         ILogger<WebApplicationBuilderSyntaxGenerationStrategy> logger)

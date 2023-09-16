@@ -11,14 +11,14 @@ public class AttributeSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy
 {
     private readonly ILogger<AttributeSyntaxGenerationStrategy> _logger;
     public AttributeSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<AttributeSyntaxGenerationStrategy> logger)
 
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    
+
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, AttributeModel model)
     {

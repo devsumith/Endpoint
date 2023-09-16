@@ -7,7 +7,7 @@ public class ContentFileArtifactGenerationStrategy : GenericArtifactGenerationSt
 {
     private readonly IFileSystem _fileSystem;
     public ContentFileArtifactGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         IFileSystem fileSystem
         )
     {

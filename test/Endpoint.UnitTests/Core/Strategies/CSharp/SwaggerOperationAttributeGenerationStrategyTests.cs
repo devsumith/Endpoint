@@ -33,7 +33,7 @@ public class SwaggerOperationAttributeGenerationStrategyTests
 
         var mockLogger = new Mock<ILogger<AttributeSyntaxGenerationStrategy>>().Object;
 
-        var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(), mockLogger);
+        var sut = new AttributeSyntaxGenerationStrategy(mockLogger);
 
         var model = new AttributeModel(AttributeType.SwaggerOperation, "SwaggerOperation", new()
         {

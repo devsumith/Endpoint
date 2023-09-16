@@ -10,7 +10,7 @@ public class DbContextSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy
 {
     private readonly ILogger<DbContextSyntaxGenerationStrategy> _logger;
     public DbContextSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<DbContextSyntaxGenerationStrategy> logger)
 
     {

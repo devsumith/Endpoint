@@ -10,7 +10,7 @@ public class RouteHandlerGetSyntaxGenerationStrategy : GenericSyntaxGenerationSt
 {
     private readonly ILogger<RouteHandlerSyntaxGenerationStrategy> _logger;
     public RouteHandlerGetSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<RouteHandlerSyntaxGenerationStrategy> logger)
 
     {

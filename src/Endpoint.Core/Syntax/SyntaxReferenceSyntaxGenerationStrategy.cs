@@ -15,7 +15,7 @@ public class SyntaxReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationSt
     private readonly IFileSystem _fileSystem;
 
     public SyntaxReferenceSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         IFileSystem fileSystem,
         ILogger<SyntaxReferenceSyntaxGenerationStrategy> logger)
 

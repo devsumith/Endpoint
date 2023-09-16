@@ -5,11 +5,12 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Units;
 
-public class SyntaxUnitModel: SyntaxModel {
+public class SyntaxUnitModel : SyntaxModel
+{
 
     public SyntaxUnitModel()
     {
-        
+
     }
 
     public SyntaxUnitModel(string name)

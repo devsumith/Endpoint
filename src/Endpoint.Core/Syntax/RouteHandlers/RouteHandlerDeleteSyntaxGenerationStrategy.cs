@@ -10,7 +10,7 @@ public class RouteHandlerDeleteSyntaxGenerationStrategy : GenericSyntaxGeneratio
 {
     private readonly ILogger<RouteHandlerDeleteSyntaxGenerationStrategy> _logger;
     public RouteHandlerDeleteSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<RouteHandlerDeleteSyntaxGenerationStrategy> logger)
 
     {

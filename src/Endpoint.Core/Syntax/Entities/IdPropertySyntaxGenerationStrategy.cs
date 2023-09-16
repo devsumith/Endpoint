@@ -13,7 +13,7 @@ public class IdPropertySyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
     private readonly ISyntaxService _syntaxService;
 
     public IdPropertySyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ISyntaxService syntaxService,
         ILogger<IdPropertySyntaxGenerationStrategy> logger)
 

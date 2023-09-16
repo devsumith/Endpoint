@@ -8,7 +8,7 @@ public class PropertyAccessorsSyntaxGenerationStrategy : GenericSyntaxGeneration
 {
     private readonly ILogger<PropertyAccessorsSyntaxGenerationStrategy> _logger;
     public PropertyAccessorsSyntaxGenerationStrategy(
-        IServiceProvider serviceProvider,
+
         ILogger<PropertyAccessorsSyntaxGenerationStrategy> logger)
 
     {

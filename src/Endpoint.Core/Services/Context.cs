@@ -20,7 +20,7 @@ public class Context : IContext
     {
         _logger.LogInformation("Retrieving context. {typeName}", typeof(T).Name);
 
-        var @event = new CustomEvent<T>() {  };
+        var @event = new CustomEvent<T>() { };
 
         DomainEvents.Raise(@event);
 
