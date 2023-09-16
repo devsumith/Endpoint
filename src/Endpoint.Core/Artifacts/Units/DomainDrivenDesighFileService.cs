@@ -5,20 +5,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Internals;
+using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Constructors;
+using Endpoint.Core.Syntax.Expressions;
 using Endpoint.Core.Syntax.Fields;
 using Endpoint.Core.Syntax.Interfaces;
 using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Types;
-using MediatR;
+using static Endpoint.Core.Constants.FileExtensions;
+using static Endpoint.Core.Syntax.Types.TypeModel;
 
-namespace Endpoint.Core.Services;
+namespace Endpoint.Core.Artifacts.Units;
 
 public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 {
@@ -74,7 +75,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Implements.Add(new ("IRequest"));
 
-        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs");
+        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, CSharpFile);
 
         await artifactGenerator.GenerateAsync(classFileModel);
     }
@@ -87,7 +88,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var classModel = new ClassModel(messageHandlerName);
 
-        classModel.Usings.Add(new UsingModel() { Name = "MediatR" });
+        classModel.Usings.Add(new () { Name = "MediatR" });
 
         classModel.Fields = new List<FieldModel>()
         {
@@ -98,7 +99,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         {
             Params = new List<ParamModel>()
             {
-                ParamModel.LoggerOf(name)
+                ParamModel.LoggerOf(name),
             },
         };
 
@@ -123,7 +124,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         {
             GenericTypeParameters = new List<TypeModel>
             {
-                new TypeModel(messageName)
+                new TypeModel(messageName),
             },
         });
 
@@ -137,17 +138,17 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             {
                 new ParamModel()
                 {
-                    Type = new TypeModel(messageName),
+                    Type = new (messageName),
                     Name = "message",
                 },
                 ParamModel.CancellationToken,
             },
-            Body = new Syntax.Expressions.ExpressionModel(new StringBuilder().AppendLine("_logger.LogInformation(\"Message Handled: {message}\", message);").ToString()),
+            Body = new ExpressionModel(new StringBuilder().AppendLine("_logger.LogInformation(\"Message Handled: {message}\", message);").ToString()),
         };
 
         classModel.Methods.Add(methodModel);
 
-        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs");
+        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, CSharpFile);
 
         await artifactGenerator.GenerateAsync(classFileModel);
     }
@@ -158,7 +159,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         if (string.IsNullOrEmpty(messagesNamespace))
         {
-            var projectDirectory = Path.GetDirectoryName(fileProvider.Get("*.csproj", directory));
+            var projectDirectory = fileSystem.Path.GetDirectoryName(fileProvider.Get("*.csproj", directory));
 
             var projectNamespace = namespaceProvider.Get(projectDirectory);
 
@@ -189,7 +190,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var constructorModel = new ConstructorModel(classModel, classModel.Name);
 
-        foreach (var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new TypeModel("IServiceScopeFactory"), new TypeModel("IUdpClientFactory") })
+        foreach (var type in new TypeModel[] { LoggerOf("ServiceBusMessageConsumer"), new ("IServiceScopeFactory"), new ("IUdpClientFactory") })
         {
             var propName = type.Name switch
             {
@@ -289,7 +290,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             AccessModifier = AccessModifier.Protected,
             Async = true,
             ReturnType = new ("Task"),
-            Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, methodBody)),
+            Body = new (string.Join(Environment.NewLine, methodBody)),
         };
 
         method.Params.Add(ParamModel.CancellationToken);
@@ -298,14 +299,14 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         classModel.Methods.Add(method);
 
-        await artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs"));
+        await artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, CSharpFile));
     }
 
-    public async Task ServiceCreate(string name, string directory)
+    public async Task ServiceCreateAsync(string name, string directory)
     {
-        if (fileSystem.File.Exists(Path.Combine(directory, $"{name}.cs")))
+        if (fileSystem.File.Exists(Path.Combine(directory, $"{name}{CSharpFile}")))
         {
-            throw new Exception($"Service exists: {Path.Combine(directory, $"{name}.cs")}");
+            throw new Exception($"Service exists: {Path.Combine(directory, $"{name}{CSharpFile}")}");
         }
 
         var usingDirectives = new List<UsingModel>()
@@ -327,7 +328,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 Name = "DoWorkAsync",
                 ReturnType = TypeModel.Task,
                 Async = true,
-                Body = new Syntax.Expressions.ExpressionModel("_logger.LogInformation(\"DoWorkAsync\");")
+                Body = new ("_logger.LogInformation(\"DoWorkAsync\");"),
             },
         };
 
@@ -348,7 +349,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 @interface.Usings,
                 @interface.Name,
                 directory,
-                ".cs");
+                CSharpFile);
 
             await artifactGenerator.GenerateAsync(interfaceFile);
 
@@ -365,8 +366,8 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 {
                     Params = new List<ParamModel>
                     {
-                        ParamModel.LoggerOf(name)
-                    }
+                        ParamModel.LoggerOf(name),
+                    },
                 },
             };
 
@@ -385,7 +386,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
                 @class.Usings,
                 @class.Name,
                 directory,
-                ".cs");
+                CSharpFile);
 
             await artifactGenerator.GenerateAsync(classFile);
 

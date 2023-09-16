@@ -414,6 +414,51 @@ public class AngularService : IAngularService
         await AddSupportedLocales(model, locales);
     }
 
+    public async Task AddSupportedLocales(AngularProjectReferenceModel model, List<string> locales)
+    {
+        var angularJsonPath = fileProvider.Get("angular.json", model.ReferencedDirectory);
+
+        var angularJson = JObject.Parse(fileSystem.File.ReadAllText(angularJsonPath));
+
+        fileSystem.Directory.CreateDirectory($"{GetProjectDirectory(model)}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}locale");
+
+        angularJson.AddSupportedLocales(model.Name, locales);
+
+        fileSystem.File.WriteAllText(angularJsonPath, JsonConvert.SerializeObject(angularJson, Formatting.Indented));
+    }
+
+    public async Task I18nExtract(AngularProjectReferenceModel model)
+    {
+        var localeDirectory = $"{GetProjectDirectory(model)}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}locale{Path.DirectorySeparatorChar}";
+
+        commandService.Start($"ng extract-i18n --output-path {localeDirectory}", GetProjectDirectory(model));
+
+        foreach (var locale in GetSupportedLocales(model))
+        {
+            fileSystem.File.Copy($"{localeDirectory}messages.xlf", $"{localeDirectory}messages.{locale}.xlf");
+        }
+
+        fileSystem.File.Delete($"{localeDirectory}messages.xlf");
+    }
+
+    public string GetProjectDirectory(AngularProjectReferenceModel model)
+    {
+        var angularJsonPath = fileProvider.Get("angular.json", model.ReferencedDirectory);
+
+        var angularJson = JObject.Parse(fileSystem.File.ReadAllText(angularJsonPath));
+
+        return $"{Path.GetDirectoryName(angularJsonPath)}{Path.DirectorySeparatorChar}{angularJson.GetProjectDirectory(model.Name)}";
+    }
+
+    public List<string> GetSupportedLocales(AngularProjectReferenceModel model)
+    {
+        var angularJsonPath = fileProvider.Get("angular.json", model.ReferencedDirectory);
+
+        var angularJson = JObject.Parse(fileSystem.File.ReadAllText(angularJsonPath));
+
+        return angularJson.GetSupportedLocales(model.Name);
+    }
+
     private void AddImports(AngularProjectModel model)
     {
         var mainPath = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}main.ts";
@@ -475,7 +520,7 @@ public class AngularService : IAngularService
                         "export function HttpLoaderFactory(httpClient: HttpClient) {",
                         "  return new TranslateHttpLoader(httpClient);",
                         "}",
-                    })
+                })
                 {
                     newLines.Add(newLine);
                 }
@@ -601,51 +646,6 @@ public class AngularService : IAngularService
         fileSystem.File.WriteAllLines(appComponentPath, newLines.ToArray());
     }
 
-    public async Task AddSupportedLocales(AngularProjectReferenceModel model, List<string> locales)
-    {
-        var angularJsonPath = fileProvider.Get("angular.json", model.ReferencedDirectory);
-
-        var angularJson = JObject.Parse(fileSystem.File.ReadAllText(angularJsonPath));
-
-        fileSystem.Directory.CreateDirectory($"{GetProjectDirectory(model)}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}locale");
-
-        angularJson.AddSupportedLocales(model.Name, locales);
-
-        fileSystem.File.WriteAllText(angularJsonPath, JsonConvert.SerializeObject(angularJson, Formatting.Indented));
-    }
-
-    public async Task I18nExtract(AngularProjectReferenceModel model)
-    {
-        var localeDirectory = $"{GetProjectDirectory(model)}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}locale{Path.DirectorySeparatorChar}";
-
-        commandService.Start($"ng extract-i18n --output-path {localeDirectory}", GetProjectDirectory(model));
-
-        foreach (var locale in GetSupportedLocales(model))
-        {
-            fileSystem.File.Copy($"{localeDirectory}messages.xlf", $"{localeDirectory}messages.{locale}.xlf");
-        }
-
-        fileSystem.File.Delete($"{localeDirectory}messages.xlf");
-    }
-
-    public string GetProjectDirectory(AngularProjectReferenceModel model)
-    {
-        var angularJsonPath = fileProvider.Get("angular.json", model.ReferencedDirectory);
-
-        var angularJson = JObject.Parse(fileSystem.File.ReadAllText(angularJsonPath));
-
-        return $"{Path.GetDirectoryName(angularJsonPath)}{Path.DirectorySeparatorChar}{angularJson.GetProjectDirectory(model.Name)}";
-    }
-
-    public List<string> GetSupportedLocales(AngularProjectReferenceModel model)
-    {
-        var angularJsonPath = fileProvider.Get("angular.json", model.ReferencedDirectory);
-
-        var angularJson = JObject.Parse(fileSystem.File.ReadAllText(angularJsonPath));
-
-        return angularJson.GetSupportedLocales(model.Name);
-    }
-
     public async Task PrettierAdd(string directory)
     {
         var workspaceDirectory = Path.GetDirectoryName(fileProvider.Get("angular.json", directory));
@@ -658,11 +658,11 @@ public class AngularService : IAngularService
 
         fileSystem.File.WriteAllText($"{workspaceDirectory}{Path.DirectorySeparatorChar}.prettierrc.json", JsonConvert.SerializeObject(
             new
-        {
-            tabWidth = 2,
-            useTabs = false,
-            printWidth = 120,
-        }, Formatting.Indented));
+            {
+                tabWidth = 2,
+                useTabs = false,
+                printWidth = 120,
+            }, Formatting.Indented));
 
         packageJson.AddScripts(new Dictionary<string, string>()
         {
@@ -813,7 +813,7 @@ public class AngularService : IAngularService
                 "Title",
                 "TitleBar",
                 "Variables",
-            })
+        })
         {
             var nameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
 
@@ -840,7 +840,7 @@ public class AngularService : IAngularService
                     $".g-{nameSnakeCase}" + " {",
                     string.Empty,
                     "}",
-                });
+        });
 
         await IndexCreate(true, scssDirectory);
     }

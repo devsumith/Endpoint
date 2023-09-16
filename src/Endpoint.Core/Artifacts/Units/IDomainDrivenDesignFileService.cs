@@ -2,14 +2,13 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Endpoint.Core.Syntax.Properties;
 
-namespace Endpoint.Core.Services;
+namespace Endpoint.Core.Artifacts.Units;
 
 public interface IDomainDrivenDesignFileService
 {
-    Task ServiceCreate(string name, string directory);
+    Task ServiceCreateAsync(string name, string directory);
 
     Task MessageCreate(string name, List<PropertyModel> properties, string directory);
 

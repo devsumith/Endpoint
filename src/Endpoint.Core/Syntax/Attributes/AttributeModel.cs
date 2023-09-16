@@ -14,6 +14,13 @@ public class AttributeModel
         Params = new List<ParamModel>();
     }
 
+    public AttributeModel(AttributeType type, string name, Dictionary<string, string> properties)
+    {
+        Type = type;
+        Name = name;
+        Properties = properties;
+    }
+
     public AttributeType Type { get; init; }
 
     public string Name { get; init; }
@@ -25,11 +32,4 @@ public class AttributeModel
     public string Template { get; set; }
 
     public int Order { get; init; } = 0;
-
-    public AttributeModel(AttributeType type, string name, Dictionary<string, string> properties)
-    {
-        Type = type;
-        Name = name;
-        Properties = properties;
-    }
 }

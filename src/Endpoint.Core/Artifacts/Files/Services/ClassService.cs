@@ -130,7 +130,7 @@ public class ClassService : IClassService
                     new AttributeModel()
                     {
                         Type = AttributeType.Fact,
-                        Name = "Fact"
+                        Name = "Fact",
                     },
                 },
                 Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, new string[] { "ARRANGE", "ACT", "ASSERT" }.Select(x => $"// {x}{Environment.NewLine}"))),

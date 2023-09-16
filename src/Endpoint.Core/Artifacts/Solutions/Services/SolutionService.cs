@@ -7,6 +7,7 @@ using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Projects.Enums;
 using Endpoint.Core.Artifacts.Projects.Factories;
+using Endpoint.Core.Artifacts.Units;
 using Endpoint.Core.Internals;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
@@ -73,6 +74,76 @@ public class SolutionService : ISolutionService
 
     public async Task Create(string name, string plantUmlSourcePath, string directory)
     {
+    }
+
+    public async Task MessagingBuildingBlockAdd(string directory)
+    {
+        var solutionPath = fileProvider.Get("*.sln", directory);
+
+        var solutionName = Path.GetFileName(solutionPath);
+
+        var solutionDirectory = Path.GetDirectoryName(solutionPath);
+
+        var buildingBlocksDirectory = Path.Combine(solutionDirectory, "src", "BuildingBlocks");
+
+        var messagingDirectory = Path.Combine(buildingBlocksDirectory, "Messaging");
+
+        if (!Directory.Exists(buildingBlocksDirectory))
+        {
+            Directory.CreateDirectory(buildingBlocksDirectory);
+        }
+
+        if (!Directory.Exists(messagingDirectory))
+        {
+            Directory.CreateDirectory(messagingDirectory);
+        }
+
+        var messagingProjectModel = await projectFactory.CreateMessagingProject(messagingDirectory);
+
+        await artifactGenerator.GenerateAsync(messagingProjectModel);
+
+        commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
+
+        var messagingUdpProjectModel = await projectFactory.CreateMessagingUdpProject(messagingDirectory);
+
+        await artifactGenerator.GenerateAsync(messagingUdpProjectModel);
+
+        commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
+    }
+
+    public async Task IOCompressionBuildingBlockAdd(string directory)
+    {
+        var solutionPath = fileProvider.Get("*.sln", directory);
+
+        var solutionName = Path.GetFileName(solutionPath);
+
+        var solutionDirectory = Path.GetDirectoryName(solutionPath);
+
+        var buildingBlocksDirectory = Path.Combine(solutionDirectory, "src", "BuildingBlocks");
+
+        var messagingDirectory = Path.Combine(buildingBlocksDirectory, "IO.Compression");
+
+        if (!Directory.Exists(buildingBlocksDirectory))
+        {
+            Directory.CreateDirectory(buildingBlocksDirectory);
+        }
+
+        if (!Directory.Exists(messagingDirectory))
+        {
+            Directory.CreateDirectory(messagingDirectory);
+        }
+
+        var messagingProjectModel = await projectFactory.CreateMessagingProject(messagingDirectory);
+
+        await artifactGenerator.GenerateAsync(messagingProjectModel);
+
+        commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
+
+        var messagingUdpProjectModel = await projectFactory.CreateMessagingUdpProject(messagingDirectory);
+
+        await artifactGenerator.GenerateAsync(messagingUdpProjectModel);
+
+        commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
     }
 
     private async Task<FolderModel> BuildingBlocksCreate(string directory)
@@ -151,75 +222,5 @@ public class SolutionService : ISolutionService
         var model = new FolderModel("Apps", directory);
 
         return model;
-    }
-
-    public async Task MessagingBuildingBlockAdd(string directory)
-    {
-        var solutionPath = fileProvider.Get("*.sln", directory);
-
-        var solutionName = Path.GetFileName(solutionPath);
-
-        var solutionDirectory = Path.GetDirectoryName(solutionPath);
-
-        var buildingBlocksDirectory = Path.Combine(solutionDirectory, "src", "BuildingBlocks");
-
-        var messagingDirectory = Path.Combine(buildingBlocksDirectory, "Messaging");
-
-        if (!Directory.Exists(buildingBlocksDirectory))
-        {
-            Directory.CreateDirectory(buildingBlocksDirectory);
-        }
-
-        if (!Directory.Exists(messagingDirectory))
-        {
-            Directory.CreateDirectory(messagingDirectory);
-        }
-
-        var messagingProjectModel = await projectFactory.CreateMessagingProject(messagingDirectory);
-
-        await artifactGenerator.GenerateAsync(messagingProjectModel);
-
-        commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
-
-        var messagingUdpProjectModel = await projectFactory.CreateMessagingUdpProject(messagingDirectory);
-
-        await artifactGenerator.GenerateAsync(messagingUdpProjectModel);
-
-        commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
-    }
-
-    public async Task IOCompressionBuildingBlockAdd(string directory)
-    {
-        var solutionPath = fileProvider.Get("*.sln", directory);
-
-        var solutionName = Path.GetFileName(solutionPath);
-
-        var solutionDirectory = Path.GetDirectoryName(solutionPath);
-
-        var buildingBlocksDirectory = Path.Combine(solutionDirectory, "src", "BuildingBlocks");
-
-        var messagingDirectory = Path.Combine(buildingBlocksDirectory, "IO.Compression");
-
-        if (!Directory.Exists(buildingBlocksDirectory))
-        {
-            Directory.CreateDirectory(buildingBlocksDirectory);
-        }
-
-        if (!Directory.Exists(messagingDirectory))
-        {
-            Directory.CreateDirectory(messagingDirectory);
-        }
-
-        var messagingProjectModel = await projectFactory.CreateMessagingProject(messagingDirectory);
-
-        await artifactGenerator.GenerateAsync(messagingProjectModel);
-
-        commandService.Start($"dotnet sln {solutionName} add {messagingProjectModel.Path}", solutionDirectory);
-
-        var messagingUdpProjectModel = await projectFactory.CreateMessagingUdpProject(messagingDirectory);
-
-        await artifactGenerator.GenerateAsync(messagingUdpProjectModel);
-
-        commandService.Start($"dotnet sln {solutionName} add {messagingUdpProjectModel.Path}", solutionDirectory);
     }
 }

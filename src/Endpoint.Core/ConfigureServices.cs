@@ -16,6 +16,7 @@ using Endpoint.Core.Artifacts.Services;
 using Endpoint.Core.Artifacts.Solutions.Factories;
 using Endpoint.Core.Artifacts.Solutions.Services;
 using Endpoint.Core.Artifacts.SpecFlow;
+using Endpoint.Core.Artifacts.Units;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes.Services;

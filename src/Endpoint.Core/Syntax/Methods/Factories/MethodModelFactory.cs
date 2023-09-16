@@ -76,7 +76,7 @@ public class MethodFactory : IMethodFactory
             Template = template,
             Properties = properties ?? new Dictionary<string, string>()
             {
-                { "Name", namingConventionConverter.Convert(NamingConvention.CamelCase, name) }
+                { "Name", namingConventionConverter.Convert(NamingConvention.CamelCase, name) },
             },
         });
 
@@ -118,8 +118,8 @@ public class MethodFactory : IMethodFactory
                 new ()
                 {
                     Name = "stoppingToken",
-                    Type = new ("CancellationToken")
-                }
+                    Type = new ("CancellationToken"),
+                },
             },
         };
     }
@@ -137,7 +137,7 @@ public class MethodFactory : IMethodFactory
                 {
                     ExtensionMethodParam = true,
                     Name = namingConventionConverter.Convert(NamingConvention.CamelCase, aggregate.Name),
-                    Type = new (aggregate.Name)
+                    Type = new (aggregate.Name),
                 },
             },
             Body = await expressionFactory.ToDtoCreateAsync(aggregate),
@@ -161,9 +161,9 @@ public class MethodFactory : IMethodFactory
                     {
                         GenericTypeParameters = new ()
                         {
-                            new ($"{aggregate.Name}Dto")
-                        }
-                    }
+                            new ($"{aggregate.Name}Dto"),
+                        },
+                    },
                 },
             },
             Params = new ()
@@ -176,15 +176,15 @@ public class MethodFactory : IMethodFactory
                     {
                         GenericTypeParameters = new ()
                         {
-                            new (aggregate.Name)
-                        }
+                            new (aggregate.Name),
+                        },
                     },
                 },
                 new ()
                 {
                     Name = "cancellationToken",
                     Type = new ("CancellationToken"),
-                    DefaultValue = "null"
+                    DefaultValue = "null",
                 },
             },
             Body = new ExpressionModel($"return await {namingConventionConverter.Convert(NamingConvention.CamelCase, aggregate.Name, pluralize: true)}.Select(x => x.ToDto()).ToListAsync(cancellationToken);"),

@@ -43,7 +43,7 @@ public class ResponseModel : ClassModel
             {
                 GenericTypeParameters = new List<TypeModel>
                 {
-                    new TypeModel($"{entity.Name}Dto")
+                    new TypeModel($"{entity.Name}Dto"),
                 },
             }, $"{entityNamePascalCasePlural}", PropertyAccessorModel.GetSet, required: true));
         }
@@ -56,7 +56,7 @@ public class ResponseModel : ClassModel
             {
                 GenericTypeParameters = new List<TypeModel>()
                 {
-                    new TypeModel($"{entity.Name}Dto")
+                    new TypeModel($"{entity.Name}Dto"),
                 },
             }, "Entities ", PropertyAccessorModel.GetSet, required: true));
         }

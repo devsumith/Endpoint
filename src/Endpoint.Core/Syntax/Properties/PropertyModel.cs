@@ -19,6 +19,14 @@ public class PropertyModel : SyntaxModel
         Interface = parent is InterfaceModel;
     }
 
+    public PropertyModel(TypeModel type, string name, PropertyAccessorModel accessor)
+    {
+        Type = type;
+        Accessors = new List<PropertyAccessorModel> { accessor };
+        Name = name;
+        Interface = true;
+    }
+
     public AccessModifier AccessModifier { get; private set; }
 
     public TypeModel Type { get; private set; }
@@ -60,13 +68,5 @@ public class PropertyModel : SyntaxModel
         }
 
         return model;
-    }
-
-    public PropertyModel(TypeModel type, string name, PropertyAccessorModel accessor)
-    {
-        Type = type;
-        Accessors = new List<PropertyAccessorModel> { accessor };
-        Name = name;
-        Interface = true;
     }
 }

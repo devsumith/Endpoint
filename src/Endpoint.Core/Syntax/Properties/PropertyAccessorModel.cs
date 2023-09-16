@@ -10,10 +10,6 @@ public class PropertyAccessorModel
         AccessModifier = accessModifier;
     }
 
-    public string AccessModifier { get; private set; }
-
-    public PropertyAccessorType Type { get; private set; }
-
     public PropertyAccessorModel(PropertyAccessorType classPropertyAccessorType)
     {
         Type = classPropertyAccessorType;
@@ -26,6 +22,10 @@ public class PropertyAccessorModel
     public static PropertyAccessorModel Get => new PropertyAccessorModel(PropertyAccessorType.Get);
 
     public static PropertyAccessorModel Set => new PropertyAccessorModel(PropertyAccessorType.Set);
+
+    public string AccessModifier { get; private set; }
+
+    public PropertyAccessorType Type { get; private set; }
 
     public static PropertyAccessorModel PrivateSet => new PropertyAccessorModel("private", PropertyAccessorType.Set);
 

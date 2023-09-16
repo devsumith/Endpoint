@@ -115,29 +115,6 @@ public class ProjectService : IProjectService
         }
     }
 
-    private XElement CreateEndpointPostBuildTargetElement()
-    {
-        var dotnetToolRestoreCommand = new XElement("Exec");
-
-        dotnetToolRestoreCommand.SetAttributeValue("Command", "dotnet tool restore");
-
-        var toFileCommand = new XElement("Exec");
-
-        toFileCommand.SetAttributeValue("Command", "dotnet tool run swagger tofile --serializeasv2  --output \"$(ProjectDir)swagger.json\" \"$(TargetDir)$(TargetFileName)\" v1");
-
-        var endpointCommand = new XElement("Exec");
-
-        endpointCommand.SetAttributeValue("Command", "endpoint post-api-build");
-
-        var element = new XElement("Target", dotnetToolRestoreCommand, toFileCommand, endpointCommand);
-
-        element.SetAttributeValue("Name", "EndpointPostBuildTarget");
-
-        element.SetAttributeValue("AfterTargets", "Build");
-
-        return element;
-    }
-
     public async Task CoreFilesAdd(string directory)
     {
         var projectPath = fileProvider.Get("*.csproj", directory);
@@ -170,5 +147,28 @@ public class ProjectService : IProjectService
     {
         CorePackagesAdd(directory);
         CoreFilesAdd(directory);
+    }
+
+    private XElement CreateEndpointPostBuildTargetElement()
+    {
+        var dotnetToolRestoreCommand = new XElement("Exec");
+
+        dotnetToolRestoreCommand.SetAttributeValue("Command", "dotnet tool restore");
+
+        var toFileCommand = new XElement("Exec");
+
+        toFileCommand.SetAttributeValue("Command", "dotnet tool run swagger tofile --serializeasv2  --output \"$(ProjectDir)swagger.json\" \"$(TargetDir)$(TargetFileName)\" v1");
+
+        var endpointCommand = new XElement("Exec");
+
+        endpointCommand.SetAttributeValue("Command", "endpoint post-api-build");
+
+        var element = new XElement("Target", dotnetToolRestoreCommand, toFileCommand, endpointCommand);
+
+        element.SetAttributeValue("Name", "EndpointPostBuildTarget");
+
+        element.SetAttributeValue("AfterTargets", "Build");
+
+        return element;
     }
 }

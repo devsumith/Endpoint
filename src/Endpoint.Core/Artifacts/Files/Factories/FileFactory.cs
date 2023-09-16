@@ -93,7 +93,7 @@ public class FileFactory : IFileFactory
         {
             GenericTypeParameters = new List<TypeModel>
             {
-                new TypeModel("string")
+                new TypeModel("string"),
             },
         }, "Errors", PropertyAccessorModel.GetSet));
 
@@ -116,7 +116,7 @@ public class FileFactory : IFileFactory
         {
             GenericTypeParameters = new List<TypeModel>
             {
-                new TypeModel("T")
+                new TypeModel("T"),
             },
         };
 
@@ -130,8 +130,8 @@ public class FileFactory : IFileFactory
                 {
                     GenericTypeParameters = new List<TypeModel>
                     {
-                        new TypeModel("T")
-                    }
+                        new TypeModel("T"),
+                    },
                 },
             },
             new ParamModel()
@@ -142,7 +142,7 @@ public class FileFactory : IFileFactory
             new ParamModel()
             {
                 Name = "pageSize",
-                Type = new TypeModel("int")
+                Type = new TypeModel("int"),
             },
         };
 

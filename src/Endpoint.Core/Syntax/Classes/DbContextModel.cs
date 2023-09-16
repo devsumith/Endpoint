@@ -46,8 +46,8 @@ public class DbContextModel : ClassModel
             {
                 GenericTypeParameters = new ()
                     {
-                        new (Name)
-                    }
+                        new (Name),
+                    },
             },
         });
 

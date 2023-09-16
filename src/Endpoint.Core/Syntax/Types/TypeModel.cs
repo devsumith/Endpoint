@@ -32,7 +32,7 @@ public class TypeModel
         {
             GenericTypeParameters = new List<TypeModel>()
             {
-                new TypeModel(typeName)
+                new TypeModel(typeName),
             },
         };
     }
@@ -42,7 +42,7 @@ public class TypeModel
         {
             GenericTypeParameters = new ()
                     {
-                        new (entityName)
+                        new (entityName),
                     },
         };
 
@@ -52,7 +52,7 @@ public class TypeModel
         {
             GenericTypeParameters = new List<TypeModel>()
             {
-                new TypeModel(typeName)
+                new TypeModel(typeName),
             },
         };
     }
@@ -63,7 +63,7 @@ public class TypeModel
         {
             GenericTypeParameters = new List<TypeModel>()
             {
-                new TypeModel(typeName)
+                new TypeModel(typeName),
             },
         };
     }
@@ -78,9 +78,9 @@ public class TypeModel
                     {
                         GenericTypeParameters = new List<TypeModel>()
                         {
-                            new TypeModel(typeName)
-                        }
-                    }
+                            new TypeModel(typeName),
+                        },
+                    },
                 },
         };
     }

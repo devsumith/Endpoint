@@ -110,6 +110,17 @@ public class AggregateService : IAggregateService
         await artifactGenerator.GenerateAsync(model);
     }
 
+    public async Task QueryCreateAsync(string routeType, string name, string aggregate, string properties, string directory)
+    {
+        var rootNamespace = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory)).Split('.').First();
+
+        var queryModel = await cqrsFactory.CreateQueryAsync(routeType, name, properties);
+
+        var model = new CodeFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, CSharpFile);
+
+        await artifactGenerator.GenerateAsync(model);
+    }
+
     private void EnsureCorePackagesAreInstalled(string directory)
     {
         projectService.PackageAdd("MediatR", directory);
@@ -121,16 +132,5 @@ public class AggregateService : IAggregateService
     private void EnsureCoreFilesAreAdded(string directory)
     {
         projectService.CoreFilesAdd(directory);
-    }
-
-    public async Task QueryCreateAsync(string routeType, string name, string aggregate, string properties, string directory)
-    {
-        var rootNamespace = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory)).Split('.').First();
-
-        var queryModel = await cqrsFactory.CreateQueryAsync(routeType, name, properties);
-
-        var model = new CodeFileModel<QueryModel>(queryModel, queryModel.UsingDirectives, queryModel.Name, directory, CSharpFile);
-
-        await artifactGenerator.GenerateAsync(model);
     }
 }

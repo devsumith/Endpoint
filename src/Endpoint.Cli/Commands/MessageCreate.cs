@@ -8,12 +8,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics.CodeAnalysis;
-using Endpoint.Core.Services;
 using System.Collections.Generic;
 using Endpoint.Core.Syntax.Types;
 
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax;
+using Endpoint.Core.Artifacts.Units;
 
 namespace Endpoint.Cli.Commands;
 

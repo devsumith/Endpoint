@@ -18,6 +18,49 @@ public class NamingConventionConverter : INamingConventionConverter
         return input.First().ToString().ToLower() + input.Substring(1);
     }
 
+    public static string PascalCaseToTitleCase(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            return string.Empty;
+        }
+
+        StringBuilder newText = new StringBuilder(input.Length * 2);
+        newText.Append(input[0]);
+        for (int i = 1; i < input.Length; i++)
+        {
+            if (char.IsUpper(input[i]) && input[i - 1] != ' ')
+            {
+                newText.Append(' ');
+            }
+
+            newText.Append(input[i]);
+        }
+
+        return newText.ToString();
+    }
+
+    public static string SnakeCaseToPascalCase(string input)
+    {
+        System.Text.StringBuilder resultBuilder = new System.Text.StringBuilder();
+        foreach (char c in input)
+        {
+            if (!char.IsLetterOrDigit(c))
+            {
+                resultBuilder.Append(" ");
+            }
+            else
+            {
+                resultBuilder.Append(c);
+            }
+        }
+
+        string result = resultBuilder.ToString();
+        TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+        result = textInfo.ToTitleCase(result).Replace(" ", string.Empty);
+        return result;
+    }
+
     public string Convert(NamingConvention to, string value) => Convert(GetNamingConvention(value), to, value);
 
     public string Convert(NamingConvention from, NamingConvention to, string value)
@@ -73,49 +116,6 @@ public class NamingConventionConverter : INamingConventionConverter
         }
 
         return value;
-    }
-
-    public static string PascalCaseToTitleCase(string input)
-    {
-        if (string.IsNullOrWhiteSpace(input))
-        {
-            return string.Empty;
-        }
-
-        StringBuilder newText = new StringBuilder(input.Length * 2);
-        newText.Append(input[0]);
-        for (int i = 1; i < input.Length; i++)
-        {
-            if (char.IsUpper(input[i]) && input[i - 1] != ' ')
-            {
-                newText.Append(' ');
-            }
-
-            newText.Append(input[i]);
-        }
-
-        return newText.ToString();
-    }
-
-    public static string SnakeCaseToPascalCase(string input)
-    {
-        System.Text.StringBuilder resultBuilder = new System.Text.StringBuilder();
-        foreach (char c in input)
-        {
-            if (!char.IsLetterOrDigit(c))
-            {
-                resultBuilder.Append(" ");
-            }
-            else
-            {
-                resultBuilder.Append(c);
-            }
-        }
-
-        string result = resultBuilder.ToString();
-        TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-        result = textInfo.ToTitleCase(result).Replace(" ", string.Empty);
-        return result;
     }
 
     public NamingConvention GetNamingConvention(string value)

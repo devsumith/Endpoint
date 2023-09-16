@@ -113,6 +113,16 @@ public class LiquidTemplateProcessor : ITemplateProcessor
         throw new NotImplementedException();
     }
 
+    public Task<string> ProcessAsync(string template, IDictionary<string, object> tokens)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<string> ProcessAsync(string template, dynamic model)
+    {
+        throw new NotImplementedException();
+    }
+
     private static Dictionary<string, object> ConvertObjectToDictionary(object o)
     {
         try
@@ -176,15 +186,5 @@ public class LiquidTemplateProcessor : ITemplateProcessor
         {
             return new Dictionary<string, object>();
         }
-    }
-
-    public Task<string> ProcessAsync(string template, IDictionary<string, object> tokens)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<string> ProcessAsync(string template, dynamic model)
-    {
-        throw new NotImplementedException();
     }
 }

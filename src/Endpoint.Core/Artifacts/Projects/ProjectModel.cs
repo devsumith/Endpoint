@@ -18,14 +18,14 @@ public class ProjectModel
     public ProjectModel(string dotNetProjectType, string name, string parentDirectory, List<string> references = null)
         : this(
             dotNetProjectType switch
-        {
-            "web" => DotNetProjectType.Web,
-            "webapi" => DotNetProjectType.WebApi,
-            "classlib" => DotNetProjectType.ClassLib,
-            "worker" => DotNetProjectType.Worker,
-            "xunit" => DotNetProjectType.XUnit,
-            _ => DotNetProjectType.Console
-        }, name, parentDirectory, references)
+            {
+                "web" => DotNetProjectType.Web,
+                "webapi" => DotNetProjectType.WebApi,
+                "classlib" => DotNetProjectType.ClassLib,
+                "worker" => DotNetProjectType.Worker,
+                "xunit" => DotNetProjectType.XUnit,
+                _ => DotNetProjectType.Console
+            }, name, parentDirectory, references)
     {
         Folders = new List<FolderModel>();
     }
@@ -37,6 +37,21 @@ public class ProjectModel
         Extension = dotNetProjectType == DotNetProjectType.TypeScriptStandalone ? ".esproj" : ".csproj";
         Directory = Combine(parentDirectory, name);
         References = references ?? new List<string>();
+        Folders = new List<FolderModel>();
+    }
+
+    public ProjectModel(string name, string parentDirectory)
+    {
+        DotNetProjectType = DotNetProjectType.ClassLib;
+        Name = name;
+        Directory = Combine(parentDirectory, name);
+        References = new List<string>();
+        Folders = new List<FolderModel>();
+    }
+
+    public ProjectModel()
+    {
+        References = new List<string>();
         Folders = new List<FolderModel>();
     }
 
@@ -79,20 +94,5 @@ public class ProjectModel
         var applicationUrl = $"{json["profiles"]["https"]["applicationUrl"]}".Split(";").First();
 
         return $"{applicationUrl}/";
-    }
-
-    public ProjectModel(string name, string parentDirectory)
-    {
-        DotNetProjectType = DotNetProjectType.ClassLib;
-        Name = name;
-        Directory = Combine(parentDirectory, name);
-        References = new List<string>();
-        Folders = new List<FolderModel>();
-    }
-
-    public ProjectModel()
-    {
-        References = new List<string>();
-        Folders = new List<FolderModel>();
     }
 }

@@ -14,8 +14,8 @@ namespace Endpoint.Core.Artifacts.Files.Strategies;
 public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileModel>
 {
     protected readonly IFileSystem fileSystem;
-    private readonly ILogger<FileGenerationStrategy> logger;
     protected readonly ITemplateLocator templateLocator;
+    private readonly ILogger<FileGenerationStrategy> logger;
 
     public FileGenerationStrategy(
         ILogger<FileGenerationStrategy> logger,

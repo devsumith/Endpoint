@@ -98,7 +98,7 @@ public class ClassFactory : IClassFactory
             Params = new ()
             {
                 ParamModel.Mediator,
-                ParamModel.LoggerOf(classModel.Name)
+                ParamModel.LoggerOf(classModel.Name),
             },
         });
 
@@ -156,7 +156,7 @@ public class ClassFactory : IClassFactory
             Params = new ()
             {
                 ParamModel.Mediator,
-                ParamModel.LoggerOf(classModel.Name)
+                ParamModel.LoggerOf(classModel.Name),
             },
         });
 
@@ -192,6 +192,74 @@ public class ClassFactory : IClassFactory
         }
 
         return classModel;
+    }
+
+    public ClassModel CreateDbContext(string name, List<EntityModel> entities, string serviceName)
+    {
+        var dbContext = new DbContextModel(namingConventionConverter, name, entities, serviceName);
+
+        return dbContext;
+    }
+
+    public ClassModel CreateMessageModel()
+    {
+        var model = new ClassModel($"Message");
+
+        model.Properties.Add(new PropertyModel(
+            model,
+            AccessModifier.Public,
+            new TypeModel("string"),
+            "MessageType",
+            PropertyAccessorModel.GetSet)
+        {
+            DefaultValue = "nameof(Message)",
+        });
+
+        model.Properties.Add(new PropertyModel(
+            model,
+            AccessModifier.Public,
+            new TypeModel("DateTimeOffset"),
+            "Created",
+            PropertyAccessorModel.GetSet)
+        {
+            DefaultValue = "DateTimeOffset.Now",
+        });
+
+        return model;
+    }
+
+    public ClassModel CreateHubModel(string name)
+    {
+        var hubClassModel = new ClassModel($"{name}Hub");
+
+        hubClassModel.Implements.Add(new TypeModel("Hub")
+        {
+            GenericTypeParameters = new List<TypeModel>()
+            {
+                new TypeModel($"I{name}Hub"),
+            },
+        });
+
+        hubClassModel.Usings.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
+
+        return hubClassModel;
+    }
+
+    public InterfaceModel CreateHubInterfaceModel(string name)
+    {
+        var interfaceModel = new InterfaceModel($"I{name}Hub");
+
+        interfaceModel.Methods.Add(new MethodModel()
+        {
+            ParentType = interfaceModel,
+            IsInterface = true,
+            ReturnType = new TypeModel("Task"),
+            AccessModifier = AccessModifier.Public,
+            Name = "Message",
+            Params = new () { new () { Name = "message", Type = new ("string") } },
+        });
+
+        return interfaceModel;
     }
 
     private MethodModel CreateControllerMethod(ClassModel controller, EntityModel model, RouteType routeType)
@@ -248,8 +316,8 @@ public class ClassFactory : IClassFactory
                     Template = "\"{" + entityIdNameCamelCase + ":guid}\"",
                     Properties = new Dictionary<string, string>()
                     {
-                    { "Name", $"get{entityNamePascalCase}ById" }
-                },
+                    { "Name", $"get{entityNamePascalCase}ById" },
+                    },
                 });
 
                 methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("NotFound", "string"));
@@ -301,8 +369,8 @@ public class ClassFactory : IClassFactory
                     Name = "HttpGet",
                     Properties = new Dictionary<string, string>()
                     {
-                    { "Name", $"get{entityNamePascalCasePlural}" }
-                },
+                    { "Name", $"get{entityNamePascalCasePlural}" },
+                    },
                 });
 
                 methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
@@ -329,8 +397,8 @@ public class ClassFactory : IClassFactory
                     Name = "HttpPost",
                     Properties = new Dictionary<string, string>()
                     {
-                    { "Name", $"create{entityNamePascalCase}" }
-                },
+                    { "Name", $"create{entityNamePascalCase}" },
+                    },
                 });
 
                 methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
@@ -358,8 +426,8 @@ public class ClassFactory : IClassFactory
                     Name = "HttpPut",
                     Properties = new Dictionary<string, string>()
                     {
-                    { "Name", $"update{entityNamePascalCase}" }
-                },
+                    { "Name", $"update{entityNamePascalCase}" },
+                    },
                 });
 
                 methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
@@ -386,8 +454,8 @@ public class ClassFactory : IClassFactory
                     Template = "\"{" + entityIdNameCamelCase + ":guid}\"",
                     Properties = new Dictionary<string, string>()
                     {
-                    { "Name", $"delete{entityNamePascalCase}" }
-                },
+                    { "Name", $"delete{entityNamePascalCase}" },
+                    },
                 });
 
                 methodModel.Attributes.Add(new ProducesResponseTypeAttributeModel("InternalServerError"));
@@ -415,74 +483,6 @@ public class ClassFactory : IClassFactory
         return methodModel;
     }
 
-    public ClassModel CreateDbContext(string name, List<EntityModel> entities, string serviceName)
-    {
-        var dbContext = new DbContextModel(namingConventionConverter, name, entities, serviceName);
-
-        return dbContext;
-    }
-
-    public ClassModel CreateMessageModel()
-    {
-        var model = new ClassModel($"Message");
-
-        model.Properties.Add(new PropertyModel(
-            model,
-            AccessModifier.Public,
-            new TypeModel("string"),
-            "MessageType",
-            PropertyAccessorModel.GetSet)
-        {
-            DefaultValue = "nameof(Message)",
-        });
-
-        model.Properties.Add(new PropertyModel(
-            model,
-            AccessModifier.Public,
-            new TypeModel("DateTimeOffset"),
-            "Created",
-            PropertyAccessorModel.GetSet)
-        {
-            DefaultValue = "DateTimeOffset.Now",
-        });
-
-        return model;
-    }
-
-    public ClassModel CreateHubModel(string name)
-    {
-        var hubClassModel = new ClassModel($"{name}Hub");
-
-        hubClassModel.Implements.Add(new TypeModel("Hub")
-        {
-            GenericTypeParameters = new List<TypeModel>()
-            {
-                new TypeModel($"I{name}Hub")
-            },
-        });
-
-        hubClassModel.Usings.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
-
-        return hubClassModel;
-    }
-
-    public InterfaceModel CreateHubInterfaceModel(string name)
-    {
-        var interfaceModel = new InterfaceModel($"I{name}Hub");
-
-        interfaceModel.Methods.Add(new MethodModel()
-        {
-            ParentType = interfaceModel,
-            IsInterface = true,
-            ReturnType = new TypeModel("Task"),
-            AccessModifier = AccessModifier.Public,
-            Name = "Message",
-            Params = new () { new () { Name = "message", Type = new ("string") } },
-        });
-
-        return interfaceModel;
-    }
-
     public async Task<ClassModel> CreateMessageProducerWorkerAsync(string name, string directory)
     {
         var model = await CreateWorkerAsync("MessageProducer");
@@ -494,7 +494,7 @@ public class ClassFactory : IClassFactory
             GenericTypeParameters = new List<TypeModel>()
             {
                 new TypeModel($"{name}Hub"),
-                new TypeModel($"I{name}Hub")
+                new TypeModel($"I{name}Hub"),
             },
         };
 
@@ -827,8 +827,8 @@ public class ClassFactory : IClassFactory
             {
                 Params = new ()
                 {
-                    ParamModel.LoggerOf(name)
-                }
+                    ParamModel.LoggerOf(name),
+                },
             },
         };
 

@@ -9,13 +9,13 @@ namespace Endpoint.Core.Internals;
 
 public class Observable<T> : IObservable<T>
 {
+    private readonly object @lock = new object();
+
     private IList<Subscription> subscriptions = new List<Subscription>();
 
     public Observable()
     {
     }
-
-    private readonly object @lock = new object();
 
     public IDisposable Subscribe(IObserver<T> observer)
     {

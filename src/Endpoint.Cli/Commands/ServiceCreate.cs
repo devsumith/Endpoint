@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Services;
+using Endpoint.Core.Artifacts.Units;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -40,8 +40,6 @@ public class ServiceCreateRequestHandler : IRequestHandler<ServiceCreateRequest>
     {
         _logger.LogInformation("Handled: {0}", nameof(ServiceCreateRequestHandler));
 
-        await _domainDrivenDesignFileService.ServiceCreate(request.Name, request.Directory);
-
-
+        await _domainDrivenDesignFileService.ServiceCreateAsync(request.Name, request.Directory);
     }
 }

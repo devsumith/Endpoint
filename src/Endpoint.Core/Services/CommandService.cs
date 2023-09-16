@@ -42,7 +42,7 @@ public class CommandService : ICommandService
                 WindowStyle = ProcessWindowStyle.Normal,
                 FileName = "bash",
                 Arguments = $"-c \"{arguments}\"",
-                WorkingDirectory = workingDirectory
+                WorkingDirectory = workingDirectory,
             },
         };
 
@@ -54,7 +54,7 @@ public class CommandService : ICommandService
                 WindowStyle = ProcessWindowStyle.Normal,
                 FileName = "cmd.exe",
                 Arguments = $"/C {arguments}",
-                WorkingDirectory = workingDirectory
+                WorkingDirectory = workingDirectory,
             },
         };
 }

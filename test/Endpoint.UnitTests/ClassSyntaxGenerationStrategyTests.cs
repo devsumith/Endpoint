@@ -118,9 +118,9 @@ public class ClassSyntaxGenerationStrategyTests
                 Name = "ILogger",
                 GenericTypeParameters = new List<TypeModel>
                 {
-                    new TypeModel() { Name = classModel.Name }
-                }
-            }, AccessModifier = AccessModifier.Private
+                    new TypeModel() { Name = classModel.Name },
+                },
+            }, AccessModifier = AccessModifier.Private,
             },
         };
 
@@ -138,11 +138,11 @@ public class ClassSyntaxGenerationStrategyTests
                             GenericTypeParameters = new List<TypeModel>
                             {
                                 new TypeModel() { Name = classModel.Name }
-                            }
+                            },
                         },
-                        Name = "logger"
-                    }
-                }
+                        Name = "logger",
+                    },
+                },
             },
         };
 
