@@ -28,13 +28,11 @@ public class FileFactory : IFileFactory
     private readonly INamespaceProvider namespaceProvider;
 
     public FileFactory(
-        dynamic aggregateRootFactory,
         IRouteHandlerFactory routeHandlerFactory,
         INamingConventionConverter namingConventionConverter,
         IFileProvider fileProvider,
         INamespaceProvider namespaceProvider)
     {
-        this.aggregateRootFactory = aggregateRootFactory;
         this.routeHandlerFactory = routeHandlerFactory;
         this.namingConventionConverter = namingConventionConverter;
         this.fileProvider = fileProvider;

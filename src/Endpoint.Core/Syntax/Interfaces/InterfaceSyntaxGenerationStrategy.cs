@@ -3,6 +3,8 @@
 
 using System.Linq;
 using System.Text;
+using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Methods;
 using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.Interfaces;
@@ -10,11 +12,13 @@ namespace Endpoint.Core.Syntax.Interfaces;
 public class InterfaceSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<InterfaceModel>
 {
     private readonly ILogger<InterfaceSyntaxGenerationStrategy> logger;
+    private readonly IContext context;
 
     public InterfaceSyntaxGenerationStrategy(
-
+        IContext context,
         ILogger<InterfaceSyntaxGenerationStrategy> logger)
     {
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -46,12 +50,14 @@ public class InterfaceSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy
 
         if (model.Properties.Count > 0)
         {
-            builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Properties)).Indent(1));
+            builder.AppendLine((await syntaxGenerator.GenerateAsync(model.Properties)).Indent(1));
         }
 
         if (model.Methods.Count > 0)
         {
-            builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Methods)).Indent(1));
+            context.Set(new MethodModel() { IsInterface = true });
+
+            builder.AppendLine((await syntaxGenerator.GenerateAsync(model.Methods)).Indent(1));
         }
 
         builder.AppendLine("}");

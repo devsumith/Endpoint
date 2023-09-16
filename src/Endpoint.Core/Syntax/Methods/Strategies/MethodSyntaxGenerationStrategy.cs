@@ -57,7 +57,14 @@ public class MethodSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Me
 
         if (model.Body == null)
         {
-            builder.Append("{ }");
+            // builder.Append("{ }");
+            builder.AppendLine();
+            builder.AppendLine("{");
+            builder.AppendLine("}");
+
+            /*            builder.AppendLine();
+                        builder.AppendLine("{");
+                        builder.AppendLine("}");*/
         }
         else
         {

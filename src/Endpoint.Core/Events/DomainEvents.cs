@@ -19,6 +19,17 @@ public static class DomainEvents
             actions = new List<Delegate>();
         }
 
+        var existingAction = actions.OfType<Action<T>>().SingleOrDefault();
+
+        if (existingAction != null)
+        {
+            var newActions = actions;
+
+            newActions.Remove(existingAction);
+
+            actions = newActions;
+        }
+
         actions.Add(callback);
     }
 
@@ -35,7 +46,9 @@ public static class DomainEvents
             return;
         }
 
-        foreach (var action in actions.OfType<Action<T>>())
+        var action = actions.OfType<Action<T>>().FirstOrDefault();
+
+        if (action != null)
         {
             action(args);
         }

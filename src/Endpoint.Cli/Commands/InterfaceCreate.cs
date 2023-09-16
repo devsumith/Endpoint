@@ -10,6 +10,7 @@ using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Syntax.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using static Endpoint.Core.Constants.FileExtensions;
 
 namespace Endpoint.Cli.Commands;
 
@@ -38,13 +39,20 @@ public class InterfaceCreateRequestHandler : IRequestHandler<InterfaceCreateRequ
 
     public async Task Handle(InterfaceCreateRequest request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Handled: {0}", nameof(InterfaceCreateRequestHandler));
+        logger.LogInformation("Creating interface. {name}", request.Name);
 
         foreach (var name in request.Name.Split(','))
         {
             var model = new InterfaceModel(name);
 
-            await artifactGenerator.GenerateAsync(new CodeFileModel<InterfaceModel>(model, model.Usings, name, request.Directory, ".cs"));
+            model.Methods.Add(new ()
+            {
+                ParentType = model,
+                Name = "Foo",
+                Body = new (string.Empty),
+            });
+
+            await artifactGenerator.GenerateAsync(new CodeFileModel<InterfaceModel>(model, model.Usings, name, request.Directory, CSharpFile));
         }
     }
 }

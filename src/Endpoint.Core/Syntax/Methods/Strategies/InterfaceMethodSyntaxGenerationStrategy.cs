@@ -4,7 +4,6 @@
 using System.Linq;
 using System.Text;
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.Methods.Strategies;
@@ -13,23 +12,26 @@ public class InterfaceMethodSyntaxGenerationStrategy : GenericSyntaxGenerationSt
 {
     private readonly INamingConventionConverter namingConventionConverter;
     private readonly ILogger<InterfaceMethodSyntaxGenerationStrategy> logger;
+    private readonly IContext context;
 
     public InterfaceMethodSyntaxGenerationStrategy(
         INamingConventionConverter namingConventionConverter,
-        ILogger<InterfaceMethodSyntaxGenerationStrategy> logger)
+        ILogger<InterfaceMethodSyntaxGenerationStrategy> logger,
+        IContext context)
     {
         this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     public override int GetPriority() => 1;
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target)
     {
-        /*        if (context is InterfaceSyntaxGenerationStrategy && target is MethodModel)
-                {
-                    return await GenerateAsync(generator, target as MethodModel);
-                }*/
+        if (context.Get<MethodModel>().IsInterface && target is MethodModel)
+        {
+            return await GenerateAsync(generator, target as MethodModel);
+        }
 
         return null;
     }

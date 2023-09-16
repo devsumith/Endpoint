@@ -29,6 +29,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
     private readonly ISyntaxGenerator syntaxGenerator;
     private readonly IFileSystem fileSystem;
     private readonly INamespaceProvider namespaceProvider;
+    private readonly IDependencyInjectionService dependencyInjectionService;
 
     public DomainDrivenDesignFileService(
         INamespaceProvider namespaceProvider,
@@ -36,7 +37,8 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         IArtifactGenerator artifactGenerator,
         IFileProvider fileProvider,
         INamingConventionConverter namingConventionConverter,
-        ISyntaxGenerator syntaxGenerator)
+        ISyntaxGenerator syntaxGenerator,
+        IDependencyInjectionService dependencyInjectionService)
     {
         this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
@@ -44,6 +46,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         this.syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
         this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         this.namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
+        this.dependencyInjectionService = dependencyInjectionService ?? throw new ArgumentNullException(nameof(dependencyInjectionService));
     }
 
     public async Task MessageCreate(string name, List<PropertyModel> properties, string directory)
@@ -304,9 +307,9 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
     public async Task ServiceCreateAsync(string name, string directory)
     {
-        if (fileSystem.File.Exists(Path.Combine(directory, $"{name}{CSharpFile}")))
+        if (fileSystem.File.Exists(fileSystem.Path.Combine(directory, $"{name}{CSharpFile}")))
         {
-            throw new Exception($"Service exists: {Path.Combine(directory, $"{name}{CSharpFile}")}");
+            throw new Exception($"Service exists: {fileSystem.Path.Combine(directory, $"{name}{CSharpFile}")}");
         }
 
         var usingDirectives = new List<UsingModel>()
@@ -334,7 +337,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var @interface = await CreateInterface(name, methods, usingDirectives, directory);
 
-        _ = await CreateClass(@interface, name, methods, usingDirectives, directory);
+        var @class = await CreateClass(@interface, name, methods, usingDirectives, directory);
 
         async Task<InterfaceModel> CreateInterface(string name, List<MethodModel> methods, List<UsingModel> usings, string directory)
         {
@@ -392,5 +395,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
             return @class;
         }
+
+        await dependencyInjectionService.Add(@interface.Name, @class.Name, directory);
     }
 }

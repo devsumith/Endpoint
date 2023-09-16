@@ -3,6 +3,9 @@
 
 using System.Linq;
 using System.Text;
+using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Methods;
+using Endpoint.Core.Syntax.Properties;
 using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.Classes.Strategies;
@@ -10,9 +13,11 @@ namespace Endpoint.Core.Syntax.Classes.Strategies;
 public class ClassSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<ClassModel>
 {
     private readonly ILogger<ClassSyntaxGenerationStrategy> logger;
+    private readonly IContext context;
 
-    public ClassSyntaxGenerationStrategy(ILogger<ClassSyntaxGenerationStrategy> logger)
+    public ClassSyntaxGenerationStrategy(IContext context, ILogger<ClassSyntaxGenerationStrategy> logger)
     {
+        this.context = context;
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -76,11 +81,15 @@ public class ClassSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Cla
 
         if (model.Properties.Count > 0)
         {
+            context.Set(new PropertyModel() { Parent = model });
+
             builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Properties)).Indent(1));
         }
 
         if (model.Methods.Count > 0)
         {
+            context.Set(new MethodModel() { IsInterface = false });
+
             builder.AppendLine(((string)await syntaxGenerator.GenerateAsync(model.Methods)).Indent(1));
         }
 

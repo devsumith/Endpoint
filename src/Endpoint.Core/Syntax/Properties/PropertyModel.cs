@@ -7,6 +7,10 @@ namespace Endpoint.Core.Syntax.Properties;
 
 public class PropertyModel : SyntaxModel
 {
+    public PropertyModel()
+    {
+    }
+
     public PropertyModel(TypeDeclarationModel parent, AccessModifier accessModifier, TypeModel type, string name, List<PropertyAccessorModel> accessors, bool required = false, bool key = false)
     {
         AccessModifier = accessModifier;

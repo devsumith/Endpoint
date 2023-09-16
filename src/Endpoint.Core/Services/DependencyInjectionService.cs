@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,9 +9,9 @@ using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Params;
-using Endpoint.Core.Syntax.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SimpleNLG.Extensions;
 
 namespace Endpoint.Core.Services;
 
@@ -56,11 +55,11 @@ public class DependencyInjectionService : IDependencyInjectionService
     {
         var classModel = new ClassModel("ConfigureServices");
 
-        classModel.Usings.Add(new UsingModel() { Name = namespaceProvider.Get(directory) });
+        classModel.Usings.Add(new () { Name = namespaceProvider.Get(directory) });
 
         var methodParam = new ParamModel()
         {
-            Type = new TypeModel("IServiceCollection"),
+            Type = new ("IServiceCollection"),
             Name = "services",
             ExtensionMethodParam = true,
         };
@@ -68,16 +67,16 @@ public class DependencyInjectionService : IDependencyInjectionService
         var method = new MethodModel()
         {
             Name = $"Add{layer}Services",
-            ReturnType = new TypeModel("void"),
+            ReturnType = new ("void"),
             Static = true,
-            Params = new List<ParamModel>() { methodParam },
+            Params = new () { methodParam },
         };
 
         classModel.Static = true;
 
         classModel.Methods.Add(method);
 
-        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, ".cs")
+        var classFileModel = new CodeFileModel<ClassModel>(classModel, classModel.Usings, classModel.Name, directory, Endpoint.Core.Constants.FileExtensions.CSharpFile)
         {
             Namespace = "Microsoft.Extensions.DependencyInjection",
         };
@@ -87,11 +86,16 @@ public class DependencyInjectionService : IDependencyInjectionService
 
     private void UpdateConfigureServices(string diRegistration, string projectSuffix, string configureServicesFilePath)
     {
-        var emptyServiceCollection = new StringBuilder().AppendJoin(Environment.NewLine, new string[]
+        var syntax = new string[]
         {
-            "public static void Add" + projectSuffix + "Services(this IServiceCollection services) {",
+            "public static void Add" + projectSuffix + "Services(this IServiceCollection services)",
+
+            "{",
+
             "}",
-        }).ToString().Indent(1);
+        };
+
+        var emptyServiceCollection = new StringBuilder().AppendJoin(Environment.NewLine, syntax).ToString().Indent(1);
 
         var fileContent = fileSystem.File.ReadAllText(configureServicesFilePath);
 
@@ -99,7 +103,9 @@ public class DependencyInjectionService : IDependencyInjectionService
 
         var registrationAdded = false;
 
-        if (!fileContent.Contains(diRegistration) && !fileContent.Contains(emptyServiceCollection))
+        var addRegistration = false;
+
+        if (!fileContent.Contains(diRegistration))
         {
             foreach (var line in fileContent.Split(Environment.NewLine))
             {
@@ -116,26 +122,33 @@ public class DependencyInjectionService : IDependencyInjectionService
                 else
                 {
                     newContent.AppendLine(line);
+
+                    if (addRegistration && line.trim() == "{")
+                    {
+                        newContent.AppendLine(diRegistration);
+                        registrationAdded = true;
+                        addRegistration = false;
+                    }
                 }
 
                 if (line.Contains("this IServiceCollection services") && !registrationAdded)
                 {
-                    newContent.AppendLine(diRegistration);
-                    registrationAdded = true;
+                    addRegistration = true;
                 }
             }
         }
 
-        if (fileContent.Contains(emptyServiceCollection))
-        {
-            fileContent = fileContent.Replace(emptyServiceCollection, new StringBuilder()
-                .AppendLine("public static void Add" + projectSuffix + "Services(this IServiceCollection services){".Indent(1))
-                .AppendLine($"{diRegistration}")
-                .Append("}".Indent(1))
-                .ToString());
+        /*
+                if (fileContent.Contains(emptyServiceCollection))
+                {
+                    fileContent = fileContent.Replace(emptyServiceCollection, new StringBuilder()
+                        .AppendLine("public static void Add" + projectSuffix + "Services(this IServiceCollection services){".Indent(1))
+                        .AppendLine($"{diRegistration}")
+                        .Append("}".Indent(1))
+                        .ToString());
 
-            newContent = new StringBuilder(fileContent);
-        }
+                    newContent = new StringBuilder(fileContent);
+                }*/
 
         fileSystem.File.WriteAllText(configureServicesFilePath, newContent.ToString());
     }

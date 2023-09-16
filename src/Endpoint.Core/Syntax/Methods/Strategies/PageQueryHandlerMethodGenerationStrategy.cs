@@ -30,10 +30,10 @@ public class PageQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerationS
 
     public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target)
     {
-        if (target is MethodModel)
-        {
-            return await GenerateAsync(generator, target as MethodModel);
-        }
+        /*        if (target is MethodModel)
+                {
+                    return await GenerateAsync(generator, target as MethodModel);
+                */
 
         return null;
     }
