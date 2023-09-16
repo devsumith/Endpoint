@@ -321,6 +321,17 @@ public class ClassFactory : IClassFactory
         return model;
     }
 
+    public Tuple<ClassModel, InterfaceModel> CreateClassAndInterface(string name)
+    {
+        var interfaceModel = new InterfaceModel($"I{name}");
+
+        var classModel = new ClassModel(name);
+
+        classModel.Implements.Add(new TypeModel(interfaceModel.Name));
+
+        return new Tuple<ClassModel, InterfaceModel>(classModel, interfaceModel);
+    }
+
     private MethodModel CreateControllerMethod(ClassModel controller, EntityModel model, RouteType routeType)
     {
         MethodModel methodModel = new MethodModel
@@ -540,17 +551,6 @@ public class ClassFactory : IClassFactory
         }
 
         return methodModel;
-    }
-
-    public Tuple<ClassModel, InterfaceModel> CreateClassAndInterface(string name)
-    {
-        var interfaceModel = new InterfaceModel($"I{name}");
-
-        var classModel = new ClassModel(name);
-
-        classModel.Implements.Add(new TypeModel(interfaceModel.Name));
-
-        return new Tuple<ClassModel, InterfaceModel>(classModel, interfaceModel);
     }
 
     public ClassModel CreateServiceBusMessageConsumer(string name, string messagesNamespace)

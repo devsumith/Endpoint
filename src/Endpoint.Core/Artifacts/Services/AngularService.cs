@@ -488,6 +488,21 @@ public class AngularService : IAngularService
         fileSystem.File.WriteAllText(packageJsonPath, JsonConvert.SerializeObject(packageJson, Formatting.Indented));
     }
 
+    public async Task BootstrapAdd(AngularProjectReferenceModel model)
+    {
+        var workspaceDirectory = Path.GetDirectoryName(fileProvider.Get("angular.json", model.ReferencedDirectory));
+
+        var jsonPath = $"{workspaceDirectory}{Path.DirectorySeparatorChar}angular.json";
+
+        var json = JObject.Parse(fileSystem.File.ReadAllText(jsonPath));
+
+        commandService.Start("npm install bootstrap", workspaceDirectory);
+
+        json.AddStyle(model.Name, "node_modules\\bootstrap\\dist\\css\\bootstrap.min.css".Replace(Path.DirectorySeparatorChar, '/'));
+
+        fileSystem.File.WriteAllText(jsonPath, JsonConvert.SerializeObject(json, Formatting.Indented));
+    }
+
     private void AddImports(AngularProjectModel model)
     {
         var mainPath = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}main.ts";
@@ -673,21 +688,6 @@ public class AngularService : IAngularService
         }
 
         fileSystem.File.WriteAllLines(appComponentPath, newLines.ToArray());
-    }
-
-    public async Task BootstrapAdd(AngularProjectReferenceModel model)
-    {
-        var workspaceDirectory = Path.GetDirectoryName(fileProvider.Get("angular.json", model.ReferencedDirectory));
-
-        var jsonPath = $"{workspaceDirectory}{Path.DirectorySeparatorChar}angular.json";
-
-        var json = JObject.Parse(fileSystem.File.ReadAllText(jsonPath));
-
-        commandService.Start("npm install bootstrap", workspaceDirectory);
-
-        json.AddStyle(model.Name, "node_modules\\bootstrap\\dist\\css\\bootstrap.min.css".Replace(Path.DirectorySeparatorChar, '/'));
-
-        fileSystem.File.WriteAllText(jsonPath, JsonConvert.SerializeObject(json, Formatting.Indented));
     }
 
     public async Task ModelCreate(string name, string directory, string properties = null)
