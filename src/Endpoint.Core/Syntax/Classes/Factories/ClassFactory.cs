@@ -332,6 +332,142 @@ public class ClassFactory : IClassFactory
         return new Tuple<ClassModel, InterfaceModel>(classModel, interfaceModel);
     }
 
+    public ClassModel CreateServiceBusMessageConsumer(string name, string messagesNamespace)
+    {
+        var classModel = new ClassModel(name);
+
+        classModel.Implements.Add(new ("BackgroundService"));
+
+        classModel.Usings.Add(new ("Messaging"));
+
+        classModel.Usings.Add(new ("Messaging.Udp"));
+
+        classModel.Usings.Add(new ("Microsoft.Extensions.DependencyInjection"));
+
+        classModel.Usings.Add(new ("Microsoft.Extensions.Hosting"));
+
+        classModel.Usings.Add(new ("System.Text"));
+
+        classModel.Usings.Add(new ("Microsoft.Extensions.Logging"));
+
+        classModel.Usings.Add(new ("System.Threading.Tasks"));
+
+        classModel.Usings.Add(new ("System.Threading"));
+
+        classModel.Usings.Add(new ("MediatR"));
+
+        classModel.Usings.Add(new ("System.Linq"));
+
+        var constructorModel = new ConstructorModel(classModel, classModel.Name);
+
+        foreach (var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new TypeModel("IServiceScopeFactory"), new TypeModel("IUdpClientFactory") })
+        {
+            var propName = type.Name switch
+            {
+                "ILogger" => "logger",
+                "IUdpClientFactory" => "udpClientFactory",
+                "IServiceScopeFactory" => "serviceScopeFactory"
+            };
+
+            classModel.Fields.Add(new ()
+            {
+                Name = $"_{propName}",
+                Type = type,
+            });
+
+            constructorModel.Params.Add(new ()
+            {
+                Name = propName,
+                Type = type,
+            });
+        }
+
+        classModel.Fields.Add(new ()
+        {
+            Name = $"_supportedMessageTypes",
+            Type = new ("string[]"),
+            DefaultValue = "new string[] { }",
+        });
+
+        var methodBody = new string[]
+        {
+            "var client = _udpClientFactory.Create();",
+
+            string.Empty,
+
+            "while(!cancellationToken.IsCancellationRequested) {",
+
+            string.Empty,
+
+            "var result = await client.ReceiveAsync(cancellationToken);".Indent(1),
+
+            string.Empty,
+
+            "var json = Encoding.UTF8.GetString(result.Buffer);".Indent(1),
+
+            string.Empty,
+
+            "var message = System.Text.Json.JsonSerializer.Deserialize<ServiceBusMessage>(json)!;".Indent(1),
+
+            string.Empty,
+
+            "var messageType = message.MessageAttributes[\"MessageType\"];".Indent(1),
+
+            string.Empty,
+
+            "if(_supportedMessageTypes.Contains(messageType))".Indent(1),
+
+            "{".Indent(1),
+
+            new StringBuilder()
+            .Append("var type = Type.GetType($\"")
+            .Append(messagesNamespace)
+            .Append(".{messageType}\");")
+            .ToString()
+            .Indent(2),
+
+            string.Empty,
+
+            "var request = System.Text.Json.JsonSerializer.Deserialize(message.Body, type!)!;".Indent(2),
+
+            string.Empty,
+
+            "using (var scope = _serviceScopeFactory.CreateScope())".Indent(2),
+
+            "{".Indent(2),
+
+            string.Empty,
+
+            "}".Indent(2),
+
+            "}".Indent(1),
+
+            string.Empty,
+
+            "await Task.Delay(0);".Indent(1),
+
+            "}",
+        };
+
+        var method = new MethodModel
+        {
+            Name = "ExecuteAsync",
+            Override = true,
+            AccessModifier = AccessModifier.Protected,
+            Async = true,
+            ReturnType = new ("Task"),
+            Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, methodBody)),
+        };
+
+        method.Params.Add(ParamModel.CancellationToken);
+
+        classModel.Constructors.Add(constructorModel);
+
+        classModel.Methods.Add(method);
+
+        return classModel;
+    }
+
     private MethodModel CreateControllerMethod(ClassModel controller, EntityModel model, RouteType routeType)
     {
         MethodModel methodModel = new MethodModel
@@ -551,142 +687,6 @@ public class ClassFactory : IClassFactory
         }
 
         return methodModel;
-    }
-
-    public ClassModel CreateServiceBusMessageConsumer(string name, string messagesNamespace)
-    {
-        var classModel = new ClassModel(name);
-
-        classModel.Implements.Add(new ("BackgroundService"));
-
-        classModel.Usings.Add(new ("Messaging"));
-
-        classModel.Usings.Add(new ("Messaging.Udp"));
-
-        classModel.Usings.Add(new ("Microsoft.Extensions.DependencyInjection"));
-
-        classModel.Usings.Add(new ("Microsoft.Extensions.Hosting"));
-
-        classModel.Usings.Add(new ("System.Text"));
-
-        classModel.Usings.Add(new ("Microsoft.Extensions.Logging"));
-
-        classModel.Usings.Add(new ("System.Threading.Tasks"));
-
-        classModel.Usings.Add(new ("System.Threading"));
-
-        classModel.Usings.Add(new ("MediatR"));
-
-        classModel.Usings.Add(new ("System.Linq"));
-
-        var constructorModel = new ConstructorModel(classModel, classModel.Name);
-
-        foreach (var type in new TypeModel[] { TypeModel.LoggerOf("ServiceBusMessageConsumer"), new TypeModel("IServiceScopeFactory"), new TypeModel("IUdpClientFactory") })
-        {
-            var propName = type.Name switch
-            {
-                "ILogger" => "logger",
-                "IUdpClientFactory" => "udpClientFactory",
-                "IServiceScopeFactory" => "serviceScopeFactory"
-            };
-
-            classModel.Fields.Add(new ()
-            {
-                Name = $"_{propName}",
-                Type = type,
-            });
-
-            constructorModel.Params.Add(new ()
-            {
-                Name = propName,
-                Type = type,
-            });
-        }
-
-        classModel.Fields.Add(new ()
-        {
-            Name = $"_supportedMessageTypes",
-            Type = new ("string[]"),
-            DefaultValue = "new string[] { }",
-        });
-
-        var methodBody = new string[]
-        {
-            "var client = _udpClientFactory.Create();",
-
-            string.Empty,
-
-            "while(!cancellationToken.IsCancellationRequested) {",
-
-            string.Empty,
-
-            "var result = await client.ReceiveAsync(cancellationToken);".Indent(1),
-
-            string.Empty,
-
-            "var json = Encoding.UTF8.GetString(result.Buffer);".Indent(1),
-
-            string.Empty,
-
-            "var message = System.Text.Json.JsonSerializer.Deserialize<ServiceBusMessage>(json)!;".Indent(1),
-
-            string.Empty,
-
-            "var messageType = message.MessageAttributes[\"MessageType\"];".Indent(1),
-
-            string.Empty,
-
-            "if(_supportedMessageTypes.Contains(messageType))".Indent(1),
-
-            "{".Indent(1),
-
-            new StringBuilder()
-            .Append("var type = Type.GetType($\"")
-            .Append(messagesNamespace)
-            .Append(".{messageType}\");")
-            .ToString()
-            .Indent(2),
-
-            string.Empty,
-
-            "var request = System.Text.Json.JsonSerializer.Deserialize(message.Body, type!)!;".Indent(2),
-
-            string.Empty,
-
-            "using (var scope = _serviceScopeFactory.CreateScope())".Indent(2),
-
-            "{".Indent(2),
-
-            string.Empty,
-
-            "}".Indent(2),
-
-            "}".Indent(1),
-
-            string.Empty,
-
-            "await Task.Delay(0);".Indent(1),
-
-            "}",
-        };
-
-        var method = new MethodModel
-        {
-            Name = "ExecuteAsync",
-            Override = true,
-            AccessModifier = AccessModifier.Protected,
-            Async = true,
-            ReturnType = new ("Task"),
-            Body = new Syntax.Expressions.ExpressionModel(string.Join(Environment.NewLine, methodBody)),
-        };
-
-        method.Params.Add(ParamModel.CancellationToken);
-
-        classModel.Constructors.Add(constructorModel);
-
-        classModel.Methods.Add(method);
-
-        return classModel;
     }
 
     public ClassModel CreateConfigureServices(string serviceSuffix)

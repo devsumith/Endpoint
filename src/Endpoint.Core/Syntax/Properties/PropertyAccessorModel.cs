@@ -27,11 +27,11 @@ public class PropertyAccessorModel
 
     public static List<PropertyAccessorModel> GetPrivateSet => new List<PropertyAccessorModel>() { Get, PrivateSet };
 
+    public static List<PropertyAccessorModel> GetSet => new List<PropertyAccessorModel>() { Get, Set };
+
     public string AccessModifier { get; private set; }
 
     public PropertyAccessorType Type { get; private set; }
-
-    public static List<PropertyAccessorModel> GetSet => new List<PropertyAccessorModel>() { Get, Set };
 
     public static bool IsGetPrivateSet(List<PropertyAccessorModel> accessors)
     {

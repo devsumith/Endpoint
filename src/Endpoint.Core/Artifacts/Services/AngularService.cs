@@ -503,6 +503,41 @@ public class AngularService : IAngularService
         fileSystem.File.WriteAllText(jsonPath, JsonConvert.SerializeObject(json, Formatting.Indented));
     }
 
+    public async Task ModelCreate(string name, string directory, string properties = null)
+    {
+        var serviceName = "DashboardService";
+
+        ClassModel classModel = syntaxService.SolutionModel?.GetClass(name, serviceName);
+
+        if (classModel == null)
+        {
+            classModel = new ClassModel(name);
+        }
+
+        var model = new TypeScriptTypeModel(name);
+
+        foreach (var property in classModel.Properties)
+        {
+            model.Properties.Add(property.ToTs());
+        }
+
+        if (!string.IsNullOrEmpty(properties))
+        {
+            foreach (var property in properties.Split(','))
+            {
+                var parts = property.Split(':');
+                var propertyName = parts[0];
+                var propertyType = parts[1];
+
+                model.Properties.Add(PropertyModel.TypeScriptProperty(propertyName, propertyType));
+            }
+        }
+
+        var fileModel = new CodeFileModel<TypeScriptTypeModel>(model, ((SyntaxToken)model.Name).SnakeCase(), directory, ".ts");
+
+        await artifactGenerator.GenerateAsync(fileModel);
+    }
+
     private void AddImports(AngularProjectModel model)
     {
         var mainPath = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}main.ts";
@@ -688,41 +723,6 @@ public class AngularService : IAngularService
         }
 
         fileSystem.File.WriteAllLines(appComponentPath, newLines.ToArray());
-    }
-
-    public async Task ModelCreate(string name, string directory, string properties = null)
-    {
-        var serviceName = "DashboardService";
-
-        ClassModel classModel = syntaxService.SolutionModel?.GetClass(name, serviceName);
-
-        if (classModel == null)
-        {
-            classModel = new ClassModel(name);
-        }
-
-        var model = new TypeScriptTypeModel(name);
-
-        foreach (var property in classModel.Properties)
-        {
-            model.Properties.Add(property.ToTs());
-        }
-
-        if (!string.IsNullOrEmpty(properties))
-        {
-            foreach (var property in properties.Split(','))
-            {
-                var parts = property.Split(':');
-                var propertyName = parts[0];
-                var propertyType = parts[1];
-
-                model.Properties.Add(PropertyModel.TypeScriptProperty(propertyName, propertyType));
-            }
-        }
-
-        var fileModel = new CodeFileModel<TypeScriptTypeModel>(model, ((SyntaxToken)model.Name).SnakeCase(), directory, ".ts");
-
-        await artifactGenerator.GenerateAsync(fileModel);
     }
 
     public async Task ListComponentCreate(string name, string directory)
