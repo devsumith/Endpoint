@@ -1,6 +1,11 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files;
@@ -10,29 +15,22 @@ using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("db-context-create-from-aggregate-model")]
 public class DbContextCreateFromAggregatesModelRequest : IRequest
 {
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
 public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<DbContextCreateFromAggregatesModelRequest>
 {
-    private readonly ILogger<DbContextCreateFromAggregatesModelRequestHandler> _logger;
-    private readonly IFileProvider _fileProvider;
-    private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly IArtifactGenerator _artifactGenerator;
+    private readonly ILogger<DbContextCreateFromAggregatesModelRequestHandler> logger;
+    private readonly IFileProvider fileProvider;
+    private readonly INamingConventionConverter namingConventionConverter;
+    private readonly IArtifactGenerator artifactGenerator;
 
     public DbContextCreateFromAggregatesModelRequestHandler(
         ILogger<DbContextCreateFromAggregatesModelRequestHandler> logger,
@@ -40,19 +38,19 @@ public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<
         INamingConventionConverter namingConventionConverter,
         IArtifactGenerator artifactGenerator)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(DbContextCreateFromAggregatesModelRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(DbContextCreateFromAggregatesModelRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(DbContextCreateFromAggregatesModelRequestHandler));
 
         var entities = new List<EntityModel>();
 
-        var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj", request.Directory));
+        var projectDirectory = Path.GetDirectoryName(fileProvider.Get("*.csproj", request.Directory));
 
         bool isInsideCoreProject = projectDirectory.EndsWith(".Core");
 
@@ -65,16 +63,18 @@ public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<
             var folderName = Path.GetFileNameWithoutExtension(folder);
 
             if (folderName.EndsWith("Aggregate"))
+            {
                 entities.Add(new EntityModel(folderName.Remove("Aggregate")));
+            }
         }
 
-        var classModel = new DbContextModel(_namingConventionConverter, $"{serviceName}DbContext", entities, serviceName);
+        var classModel = new DbContextModel(namingConventionConverter, $"{serviceName}DbContext", entities, serviceName);
 
         var interfaceModel = classModel.ToInterface();
 
         Directory.CreateDirectory($"{projectDirectory.Replace("Core", "Infrastructure")}{Path.DirectorySeparatorChar}Data");
 
-        await _artifactGenerator.GenerateAsync(
+        await artifactGenerator.GenerateAsync(
             new CodeFileModel<InterfaceModel>(
                 interfaceModel,
                 interfaceModel.Usings,
@@ -82,15 +82,12 @@ public class DbContextCreateFromAggregatesModelRequestHandler : IRequestHandler<
                 projectDirectory,
                 ".cs"));
 
-        await _artifactGenerator.GenerateAsync(
+        await artifactGenerator.GenerateAsync(
             new CodeFileModel<ClassModel>(
                 classModel,
                 classModel.Usings,
                 classModel.Name,
                 $"{projectDirectory.Replace("Core", "Infrastructure")}{Path.DirectorySeparatorChar}Data",
                 ".cs"));
-
-
-
     }
 }

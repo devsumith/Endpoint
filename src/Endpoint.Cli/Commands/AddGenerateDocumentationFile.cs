@@ -1,17 +1,16 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using Endpoint.Core.Artifacts.Projects.Strategies;
-using Endpoint.Core.Services;
-using MediatR;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using CommandLine;
+using Endpoint.Core.Artifacts.Projects.Strategies;
+using Endpoint.Core.Services;
+using MediatR;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("generate-documentation-file-add")]
 public class GenerateDocumentationFileAddRequest : IRequest
@@ -22,21 +21,21 @@ public class GenerateDocumentationFileAddRequest : IRequest
 
 public class GenerateDocumentationFileAddRequestHandler : IRequestHandler<GenerateDocumentationFileAddRequest>
 {
-    private readonly ISettingsProvider _settingsProvider;
-    private readonly IApiProjectFilesGenerationStrategy _apiProjectFilesGenerationStrategy;
+    private readonly ISettingsProvider settingsProvider;
+    private readonly IApiProjectFilesGenerationStrategy apiProjectFilesGenerationStrategy;
 
     public GenerateDocumentationFileAddRequestHandler(ISettingsProvider settingsProvider, IApiProjectFilesGenerationStrategy apiProjectFilesGenerationStrategy)
     {
-        _settingsProvider = settingsProvider ?? throw new ArgumentNullException(nameof(settingsProvider));
-        _apiProjectFilesGenerationStrategy = apiProjectFilesGenerationStrategy ?? throw new System.ArgumentNullException(nameof(apiProjectFilesGenerationStrategy));
+        this.settingsProvider = settingsProvider ?? throw new ArgumentNullException(nameof(settingsProvider));
+        this.apiProjectFilesGenerationStrategy = apiProjectFilesGenerationStrategy ?? throw new System.ArgumentNullException(nameof(apiProjectFilesGenerationStrategy));
     }
 
     public async Task Handle(GenerateDocumentationFileAddRequest request, CancellationToken cancellationToken)
     {
-        var settings = _settingsProvider.Get(request.Directory);
+        var settings = settingsProvider.Get(request.Directory);
 
         var apiCsProjPath = $"{settings.ApiDirectory}{Path.DirectorySeparatorChar}{settings.ApiNamespace}.csproj";
 
-        _apiProjectFilesGenerationStrategy.AddGenerateDocumentationFile(apiCsProjPath);
+        apiProjectFilesGenerationStrategy.AddGenerateDocumentationFile(apiCsProjPath);
     }
 }

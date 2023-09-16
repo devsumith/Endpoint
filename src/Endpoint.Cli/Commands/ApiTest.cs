@@ -1,13 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax;
 using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
 
@@ -25,27 +25,28 @@ public class ApiTest
 
     public class Handler : IRequestHandler<Request>
     {
-        private readonly ITemplateLocator _templateLocator;
-        private readonly ITemplateProcessor _templateProcessor;
-        private readonly IFileSystem _fileSystem;
+        private readonly ITemplateLocator templateLocator;
+        private readonly ITemplateProcessor templateProcessor;
+        private readonly IFileSystem fileSystem;
+
         public Handler(ITemplateLocator templateLocator, ITemplateProcessor templateProcessor, IFileSystem fileSystem)
         {
-            _templateLocator = templateLocator;
-            _templateProcessor = templateProcessor;
-            _fileSystem = fileSystem;
+            this.templateLocator = templateLocator;
+            this.templateProcessor = templateProcessor;
+            this.fileSystem = fileSystem;
         }
+
         public async Task Handle(Request request, CancellationToken cancellationToken)
         {
-            var template = _templateLocator.Get(nameof(ApiTest));
+            var template = templateLocator.Get(nameof(ApiTest));
 
             var tokens = new TokensBuilder()
                 .With(nameof(request.EntityName), (SyntaxToken)request.EntityName)
                 .Build();
 
-            var contents = string.Join(Environment.NewLine, _templateProcessor.Process(template, tokens));
+            var contents = string.Join(Environment.NewLine, templateProcessor.Process(template, tokens));
 
-            _fileSystem.File.WriteAllText($@"{request.Directory}/{((SyntaxToken)request.EntityName).PascalCase}ControllerTests.cs", contents);
+            fileSystem.File.WriteAllText($@"{request.Directory}/{((SyntaxToken)request.EntityName).PascalCase}ControllerTests.cs", contents);
         }
     }
 }
-

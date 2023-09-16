@@ -1,29 +1,28 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using Endpoint.Core.Artifacts.Files.Factories;
-using Endpoint.Core.Artifacts.Projects;
-using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Services;
-using MediatR;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Classes;
-using Endpoint.Core.Syntax.Interfaces;
-using Endpoint.Core.Artifacts.Services;
+using CommandLine;
 using Endpoint.Core.Artifacts;
-using static Endpoint.Core.Constants.FileExtensions;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Artifacts.Files.Factories;
+using Endpoint.Core.Artifacts.Projects;
+using Endpoint.Core.Artifacts.Services;
 using Endpoint.Core.Artifacts.Solutions.Factories;
 using Endpoint.Core.Artifacts.Solutions.Services;
+using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Classes.Factories;
+using Endpoint.Core.Syntax.Interfaces;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using static Endpoint.Core.Constants.FileExtensions;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("signalr-app-create")]
 public class SignalRAppCreateRequest : IRequest
@@ -40,17 +39,17 @@ public class SignalRAppCreateRequest : IRequest
 
 public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRequest>
 {
-    private readonly ILogger<SignalRAppCreateRequestHandler> _logger;
-    private readonly ISolutionService _solutionService;
-    private readonly IAngularService _angularService;
-    private readonly ISolutionFactory _solutionFactory;
-    private readonly IArtifactGenerator _artifactGenerator;
-    private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly ICommandService _commandService;
-    private readonly IClassFactory _classFactory;
-    private readonly IFileProvider _fileProvider;
-    private readonly IFileSystem _fileSystem;
-    private readonly IFileFactory _fileFactory;
+    private readonly ILogger<SignalRAppCreateRequestHandler> logger;
+    private readonly ISolutionService solutionService;
+    private readonly IAngularService angularService;
+    private readonly ISolutionFactory solutionFactory;
+    private readonly IArtifactGenerator artifactGenerator;
+    private readonly INamingConventionConverter namingConventionConverter;
+    private readonly ICommandService commandService;
+    private readonly IClassFactory classFactory;
+    private readonly IFileProvider fileProvider;
+    private readonly IFileSystem fileSystem;
+    private readonly IFileFactory fileFactory;
 
     public SignalRAppCreateRequestHandler(
         ILogger<SignalRAppCreateRequestHandler> logger,
@@ -65,17 +64,17 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
         IFileSystem fileSystem,
         IFileFactory fileFactory)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
-        _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
-        _solutionFactory = solutionFactory;
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter)); ;
-        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
+        this.solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
+        this.solutionFactory = solutionFactory;
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+        this.classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
     public void HubAdd(ProjectModel projectModel, string name)
@@ -88,19 +87,19 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var programContent = new List<string>();
 
-        foreach (var line in _fileSystem.File.ReadAllLines(programPath))
+        foreach (var line in fileSystem.File.ReadAllLines(programPath))
         {
             if (line.Contains("app.Run();"))
             {
                 programContent.Add(appBuilderRegistration);
 
-                programContent.Add("");
+                programContent.Add(string.Empty);
             }
 
             programContent.Add(line);
         }
 
-        _fileSystem.File.WriteAllLines(programPath, programContent.ToArray());
+        fileSystem.File.WriteAllLines(programPath, programContent.ToArray());
 
         ServiceAdd(projectModel, signalrServiceAddition);
     }
@@ -111,7 +110,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var configureServicesContent = new List<string>();
 
-        foreach (var line in _fileSystem.File.ReadAllLines(configureServicePath))
+        foreach (var line in fileSystem.File.ReadAllLines(configureServicePath))
         {
             configureServicesContent.Add(line);
 
@@ -121,29 +120,29 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             }
         }
 
-        _fileSystem.File.WriteAllLines(configureServicePath, configureServicesContent.ToArray());
+        fileSystem.File.WriteAllLines(configureServicePath, configureServicesContent.ToArray());
     }
 
     public async Task Handle(SignalRAppCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(SignalRAppCreateRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(SignalRAppCreateRequestHandler));
 
-        if (_fileSystem.Directory.Exists(Path.Combine(request.Directory, request.Name)))
+        if (fileSystem.Directory.Exists(Path.Combine(request.Directory, request.Name)))
         {
-            _fileSystem.Directory.Delete(Path.Combine(request.Directory, request.Name), true);
+            fileSystem.Directory.Delete(Path.Combine(request.Directory, request.Name), true);
         }
 
-        var solutionModel = await _solutionFactory.Create(request.Name, $"{request.Name}.Api", "webapi", string.Empty, request.Directory);
+        var solutionModel = await solutionFactory.Create(request.Name, $"{request.Name}.Api", "webapi", string.Empty, request.Directory);
 
-        var messageModel = _classFactory.CreateMessageModel();
+        var messageModel = classFactory.CreateMessageModel();
 
-        var hubClassModel = _classFactory.CreateHubModel(request.Name);
+        var hubClassModel = classFactory.CreateHubModel(request.Name);
 
-        var interfaceModel = _classFactory.CreateHubInterfaceModel(request.Name);
+        var interfaceModel = classFactory.CreateHubInterfaceModel(request.Name);
 
         var projectModel = solutionModel.DefaultProject;
 
-        var workerModel = await _classFactory.CreateMessageProducerWorkerAsync(request.Name, projectModel.Directory);
+        var workerModel = await classFactory.CreateMessageProducerWorkerAsync(request.Name, projectModel.Directory);
 
         projectModel.Files.Add(new CodeFileModel<ClassModel>(workerModel, workerModel.Name, projectModel.Directory, CSharpFile));
 
@@ -153,40 +152,40 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         projectModel.Files.Add(new CodeFileModel<InterfaceModel>(interfaceModel, interfaceModel.Name, projectModel.Directory, CSharpFile));
 
-        await _artifactGenerator.GenerateAsync(solutionModel);
+        await artifactGenerator.GenerateAsync(solutionModel);
 
         HubAdd(projectModel, request.Name);
 
         ServiceAdd(projectModel, $"services.AddHostedService<{request.Name}.Api.MessageProducer>();".Indent(2));
 
-        var temporaryAppName = $"{_namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}-app";
+        var temporaryAppName = $"{namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}-app";
 
-        await _angularService.CreateWorkspace(temporaryAppName, request.Version, "app", "application", "app", solutionModel.SrcDirectory, false);
+        await angularService.CreateWorkspace(temporaryAppName, request.Version, "app", "application", "app", solutionModel.SrcDirectory, false);
 
-        var nameSnakeCase = _namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name);
+        var nameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name);
 
         var serviceName = $"{nameSnakeCase}-hub-client";
 
         var appDirectory = Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app");
 
-        _commandService.Start($"ng g s {serviceName}", appDirectory);
+        commandService.Start($"ng g s {serviceName}", appDirectory);
 
-        _commandService.Start($"ng g c {_namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}", appDirectory);
+        commandService.Start($"ng g c {namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}", appDirectory);
 
-        _commandService.Start("npm install @microsoft/signalr --force", Path.Combine(solutionModel.SrcDirectory, temporaryAppName));
+        commandService.Start("npm install @microsoft/signalr --force", Path.Combine(solutionModel.SrcDirectory, temporaryAppName));
 
-        var mainFileModel = _fileFactory
+        var mainFileModel = fileFactory
             .CreateTemplate(
             "SignalRAppMain",
             "main",
             Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src"),
             TypeScriptFile,
             tokens: new TokensBuilder()
-            .With("baseUrl", projectModel.GetApplicationUrl(_fileSystem))
+            .With("baseUrl", projectModel.GetApplicationUrl(fileSystem))
             .With("name", request.Name)
             .Build());
 
-        var componentFileModel = _fileFactory
+        var componentFileModel = fileFactory
             .CreateTemplate(
             "Components.HubClientServiceConsumer.Component",
             Path.Combine(nameSnakeCase, $"{nameSnakeCase}.component"),
@@ -196,7 +195,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             .With("name", request.Name)
             .Build());
 
-        var componentTemplateFileModel = _fileFactory
+        var componentTemplateFileModel = fileFactory
             .CreateTemplate(
             "Components.HubClientServiceConsumer.Html",
             Path.Combine(nameSnakeCase, $"{nameSnakeCase}.component"),
@@ -207,7 +206,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             .With("code", "{{ vm.messages | json }}")
             .Build());
 
-        var hubServiceFileModel = _fileFactory
+        var hubServiceFileModel = fileFactory
             .CreateTemplate(
             "Services.HubClientService.Service",
             $"{serviceName}.service",
@@ -217,7 +216,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
             .With("name", request.Name)
             .Build());
 
-        var hubServiceSpecFileModel = _fileFactory
+        var hubServiceSpecFileModel = fileFactory
             .CreateTemplate(
             "Services.HubClientService.Spec",
             $"{serviceName}.service.spec",
@@ -229,21 +228,20 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         var appHtmlFileModel = new ContentFileModel("<router-outlet />", "app.component", Path.Combine(solutionModel.SrcDirectory, temporaryAppName, "projects", "app", "src", "app"), HtmlFile);
 
-        await _artifactGenerator.GenerateAsync(mainFileModel);
+        await artifactGenerator.GenerateAsync(mainFileModel);
 
-        await _artifactGenerator.GenerateAsync(componentTemplateFileModel);
+        await artifactGenerator.GenerateAsync(componentTemplateFileModel);
 
-        await _artifactGenerator.GenerateAsync(componentFileModel);
+        await artifactGenerator.GenerateAsync(componentFileModel);
 
-        await _artifactGenerator.GenerateAsync(hubServiceFileModel);
+        await artifactGenerator.GenerateAsync(hubServiceFileModel);
 
-        await _artifactGenerator.GenerateAsync(hubServiceSpecFileModel);
+        await artifactGenerator.GenerateAsync(hubServiceSpecFileModel);
 
-        await _artifactGenerator.GenerateAsync(appHtmlFileModel);
+        await artifactGenerator.GenerateAsync(appHtmlFileModel);
 
         Directory.Move(Path.Combine(solutionModel.SrcDirectory, temporaryAppName), Path.Combine(solutionModel.SrcDirectory, $"{request.Name}.App"));
 
-        _commandService.Start("code .", solutionModel.SolutionDirectory);
-
+        commandService.Start("code .", solutionModel.SolutionDirectory);
     }
 }

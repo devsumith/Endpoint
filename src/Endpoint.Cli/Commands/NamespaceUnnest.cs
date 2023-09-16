@@ -1,39 +1,37 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using CommandLine;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("namespace-unnest")]
 public class NamespaceUnnestRequest : IRequest
 {
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
 public class NamespaceUnnestRequestHandler : IRequestHandler<NamespaceUnnestRequest>
 {
-    private readonly ILogger<NamespaceUnnestRequestHandler> _logger;
+    private readonly ILogger<NamespaceUnnestRequestHandler> logger;
 
     public NamespaceUnnestRequestHandler(ILogger<NamespaceUnnestRequestHandler> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task Handle(NamespaceUnnestRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(NamespaceUnnestRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(NamespaceUnnestRequestHandler));
 
         foreach (var path in Directory.GetFiles(request.Directory, "*.*", SearchOption.AllDirectories))
         {
@@ -49,9 +47,9 @@ public class NamespaceUnnestRequestHandler : IRequestHandler<NamespaceUnnestRequ
                     {
                         if (line.StartsWith("namespace"))
                         {
-                            newContent.Add("");
+                            newContent.Add(string.Empty);
                             newContent.Add($"{line};");
-                            newContent.Add("");
+                            newContent.Add(string.Empty);
                         }
 
                         if (line.StartsWith("using"))
@@ -61,10 +59,12 @@ public class NamespaceUnnestRequestHandler : IRequestHandler<NamespaceUnnestRequ
 
                         if (string.IsNullOrEmpty(line.Trim()))
                         {
-                            newContent.Add("");
+                            newContent.Add(string.Empty);
                         }
                         else if (line.StartsWith("    "))
+                        {
                             newContent.Add(line.Substring(4));
+                        }
                     }
 
                     foreach (var line in newContent)
@@ -75,9 +75,6 @@ public class NamespaceUnnestRequestHandler : IRequestHandler<NamespaceUnnestRequ
                     File.WriteAllLines(path, newContent);
                 }
             }
-
         }
-
-
     }
 }

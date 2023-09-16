@@ -1,18 +1,17 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Git;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("git-create")]
 public class GitCreateRequest : IRequest
@@ -26,29 +25,26 @@ public class GitCreateRequest : IRequest
 
 public class GitCreateRequestHandler : IRequestHandler<GitCreateRequest>
 {
-    private readonly ILogger<GitCreateRequestHandler> _logger;
-    private readonly IArtifactGenerator _artifactGenerator;
+    private readonly ILogger<GitCreateRequestHandler> logger;
+    private readonly IArtifactGenerator artifactGenerator;
 
     public GitCreateRequestHandler(
         ILogger<GitCreateRequestHandler> logger,
         IArtifactGenerator artifactGenerator)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(GitCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Handled: {nameof(GitCreateRequestHandler)}");
+        logger.LogInformation($"Handled: {nameof(GitCreateRequestHandler)}");
 
         var model = new GitModel(request.RepositoryName)
         {
-            Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{request.RepositoryName}"
+            Directory = $"{request.Directory}{Path.DirectorySeparatorChar}{request.RepositoryName}",
         };
 
-        await _artifactGenerator.GenerateAsync(model);
-
-
+        await artifactGenerator.GenerateAsync(model);
     }
 }
-

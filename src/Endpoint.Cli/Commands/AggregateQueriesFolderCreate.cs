@@ -1,17 +1,16 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Syntax.Classes;
+using CommandLine;
 using Endpoint.Core.Artifacts.Folders.Services;
+using Endpoint.Core.Syntax.Classes;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("aggregate-queries-folder-create")]
 public class AggregateQueriesFolderCreateRequest : IRequest
@@ -19,30 +18,27 @@ public class AggregateQueriesFolderCreateRequest : IRequest
     [Option('n', "name")]
     public string AggregateName { get; set; }
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
 public class AggregateQueriesFolderCreateRequestHandler : IRequestHandler<AggregateQueriesFolderCreateRequest>
 {
-    private readonly ILogger<AggregateQueriesFolderCreateRequestHandler> _logger;
-    private readonly IFolderService _folderService;
+    private readonly ILogger<AggregateQueriesFolderCreateRequestHandler> logger;
+    private readonly IFolderService folderService;
 
     public AggregateQueriesFolderCreateRequestHandler(
         ILogger<AggregateQueriesFolderCreateRequestHandler> logger,
         IFolderService folderService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _folderService = folderService ?? throw new ArgumentNullException(nameof(folderService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.folderService = folderService ?? throw new ArgumentNullException(nameof(folderService));
     }
 
     public async Task Handle(AggregateQueriesFolderCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(AggregateQueriesFolderCreateRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(AggregateQueriesFolderCreateRequestHandler));
 
-        _folderService.AggregateQueries(new ClassModel(request.AggregateName), request.Directory);
-
-
+        folderService.AggregateQueries(new ClassModel(request.AggregateName), request.Directory);
     }
 }

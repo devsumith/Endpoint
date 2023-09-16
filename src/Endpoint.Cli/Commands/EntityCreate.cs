@@ -1,6 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files;
@@ -10,9 +13,6 @@ using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
 
@@ -31,11 +31,12 @@ public class EntityCreateRequest : IRequest
 
 public class EntityAddRequestHandler : IRequestHandler<EntityCreateRequest>
 {
-    private readonly ILogger<EntityAddRequestHandler> _logger;
-    private readonly IClassService _classService;
-    private readonly IArtifactGenerator _artifactGenerator;
-    private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly IClassFactory _classFactory;
+    private readonly ILogger<EntityAddRequestHandler> logger;
+    private readonly IClassService classService;
+    private readonly IArtifactGenerator artifactGenerator;
+    private readonly INamingConventionConverter namingConventionConverter;
+    private readonly IClassFactory classFactory;
+
     public EntityAddRequestHandler(
         ILogger<EntityAddRequestHandler> logger,
         IClassService classService,
@@ -43,25 +44,23 @@ public class EntityAddRequestHandler : IRequestHandler<EntityCreateRequest>
         INamingConventionConverter namingConventionConverter,
         IClassFactory classFactory)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _classService = classService ?? throw new ArgumentNullException(nameof(classService));
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
-        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
-
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.classService = classService ?? throw new ArgumentNullException(nameof(classService));
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        this.classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
     }
 
     public async Task Handle(EntityCreateRequest request, CancellationToken cancellationToken)
     {
-        var model = _classFactory.CreateEntity(request.Name, request.Properties);
+        var model = classFactory.CreateEntity(request.Name, request.Properties);
 
-        await _classService.CreateAsync(request.Name, request.Properties, request.Directory);
+        await classService.CreateAsync(request.Name, request.Properties, request.Directory);
 
-        await _classService.CreateAsync($"{request.Name}Dto", request.Properties, request.Directory);
+        await classService.CreateAsync($"{request.Name}Dto", request.Properties, request.Directory);
 
-        //var dtoExtensions = new DtoExtensionsModel(_namingConventionConverter, $"{model.Name}Extensions", model);
+        // var dtoExtensions = new DtoExtensionsModel(_namingConventionConverter, $"{model.Name}Extensions", model);
 
-        //await _artifactGenerator.GenerateAsync(new ObjectFileModel<ClassModel>(dtoExtensions, $"{model.Name}Extensions", request.Directory, ".cs"));
-
+        // await _artifactGenerator.GenerateAsync(new ObjectFileModel<ClassModel>(dtoExtensions, $"{model.Name}Extensions", request.Directory, ".cs"));
     }
 }

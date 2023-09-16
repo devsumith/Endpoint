@@ -1,25 +1,24 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using Endpoint.Core.Artifacts.Projects.Factories;
-using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Services;
-using MediatR;
-using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Classes;
+using CommandLine;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Artifacts.Solutions.Factories;
 using Endpoint.Core.Artifacts.Solutions.Services;
+using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Classes.Factories;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("service-bus-solution-create")]
 public class ServiceBusSolutionCreateRequest : IRequest
@@ -39,39 +38,39 @@ public class ServiceBusSolutionCreateRequest : IRequest
 
 public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBusSolutionCreateRequest>
 {
-    private readonly ILogger<ServiceBusSolutionCreateRequestHandler> _logger;
-    private readonly ISolutionFactory _solutionFactory;
-    private readonly ISolutionService _solutionService;
-    private readonly ICommandService _commandService;
-    private readonly IProjectFactory _projectFactory;
-    private readonly IClassFactory _classFactory;
+    private readonly ILogger<ServiceBusSolutionCreateRequestHandler> logger;
+    private readonly ISolutionFactory solutionFactory;
+    private readonly ISolutionService solutionService;
+    private readonly ICommandService commandService;
+    private readonly IProjectFactory projectFactory;
+    private readonly IClassFactory classFactory;
+
     public ServiceBusSolutionCreateRequestHandler(
         ILogger<ServiceBusSolutionCreateRequestHandler> logger,
         ISolutionService solutionService,
         ISolutionFactory solutionFactory,
         ICommandService commandService,
         IProjectFactory projectFactory,
-        IClassFactory classFactory
-        )
+        IClassFactory classFactory)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
-        _solutionFactory = solutionFactory ?? throw new ArgumentNullException(nameof(solutionFactory));
-        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _projectFactory = projectFactory ?? throw new ArgumentNullException(nameof(projectFactory));
-        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
+        this.solutionFactory = solutionFactory ?? throw new ArgumentNullException(nameof(solutionFactory));
+        this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+        this.projectFactory = projectFactory ?? throw new ArgumentNullException(nameof(projectFactory));
+        this.classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
     }
 
     public async Task Handle(ServiceBusSolutionCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(SolutionCreateRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(SolutionCreateRequestHandler));
 
         if (string.IsNullOrEmpty(request.ProjectName))
         {
             request.ProjectName = $"{request.Name}";
         }
 
-        var model = await _solutionFactory.Create(request.Name, request.ProjectName, request.ProjectType, string.Empty, request.Directory);
+        var model = await solutionFactory.Create(request.Name, request.ProjectName, request.ProjectType, string.Empty, request.Directory);
 
         var srcFolder = model.Folders.Single();
 
@@ -84,9 +83,9 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         projectModel.Order = int.MaxValue;
 
-        var serviceBusMessageConsumerClassModel = _classFactory.CreateServiceBusMessageConsumer("ServiceBusMessageConsumer", projectModel.Name);
+        var serviceBusMessageConsumerClassModel = classFactory.CreateServiceBusMessageConsumer("ServiceBusMessageConsumer", projectModel.Name);
 
-        var configureServicesClassModel = _classFactory.CreateConfigureServices(projectModel.Name.Split('.').Last());
+        var configureServicesClassModel = classFactory.CreateConfigureServices(projectModel.Name.Split('.').Last());
 
         var configureServicesMethodBodyBuilder = new StringBuilder();
 
@@ -111,10 +110,9 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         configureServicesClassModel.Methods.First().Body = new Core.Syntax.Expressions.ExpressionModel(configureServicesMethodBodyBuilder.ToString());
 
-        var configureServicesFileModel = new CodeFileModel<ClassModel>(configureServicesClassModel, new()
+        var configureServicesFileModel = new CodeFileModel<ClassModel>(configureServicesClassModel, new ()
         {
-            new (projectModel.Name)
-
+            new (projectModel.Name),
         }, configureServicesClassModel.Name, projectModel.Directory, ".cs");
 
         configureServicesFileModel.Namespace = "Microsoft.Extensions.DependencyInjection";
@@ -123,7 +121,8 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         if (request.ProjectType == "worker")
         {
-            var programFileModel = new ContentFileModel(new StringBuilder()
+            var programFileModel = new ContentFileModel(
+                new StringBuilder()
                 .AppendLine("var host = Host.CreateDefaultBuilder(args)")
                 .AppendLine(".ConfigureServices(services =>".Indent(1))
                 .AppendLine("{".Indent(1))
@@ -141,18 +140,17 @@ public class ServiceBusSolutionCreateRequestHandler : IRequestHandler<ServiceBus
 
         projectModel.References.Add(@"..\Messaging.Udp\Messaging.Udp.csproj");
 
-        srcFolder.Projects.Add(await _projectFactory.CreateMessagingProject(srcFolder.Directory));
+        srcFolder.Projects.Add(await projectFactory.CreateMessagingProject(srcFolder.Directory));
 
-        srcFolder.Projects.Add(await _projectFactory.CreateMessagingUdpProject(srcFolder.Directory));
+        srcFolder.Projects.Add(await projectFactory.CreateMessagingUdpProject(srcFolder.Directory));
 
-        await _solutionService.Create(model);
+        await solutionService.Create(model);
 
         if (File.Exists(Path.Combine(projectModel.Directory, "Worker.cs")))
         {
             File.Delete(Path.Combine(projectModel.Directory, "Worker.cs"));
         }
 
-        _commandService.Start($"start {model.SolultionFileName}", model.SolutionDirectory);
-
+        commandService.Start($"start {model.SolultionFileName}", model.SolutionDirectory);
     }
 }

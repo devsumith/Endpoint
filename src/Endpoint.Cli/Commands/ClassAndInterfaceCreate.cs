@@ -1,22 +1,21 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using CommandLine;
+using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files;
-using System.Collections.Generic;
-using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Interfaces;
 using Endpoint.Core.Syntax.Types;
-using Endpoint.Core.Artifacts;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("class-and-interface-create")]
 public class ClassAndInterfaceCreateRequest : IRequest
@@ -24,30 +23,29 @@ public class ClassAndInterfaceCreateRequest : IRequest
     [Option('n', "name")]
     public string Name { get; set; }
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
 public class ClassAndInterfaceCreateRequestHandler : IRequestHandler<ClassAndInterfaceCreateRequest>
 {
-    private readonly ILogger<ClassAndInterfaceCreateRequestHandler> _logger;
-    private readonly IClassFactory _classFactory;
-    private readonly IArtifactGenerator _artifactGenerator;
+    private readonly ILogger<ClassAndInterfaceCreateRequestHandler> logger;
+    private readonly IClassFactory classFactory;
+    private readonly IArtifactGenerator artifactGenerator;
 
     public ClassAndInterfaceCreateRequestHandler(
         ILogger<ClassAndInterfaceCreateRequestHandler> logger,
         IArtifactGenerator artifactGenerator,
         IClassFactory classFactory)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(ClassAndInterfaceCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(ClassAndInterfaceCreateRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(ClassAndInterfaceCreateRequestHandler));
 
         foreach (var nameAndMaybeInterfaces in request.Name.Split(','))
         {
@@ -63,7 +61,7 @@ public class ClassAndInterfaceCreateRequestHandler : IRequestHandler<ClassAndInt
                 }
             }
 
-            var (classModel, interfaceModel) = _classFactory.CreateClassAndInterface(name);
+            var (classModel, interfaceModel) = classFactory.CreateClassAndInterface(name);
 
             foreach (var @interface in interfaces)
             {
@@ -74,9 +72,9 @@ public class ClassAndInterfaceCreateRequestHandler : IRequestHandler<ClassAndInt
 
             var interfaceFileModel = new CodeFileModel<InterfaceModel>(interfaceModel, interfaceModel.Usings, interfaceModel.Name, request.Directory, ".cs");
 
-            await _artifactGenerator.GenerateAsync(classFileModel);
+            await artifactGenerator.GenerateAsync(classFileModel);
 
-            await _artifactGenerator.GenerateAsync(interfaceFileModel);
+            await artifactGenerator.GenerateAsync(interfaceFileModel);
         }
     }
 }

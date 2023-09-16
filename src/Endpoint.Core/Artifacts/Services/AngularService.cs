@@ -459,6 +459,35 @@ public class AngularService : IAngularService
         return angularJson.GetSupportedLocales(model.Name);
     }
 
+    public async Task PrettierAdd(string directory)
+    {
+        var workspaceDirectory = Path.GetDirectoryName(fileProvider.Get("angular.json", directory));
+
+        var packageJsonPath = $"{workspaceDirectory}{Path.DirectorySeparatorChar}package.json";
+
+        var packageJson = JObject.Parse(fileSystem.File.ReadAllText(packageJsonPath));
+
+        commandService.Start("npm install prettier npm-run-all husky pretty-quick -D", workspaceDirectory);
+
+        fileSystem.File.WriteAllText($"{workspaceDirectory}{Path.DirectorySeparatorChar}.prettierrc.json", JsonConvert.SerializeObject(
+            new
+            {
+                tabWidth = 2,
+                useTabs = false,
+                printWidth = 120,
+            }, Formatting.Indented));
+
+        packageJson.AddScripts(new Dictionary<string, string>()
+        {
+            { "format:fix", "pretty-quick --staged" },
+            { "precommit", "run-s format:fix lint" },
+            { "lint", "ng lint" },
+            { "format:check", "prettier --config ./.prettierrc.json --list-different \"projects/**/src/{app,environments,assets}/**/*{.ts,.js,.json,.css,.scss}\"" },
+        });
+
+        fileSystem.File.WriteAllText(packageJsonPath, JsonConvert.SerializeObject(packageJson, Formatting.Indented));
+    }
+
     private void AddImports(AngularProjectModel model)
     {
         var mainPath = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}main.ts";
@@ -644,35 +673,6 @@ public class AngularService : IAngularService
         }
 
         fileSystem.File.WriteAllLines(appComponentPath, newLines.ToArray());
-    }
-
-    public async Task PrettierAdd(string directory)
-    {
-        var workspaceDirectory = Path.GetDirectoryName(fileProvider.Get("angular.json", directory));
-
-        var packageJsonPath = $"{workspaceDirectory}{Path.DirectorySeparatorChar}package.json";
-
-        var packageJson = JObject.Parse(fileSystem.File.ReadAllText(packageJsonPath));
-
-        commandService.Start("npm install prettier npm-run-all husky pretty-quick -D", workspaceDirectory);
-
-        fileSystem.File.WriteAllText($"{workspaceDirectory}{Path.DirectorySeparatorChar}.prettierrc.json", JsonConvert.SerializeObject(
-            new
-            {
-                tabWidth = 2,
-                useTabs = false,
-                printWidth = 120,
-            }, Formatting.Indented));
-
-        packageJson.AddScripts(new Dictionary<string, string>()
-        {
-            { "format:fix", "pretty-quick --staged" },
-            { "precommit", "run-s format:fix lint" },
-            { "lint", "ng lint" },
-            { "format:check", "prettier --config ./.prettierrc.json --list-different \"projects/**/src/{app,environments,assets}/**/*{.ts,.js,.json,.css,.scss}\"" },
-        });
-
-        fileSystem.File.WriteAllText(packageJsonPath, JsonConvert.SerializeObject(packageJson, Formatting.Indented));
     }
 
     public async Task BootstrapAdd(AngularProjectReferenceModel model)

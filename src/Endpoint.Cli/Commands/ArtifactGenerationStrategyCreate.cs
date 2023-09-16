@@ -1,6 +1,8 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files.Factories;
@@ -8,11 +10,8 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Syntax;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("artifact-generation-strategy-create")]
 public class ArtifactGenerationStrategyCreateRequest : IRequest
@@ -26,37 +25,36 @@ public class ArtifactGenerationStrategyCreateRequest : IRequest
 
 public class ArtifactGenerationStrategyCreateRequestHandler : IRequestHandler<ArtifactGenerationStrategyCreateRequest>
 {
-    private readonly IArtifactGenerator _artifactGenerator;
-    private readonly ILogger<VerbRequestHandler> _logger;
-    private readonly IFileFactory _fileFactory;
-    private readonly INamespaceProvider _namespaceProvider;
+    private readonly IArtifactGenerator artifactGenerator;
+    private readonly ILogger<VerbRequestHandler> logger;
+    private readonly IFileFactory fileFactory;
+    private readonly INamespaceProvider namespaceProvider;
 
     public ArtifactGenerationStrategyCreateRequestHandler(
         ILogger<VerbRequestHandler> logger,
         IArtifactGenerator artifactGenerator,
         IFileFactory fileFactory,
-        INamespaceProvider namespaceProvider
-        )
+        INamespaceProvider namespaceProvider)
     {
-        _artifactGenerator = artifactGenerator;
-        _logger = logger;
-        _fileFactory = fileFactory;
-        _namespaceProvider = namespaceProvider;
+        this.artifactGenerator = artifactGenerator;
+        this.logger = logger;
+        this.fileFactory = fileFactory;
+        this.namespaceProvider = namespaceProvider;
     }
 
     public async Task Handle(ArtifactGenerationStrategyCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Handled: {nameof(ArtifactGenerationStrategyCreateRequestHandler)}");
+        logger.LogInformation($"Handled: {nameof(ArtifactGenerationStrategyCreateRequestHandler)}");
 
-        var @namespace = _namespaceProvider.Get(request.Directory);
+        var @namespace = namespaceProvider.Get(request.Directory);
 
         var tokens = new TokensBuilder()
             .With("ModelName", (SyntaxToken)request.Name)
             .With("Namespace", (SyntaxToken)@namespace)
             .Build();
 
-        var model = _fileFactory.CreateTemplate("ArtifactGenerationStrategy", $"{request.Name}ArtifactGenerationStrategy", request.Directory, tokens: tokens);
+        var model = fileFactory.CreateTemplate("ArtifactGenerationStrategy", $"{request.Name}ArtifactGenerationStrategy", request.Directory, tokens: tokens);
 
-        await _artifactGenerator.GenerateAsync(model);
+        await artifactGenerator.GenerateAsync(model);
     }
 }

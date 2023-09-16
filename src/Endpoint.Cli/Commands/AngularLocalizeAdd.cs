@@ -1,18 +1,17 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts.AngularProjects;
 using Endpoint.Core.Artifacts.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("ng-localize-add")]
 public class AngularLocalizeAddRequest : IRequest
@@ -29,21 +28,21 @@ public class AngularLocalizeAddRequest : IRequest
 
 public class AngularLocalizeAddRequestHandler : IRequestHandler<AngularLocalizeAddRequest>
 {
-    private readonly ILogger<AngularLocalizeAddRequestHandler> _logger;
-    private readonly IAngularService _angularService;
+    private readonly ILogger<AngularLocalizeAddRequestHandler> logger;
+    private readonly IAngularService angularService;
 
     public AngularLocalizeAddRequestHandler(
         ILogger<AngularLocalizeAddRequestHandler> logger,
         IAngularService angularService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
     public async Task Handle(AngularLocalizeAddRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(AngularLocalizeAddRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(AngularLocalizeAddRequestHandler));
 
-        await _angularService.LocalizeAdd(new AngularProjectReferenceModel(request.Name, request.Directory), request.Locales.Split(',').ToList());
+        await angularService.LocalizeAdd(new AngularProjectReferenceModel(request.Name, request.Directory), request.Locales.Split(',').ToList());
     }
 }

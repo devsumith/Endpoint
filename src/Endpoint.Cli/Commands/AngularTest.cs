@@ -1,13 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using CommandLine;
 using Endpoint.Core.Artifacts.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
 
@@ -23,20 +23,21 @@ public class AngularTestRequest : IRequest
 
 public class AngularTestRequestHandler : IRequestHandler<AngularTestRequest>
 {
-    private readonly ILogger<AngularTestRequestHandler> _logger;
-    private readonly IAngularService _angularService;
+    private readonly ILogger<AngularTestRequestHandler> logger;
+    private readonly IAngularService angularService;
+
     public AngularTestRequestHandler(
         ILogger<AngularTestRequestHandler> logger,
         IAngularService angularService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
     public async Task Handle(AngularTestRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Testing Angular. {searchPattern}", request.SearchPattern);
+        logger.LogInformation("Testing Angular. {searchPattern}", request.SearchPattern);
 
-        await _angularService.Test(request.Directory, request.SearchPattern);
+        await angularService.Test(request.Directory, request.SearchPattern);
     }
 }

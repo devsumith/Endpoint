@@ -1,16 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts.Solutions.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("event-driven-microservices-create")]
 public class EventDrivenMicroservicesCreateRequest : IRequest
@@ -27,22 +26,21 @@ public class EventDrivenMicroservicesCreateRequest : IRequest
 
 public class EventDrivenMicroservicesCreateRequestHandler : IRequestHandler<EventDrivenMicroservicesCreateRequest>
 {
-    private readonly ILogger<EventDrivenMicroservicesCreateRequestHandler> _logger;
-    private readonly ISolutionService _solutionService;
+    private readonly ILogger<EventDrivenMicroservicesCreateRequestHandler> logger;
+    private readonly ISolutionService solutionService;
+
     public EventDrivenMicroservicesCreateRequestHandler(
         ILogger<EventDrivenMicroservicesCreateRequestHandler> logger,
         ISolutionService solutionService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
     }
 
     public async Task Handle(EventDrivenMicroservicesCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(EventDrivenMicroservicesCreateRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(EventDrivenMicroservicesCreateRequestHandler));
 
-        await _solutionService.EventDrivenMicroservicesCreate(request.Name, request.Services, request.Directory);
-
-
+        await solutionService.EventDrivenMicroservicesCreate(request.Name, request.Services, request.Directory);
     }
 }

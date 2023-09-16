@@ -262,6 +262,65 @@ public class ClassFactory : IClassFactory
         return interfaceModel;
     }
 
+    public async Task<ClassModel> CreateMessageProducerWorkerAsync(string name, string directory)
+    {
+        var model = await CreateWorkerAsync("MessageProducer");
+
+        model.Usings.Add(new UsingModel() { Name = "System.Text.Json" });
+
+        var hubContextType = new TypeModel("IHubContext")
+        {
+            GenericTypeParameters = new List<TypeModel>()
+            {
+                new TypeModel($"{name}Hub"),
+                new TypeModel($"I{name}Hub"),
+            },
+        };
+
+        model.Usings.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
+
+        model.Fields.Add(new FieldModel()
+        {
+            Type = hubContextType,
+            Name = "_hubContext",
+        });
+
+        var methodBodyBuilder = new StringBuilder();
+
+        methodBodyBuilder.AppendLine("while (!stoppingToken.IsCancellationRequested)");
+
+        methodBodyBuilder.AppendLine("{");
+
+        methodBodyBuilder.AppendLine("_logger.LogInformation(\"Worker running at: {time}\", DateTimeOffset.Now);".Indent(1));
+
+        methodBodyBuilder.AppendLine(string.Empty);
+
+        methodBodyBuilder.Append(new StringBuilder()
+            .AppendLine("var message = new Message();")
+            .AppendLine(string.Empty)
+            .AppendLine("var json = JsonSerializer.Serialize(message);")
+            .AppendLine(string.Empty)
+            .AppendLine("await _hubContext.Clients.All.Message(json);")
+            .ToString()
+            .Indent(1));
+
+        methodBodyBuilder.AppendLine(string.Empty);
+
+        methodBodyBuilder.AppendLine("await Task.Delay(1000, stoppingToken);".Indent(1));
+
+        methodBodyBuilder.AppendLine("}");
+
+        model.Methods.First().Body = new Syntax.Expressions.ExpressionModel(methodBodyBuilder.ToString());
+
+        model.Constructors.First().Params.Add(new ParamModel()
+        {
+            Type = hubContextType,
+            Name = "hubContext",
+        });
+
+        return model;
+    }
+
     private MethodModel CreateControllerMethod(ClassModel controller, EntityModel model, RouteType routeType)
     {
         MethodModel methodModel = new MethodModel
@@ -481,65 +540,6 @@ public class ClassFactory : IClassFactory
         }
 
         return methodModel;
-    }
-
-    public async Task<ClassModel> CreateMessageProducerWorkerAsync(string name, string directory)
-    {
-        var model = await CreateWorkerAsync("MessageProducer");
-
-        model.Usings.Add(new UsingModel() { Name = "System.Text.Json" });
-
-        var hubContextType = new TypeModel("IHubContext")
-        {
-            GenericTypeParameters = new List<TypeModel>()
-            {
-                new TypeModel($"{name}Hub"),
-                new TypeModel($"I{name}Hub"),
-            },
-        };
-
-        model.Usings.Add(new UsingModel() { Name = "Microsoft.AspNetCore.SignalR" });
-
-        model.Fields.Add(new FieldModel()
-        {
-            Type = hubContextType,
-            Name = "_hubContext",
-        });
-
-        var methodBodyBuilder = new StringBuilder();
-
-        methodBodyBuilder.AppendLine("while (!stoppingToken.IsCancellationRequested)");
-
-        methodBodyBuilder.AppendLine("{");
-
-        methodBodyBuilder.AppendLine("_logger.LogInformation(\"Worker running at: {time}\", DateTimeOffset.Now);".Indent(1));
-
-        methodBodyBuilder.AppendLine(string.Empty);
-
-        methodBodyBuilder.Append(new StringBuilder()
-            .AppendLine("var message = new Message();")
-            .AppendLine(string.Empty)
-            .AppendLine("var json = JsonSerializer.Serialize(message);")
-            .AppendLine(string.Empty)
-            .AppendLine("await _hubContext.Clients.All.Message(json);")
-            .ToString()
-            .Indent(1));
-
-        methodBodyBuilder.AppendLine(string.Empty);
-
-        methodBodyBuilder.AppendLine("await Task.Delay(1000, stoppingToken);".Indent(1));
-
-        methodBodyBuilder.AppendLine("}");
-
-        model.Methods.First().Body = new Syntax.Expressions.ExpressionModel(methodBodyBuilder.ToString());
-
-        model.Constructors.First().Params.Add(new ParamModel()
-        {
-            Type = hubContextType,
-            Name = "hubContext",
-        });
-
-        return model;
     }
 
     public Tuple<ClassModel, InterfaceModel> CreateClassAndInterface(string name)

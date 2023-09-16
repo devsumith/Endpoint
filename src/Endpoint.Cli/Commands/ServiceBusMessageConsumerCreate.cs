@@ -1,16 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts.Units;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("service-bus-message-consumer-create")]
 public class ServiceBusMessageConsumerCreateRequest : IRequest
@@ -27,20 +26,21 @@ public class ServiceBusMessageConsumerCreateRequest : IRequest
 
 public class ServiceBusMessageConsumerCreateRequestHandler : IRequestHandler<ServiceBusMessageConsumerCreateRequest>
 {
-    private readonly ILogger<ServiceBusMessageConsumerCreateRequestHandler> _logger;
-    private readonly IDomainDrivenDesignFileService _domainDrivenDesignFileService;
+    private readonly ILogger<ServiceBusMessageConsumerCreateRequestHandler> logger;
+    private readonly IDomainDrivenDesignFileService domainDrivenDesignFileService;
+
     public ServiceBusMessageConsumerCreateRequestHandler(
         ILogger<ServiceBusMessageConsumerCreateRequestHandler> logger,
         IDomainDrivenDesignFileService domainDrivenDesignFileService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _domainDrivenDesignFileService = domainDrivenDesignFileService ?? throw new ArgumentNullException(nameof(domainDrivenDesignFileService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.domainDrivenDesignFileService = domainDrivenDesignFileService ?? throw new ArgumentNullException(nameof(domainDrivenDesignFileService));
     }
 
     public async Task Handle(ServiceBusMessageConsumerCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(ServiceBusMessageConsumerCreateRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(ServiceBusMessageConsumerCreateRequestHandler));
 
-        _domainDrivenDesignFileService.ServiceBusMessageConsumerCreate(request.Name, request.MessagesNamespace, request.Directory);
+        domainDrivenDesignFileService.ServiceBusMessageConsumerCreate(request.Name, request.MessagesNamespace, request.Directory);
     }
 }

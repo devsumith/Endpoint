@@ -1,17 +1,16 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using CommandLine;
 using Endpoint.Core.Services;
-using System.IO;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("remove-mediator")]
 public class RemoveMediatorRequest : IRequest
@@ -19,33 +18,32 @@ public class RemoveMediatorRequest : IRequest
     [Option('n', "name")]
     public string Name { get; set; }
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
 public class RemoveMediatorRequestHandler : IRequestHandler<RemoveMediatorRequest>
 {
-    private readonly ILogger<RemoveMediatorRequestHandler> _logger;
-    private readonly ICommandService _commandService;
+    private readonly ILogger<RemoveMediatorRequestHandler> logger;
+    private readonly ICommandService commandService;
 
     public RemoveMediatorRequestHandler(
         ILogger<RemoveMediatorRequestHandler> logger,
         ICommandService commandService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
     public async Task Handle(RemoveMediatorRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(RemoveMediatorRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(RemoveMediatorRequestHandler));
 
         foreach (var file in Directory.GetFiles(request.Directory, "*.Core.csproj", SearchOption.AllDirectories))
         {
-            _commandService.Start("dotnet remove package MediatR", Path.GetDirectoryName(file));
+            commandService.Start("dotnet remove package MediatR", Path.GetDirectoryName(file));
 
-            _commandService.Start("dotnet remove package MediatR.Extensions.Microsoft.DependencyInjection", Path.GetDirectoryName(file));
+            commandService.Start("dotnet remove package MediatR.Extensions.Microsoft.DependencyInjection", Path.GetDirectoryName(file));
         }
     }
 }

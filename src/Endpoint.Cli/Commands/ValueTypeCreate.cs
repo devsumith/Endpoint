@@ -1,19 +1,18 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Artifacts.Files;
-using System.Collections.Generic;
-using Endpoint.Core.Services;
+using CommandLine;
 using Endpoint.Core.Artifacts;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("value-type-create")]
 public class ValueTypeCreateRequest : IRequest
@@ -30,23 +29,23 @@ public class ValueTypeCreateRequest : IRequest
 
 public class ValueTypeCreateRequestHandler : IRequestHandler<ValueTypeCreateRequest>
 {
-    private readonly ILogger<ValueTypeCreateRequestHandler> _logger;
-    private readonly IArtifactGenerator _artifactGenerator;
-    private readonly INamingConventionConverter _namingConventionConverter;
+    private readonly ILogger<ValueTypeCreateRequestHandler> logger;
+    private readonly IArtifactGenerator artifactGenerator;
+    private readonly INamingConventionConverter namingConventionConverter;
 
     public ValueTypeCreateRequestHandler(
         ILogger<ValueTypeCreateRequestHandler> logger,
         IArtifactGenerator artifactGenerator,
         INamingConventionConverter namingConventionConverter)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
     public async Task Handle(ValueTypeCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(ValueTypeCreateRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(ValueTypeCreateRequestHandler));
 
         var tokens = new TokensBuilder()
             .With(nameof(request.Name), request.Name)
@@ -54,8 +53,8 @@ public class ValueTypeCreateRequestHandler : IRequestHandler<ValueTypeCreateRequ
             .With("namespace", "System")
             .Build();
 
-        var model = new TemplatedFileModel("ValueType", $"{_namingConventionConverter.Convert(NamingConvention.PascalCase, request.Name)}Type", request.Directory, ".cs", tokens);
+        var model = new TemplatedFileModel("ValueType", $"{namingConventionConverter.Convert(NamingConvention.PascalCase, request.Name)}Type", request.Directory, ".cs", tokens);
 
-        await _artifactGenerator.GenerateAsync(model);
+        await artifactGenerator.GenerateAsync(model);
     }
 }

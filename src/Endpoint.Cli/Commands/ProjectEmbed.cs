@@ -1,18 +1,17 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using CommandLine;
 using Endpoint.Core.Services;
-using System.IO;
-using System.Collections.Generic;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("project-embed")]
 public class ProjectEmbedRequest : IRequest
@@ -20,32 +19,31 @@ public class ProjectEmbedRequest : IRequest
     [Option('o', "output-directory")]
     public string OutputDirectory { get; set; }
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
 public class ProjectEmbedRequestHandler : IRequestHandler<ProjectEmbedRequest>
 {
-    private readonly ILogger<ProjectEmbedRequestHandler> _logger;
-    private readonly IFileProvider _fileProvider;
-    private readonly IFileSystem _fileSystem;
+    private readonly ILogger<ProjectEmbedRequestHandler> logger;
+    private readonly IFileProvider fileProvider;
+    private readonly IFileSystem fileSystem;
 
     public ProjectEmbedRequestHandler(
         ILogger<ProjectEmbedRequestHandler> logger,
         IFileProvider fileProvider,
         IFileSystem fileSystem)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _fileSystem = fileSystem;
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        this.fileSystem = fileSystem;
     }
 
     public async Task Handle(ProjectEmbedRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(ProjectEmbedRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(ProjectEmbedRequestHandler));
 
-        var projectDirectory = Path.GetDirectoryName(_fileProvider.Get("*.csproj", request.Directory));
+        var projectDirectory = Path.GetDirectoryName(fileProvider.Get("*.csproj", request.Directory));
 
         foreach (var path in Directory.GetFiles(projectDirectory, "*.cs", SearchOption.AllDirectories))
         {
@@ -55,7 +53,7 @@ public class ProjectEmbedRequestHandler : IRequestHandler<ProjectEmbedRequest>
                 break;
             }
 
-            var content = _fileSystem.File.ReadAllText(path);
+            var content = fileSystem.File.ReadAllText(path);
 
             var resolvedPath = path.Replace(projectDirectory, request.OutputDirectory);
 
@@ -69,11 +67,11 @@ public class ProjectEmbedRequestHandler : IRequestHandler<ProjectEmbedRequest>
 
                 if (parts.Count > 1)
                 {
-                    _fileSystem.Directory.CreateDirectory(string.Join(Path.DirectorySeparatorChar, parts));
+                    fileSystem.Directory.CreateDirectory(string.Join(Path.DirectorySeparatorChar, parts));
                 }
             }
-            _fileSystem.File.WriteAllText(resolvedPath, content);
-        }
 
+            fileSystem.File.WriteAllText(resolvedPath, content);
+        }
     }
 }

@@ -1,16 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using CommandLine;
 using Endpoint.Core.Artifacts.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("ng-component-create")]
 public class AngularComponentCreateRequest : IRequest
@@ -18,28 +17,27 @@ public class AngularComponentCreateRequest : IRequest
     [Option('n', "name")]
     public string Name { get; set; }
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
 public class AngularComponentCreateRequestHandler : IRequestHandler<AngularComponentCreateRequest>
 {
-    private readonly ILogger<AngularComponentCreateRequestHandler> _logger;
-    private readonly IAngularService _angularService;
+    private readonly ILogger<AngularComponentCreateRequestHandler> logger;
+    private readonly IAngularService angularService;
 
     public AngularComponentCreateRequestHandler(
         ILogger<AngularComponentCreateRequestHandler> logger,
         IAngularService angularService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
     public async Task Handle(AngularComponentCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Creating Angular Component.", nameof(AngularComponentCreateRequestHandler));
+        logger.LogInformation("Creating Angular Component.", nameof(AngularComponentCreateRequestHandler));
 
-        await _angularService.ComponentCreate(request.Name, request.Directory);
+        await angularService.ComponentCreate(request.Name, request.Directory);
     }
 }

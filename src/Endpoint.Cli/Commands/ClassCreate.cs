@@ -1,20 +1,17 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts.Files.Services;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
-
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("class-create")]
 public class ClassCreateRequest : IRequest
 {
-
     [Option('n')]
     public string Name { get; set; }
 
@@ -27,16 +24,15 @@ public class ClassCreateRequest : IRequest
 
 public class ClassCreateRequestHandler : IRequestHandler<ClassCreateRequest>
 {
-    private readonly IClassService _classService;
+    private readonly IClassService classService;
 
     public ClassCreateRequestHandler(IClassService classService)
     {
-        _classService = classService;
+        this.classService = classService;
     }
 
     public async Task Handle(ClassCreateRequest request, CancellationToken cancellationToken)
     {
-        await _classService.CreateAsync(request.Name, request.Properties, request.Directory);
+        await classService.CreateAsync(request.Name, request.Properties, request.Directory);
     }
 }
-

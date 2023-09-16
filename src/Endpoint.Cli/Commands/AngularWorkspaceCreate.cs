@@ -1,16 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("ng-new")]
 internal class AngularWorkspaceCreateRequest : IRequest
@@ -39,21 +38,21 @@ internal class AngularWorkspaceCreateRequest : IRequest
 
 internal class AngularWorkspaceCreateRequestHandler : IRequestHandler<AngularWorkspaceCreateRequest>
 {
-    private readonly ILogger<AngularWorkspaceCreateRequestHandler> _logger;
-    private readonly IAngularService _angularService;
+    private readonly ILogger<AngularWorkspaceCreateRequestHandler> logger;
+    private readonly IAngularService angularService;
 
     public AngularWorkspaceCreateRequestHandler(
         ILogger<AngularWorkspaceCreateRequestHandler> logger,
         IAngularService angularService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
     public async Task Handle(AngularWorkspaceCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Handled: {nameof(AngularWorkspaceCreateRequestHandler)}");
+        logger.LogInformation($"Handled: {nameof(AngularWorkspaceCreateRequestHandler)}");
 
-        await _angularService.CreateWorkspace(request.Name, request.Version, request.ProjectName, request.ProjectType, request.Prefix, request.Directory);
+        await angularService.CreateWorkspace(request.Name, request.Version, request.ProjectName, request.ProjectType, request.Prefix, request.Directory);
     }
 }

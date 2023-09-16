@@ -1,14 +1,14 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using CommandLine;
 using Endpoint.Core.Services;
-using System.IO;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
 
@@ -21,24 +21,25 @@ public class TestProjectsRemoveRequest : IRequest
 
 public class TestProjectsRemoveRequestHandler : IRequestHandler<TestProjectsRemoveRequest>
 {
-    private readonly ILogger<TestProjectsRemoveRequestHandler> _logger;
-    private readonly IFileProvider _fileProvider;
-    private readonly ICommandService _commandService;
+    private readonly ILogger<TestProjectsRemoveRequestHandler> logger;
+    private readonly IFileProvider fileProvider;
+    private readonly ICommandService commandService;
+
     public TestProjectsRemoveRequestHandler(
         ILogger<TestProjectsRemoveRequestHandler> logger,
         IFileProvider fileProvider,
         ICommandService commandService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _commandService = commandService;
-        _fileProvider = fileProvider;
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.commandService = commandService;
+        this.fileProvider = fileProvider;
     }
 
     public async Task Handle(TestProjectsRemoveRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(TestProjectsRemoveRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(TestProjectsRemoveRequestHandler));
 
-        var solutionPath = _fileProvider.Get("*.sln", request.Directory);
+        var solutionPath = fileProvider.Get("*.sln", request.Directory);
 
         var solutionFileName = Path.GetFileName(solutionPath);
 
@@ -46,8 +47,7 @@ public class TestProjectsRemoveRequestHandler : IRequestHandler<TestProjectsRemo
 
         foreach (var projectPath in Directory.GetFiles(solutionDirectory, "*.Tests.csproj", SearchOption.AllDirectories))
         {
-            _commandService.Start($"dotnet sln {solutionFileName} remove {projectPath}", solutionDirectory);
+            commandService.Start($"dotnet sln {solutionFileName} remove {projectPath}", solutionDirectory);
         }
-
     }
 }

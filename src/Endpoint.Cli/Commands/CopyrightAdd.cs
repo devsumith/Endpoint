@@ -1,16 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using CommandLine;
 using Endpoint.Core.Syntax;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("copyright-add")]
 public class CopyrightAddRequest : IRequest
@@ -21,21 +20,21 @@ public class CopyrightAddRequest : IRequest
 
 public class CopyrightAddRequestHandler : IRequestHandler<CopyrightAddRequest>
 {
-    private readonly ILogger<CopyrightAddRequestHandler> _logger;
-    private readonly IUtlitityService _utlitityService;
+    private readonly ILogger<CopyrightAddRequestHandler> logger;
+    private readonly IUtlitityService utlitityService;
 
     public CopyrightAddRequestHandler(
         ILogger<CopyrightAddRequestHandler> logger,
         IUtlitityService utlitityService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _utlitityService = utlitityService ?? throw new ArgumentNullException(nameof(utlitityService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.utlitityService = utlitityService ?? throw new ArgumentNullException(nameof(utlitityService));
     }
 
     public async Task Handle(CopyrightAddRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(CopyrightAddRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(CopyrightAddRequestHandler));
 
-        _utlitityService.CopyrightAdd(request.Directory);
+        utlitityService.CopyrightAdd(request.Directory);
     }
 }

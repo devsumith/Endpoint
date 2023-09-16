@@ -1,38 +1,36 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using CommandLine;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("class-unnest")]
 public class ClassUnnestRequest : IRequest
 {
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
 public class ClassUnnestRequestHandler : IRequestHandler<ClassUnnestRequest>
 {
-    private readonly ILogger<ClassUnnestRequestHandler> _logger;
+    private readonly ILogger<ClassUnnestRequestHandler> logger;
 
     public ClassUnnestRequestHandler(ILogger<ClassUnnestRequestHandler> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task Handle(ClassUnnestRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(NamespaceUnnestRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(NamespaceUnnestRequestHandler));
 
         await AddSuffix(request, cancellationToken).ConfigureAwait(false);
 
@@ -43,7 +41,7 @@ public class ClassUnnestRequestHandler : IRequestHandler<ClassUnnestRequest>
     {
         foreach (var path in Directory.GetFiles(request.Directory, "*.cs", SearchOption.AllDirectories))
         {
-            if (nestedClasses(path))
+            if (NestedClasses(path))
             {
                 Console.WriteLine(path);
 
@@ -70,7 +68,7 @@ public class ClassUnnestRequestHandler : IRequestHandler<ClassUnnestRequest>
             }
         }
 
-        bool nestedClasses(string path)
+        bool NestedClasses(string path)
         {
             var nestedClasses = false;
 
@@ -87,7 +85,6 @@ public class ClassUnnestRequestHandler : IRequestHandler<ClassUnnestRequest>
                 {
                     classContext = true;
                 }
-
             }
 
             return nestedClasses;

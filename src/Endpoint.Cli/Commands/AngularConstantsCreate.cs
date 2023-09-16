@@ -1,17 +1,16 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Files;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("ng-constants-create")]
 public class AngularConstantsCreateRequest : IRequest
@@ -22,25 +21,25 @@ public class AngularConstantsCreateRequest : IRequest
 
 public class AngularConstantsCreateRequestHandler : IRequestHandler<AngularConstantsCreateRequest>
 {
-    private readonly ILogger<AngularConstantsCreateRequestHandler> _logger;
-    private readonly IArtifactGenerator _artifactGenerator;
+    private readonly ILogger<AngularConstantsCreateRequestHandler> logger;
+    private readonly IArtifactGenerator artifactGenerator;
 
     public AngularConstantsCreateRequestHandler(
         ILogger<AngularConstantsCreateRequestHandler> logger,
         IArtifactGenerator artifactGenerator)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
     }
 
     public async Task Handle(AngularConstantsCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(AngularConstantsCreateRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(AngularConstantsCreateRequestHandler));
 
         var content = "export const BASE_URL = 'BASE_URL';";
 
         var model = new ContentFileModel(content, "constants", request.Directory, ".ts");
 
-        await _artifactGenerator.GenerateAsync(model);
+        await artifactGenerator.GenerateAsync(model);
     }
 }

@@ -1,6 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core;
 using Endpoint.Core.Internals;
@@ -10,9 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
@@ -32,7 +32,7 @@ async Task RunAsync()
         })
         .Build();
 
-    var _configuration = host.Services.GetRequiredService<IConfiguration>();
+    var configuration = host.Services.GetRequiredService<IConfiguration>();
 
     var mediator = host.Services.GetRequiredService<IMediator>();
 
@@ -47,7 +47,7 @@ async Task RunAsync()
 
     if (args.Length == 0 || args[0].StartsWith('-'))
     {
-        args = new string[1] { _configuration[Constants.EnvironmentVariables.DefaultCommand] }.Concat(args).ToArray();
+        args = new string[1] { configuration[Constants.EnvironmentVariables.DefaultCommand] }.Concat(args).ToArray();
     }
 
     try
@@ -57,7 +57,7 @@ async Task RunAsync()
             .Where(type => type.GetCustomAttributes(typeof(VerbAttribute), true).Length > 0)
             .ToArray();
 
-        var parsedResult = _createParser().ParseArguments(args, verbs);
+        var parsedResult = CreateParser().ParseArguments(args, verbs);
 
         if (parsedResult.Errors.SingleOrDefault() is HelpRequestedError || parsedResult.Errors.SingleOrDefault() is HelpRequestedError)
         {
@@ -72,8 +72,6 @@ async Task RunAsync()
         }
 
         await parsedResult.WithParsedAsync(request => mediator.Send(request));
-
-
     }
     catch (Exception ex)
     {
@@ -85,7 +83,7 @@ async Task RunAsync()
     }
 }
 
-Parser _createParser() => new Parser(with =>
+Parser CreateParser() => new Parser(with =>
 {
     with.CaseSensitive = false;
     with.HelpWriter = Console.Out;

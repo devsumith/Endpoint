@@ -1,17 +1,16 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using CommandLine;
+using MediatR;
 using Microsoft.Extensions.Logging;
-using System.IO;
-using System.Collections.Generic;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("replace")]
 public class ReplaceRequest : IRequest
@@ -25,23 +24,22 @@ public class ReplaceRequest : IRequest
     [Option('p')]
     public string Pattern { get; set; } = "*.*";
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
 public class ReplaceRequestHandler : IRequestHandler<ReplaceRequest>
 {
-    private readonly ILogger<ReplaceRequestHandler> _logger;
+    private readonly ILogger<ReplaceRequestHandler> logger;
 
     public ReplaceRequestHandler(ILogger<ReplaceRequestHandler> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task Handle(ReplaceRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(ReplaceRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(ReplaceRequestHandler));
 
         foreach (var path in Directory.GetFiles(request.Directory, request.Pattern, SearchOption.AllDirectories))
         {
@@ -63,7 +61,6 @@ public class ReplaceRequestHandler : IRequestHandler<ReplaceRequest>
             {
                 File.WriteAllLines(path, modified);
             }
-
         }
     }
 }

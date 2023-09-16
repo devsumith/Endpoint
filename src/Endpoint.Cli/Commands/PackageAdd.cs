@@ -1,17 +1,16 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Services;
+using CommandLine;
 using Endpoint.Core.Artifacts.Projects.Services;
+using Endpoint.Core.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("package-add")]
 public class PackageAddRequest : IRequest
@@ -19,28 +18,25 @@ public class PackageAddRequest : IRequest
     [Option('n', "name")]
     public string Name { get; set; }
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
 public class PackageAddRequestHandler : IRequestHandler<PackageAddRequest>
 {
-    private readonly ILogger<PackageAddRequestHandler> _logger;
-    private readonly IProjectService _projectService;
+    private readonly ILogger<PackageAddRequestHandler> logger;
+    private readonly IProjectService projectService;
 
     public PackageAddRequestHandler(ILogger<PackageAddRequestHandler> logger, IProjectService projectService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
     }
 
     public async Task Handle(PackageAddRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(PackageAddRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(PackageAddRequestHandler));
 
-        _projectService.PackageAdd(request.Name, request.Directory);
-
-
+        projectService.PackageAdd(request.Name, request.Directory);
     }
 }

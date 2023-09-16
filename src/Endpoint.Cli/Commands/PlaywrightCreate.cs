@@ -1,16 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using CommandLine;
 using Endpoint.Core.Artifacts.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("playwright-create")]
 public class PlaywrightCreateRequest : IRequest
@@ -21,21 +20,21 @@ public class PlaywrightCreateRequest : IRequest
 
 public class PlaywrightCreateRequestHandler : IRequestHandler<PlaywrightCreateRequest>
 {
-    private readonly ILogger<PlaywrightCreateRequestHandler> _logger;
-    private readonly IPlaywrightService _playwrightService;
+    private readonly ILogger<PlaywrightCreateRequestHandler> logger;
+    private readonly IPlaywrightService playwrightService;
 
     public PlaywrightCreateRequestHandler(
         ILogger<PlaywrightCreateRequestHandler> logger,
         IPlaywrightService playwrightService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _playwrightService = playwrightService ?? throw new ArgumentNullException(nameof(playwrightService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.playwrightService = playwrightService ?? throw new ArgumentNullException(nameof(playwrightService));
     }
 
     public async Task Handle(PlaywrightCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(PlaywrightCreateRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(PlaywrightCreateRequestHandler));
 
-        _playwrightService.Create(request.Directory);
+        playwrightService.Create(request.Directory);
     }
 }

@@ -1,14 +1,14 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using Endpoint.Core.Options;
-using Endpoint.Core.Services;
-using MediatR;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using CommandLine;
+using Endpoint.Core.Options;
+using Endpoint.Core.Services;
+using MediatR;
 
 namespace Endpoint.Cli.Commands;
 
@@ -17,27 +17,26 @@ public class PostApiBuild
     [Verb("post-api-build")]
     public class Request : IRequest
     {
-
         [Option('d', Required = false)]
         public string Directory { get; set; } = Environment.CurrentDirectory;
     }
 
     public class Handler : IRequestHandler<Request>
     {
-        private readonly ICommandService _commandService;
-        private readonly ISettingsProvider _settingsProvider;
+        private readonly ICommandService commandService;
+        private readonly ISettingsProvider settingsProvider;
 
         public Handler(ICommandService commandService, ISettingsProvider settingsProvider)
         {
-            _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-            _settingsProvider = settingsProvider ?? throw new ArgumentNullException(nameof(settingsProvider));
+            this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+            this.settingsProvider = settingsProvider ?? throw new ArgumentNullException(nameof(settingsProvider));
         }
 
         public async Task Handle(Request request, CancellationToken cancellationToken)
         {
-            dynamic settings = _settingsProvider.Get(request.Directory);
+            dynamic settings = settingsProvider.Get(request.Directory);
 
-            var solutionName = settings.ApiNamespace.Replace(".Api", "");
+            var solutionName = settings.ApiNamespace.Replace(".Api", string.Empty);
 
             var appDirectory = $"{settings.RootDirectory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}{solutionName}.App";
 
@@ -56,12 +55,9 @@ public class PostApiBuild
                 {
                     File.Copy(apiSwaggerFilePath, appSwaggerFilePath);
 
-                    _commandService.Start("node node_modules/ng-swagger-gen/ng-swagger-gen --config ng-swagger-gen.json", appDirectory);
+                    commandService.Start("node node_modules/ng-swagger-gen/ng-swagger-gen --config ng-swagger-gen.json", appDirectory);
                 }
             }
-
-
         }
     }
 }
-

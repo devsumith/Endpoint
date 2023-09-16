@@ -1,24 +1,22 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Endpoint.Core.Artifacts.Folders.Factories;
+using CommandLine;
 using Endpoint.Core.Artifacts;
+using Endpoint.Core.Artifacts.Folders.Factories;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("ng-domain-model-create")]
 public class AngularDomainModelCreateRequest : IRequest
 {
     [Option('n', "name")]
     public string Name { get; set; }
-
 
     [Option('p', "properties")]
     public string Properties { get; set; }
@@ -29,32 +27,31 @@ public class AngularDomainModelCreateRequest : IRequest
 
 public class AngularDomainModelCreateRequestHandler : IRequestHandler<AngularDomainModelCreateRequest>
 {
-    private readonly ILogger<AngularDomainModelCreateRequestHandler> _logger;
-    private readonly IFolderFactory _folderFactory;
-    private readonly IArtifactGenerator _artifactGenerator;
+    private readonly ILogger<AngularDomainModelCreateRequestHandler> logger;
+    private readonly IFolderFactory folderFactory;
+    private readonly IArtifactGenerator artifactGenerator;
 
     public AngularDomainModelCreateRequestHandler(
         ILogger<AngularDomainModelCreateRequestHandler> logger,
         IFolderFactory folderFactory,
-        IArtifactGenerator artifactGenerator
-        )
+        IArtifactGenerator artifactGenerator)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _folderFactory = folderFactory ?? throw new ArgumentNullException(nameof(folderFactory));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.folderFactory = folderFactory ?? throw new ArgumentNullException(nameof(folderFactory));
     }
 
     public async Task Handle(AngularDomainModelCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(AngularDomainModelCreateRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(AngularDomainModelCreateRequestHandler));
 
         if (string.IsNullOrEmpty(request.Properties))
         {
             request.Properties = $"{request.Name}Id:string";
         }
 
-        var model = _folderFactory.AngularDomainModel(request.Name, request.Properties, request.Directory);
+        var model = folderFactory.AngularDomainModel(request.Name, request.Properties, request.Directory);
 
-        await _artifactGenerator.GenerateAsync(model);
+        await artifactGenerator.GenerateAsync(model);
     }
 }

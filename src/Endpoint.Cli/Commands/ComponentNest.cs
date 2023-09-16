@@ -1,16 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using CommandLine;
+using MediatR;
 using Microsoft.Extensions.Logging;
-using System.IO;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("component-nest")]
 public class ComponentNestRequest : IRequest
@@ -21,16 +20,16 @@ public class ComponentNestRequest : IRequest
 
 public class ComponentNestRequestHandler : IRequestHandler<ComponentNestRequest>
 {
-    private readonly ILogger<ComponentNestRequestHandler> _logger;
+    private readonly ILogger<ComponentNestRequestHandler> logger;
 
     public ComponentNestRequestHandler(ILogger<ComponentNestRequestHandler> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task Handle(ComponentNestRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(ComponentNestRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(ComponentNestRequestHandler));
 
         foreach (var file in Directory.GetFiles(request.Directory, "*component.ts", SearchOption.AllDirectories))
         {
@@ -51,7 +50,9 @@ public class ComponentNestRequestHandler : IRequestHandler<ComponentNestRequest>
                     var destination = Path.Combine(destinationDirectory, $"{componentName}.component.{fileExtension}");
 
                     if (File.Exists(source))
+                    {
                         File.Move(source, destination);
+                    }
                 }
             }
         }

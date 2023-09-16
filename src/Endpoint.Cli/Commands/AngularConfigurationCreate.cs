@@ -1,17 +1,16 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using CommandLine;
 using Endpoint.Core.Artifacts.AngularProjects;
 using Endpoint.Core.Artifacts.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("angular-configuration-create")]
 public class AngularConfigurationCreateRequest : IRequest
@@ -28,21 +27,21 @@ public class AngularConfigurationCreateRequest : IRequest
 
 public class AngularConfigurationCreateRequestHandler : IRequestHandler<AngularConfigurationCreateRequest>
 {
-    private readonly ILogger<AngularConfigurationCreateRequestHandler> _logger;
-    private readonly IAngularService _angularService;
+    private readonly ILogger<AngularConfigurationCreateRequestHandler> logger;
+    private readonly IAngularService angularService;
 
     public AngularConfigurationCreateRequestHandler(
         ILogger<AngularConfigurationCreateRequestHandler> logger,
         IAngularService angularService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
     }
 
     public async Task Handle(AngularConfigurationCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(AngularConfigurationCreateRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(AngularConfigurationCreateRequestHandler));
 
-        await _angularService.AddBuildConfiguration(request.Name, new AngularProjectReferenceModel(request.Project, request.Directory));
+        await angularService.AddBuildConfiguration(request.Name, new AngularProjectReferenceModel(request.Project, request.Directory));
     }
 }

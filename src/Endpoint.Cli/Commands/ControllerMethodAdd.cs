@@ -1,16 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using CommandLine;
 using Endpoint.Core.Artifacts.Projects.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("controller-method-add")]
 public class ControllerMethodAddRequest : IRequest
@@ -30,21 +29,21 @@ public class ControllerMethodAddRequest : IRequest
 
 public class ControllerMethodAddRequestHandler : IRequestHandler<ControllerMethodAddRequest>
 {
-    private readonly ILogger<ControllerMethodAddRequestHandler> _logger;
-    private readonly IApiProjectService _apiProjectService;
+    private readonly ILogger<ControllerMethodAddRequestHandler> logger;
+    private readonly IApiProjectService apiProjectService;
 
     public ControllerMethodAddRequestHandler(
         ILogger<ControllerMethodAddRequestHandler> logger,
         IApiProjectService apiProjectService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _apiProjectService = apiProjectService ?? throw new ArgumentNullException(nameof(apiProjectService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.apiProjectService = apiProjectService ?? throw new ArgumentNullException(nameof(apiProjectService));
     }
 
     public async Task Handle(ControllerMethodAddRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(ControllerMethodAddRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(ControllerMethodAddRequestHandler));
 
-        await _apiProjectService.ControllerMethodAdd(request.Name, request.Controller, request.Route, request.Directory);
+        await apiProjectService.ControllerMethodAdd(request.Name, request.Controller, request.Route, request.Directory);
     }
 }

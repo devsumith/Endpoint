@@ -18,5 +18,3 @@ public static class ConfigureServices
         services.AddSingleton(new Observable<INotification>());
     }
 }
-
-

@@ -1,11 +1,11 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CommandLine;
+using MediatR;
 
 namespace Endpoint.Cli.Commands;
 
@@ -26,8 +26,8 @@ public class AddResourceHandler : IRequestHandler<AddResourceRequest>
 {
     public async Task Handle(AddResourceRequest request, CancellationToken cancellationToken)
     {
-        //var options = TinyMapper.Map<AddResourceOptions>(request);
+        // var options = TinyMapper.Map<AddResourceOptions>(request);
 
-        //AdditionalResourceGenerator.Generate(options, _factory);
+        // AdditionalResourceGenerator.Generate(options, _factory);
     }
 }

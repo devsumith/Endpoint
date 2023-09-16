@@ -137,7 +137,7 @@ public class ClassSyntaxGenerationStrategyTests
                             Name = "ILogger",
                             GenericTypeParameters = new List<TypeModel>
                             {
-                                new TypeModel() { Name = classModel.Name }
+                                new TypeModel() { Name = classModel.Name },
                             },
                         },
                         Name = "logger",

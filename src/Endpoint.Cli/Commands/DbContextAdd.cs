@@ -1,16 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts.Projects.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("db-context-add")]
 public class DbContextAddRequest : IRequest
@@ -21,23 +20,21 @@ public class DbContextAddRequest : IRequest
 
 public class DbContextAddRequestHandler : IRequestHandler<DbContextAddRequest>
 {
-    private readonly ILogger<DbContextAddRequestHandler> _logger;
-    private readonly IInfrastructureProjectService _infrastructureProjectService;
+    private readonly ILogger<DbContextAddRequestHandler> logger;
+    private readonly IInfrastructureProjectService infrastructureProjectService;
 
     public DbContextAddRequestHandler(
         ILogger<DbContextAddRequestHandler> logger,
         IInfrastructureProjectService infrastructureProjectService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _infrastructureProjectService = infrastructureProjectService ?? throw new ArgumentNullException(nameof(infrastructureProjectService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.infrastructureProjectService = infrastructureProjectService ?? throw new ArgumentNullException(nameof(infrastructureProjectService));
     }
 
     public async Task Handle(DbContextAddRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(DbContextAddRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(DbContextAddRequestHandler));
 
-        _infrastructureProjectService.DbContextAdd(request.Directory);
-
-
+        infrastructureProjectService.DbContextAdd(request.Directory);
     }
 }

@@ -1,23 +1,22 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using CommandLine;
-using Endpoint.Core;
-using Endpoint.Core.Artifacts.Projects.Factories;
-using Endpoint.Core.Artifacts.Projects.Services;
-using Endpoint.Core.Artifacts.Projects;
-using Endpoint.Core.Services;
-using MediatR;
-using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommandLine;
+using Endpoint.Core;
 using Endpoint.Core.Artifacts;
+using Endpoint.Core.Artifacts.Projects;
+using Endpoint.Core.Artifacts.Projects.Factories;
+using Endpoint.Core.Artifacts.Projects.Services;
+using Endpoint.Core.Services;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("project-add")]
 public class ProjectAddRequest : IRequest
@@ -37,20 +36,20 @@ public class ProjectAddRequest : IRequest
     [Option('m', "metadata")]
     public string Metadata { get; set; }
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = Environment.CurrentDirectory;
 }
 
 public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 {
-    private readonly ILogger<ProjectAddRequestHandler> _logger;
-    private readonly IArtifactGenerator _artifactGenerator;
-    private readonly ICommandService _commandService;
-    private readonly IFileSystem _fileSystem;
-    private readonly IProjectService _projectService;
-    private readonly IProjectFactory _projectFactory;
-    private readonly IFileProvider _fileProvider;
+    private readonly ILogger<ProjectAddRequestHandler> logger;
+    private readonly IArtifactGenerator artifactGenerator;
+    private readonly ICommandService commandService;
+    private readonly IFileSystem fileSystem;
+    private readonly IProjectService projectService;
+    private readonly IProjectFactory projectFactory;
+    private readonly IFileProvider fileProvider;
+
     public ProjectAddRequestHandler(
         ILogger<ProjectAddRequestHandler> logger,
         IArtifactGenerator artifactGenerator,
@@ -58,21 +57,20 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
         IFileSystem fileSystem,
         IProjectService projectService,
         IProjectFactory projectFactory,
-        IFileProvider fileProvider
-        )
+        IFileProvider fileProvider)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
-        _projectFactory = projectFactory ?? throw new ArgumentNullException(nameof(projectFactory));
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
+        this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+        this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
+        this.projectFactory = projectFactory ?? throw new ArgumentNullException(nameof(projectFactory));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
     public async Task Handle(ProjectAddRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Adding Project. {name}", request.Name);
+        logger.LogInformation("Adding Project. {name}", request.Name);
 
         if (string.IsNullOrEmpty(request.Name))
         {
@@ -86,17 +84,17 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
         if (string.IsNullOrEmpty(request.FolderName))
         {
-            _fileSystem.Directory.CreateDirectory(request.Directory);
+            fileSystem.Directory.CreateDirectory(request.Directory);
         }
 
-        var model = await _projectFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);
+        var model = await projectFactory.Create(request.DotNetProjectType, request.Name, projectDirectory, request.References?.Split(',').ToList(), request.Metadata);
 
-        await _projectService.AddProjectAsync(model);
+        await projectService.AddProjectAsync(model);
     }
 
     public void ProjectAdd(string directory)
     {
-        var projectPath = _fileProvider.Get("*.*sproj", directory);
+        var projectPath = fileProvider.Get("*.*sproj", directory);
 
         if (projectPath != Constants.FileNotFound)
         {
@@ -104,10 +102,10 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
 
             var projectDirectory = Path.GetDirectoryName(projectPath);
 
-            _projectService.AddToSolution(new ProjectModel
+            projectService.AddToSolution(new ProjectModel
             {
                 Name = projectName,
-                Directory = projectDirectory
+                Directory = projectDirectory,
             });
         }
 
@@ -126,7 +124,7 @@ public class ProjectAddRequestHandler : IRequestHandler<ProjectAddRequest>
                 "dist",
                 ".angular",
                 ".vs",
-                ".vscode"
+                ".vscode",
             };
 
             if (!invalidDirectories.Contains(subDirectoryName))

@@ -1,6 +1,11 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core;
 using Endpoint.Core.Artifacts.Projects;
@@ -8,14 +13,8 @@ using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
-
 
 [Verb("project-move")]
 public class ProjectMoveRequest : IRequest
@@ -23,17 +22,16 @@ public class ProjectMoveRequest : IRequest
     [Option("dest", Required = true)]
     public string DestinationRelativePath { get; set; }
 
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
 
 public class ProjectMoveRequestHandler : IRequestHandler<ProjectMoveRequest>
 {
-    private readonly ILogger<ProjectMoveRequestHandler> _logger;
-    private readonly IFileProvider _fileProvider;
-    private readonly ICommandService _commandService;
-    private readonly IProjectService _projectService;
+    private readonly ILogger<ProjectMoveRequestHandler> logger;
+    private readonly IFileProvider fileProvider;
+    private readonly ICommandService commandService;
+    private readonly IProjectService projectService;
 
     public ProjectMoveRequestHandler(
         ILogger<ProjectMoveRequestHandler> logger,
@@ -41,15 +39,15 @@ public class ProjectMoveRequestHandler : IRequestHandler<ProjectMoveRequest>
         IFileProvider fileProvider,
         IProjectService projectService)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-        _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
+        this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+        this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
     }
 
     public async Task Handle(ProjectMoveRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handled: {0}", nameof(ProjectMoveRequestHandler));
+        logger.LogInformation("Handled: {0}", nameof(ProjectMoveRequestHandler));
 
         var destinationDirectoryRoot = Path.GetFullPath(request.DestinationRelativePath, request.Directory);
 
@@ -65,12 +63,11 @@ public class ProjectMoveRequestHandler : IRequestHandler<ProjectMoveRequest>
         Directory.Move(request.Directory, destinationDirectory);
 
         Add(destinationDirectory);
-
     }
 
     public void Add(string directory)
     {
-        var projectPath = _fileProvider.Get("*.csproj", directory);
+        var projectPath = fileProvider.Get("*.csproj", directory);
 
         if (projectPath != Constants.FileNotFound)
         {
@@ -78,10 +75,10 @@ public class ProjectMoveRequestHandler : IRequestHandler<ProjectMoveRequest>
 
             var projectDirectory = Path.GetDirectoryName(projectPath);
 
-            _projectService.AddToSolution(new ProjectModel
+            projectService.AddToSolution(new ProjectModel
             {
                 Name = projectName,
-                Directory = projectDirectory
+                Directory = projectDirectory,
             });
         }
 
@@ -100,7 +97,7 @@ public class ProjectMoveRequestHandler : IRequestHandler<ProjectMoveRequest>
                 "dist",
                 ".angular",
                 ".vs",
-                ".vscode"
+                ".vscode",
             };
 
             if (!invalidDirectories.Contains(subDirectoryName))
@@ -112,7 +109,7 @@ public class ProjectMoveRequestHandler : IRequestHandler<ProjectMoveRequest>
 
     public void Remove(string directory)
     {
-        var solutionPath = _fileProvider.Get("*.sln", directory);
+        var solutionPath = fileProvider.Get("*.sln", directory);
 
         var solutionDirectory = Path.GetDirectoryName(solutionPath);
 
@@ -120,7 +117,7 @@ public class ProjectMoveRequestHandler : IRequestHandler<ProjectMoveRequest>
 
         foreach (var path in Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories))
         {
-            _commandService.Start($"dotnet sln {solutionFileName} remove {path}", solutionDirectory);
+            commandService.Start($"dotnet sln {solutionFileName} remove {path}", solutionDirectory);
         }
     }
 }

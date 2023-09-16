@@ -1,11 +1,11 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Threading;
+using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Services;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
 
@@ -23,20 +23,19 @@ public class EntityConfiguration
 
     public class Handler : IRequestHandler<Request>
     {
-        private readonly ISettingsProvider _settingsProvider;
-        private readonly IFileSystem _fileSystem;
+        private readonly ISettingsProvider settingsProvider;
+        private readonly IFileSystem fileSystem;
 
         public Handler(ISettingsProvider settingsProvider, IFileSystem fileSystem)
         {
-            _settingsProvider = settingsProvider;
-            _fileSystem = fileSystem;
+            this.settingsProvider = settingsProvider;
+            this.fileSystem = fileSystem;
         }
 
         public async Task Handle(Request request, CancellationToken cancellationToken)
         {
-            // Create Entity Type Converter 
+            // Create Entity Type Converter
             // EF
         }
     }
 }
-
