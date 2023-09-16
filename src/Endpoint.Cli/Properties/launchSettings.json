@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "git-create -n MyUltraCoolLibrary -d C:\\projects",
+      "commandLineArgs": "image-create -i C:\\projects\\Test\\test.txt -o C:\\projects\\Test\\foo.png -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
