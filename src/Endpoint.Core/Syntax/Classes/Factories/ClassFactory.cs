@@ -468,6 +468,32 @@ public class ClassFactory : IClassFactory
         return classModel;
     }
 
+    public ClassModel CreateConfigureServices(string serviceSuffix)
+    {
+        var classModel = new ClassModel("ConfigureServices");
+
+        var methodParam = new ParamModel()
+        {
+            Type = new TypeModel("IServiceCollection"),
+            Name = "services",
+            ExtensionMethodParam = true,
+        };
+
+        var method = new MethodModel()
+        {
+            Name = $"Add{serviceSuffix}Services",
+            ReturnType = new TypeModel("void"),
+            Static = true,
+            Params = new List<ParamModel>() { methodParam },
+        };
+
+        classModel.Static = true;
+
+        classModel.Methods.Add(method);
+
+        return classModel;
+    }
+
     private MethodModel CreateControllerMethod(ClassModel controller, EntityModel model, RouteType routeType)
     {
         MethodModel methodModel = new MethodModel
@@ -687,32 +713,6 @@ public class ClassFactory : IClassFactory
         }
 
         return methodModel;
-    }
-
-    public ClassModel CreateConfigureServices(string serviceSuffix)
-    {
-        var classModel = new ClassModel("ConfigureServices");
-
-        var methodParam = new ParamModel()
-        {
-            Type = new TypeModel("IServiceCollection"),
-            Name = "services",
-            ExtensionMethodParam = true,
-        };
-
-        var method = new MethodModel()
-        {
-            Name = $"Add{serviceSuffix}Services",
-            ReturnType = new TypeModel("void"),
-            Static = true,
-            Params = new List<ParamModel>() { methodParam },
-        };
-
-        classModel.Static = true;
-
-        classModel.Methods.Add(method);
-
-        return classModel;
     }
 
     public async Task<ClassModel> CreateRequestAsync(string name, string responseName)

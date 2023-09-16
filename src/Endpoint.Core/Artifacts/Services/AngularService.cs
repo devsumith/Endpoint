@@ -538,6 +538,13 @@ public class AngularService : IAngularService
         await artifactGenerator.GenerateAsync(fileModel);
     }
 
+    public async Task ListComponentCreate(string name, string directory)
+    {
+        var nameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
+
+        await ComponentCreate($"{nameSnakeCase}-list", directory);
+    }
+
     private void AddImports(AngularProjectModel model)
     {
         var mainPath = $"{model.Directory}{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}main.ts";
@@ -723,13 +730,6 @@ public class AngularService : IAngularService
         }
 
         fileSystem.File.WriteAllLines(appComponentPath, newLines.ToArray());
-    }
-
-    public async Task ListComponentCreate(string name, string directory)
-    {
-        var nameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, name);
-
-        await ComponentCreate($"{nameSnakeCase}-list", directory);
     }
 
     public async Task DetailComponentCreate(string name, string directory)
