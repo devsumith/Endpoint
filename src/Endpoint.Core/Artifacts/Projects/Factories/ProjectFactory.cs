@@ -60,6 +60,8 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.Console, name, directory);
 
+        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
+
         model.Files.Add(fileFactory.CreateCSharp("EmptyProgram", string.Empty, "Program", model.Directory));
         model.Files.Add(fileFactory.CreateCSharp("HttpClientExtensions", string.Empty, "HttpClientExtensions", model.Directory));
         model.Files.Add(fileFactory.CreateCSharp("HttpClientFactory", string.Empty, "HttpClientFactory", model.Directory));
@@ -70,6 +72,8 @@ public class ProjectFactory : IProjectFactory
     public async Task<ProjectModel> CreateMinimalApiProject(CreateMinimalApiProjectOptions options)
     {
         var model = new ProjectModel(DotNetProjectType.MinimalWebApi, options.Name, options.Directory);
+
+        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         var entities = new List<EntityModel> { new EntityModel(options.Resource) };
 
@@ -91,12 +95,16 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.XUnit, $"{name}.Tests", directory);
 
+        model.Packages.Add(new("StyleCop.Analyzers", "1.1.118"));
+
         return model;
     }
 
     public async Task<ProjectModel> CreateLibrary(string name, string parentDirectory, List<string> additionalMetadata = null)
     {
-        var project = new ProjectModel(name, parentDirectory);
+        var model = new ProjectModel(name, parentDirectory);
+
+        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         var serviceName = name.Split('.').First();
 
@@ -104,45 +112,45 @@ public class ProjectFactory : IProjectFactory
         {
             foreach (var m in additionalMetadata)
             {
-                project.Metadata.Add(m);
+                model.Metadata.Add(m);
             }
         }
 
-        foreach (var metadataItem in project.Metadata)
+        foreach (var metadataItem in model.Metadata)
         {
             switch (metadataItem)
             {
                 case Constants.ProjectType.Core:
 
-                    project.DotNetProjectType = DotNetProjectType.ClassLib;
+                    model.DotNetProjectType = DotNetProjectType.ClassLib;
 
-                    project.Folders.Add(new ("AggregatesModel", project.Directory));
+                    model.Folders.Add(new ("AggregatesModel", model.Directory));
 
-                    project.Files.Add(fileFactory.CreateResponseBase(project.Directory));
-                    project.Files.Add(fileFactory.CreateCoreUsings(project.Directory));
-                    project.Files.Add(fileFactory.CreateLinqExtensions(project.Directory));
-                    project.Files.Add(fileFactory.CreateTemplate("DddApp.Core.ConfigureServices", "ConfigureServices", project.Directory, ".cs", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
+                    model.Files.Add(fileFactory.CreateResponseBase(model.Directory));
+                    model.Files.Add(fileFactory.CreateCoreUsings(model.Directory));
+                    model.Files.Add(fileFactory.CreateLinqExtensions(model.Directory));
+                    model.Files.Add(fileFactory.CreateTemplate("DddApp.Core.ConfigureServices", "ConfigureServices", model.Directory, ".cs", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
 
-                    project.Packages.Add(new ("FluentValidation", "11.5.1"));
-                    project.Packages.Add(new ("FluentValidation.DependencyInjectionExtensions", "11.5.1"));
-                    project.Packages.Add(new ("MediatR", "12.0.0"));
-                    project.Packages.Add(new ("Newtonsoft.Json", "13.0.2"));
-                    project.Packages.Add(new ("Microsoft.EntityFrameworkCore", "7.0.2"));
-                    project.Packages.Add(new ("Microsoft.Extensions.Hosting.Abstractions", "7.0.0"));
-                    project.Packages.Add(new ("Microsoft.Extensions.Logging.Abstractions", "7.0.0"));
-                    project.Packages.Add(new ("SerilogTimings", "3.0.1"));
-                    project.Packages.Add(new ("Microsoft.AspNetCore.Authentication.JwtBearer", "6.5.0"));
-                    project.Packages.Add(new ("System.IdentityModel.Tokens.Jwt", "6.25.1"));
+                    model.Packages.Add(new ("FluentValidation", "11.5.1"));
+                    model.Packages.Add(new ("FluentValidation.DependencyInjectionExtensions", "11.5.1"));
+                    model.Packages.Add(new ("MediatR", "12.0.0"));
+                    model.Packages.Add(new ("Newtonsoft.Json", "13.0.2"));
+                    model.Packages.Add(new ("Microsoft.EntityFrameworkCore", "7.0.2"));
+                    model.Packages.Add(new ("Microsoft.Extensions.Hosting.Abstractions", "7.0.0"));
+                    model.Packages.Add(new ("Microsoft.Extensions.Logging.Abstractions", "7.0.0"));
+                    model.Packages.Add(new ("SerilogTimings", "3.0.1"));
+                    model.Packages.Add(new ("Microsoft.AspNetCore.Authentication.JwtBearer", "6.5.0"));
+                    model.Packages.Add(new ("System.IdentityModel.Tokens.Jwt", "6.25.1"));
 
-                    project.References.Add(@"..\BuildingBlocks\Kernel\Kernel.csproj");
+                    model.References.Add(@"..\BuildingBlocks\Kernel\Kernel.csproj");
 
                     break;
 
                 case Constants.ProjectType.Domain:
-                    project.Packages.Add(new ("FluentValidation", "11.4.0"));
-                    project.Packages.Add(new ("MediatR", "12.0.0"));
-                    project.Packages.Add(new ("Newtonsoft.Json", "13.0.2"));
-                    project.Packages.Add(new ("Microsoft.EntityFrameworkCore", "7.0.2"));
+                    model.Packages.Add(new ("FluentValidation", "11.4.0"));
+                    model.Packages.Add(new ("MediatR", "12.0.0"));
+                    model.Packages.Add(new ("Newtonsoft.Json", "13.0.2"));
+                    model.Packages.Add(new ("Microsoft.EntityFrameworkCore", "7.0.2"));
                     break;
 
                 case Constants.ProjectType.Application:
@@ -154,76 +162,78 @@ public class ProjectFactory : IProjectFactory
                         .With("serviceName", serviceName)
                         .Build();
 
-                    project.DotNetProjectType = DotNetProjectType.ClassLib;
-                    project.Folders.Add(new ("Data", project.Directory));
-                    project.Files.Add(fileFactory.CreateTemplate("DddApp.Infrastructure.ConfigureServices", "ConfigureServices", project.Directory, ".cs", tokens: tokens));
+                    model.DotNetProjectType = DotNetProjectType.ClassLib;
+                    model.Folders.Add(new ("Data", model.Directory));
+                    model.Files.Add(fileFactory.CreateTemplate("DddApp.Infrastructure.ConfigureServices", "ConfigureServices", model.Directory, ".cs", tokens: tokens));
 
-                    project.Files.Add(fileFactory.CreateTemplate("DddApp.Infrastructure.SeedData", "SeedData", Path.Combine(project.Directory, "Data"), ".cs", tokens: new TokensBuilder()
+                    model.Files.Add(fileFactory.CreateTemplate("DddApp.Infrastructure.SeedData", "SeedData", Path.Combine(model.Directory, "Data"), ".cs", tokens: new TokensBuilder()
                         .With("serviceName", serviceName)
                         .With("namespace", $"{serviceName}.Infrastructure.Data")
                         .Build()));
 
-                    project.Files.Add(fileFactory.CreateTemplate("DddApp.Infrastructure.DesignTimeDbContextFactory", "DesignTimeDbContextFactory", project.Directory, ".cs", tokens: tokens));
+                    model.Files.Add(fileFactory.CreateTemplate("DddApp.Infrastructure.DesignTimeDbContextFactory", "DesignTimeDbContextFactory", model.Directory, ".cs", tokens: tokens));
 
-                    project.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Core{Path.DirectorySeparatorChar}{serviceName}.Core.csproj");
+                    model.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Core{Path.DirectorySeparatorChar}{serviceName}.Core.csproj");
 
-                    project.Packages.Add(new ("Microsoft.EntityFrameworkCore.Tools", "7.0.0"));
-                    project.Packages.Add(new ("Microsoft.EntityFrameworkCore.SqlServer", "7.0.2"));
-                    project.Packages.Add(new ("Microsoft.EntityFrameworkCore.Design", "7.0.2"));
+                    model.Packages.Add(new ("Microsoft.EntityFrameworkCore.Tools", "7.0.0"));
+                    model.Packages.Add(new ("Microsoft.EntityFrameworkCore.SqlServer", "7.0.2"));
+                    model.Packages.Add(new ("Microsoft.EntityFrameworkCore.Design", "7.0.2"));
                     break;
 
                 case Constants.ProjectType.Api:
 
                     var schema = serviceName.Remove("Service");
 
-                    project.DotNetProjectType = DotNetProjectType.WebApi;
+                    model.DotNetProjectType = DotNetProjectType.WebApi;
 
-                    project.Folders.Add(new ("Controllers", project.Directory));
+                    model.Folders.Add(new ("Controllers", model.Directory));
 
-                    project.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Infrastructure{Path.DirectorySeparatorChar}{serviceName}.Infrastructure.csproj");
+                    model.References.Add($"..{Path.DirectorySeparatorChar}{serviceName}.Infrastructure{Path.DirectorySeparatorChar}{serviceName}.Infrastructure.csproj");
 
-                    project.Files.Add(fileFactory.CreateTemplate("DddApp.Api.AppSettings", "appsettings", project.Directory, ".json", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
+                    model.Files.Add(fileFactory.CreateTemplate("DddApp.Api.AppSettings", "appsettings", model.Directory, ".json", tokens: new TokensBuilder().With("serviceName", serviceName).Build()));
 
-                    project.Files.Add(fileFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", project.Directory, tokens: new TokensBuilder()
+                    model.Files.Add(fileFactory.CreateTemplate("Api.ConfigureServices", "ConfigureServices", model.Directory, tokens: new TokensBuilder()
                         .With("DbContext", $"{serviceName}DbContext")
                         .With("serviceName", serviceName)
                         .Build()));
 
-                    project.Files.Add(fileFactory.CreateTemplate("Api.Program", "Program", project.Directory, tokens: new TokensBuilder()
+                    model.Files.Add(fileFactory.CreateTemplate("Api.Program", "Program", model.Directory, tokens: new TokensBuilder()
                         .With("DbContext", $"{serviceName}DbContext")
                         .With("serviceName", serviceName)
                         .With("schema", schema)
                         .Build()));
 
-                    project.Packages.Add(new ("Microsoft.AspNetCore.Mvc.Versioning", "5.0.0"));
-                    project.Packages.Add(new () { Name = "Microsoft.AspNetCore.OpenApi", Version = "7.0.2" });
-                    project.Packages.Add(new ("Serilog", "2.12.0"));
-                    project.Packages.Add(new ("SerilogTimings", "3.0.1"));
-                    project.Packages.Add(new ("Serilog.AspNetCore", "6.0.1"));
-                    project.Packages.Add(new ("Swashbuckle.AspNetCore", "6.5.0"));
-                    project.Packages.Add(new ("Swashbuckle.AspNetCore.Annotations", "6.5.0"));
-                    project.Packages.Add(new ("Swashbuckle.AspNetCore.Newtonsoft", "6.5.0"));
-                    project.Packages.Add(new ("Swashbuckle.AspNetCore.Swagger", "6.5.0"));
+                    model.Packages.Add(new ("Microsoft.AspNetCore.Mvc.Versioning", "5.0.0"));
+                    model.Packages.Add(new () { Name = "Microsoft.AspNetCore.OpenApi", Version = "7.0.2" });
+                    model.Packages.Add(new ("Serilog", "2.12.0"));
+                    model.Packages.Add(new ("SerilogTimings", "3.0.1"));
+                    model.Packages.Add(new ("Serilog.AspNetCore", "6.0.1"));
+                    model.Packages.Add(new ("Swashbuckle.AspNetCore", "6.5.0"));
+                    model.Packages.Add(new ("Swashbuckle.AspNetCore.Annotations", "6.5.0"));
+                    model.Packages.Add(new ("Swashbuckle.AspNetCore.Newtonsoft", "6.5.0"));
+                    model.Packages.Add(new ("Swashbuckle.AspNetCore.Swagger", "6.5.0"));
                     break;
             }
         }
 
-        return project;
+        return model;
     }
 
     public async Task<ProjectModel> CreateWebApi(string name, string parentDirectory, List<string> additionalMetadata = null)
     {
-        var project = new ProjectModel(name, parentDirectory)
+        var model = new ProjectModel(name, parentDirectory)
         {
             DotNetProjectType = DotNetProjectType.WebApi,
         };
 
+        model.Packages.Add(new("StyleCop.Analyzers", "1.1.118"));
+
         if (additionalMetadata != null)
         {
-            project.Metadata.Concat(additionalMetadata);
+            model.Metadata.Concat(additionalMetadata);
         }
 
-        return project;
+        return model;
     }
 
     public async Task<ProjectModel> CreateTestingProject()
@@ -244,6 +254,8 @@ public class ProjectFactory : IProjectFactory
     public async Task<ProjectModel> CreateMessagingProject(string directory)
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Messaging", directory);
+
+        model.Packages.Add(new("StyleCop.Analyzers", "1.1.118"));
 
         model.Files.Add(fileFactory.CreateTemplate("IMessagingClient", "IMessagingClient", model.Directory));
 
@@ -269,6 +281,8 @@ public class ProjectFactory : IProjectFactory
     public async Task<ProjectModel> CreateMessagingUdpProject(string directory)
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Messaging.Udp", directory);
+
+        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         model.References.Add(@"..\Messaging\Messaging.csproj");
 
@@ -297,12 +311,16 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Validation", directory);
 
+        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
+
         return model;
     }
 
     public async Task<ProjectModel> CreateKernelProject(string directory)
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Kernel", directory);
+
+        model.Packages.Add(new("StyleCop.Analyzers", "1.1.118"));
 
         model.Packages.Add(new ("Microsoft.EntityFrameworkCore", "7.0.2"));
         model.Packages.Add(new ("Microsoft.AspNetCore.Mvc.Core", "2.2.5"));

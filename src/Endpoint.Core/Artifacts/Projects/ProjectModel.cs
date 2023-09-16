@@ -28,6 +28,10 @@ public class ProjectModel
             }, name, parentDirectory, references)
     {
         Folders = new List<FolderModel>();
+        Packages = new List<PackageModel>()
+        {
+            new ("StyleCop.Analyzers", "1.1.118"),
+        };
     }
 
     public ProjectModel(DotNetProjectType dotNetProjectType, string name, string parentDirectory, List<string> references = null)
@@ -38,6 +42,10 @@ public class ProjectModel
         Directory = Combine(parentDirectory, name);
         References = references ?? new List<string>();
         Folders = new List<FolderModel>();
+        Packages = new List<PackageModel>()
+        {
+            new ("StyleCop.Analyzers", "1.1.118"),
+        };
     }
 
     public ProjectModel(string name, string parentDirectory)
@@ -47,12 +55,20 @@ public class ProjectModel
         Directory = Combine(parentDirectory, name);
         References = new List<string>();
         Folders = new List<FolderModel>();
+        Packages = new List<PackageModel>()
+        {
+            new ("StyleCop.Analyzers", "1.1.118"),
+        };
     }
 
     public ProjectModel()
     {
         References = new List<string>();
         Folders = new List<FolderModel>();
+        Packages = new List<PackageModel>()
+        {
+            new ("StyleCop.Analyzers", "1.1.118"),
+        };
     }
 
     public string Name { get; init; }
