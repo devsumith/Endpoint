@@ -5,5 +5,5 @@ namespace Endpoint.Core.Artifacts;
 
 public interface IArtifactGenerator
 {
-    Task GenerateAsync(object model, dynamic context = null);
+    Task GenerateAsync(object model);
 }

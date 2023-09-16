@@ -2,8 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.Cqrs;
-using System.Runtime.CompilerServices;
+using Endpoint.Core.Syntax.Units;
 using static System.Linq.Enumerable;
 
 namespace System;

@@ -17,9 +17,9 @@ public class SwaggerOperationAttributeSyntaxGenerationStrategy : GenericSyntaxGe
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public int GetPriority { get; set; } = 0;
+    
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SwaggerOperationAttributeModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SwaggerOperationAttributeModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

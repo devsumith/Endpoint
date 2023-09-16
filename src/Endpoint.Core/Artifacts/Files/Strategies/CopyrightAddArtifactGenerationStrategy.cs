@@ -25,7 +25,7 @@ public class CopyrightAddArtifactGenerationStrategy : GenericArtifactGenerationS
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
-    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, FileReferenceModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, FileReferenceModel model)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

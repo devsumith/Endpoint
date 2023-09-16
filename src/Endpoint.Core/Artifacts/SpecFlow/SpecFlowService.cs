@@ -3,11 +3,9 @@
 
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
-using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Attributes;
 using Endpoint.Core.Syntax.Classes;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.SpecFlow;
 

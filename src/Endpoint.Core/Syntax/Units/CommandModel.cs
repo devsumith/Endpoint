@@ -3,7 +3,7 @@
 
 using Endpoint.Core.Syntax.Classes;
 
-namespace Endpoint.Core.Syntax.Entities.Aggregate;
+namespace Endpoint.Core.Syntax.Units;
 
 public class CommandModel : QueryModel
 {

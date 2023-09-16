@@ -47,7 +47,7 @@ public class ClassFromPlantUmlCreateRequestHandler : IRequestHandler<ClassFromPl
 
     public async Task Handle(ClassFromPlantUmlCreateRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Creating Class from PlantUml", nameof(ClassFromPlantUmlCreateRequestHandler));
+        _logger.LogInformation("Creating Class from PlantUml");
 
         _context.Set(new CodeFileModel<NamespaceModel>()
         {

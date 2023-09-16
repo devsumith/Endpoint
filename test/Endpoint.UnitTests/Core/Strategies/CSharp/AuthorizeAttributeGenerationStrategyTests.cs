@@ -7,6 +7,7 @@ using Endpoint.Core.Syntax.Attributes.Strategies;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -30,7 +31,7 @@ public class AuthorizeAttributeGenerationStrategyTests
 
         var sut = new AttributeSyntaxGenerationStrategy(services.BuildServiceProvider(), mockLogger);
 
-        var actual = await sut.GenerateAsync(default, new AttributeModel(AttributeType.Authorize, "Authorize", new System.Collections.Generic.Dictionary<string, string>()));
+        var actual = await sut.GenerateAsync(default, new AttributeModel(AttributeType.Authorize, "Authorize", new Dictionary<string, string>()));
 
         Assert.Equal(expected, actual);
     }

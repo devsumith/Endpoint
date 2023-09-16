@@ -9,8 +9,8 @@ namespace Endpoint.Core.Artifacts.Projects.Strategies;
 
 public interface IApiProjectFilesGenerationStrategy
 {
-    void Build(SettingsModel settings);
-    void BuildAdditionalResource(string additionalResource, SettingsModel settings);
+    void Build(dynamic settings);
+    void BuildAdditionalResource(string additionalResource, dynamic settings);
     void AddGenerateDocumentationFile(string csProjPath);
 }
 

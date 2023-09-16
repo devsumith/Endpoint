@@ -16,7 +16,7 @@ public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : GenericA
 
 
 
-    public bool CanHandle(object model, dynamic context = null)
+    public bool CanHandle(object model)
     {
         if (model is string value)
         {
@@ -26,7 +26,7 @@ public class DbContextFileFromCoreDirectoryArtifactGenerationStrategy : GenericA
         return false;
     }
 
-    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, string directory, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, string directory)
     {
         throw new NotImplementedException();
     }

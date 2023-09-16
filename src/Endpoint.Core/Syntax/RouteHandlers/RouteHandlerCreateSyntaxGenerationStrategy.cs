@@ -19,10 +19,10 @@ public class RouteHandlerCreateSyntaxGenerationStrategy : GenericSyntaxGeneratio
 
     public int GetPriority() => 0;
 
-    public bool CanHandle(object model, dynamic context = null)
+    public bool CanHandle(object model)
         => model is RouteHandlerModel routeHandlerModel && routeHandlerModel.Type == RouteType.Create;
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model)
     {
         _logger.LogInformation("Generating syntax for {0} and type {1}.", model, model.Type);
 

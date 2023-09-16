@@ -16,7 +16,7 @@ public class LogStatementSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, LogStatementModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, LogStatementModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

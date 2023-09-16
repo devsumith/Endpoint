@@ -19,7 +19,7 @@ public class RequestValidatorSyntaxGenerationStrategy : GenericSyntaxGenerationS
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RequestValidatorModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RequestValidatorModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

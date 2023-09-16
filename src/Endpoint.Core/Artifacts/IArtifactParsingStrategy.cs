@@ -13,7 +13,5 @@ public interface IArtifactParsingStrategy
 public interface IArtifactParsingStrategy<T> : IArtifactParsingStrategy
     where T : class
 {
-
-
     Task<T> ParseAsync(IArtifactParser parser, string valueOrDirectoryOrPath);
 }

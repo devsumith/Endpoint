@@ -35,7 +35,7 @@ public class PostApiBuild
 
         public async Task Handle(Request request, CancellationToken cancellationToken)
         {
-            SettingsModel settings = _settingsProvider.Get(request.Directory);
+            dynamic settings = _settingsProvider.Get(request.Directory);
 
             var solutionName = settings.ApiNamespace.Replace(".Api", "");
 

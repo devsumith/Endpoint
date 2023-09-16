@@ -16,7 +16,7 @@ public class LaunchSettingsFileGenerationStrategy : FileGenerationStrategy, IGen
         _templateProcessor = templateProcessor;
     }
 
-    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, LaunchSettingsFileModel model, dynamic context = null)
+    public async Task GenerateAsync(IArtifactGenerator artifactGenerator, LaunchSettingsFileModel model)
     {
         var builder = new StringBuilder();
 
@@ -26,7 +26,7 @@ public class LaunchSettingsFileGenerationStrategy : FileGenerationStrategy, IGen
 
         model.Body = builder.ToString();
 
-        await base.GenerateAsync(artifactGenerator, model, null);
+        await base.GenerateAsync(artifactGenerator, model);
     }
 }
 

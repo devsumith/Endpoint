@@ -24,7 +24,7 @@ public class TypeScriptTypeSyntaxGenerationStrategy : GenericSyntaxGenerationStr
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, TypeScriptTypeModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, TypeScriptTypeModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

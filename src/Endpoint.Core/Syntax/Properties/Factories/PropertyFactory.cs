@@ -1,5 +1,5 @@
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.Cqrs;
+using Endpoint.Core.Syntax.Units;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using static Endpoint.Core.Syntax.AccessModifier;

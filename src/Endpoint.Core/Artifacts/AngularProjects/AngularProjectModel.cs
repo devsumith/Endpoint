@@ -8,7 +8,6 @@ namespace Endpoint.Core.Artifacts.AngularProjects;
 
 public class AngularProjectModel
 {
-
     public AngularProjectModel(string name, string projectType, string prefix, string rootDirectory)
     {
         Name = name;

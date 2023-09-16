@@ -26,7 +26,7 @@ public class WebApplicationBuilderSyntaxGenerationStrategy : GenericSyntaxGenera
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationBuilderModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationBuilderModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

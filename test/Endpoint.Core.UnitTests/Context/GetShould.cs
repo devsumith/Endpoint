@@ -25,7 +25,6 @@ public class GetShould
 
         sut.Set(new Foo() { Name = "Foo" });
 
-
         var result = sut.Get<Foo>();
 
         Assert.Equal("Foo", result.Name);

@@ -23,7 +23,7 @@ public class SolutionGenerationStrategy : GenericArtifactGenerationStrategy<Solu
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
     }
 
-    public override async Task GenerateAsync(IArtifactGenerator generator, SolutionModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator generator, SolutionModel model)
     {
         _fileSystem.Directory.CreateDirectory(model.SolutionDirectory);
 

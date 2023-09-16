@@ -21,7 +21,7 @@ public class RouteHandlerSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
 
     public int GetPriority() => 0;
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

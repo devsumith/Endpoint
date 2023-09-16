@@ -6,13 +6,13 @@ namespace Endpoint.Core.Artifacts;
 public abstract class GenericArtifactGenerationStrategy<T> : IGenericArtifactGenerationStrategy<T>
     where T : class
 {
-    public abstract Task GenerateAsync(IArtifactGenerator generator, T model, dynamic context = null);
+    public abstract Task GenerateAsync(IArtifactGenerator generator, T model);
 
-    public virtual async Task<bool> GenerateAsync(IArtifactGenerator generator, object target, dynamic context = null)
+    public virtual async Task<bool> GenerateAsync(IArtifactGenerator generator, object target)
     {
         if (target is T model)
         {
-            await GenerateAsync(generator, model, context);
+            await GenerateAsync(generator, model);
 
             return true;
         }

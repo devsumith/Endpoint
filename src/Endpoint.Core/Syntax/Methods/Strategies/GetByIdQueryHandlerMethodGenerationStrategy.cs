@@ -19,33 +19,33 @@ public class GetByIdQueryHandlerMethodGenerationStrategy : GenericSyntaxGenerati
         _namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target)
     {
-        if (context != null && target is MethodModel)
+/*        if (target is MethodModel)
         {
-            return await GenerateAsync(generator, target as MethodModel, context);
-        }
+            return await GenerateAsync(generator, target as MethodModel);
+        }*/
 
         return null;
     }
 
-    public bool CanHandle(object model, dynamic context = null)
+    public bool CanHandle(object model)
     {
-        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
+/*        if (model is MethodModel methodModel && context?.Entity is ClassModel entity)
         {
             return methodModel.Name == "Handle" && methodModel.Params.FirstOrDefault().Type.Name.StartsWith($"Get{entity.Name}ByIdRequest");
-        }
+        }*/
 
         return false;
     }
 
     public int Priority => int.MaxValue;
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model)
     {
         var builder = new StringBuilder();
 
-        var entityName = context.Entity.Name;
+        var entityName = ""; // ""; // context.Entity.Name;
 
         var entityNamePascalCasePlural = _namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
 

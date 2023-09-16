@@ -24,12 +24,10 @@ public class SyntaxReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationSt
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
+    public bool CanHandle(object model)
+        => true; //model is SyntaxReferenceModel && context.Request == SetInitialLanguageInAppComponent;
 
-
-    public bool CanHandle(object model, dynamic context = null)
-        => model is SyntaxReferenceModel && context != null && context.Request == SetInitialLanguageInAppComponent;
-
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SyntaxReferenceModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SyntaxReferenceModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

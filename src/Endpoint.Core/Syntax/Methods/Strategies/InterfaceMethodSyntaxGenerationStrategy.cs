@@ -23,17 +23,17 @@ public class InterfaceMethodSyntaxGenerationStrategy : GenericSyntaxGenerationSt
 
     public override int GetPriority() => 1;
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target)
     {
-        if (context != null && context is InterfaceSyntaxGenerationStrategy && target is MethodModel)
+/*        if (context is InterfaceSyntaxGenerationStrategy && target is MethodModel)
         {
-            return await GenerateAsync(generator, target as MethodModel, context);
-        }
+            return await GenerateAsync(generator, target as MethodModel);
+        }*/
 
         return null;
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

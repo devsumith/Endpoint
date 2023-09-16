@@ -10,10 +10,15 @@ namespace Endpoint.Core.Artifacts.Folders;
 
 public class FolderModel
 {
+    public FolderModel()
+    {
+
+    }
+
     public FolderModel(string name, string parentDirectory)
     {
         Name = name;
-        Directory = $"{parentDirectory}{Path.DirectorySeparatorChar}{name}";
+        Directory = Path.Combine(parentDirectory,name);
         SubFolders = new List<FolderModel>();
         Projects = new List<ProjectModel>();
         Files = new List<FileModel>();

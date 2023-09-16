@@ -17,7 +17,7 @@ public class FolderArtifactGenerationStrategy : GenericArtifactGenerationStrateg
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, FolderModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, FolderModel model)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -25,12 +25,12 @@ public class FolderArtifactGenerationStrategy : GenericArtifactGenerationStrateg
 
         foreach (var fileModel in model.Files)
         {
-            await artifactGenerator.GenerateAsync(fileModel, context);
+            await artifactGenerator.GenerateAsync(fileModel);
         }
 
         foreach (var folder in model.SubFolders)
         {
-            await artifactGenerator.GenerateAsync(folder, context);
+            await artifactGenerator.GenerateAsync(folder);
         }
     }
 }

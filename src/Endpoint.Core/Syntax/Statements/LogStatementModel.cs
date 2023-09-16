@@ -1,11 +1,14 @@
-using Endpoint.Core.Options;
-
 namespace Endpoint.Core.Syntax.Statements;
 
-public class LogStatementModel
+public class LogStatementModel: SyntaxModel
 {
 
-    public LogStatementModel(RouteType routeType, string resource, SettingsModel settingsModel)
+    public LogStatementModel()
+    {
+
+    }
+
+    public LogStatementModel(RouteType routeType, string resource, dynamic settingsModel)
     {
         RouteType = routeType;
         Resource = resource;
@@ -14,5 +17,5 @@ public class LogStatementModel
 
     public RouteType RouteType { get; set; }
     public string Resource { get; set; }
-    public SettingsModel Settings { get; set; }
+    public dynamic Settings { get; set; }
 }

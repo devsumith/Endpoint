@@ -15,7 +15,7 @@ public class ExpressionGenerationStrategy : GenericSyntaxGenerationStrategy<Expr
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, ExpressionModel model, dynamic? context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, ExpressionModel model)
     {
         _logger.LogInformation("Generating Expression Body.");
 

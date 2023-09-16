@@ -16,7 +16,7 @@ public class PropertySyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<
 
     public int GetPriority() => 0;
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -20,19 +20,19 @@ public class UpdateCommandHandlerMethodGenerationStrategy : GenericSyntaxGenerat
     }
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, object target)
     {
-        if (context != null && target is MethodModel)
+/*        if (target is MethodModel)
         {
-            return await GenerateAsync(generator, target as MethodModel, context);
-        }
+            return await GenerateAsync(generator, target as MethodModel);
+        }*/
 
         return null;
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, MethodModel model)
     {
-        var entity = context.Entity as ClassModel;
+        var entity = new ClassModel();
 
         var entityName = entity.Name;
 

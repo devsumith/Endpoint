@@ -2,9 +2,8 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.AggregateModels;
 using Endpoint.Core.Syntax.Classes;
-using Endpoint.Core.Syntax.Entities.Aggregate;
+using Endpoint.Core.Syntax.Units;
 using System.IO;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
@@ -20,7 +19,7 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
 
 
 
-    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, AggregateModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, AggregateModel model)
     {
         var directory = string.Empty;
 
@@ -51,7 +50,7 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
                     query.UsingDirectives,
                     query.Name,
                     $"{aggregateDirectory}{Path.DirectorySeparatorChar}Queries",
-                    ".cs"), new { Entity = model.Aggregate });
+                    ".cs"));
         }
 
         foreach (var command in model.Commands)
@@ -63,7 +62,7 @@ public class AggregateArtifactsGenerationStrategy : GenericArtifactGenerationStr
                     command.UsingDirectives,
                     command.Name,
                     $"{aggregateDirectory}{Path.DirectorySeparatorChar}Commands",
-                    ".cs"), new { Entity = model.Aggregate });
+                    ".cs"));
         }
     }
 }

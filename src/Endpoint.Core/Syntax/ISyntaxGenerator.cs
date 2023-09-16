@@ -5,5 +5,5 @@ namespace Endpoint.Core.Syntax;
 
 public interface ISyntaxGenerator
 {
-    Task<string> GenerateAsync<T>(T model, dynamic context = null);
+    Task<string> GenerateAsync<T>(T model);
 }

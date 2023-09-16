@@ -13,7 +13,7 @@ namespace Endpoint.Core.Services;
 
 public class SettingsProvider : ISettingsProvider
 {
-    public SettingsModel Get(string directory = null)
+    public dynamic Get(string directory = null)
     {
         directory ??= CurrentDirectory;
 
@@ -25,7 +25,7 @@ public class SettingsProvider : ISettingsProvider
 
             if (File.Exists(path))
             {
-                var settings = Deserialize<SettingsModel>(File.ReadAllText(path), new JsonSerializerOptions()
+                var settings = Deserialize<dynamic>(File.ReadAllText(path), new JsonSerializerOptions()
                 {
                     PropertyNameCaseInsensitive = true,
                 });

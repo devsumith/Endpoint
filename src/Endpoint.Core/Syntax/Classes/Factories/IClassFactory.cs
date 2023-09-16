@@ -1,9 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Syntax.Cqrs;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Interfaces;
+using Endpoint.Core.Syntax.Units;
 using System.Collections.Generic;
 
 namespace Endpoint.Core.Syntax.Classes.Factories;

@@ -26,7 +26,7 @@ public class ConstructorSyntaxGenerationStrategy : GenericSyntaxGenerationStrate
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ConstructorModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ConstructorModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -28,7 +28,7 @@ public class TemplatedFileArtifactGenerationStrategy : GenericArtifactGeneration
     }
 
 
-    public override async Task GenerateAsync(IArtifactGenerator generator, TemplatedFileModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator generator, TemplatedFileModel model)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 
@@ -47,6 +47,6 @@ public class TemplatedFileArtifactGenerationStrategy : GenericArtifactGeneration
 
         model.Body = string.Join(Environment.NewLine, result);
 
-        await _fileModelGenerationStrategy.GenerateAsync(generator, model, null);
+        await _fileModelGenerationStrategy.GenerateAsync(generator, model);
     }
 }

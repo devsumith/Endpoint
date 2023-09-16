@@ -5,6 +5,6 @@ namespace Endpoint.Core.Syntax;
 
 public interface IGenericSyntaxGenerationStrategy<T> : ISyntaxGenerationStrategy
 {
-    Task<string> GenerateAsync(ISyntaxGenerator generator, T model, dynamic context = null);
+    Task<string> GenerateAsync(ISyntaxGenerator generator, T model);
 }
 

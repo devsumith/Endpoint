@@ -15,7 +15,7 @@ public class NamespaceGenerationStrategy : GenericSyntaxGenerationStrategy<Names
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, NamespaceModel model, dynamic? context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, NamespaceModel model)
     {
         _logger.LogInformation("Generating syntax. {name}", model.Name);
 

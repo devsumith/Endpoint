@@ -27,7 +27,7 @@ public class FileGenerationStrategy : GenericArtifactGenerationStrategy<FileMode
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
-    public override async Task GenerateAsync(IArtifactGenerator generator, FileModel model, dynamic? context = null)
+    public override async Task GenerateAsync(IArtifactGenerator generator, FileModel model)
     {
         _logger.LogInformation("Generating file artifact. {name}", model.Name);
 

@@ -19,7 +19,7 @@ public class SpecFlowHookSyntaxGenerationStrategy : GenericSyntaxGenerationStrat
 
     public int GetPriority() => 0;
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SpecFlowHookModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SpecFlowHookModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

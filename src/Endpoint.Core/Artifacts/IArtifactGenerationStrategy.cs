@@ -6,5 +6,5 @@ namespace Endpoint.Core.Artifacts;
 public interface IArtifactGenerationStrategy
 {
     int GetPriority();
-    Task<bool> GenerateAsync(IArtifactGenerator generator, object target, dynamic? context = null);
+    Task<bool> GenerateAsync(IArtifactGenerator generator, object target);
 }

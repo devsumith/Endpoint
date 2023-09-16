@@ -27,7 +27,7 @@ public class ArtifactGenerator : IArtifactGenerator
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
-    public async Task GenerateAsync(object model, dynamic context = null)
+    public async Task GenerateAsync(object model)
     {
         _logger.LogInformation("Generating artifact for model. {type}", model.GetType());
 

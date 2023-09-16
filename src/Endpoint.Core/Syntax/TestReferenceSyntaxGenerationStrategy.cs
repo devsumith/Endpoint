@@ -19,7 +19,7 @@ public class TestReferenceSyntaxGenerationStrategy : GenericSyntaxGenerationStra
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, TestReferenceModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, TestReferenceModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

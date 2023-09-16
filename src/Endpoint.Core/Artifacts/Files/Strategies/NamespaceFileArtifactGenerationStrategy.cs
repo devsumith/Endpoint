@@ -15,7 +15,7 @@ public class NamespaceFileArtifactGenerationStrategy : CodeFileIArtifactGenerati
         : base(syntaxGenerator, fileSystem, namespaceProvider, fileArtifactGenerationStrategy, logger)
     { }
 
-    public override async Task GenerateAsync(IArtifactGenerator generator, CodeFileModel<NamespaceModel> model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator generator, CodeFileModel<NamespaceModel> model)
     {
         _logger.LogInformation("Generating Code File. {name}", model.Name);
 
@@ -33,7 +33,7 @@ public class NamespaceFileArtifactGenerationStrategy : CodeFileIArtifactGenerati
 
         stringBuilder.AppendLine();
         
-        stringBuilder.AppendLine(await _syntaxGenerator.GenerateAsync(model.Object, context));
+        stringBuilder.AppendLine(await _syntaxGenerator.GenerateAsync(model.Object));
 
         model.Body = stringBuilder.ToString();
 

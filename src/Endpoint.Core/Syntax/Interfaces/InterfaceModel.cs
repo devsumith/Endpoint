@@ -9,6 +9,11 @@ namespace Endpoint.Core.Syntax.Interfaces;
 
 public class InterfaceModel : TypeDeclarationModel
 {
+    public InterfaceModel()
+    {
+
+    }
+
     public InterfaceModel(string name)
         : base(name)
     {

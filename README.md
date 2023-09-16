@@ -1,9 +1,11 @@
 # Endpoint
-Design-Time Code Generator via a command line interface
+Design-Time Code Generator that generates C# code and solutions, as well some frontend projects and files.
 
 ## Give a Star! :star:
 
 If you like or are using this project to learn or start your solution, please give it a star. Thanks!
+
+## Contributing
 
 ## Get started with Endpoint
 

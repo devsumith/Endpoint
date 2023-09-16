@@ -21,7 +21,7 @@ public class SyntaxGenerator : ISyntaxGenerator
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
-    public async Task<string> GenerateAsync<T>(T model, dynamic context = null)
+    public async Task<string> GenerateAsync<T>(T model)
     {
         var inner = typeof(IGenericSyntaxGenerationStrategy<>).MakeGenericType(model.GetType());
 
@@ -35,7 +35,7 @@ public class SyntaxGenerator : ISyntaxGenerator
 
         foreach (var strategy in orderedStrategies)
         {
-            result = await strategy.GenerateAsync(this, model, context);
+            result = await strategy.GenerateAsync(this, model);
 
             if (result != null)
             {

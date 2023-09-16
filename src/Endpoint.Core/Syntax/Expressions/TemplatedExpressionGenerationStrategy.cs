@@ -20,7 +20,7 @@ public class TemplatedExpressionGenerationStrategy : GenericSyntaxGenerationStra
         _templateLocator = templateLocator ?? throw new ArgumentNullException(nameof(templateLocator));
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, TemplateExpressionModel model, dynamic? context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, TemplateExpressionModel model)
     {
         _logger.LogInformation("Generating Templated Expression Body");
 

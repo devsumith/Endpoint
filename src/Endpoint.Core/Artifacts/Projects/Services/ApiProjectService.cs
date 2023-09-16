@@ -3,14 +3,12 @@
 
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
-using Endpoint.Core.Artifacts.Projects.Commands;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Methods.Factories;
 using Microsoft.Extensions.Logging;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace Endpoint.Core.Artifacts.Projects.Services;
 
@@ -57,7 +55,7 @@ public class ApiProjectService : IApiProjectService
         await _artifactGenerator.GenerateAsync(new ProjectReferenceModel()
         {
             ReferenceDirectory = directory
-        }, new { Command = new ApiProjectEnsure() });
+        });
 
         var csProjPath = _fileProvider.Get("*.csproj", directory);
 

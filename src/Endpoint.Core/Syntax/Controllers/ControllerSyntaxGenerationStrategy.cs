@@ -11,7 +11,7 @@ public class ControllerSyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ControllerModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ControllerModel model)
     {
         /*            new ClassBuilder($"{((Token)model).PascalCase}Controller", new Endpoint.Core.Services.Context(), fileSystem)
                 .WithDirectory($"{settings.ApiDirectory}{Path.DirectorySeparatorChar}Controllers")

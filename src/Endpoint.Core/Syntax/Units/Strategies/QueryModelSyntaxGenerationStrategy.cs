@@ -2,8 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System.Text;
+using Endpoint.Core.Syntax.Units;
 
-namespace Endpoint.Core.Syntax.Entities.Aggregate;
+namespace Endpoint.Core.Syntax.Units.Strategies;
 
 public class QueryModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<QueryModel>
 {
@@ -14,7 +15,7 @@ public class QueryModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, QueryModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, QueryModel model)
     {
         var builder = new StringBuilder();
 
@@ -26,7 +27,7 @@ public class QueryModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
 
         builder.AppendLine("");
 
-        builder.AppendLine(await syntaxGenerator.GenerateAsync(model.RequestHandler, context));
+        builder.AppendLine(await syntaxGenerator.GenerateAsync(model.RequestHandler));
 
         return builder.ToString();
     }

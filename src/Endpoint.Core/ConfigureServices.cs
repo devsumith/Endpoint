@@ -11,26 +11,22 @@ using Endpoint.Core.Artifacts.Folders.Services;
 using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Artifacts.Services;
-using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Artifacts.Solutions.Factories;
 using Endpoint.Core.Artifacts.Solutions.Services;
-using Endpoint.Core.Artifacts.Solutions.Strategies;
 using Endpoint.Core.Artifacts.SpecFlow;
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.AggregateModels;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes.Services;
 using Endpoint.Core.Syntax.Controllers;
-using Endpoint.Core.Syntax.Cqrs;
 using Endpoint.Core.Syntax.Entities;
-using Endpoint.Core.Syntax.Entities.Aggregate;
-using Endpoint.Core.Syntax.Entities.Legacy;
 using Endpoint.Core.Syntax.Expressions;
 using Endpoint.Core.Syntax.Methods.Factories;
 using Endpoint.Core.Syntax.Namespaces.Factories;
 using Endpoint.Core.Syntax.Properties.Factories;
 using Endpoint.Core.Syntax.RouteHandlers;
 using Endpoint.Core.Syntax.Types;
+using Endpoint.Core.Syntax.Units.Factories;
+using Endpoint.Core.Syntax.Units.Services;
 using System.Linq;
 using System.Reflection;
 
@@ -40,10 +36,10 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
+        services.AddSingleton<ISyntaxUnitFactory, SyntaxUnitFactory>();
         services.AddSingleton<INamespaceFactory, NamespaceFactory>();
         services.AddSingleton<IPropertyFactory, PropertyFactory>();
         services.AddSingleton<ICqrsFactory, CqrsFactory>();
-        services.AddSingleton<IAggregateModelFactory, AggregateModelFactory>();
         services.AddSingleton<ISyntaxFactory, SyntaxFactory>();
         services.AddSingleton<IExpressionFactory, ExpressionFactory>();
         services.AddSingleton<IObjectCache, ObjectCache>();
@@ -77,7 +73,6 @@ public static class ConfigureServices
         services.AddSingleton<IDomainDrivenDesignFileService, DomainDrivenDesignFileService>();
         services.AddSingleton<IDependencyInjectionService, DependencyInjectionService>();
         services.AddSingleton<IEntityFactory, EntityFactory>();
-        services.AddSingleton<ILegacyAggregatesFactory, LegacyAggregatesFactory>();
         services.AddSingleton<IFileNamespaceProvider, FileNamespaceProvider>();
         services.AddSingleton<IProjectService, ProjectService>();
         services.AddSingleton<ISolutionService, SolutionService>();

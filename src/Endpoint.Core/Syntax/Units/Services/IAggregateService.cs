@@ -2,9 +2,8 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Syntax.Classes;
-using System.Threading.Tasks;
 
-namespace Endpoint.Core.Syntax.Entities.Aggregate;
+namespace Endpoint.Core.Syntax.Units.Services;
 
 public interface IAggregateService
 {

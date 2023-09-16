@@ -18,7 +18,7 @@ public class AngularWorkspaceGenerationStrategy : GenericArtifactGenerationStrat
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, AngularWorkspaceModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, AngularWorkspaceModel model)
     {
         _logger.LogInformation("Generating Angular Workspace. {name}", model.Name);
 

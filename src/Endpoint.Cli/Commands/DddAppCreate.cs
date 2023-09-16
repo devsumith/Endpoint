@@ -20,12 +20,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Classes;
-using Endpoint.Core.Syntax.Entities.Aggregate;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Artifacts.Services;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Solutions.Factories;
 using Endpoint.Core.Artifacts.Solutions.Services;
+using Endpoint.Core.Syntax.Units.Services;
 
 namespace Endpoint.Cli.Commands;
 

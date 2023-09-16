@@ -20,9 +20,9 @@ public class AngularProjectGenerationStrategy : GenericArtifactGenerationStrateg
 
     public int Priority => throw new NotImplementedException();
 
-    public bool CanHandle(AngularProjectModel model, dynamic context = null) => model is AngularProjectModel;
+    public bool CanHandle(AngularProjectModel model) => model is AngularProjectModel;
 
-    public override async Task GenerateAsync(IArtifactGenerator generator, AngularProjectModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator generator, AngularProjectModel model)
     {
         _logger.LogInformation("Create Angular Project. {name}", model.Name);
 

@@ -6,9 +6,9 @@ using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Entities.Aggregate;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.TypeScript;
+using Endpoint.Core.Syntax.Units;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Linq;
@@ -76,7 +76,7 @@ public class FolderFactory : IFolderFactory
         {
             var query = new QueryModel(); //(microserviceName, _namingConventionConverter, aggregate, routeType);
 
-            model.Files.Add(new CodeFileModel<Syntax.Entities.Aggregate.QueryModel>((Syntax.Entities.Aggregate.QueryModel)query, (System.Collections.Generic.List<UsingModel>)query.UsingDirectives, (string)query.Name, model.Directory, ".cs"));
+            model.Files.Add(new CodeFileModel<QueryModel>((QueryModel)query, (System.Collections.Generic.List<UsingModel>)query.UsingDirectives, (string)query.Name, model.Directory, ".cs"));
         }
 
         return model;

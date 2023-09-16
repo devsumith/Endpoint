@@ -3,15 +3,15 @@
 
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
-using Endpoint.Core.Syntax.Entities.Aggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Octokit.Internal;
 using Octokit;
 using System.Xml.Linq;
 using Endpoint.Core.Syntax.Classes.Factories;
+using Endpoint.Core.Syntax.Units;
 
-namespace Endpoint.Core.Syntax.Cqrs;
+namespace Endpoint.Core.Syntax.Units.Factories;
 
 public class CqrsFactory : ICqrsFactory
 {

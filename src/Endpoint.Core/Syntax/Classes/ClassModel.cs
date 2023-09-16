@@ -12,6 +12,11 @@ namespace Endpoint.Core.Syntax.Classes;
 
 public class ClassModel : InterfaceModel
 {
+    public ClassModel()
+    {
+
+    }
+
     public ClassModel(string name)
         : base(name)
     {

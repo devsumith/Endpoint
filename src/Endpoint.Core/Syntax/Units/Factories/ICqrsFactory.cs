@@ -2,9 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 
-using Endpoint.Core.Syntax.Entities.Aggregate;
+using Endpoint.Core.Syntax.Units;
 
-namespace Endpoint.Core.Syntax.Cqrs;
+namespace Endpoint.Core.Syntax.Units.Factories;
 
 public interface ICqrsFactory
 {

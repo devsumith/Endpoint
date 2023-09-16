@@ -18,7 +18,7 @@ public class MethodsSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<L
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<MethodModel> model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<MethodModel> model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -26,7 +26,7 @@ public class MethodsSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<L
 
         foreach (var method in model)
         {
-            builder.AppendLine(await syntaxGenerator.GenerateAsync(method, context));
+            builder.AppendLine(await syntaxGenerator.GenerateAsync(method));
 
             if (method != model.Last())
             {

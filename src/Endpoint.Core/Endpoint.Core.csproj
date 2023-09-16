@@ -54,7 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Events\" />
+    <Folder Include="Artifacts\Units\" />
     <Folder Include="Syntax\Namespaces\Factories\" />
     <Folder Include="Syntax\Namespaces\Strategies\" />
     <Folder Include="Syntax\Properties\Factories\" />

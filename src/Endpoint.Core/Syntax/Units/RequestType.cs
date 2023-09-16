@@ -1,9 +1,15 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System;
+namespace Endpoint.Core.Syntax.Units;
 
-namespace Endpoint.Core.Artifacts.Projects.Commands;
+public enum RequestType
+{
 
-public class InfrastructureProjectEnsure { }
-
+    Get,
+    GetById,
+    Page,
+    Create,
+    Update,
+    Delete,
+}

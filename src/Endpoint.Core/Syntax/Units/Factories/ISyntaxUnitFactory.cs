@@ -4,11 +4,11 @@
 using Endpoint.Core.Syntax.Properties;
 using System.Collections.Generic;
 
-namespace Endpoint.Core.Syntax.AggregateModels;
+namespace Endpoint.Core.Syntax.Units.Factories;
 
-public interface IAggregateModelFactory
+public interface ISyntaxUnitFactory
 {
     Task<AggregateModel> CreateAsync(string name, List<PropertyModel> properties);
-
+    Task CreateAsync();
 }
 

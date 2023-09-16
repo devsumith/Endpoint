@@ -19,7 +19,7 @@ public class AccessModifierSyntaxGenerationStrategy : GenericSyntaxGenerationStr
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, AccessModifier model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, AccessModifier model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

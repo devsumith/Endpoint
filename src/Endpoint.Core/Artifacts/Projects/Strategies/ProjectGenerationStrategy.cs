@@ -27,7 +27,7 @@ public class ProjectGenerationStrategy : GenericArtifactGenerationStrategy<Proje
         _commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
     }
 
-    public override async Task GenerateAsync(IArtifactGenerator generator, ProjectModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator generator, ProjectModel model)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

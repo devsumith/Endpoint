@@ -20,7 +20,7 @@ public class FieldsSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Li
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<FieldModel> model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, List<FieldModel> model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 
@@ -28,7 +28,7 @@ public class FieldsSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Li
 
         foreach (var field in model)
         {
-            builder.AppendLine(await CreateAsync(syntaxGenerator, field, context));
+            builder.AppendLine(await CreateAsync(syntaxGenerator, field));
 
             if (field != model.Last())
                 builder.AppendLine();
@@ -39,7 +39,7 @@ public class FieldsSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Li
 
 
 
-    private async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, FieldModel model, dynamic context = null)
+    private async Task<string> CreateAsync(ISyntaxGenerator syntaxGenerator, FieldModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

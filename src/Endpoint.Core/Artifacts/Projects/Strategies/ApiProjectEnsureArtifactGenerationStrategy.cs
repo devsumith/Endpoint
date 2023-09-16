@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Artifacts.Files.Factories;
-using Endpoint.Core.Artifacts.Projects.Commands;
 using Endpoint.Core.Services;
 using Microsoft.Extensions.Logging;
 using System.IO;
@@ -34,12 +33,12 @@ public class ApiProjectEnsureArtifactGenerationStrategy : GenericArtifactGenerat
         _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
     }
 
-    public bool CanHandle(object model, dynamic context = null)
-        => model is ProjectReferenceModel && context != null && context.Command is ApiProjectEnsure;
+    public bool CanHandle(object model)
+        => true; //=> model is ProjectReferenceModel && context.Command is ApiProjectEnsure;
 
 
 
-    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ProjectReferenceModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ProjectReferenceModel model)
     {
         _logger.LogInformation("Generating artifact for {0}.", model);
 

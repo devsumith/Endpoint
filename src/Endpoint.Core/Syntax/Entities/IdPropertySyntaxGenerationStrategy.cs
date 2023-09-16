@@ -24,10 +24,10 @@ public class IdPropertySyntaxGenerationStrategy : GenericSyntaxGenerationStrateg
 
     public int GetPriority => 1;
 
-    public bool CanHandle(object model, dynamic context = null)
+    public bool CanHandle(object model)
         => model is PropertyModel propertyModel && propertyModel.Id;
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, PropertyModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

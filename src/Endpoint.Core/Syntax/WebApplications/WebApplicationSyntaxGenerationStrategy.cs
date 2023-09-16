@@ -25,7 +25,7 @@ public class WebApplicationSyntaxGenerationStrategy : GenericSyntaxGenerationStr
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, WebApplicationModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

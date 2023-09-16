@@ -1,9 +1,8 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Enpoint.Core.Events;
+using Endpoint.Core.Events;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 
 namespace Endpoint.Core.Services;
 
@@ -21,11 +20,11 @@ public class Context : IContext
     {
         _logger.LogInformation("Retrieving context. {typeName}", typeof(T).Name);
 
-        T item = Activator.CreateInstance(typeof(T)) as T;
+        var @event = new CustomEvent<T>() {  };
 
-        DomainEvents.Raise(item);
+        DomainEvents.Raise(@event);
 
-        return item;
+        return @event.Payload;
     }
 
     public void Set<T>(T item)
@@ -33,23 +32,9 @@ public class Context : IContext
     {
         _logger.LogInformation("Setting context. {typeName}", typeof(T).Name);
 
-        DomainEvents.Register<T>(x =>
+        DomainEvents.Register<CustomEvent<T>>(x =>
         {
-            var sourceProperties = item.GetType().GetProperties();
-            var destinationProperties = x.GetType().GetProperties();
-
-            foreach (var sourceProperty in sourceProperties)
-            {
-                var destinationProperty = destinationProperties.FirstOrDefault(x => x.Name == sourceProperty.Name);
-                if (destinationProperty != null && destinationProperty.PropertyType == sourceProperty.PropertyType)
-                {
-                    destinationProperty.SetValue(x, sourceProperty.GetValue(item));
-                }
-            }
+            x.Payload = item;
         });
     }
-
 }
-
-
-

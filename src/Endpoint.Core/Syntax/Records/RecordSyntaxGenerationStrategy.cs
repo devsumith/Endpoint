@@ -14,7 +14,7 @@ public class RecordSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Re
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, RecordModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator generator, RecordModel model)
     {
         _logger.LogInformation("Generating Record. {name}", model.Name);
 

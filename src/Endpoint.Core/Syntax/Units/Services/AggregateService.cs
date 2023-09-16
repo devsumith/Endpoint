@@ -6,16 +6,15 @@ using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.AggregateModels;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Cqrs;
+using Endpoint.Core.Syntax.Units.Factories;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Linq;
 using static Endpoint.Core.Constants.FileExtensions;
 
-namespace Endpoint.Core.Syntax.Entities.Aggregate;
+namespace Endpoint.Core.Syntax.Units.Services;
 
 public class AggregateService : IAggregateService
 {
@@ -27,7 +26,7 @@ public class AggregateService : IAggregateService
     private readonly IProjectService _projectService;
     private readonly IFileFactory _fileFactory;
     private readonly IFileProvider _fileProvider;
-    private readonly IAggregateModelFactory _aggregateModelFactory;
+    private readonly ISyntaxUnitFactory _syntaxUnitFactory;
     private readonly ICqrsFactory _cqrsFactory;
 
     public AggregateService(
@@ -39,7 +38,7 @@ public class AggregateService : IAggregateService
         IProjectService projectService,
         IFileFactory fileFactory,
         IFileProvider fileProvider,
-        IAggregateModelFactory aggregateModelFactory,
+        ISyntaxUnitFactory syntaxUnitFactory,
         ICqrsFactory cqrsFactory)
     {
         _syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
@@ -50,7 +49,7 @@ public class AggregateService : IAggregateService
         _projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
         _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         _fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-        _aggregateModelFactory = aggregateModelFactory ?? throw new ArgumentException(nameof(aggregateModelFactory));
+        _syntaxUnitFactory = syntaxUnitFactory ?? throw new ArgumentException(nameof(syntaxUnitFactory));
         _cqrsFactory = cqrsFactory ?? throw new ArgumentNullException(nameof(cqrsFactory));
     }
 
@@ -76,7 +75,7 @@ public class AggregateService : IAggregateService
             classModel = _classFactory.CreateEntity(name, properties);
         }
 
-        var model = await _aggregateModelFactory.CreateAsync(name, classModel.Properties);
+        var model = await _syntaxUnitFactory.CreateAsync(name, classModel.Properties);
 
         await _artifactGenerator.GenerateAsync(model);
 

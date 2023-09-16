@@ -24,7 +24,7 @@ public class GitGenerationStrategy : GenericArtifactGenerationStrategy<GitModel>
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, GitModel model, dynamic? context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, GitModel model)
     {
         _logger.LogInformation($"{nameof(GitGenerationStrategy)}: Handled");
 

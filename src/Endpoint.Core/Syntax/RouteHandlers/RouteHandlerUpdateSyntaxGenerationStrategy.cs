@@ -19,7 +19,7 @@ public class RouteHandlerUpdateSyntaxGenerationStrategy : GenericSyntaxGeneratio
 
     public int GetPriority() => 0;
 
-    public bool CanHandle(object model, dynamic context = null)
+    public bool CanHandle(object model)
     {
         if (model is RouteHandlerModel routeHandlerModel)
         {
@@ -28,7 +28,7 @@ public class RouteHandlerUpdateSyntaxGenerationStrategy : GenericSyntaxGeneratio
 
         return false;
     }
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RouteHandlerModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

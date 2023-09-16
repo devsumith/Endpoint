@@ -20,7 +20,7 @@ public class ImportSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Im
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ImportModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ImportModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

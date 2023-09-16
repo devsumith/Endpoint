@@ -14,7 +14,7 @@ public class EntityModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrate
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, EntityModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, EntityModel model)
     {
         throw new NotImplementedException();
     }

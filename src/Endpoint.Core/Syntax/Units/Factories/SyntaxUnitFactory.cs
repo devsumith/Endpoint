@@ -1,30 +1,28 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Entities.Aggregate;
-using Endpoint.Core.Syntax.Methods.Factories;
 using Endpoint.Core.Syntax.Properties;
-using EnvDTE;
 using Microsoft.Extensions.Logging;
-using SimpleNLG;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Abstractions;
 
-namespace Endpoint.Core.Syntax.AggregateModels;
+namespace Endpoint.Core.Syntax.Units.Factories;
 
-public class AggregateModelFactory : IAggregateModelFactory
+public class SyntaxUnitFactory : ISyntaxUnitFactory
 {
-    private readonly ILogger<AggregateModelFactory> _logger;
+    private readonly ILogger<SyntaxUnitFactory> _logger;
     private readonly IClassFactory _classFactory;
-
-    public AggregateModelFactory(ILogger<AggregateModelFactory> logger, IClassFactory classFactory)
+    public SyntaxUnitFactory(ILogger<SyntaxUnitFactory> logger, IClassFactory classFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
+    }
+
+    public async Task CreateAsync()
+    {
+        _logger.LogInformation("Create");
+
     }
 
     public async Task<AggregateModel> CreateAsync(string name, List<PropertyModel> properties)
@@ -37,7 +35,7 @@ public class AggregateModelFactory : IAggregateModelFactory
 
         var model = new AggregateModel()
         {
-            Queries = new List<Entities.Aggregate.QueryModel>(),
+            Queries = new List<QueryModel>(),
             Commands = new List<CommandModel>(),
             Aggregate = aggregate,
             AggregateDto = aggregate.CreateDto(),
@@ -75,6 +73,5 @@ public class AggregateModelFactory : IAggregateModelFactory
 
         return model;
     }
-
 }
 

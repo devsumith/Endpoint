@@ -9,8 +9,9 @@ public class RuleForModel
 {
     public RuleForModel(PropertyModel property)
     {
-        Property = property;
+        Property = property ?? throw new ArgumentNullException(nameof(property));
     }
+
     public PropertyModel Property { get; set; }
 }
 

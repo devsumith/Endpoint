@@ -19,7 +19,7 @@ public class SpecFlowStepsSyntaxGenerationStrategy : GenericSyntaxGenerationStra
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SpecFlowStepsModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, SpecFlowStepsModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

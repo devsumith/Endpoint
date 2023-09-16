@@ -19,7 +19,7 @@ public class RequestSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<R
 
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RequestModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, RequestModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -5,7 +5,6 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Constructors;
 using Endpoint.Core.Syntax.Entities;
-using Endpoint.Core.Syntax.Entities.Legacy;
 using Endpoint.Core.Syntax.Interfaces;
 using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Params;
@@ -24,12 +23,12 @@ public class FileFactory : IFileFactory
 {
     private readonly IRouteHandlerFactory _routeHandlerFactory;
     private readonly INamingConventionConverter _namingConventionConverter;
-    private readonly ILegacyAggregatesFactory _aggregateRootFactory;
+    private readonly dynamic _aggregateRootFactory;
     private readonly IFileProvider _fileProvider;
     private readonly INamespaceProvider _namespaceProvider;
 
     public FileFactory(
-        ILegacyAggregatesFactory aggregateRootFactory,
+        dynamic aggregateRootFactory,
         IRouteHandlerFactory routeHandlerFactory,
         INamingConventionConverter namingConventionConverter,
         IFileProvider fileProvider,

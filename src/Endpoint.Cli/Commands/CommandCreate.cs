@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using Endpoint.Core.Syntax.Entities.Aggregate;
+using Endpoint.Core.Syntax.Units.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;

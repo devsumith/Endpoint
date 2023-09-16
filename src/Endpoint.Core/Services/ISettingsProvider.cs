@@ -7,6 +7,6 @@ namespace Endpoint.Core.Services;
 
 public interface ISettingsProvider
 {
-    SettingsModel Get(string directory = null);
+    dynamic Get(string directory = null);
 }
 

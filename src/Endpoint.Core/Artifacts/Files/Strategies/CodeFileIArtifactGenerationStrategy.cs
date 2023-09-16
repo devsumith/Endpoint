@@ -31,7 +31,7 @@ public abstract class CodeFileIArtifactGenerationStrategy<T> : GenericArtifactGe
         _fileArtifactGenerationStrategy = fileArtifactGenerationStrategy ?? throw new ArgumentNullException(nameof(fileArtifactGenerationStrategy));
     }
 
-    public override async Task GenerateAsync(IArtifactGenerator generator, CodeFileModel<T> model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator generator, CodeFileModel<T> model)
     {
         _logger.LogInformation("Generating Code File. {name}", model.Name);
 
@@ -56,7 +56,7 @@ public abstract class CodeFileIArtifactGenerationStrategy<T> : GenericArtifactGe
             stringBuilder.AppendLine();
         }
 
-        stringBuilder.AppendLine(await _syntaxGenerator.GenerateAsync(model.Object, context));
+        stringBuilder.AppendLine(await _syntaxGenerator.GenerateAsync(model.Object));
 
         model.Body = stringBuilder.ToString();
 

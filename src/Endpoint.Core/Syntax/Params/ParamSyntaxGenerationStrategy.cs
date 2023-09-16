@@ -20,7 +20,7 @@ public class ParamSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<Par
     public int GetPriority() => 0;
 
 
-    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ParamModel model, dynamic context = null)
+    public override async Task<string> GenerateAsync(ISyntaxGenerator syntaxGenerator, ParamModel model)
     {
         _logger.LogInformation("Generating syntax for {0}.", model);
 

@@ -23,7 +23,7 @@ public class ConsoleMicroserviceArtifactGenerationStrategy : GenericArtifactGene
 
 
 
-    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ConsoleMicroserviceProjectModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ConsoleMicroserviceProjectModel model)
     {
         throw new NotImplementedException();
     }

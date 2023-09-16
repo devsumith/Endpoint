@@ -14,7 +14,7 @@ public class ContentFileArtifactGenerationStrategy : GenericArtifactGenerationSt
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
-    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ContentFileModel model, dynamic context = null)
+    public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, ContentFileModel model)
     {
         _fileSystem.File.WriteAllText(model.Path, model.Content);
     }

@@ -4,7 +4,6 @@
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Attributes;
 using Endpoint.Core.Syntax.Constructors;
-using Endpoint.Core.Syntax.Cqrs;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Fields;
 using Endpoint.Core.Syntax.Interfaces;
@@ -14,6 +13,7 @@ using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Properties.Factories;
 using Endpoint.Core.Syntax.Types;
+using Endpoint.Core.Syntax.Units;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

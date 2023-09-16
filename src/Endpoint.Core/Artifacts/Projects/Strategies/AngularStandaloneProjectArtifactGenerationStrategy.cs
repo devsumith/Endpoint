@@ -21,11 +21,11 @@ public class AngularStandaloneProjectArtifactGenerationStrategy : IGenericArtifa
         _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
     }
 
-    public async Task<bool> GenerateAsync(IArtifactGenerator generator, object target, dynamic context = null)
+    public async Task<bool> GenerateAsync(IArtifactGenerator generator, object target)
     {
         if (target is ProjectModel model && model.Extension == ".esproj")
         {
-            await GenerateAsync(generator, model, context);
+            await GenerateAsync(generator, model);
 
             return true;
         }
@@ -35,7 +35,7 @@ public class AngularStandaloneProjectArtifactGenerationStrategy : IGenericArtifa
 
     public virtual int GetPriority() => 1;
 
-    public async Task GenerateAsync(IArtifactGenerator generator, ProjectModel model, dynamic? context = null)
+    public async Task GenerateAsync(IArtifactGenerator generator, ProjectModel model)
     {
         var template = string.Join(Environment.NewLine, _templateLocator.Get("EsProj"));
 
