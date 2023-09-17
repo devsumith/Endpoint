@@ -2,10 +2,8 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using DotLiquid.Util;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
@@ -18,14 +16,7 @@ using Endpoint.Core.Syntax.Methods;
 using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Types;
-using Microsoft.Build.Locator;
-using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.MSBuild;
-
-// using Microsoft.CodeAnalysis.CSharp.Workspaces;
 using static Endpoint.Core.Constants.FileExtensions;
 using static Endpoint.Core.Syntax.Types.TypeModel;
 
@@ -41,6 +32,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
     private readonly INamespaceProvider namespaceProvider;
     private readonly IDependencyInjectionService dependencyInjectionService;
     private readonly IProjectService projectService;
+    private readonly ICodeAnalysisService codeAnalysisService;
 
     public DomainDrivenDesignFileService(
         INamespaceProvider namespaceProvider,
@@ -50,7 +42,8 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         INamingConventionConverter namingConventionConverter,
         ISyntaxGenerator syntaxGenerator,
         IDependencyInjectionService dependencyInjectionService,
-        IProjectService projectService)
+        IProjectService projectService,
+        ICodeAnalysisService codeAnalysisService)
     {
         this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
@@ -60,6 +53,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         this.namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
         this.dependencyInjectionService = dependencyInjectionService ?? throw new ArgumentNullException(nameof(dependencyInjectionService));
         this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
+        this.codeAnalysisService = codeAnalysisService ?? throw new ArgumentNullException(nameof(codeAnalysisService));
     }
 
     public async Task MessageCreate(string name, List<PropertyModel> properties, string directory)
@@ -327,20 +321,14 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
 
         var projectPath = fileProvider.Get("*.csproj", directory);
 
-        MSBuildLocator.RegisterDefaults();
-
-        var workspace = MSBuildWorkspace.Create();
-
-        var project = await workspace.OpenProjectAsync(projectPath);
-
-        var shouldInstallLogging = !project.MetadataReferences.Any(x => x.Display.Contains("Microsoft.Extensions.Logging"));
+        var shouldInstallLogging = !await codeAnalysisService.IsPackageInstalledAsync("Microsoft.Extensions.Logging", directory);
 
         if (shouldInstallLogging)
         {
             await projectService.PackageAdd("Microsoft.Extensions.Logging", System.IO.Path.GetDirectoryName(projectPath));
         }
 
-        var shouldInstallDI = !project.MetadataReferences.Any(x => x.Display.Contains("Microsoft.Extensions.DependencyInjection"));
+        var shouldInstallDI = !await codeAnalysisService.IsPackageInstalledAsync("Microsoft.Extensions.DependencyInjection", directory);
 
         if (shouldInstallDI)
         {

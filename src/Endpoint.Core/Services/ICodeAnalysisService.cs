@@ -10,4 +10,8 @@ public interface ICodeAnalysisService
     SyntaxModel SyntaxModel { get; set; }
 
     SolutionModel SolutionModel { get; set; }
+
+    Task<bool> IsNpmPackageInstalledAsync(string name);
+
+    Task<bool> IsPackageInstalledAsync(string name, string directory);
 }

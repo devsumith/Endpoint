@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "service-create -n Teach -d C:\\projects\\Leora\\src\\Leora",
+      "commandLineArgs": "service-create -n Wtf -d C:\\projects\\Kenny\\src\\Kenny",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

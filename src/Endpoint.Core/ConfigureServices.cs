@@ -37,7 +37,7 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
-        services.AddSingleton<ICodeFormatterService,DotnetCodeFormatterService>();
+        services.AddSingleton<ICodeFormatterService, DotnetCodeFormatterService>();
         services.AddSingleton<ICodeAnalysisService, CodeAnalysisService>();
         services.AddSingleton<ISyntaxUnitFactory, SyntaxUnitFactory>();
         services.AddSingleton<INamespaceFactory, NamespaceFactory>();
@@ -138,4 +138,3 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
-
