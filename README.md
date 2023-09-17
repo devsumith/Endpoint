@@ -1,5 +1,5 @@
 # Endpoint
-Design-Time Code Generator that generates C# code and solutions, as well some frontend projects and files.
+Template-based Design-Time Code Generator that generates C# code and solutions, as well some frontend projects and files. It supports complex logic and enabled transforming a software project by generating or modifying code.
 
 ## Give a Star! :star:
 
