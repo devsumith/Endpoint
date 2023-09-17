@@ -36,7 +36,7 @@ public class ServiceCreateRequestHandler : IRequestHandler<ServiceCreateRequest>
 
     public async Task Handle(ServiceCreateRequest request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Handled: {0}", nameof(ServiceCreateRequestHandler));
+        logger.LogInformation("Creating Service. {name}", request.Name);
 
         await domainDrivenDesignFileService.ServiceCreateAsync(request.Name, request.Directory);
     }
