@@ -3,25 +3,22 @@
 
 using System.Collections.Generic;
 
-namespace Endpoint.Core.Syntax;
+namespace Endpoint.Core.Artifacts;
 
-public class SyntaxModel
+public class ArtifactModel
 {
-    public SyntaxModel()
+    public ArtifactModel()
     {
-        Usings = new List<UsingModel>();
     }
 
-    public SyntaxModel Parent { get; set; }
+    public ArtifactModel Parent { get; set; }
 
-    public List<UsingModel> Usings { get; set; }
-
-    public virtual IEnumerable<SyntaxModel> GetChildren()
+    public virtual IEnumerable<ArtifactModel> GetChildren()
     {
         yield break;
     }
 
-    public virtual List<SyntaxModel> GetDescendants(SyntaxModel root = null, List<SyntaxModel> children = null)
+    public virtual List<ArtifactModel> GetDescendants(ArtifactModel root = null, List<ArtifactModel> children = null)
     {
         root ??= this;
 
