@@ -28,14 +28,16 @@ public class ClassFactory : IClassFactory
     private readonly IFileProvider fileProvider;
     private readonly IMethodFactory methodFactory;
     private readonly IPropertyFactory propertyFactory;
+    private readonly ICodeAnalysisService codeAnalysisService;
 
-    public ClassFactory(IPropertyFactory propertyFactory, INamingConventionConverter namingConventionConverter, INamespaceProvider namespaceProvider, IFileProvider fileProvider, IMethodFactory methodFactory)
+    public ClassFactory(IPropertyFactory propertyFactory, INamingConventionConverter namingConventionConverter, INamespaceProvider namespaceProvider, IFileProvider fileProvider, IMethodFactory methodFactory, ICodeAnalysisService codeAnalysisService)
     {
         this.propertyFactory = propertyFactory ?? throw new ArgumentNullException(nameof(propertyFactory));
         this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         this.namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
         this.methodFactory = methodFactory ?? throw new ArgumentNullException(nameof(methodFactory));
+        this.codeAnalysisService = codeAnalysisService ?? throw new ArgumentNullException(nameof(codeAnalysisService));
     }
 
     public async Task<ClassModel> DtoExtensionsCreateAsync(ClassModel aggregate)
@@ -618,6 +620,13 @@ public class ClassFactory : IClassFactory
         model.Implements.Add(new ("BackgroundService"));
 
         model.Methods.Add(await methodFactory.CreateWorkerExecuteAsync());
+
+        return model;
+    }
+
+    public async Task<ClassModel> CreateControllerAsync(string controllerName, string directory)
+    {
+        var model = new ClassModel(controllerName);
 
         return model;
     }

@@ -23,6 +23,7 @@ public class ApiProjectService : IApiProjectService
     private readonly ISyntaxGenerator syntaxGenerator;
     private readonly IMethodFactory methodFactory;
     private readonly IClipboardService clipboardService;
+    private readonly ICodeAnalysisService codeAnalysisService;
 
     public ApiProjectService(
         ILogger<ApiProjectService> logger,
@@ -33,7 +34,8 @@ public class ApiProjectService : IApiProjectService
         IClassFactory classFactory,
         ISyntaxGenerator syntaxGenerator,
         IMethodFactory methodFactory,
-        IClipboardService clipboardService)
+        IClipboardService clipboardService,
+        ICodeAnalysisService codeAnalysisService)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
@@ -44,9 +46,10 @@ public class ApiProjectService : IApiProjectService
         this.syntaxGenerator = syntaxGenerator ?? throw new ArgumentNullException(nameof(syntaxGenerator));
         this.methodFactory = methodFactory ?? throw new ArgumentNullException(nameof(methodFactory));
         this.clipboardService = clipboardService ?? throw new ArgumentNullException(nameof(clipboardService));
+        this.codeAnalysisService = codeAnalysisService ?? throw new ArgumentNullException(nameof(codeAnalysisService));
     }
 
-    public async Task ControllerAdd(string entityName, bool empty, string directory)
+    public async Task ControllerCreateAsync(string entityName, bool empty, string directory)
     {
         logger.LogInformation("Controller Add");
 
@@ -61,7 +64,7 @@ public class ApiProjectService : IApiProjectService
 
         var csProjDirectory = Path.GetDirectoryName(csProjPath);
 
-        var controllersDirectory = $"{csProjDirectory}{Path.DirectorySeparatorChar}Controllers";
+        var controllersDirectory = fileSystem.Path.Combine(csProjDirectory, "Controllers");
 
         fileSystem.Directory.CreateDirectory(controllersDirectory);
 

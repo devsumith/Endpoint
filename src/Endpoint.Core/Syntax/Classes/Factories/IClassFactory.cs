@@ -10,6 +10,8 @@ namespace Endpoint.Core.Syntax.Classes.Factories;
 
 public interface IClassFactory
 {
+    Task<ClassModel> CreateControllerAsync(string controllerName, string directory);
+
     ClassModel CreateEntity(string name, string properties);
 
     ClassModel CreateController(EntityModel model, string directory);
