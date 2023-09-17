@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Endpoint.Core.Artifacts.Folders.Factories;
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax;
 using Endpoint.Core.Syntax.Classes;
 using Microsoft.Extensions.Logging;
 
@@ -17,20 +16,20 @@ public class FolderService : IFolderService
     private readonly ILogger<FolderService> logger;
     private readonly IFolderFactory folderFactory;
     private readonly IArtifactGenerator artifactGenerator;
-    private readonly ISyntaxService syntaxService;
+    private readonly ICodeAnalysisService codeAnalysisService;
     private readonly IFileProvider fileProvider;
 
     public FolderService(
         ILogger<FolderService> logger,
         IFolderFactory folderFactory,
         IArtifactGenerator artifactGenerator,
-        ISyntaxService syntaxService,
+        ICodeAnalysisService codeAnalysisService,
         IFileProvider fileProvider)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.folderFactory = folderFactory ?? throw new ArgumentNullException(nameof(folderFactory));
         this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
-        this.syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
+        this.codeAnalysisService = codeAnalysisService ?? throw new ArgumentNullException(nameof(codeAnalysisService));
         this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
@@ -40,7 +39,7 @@ public class FolderService : IFolderService
 
         var serviceName = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory).Split('.').First());
 
-        var entity = syntaxService.SolutionModel?.GetClass(aggregate.Name, serviceName);
+        var entity = codeAnalysisService.SolutionModel?.GetClass(aggregate.Name, serviceName);
 
         await artifactGenerator.GenerateAsync(model);
 
@@ -53,7 +52,7 @@ public class FolderService : IFolderService
 
         var serviceName = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory).Split('.').First());
 
-        var entity = syntaxService.SolutionModel?.GetClass(aggregate.Name, serviceName);
+        var entity = codeAnalysisService.SolutionModel?.GetClass(aggregate.Name, serviceName);
 
         await artifactGenerator.GenerateAsync(model);
 

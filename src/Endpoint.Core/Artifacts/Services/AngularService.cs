@@ -33,7 +33,6 @@ public class AngularService : IAngularService
     private readonly IFileFactory fileFactory;
     private readonly Observable<INotification> observableNotifications;
     private readonly IUtlitityService utlitityService;
-    private readonly ISyntaxService syntaxService;
     private readonly INamingConventionConverter namingConventionConverter;
     private readonly List<ImportModel> importModels = new List<ImportModel>()
         {
@@ -52,7 +51,6 @@ public class AngularService : IAngularService
         IFileFactory fileFactory,
         Observable<INotification> observableNotifications,
         IUtlitityService utlitityService,
-        ISyntaxService syntaxService,
         INamingConventionConverter namingConventionConverter)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -63,7 +61,6 @@ public class AngularService : IAngularService
         this.fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         this.observableNotifications = observableNotifications ?? throw new ArgumentNullException(nameof(observableNotifications));
         this.utlitityService = utlitityService ?? throw new ArgumentNullException(nameof(utlitityService));
-        this.syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
         this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
     }
 
@@ -507,7 +504,7 @@ public class AngularService : IAngularService
     {
         var serviceName = "DashboardService";
 
-        ClassModel classModel = syntaxService.SolutionModel?.GetClass(name, serviceName);
+        ClassModel classModel = null;
 
         if (classModel == null)
         {

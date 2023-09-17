@@ -1,15 +1,17 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Endpoint.Core.Services;
+
 namespace Endpoint.Core.Artifacts.Files.Factories;
 
 public class EntityFileFactory : IEntityFileFactory
 {
-    private readonly ISyntaxService syntaxService;
+    private readonly ICodeAnalysisService codeAnalysisService;
 
-    public EntityFileFactory(ISyntaxService syntaxService)
+    public EntityFileFactory(ICodeAnalysisService codeAnalysisService)
     {
-        this.syntaxService = syntaxService;
+        this.codeAnalysisService = codeAnalysisService;
     }
 
     public EntityFileModel Create(string name, string properties, string directory)
@@ -18,11 +20,11 @@ public class EntityFileFactory : IEntityFileFactory
 
                 var idProperty = new StringBuilder();
 
-                idProperty.Append(_syntaxService.SyntaxModel.IdPropertyFormat == IdPropertyFormat.Long ? $"{entity.Name}Id" : "Id");
+                idProperty.Append(_codeAnalysisService.SyntaxModel.IdPropertyFormat == IdPropertyFormat.Long ? $"{entity.Name}Id" : "Id");
 
                 idProperty.Append(':');
 
-                idProperty.Append(_syntaxService.SyntaxModel.IdPropertyType == IdPropertyType.Guid ? "guid" : "int");
+                idProperty.Append(_codeAnalysisService.SyntaxModel.IdPropertyType == IdPropertyType.Guid ? "guid" : "int");
 
                 foreach (var prop in $"{idProperty},{properties}".Split(',').Distinct())
                 {

@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System.Text;
+using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Properties;
 using Microsoft.Extensions.Logging;
 
@@ -10,15 +11,15 @@ namespace Endpoint.Core.Syntax.Entities;
 public class IdPropertySyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<PropertyModel>
 {
     private readonly ILogger<IdPropertySyntaxGenerationStrategy> logger;
-    private readonly ISyntaxService syntaxService;
+    private readonly ICodeAnalysisService codeAnalysisService;
 
     public IdPropertySyntaxGenerationStrategy(
 
-        ISyntaxService syntaxService,
+        ICodeAnalysisService codeAnalysisService,
         ILogger<IdPropertySyntaxGenerationStrategy> logger)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
+        this.codeAnalysisService = codeAnalysisService ?? throw new ArgumentNullException(nameof(codeAnalysisService));
     }
 
     public int GetPriority => 1;

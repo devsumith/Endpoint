@@ -20,7 +20,7 @@ public class AggregateService : IAggregateService
 {
     private readonly ILogger<AggregateService> logger;
     private readonly INamingConventionConverter namingConventionConverter;
-    private readonly ISyntaxService syntaxService;
+    private readonly ICodeAnalysisService codeAnalysisService;
     private readonly IArtifactGenerator artifactGenerator;
     private readonly IClassFactory classFactory;
     private readonly IProjectService projectService;
@@ -32,7 +32,7 @@ public class AggregateService : IAggregateService
     public AggregateService(
         ILogger<AggregateService> logger,
         INamingConventionConverter namingConventionConverter,
-        ISyntaxService syntaxService,
+        ICodeAnalysisService codeAnalysisService,
         IArtifactGenerator artifactGenerator,
         IClassFactory classFactory,
         IProjectService projectService,
@@ -41,7 +41,7 @@ public class AggregateService : IAggregateService
         ISyntaxUnitFactory syntaxUnitFactory,
         ICqrsFactory cqrsFactory)
     {
-        this.syntaxService = syntaxService ?? throw new ArgumentNullException(nameof(syntaxService));
+        this.codeAnalysisService = codeAnalysisService ?? throw new ArgumentNullException(nameof(codeAnalysisService));
         this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
@@ -68,7 +68,7 @@ public class AggregateService : IAggregateService
             serviceName = Path.GetFileNameWithoutExtension(projectPath).Split('.').First();
         }
 
-        var classModel = syntaxService.SolutionModel?.GetClass(name, serviceName);
+        var classModel = codeAnalysisService.SolutionModel?.GetClass(name, serviceName);
 
         if (classModel == null)
         {
@@ -90,7 +90,7 @@ public class AggregateService : IAggregateService
     {
         var serviceName = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory)).Split('.').First();
 
-        var classModel = syntaxService.SolutionModel?.GetClass(aggregate, serviceName);
+        var classModel = codeAnalysisService.SolutionModel?.GetClass(aggregate, serviceName);
 
         if (classModel == null)
         {

@@ -3,9 +3,9 @@
 
 using Endpoint.Core.Artifacts.Solutions;
 
-namespace Endpoint.Core.Syntax;
+namespace Endpoint.Core.Services;
 
-public interface ISyntaxService
+public interface ICodeAnalysisService
 {
     SyntaxModel SyntaxModel { get; set; }
 

@@ -1,24 +1,26 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Endpoint.Core.Services;
+
 namespace Endpoint.Core.Syntax.Entities;
 
 public class EntityFactory : IEntityFactory
 {
-    private readonly ISyntaxService syntaxService;
+    private readonly ICodeAnalysisService codeAnalysisService;
 
-    public EntityFactory(ISyntaxService syntaxService)
+    public EntityFactory(ICodeAnalysisService codeAnalysisService)
     {
-        this.syntaxService = syntaxService;
+        this.codeAnalysisService = codeAnalysisService;
     }
 
     public EntityModel Create(string name, string properties)
     {
         /*        EntityModel model = new EntityModel(name);
 
-                var idPropertyName = _syntaxService.SyntaxModel.IdPropertyFormat == IdPropertyFormat.Short ? "Id" : $"{((SyntaxToken)name).PascalCase}Id";
+                var idPropertyName = _codeAnalysisService.SyntaxModel.IdPropertyFormat == IdPropertyFormat.Short ? "Id" : $"{((SyntaxToken)name).PascalCase}Id";
 
-                var idDotNetType = _syntaxService.SyntaxModel.IdPropertyType == IdPropertyType.Int ? "int" : "Guid";
+                var idDotNetType = _codeAnalysisService.SyntaxModel.IdPropertyType == IdPropertyType.Int ? "int" : "Guid";
 
                 model.Properties.Add(new PropertyModel(model, AccessModifier.Public, new TypeModel() { Name = idDotNetType }, idPropertyName, PropertyAccessorModel.GetPrivateSet, key: true));
 
