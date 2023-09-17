@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
@@ -23,18 +22,20 @@ public class GenerateDocumentationFileAddRequestHandler : IRequestHandler<Genera
 {
     private readonly ISettingsProvider settingsProvider;
     private readonly IApiProjectFilesGenerationStrategy apiProjectFilesGenerationStrategy;
+    private readonly IFileSystem fileSystem;
 
-    public GenerateDocumentationFileAddRequestHandler(ISettingsProvider settingsProvider, IApiProjectFilesGenerationStrategy apiProjectFilesGenerationStrategy)
+    public GenerateDocumentationFileAddRequestHandler(ISettingsProvider settingsProvider, IApiProjectFilesGenerationStrategy apiProjectFilesGenerationStrategy, IFileSystem fileSystem)
     {
         this.settingsProvider = settingsProvider ?? throw new ArgumentNullException(nameof(settingsProvider));
         this.apiProjectFilesGenerationStrategy = apiProjectFilesGenerationStrategy ?? throw new System.ArgumentNullException(nameof(apiProjectFilesGenerationStrategy));
+        this.fileSystem = fileSystem ?? throw new System.ArgumentNullException(nameof(fileSystem));
     }
 
     public async Task Handle(GenerateDocumentationFileAddRequest request, CancellationToken cancellationToken)
     {
         var settings = settingsProvider.Get(request.Directory);
 
-        var apiCsProjPath = $"{settings.ApiDirectory}{Path.DirectorySeparatorChar}{settings.ApiNamespace}.csproj";
+        var apiCsProjPath = fileSystem.Path.Combine(settings.ApiDirectory, $"{settings.ApiNamespace}.csproj");
 
         apiProjectFilesGenerationStrategy.AddGenerateDocumentationFile(apiCsProjPath);
     }
