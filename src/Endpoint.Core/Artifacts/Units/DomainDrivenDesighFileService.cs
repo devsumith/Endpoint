@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using DotLiquid.Util;
 using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Constructors;
@@ -23,8 +24,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.MSBuild;
-//using Microsoft.CodeAnalysis.CSharp.Workspaces;
 
+// using Microsoft.CodeAnalysis.CSharp.Workspaces;
 using static Endpoint.Core.Constants.FileExtensions;
 using static Endpoint.Core.Syntax.Types.TypeModel;
 
@@ -39,6 +40,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
     private readonly IFileSystem fileSystem;
     private readonly INamespaceProvider namespaceProvider;
     private readonly IDependencyInjectionService dependencyInjectionService;
+    private readonly IProjectService projectService;
 
     public DomainDrivenDesignFileService(
         INamespaceProvider namespaceProvider,
@@ -47,7 +49,8 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         IFileProvider fileProvider,
         INamingConventionConverter namingConventionConverter,
         ISyntaxGenerator syntaxGenerator,
-        IDependencyInjectionService dependencyInjectionService)
+        IDependencyInjectionService dependencyInjectionService,
+        IProjectService projectService)
     {
         this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
@@ -56,6 +59,7 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
         this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         this.namespaceProvider = namespaceProvider ?? throw new ArgumentNullException(nameof(namespaceProvider));
         this.dependencyInjectionService = dependencyInjectionService ?? throw new ArgumentNullException(nameof(dependencyInjectionService));
+        this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
     }
 
     public async Task MessageCreate(string name, List<PropertyModel> properties, string directory)
@@ -321,21 +325,27 @@ public class DomainDrivenDesignFileService : IDomainDrivenDesignFileService
             throw new Exception($"Service exists: {fileSystem.Path.Combine(directory, $"{name}{CSharpFile}")}");
         }
 
-        var solutionPath = fileProvider.Get("*.sln", directory);
-
-        var projectName = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory));
+        var projectPath = fileProvider.Get("*.csproj", directory);
 
         MSBuildLocator.RegisterDefaults();
 
         var workspace = MSBuildWorkspace.Create();
 
-        var path = fileProvider.Get("*.csproj", directory);
+        var project = await workspace.OpenProjectAsync(projectPath);
 
-        var project = await workspace.OpenProjectAsync(path);
+        var shouldInstallLogging = !project.MetadataReferences.Any(x => x.Display.Contains("Microsoft.Extensions.Logging"));
 
-        var shouldInstallLogging = !project.MetadataReferences.Any(x => x.Display.Contains("Microsoft.Extensions.Logging."));
+        if (shouldInstallLogging)
+        {
+            await projectService.PackageAdd("Microsoft.Extensions.Logging", System.IO.Path.GetDirectoryName(projectPath));
+        }
 
-        var shouldInstallDI = !project.MetadataReferences.Any(x => x.Display.Contains("Microsoft.Extensions.DependencyInjection."));
+        var shouldInstallDI = !project.MetadataReferences.Any(x => x.Display.Contains("Microsoft.Extensions.DependencyInjection"));
+
+        if (shouldInstallDI)
+        {
+            await projectService.PackageAdd("Microsoft.Extensions.DependencyInjection", System.IO.Path.GetDirectoryName(projectPath));
+        }
 
         var usingDirectives = new List<UsingModel>()
         {
