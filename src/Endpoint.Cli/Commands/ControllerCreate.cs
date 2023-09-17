@@ -39,6 +39,6 @@ public class ControllerCreateRequestHandler : IRequestHandler<ControllerCreateRe
     {
         logger.LogInformation("Handled: {0}", nameof(ControllerCreateRequestHandler));
 
-        await apiProjectService.ControllerAdd(request.EntityName, request.Empty, request.Directory);
+        await apiProjectService.ControllerCreateAsync(request.EntityName, request.Empty, request.Directory);
     }
 }

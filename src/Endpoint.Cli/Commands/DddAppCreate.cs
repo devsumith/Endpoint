@@ -186,7 +186,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         await artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(dbContext, dbContext.Usings, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), ".cs"));
 
-        await apiProjectService.ControllerAdd(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
+        await apiProjectService.ControllerCreateAsync(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
 
         commandService.Start($"dotnet ef migrations add {schema}_Initial", infrastructure.Directory);
 
