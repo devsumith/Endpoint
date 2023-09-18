@@ -5,6 +5,6 @@ using System;
 
 namespace Endpoint.Core.Syntax.Classes;
 
-public class ValidatorModel: ClassModel
+public class ValidatorModel : ClassModel
 {
 }
