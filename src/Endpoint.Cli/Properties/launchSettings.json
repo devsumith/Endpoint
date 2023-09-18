@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "pr -b CreateSyntaxFactory -r Endpoint -t \"Create Syntax Factory #11\" -n  -d C:\\projects\\Endpoint",
+      "commandLineArgs": "pr -b CreateSyntaxFactory -r Endpoint -n \"Create Syntax Factory #11\"  -d C:\\projects\\Endpoint",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
