@@ -3,29 +3,38 @@
 
 using System.Collections.Generic;
 using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Expressions;
 using Endpoint.Core.Syntax.Params;
 
 namespace Endpoint.Core.Syntax.Constructors;
 
-public class ConstructorModel
+public class ConstructorModel : SyntaxModel
 {
     public ConstructorModel(ClassModel @class, string name)
     {
-        Class = @class;
+        Parent = @class;
         Name = name;
         Params = new List<ParamModel>();
         BaseParams = new List<string>();
     }
 
-    public ClassModel Class { get; set; }
-
     public string Name { get; set; }
 
     public AccessModifier AccessModifier { get; set; }
 
-    public string Body { get; set; }
+    public ExpressionModel Body { get; set; }
 
     public List<string> BaseParams { get; set; }
 
     public List<ParamModel> Params { get; set; }
+
+    public override IEnumerable<SyntaxModel> GetChildren()
+    {
+        foreach (var param in Params)
+        {
+            yield return param;
+        }
+
+        yield return Body;
+    }
 }

@@ -6,7 +6,7 @@ using Endpoint.Core.Syntax.Params;
 
 namespace Endpoint.Core.Syntax.Attributes;
 
-public class AttributeModel
+public class AttributeModel : SyntaxModel
 {
     public AttributeModel()
     {

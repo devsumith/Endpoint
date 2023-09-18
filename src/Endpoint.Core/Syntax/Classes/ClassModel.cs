@@ -46,4 +46,27 @@ public class ClassModel : InterfaceModel
         {
             Properties = Properties,
         };
+
+    public override IEnumerable<SyntaxModel> GetChildren()
+    {
+        foreach (var method in Methods)
+        {
+            yield return method;
+        }
+
+        foreach (var method in Fields)
+        {
+            yield return method;
+        }
+
+        foreach (var method in Constructors)
+        {
+            yield return method;
+        }
+
+        foreach (var method in Attributes)
+        {
+            yield return method;
+        }
+    }
 }

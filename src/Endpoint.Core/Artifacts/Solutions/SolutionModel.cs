@@ -11,7 +11,7 @@ using Endpoint.Core.Syntax.Classes;
 
 namespace Endpoint.Core.Artifacts.Solutions;
 
-public class SolutionModel
+public class SolutionModel : ArtifactModel
 {
     public SolutionModel()
     {

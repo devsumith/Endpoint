@@ -5,14 +5,14 @@ using System.IO;
 
 namespace Endpoint.Core.Artifacts.Workspaces;
 
-public class AngularWorkspaceModel
+public class AngularWorkspaceModel : ArtifactModel
 {
     public AngularWorkspaceModel(string name, string version, string rootDirectory)
     {
         Name = name;
         Version = version;
         RootDirectory = rootDirectory;
-        Directory = $"{RootDirectory}{Path.DirectorySeparatorChar}{name}";
+        Directory = Path.Combine(rootDirectory, name);
     }
 
     public string Version { get; set; }

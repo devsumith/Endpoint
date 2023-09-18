@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Artifacts.AngularProjects;
 
-public class AngularProjectReferenceModel
+public class AngularProjectReferenceModel : ArtifactModel
 {
     public AngularProjectReferenceModel(string name, string referencedDirectory, string projectType = "application")
     {

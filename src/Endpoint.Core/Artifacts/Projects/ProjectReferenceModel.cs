@@ -5,7 +5,7 @@ using System;
 
 namespace Endpoint.Core.Artifacts.Projects;
 
-public class ProjectReferenceModel
+public class ProjectReferenceModel : ArtifactModel
 {
     public string ReferenceDirectory { get; set; }
 

@@ -332,7 +332,7 @@ public class ProjectFactory : IProjectFactory
 
         var responseBaseConstructor = new ConstructorModel(responseBase, responseBase.Name)
         {
-            Body = "Errors = new List<string>();",
+            Body = new ("Errors = new List<string>();"),
         };
 
         responseBase.Properties.Add(new (responseBase, AccessModifier.Public, TypeModel.ListOf("string"), "Errors", PropertyAccessorModel.GetPrivateSet));

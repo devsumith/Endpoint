@@ -8,7 +8,7 @@ using Endpoint.Core.Artifacts.Projects;
 
 namespace Endpoint.Core.Artifacts.Folders;
 
-public class FolderModel
+public class FolderModel : ArtifactModel
 {
     public FolderModel()
     {

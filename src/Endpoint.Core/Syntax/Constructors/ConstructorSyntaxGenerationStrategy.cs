@@ -4,6 +4,7 @@
 using System.Linq;
 using System.Text;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Classes;
 using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Syntax.Constructors;
@@ -47,7 +48,7 @@ public class ConstructorSyntaxGenerationStrategy : GenericSyntaxGenerationStrate
 
         foreach (var param in model.Params)
         {
-            var field = model.Class.Fields.SingleOrDefault(x => x.Type.Name == param.Type.Name);
+            var field = ((ClassModel)model.Parent).Fields.SingleOrDefault(x => x.Type.Name == param.Type.Name);
 
             if (field != null)
             {
@@ -59,9 +60,11 @@ public class ConstructorSyntaxGenerationStrategy : GenericSyntaxGenerationStrate
             }
         }
 
-        if (!string.IsNullOrEmpty(model.Body))
+        if (model.Body != null)
         {
-            builder.AppendLine(model.Body.Indent(1));
+            string result = await syntaxGenerator.GenerateAsync(model.Body);
+
+            builder.AppendLine(result.Indent(1));
         }
 
         builder.Append("}");

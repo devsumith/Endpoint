@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Endpoint.Core.Artifacts.Lit;
 
-public class LitWorkspaceModel
+public class LitWorkspaceModel : ArtifactModel
 {
     public LitWorkspaceModel(string name, string rootDirectory)
     {
