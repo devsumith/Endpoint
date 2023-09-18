@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Artifacts.Files;
 
-public class FileModel
+public class FileModel : ArtifactModel
 {
     public FileModel()
     {

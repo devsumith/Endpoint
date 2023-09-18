@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Artifacts.Projects;
 
-public class PackageModel
+public class PackageModel : ArtifactModel
 {
     public PackageModel(string name, string verison)
     {

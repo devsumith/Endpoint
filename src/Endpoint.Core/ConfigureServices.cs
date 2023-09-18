@@ -10,6 +10,7 @@ using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Files.Services;
 using Endpoint.Core.Artifacts.Folders.Factories;
 using Endpoint.Core.Artifacts.Folders.Services;
+using Endpoint.Core.Artifacts.Git;
 using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Artifacts.Services;
@@ -37,6 +38,7 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
+        services.AddSingleton<IGitService, GitService>();
         services.AddSingleton<ICodeFormatterService, DotnetCodeFormatterService>();
         services.AddSingleton<ICodeAnalysisService, CodeAnalysisService>();
         services.AddSingleton<ISyntaxUnitFactory, SyntaxUnitFactory>();

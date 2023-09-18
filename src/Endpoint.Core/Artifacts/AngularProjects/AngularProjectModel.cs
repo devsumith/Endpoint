@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Endpoint.Core.Artifacts.AngularProjects;
 
-public class AngularProjectModel
+public class AngularProjectModel : ArtifactModel
 {
     public AngularProjectModel(string name, string projectType, string prefix, string rootDirectory)
     {

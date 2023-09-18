@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Artifacts.Git;
 
-public class GitModel
+public class GitModel : ArtifactModel
 {
     public GitModel(string repositoryName)
     {

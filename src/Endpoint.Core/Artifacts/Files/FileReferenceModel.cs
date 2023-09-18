@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Artifacts.Files;
 
-public class FileReferenceModel
+public class FileReferenceModel : ArtifactModel
 {
     public string Path { get; set; }
 }

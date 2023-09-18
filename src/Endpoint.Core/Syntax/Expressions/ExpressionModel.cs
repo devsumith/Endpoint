@@ -3,7 +3,7 @@
 
 namespace Endpoint.Core.Syntax.Expressions;
 
-public class ExpressionModel
+public class ExpressionModel : SyntaxModel
 {
     public ExpressionModel(string body)
     {

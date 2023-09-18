@@ -5,7 +5,7 @@ using Endpoint.Core.Artifacts.Projects;
 
 namespace Endpoint.Core.Artifacts.Solutions;
 
-public class DependsOnModel
+public class DependsOnModel : ArtifactModel
 {
     public DependsOnModel(ProjectModel client, ProjectModel service)
     {

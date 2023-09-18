@@ -84,7 +84,7 @@ public class FileFactory : IFileFactory
 
         classModel.Constructors.Add(new ConstructorModel(classModel, classModel.Name)
         {
-            Body = "Errors = new List<string>();",
+            Body = new ("Errors = new List<string>();"),
         });
 
         classModel.Properties.Add(new PropertyModel(classModel, AccessModifier.Public, new TypeModel("List")

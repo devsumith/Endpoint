@@ -6,7 +6,7 @@ using Endpoint.Core.Syntax.Types;
 
 namespace Endpoint.Core.Syntax.Params;
 
-public class ParamModel
+public class ParamModel : SyntaxModel
 {
     public static ParamModel CancellationToken = new ()
     {

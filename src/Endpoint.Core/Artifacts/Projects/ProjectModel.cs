@@ -8,12 +8,11 @@ using System.Text.Json.Nodes;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Projects.Enums;
-using Endpoint.Core.Services;
 using static System.IO.Path;
 
 namespace Endpoint.Core.Artifacts.Projects;
 
-public class ProjectModel
+public class ProjectModel : ArtifactModel
 {
     public ProjectModel(string dotNetProjectType, string name, string parentDirectory, List<string> references = null)
         : this(
