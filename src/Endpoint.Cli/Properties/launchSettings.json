@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "service-create -n Wtf -d C:\\projects\\Kenny\\src\\Kenny",
+      "commandLineArgs": "pr -b CreateSyntaxFactory -r Endpoint -t \"Create Syntax Factory #11\" -n  -d C:\\projects\\Endpoint",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

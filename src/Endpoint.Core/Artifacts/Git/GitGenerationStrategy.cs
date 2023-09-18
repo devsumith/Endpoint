@@ -25,7 +25,7 @@ public class GitGenerationStrategy : GenericArtifactGenerationStrategy<GitModel>
 
     public override async Task GenerateAsync(IArtifactGenerator artifactGenerator, GitModel model)
     {
-        logger.LogInformation($"{nameof(GitGenerationStrategy)}: Handled");
+        logger.LogInformation("Generating Git Repository. {repositoryName}", model.RepositoryName);
 
         var client = new GitHubClient(new ProductHeaderValue(model.Username))
         {
@@ -40,13 +40,13 @@ public class GitGenerationStrategy : GenericArtifactGenerationStrategy<GitModel>
 
         commandService.Start($"git config user.email {model.Email}", model.Directory);
 
-        fileSystem.File.WriteAllText($@"{model.Directory}{Path.DirectorySeparatorChar}.gitignore", string.Join(Environment.NewLine, templateLocator.Get("GitIgnoreFile")));
+        fileSystem.File.WriteAllText(Path.Combine(model.Directory, ".gitignore"), string.Join(Environment.NewLine, templateLocator.Get("GitIgnoreFile")));
 
         commandService.Start($"git remote add origin https://{model.Username}:{model.PersonalAccessToken}@github.com/{model.Username}/{model.RepositoryName}.git", model.Directory);
 
         commandService.Start("git add -A", model.Directory);
 
-        commandService.Start("git commit -m intial", model.Directory);
+        commandService.Start("git commit -m initial", model.Directory);
 
         commandService.Start("git push --set-upstream origin master", model.Directory);
 

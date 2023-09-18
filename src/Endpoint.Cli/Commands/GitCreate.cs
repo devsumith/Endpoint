@@ -38,7 +38,10 @@ public class GitCreateRequestHandler : IRequestHandler<GitCreateRequest>
 
     public async Task Handle(GitCreateRequest request, CancellationToken cancellationToken)
     {
-        logger.LogInformation($"Handled: {nameof(GitCreateRequestHandler)}");
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Creating Git Repository");
+        }
 
         var model = new GitModel(request.RepositoryName)
         {
