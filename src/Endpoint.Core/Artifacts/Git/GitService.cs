@@ -1,8 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-
-
 using Microsoft.Extensions.Logging;
 using Octokit;
 
@@ -28,16 +26,14 @@ public class GitService : IGitService
 
         var repo = await client.Repository.Get(model.Username, model.RepositoryName);
 
-        var defaultBranch = await client.Git.Reference.Get(model.Username, model.RepositoryName, "master");
+        var defaultBranch = await client.Git.Reference.Get(model.Username, model.RepositoryName, "refs/heads/master");
 
-        var featureBranch = await client.Git.Reference.Create(model.Username, model.RepositoryName, new NewReference(featureBranchName, defaultBranch.Object.Sha));
+        var featureBranch = await client.Git.Reference.Get(model.Username, model.RepositoryName, $@"refs/heads/{featureBranchName}");
 
         _ = await client.PullRequest.Create(repo.Id, new NewPullRequest(pullRequestTitle, featureBranch.Ref, defaultBranch.Ref));
 
         var newMerge = new NewMerge(defaultBranch.Ref, featureBranch.Ref);
 
         await client.Repository.Merging.Create(repo.Id, newMerge);
-
-        throw new NotImplementedException();
     }
 }
