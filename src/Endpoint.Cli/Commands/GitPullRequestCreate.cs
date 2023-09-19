@@ -16,13 +16,7 @@ namespace Endpoint.Cli.Commands;
 public class GitPullRequestCreateRequest : IRequest
 {
     [Option('n', "name")]
-    public string PullRequestTitle { get; set; }
-
-    [Option('r', "repository-name")]
-    public string RepositoryName { get; set; }
-
-    [Option('b', "branch-name")]
-    public string BrancName { get; set; }
+    public string Name { get; set; }
 
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
@@ -43,11 +37,6 @@ public class GitPullRequestCreateRequestHandler : IRequestHandler<GitPullRequest
     {
         logger.LogInformation("Handled: {0}", nameof(GitPullRequestCreateRequestHandler));
 
-        var model = new GitModel(request.RepositoryName)
-        {
-            Directory = Path.Combine(request.Directory, request.RepositoryName),
-        };
-
-        await gitService.CreatePullRequestAsync(model, request.BrancName, request.PullRequestTitle);
+        await gitService.CreatePullRequestAsync(request.Name, request.Directory);
     }
 }

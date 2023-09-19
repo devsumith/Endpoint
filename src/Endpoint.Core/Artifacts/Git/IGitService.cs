@@ -5,5 +5,5 @@ namespace Endpoint.Core.Artifacts.Git;
 
 public interface IGitService
 {
-    Task CreatePullRequestAsync(GitModel model, string featureBranchName, string pullRequestTitle);
+    Task CreatePullRequestAsync(string pullRequestTitle, string directory);
 }
