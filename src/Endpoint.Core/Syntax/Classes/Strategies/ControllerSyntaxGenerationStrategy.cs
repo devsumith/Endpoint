@@ -15,7 +15,7 @@ public class ControllerGenerationStrategy : GenericSyntaxGenerationStrategy<Clas
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public override int GetPriority() => int.MaxValue;
+    public override int GetPriority() => -1;
 
     public override Task<string> GenerateAsync(ISyntaxGenerator generator, object target)
     {
