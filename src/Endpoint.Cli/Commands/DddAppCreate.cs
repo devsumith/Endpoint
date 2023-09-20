@@ -108,7 +108,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
     public async Task Handle(DddAppCreateRequest request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Handled: {0}", nameof(DddAppCreateRequestHandler));
+        logger.LogInformation("Creating Domain Driven Design Application", nameof(DddAppCreateRequestHandler));
 
         var solution = await CreateDddSolution(request.Name, request.AggregateName, request.Properties, request.Directory);
 
@@ -184,9 +184,9 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
             new EntityModel(entity.Name) { Properties = entity.Properties },
         }, name);
 
-        await artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(dbContext, dbContext.Usings, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), ".cs"));
+        await artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(dbContext, dbContext.Usings, dbContext.Name, fileSystem.Path.Combine(infrastructure.Directory, "Data"), ".cs"));
 
-        await apiProjectService.ControllerCreateAsync(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
+        await apiProjectService.ControllerCreateAsync(aggregateName, false, fileSystem.Path.Combine(api.Directory, "Controllers"));
 
         commandService.Start($"dotnet ef migrations add {schema}_Initial", infrastructure.Directory);
 
@@ -201,6 +201,6 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         await angularService.CreateWorkspace(temporaryAppName, version, applicationName, "application", prefix, model.SrcDirectory, false);
 
-        Directory.Move(Path.Combine(model.SrcDirectory, temporaryAppName), Path.Combine(model.SrcDirectory, $"{model.Name}.App"));
+        fileSystem.Directory.Move(Path.Combine(model.SrcDirectory, temporaryAppName), Path.Combine(model.SrcDirectory, $"{model.Name}.App"));
     }
 }
