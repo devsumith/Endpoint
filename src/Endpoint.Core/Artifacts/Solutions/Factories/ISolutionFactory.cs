@@ -16,4 +16,6 @@ public interface ISolutionFactory
     Task<SolutionModel> CreateHttpSolution(CreateEndpointSolutionOptions options);
 
     Task<SolutionModel> CleanArchitectureMicroservice(CreateCleanArchitectureMicroserviceOptions options);
+
+    Task<SolutionModel> DddCreateAync(string directory);
 }

@@ -143,4 +143,11 @@ public class SolutionFactory : ISolutionFactory
         {
         };
     }
+
+    public async Task<SolutionModel> DddCreateAync(string directory)
+    {
+        var model = new SolutionModel();
+
+        return model;
+    }
 }
