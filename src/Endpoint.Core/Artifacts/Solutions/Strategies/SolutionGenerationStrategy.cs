@@ -28,6 +28,11 @@ public class SolutionGenerationStrategy : GenericArtifactGenerationStrategy<Solu
 
     public override async Task GenerateAsync(IArtifactGenerator generator, SolutionModel model)
     {
+        if (fileSystem.Directory.Exists(model.SolutionDirectory))
+        {
+            fileSystem.Directory.Delete(model.SolutionDirectory, true);
+        }
+
         fileSystem.Directory.CreateDirectory(model.SolutionDirectory);
 
         commandService.Start($"dotnet new sln -n {model.Name}", model.SolutionDirectory);

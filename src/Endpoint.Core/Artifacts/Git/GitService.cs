@@ -63,9 +63,10 @@ public class GitService : IGitService
             commandService.Start("git checkout master", directory);
 
             commandService.Start("git pull", directory);
-        }catch(Exception ex)
+        }
+        catch (Exception ex)
         {
-            throw ex;
+            throw;
         }
     }
 

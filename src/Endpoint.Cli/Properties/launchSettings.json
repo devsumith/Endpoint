@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "pr -n \"Test\"  -d C:\\projects\\Endpoint",
+      "commandLineArgs": "ddd-app-create -n \"DddAppCreate\"  -d C:\\projects\\Endpoint\\samples",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
