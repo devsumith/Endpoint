@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
-using Endpoint.Core.Syntax.Units.Services;
+using Endpoint.Core.Syntax.Documents.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

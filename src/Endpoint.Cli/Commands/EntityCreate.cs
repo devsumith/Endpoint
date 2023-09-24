@@ -53,7 +53,7 @@ public class EntityAddRequestHandler : IRequestHandler<EntityCreateRequest>
 
     public async Task Handle(EntityCreateRequest request, CancellationToken cancellationToken)
     {
-        var model = classFactory.CreateEntity(request.Name, request.Properties);
+        var model = await classFactory.CreateEntityAsync(request.Name, request.Properties);
 
         await classService.CreateAsync(request.Name, request.Properties, request.Directory);
 

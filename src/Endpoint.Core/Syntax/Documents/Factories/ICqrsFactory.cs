@@ -1,9 +1,9 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Syntax.Units;
+using Endpoint.Core.Syntax.Documents;
 
-namespace Endpoint.Core.Syntax.Units.Factories;
+namespace Endpoint.Core.Syntax.Documents.Factories;
 
 public interface ICqrsFactory
 {

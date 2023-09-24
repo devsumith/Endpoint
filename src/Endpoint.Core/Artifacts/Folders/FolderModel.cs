@@ -14,6 +14,14 @@ public class FolderModel : ArtifactModel
     {
     }
 
+    public FolderModel(string name)
+    {
+        Name = name;
+        SubFolders = new List<FolderModel>();
+        Projects = new List<ProjectModel>();
+        Files = new List<FileModel>();
+    }
+
     public FolderModel(string name, FolderModel parent)
         :this(name, parent.Directory)
     {

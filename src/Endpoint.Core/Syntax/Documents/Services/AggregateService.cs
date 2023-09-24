@@ -10,11 +10,11 @@ using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Units.Factories;
+using Endpoint.Core.Syntax.Documents.Factories;
 using Microsoft.Extensions.Logging;
 using static Endpoint.Core.Constants.FileExtensions;
 
-namespace Endpoint.Core.Syntax.Units.Services;
+namespace Endpoint.Core.Syntax.Documents.Services;
 
 public class AggregateService : IAggregateService
 {
@@ -72,7 +72,7 @@ public class AggregateService : IAggregateService
 
         if (classModel == null)
         {
-            classModel = classFactory.CreateEntity(name, properties);
+            classModel = await classFactory.CreateEntityAsync(name, properties);
         }
 
         var model = await syntaxUnitFactory.CreateAsync(name, classModel.Properties);
@@ -86,7 +86,8 @@ public class AggregateService : IAggregateService
         return classModel;
     }
 
-    public async Task CommandCreate(string routeType, string name, string aggregate, string properties, string directory)
+    [Obsolete("Use Folder Factory")]
+    public async Task CommandCreateAsync(string routeType, string name, string aggregate, string properties, string directory)
     {
         var serviceName = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory)).Split('.').First();
 
@@ -94,7 +95,7 @@ public class AggregateService : IAggregateService
 
         if (classModel == null)
         {
-            classModel = classFactory.CreateEntity(aggregate, properties);
+            classModel = await classFactory.CreateEntityAsync(aggregate, properties);
         }
 
         var commandModel = new CommandModel(); // (serviceName, classModel, _namingConventionConverter, name: name, routeType: routeType switch

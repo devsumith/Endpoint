@@ -3,9 +3,9 @@
 
 using Endpoint.Core.Syntax.Classes;
 
-namespace Endpoint.Core.Syntax.Units.Factories;
+namespace Endpoint.Core.Syntax.Documents.Factories;
 
-public interface IUnitFactory
+public interface IDocumentFactory
 {
-    Task<SyntaxUnitModel> CreateCommandAsync(ClassModel aggregate, RouteType routeType);
+    Task<DocumentModel> CreateCommandAsync(ClassModel aggregate, RouteType routeType);
 }

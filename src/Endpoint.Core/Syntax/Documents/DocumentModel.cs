@@ -3,15 +3,15 @@
 
 using System.Collections.Generic;
 
-namespace Endpoint.Core.Syntax.Units;
+namespace Endpoint.Core.Syntax.Documents;
 
-public class SyntaxUnitModel : SyntaxModel
+public class DocumentModel : SyntaxModel
 {
-    public SyntaxUnitModel()
+    public DocumentModel()
     {
     }
 
-    public SyntaxUnitModel(string name)
+    public DocumentModel(string name)
     {
         Name = name;
         Code = new List<SyntaxModel>();

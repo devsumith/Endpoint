@@ -7,7 +7,7 @@ using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Properties;
 using Microsoft.Extensions.Logging;
 
-namespace Endpoint.Core.Syntax.Units.Factories;
+namespace Endpoint.Core.Syntax.Documents.Factories;
 
 public class SyntaxUnitFactory : ISyntaxUnitFactory
 {

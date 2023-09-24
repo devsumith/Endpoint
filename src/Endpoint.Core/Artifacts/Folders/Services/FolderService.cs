@@ -48,7 +48,7 @@ public class FolderService : IFolderService
 
     public async Task<FolderModel> AggregateCommands(ClassModel aggregate, string directory)
     {
-        var model = await folderFactory.CreateAggregateCommandsAsync(aggregate);
+        var model = await folderFactory.CreateAggregateCommandsAsync(aggregate, directory);
 
         var serviceName = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory).Split('.').First());
 

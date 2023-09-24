@@ -29,8 +29,8 @@ using Endpoint.Core.Syntax.Namespaces.Factories;
 using Endpoint.Core.Syntax.Properties.Factories;
 using Endpoint.Core.Syntax.RouteHandlers;
 using Endpoint.Core.Syntax.Types;
-using Endpoint.Core.Syntax.Units.Factories;
-using Endpoint.Core.Syntax.Units.Services;
+using Endpoint.Core.Syntax.Documents.Factories;
+using Endpoint.Core.Syntax.Documents.Services;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -38,7 +38,7 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
-        services.AddSingleton<IUnitFactory, UnitFactory>();
+        services.AddSingleton<IDocumentFactory, DocumentFactory>();
         services.AddSingleton<IGitService, GitService>();
         services.AddSingleton<ICodeFormatterService, DotnetCodeFormatterService>();
         services.AddSingleton<ICodeAnalysisService, CodeAnalysisService>();

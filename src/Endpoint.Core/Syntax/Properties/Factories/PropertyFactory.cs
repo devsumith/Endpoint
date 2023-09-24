@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.Units;
+using Endpoint.Core.Syntax.Documents;
 using Microsoft.Extensions.Logging;
 using static Endpoint.Core.Syntax.AccessModifier;
 using static Endpoint.Core.Syntax.Properties.PropertyAccessorModel;

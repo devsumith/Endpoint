@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Interfaces;
-using Endpoint.Core.Syntax.Units;
+using Endpoint.Core.Syntax.Documents;
 
 namespace Endpoint.Core.Syntax.Classes.Factories;
 
@@ -12,7 +12,7 @@ public interface IClassFactory
 {
     Task<ClassModel> CreateControllerAsync(string controllerName, string directory);
 
-    ClassModel CreateEntity(string name, string properties);
+    Task<ClassModel> CreateEntityAsync(string name, string properties);
 
     ClassModel CreateController(EntityModel model, string directory);
 

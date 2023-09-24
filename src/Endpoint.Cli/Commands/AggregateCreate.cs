@@ -21,9 +21,6 @@ public class AggregateCreateRequest : IRequest
     [Option('p', "properties")]
     public string Properties { get; set; }
 
-    [Option('m', "microservice-name")]
-    public string MicroserviceName { get; set; }
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }
@@ -48,7 +45,7 @@ public class AggregateCreateRequestHandler : IRequestHandler<AggregateCreateRequ
     {
         logger.LogInformation("Creating Aggregate. {name}", request.Name);
 
-        var model = await folderFactory.CreateAggregateAsync(request.Name, request.Properties);
+        var model = await folderFactory.CreateAggregateAsync(request.Name, request.Properties, request.Directory);
 
         await artifactGenerator.GenerateAsync(model);
     }

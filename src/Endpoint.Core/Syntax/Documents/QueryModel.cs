@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using Endpoint.Core.Syntax.Classes;
 
-namespace Endpoint.Core.Syntax.Units;
+namespace Endpoint.Core.Syntax.Documents;
 
 public class QueryModel : SyntaxModel
 {

@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using Endpoint.Core.Syntax.Properties;
 
-namespace Endpoint.Core.Syntax.Units.Factories;
+namespace Endpoint.Core.Syntax.Documents.Factories;
 
 public interface ISyntaxUnitFactory
 {

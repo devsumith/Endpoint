@@ -2,9 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System.Text;
-using Endpoint.Core.Syntax.Units;
+using Endpoint.Core.Syntax.Documents;
 
-namespace Endpoint.Core.Syntax.Units.Strategies;
+namespace Endpoint.Core.Syntax.Documents.Strategies;
 
 public class QueryModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<QueryModel>
 {
