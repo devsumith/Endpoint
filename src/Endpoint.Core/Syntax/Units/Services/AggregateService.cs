@@ -53,7 +53,7 @@ public class AggregateService : IAggregateService
         this.cqrsFactory = cqrsFactory ?? throw new ArgumentNullException(nameof(cqrsFactory));
     }
 
-    public async Task<ClassModel> Add(string name, string properties, string directory, string serviceName)
+    public async Task<ClassModel> AddAsync(string name, string properties, string directory, string serviceName)
     {
         logger.LogInformation("Add");
 

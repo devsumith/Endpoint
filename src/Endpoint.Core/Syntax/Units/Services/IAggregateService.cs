@@ -7,7 +7,7 @@ namespace Endpoint.Core.Syntax.Units.Services;
 
 public interface IAggregateService
 {
-    Task<ClassModel> Add(string name, string properties, string directory, string microserviceName);
+    Task<ClassModel> AddAsync(string name, string properties, string directory, string microserviceName);
 
     Task CommandCreate(string routeType, string name, string aggregate, string properties, string directory);
 

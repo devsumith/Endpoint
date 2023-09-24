@@ -112,7 +112,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var solution = await CreateDddSolution(request.Name, request.AggregateName, request.Properties, request.Directory);
 
-        await CreateDddApp(solution, request.ApplicationName, request.Version, request.Prefix);
+        await CreateDddAppAsync(solution, request.ApplicationName, request.Version, request.Prefix);
 
         commandService.Start("code .", solution.SolutionDirectory);
     }
@@ -125,11 +125,11 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var sourceFolder = new FolderModel("src", model.SolutionDirectory);
 
-        var servicesFolder = new FolderModel("Services", sourceFolder.Directory);
+        var servicesFolder = new FolderModel("Services", sourceFolder);
 
-        var serviceFolder = new FolderModel(schema, servicesFolder.Directory);
+        var serviceFolder = new FolderModel(schema, servicesFolder);
 
-        var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder.Directory) { Priority = 1 };
+        var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder) { Priority = 1 };
 
         var kernel = await projectFactory.CreateKernelProject(buildingBlocksFolder.Directory);
 
@@ -177,7 +177,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var aggregatesModelDirectory = Path.Combine(core.Directory, "AggregatesModel");
 
-        var entity = await aggregateService.Add(aggregateName, properties, aggregatesModelDirectory, name);
+        var entity = new ClassModel(aggregateName);
 
         var dbContext = classFactory.CreateDbContext($"{name}DbContext", new List<EntityModel>()
         {
@@ -195,7 +195,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         return model;
     }
 
-    private async Task CreateDddApp(SolutionModel model, string applicationName, string version, string prefix)
+    private async Task CreateDddAppAsync(SolutionModel model, string applicationName, string version, string prefix)
     {
         var temporaryAppName = $"{namingConventionConverter.Convert(NamingConvention.SnakeCase, model.Name)}-app";
 
