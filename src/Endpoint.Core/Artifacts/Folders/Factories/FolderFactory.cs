@@ -12,6 +12,7 @@ using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.TypeScript;
 using Endpoint.Core.Syntax.Units;
+using Endpoint.Core.Syntax.Units.Factories;
 using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Artifacts.Folders.Factories;
@@ -24,6 +25,7 @@ public class FolderFactory : IFolderFactory
     private readonly INamingConventionConverter namingConventionConverter;
     private readonly IFileFactory fileFactory;
     private readonly IClassFactory classFactory;
+    private readonly IUnitFactory unitFactory;
 
     public FolderFactory(
         ILogger<FolderFactory> logger,
@@ -31,7 +33,8 @@ public class FolderFactory : IFolderFactory
         IFileSystem fileSystem,
         INamingConventionConverter namingConventionConverter,
         IFileFactory fileFactory,
-        IClassFactory classFactory)
+        IClassFactory classFactory,
+        IUnitFactory unitFactory)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
@@ -39,37 +42,28 @@ public class FolderFactory : IFolderFactory
         this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(fileSystem));
         this.fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         this.classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
+        this.unitFactory = unitFactory ?? throw new ArgumentNullException(nameof(unitFactory));
     }
 
-    public FolderModel AggregagteCommands(ClassModel aggregate, string directory)
+    public async Task<FolderModel> CreateAggregateCommandsAsync(ClassModel aggregate)
     {
         logger.LogInformation("Generating Aggregate Commands. {name}", aggregate.Name);
 
-        var aggregateName = aggregate.Name;
-
-        fileSystem.Directory.CreateDirectory(directory);
-
-        var model = new FolderModel("Commands", directory);
-
-        var microserviceName = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory)).Split('.').First();
+        var model = new FolderModel("Commands", string.Empty);
 
         foreach (var routeType in new RouteType[] { RouteType.Create, RouteType.Delete, RouteType.Update })
         {
-            // TODO: build command and subclasses fully here. Class factory
-            // var command = new CommandModel(microserviceName, aggregate, _namingConventionConverter, routeType);
-            var command = new CommandModel();
+            var command = await unitFactory.CreateCommandAsync(aggregate, routeType);
 
-            model.Files.Add(new CodeFileModel<CommandModel>(command, command.UsingDirectives, command.Name, model.Directory, ".cs"));
+            model.Files.Add(new CodeFileModel<SyntaxUnitModel>(command, command.Name, model.Directory, ".cs"));
         }
 
         return model;
     }
 
-    public FolderModel AggregagteQueries(ClassModel aggregate, string directory)
+    public async Task<FolderModel> CreateAggregateQueriesAsync(ClassModel aggregate)
     {
-        var model = new FolderModel("Queries", directory);
-
-        var microserviceName = Path.GetFileNameWithoutExtension(fileProvider.Get("*.csproj", directory)).Split('.').First();
+        var model = new FolderModel("Queries", string.Empty);
 
         foreach (var routeType in new RouteType[] { RouteType.GetById, RouteType.Get, RouteType.Page })
         {
@@ -81,11 +75,11 @@ public class FolderFactory : IFolderFactory
         return model;
     }
 
-    public FolderModel AngularDomainModel(string modelName, string properties, string directory)
+    public async Task<FolderModel> CreateAngularDomainModelAsync(string modelName, string properties)
     {
         var modelNameSnakeCase = namingConventionConverter.Convert(NamingConvention.SnakeCase, modelName);
 
-        var model = new FolderModel(modelNameSnakeCase, directory);
+        var model = new FolderModel(modelNameSnakeCase, string.Empty);
 
         var typeScriptTypeModel = new TypeScriptTypeModel(modelNameSnakeCase);
 
@@ -123,15 +117,15 @@ public class FolderFactory : IFolderFactory
         return model;
     }
 
-    public async Task<FolderModel> CreateAggregateAsync(string aggregateName, string properties, string directory)
+    public async Task<FolderModel> CreateAggregateAsync(string aggregateName, string properties)
     {
         var aggregate = classFactory.CreateEntity(aggregateName, properties);
 
-        var model = new FolderModel($"{aggregateName}Aggregate", directory);
+        var model = new FolderModel($"{aggregateName}Aggregate", string.Empty);
 
-        model.SubFolders.Add(AggregagteCommands(aggregate, model.Directory));
+        model.SubFolders.Add(await CreateAggregateCommandsAsync(aggregate));
 
-        model.SubFolders.Add(AggregagteQueries(aggregate, model.Directory));
+        model.SubFolders.Add(await CreateAggregateQueriesAsync(aggregate));
 
         var aggregateDto = aggregate.CreateDto();
 
@@ -145,15 +139,4 @@ public class FolderFactory : IFolderFactory
 
         return model;
     }
-}
-
-public class AggregateFolderModel : FolderModel
-{
-    public AggregateFolderModel(ClassModel aggregate, string directory)
-        : base($"{aggregate.Name}Aggregate", directory)
-    {
-        Aggregate = aggregate;
-    }
-
-    public ClassModel Aggregate { get; set; }
 }

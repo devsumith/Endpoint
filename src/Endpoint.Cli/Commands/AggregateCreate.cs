@@ -48,7 +48,7 @@ public class AggregateCreateRequestHandler : IRequestHandler<AggregateCreateRequ
     {
         logger.LogInformation("Creating Aggregate. {name}", request.Name);
 
-        var model = await folderFactory.CreateAggregateAsync(request.Name, request.Properties, request.Directory);
+        var model = await folderFactory.CreateAggregateAsync(request.Name, request.Properties);
 
         await artifactGenerator.GenerateAsync(model);
     }

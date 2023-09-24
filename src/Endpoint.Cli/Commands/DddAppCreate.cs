@@ -110,7 +110,6 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     {
         logger.LogInformation("Creating Domain Driven Design Application", nameof(DddAppCreateRequestHandler));
 
-        
         var solution = await CreateDddSolution(request.Name, request.AggregateName, request.Properties, request.Directory);
 
         await CreateDddApp(solution, request.ApplicationName, request.Version, request.Prefix);

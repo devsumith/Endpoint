@@ -50,7 +50,7 @@ public class AngularDomainModelCreateRequestHandler : IRequestHandler<AngularDom
             request.Properties = $"{request.Name}Id:string";
         }
 
-        var model = folderFactory.AngularDomainModel(request.Name, request.Properties, request.Directory);
+        var model = await folderFactory.CreateAngularDomainModelAsync(request.Name, request.Properties);
 
         await artifactGenerator.GenerateAsync(model);
     }

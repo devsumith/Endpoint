@@ -38,6 +38,7 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
+        services.AddSingleton<IUnitFactory, UnitFactory>();
         services.AddSingleton<IGitService, GitService>();
         services.AddSingleton<ICodeFormatterService, DotnetCodeFormatterService>();
         services.AddSingleton<ICodeAnalysisService, CodeAnalysisService>();
