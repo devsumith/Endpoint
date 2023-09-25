@@ -21,9 +21,6 @@ public class AggregateCreateRequest : IRequest
     [Option('p', "properties")]
     public string Properties { get; set; }
 
-    [Option('m', "microservice-name")]
-    public string MicroserviceName { get; set; }
-
     [Option('d', Required = false)]
     public string Directory { get; set; } = System.Environment.CurrentDirectory;
 }

@@ -1,10 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using System.IO;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Projects;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Endpoint.Core.Artifacts.Folders;
 
@@ -12,6 +12,22 @@ public class FolderModel : ArtifactModel
 {
     public FolderModel()
     {
+    }
+
+    public FolderModel(string name)
+    {
+        Name = name;
+        SubFolders = new List<FolderModel>();
+        Projects = new List<ProjectModel>();
+        Files = new List<FileModel>();
+    }
+
+    public FolderModel(string name, FolderModel parent)
+        :this(name, parent.Directory)
+    {
+        Name = name;
+        Directory = Path.Combine(parent.Directory, name);
+        parent.SubFolders.Add(this);
     }
 
     public FolderModel(string name, string parentDirectory)
@@ -34,4 +50,13 @@ public class FolderModel : ArtifactModel
     public List<FolderModel> SubFolders { get; set; }
 
     public List<FileModel> Files { get; set; }
+
+    public override IEnumerable<FolderModel> GetChildren()
+    {
+        foreach (var folder in SubFolders)
+        {
+            yield return folder;
+        }
+    }
+
 }

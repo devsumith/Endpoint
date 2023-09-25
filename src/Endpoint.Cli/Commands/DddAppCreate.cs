@@ -23,7 +23,7 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Entities;
-using Endpoint.Core.Syntax.Units.Services;
+using Endpoint.Core.Syntax.Documents.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -108,11 +108,11 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
     public async Task Handle(DddAppCreateRequest request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Handled: {0}", nameof(DddAppCreateRequestHandler));
+        logger.LogInformation("Creating Domain Driven Design Application", nameof(DddAppCreateRequestHandler));
 
         var solution = await CreateDddSolution(request.Name, request.AggregateName, request.Properties, request.Directory);
 
-        await CreateDddApp(solution, request.ApplicationName, request.Version, request.Prefix);
+        await CreateDddAppAsync(solution, request.ApplicationName, request.Version, request.Prefix);
 
         commandService.Start("code .", solution.SolutionDirectory);
     }
@@ -125,11 +125,11 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var sourceFolder = new FolderModel("src", model.SolutionDirectory);
 
-        var servicesFolder = new FolderModel("Services", sourceFolder.Directory);
+        var servicesFolder = new FolderModel("Services", sourceFolder);
 
-        var serviceFolder = new FolderModel(schema, servicesFolder.Directory);
+        var serviceFolder = new FolderModel(schema, servicesFolder);
 
-        var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder.Directory) { Priority = 1 };
+        var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder) { Priority = 1 };
 
         var kernel = await projectFactory.CreateKernelProject(buildingBlocksFolder.Directory);
 
@@ -177,16 +177,16 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         var aggregatesModelDirectory = Path.Combine(core.Directory, "AggregatesModel");
 
-        var entity = await aggregateService.Add(aggregateName, properties, aggregatesModelDirectory, name);
+        var entity = new ClassModel(aggregateName);
 
         var dbContext = classFactory.CreateDbContext($"{name}DbContext", new List<EntityModel>()
         {
             new EntityModel(entity.Name) { Properties = entity.Properties },
         }, name);
 
-        await artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(dbContext, dbContext.Usings, dbContext.Name, Path.Combine(infrastructure.Directory, "Data"), ".cs"));
+        await artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(dbContext, dbContext.Usings, dbContext.Name, fileSystem.Path.Combine(infrastructure.Directory, "Data"), ".cs"));
 
-        await apiProjectService.ControllerCreateAsync(aggregateName, false, Path.Combine(api.Directory, "Controllers"));
+        await apiProjectService.ControllerCreateAsync(aggregateName, false, fileSystem.Path.Combine(api.Directory, "Controllers"));
 
         commandService.Start($"dotnet ef migrations add {schema}_Initial", infrastructure.Directory);
 
@@ -195,12 +195,12 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         return model;
     }
 
-    private async Task CreateDddApp(SolutionModel model, string applicationName, string version, string prefix)
+    private async Task CreateDddAppAsync(SolutionModel model, string applicationName, string version, string prefix)
     {
         var temporaryAppName = $"{namingConventionConverter.Convert(NamingConvention.SnakeCase, model.Name)}-app";
 
         await angularService.CreateWorkspace(temporaryAppName, version, applicationName, "application", prefix, model.SrcDirectory, false);
 
-        Directory.Move(Path.Combine(model.SrcDirectory, temporaryAppName), Path.Combine(model.SrcDirectory, $"{model.Name}.App"));
+        fileSystem.Directory.Move(Path.Combine(model.SrcDirectory, temporaryAppName), Path.Combine(model.SrcDirectory, $"{model.Name}.App"));
     }
 }

@@ -17,7 +17,7 @@ using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Properties.Factories;
 using Endpoint.Core.Syntax.Types;
-using Endpoint.Core.Syntax.Units;
+using Endpoint.Core.Syntax.Documents;
 
 namespace Endpoint.Core.Syntax.Classes.Factories;
 
@@ -165,7 +165,7 @@ public class ClassFactory : IClassFactory
         return classModel;
     }
 
-    public ClassModel CreateEntity(string name, string properties = null)
+    public async Task<ClassModel> CreateEntityAsync(string name, string properties = null)
     {
         var classModel = new ClassModel(name);
 

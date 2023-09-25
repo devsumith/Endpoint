@@ -7,11 +7,13 @@ namespace Endpoint.Core.Artifacts.Folders.Factories;
 
 public interface IFolderFactory
 {
-    FolderModel AggregagteCommands(ClassModel aggregate, string directory);
+    Task<FolderModel> CreateAggregateCommandsAsync(ClassModel aggregate, string directory);
 
-    FolderModel AggregagteQueries(ClassModel aggregate, string directory);
+    Task<FolderModel> CreateAggregateQueriesAsync(ClassModel aggregate);
 
-    FolderModel AngularDomainModel(string modelName, string properties, string directory);
+    Task<FolderModel> CreateAngularDomainModelAsync(string modelName, string properties);
+
+    Task<FolderModel> CreateAggregateAsync(string aggregateName, string properties);
 
     Task<FolderModel> CreateAggregateAsync(string aggregateName, string properties, string directory);
 }

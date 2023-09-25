@@ -1,14 +1,14 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts;
 using Endpoint.Core.Artifacts.Folders.Factories;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Endpoint.Cli.Commands;
 
@@ -50,7 +50,7 @@ public class AngularDomainModelCreateRequestHandler : IRequestHandler<AngularDom
             request.Properties = $"{request.Name}Id:string";
         }
 
-        var model = folderFactory.AngularDomainModel(request.Name, request.Properties, request.Directory);
+        var model = await folderFactory.CreateAngularDomainModelAsync(request.Name, request.Properties);
 
         await artifactGenerator.GenerateAsync(model);
     }

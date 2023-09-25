@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "pr -n \"Test\"  -d C:\\projects\\Endpoint",
+      "commandLineArgs": "commands-create -d ../../../../../samples/DddAppCreate/src/Services/DddAppCreate/DddAppCreate.Core/AggregatesModel/ToDoAggregate",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
