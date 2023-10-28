@@ -24,4 +24,6 @@ public interface ISystemContext
     List<Type> Types { get; set; }
 
     List<BuildingBlock> BuildingBlocks { get; set; }
+
+    List<Project> Projects { get; set; }
 }

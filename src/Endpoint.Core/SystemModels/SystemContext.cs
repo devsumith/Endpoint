@@ -15,6 +15,8 @@ public class SystemContext : ISystemContext
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    public string Name { get; set; }
+
     public List<Aggregate> Aggregates { get; set; } = new ();
 
     public List<Command> Commands { get; set; } = new ();
@@ -32,4 +34,8 @@ public class SystemContext : ISystemContext
     public List<Type> Types { get; set; } = new ();
 
     public List<BuildingBlock> BuildingBlocks { get; set; } = new ();
+
+    public List<Project> Projects { get; set; } = new ();
+
+    public string Directory { get; set; }
 }

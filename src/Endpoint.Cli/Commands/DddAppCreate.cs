@@ -2,30 +2,20 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.IO.Abstractions;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using CommandLine;
 using Endpoint.Core.Artifacts;
-using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
-using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Folders.Factories;
-using Endpoint.Core.Artifacts.Projects;
 using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Artifacts.Services;
-using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Artifacts.Solutions.Factories;
 using Endpoint.Core.Artifacts.Solutions.Services;
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Units.Services;
 using Endpoint.Core.SystemModels;
 using MediatR;
@@ -38,6 +28,9 @@ public class DddAppCreateRequest : IRequest
 {
     [Option('n', "name")]
     public string Name { get; set; } = "Microservices";
+
+    [Option('m', "microservice-name")]
+    public string MicroserviceName { get; set; } = "ToDoService";
 
     [Option('a', "aggregate")]
     public string AggregateName { get; set; } = "ToDo";
@@ -123,7 +116,7 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     {
         logger.LogInformation("Creating Domain Driven Design Application", nameof(DddAppCreateRequestHandler));
 
-        systemContext = await systemContextFactory.DddCreateAsync(request.Name, request.AggregateName, request.Directory);
+        systemContext = await systemContextFactory.DddCreateAsync(request.Name, request.MicroserviceName, request.AggregateName, request.Properties, request.Directory);
 
         context.Set(systemContext);
 
@@ -131,36 +124,12 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
 
         await artifactGenerator.GenerateAsync(solution);
 
-        ProjectModel infrastructure = solution.Projects.Single(x => x.Name.Contains("Infrastructure"));
+        var temporaryAppName = $"{namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}-app";
 
-        ProjectModel api = solution.Projects.Single(x => x.Name.Contains(".Api"));
+        await angularService.CreateWorkspace(temporaryAppName, request.Version, request.ApplicationName, "application", request.Prefix, solution.SrcDirectory, false);
 
-        var entity = new ClassModel(request.AggregateName);
-
-        var dbContext = classFactory.CreateDbContext($"{request.Name}DbContext", new List<EntityModel>()
-        {
-            new EntityModel(entity.Name) { Properties = entity.Properties },
-        }, request.Name);
-
-        await artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(dbContext, dbContext.Usings, dbContext.Name, fileSystem.Path.Combine(infrastructure.Directory, "Data"), ".cs"));
-
-        await apiProjectService.ControllerCreateAsync(request.AggregateName, false, fileSystem.Path.Combine(api.Directory, "Controllers"));
-
-        commandService.Start($"dotnet ef migrations add {request.Name.Remove("Service")}_Initial", infrastructure.Directory);
-
-        commandService.Start("dotnet ef database update", infrastructure.Directory);
-
-        await CreateDddAppAsync(solution, request.ApplicationName, request.Version, request.Prefix);
+        fileSystem.Directory.Move(Path.Combine(solution.SrcDirectory, temporaryAppName), Path.Combine(solution.SrcDirectory, $"{request.Name}.App"));
 
         commandService.Start("code .", solution.SolutionDirectory);
-    }
-
-    private async Task CreateDddAppAsync(SolutionModel model, string applicationName, string version, string prefix)
-    {
-        var temporaryAppName = $"{namingConventionConverter.Convert(NamingConvention.SnakeCase, model.Name)}-app";
-
-        await angularService.CreateWorkspace(temporaryAppName, version, applicationName, "application", prefix, model.SrcDirectory, false);
-
-        fileSystem.Directory.Move(Path.Combine(model.SrcDirectory, temporaryAppName), Path.Combine(model.SrcDirectory, $"{model.Name}.App"));
     }
 }
