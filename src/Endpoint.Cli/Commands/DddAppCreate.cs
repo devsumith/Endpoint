@@ -23,7 +23,7 @@ using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Entities;
-using Endpoint.Core.Syntax.Documents.Services;
+using Endpoint.Core.Syntax.Units.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

@@ -3,7 +3,7 @@
 
 using Endpoint.Core.Syntax.Classes;
 
-namespace Endpoint.Core.Syntax.Documents.Services;
+namespace Endpoint.Core.Syntax.Units.Services;
 
 public interface IAggregateService
 {

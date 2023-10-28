@@ -1,17 +1,18 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System.Text;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Documents;
-using Endpoint.Core.Syntax.Documents.Factories;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.TypeScript;
+using Endpoint.Core.Syntax.Units;
+using Endpoint.Core.Syntax.Units.Factories;
 using Microsoft.Extensions.Logging;
-using System.Text;
 using static Endpoint.Core.Constants.FileExtensions;
 
 namespace Endpoint.Core.Artifacts.Folders.Factories;

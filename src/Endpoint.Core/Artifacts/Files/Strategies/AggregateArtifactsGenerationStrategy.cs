@@ -4,7 +4,7 @@
 using System.IO;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
-using Endpoint.Core.Syntax.Documents;
+using Endpoint.Core.Syntax.Units;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
 

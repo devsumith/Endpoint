@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Endpoint.Core.Syntax.Documents;
+using Endpoint.Core.Syntax.Units;
 
 namespace Endpoint.Core.Syntax.Properties.Factories;
 

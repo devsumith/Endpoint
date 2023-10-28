@@ -6,7 +6,7 @@ using Endpoint.Core.Syntax.Classes;
 
 namespace Endpoint.Core.Syntax.Types;
 
-public class TypeModel
+public class TypeModel : SyntaxModel
 {
     public static TypeModel Task = new TypeModel("Task");
 

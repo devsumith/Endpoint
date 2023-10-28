@@ -4,6 +4,7 @@
 using System.Linq;
 using System.Text;
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Documents;
 using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Artifacts.Files.Strategies;
@@ -37,23 +38,26 @@ public abstract class CodeFileIArtifactGenerationStrategy<T> : GenericArtifactGe
 
         var stringBuilder = new StringBuilder();
 
-        foreach (var @using in model.Usings)
+        if (typeof(T) != typeof(DocumentModel))
         {
-            stringBuilder.AppendLine($"using {@using.Name};");
-
-            if (@using == model.Usings.Last())
+            foreach (var @using in model.Usings)
             {
+                stringBuilder.AppendLine($"using {@using.Name};");
+
+                if (@using == model.Usings.Last())
+                {
+                    stringBuilder.AppendLine();
+                }
+            }
+
+            var fileNamespace = string.IsNullOrEmpty(model.Namespace) ? namespaceProvider.Get(model.Directory) : model.Namespace;
+
+            if (!string.IsNullOrEmpty(fileNamespace) && fileNamespace != "NamespaceNotFound" && !fileNamespace.Contains(".lib."))
+            {
+                stringBuilder.AppendLine($"namespace {fileNamespace};");
+
                 stringBuilder.AppendLine();
             }
-        }
-
-        var fileNamespace = string.IsNullOrEmpty(model.Namespace) ? namespaceProvider.Get(model.Directory) : model.Namespace;
-
-        if (!string.IsNullOrEmpty(fileNamespace) && fileNamespace != "NamespaceNotFound" && !fileNamespace.Contains(".lib."))
-        {
-            stringBuilder.AppendLine($"namespace {fileNamespace};");
-
-            stringBuilder.AppendLine();
         }
 
         stringBuilder.AppendLine(await syntaxGenerator.GenerateAsync(model.Object));

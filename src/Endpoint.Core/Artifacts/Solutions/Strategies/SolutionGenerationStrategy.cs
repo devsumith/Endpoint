@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Projects.Services;
@@ -16,14 +15,12 @@ public class SolutionGenerationStrategy : GenericArtifactGenerationStrategy<Solu
     private readonly ICommandService commandService;
     private readonly IFileSystem fileSystem;
     private readonly IProjectService projectService;
-    private readonly ICodeFormatterService codeFormatterService;
 
     public SolutionGenerationStrategy(ICommandService commandService, IFileSystem fileSystem, IProjectService projectService, ICodeFormatterService codeFormatterService)
     {
         this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
         this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         this.projectService = projectService ?? throw new ArgumentNullException(nameof(projectService));
-        this.codeFormatterService = codeFormatterService ?? throw new ArgumentNullException(nameof(codeFormatterService));
     }
 
     public override async Task GenerateAsync(IArtifactGenerator generator, SolutionModel model)
@@ -51,8 +48,6 @@ public class SolutionGenerationStrategy : GenericArtifactGenerationStrategy<Solu
         {
             commandService.Start($"dotnet add {dependOn.Client.Directory} reference {dependOn.Service.Path}");
         }
-
-        await codeFormatterService.FormatAsync(model.SolutionDirectory);
     }
 
     private async Task CreateProjectsAndAddToSln(IArtifactGenerator artifactGenerator, SolutionModel model, List<FolderModel> folders)

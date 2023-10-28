@@ -17,7 +17,6 @@ using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Properties.Factories;
 using Endpoint.Core.Syntax.Types;
-using Endpoint.Core.Syntax.Documents;
 
 namespace Endpoint.Core.Syntax.Classes.Factories;
 
@@ -561,15 +560,12 @@ public class ClassFactory : IClassFactory
         return model;
     }
 
-    public async Task<ClassModel> CreateResponseAsync(RequestType responseType, string entityName, string name = null)
+    public async Task<ClassModel> CreateResponseAsync(string responseName, List<PropertyModel> properties)
     {
-        var entityNamePascalCasePlural = namingConventionConverter.Convert(NamingConvention.PascalCase, entityName, pluralize: true);
-
-        var responseName = string.IsNullOrEmpty(name) ? $"Get{entityNamePascalCasePlural}Response" : name;
-
-        var model = new ClassModel(responseName);
-
-        model.Properties = await propertyFactory.ResponsePropertiesCreateAsync(responseType, model, entityName);
+        var model = new ClassModel(responseName)
+        {
+            Properties = properties,
+        };
 
         return model;
     }
@@ -850,5 +846,24 @@ public class ClassFactory : IClassFactory
         }
 
         return methodModel;
+    }
+
+    public async Task<ClassModel> CreateRequestAsync(string requestName, string responseName, List<PropertyModel> properties)
+    {
+        var model = new ClassModel(requestName);
+
+        model.Implements.Add(new ("IRequest")
+        {
+            GenericTypeParameters = new () { new (responseName) },
+
+            Usings = new List<UsingModel>()
+            {
+                new UsingModel("MediatR")
+            },
+        });
+
+        model.Properties = properties;
+
+        return model;
     }
 }

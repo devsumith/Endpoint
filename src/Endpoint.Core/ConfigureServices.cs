@@ -29,8 +29,8 @@ using Endpoint.Core.Syntax.Namespaces.Factories;
 using Endpoint.Core.Syntax.Properties.Factories;
 using Endpoint.Core.Syntax.RouteHandlers;
 using Endpoint.Core.Syntax.Types;
-using Endpoint.Core.Syntax.Documents.Factories;
-using Endpoint.Core.Syntax.Documents.Services;
+using Endpoint.Core.Syntax.Units.Factories;
+using Endpoint.Core.Syntax.Units.Services;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

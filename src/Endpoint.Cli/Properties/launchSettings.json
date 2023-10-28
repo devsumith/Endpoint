@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "commands-create -d ../../../../../samples/DddAppCreate/src/Services/DddAppCreate/DddAppCreate.Core/AggregatesModel/ToDoAggregate",
+      "commandLineArgs": "commands-create -n SourceGen -r DddAppCreate.Core -d C:\\projects\\Endpoint\\samples\\DddAppCreate\\src\\Services\\DddAppCreate\\DddAppCreate.Core\\AggregatesModel\\ToDoAggregate",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

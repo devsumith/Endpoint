@@ -4,7 +4,8 @@
 using System.Collections.Generic;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Interfaces;
-using Endpoint.Core.Syntax.Documents;
+using Endpoint.Core.Syntax.Properties;
+using Endpoint.Core.Syntax.Units;
 
 namespace Endpoint.Core.Syntax.Classes.Factories;
 
@@ -38,7 +39,9 @@ public interface IClassFactory
 
     Task<ClassModel> CreateRequestAsync(string requestName, string properties);
 
-    Task<ClassModel> CreateResponseAsync(RequestType responseType, string entityName, string name = null);
+    Task<ClassModel> CreateRequestAsync(string requestName, string responseName, List<PropertyModel> properties);
+
+    Task<ClassModel> CreateResponseAsync(string responseName, List<PropertyModel> properties);
 
     Task<ClassModel> CreateWorkerAsync(string name);
 }

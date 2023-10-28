@@ -5,13 +5,13 @@ using System.Xml.Linq;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Documents;
+using Endpoint.Core.Syntax.Units;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Octokit;
 using Octokit.Internal;
 
-namespace Endpoint.Core.Syntax.Documents.Factories;
+namespace Endpoint.Core.Syntax.Units.Factories;
 
 public class CqrsFactory : ICqrsFactory
 {
@@ -41,10 +41,9 @@ public class CqrsFactory : ICqrsFactory
         {
             Name = routeType.ToRequestName(namingConventionConverter),
 
-            Response = await classFactory.CreateResponseAsync(routeType.ToRequestType(), aggregateName),
+            // Response = await classFactory.CreateResponseAsync(routeType.ToRequestType(), aggregateName),
 
-            Request = await classFactory.CreateResponseAsync(routeType.ToRequestType(), aggregateName),
-
+            // Request = await classFactory.CreateResponseAsync(routeType.ToRequestType(), aggregateName),
             RequestHandler = null,
         };
     }

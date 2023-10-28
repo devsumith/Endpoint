@@ -4,9 +4,9 @@
 using System.Collections.Generic;
 using Endpoint.Core.Syntax.Classes;
 
-namespace Endpoint.Core.Syntax.Documents;
+namespace Endpoint.Core.Syntax.Units;
 
-public class AggregateModel : DocumentModel
+public class AggregateModel : UnitModel
 {
     public ClassModel Aggregate { get; set; }
 
