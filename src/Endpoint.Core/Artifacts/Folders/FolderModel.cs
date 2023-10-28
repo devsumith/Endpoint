@@ -1,10 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Endpoint.Core.Artifacts.Files;
-using Endpoint.Core.Artifacts.Projects;
 using System.Collections.Generic;
 using System.IO;
+using Endpoint.Core.Artifacts.Files;
+using Endpoint.Core.Artifacts.Projects;
 
 namespace Endpoint.Core.Artifacts.Folders;
 
@@ -23,7 +23,7 @@ public class FolderModel : ArtifactModel
     }
 
     public FolderModel(string name, FolderModel parent)
-        :this(name, parent.Directory)
+        : this(name, parent.Directory)
     {
         Name = name;
         Directory = Path.Combine(parent.Directory, name);
@@ -58,5 +58,4 @@ public class FolderModel : ArtifactModel
             yield return folder;
         }
     }
-
 }

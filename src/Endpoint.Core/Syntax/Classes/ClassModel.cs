@@ -68,5 +68,10 @@ public class ClassModel : InterfaceModel
         {
             yield return method;
         }
+
+        foreach (var implements in Implements)
+        {
+            yield return implements;
+        }
     }
 }

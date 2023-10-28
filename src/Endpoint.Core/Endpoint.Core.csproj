@@ -64,6 +64,7 @@
   <ItemGroup>
     <Folder Include="Syntax\Namespaces\Factories\" />
     <Folder Include="Syntax\Namespaces\Strategies\" />
+    <Folder Include="Syntax\Structs\" />
     <Folder Include="Syntax\Properties\Factories\" />
     <Folder Include="Syntax\Statements\" />
     <Folder Include="Syntax\RouteHandlers\Create\" />

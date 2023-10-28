@@ -2,8 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System.Text;
+using Endpoint.Core.Syntax.Units;
 
-namespace Endpoint.Core.Syntax.Documents.Strategies;
+namespace Endpoint.Core.Syntax.Units.Strategies;
 
 public class CommandModelSyntaxGenerationStrategy : GenericSyntaxGenerationStrategy<CommandModel>
 {

@@ -2,28 +2,23 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
 using Endpoint.Core.Artifacts;
-using Endpoint.Core.Artifacts.Files;
 using Endpoint.Core.Artifacts.Files.Factories;
-using Endpoint.Core.Artifacts.Folders;
 using Endpoint.Core.Artifacts.Folders.Factories;
 using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Artifacts.Services;
-using Endpoint.Core.Artifacts.Solutions;
 using Endpoint.Core.Artifacts.Solutions.Factories;
 using Endpoint.Core.Artifacts.Solutions.Services;
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Entities;
-using Endpoint.Core.Syntax.Documents.Services;
+using Endpoint.Core.Syntax.Units.Services;
+using Endpoint.Core.SystemModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -34,6 +29,9 @@ public class DddAppCreateRequest : IRequest
 {
     [Option('n', "name")]
     public string Name { get; set; } = "Microservices";
+
+    [Option('m', "microservice-name")]
+    public string MicroserviceName { get; set; } = "ToDoService";
 
     [Option('a', "aggregate")]
     public string AggregateName { get; set; } = "ToDo";
@@ -71,6 +69,9 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
     private readonly IProjectFactory projectFactory;
     private readonly IAggregateService aggregateService;
     private readonly IApiProjectService apiProjectService;
+    private readonly ISystemContextFactory systemContextFactory;
+    private readonly IContext context;
+    private ISystemContext systemContext;
 
     public DddAppCreateRequestHandler(
         ILogger<DddAppCreateRequestHandler> logger,
@@ -87,12 +88,15 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         IFolderFactory folderFactory,
         IProjectFactory projectFactory,
         IAggregateService aggregateService,
-        IApiProjectService apiProjectService)
+        IApiProjectService apiProjectService,
+        ISystemContextFactory systemContextFactory,
+        IContext context,
+        ISystemContext systemContext)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.angularService = angularService ?? throw new ArgumentNullException(nameof(angularService));
         this.solutionService = solutionService ?? throw new ArgumentNullException(nameof(solutionService));
-        this.solutionFactory = solutionFactory;
+        this.solutionFactory = solutionFactory ?? throw new ArgumentNullException(nameof(solutionFactory));
         this.artifactGenerator = artifactGenerator ?? throw new ArgumentNullException(nameof(artifactGenerator));
         this.namingConventionConverter = namingConventionConverter ?? throw new ArgumentNullException(nameof(namingConventionConverter));
         this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -104,103 +108,31 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         this.projectFactory = projectFactory ?? throw new ArgumentNullException(nameof(projectFactory));
         this.aggregateService = aggregateService ?? throw new ArgumentNullException(nameof(aggregateService));
         this.apiProjectService = apiProjectService ?? throw new ArgumentNullException(nameof(apiProjectService));
+        this.systemContextFactory = systemContextFactory ?? throw new ArgumentNullException(nameof(systemContextFactory));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
+        this.systemContext = systemContext ?? throw new ArgumentNullException(nameof(systemContext));
     }
 
     public async Task Handle(DddAppCreateRequest request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Creating Domain Driven Design Application", nameof(DddAppCreateRequestHandler));
 
-        var solution = await CreateDddSolution(request.Name, request.AggregateName, request.Properties, request.Directory);
+        systemContext = await systemContextFactory.DddCreateAsync(request.Name, request.MicroserviceName, request.AggregateName, request.Properties, request.Directory);
 
-        await CreateDddAppAsync(solution, request.ApplicationName, request.Version, request.Prefix);
+        context.Set(systemContext);
+
+        context.Set(systemContext.Microservices.First());
+
+        var solution = await solutionFactory.DddCreateAync(request.Name, request.Directory);
+
+        await artifactGenerator.GenerateAsync(solution);
+
+        var temporaryAppName = $"{namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}-app";
+
+        await angularService.CreateWorkspace(temporaryAppName, request.Version, request.ApplicationName, "application", request.Prefix, solution.SrcDirectory, false);
+
+        fileSystem.Directory.Move(Path.Combine(solution.SrcDirectory, temporaryAppName), Path.Combine(solution.SrcDirectory, $"{request.Name}.App"));
 
         commandService.Start("code .", solution.SolutionDirectory);
-    }
-
-    private async Task<SolutionModel> CreateDddSolution(string name, string aggregateName, string properties, string directory)
-    {
-        var model = new SolutionModel(name, directory);
-
-        var schema = name.Remove("Service");
-
-        var sourceFolder = new FolderModel("src", model.SolutionDirectory);
-
-        var servicesFolder = new FolderModel("Services", sourceFolder);
-
-        var serviceFolder = new FolderModel(schema, servicesFolder);
-
-        var buildingBlocksFolder = new FolderModel("BuildingBlocks", sourceFolder) { Priority = 1 };
-
-        var kernel = await projectFactory.CreateKernelProject(buildingBlocksFolder.Directory);
-
-        var messaging = await projectFactory.CreateMessagingProject(buildingBlocksFolder.Directory);
-
-        var messagingUdp = await projectFactory.CreateMessagingUdpProject(buildingBlocksFolder.Directory);
-
-        var security = await projectFactory.CreateSecurityProject(buildingBlocksFolder.Directory);
-
-        var validation = await projectFactory.CreateValidationProject(buildingBlocksFolder.Directory);
-
-        var compression = await projectFactory.CreateIOCompression(buildingBlocksFolder.Directory);
-
-        buildingBlocksFolder.Projects.Add(messaging);
-
-        buildingBlocksFolder.Projects.Add(messagingUdp);
-
-        buildingBlocksFolder.Projects.Add(security);
-
-        buildingBlocksFolder.Projects.Add(kernel);
-
-        buildingBlocksFolder.Projects.Add(validation);
-
-        buildingBlocksFolder.Projects.Add(compression);
-
-        servicesFolder.Projects.Add(await projectFactory.CreateCommon(servicesFolder.Directory));
-
-        var core = await projectFactory.CreateCore(name, serviceFolder.Directory);
-
-        var infrastructure = await projectFactory.CreateInfrastructure(name, serviceFolder.Directory);
-
-        var api = await projectFactory.CreateApi(name, serviceFolder.Directory);
-
-        sourceFolder.Projects.AddRange(new[] { core, infrastructure, api });
-
-        model.Folders.Add(sourceFolder);
-
-        model.Folders.Add(buildingBlocksFolder);
-
-        model.Folders.Add(servicesFolder);
-
-        model.Folders = model.Folders.OrderByDescending(x => x.Priority).ToList();
-
-        await artifactGenerator.GenerateAsync(model);
-
-        var aggregatesModelDirectory = Path.Combine(core.Directory, "AggregatesModel");
-
-        var entity = new ClassModel(aggregateName);
-
-        var dbContext = classFactory.CreateDbContext($"{name}DbContext", new List<EntityModel>()
-        {
-            new EntityModel(entity.Name) { Properties = entity.Properties },
-        }, name);
-
-        await artifactGenerator.GenerateAsync(new CodeFileModel<ClassModel>(dbContext, dbContext.Usings, dbContext.Name, fileSystem.Path.Combine(infrastructure.Directory, "Data"), ".cs"));
-
-        await apiProjectService.ControllerCreateAsync(aggregateName, false, fileSystem.Path.Combine(api.Directory, "Controllers"));
-
-        commandService.Start($"dotnet ef migrations add {schema}_Initial", infrastructure.Directory);
-
-        commandService.Start("dotnet ef database update", infrastructure.Directory);
-
-        return model;
-    }
-
-    private async Task CreateDddAppAsync(SolutionModel model, string applicationName, string version, string prefix)
-    {
-        var temporaryAppName = $"{namingConventionConverter.Convert(NamingConvention.SnakeCase, model.Name)}-app";
-
-        await angularService.CreateWorkspace(temporaryAppName, version, applicationName, "application", prefix, model.SrcDirectory, false);
-
-        fileSystem.Directory.Move(Path.Combine(model.SrcDirectory, temporaryAppName), Path.Combine(model.SrcDirectory, $"{model.Name}.App"));
     }
 }

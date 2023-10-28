@@ -21,15 +21,15 @@ public class SyntaxModel
         yield break;
     }
 
-    public virtual List<SyntaxModel> GetDescendants(SyntaxModel root = null, List<SyntaxModel> children = null)
+    public virtual List<SyntaxModel> GetDescendants(SyntaxModel syntax = null, List<SyntaxModel> children = null)
     {
-        root ??= this;
+        syntax ??= this;
 
         children ??= new ();
 
-        children.Add(root);
+        children.Add(syntax);
 
-        foreach (var child in children)
+        foreach (var child in syntax.GetChildren())
         {
             if (child != null)
             {

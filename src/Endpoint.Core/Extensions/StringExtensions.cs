@@ -2,13 +2,25 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Services;
-using Endpoint.Core.Syntax.Documents;
+using Endpoint.Core.Syntax.Units;
 using static System.Linq.Enumerable;
 
 namespace System;
 
 public static class StringExtensions
 {
+    private static INamingConventionConverter converter = new NamingConventionConverter();
+
+    public static string ToPascalCase(this string value)
+    {
+        return converter.Convert(NamingConvention.PascalCase, value);
+    }
+
+    public static string ToCamelCase(this string value)
+    {
+        return converter.Convert(NamingConvention.CamelCase, value);
+    }
+
     public static string Indent(this string value, int indent, int spaces = 4)
     {
         try

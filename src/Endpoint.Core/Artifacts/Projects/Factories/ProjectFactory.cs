@@ -11,10 +11,13 @@ using Endpoint.Core.Artifacts.Projects.Enums;
 using Endpoint.Core.Options;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
+using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Constructors;
 using Endpoint.Core.Syntax.Entities;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Types;
+using Endpoint.Core.Syntax.Units;
+using Endpoint.Core.SystemModels;
 using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core.Artifacts.Projects.Factories;
@@ -23,11 +26,15 @@ public class ProjectFactory : IProjectFactory
 {
     private readonly IFileFactory fileFactory;
     private readonly ILogger<ProjectFactory> logger;
+    private readonly IContext context;
+    private readonly IClassFactory classFactory;
 
-    public ProjectFactory(IFileFactory fileFactory, ILogger<ProjectFactory> logger)
+    public ProjectFactory(IFileFactory fileFactory, ILogger<ProjectFactory> logger, IContext context, IClassFactory classFactory)
     {
         this.fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
+        this.classFactory = classFactory ?? throw new ArgumentNullException(nameof(classFactory));
     }
 
     public async Task<ProjectModel> CreateSpecFlowProject(string name, string directory)
@@ -60,7 +67,7 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.Console, name, directory);
 
-        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
+        // model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         model.Files.Add(fileFactory.CreateCSharp("EmptyProgram", string.Empty, "Program", model.Directory));
         model.Files.Add(fileFactory.CreateCSharp("HttpClientExtensions", string.Empty, "HttpClientExtensions", model.Directory));
@@ -73,7 +80,7 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.MinimalWebApi, options.Name, options.Directory);
 
-        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
+        // model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         var entities = new List<EntityModel> { new EntityModel(options.Resource) };
 
@@ -95,7 +102,7 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.XUnit, $"{name}.Tests", directory);
 
-        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
+        // model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         return model;
     }
@@ -104,7 +111,7 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(name, parentDirectory);
 
-        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
+        // model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         var serviceName = name.Split('.').First();
 
@@ -226,7 +233,7 @@ public class ProjectFactory : IProjectFactory
             DotNetProjectType = DotNetProjectType.WebApi,
         };
 
-        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
+        // model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         if (additionalMetadata != null)
         {
@@ -255,7 +262,7 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Messaging", directory);
 
-        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
+        // model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         model.Files.Add(fileFactory.CreateTemplate("IMessagingClient", "IMessagingClient", model.Directory));
 
@@ -282,7 +289,7 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Messaging.Udp", directory);
 
-        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
+        // model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         model.References.Add(@"..\Messaging\Messaging.csproj");
 
@@ -311,7 +318,7 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Validation", directory);
 
-        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
+        // model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         return model;
     }
@@ -320,7 +327,7 @@ public class ProjectFactory : IProjectFactory
     {
         var model = new ProjectModel(DotNetProjectType.ClassLib, "Kernel", directory);
 
-        model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
+        // model.Packages.Add(new ("StyleCop.Analyzers", "1.1.118"));
 
         model.Packages.Add(new ("Microsoft.EntityFrameworkCore", "7.0.2"));
         model.Packages.Add(new ("Microsoft.AspNetCore.Mvc.Core", "2.2.5"));
@@ -438,7 +445,19 @@ public class ProjectFactory : IProjectFactory
         => await CreateLibrary($"{name}.Core", directory, new () { Constants.ProjectType.Core });
 
     public async Task<ProjectModel> CreateInfrastructure(string name, string directory)
-        => await CreateLibrary($"{name}.Infrastructure", directory, new () { Constants.ProjectType.Infrastructure });
+    {
+        var microserviceContext = context.Get<Microservice>();
+
+        var model = await CreateLibrary(name, directory, new () { Constants.ProjectType.Infrastructure });
+
+        var aggregates = microserviceContext.Aggregates.Select(x => new EntityModel(x.Name)).ToList();
+
+        var dbContext = classFactory.CreateDbContext($"{microserviceContext.SchemaRootName}DbContext", aggregates, Path.Combine(model.Directory, "Data"));
+
+        model.Files.Add(new CodeFileModel<ClassModel>(dbContext, dbContext.Usings, dbContext.Name, Path.Combine(model.Directory, "Data"), ".cs"));
+
+        return model;
+    }
 
     public async Task<ProjectModel> CreateApi(string name, string directory)
         => await CreateLibrary($"{name}.Api", directory, new () { Constants.ProjectType.Api });

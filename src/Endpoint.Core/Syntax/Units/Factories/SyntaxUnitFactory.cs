@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
 using Endpoint.Core.Syntax.Properties;
+using Endpoint.Core.Syntax.Units;
 using Microsoft.Extensions.Logging;
 
-namespace Endpoint.Core.Syntax.Documents.Factories;
+namespace Endpoint.Core.Syntax.Units.Factories;
 
 public class SyntaxUnitFactory : ISyntaxUnitFactory
 {

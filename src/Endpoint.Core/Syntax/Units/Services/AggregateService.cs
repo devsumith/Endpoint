@@ -10,11 +10,12 @@ using Endpoint.Core.Artifacts.Projects.Services;
 using Endpoint.Core.Services;
 using Endpoint.Core.Syntax.Classes;
 using Endpoint.Core.Syntax.Classes.Factories;
-using Endpoint.Core.Syntax.Documents.Factories;
+using Endpoint.Core.Syntax.Units;
+using Endpoint.Core.Syntax.Units.Factories;
 using Microsoft.Extensions.Logging;
 using static Endpoint.Core.Constants.FileExtensions;
 
-namespace Endpoint.Core.Syntax.Documents.Services;
+namespace Endpoint.Core.Syntax.Units.Services;
 
 public class AggregateService : IAggregateService
 {

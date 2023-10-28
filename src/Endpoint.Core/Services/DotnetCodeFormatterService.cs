@@ -22,10 +22,10 @@ public class DotnetCodeFormatterService : ICodeFormatterService
 
     public async Task FormatAsync(string directory)
     {
-        logger.LogInformation("Formatting files using dotnet format");
+/*        logger.LogInformation("Formatting files using dotnet format");
 
         var solutionDirectory = fileSystem.Path.GetDirectoryName(fileProvider.Get("*.sln", directory));
 
-        commandService.Start("dotnet format", solutionDirectory);
+        commandService.Start("dotnet format", solutionDirectory);*/
     }
 }

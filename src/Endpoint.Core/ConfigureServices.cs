@@ -29,15 +29,20 @@ using Endpoint.Core.Syntax.Namespaces.Factories;
 using Endpoint.Core.Syntax.Properties.Factories;
 using Endpoint.Core.Syntax.RouteHandlers;
 using Endpoint.Core.Syntax.Types;
-using Endpoint.Core.Syntax.Documents.Factories;
-using Endpoint.Core.Syntax.Documents.Services;
+using Endpoint.Core.Syntax.Units.Factories;
+using Endpoint.Core.Syntax.Units.Services;
+using Endpoint.Core.SystemModels;
 
 namespace Microsoft.Extensions.DependencyInjection;
+
+using Type = System.Type;
 
 public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
+        services.AddSingleton<ISystemContextFactory, SystemContextFactory>();
+        services.AddSingleton<ISystemContext, SystemContext>();
         services.AddSingleton<IDocumentFactory, DocumentFactory>();
         services.AddSingleton<IGitService, GitService>();
         services.AddSingleton<ICodeFormatterService, DotnetCodeFormatterService>();

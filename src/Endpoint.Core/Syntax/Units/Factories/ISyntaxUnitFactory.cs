@@ -3,8 +3,9 @@
 
 using System.Collections.Generic;
 using Endpoint.Core.Syntax.Properties;
+using Endpoint.Core.Syntax.Units;
 
-namespace Endpoint.Core.Syntax.Documents.Factories;
+namespace Endpoint.Core.Syntax.Units.Factories;
 
 public interface ISyntaxUnitFactory
 {

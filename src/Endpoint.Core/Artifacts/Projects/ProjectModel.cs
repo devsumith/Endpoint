@@ -29,7 +29,7 @@ public class ProjectModel : ArtifactModel
         Folders = new List<FolderModel>();
         Packages = new List<PackageModel>()
         {
-            new ("StyleCop.Analyzers", "1.1.118"),
+            // new ("StyleCop.Analyzers", "1.1.118"),
         };
     }
 
@@ -43,7 +43,7 @@ public class ProjectModel : ArtifactModel
         Folders = new List<FolderModel>();
         Packages = new List<PackageModel>()
         {
-            new ("StyleCop.Analyzers", "1.1.118"),
+            // new ("StyleCop.Analyzers", "1.1.118"),
         };
     }
 
@@ -56,7 +56,7 @@ public class ProjectModel : ArtifactModel
         Folders = new List<FolderModel>();
         Packages = new List<PackageModel>()
         {
-            new ("StyleCop.Analyzers", "1.1.118"),
+            // new ("StyleCop.Analyzers", "1.1.118"),
         };
     }
 
@@ -66,7 +66,7 @@ public class ProjectModel : ArtifactModel
         Folders = new List<FolderModel>();
         Packages = new List<PackageModel>()
         {
-            new ("StyleCop.Analyzers", "1.1.118"),
+            // new ("StyleCop.Analyzers", "1.1.118"),
         };
     }
 
