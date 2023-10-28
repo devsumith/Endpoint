@@ -51,7 +51,7 @@ public class DocumentFactory : IDocumentFactory
                 {
                     Usings = new List<UsingModel>()
                     {
-                        new UsingModel("FluentValidation")
+                        new UsingModel("FluentValidation"),
                     },
                 });
 
@@ -68,7 +68,7 @@ public class DocumentFactory : IDocumentFactory
                 {
                     Usings = new List<UsingModel>()
                     {
-                        new UsingModel("FluentValidation")
+                        new UsingModel("FluentValidation"),
                     },
                 });
 
@@ -87,7 +87,7 @@ public class DocumentFactory : IDocumentFactory
                 {
                     Usings = new List<UsingModel>()
                     {
-                        new UsingModel("FluentValidation")
+                        new UsingModel("FluentValidation"),
                     },
                 });
 

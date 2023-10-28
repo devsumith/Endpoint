@@ -41,7 +41,8 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
-        services.AddSingleton<ISystemContext,SystemContext>();
+        services.AddSingleton<ISystemContextFactory, SystemContextFactory>();
+        services.AddSingleton<ISystemContext, SystemContext>();
         services.AddSingleton<IDocumentFactory, DocumentFactory>();
         services.AddSingleton<IGitService, GitService>();
         services.AddSingleton<ICodeFormatterService, DotnetCodeFormatterService>();
@@ -145,4 +146,3 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
-

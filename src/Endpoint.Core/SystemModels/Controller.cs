@@ -6,12 +6,13 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.SystemModels;
 
-public class Controller {
+public class Controller
+{
     public Controller()
     {
-            
     }
 
     public string Name { get; set; }
+
     public List<Endpoint> Endpoints { get; set; }
 }

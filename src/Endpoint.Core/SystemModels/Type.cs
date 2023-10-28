@@ -5,6 +5,6 @@ using System;
 
 namespace Endpoint.Core.SystemModels;
 
-public class Type { 
-
+public class Type
+{
 }

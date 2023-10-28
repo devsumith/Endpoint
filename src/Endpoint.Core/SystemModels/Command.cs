@@ -5,4 +5,6 @@ using System;
 
 namespace Endpoint.Core.SystemModels;
 
-public class Command { }
+public class Command
+{
+}

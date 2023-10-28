@@ -17,5 +17,5 @@ public interface ISolutionFactory
 
     Task<SolutionModel> CleanArchitectureMicroservice(CreateCleanArchitectureMicroserviceOptions options);
 
-    Task<SolutionModel> DddCreateAync(string directory);
+    Task<SolutionModel> DddCreateAync(string name, string directory);
 }

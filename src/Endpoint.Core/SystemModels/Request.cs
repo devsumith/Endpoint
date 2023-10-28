@@ -5,7 +5,7 @@ using System;
 
 namespace Endpoint.Core.SystemModels;
 
-public class Request {
-
+public class Request
+{
     public string Name { get; set; }
 }

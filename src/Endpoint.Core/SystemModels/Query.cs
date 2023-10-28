@@ -5,9 +5,13 @@ using System;
 
 namespace Endpoint.Core.SystemModels;
 
-public class Query {
+public class Query
+{
     public string Name { get; set; }
+
     public Request Request { get; set; }
+
     public Response Response { get; set; }
+
     public Handler Handler { get; set; }
 }

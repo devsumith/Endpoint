@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.SystemModels;
 
-public class Solution {
+public class Solution
+{
     public Solution()
     {
         Microservices = new List<Microservice>();
@@ -14,6 +15,8 @@ public class Solution {
     }
 
     public string Name { get; set; }
+
     public List<Microservice> Microservices { get; set; }
+
     public List<BuildingBlock> BuildingBlocks { get; set; }
 }

@@ -7,8 +7,9 @@ using System.Security.Permissions;
 
 namespace Endpoint.Core.SystemModels;
 
-public class Response {
-
+public class Response
+{
     public string Name { get; set; }
-    public List<Property> Properties { get; set; } = new();
+
+    public List<Property> Properties { get; set; } = new ();
 }

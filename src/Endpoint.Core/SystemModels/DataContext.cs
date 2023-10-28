@@ -6,13 +6,13 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.SystemModels;
 
-public class DataContext {
-
+public class DataContext
+{
     public DataContext()
     {
-            
     }
 
     public string Name { get; set; }
-    public List<Property> Properties { get; set; } = new();
+
+    public List<Property> Properties { get; set; } = new ();
 }

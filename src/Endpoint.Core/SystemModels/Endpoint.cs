@@ -5,4 +5,6 @@ using System;
 
 namespace Endpoint.Core.SystemModels;
 
-public class Endpoint { }
+public class Endpoint
+{
+}

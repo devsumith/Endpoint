@@ -3,8 +3,11 @@
 
 namespace Endpoint.Core.SystemModels;
 
-public class Property {
+public class Property
+{
     public string Name { get; set; }
+
     public Type Type { get; set; }
+
     public bool IsPrimaryKey { get; set; }
 }

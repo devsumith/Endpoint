@@ -5,7 +5,7 @@ using System;
 
 namespace Endpoint.Core.SystemModels;
 
-public class Microservice {
-
+public class Microservice
+{
     public string Name { get; set; }
 }

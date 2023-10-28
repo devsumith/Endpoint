@@ -858,7 +858,7 @@ public class ClassFactory : IClassFactory
 
             Usings = new List<UsingModel>()
             {
-                new UsingModel("MediatR")
+                new UsingModel("MediatR"),
             },
         });
 
