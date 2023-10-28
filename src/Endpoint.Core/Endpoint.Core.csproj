@@ -62,6 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="SystemModels\" />
     <Folder Include="Syntax\Namespaces\Factories\" />
     <Folder Include="Syntax\Namespaces\Strategies\" />
     <Folder Include="Syntax\Structs\" />
