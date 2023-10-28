@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace Endpoint.Core.SystemModels;
 
+
 public interface ISystemContext
 {
     List<Aggregate> Aggregates { get; set; }

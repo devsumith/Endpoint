@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
@@ -119,6 +120,8 @@ public class DddAppCreateRequestHandler : IRequestHandler<DddAppCreateRequest>
         systemContext = await systemContextFactory.DddCreateAsync(request.Name, request.MicroserviceName, request.AggregateName, request.Properties, request.Directory);
 
         context.Set(systemContext);
+
+        context.Set(systemContext.Microservices.First());
 
         var solution = await solutionFactory.DddCreateAync(request.Name, request.Directory);
 
