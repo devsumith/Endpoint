@@ -82,11 +82,22 @@ public class ClassService : IClassService
         {
             foreach (var path in Directory.GetFiles(Path.GetDirectoryName(projectDirectory), "*.cs", SearchOption.AllDirectories))
             {
-                if (fileSystem.File.ReadAllText(path).Contains($"class {name}"))
+                var supportedDeclarations = new string[]
                 {
-                    classPath = path;
-                    break;
+                    $"class {name}",
+                    $"record {name}",
+                    $"record struct {name}",
+                };
+
+                foreach (var supportedDeclaration in supportedDeclarations)
+                {
+                    if (fileSystem.File.ReadAllText(path).Contains(supportedDeclaration))
+                    {
+                        classPath = path;
+                        break;
+                    }
                 }
+
             }
         }
 
@@ -94,10 +105,20 @@ public class ClassService : IClassService
         {
             foreach (var path in Directory.GetFiles(Path.GetDirectoryName(Path.GetDirectoryName(projectDirectory)), "*.cs", SearchOption.AllDirectories))
             {
-                if (fileSystem.File.ReadAllText(path).Contains($"class {name}"))
+                var supportedDeclarations = new string[]
                 {
-                    classPath = path;
-                    break;
+                    $"class {name}",
+                    $"record {name}",
+                    $"record struct {name}",
+                };
+
+                foreach (var supportedDeclaration in supportedDeclarations)
+                {
+                    if (fileSystem.File.ReadAllText(path).Contains(supportedDeclaration))
+                    {
+                        classPath = path;
+                        break;
+                    }
                 }
             }
         }

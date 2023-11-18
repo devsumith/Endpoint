@@ -56,7 +56,7 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
 
     public async Task Handle(SolutionCreateRequest request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Handled: {0}", nameof(SolutionCreateRequestHandler));
+        logger.LogInformation("Creating Solution", nameof(SolutionCreateRequestHandler));
 
         var model = await solutionFactory.Create(request.Name, request.ProjectName, request.ProjectType, request.FolderName, request.Directory);
 
@@ -67,6 +67,6 @@ public class SolutionCreateRequestHandler : IRequestHandler<SolutionCreateReques
 
         await solutionService.Create(model);
 
-        commandService.Start($"start {model.SolultionFileName}", model.SolutionDirectory);
+        commandService.Start($"code .", model.SolutionDirectory);
     }
 }

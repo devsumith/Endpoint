@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Authors>Quinntyne Brown</Authors>
     <Company>Allagi Consulting</Company>
     <PackageTags>clean-architecture;source-generator;application-code;scaffolding</PackageTags>

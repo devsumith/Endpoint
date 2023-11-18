@@ -7,4 +7,5 @@ namespace Endpoint.Core.SystemModels;
 
 public class Type
 {
+    public string Name { get; set; }
 }

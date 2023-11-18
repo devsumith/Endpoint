@@ -5,26 +5,24 @@ using System;
 
 namespace Endpoint.Core.SystemModels;
 
-public class Command
+public class Class
 {
+    public Class(string name)
+    {
+        Name = name;
+    }
 
     public string Name { get; set; }
 
-    public Request Request { get; set; }
+    public string NamespaceName { get; set; }
 
-    public Response Response { get; set; }
-
-    public Handler Handler { get; set; }
-
-    public string MicroserviceName { get; set; }
-
-    public Microservice Microservice { get; set; }
-
-    public string ProjectName { get; set; }
-
-    public Project Project { get; set; }
+    public Namespace Namespace { get; set; }
 
     public string SolutionName { get; set; }
 
+    public string ProjectName { get; set; }
+
     public Solution Solution { get; set; }
+
+    public string Project { get; set; }
 }

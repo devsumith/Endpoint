@@ -38,7 +38,41 @@ public class SystemContextFactory : ISystemContextFactory
 
         model.Microservices.Add(microservice);
 
-        model.Aggregates.Add(new Aggregate() { Name = microserviceName });
+        model.Aggregates.Add(new Aggregate("","") { Name = microserviceName });
+
+        return model;
+    }
+
+    public async Task<ISystemContext> DddSlimCreateAsync(string name, string aggregateName, string properties, string directory)
+    {
+        var model = new SystemContext(loggerFactory.CreateLogger<SystemContext>());
+
+        var aggregate = new Aggregate(aggregateName,properties);
+
+        model.Aggregates.Add(aggregate);
+
+        model.Name = name;
+
+        var microservice = new Microservice(name);
+
+        var project = new Project(DotNetProjectType.Web, libraryType: LibraryType.Core, name, Path.Combine(directory));
+
+        microservice.Projects.Add(project);
+
+        model.Projects.Add(project);
+
+
+        var solution = new Solution();
+
+        solution.Name = name;
+
+
+        model.Solutions.Add(solution);
+
+
+        model.Microservices.Add(microservice);
+
+
 
         return model;
     }
