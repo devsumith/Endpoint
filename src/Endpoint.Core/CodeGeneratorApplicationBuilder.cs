@@ -1,0 +1,36 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using System.Reflection;
+using Endpoint.Core.Internals;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+namespace Endpoint.Core;
+
+public class CodeGeneratorApplicationBuilder
+{
+    private readonly IServiceCollection services = new ServiceCollection();
+
+    public CodeGeneratorApplicationBuilder ConfigureServices(Action<IServiceCollection> services)
+    {
+        services.Invoke(this.services);
+
+        return this;
+    }
+
+    public CodeGeneratorApplication Build()
+    {
+        var entryAssembly = Assembly.GetEntryAssembly();
+        services.AddCoreServices();
+        services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(entryAssembly));
+        services.AddSingleton(new Observable<INotification>());
+
+        var serviceProvider = services.BuildServiceProvider();
+
+        var application = new CodeGeneratorApplication(serviceProvider);
+
+        return application;
+    }
+}

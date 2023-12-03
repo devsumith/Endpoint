@@ -2,7 +2,10 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Endpoint.Core.Services;
+using Endpoint.Core.Syntax.Properties;
+using Endpoint.Core.Syntax.Types;
 using Endpoint.Core.Syntax.Units;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static System.Linq.Enumerable;
 
 namespace System;
@@ -76,6 +79,19 @@ public static class StringExtensions
         {
             "get" => $"Get{namingConventionConverter.Convert(NamingConvention.PascalCase, value, pluralize: true)}",
             _ => throw new InvalidOperationException()
+        };
+    }
+
+    public static PropertyModel ToString(this string value, TypeDeclarationModel model, string? defaultValue = null)
+    {
+        return new PropertyModel(
+            model,
+            AccessModifier.Public,
+            new TypeModel("string"),
+            value,
+            PropertyAccessorModel.GetSet)
+        {
+            DefaultValue = defaultValue,
         };
     }
 }

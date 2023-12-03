@@ -1,6 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,8 @@ using Endpoint.Core.Syntax.Params;
 using Endpoint.Core.Syntax.Properties;
 using Endpoint.Core.Syntax.Properties.Factories;
 using Endpoint.Core.Syntax.Types;
+using Endpoint.Core.Extensions;
+using Microsoft.Extensions.Primitives;
 
 namespace Endpoint.Core.Syntax.Classes.Factories;
 
@@ -206,6 +209,8 @@ public class ClassFactory : IClassFactory
     {
         var model = new ClassModel($"Message");
 
+        //model.Properties.Add("Messagetype".ToString("nameof(Message)"));
+
         model.Properties.Add(new PropertyModel(
             model,
             AccessModifier.Public,
@@ -292,26 +297,20 @@ public class ClassFactory : IClassFactory
 
         methodBodyBuilder.AppendLine("{");
 
-        methodBodyBuilder.AppendLine("_logger.LogInformation(\"Worker running at: {time}\", DateTimeOffset.Now);".Indent(1));
+        methodBodyBuilder.AppendDoubleLine("_logger.LogInformation(\"Worker running at: {time}\", DateTimeOffset.Now);".Indent(1));
 
-        methodBodyBuilder.AppendLine(string.Empty);
-
-        methodBodyBuilder.Append(new StringBuilder()
-            .AppendLine("var message = new Message();")
-            .AppendLine(string.Empty)
-            .AppendLine("var json = JsonSerializer.Serialize(message);")
-            .AppendLine(string.Empty)
-            .AppendLine("await _hubContext.Clients.All.Message(json);")
+        methodBodyBuilder.AppendLine(new StringBuilder()
+            .AppendDoubleLine("var message = new Message();")
+            .AppendDoubleLine("var json = JsonSerializer.Serialize(message);")
+            .Append("await _hubContext.Clients.All.Message(json);")
             .ToString()
             .Indent(1));
-
-        methodBodyBuilder.AppendLine(string.Empty);
 
         methodBodyBuilder.AppendLine("await Task.Delay(1000, stoppingToken);".Indent(1));
 
         methodBodyBuilder.AppendLine("}");
 
-        model.Methods.First().Body = new Syntax.Expressions.ExpressionModel(methodBodyBuilder.ToString());
+        model.Methods.First().Body = methodBodyBuilder.ToExpression();
 
         model.Constructors.First().Params.Add(new ParamModel()
         {

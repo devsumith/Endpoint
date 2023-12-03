@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <Authors>Quinntyne Brown</Authors>
     <Company>Allagi Consulting</Company>
     <PackageTags>clean-architecture;source-generator;application-code;scaffolding</PackageTags>
@@ -30,6 +31,7 @@
     <PackageReference Include="EnvDTE" Version="17.6.36389" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="LibGit2Sharp" Version="0.27.2" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.1-dev-00896" />
     <PackageReference Include="MediatR" Version="12.0.0" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.6.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" />

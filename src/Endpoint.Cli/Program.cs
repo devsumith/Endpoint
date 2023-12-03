@@ -1,91 +1,29 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using CommandLine;
 using Endpoint.Core;
-using Endpoint.Core.Internals;
-using MediatR;
-using Microsoft.Extensions.Configuration;
+using Endpoint.Core.Services;
+using Endpoint.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 
-Log.Logger = new LoggerConfiguration()
+var configuration = new LoggerConfiguration()
         .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
         .Enrich.FromLogContext()
-        .WriteTo.Console()
-        .CreateBootstrapLogger();
+        .WriteTo.Console();
+
+Log.Logger = configuration.CreateBootstrapLogger();
 
 Log.Information("Starting Endpoint");
 
-await RunAsync();
-async Task RunAsync()
-{
-    var host = Host.CreateDefaultBuilder()
-        .ConfigureServices((services) =>
-        {
-            services.AddCliServices();
-        })
-        .Build();
-
-    var configuration = host.Services.GetRequiredService<IConfiguration>();
-
-    var mediator = host.Services.GetRequiredService<IMediator>();
-
-    var notificationObservable = host.Services.GetRequiredService<Observable<INotification>>();
-
-    notificationObservable.Subscribe(async x =>
+var app = CodeGeneratorApplication.CreateBuilder()
+    .ConfigureServices(services =>
     {
-        await mediator.Publish(x);
-    });
+        services.AddLogging(x => x.AddConsole());
+        services.AddSingleton<ITemplateLocator, EmbeddedResourceTemplateLocatorBase<Marker>>();
+    })
+    .Build();
 
-    var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
-
-    if (args.Length == 0 || args[0].StartsWith('-'))
-    {
-        args = new string[1] { configuration[Constants.EnvironmentVariables.DefaultCommand] }.Concat(args).ToArray();
-    }
-
-    try
-    {
-        var verbs = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(type => type.GetCustomAttributes(typeof(VerbAttribute), true).Length > 0)
-            .ToArray();
-
-        var parsedResult = CreateParser().ParseArguments(args, verbs);
-
-        if (parsedResult.Errors.SingleOrDefault() is HelpRequestedError || parsedResult.Errors.SingleOrDefault() is HelpRequestedError)
-        {
-            Environment.Exit(0);
-        }
-
-        if (parsedResult.Errors.SingleOrDefault() is BadVerbSelectedError error)
-        {
-            Log.Error("{tag}:{token}", error.Tag, error.Token);
-
-            throw new Exception($"{error.Tag}:{error.Token}");
-        }
-
-        await parsedResult.WithParsedAsync(request => mediator.Send(request));
-    }
-    catch (Exception ex)
-    {
-        Log.Error(ex.Message);
-    }
-    finally
-    {
-        Environment.Exit(0);
-    }
-}
-
-Parser CreateParser() => new Parser(with =>
-{
-    with.CaseSensitive = false;
-    with.HelpWriter = Console.Out;
-    with.IgnoreUnknownArguments = true;
-});
+await app.RunAsync();

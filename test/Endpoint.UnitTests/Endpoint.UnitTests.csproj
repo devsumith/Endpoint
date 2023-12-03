@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <NoWarn>1998;4014,SA1101,SA1600,SA1200,SA1633</NoWarn>
     <IsPackable>false</IsPackable>
   </PropertyGroup>

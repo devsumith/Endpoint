@@ -2,7 +2,7 @@
   "profiles": {
     "Endpoint.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "solution-create -n FreeTheGuys2 -t web -d C:\\projects",
+      "commandLineArgs": "solution-create -n FreeTheGuys3 -t web -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }

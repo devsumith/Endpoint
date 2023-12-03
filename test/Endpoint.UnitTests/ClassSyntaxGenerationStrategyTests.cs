@@ -27,7 +27,7 @@ public class ClassSyntaxGenerationStrategyTests
 
         services.AddLogging();
 
-        services.AddCliServices();
+        //services.AddCliServices();
 
         var container = services.BuildServiceProvider();
 
@@ -56,7 +56,7 @@ public class ClassSyntaxGenerationStrategyTests
 
         services.AddLogging();
 
-        services.AddCliServices();
+        //services.AddCliServices();
 
         var container = services.BuildServiceProvider();
 
@@ -99,7 +99,7 @@ public class ClassSyntaxGenerationStrategyTests
 
         services.AddLogging();
 
-        services.AddCliServices();
+        //services.AddCliServices();
 
         var container = services.BuildServiceProvider();
 
