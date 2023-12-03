@@ -29,7 +29,7 @@ public class CodeGeneratorApplicationBuilder
 
         var serviceProvider = services.BuildServiceProvider();
 
-        var application = new CodeGeneratorApplication(serviceProvider);
+        var application = ActivatorUtilities.CreateInstance<CodeGeneratorApplication>(serviceProvider);
 
         return application;
     }

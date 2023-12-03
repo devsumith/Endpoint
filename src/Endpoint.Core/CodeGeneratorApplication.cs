@@ -1,23 +1,29 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System.Linq;
+using System.Threading;
 using CommandLine;
+using Endpoint.Core.Extensions;
 using Endpoint.Core.Internals;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Endpoint.Core;
 
 public class CodeGeneratorApplication
 {
-    private readonly IServiceProvider serviceProvider;
+    private readonly IMediator mediator;
+    private readonly ILogger<CodeGeneratorApplication> logger;
 
-    public CodeGeneratorApplication(IServiceProvider serviceProvider)
+    public CodeGeneratorApplication(IMediator mediator, ILogger<CodeGeneratorApplication> logger, Observable<INotification> notificationObservable)
     {
-        ArgumentNullException.ThrowIfNull(serviceProvider, nameof(serviceProvider));
+        this.mediator = mediator;
+        this.logger = logger;
 
-        this.serviceProvider = serviceProvider;
+        _ = notificationObservable.Subscribe(async x =>
+        {
+            await mediator.Publish(x);
+        });
     }
 
     public static CodeGeneratorApplicationBuilder CreateBuilder()
@@ -26,62 +32,8 @@ public class CodeGeneratorApplication
         return builder;
     }
 
-    public async Task RunAsync()
+    public async Task RunAsync(CancellationToken token = default)
     {
-        var mediator = serviceProvider.GetRequiredService<IMediator>();
-
-        var notificationObservable = serviceProvider.GetRequiredService<Observable<INotification>>();
-
-        notificationObservable.Subscribe(async x =>
-        {
-            await mediator.Publish(x);
-        });
-
-        try
-        {
-            await mediator.Send(ParseCommandLineArgs());
-        }
-        finally
-        {
-            Environment.Exit(0);
-        }
-    }
-
-    object ParseCommandLineArgs()
-    {
-        var parser = new Parser(with =>
-        {
-            with.CaseSensitive = false;
-            with.HelpWriter = Console.Out;
-            with.IgnoreUnknownArguments = true;
-        });
-
-        var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
-
-        if (args.Length == 0 || args[0].StartsWith('-'))
-        {
-            args = new string[1] { "default" }.Concat(args).ToArray();
-        }
-
-        var verbs = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(type => type.GetCustomAttributes(typeof(VerbAttribute), true).Length > 0)
-            .ToArray();
-
-        var parsedResult = parser.ParseArguments(args, verbs);
-
-        if (parsedResult.Errors.SingleOrDefault() is HelpRequestedError || parsedResult.Errors.SingleOrDefault() is HelpRequestedError)
-        {
-            Environment.Exit(0);
-        }
-
-        if (parsedResult.Errors.SingleOrDefault() is BadVerbSelectedError error)
-        {
-            throw new Exception($"{error.Tag}:{error.Token}");
-        }
-
-        return parsedResult.Value;
+        await mediator.Send(Environment.GetCommandLineArgs().ParseArguments());
     }
 }
-
-

@@ -8,9 +8,9 @@
     <PackageTags>clean-architecture;source-generator;application-code;scaffolding</PackageTags>
     <RepositoryUrl>https://github.com/QuinntyneBrown/Endpoint</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>1.0.11</AssemblyVersion>
-    <FileVersion>1.0.11</FileVersion>
-    <Version>1.0.11</Version>
+    <AssemblyVersion>1.0.12</AssemblyVersion>
+    <FileVersion>1.0.12</FileVersion>
+    <Version>1.0.12</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageId>Quinntyne.Endpoint.Core</PackageId>

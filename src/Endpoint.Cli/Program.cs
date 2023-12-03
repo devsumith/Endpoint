@@ -5,7 +5,6 @@ using Endpoint.Core;
 using Endpoint.Core.Services;
 using Endpoint.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 
@@ -21,7 +20,7 @@ Log.Information("Starting Endpoint");
 var app = CodeGeneratorApplication.CreateBuilder()
     .ConfigureServices(services =>
     {
-        services.AddLogging(x => x.AddConsole());
+        services.AddLogging(x => x.AddSerilog(Log.Logger));
         services.AddSingleton<ITemplateLocator, EmbeddedResourceTemplateLocatorBase<Marker>>();
     })
     .Build();
