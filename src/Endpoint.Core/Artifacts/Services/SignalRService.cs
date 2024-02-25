@@ -32,7 +32,7 @@ public class SignalRService : ISignalRService
     {
         var workspaceDirectory = Path.GetDirectoryName(fileProvider.Get("package.json", directory));
 
-        commandService.Start("npm install -D @microsoft/signalr", workspaceDirectory);
+        commandService.Start("npm install --registry=https://registry.npmjs.org/ -D @microsoft/signalr", workspaceDirectory);
     }
 
     public async Task AddHub(string name, string directory)

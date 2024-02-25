@@ -165,16 +165,16 @@ public class AngularService : IAngularService
     {
         var workspaceDirectory = Path.GetDirectoryName(fileProvider.Get("angular.json", directory));
 
-        commandService.Start("npm install -D jest@28.1.3 jest-preset-angular@12.2.6 @angular-builders/jest @types/jest --force", workspaceDirectory);
+        commandService.Start("npm install --registry=https://registry.npmjs.org/ -D jest@28.1.3 jest-preset-angular@12.2.6 @angular-builders/jest @types/jest --force", workspaceDirectory);
     }
 
     public async Task NgxTranslateAdd(string projectName, string directory)
     {
         var workspaceDirectory = fileSystem.Path.GetDirectoryName(fileProvider.Get("angular.json", directory));
 
-        commandService.Start("npm install -D @ngx-translate/core --force", workspaceDirectory);
+        commandService.Start("npm install --registry=https://registry.npmjs.org/ -D @ngx-translate/core --force", workspaceDirectory);
 
-        commandService.Start("npm install -D @ngx-translate/http-loader --force", workspaceDirectory);
+        commandService.Start("npm install --registry=https://registry.npmjs.org/ -D @ngx-translate/http-loader --force", workspaceDirectory);
 
         var model = new AngularProjectModel(projectName, string.Empty, string.Empty, directory);
 
@@ -204,7 +204,7 @@ public class AngularService : IAngularService
 
         utlitityService.CopyrightAdd(workspaceModel.Directory);
 
-        commandService.Start("npm install npm-run-all --force", workspaceModel.Directory);
+        commandService.Start("npm install --registry=https://registry.npmjs.org/ npm-run-all --force", workspaceModel.Directory);
 
         await KarmaRemove(workspaceModel.Directory);
 
@@ -464,7 +464,7 @@ public class AngularService : IAngularService
 
         var packageJson = JObject.Parse(fileSystem.File.ReadAllText(packageJsonPath));
 
-        commandService.Start("npm install prettier npm-run-all husky pretty-quick -D", workspaceDirectory);
+        commandService.Start("npm install --registry=https://registry.npmjs.org/ prettier npm-run-all husky pretty-quick -D", workspaceDirectory);
 
         fileSystem.File.WriteAllText($"{workspaceDirectory}{Path.DirectorySeparatorChar}.prettierrc.json", JsonConvert.SerializeObject(
             new
@@ -493,7 +493,7 @@ public class AngularService : IAngularService
 
         var json = JObject.Parse(fileSystem.File.ReadAllText(jsonPath));
 
-        commandService.Start("npm install bootstrap", workspaceDirectory);
+        commandService.Start("npm install --registry=https://registry.npmjs.org/ bootstrap", workspaceDirectory);
 
         json.AddStyle(model.Name, "node_modules\\bootstrap\\dist\\css\\bootstrap.min.css".Replace(Path.DirectorySeparatorChar, '/'));
 

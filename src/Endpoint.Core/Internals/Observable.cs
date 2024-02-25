@@ -13,7 +13,7 @@ public class Observable<T> : IObservable<T>
 
     private IList<Subscription> subscriptions = new List<Subscription>();
 
-    public Observable()
+    internal Observable()
     {
     }
 

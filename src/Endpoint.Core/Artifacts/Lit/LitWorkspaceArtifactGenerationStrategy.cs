@@ -65,7 +65,7 @@ public class LitWorkspaceArtifactGenerationStrategy : GenericArtifactGenerationS
 
         await artifactGenerator.GenerateAsync(indexHtmlModel);
 
-        commandService.Start("npm install --force", model.Directory);
+        commandService.Start("npm install --registry=https://registry.npmjs.org/ --force", model.Directory);
 
         commandService.Start("ts-jest config:init", model.Directory);
 

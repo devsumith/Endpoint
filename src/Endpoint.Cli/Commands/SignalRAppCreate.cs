@@ -172,7 +172,7 @@ public class SignalRAppCreateRequestHandler : IRequestHandler<SignalRAppCreateRe
 
         commandService.Start($"ng g c {namingConventionConverter.Convert(NamingConvention.SnakeCase, request.Name)}", appDirectory);
 
-        commandService.Start("npm install @microsoft/signalr --force", Path.Combine(solutionModel.SrcDirectory, temporaryAppName));
+        commandService.Start("npm install --registry=https://registry.npmjs.org/ @microsoft/signalr --force", Path.Combine(solutionModel.SrcDirectory, temporaryAppName));
 
         var mainFileModel = fileFactory
             .CreateTemplate(

@@ -37,7 +37,7 @@ public class DrawioImageCreateRequestHandler : IRequestHandler<DrawioImageCreate
 
         if (!await codeAnalysisService.IsNpmPackageInstalledAsync("draw.io"))
         {
-            commandService.Start("npm install -g draw.io", request.Directory);
+            commandService.Start("npm install --registry=https://registry.npmjs.org/ -g draw.io", request.Directory);
         }
     }
 }

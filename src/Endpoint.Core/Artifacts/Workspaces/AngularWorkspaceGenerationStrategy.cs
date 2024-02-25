@@ -24,12 +24,12 @@ public class AngularWorkspaceGenerationStrategy : GenericArtifactGenerationStrat
 
         commandService.Start($"npm uninstall @angular/cli -g", model.RootDirectory);
 
-        commandService.Start($"npm install @angular/cli@{model.Version} -g", model.RootDirectory);
+        commandService.Start($"npm install --registry=https://registry.npmjs.org/ @angular/cli@{model.Version} -g", model.RootDirectory);
 
         commandService.Start($"ng new {model.Name} --no-create-application", model.RootDirectory);
 
-        commandService.Start($"npm install @ngrx/component-store --force", Path.Combine(model.RootDirectory, model.Name));
+        commandService.Start($"npm install --registry=https://registry.npmjs.org/ @ngrx/component-store --force", Path.Combine(model.RootDirectory, model.Name));
 
-        commandService.Start($"npm install @ngrx/component --force", Path.Combine(model.RootDirectory, model.Name));
+        commandService.Start($"npm install --registry=https://registry.npmjs.org/ @ngrx/component --force", Path.Combine(model.RootDirectory, model.Name));
     }
 }
