@@ -10,6 +10,7 @@ using Endpoint.Core.Artifacts.Files.Factories;
 using Endpoint.Core.Artifacts.Files.Services;
 using Endpoint.Core.Artifacts.Folders.Factories;
 using Endpoint.Core.Artifacts.Folders.Services;
+using Endpoint.Core.Artifacts.FullStack;
 using Endpoint.Core.Artifacts.Git;
 using Endpoint.Core.Artifacts.Projects.Factories;
 using Endpoint.Core.Artifacts.Projects.Services;
@@ -41,6 +42,7 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
+        services.AddSingleton<IFullStackFactory,FullStackFactory>();
         services.AddSingleton<ISystemContextFactory, SystemContextFactory>();
         services.AddSingleton<ISystemContext, SystemContext>();
         services.AddSingleton<IDocumentFactory, DocumentFactory>();
@@ -146,3 +148,4 @@ public static class ConfigureServices
         AddCoreServices(services);
     }
 }
+

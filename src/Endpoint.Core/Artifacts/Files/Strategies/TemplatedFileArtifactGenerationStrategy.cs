@@ -40,7 +40,11 @@ public class TemplatedFileArtifactGenerationStrategy : GenericArtifactGeneration
 
         foreach (var token in tokens)
         {
-            model.Tokens.Add(token.Key, token.Value);
+            try
+            {
+                model.Tokens.Add(token.Key, token.Value);
+            }
+            catch { }
         }
 
         var result = templateProcessor.Process(template, model.Tokens);

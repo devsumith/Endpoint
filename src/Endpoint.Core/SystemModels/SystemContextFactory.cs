@@ -38,7 +38,7 @@ public class SystemContextFactory : ISystemContextFactory
 
         model.Microservices.Add(microservice);
 
-        model.Aggregates.Add(new Aggregate("","") { Name = microserviceName });
+        model.Aggregates.Add(new Aggregate(aggregate, properties) { Name = microserviceName });
 
         return model;
     }

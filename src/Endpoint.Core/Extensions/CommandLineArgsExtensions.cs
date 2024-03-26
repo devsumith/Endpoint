@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using CommandLine;
-using System;
 using System.Linq;
 
 namespace Endpoint.Core.Extensions;
@@ -11,6 +10,13 @@ public static class CommandLineArgsExtensions {
 
     public static object ParseArguments(this string[] args)
     {
+        var lastArg = args.First();
+
+        if (lastArg.EndsWith("dll"))
+        {
+            args = args.Skip(1).ToArray();
+        }
+
         var parser = new Parser(with =>
         {
             with.CaseSensitive = false;

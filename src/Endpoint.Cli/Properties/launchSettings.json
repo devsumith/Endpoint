@@ -1,8 +1,15 @@
 {
   "profiles": {
-    "Endpoint.Cli": {
+    "default": {
       "commandName": "Project",
-      "commandLineArgs": "solution-create -n FreeTheGuys3 -t web -d C:\\projects",
+      "commandLineArgs": "git-create -n MessageBroker -d C:\\projects\\MessageBroker\\",
+      "environmentVariables": {
+        "Endpoint:DefaultCommand": ""
+      }
+    },
+    "ddd-app-create": {
+      "commandName": "Project",
+      "commandLineArgs": "ddd-app-create -n FlightMessages -m FlightMessages -d C:\\projects",
       "environmentVariables": {
         "Endpoint:DefaultCommand": ""
       }
